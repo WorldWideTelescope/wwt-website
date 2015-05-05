@@ -1,0 +1,1774 @@
+<?xml version="1.0"?>
+<Folder
+   Name = "The Surface of Callisto surface"
+   Group = "Explorer"
+   Searchable = "True"
+   Type = "Planet"
+   Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Callisto surface.jpg">
+
+   <Folder
+      Name = "Zero Lat Lon"
+      Group = "Explorer"
+      Searchable = "True"
+      Type = "Planet"
+      Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_ZeroLatLon.jpg">
+
+      <Place
+         Name = "Zero Zero"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_ZeroLatLon.jpg"
+         DataSetType = "Planet"
+         Lat = "0"
+         Lng = "0"
+         Angle = "0"
+         ZoomLevel = "7.5">
+      </Place>
+
+   </Folder>
+
+   <Folder
+      Name = "Bright spot"
+      Group = "Explorer"
+      Searchable = "True"
+      Type = "Planet"
+      Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Brightspot.jpg">
+
+      <Place
+         Name = "Kol Facula"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Brightspot.jpg"
+         DataSetType = "Planet"
+         Lat = "4.5"
+         Lng = "-77.3"
+         Angle = "0"
+         ZoomLevel = "33.3293938329202">
+      </Place>
+
+   </Folder>
+
+   <Folder
+      Name = "Crater"
+      Group = "Explorer"
+      Searchable = "True"
+      Type = "Planet"
+      Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+
+      <Folder
+         Name = "A - Crater"
+         Group = "Explorer"
+         Searchable = "True"
+         Type = "Planet"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+
+         <Place
+            Name = "Adal"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "75.4"
+            Lng = "-80.8"
+            Angle = "0"
+            ZoomLevel = "18.861501445244">
+         </Place>
+
+         <Place
+            Name = "Aegir"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-45.9"
+            Lng = "-104.4"
+            Angle = "0"
+            ZoomLevel = "19.5321801535516">
+         </Place>
+
+         <Place
+            Name = "Agloolik"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-47.9"
+            Lng = "-82.9"
+            Angle = "0"
+            ZoomLevel = "19.8431348329844">
+         </Place>
+
+         <Place
+            Name = "Agroi"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "43.2833333333333"
+            Lng = "-11"
+            Angle = "0"
+            ZoomLevel = "20.4245236149863">
+         </Place>
+
+         <Place
+            Name = "Ahti"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "41.7833333333333"
+            Lng = "-103.083333333333"
+            Angle = "0"
+            ZoomLevel = "20.1401221071199">
+         </Place>
+
+         <Place
+            Name = "Ajleke"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "22.3833333333333"
+            Lng = "-101.3"
+            Angle = "0"
+            ZoomLevel = "19.5321801535516">
+         </Place>
+
+         <Place
+            Name = "Akycha"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "72.5"
+            Lng = "41.3833333333333"
+            Angle = "0"
+            ZoomLevel = "21.4575416443223">
+         </Place>
+
+         <Place
+            Name = "Alfr"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-9.68333333333333"
+            Lng = "137.183333333333"
+            Angle = "0"
+            ZoomLevel = "20.8736826278531">
+         </Place>
+
+         <Place
+            Name = "Ali"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "59.2833333333333"
+            Lng = "-56.2"
+            Angle = "0"
+            ZoomLevel = "20.9601179450343">
+         </Place>
+
+         <Place
+            Name = "Anarr"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "44.0833333333333"
+            Lng = "-0.6"
+            Angle = "0"
+            ZoomLevel = "19.6374787402191">
+         </Place>
+
+         <Place
+            Name = "Arcas"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-85"
+            Lng = "-66.8"
+            Angle = "0"
+            ZoomLevel = "18.9782965082643">
+         </Place>
+
+         <Place
+            Name = "Askr"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "51.7"
+            Lng = "35.8833333333333"
+            Angle = "0"
+            ZoomLevel = "21.2132034355964">
+         </Place>
+
+         <Place
+            Name = "Audr"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-31"
+            Lng = "-81.1833333333333"
+            Angle = "0"
+            ZoomLevel = "21.6938070638931">
+         </Place>
+
+         <Place
+            Name = "Austri"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-81.3"
+            Lng = "-64.0833333333333"
+            Angle = "0"
+            ZoomLevel = "12.9903810567666">
+         </Place>
+
+         <Place
+            Name = "Aziren"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "35.4"
+            Lng = "-178.3"
+            Angle = "0"
+            ZoomLevel = "21.2132034355964">
+         </Place>
+
+      </Folder>
+
+      <Folder
+         Name = "B - Crater"
+         Group = "Explorer"
+         Searchable = "True"
+         Type = "Planet"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+
+         <Place
+            Name = "Balkr"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "29.1"
+            Lng = "-11.8833333333333"
+            Angle = "0"
+            ZoomLevel = "21.2132034355964">
+         </Place>
+
+         <Place
+            Name = "Barri"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-31.6"
+            Lng = "-71"
+            Angle = "0"
+            ZoomLevel = "22.6376210946925">
+         </Place>
+
+         <Place
+            Name = "Bavorr"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "49.2"
+            Lng = "-20.2833333333333"
+            Angle = "0"
+            ZoomLevel = "22.7055007802632">
+         </Place>
+
+         <Place
+            Name = "Beli"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "62.5833333333333"
+            Lng = "-81.6833333333333"
+            Angle = "0"
+            ZoomLevel = "19.9436096135437">
+         </Place>
+
+         <Place
+            Name = "Biflindi"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-53.7833333333333"
+            Lng = "-74.3"
+            Angle = "0"
+            ZoomLevel = "20.6077215379085">
+         </Place>
+
+         <Place
+            Name = "Bragi"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "75.6833333333333"
+            Lng = "-61.7"
+            Angle = "0"
+            ZoomLevel = "21.2955863582526">
+         </Place>
+
+         <Place
+            Name = "Brami"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "28.8833333333333"
+            Lng = "-19.2"
+            Angle = "0"
+            ZoomLevel = "21.4575416443223">
+         </Place>
+
+         <Place
+            Name = "Bran"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-24.2833333333333"
+            Lng = "152.3"
+            Angle = "0"
+            ZoomLevel = "23.0360899173055">
+         </Place>
+
+         <Place
+            Name = "Buga"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "22.2"
+            Lng = "36.1"
+            Angle = "0"
+            ZoomLevel = "20.3310450812215">
+         </Place>
+
+         <Place
+            Name = "Buri"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-38.7"
+            Lng = "-46.2"
+            Angle = "0"
+            ZoomLevel = "23.5975971273434">
+         </Place>
+
+         <Place
+            Name = "Burr"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "42.5"
+            Lng = "-135.5"
+            Angle = "0"
+            ZoomLevel = "21.9972906575139">
+         </Place>
+
+      </Folder>
+
+      <Folder
+         Name = "D - Crater"
+         Group = "Explorer"
+         Searchable = "True"
+         Type = "Planet"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+
+         <Place
+            Name = "Dag"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "58.5833333333333"
+            Lng = "-74.1833333333333"
+            Angle = "0"
+            ZoomLevel = "18.861501445244">
+         </Place>
+
+         <Place
+            Name = "Danr"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "62.5"
+            Lng = "-77.8"
+            Angle = "0"
+            ZoomLevel = "19.7411101942874">
+         </Place>
+
+         <Place
+            Name = "Dia"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "73"
+            Lng = "-50.4"
+            Angle = "0"
+            ZoomLevel = "18.2422445932334">
+         </Place>
+
+         <Place
+            Name = "Doh"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "30.3833333333333"
+            Lng = "-142.1"
+            Angle = "0"
+            ZoomLevel = "20.4245236149863">
+         </Place>
+
+         <Place
+            Name = "Dryops"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "80"
+            Lng = "-34"
+            Angle = "0"
+            ZoomLevel = "19.0929742126637">
+         </Place>
+
+         <Place
+            Name = "Durinn"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "67"
+            Lng = "-90.0833333333333"
+            Angle = "0"
+            ZoomLevel = "19.8431348329844">
+         </Place>
+
+      </Folder>
+
+      <Folder
+         Name = "E - Crater"
+         Group = "Explorer"
+         Searchable = "True"
+         Type = "Planet"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+
+         <Place
+            Name = "Egdir"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "33.9"
+            Lng = "-35.9"
+            Angle = "0"
+            ZoomLevel = "20.6975176580392">
+         </Place>
+
+         <Place
+            Name = "Egres"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "42.5"
+            Lng = "-176.6"
+            Angle = "0"
+            ZoomLevel = "18.6211784714879">
+         </Place>
+
+         <Place
+            Name = "Erlik"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "66.8"
+            Lng = "-1.28333333333333"
+            Angle = "0"
+            ZoomLevel = "18.7424954957954">
+         </Place>
+
+      </Folder>
+
+      <Folder
+         Name = "F - Crater"
+         Group = "Explorer"
+         Searchable = "True"
+         Type = "Planet"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+
+         <Place
+            Name = "Fadir"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "56.4"
+            Lng = "-12.6833333333333"
+            Angle = "0"
+            ZoomLevel = "22.5">
+         </Place>
+
+         <Place
+            Name = "Fili"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "64.3"
+            Lng = "10.5"
+            Angle = "0"
+            ZoomLevel = "19.0929742126637">
+         </Place>
+
+         <Place
+            Name = "Finnr"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "15.5"
+            Lng = "-4.3"
+            Angle = "0"
+            ZoomLevel = "21.2955863582526">
+         </Place>
+
+         <Place
+            Name = "Freki"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "79.9"
+            Lng = "8"
+            Angle = "0"
+            ZoomLevel = "19.7411101942874">
+         </Place>
+
+         <Place
+            Name = "Frodi"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "68.3"
+            Lng = "-139.1"
+            Angle = "0"
+            ZoomLevel = "19.3163218267605">
+         </Place>
+
+         <Place
+            Name = "Fulla"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "73.5"
+            Lng = "-103.683333333333"
+            Angle = "0"
+            ZoomLevel = "19.4251504808351">
+         </Place>
+
+         <Place
+            Name = "Fulnir"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "60.2833333333333"
+            Lng = "-35.5"
+            Angle = "0"
+            ZoomLevel = "19.5321801535516">
+         </Place>
+
+      </Folder>
+
+      <Folder
+         Name = "G - Crater"
+         Group = "Explorer"
+         Searchable = "True"
+         Type = "Planet"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+
+         <Place
+            Name = "Gandalfr"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-81"
+            Lng = "-63.2833333333333"
+            Angle = "0"
+            ZoomLevel = "13.9590728865315">
+         </Place>
+
+         <Place
+            Name = "Geri"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "66.6833333333333"
+            Lng = "5.78333333333333"
+            Angle = "0"
+            ZoomLevel = "18.6211784714879">
+         </Place>
+
+         <Place
+            Name = "Ginandi"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-85.6833333333333"
+            Lng = "-50"
+            Angle = "0"
+            ZoomLevel = "17.5526048949054">
+         </Place>
+
+         <Place
+            Name = "Gisl"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "57.2"
+            Lng = "-34.7833333333333"
+            Angle = "0"
+            ZoomLevel = "18.7424954957954">
+         </Place>
+
+         <Place
+            Name = "Gloi"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "49"
+            Lng = "114.3"
+            Angle = "0"
+            ZoomLevel = "24.3986484254668">
+         </Place>
+
+         <Place
+            Name = "Goll"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "57.5"
+            Lng = "40.5"
+            Angle = "0"
+            ZoomLevel = "20.4245236149863">
+         </Place>
+
+         <Place
+            Name = "Gondul"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "59.9"
+            Lng = "-115.5"
+            Angle = "0"
+            ZoomLevel = "19.9436096135437">
+         </Place>
+
+         <Place
+            Name = "Grimr"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "41.5833333333333"
+            Lng = "144.8"
+            Angle = "0"
+            ZoomLevel = "23.1005271618077">
+         </Place>
+
+         <Place
+            Name = "Gunnr"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "64.6833333333333"
+            Lng = "-106.183333333333"
+            Angle = "0"
+            ZoomLevel = "20.6975176580392">
+         </Place>
+
+         <Place
+            Name = "Gymir"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "63.7833333333333"
+            Lng = "-49.2"
+            Angle = "0"
+            ZoomLevel = "18.861501445244">
+         </Place>
+
+      </Folder>
+
+      <Folder
+         Name = "H - Crater"
+         Group = "Explorer"
+         Searchable = "True"
+         Type = "Planet"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+
+         <Place
+            Name = "Habrok"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "76"
+            Lng = "-136"
+            Angle = "0"
+            ZoomLevel = "18.861501445244">
+         </Place>
+
+         <Place
+            Name = "Haki"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "24.8833333333333"
+            Lng = "44.8833333333333"
+            Angle = "0"
+            ZoomLevel = "21.615910628265">
+         </Place>
+
+         <Place
+            Name = "Har"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-3.58333333333333"
+            Lng = "2.1"
+            Angle = "0"
+            ZoomLevel = "19.3163218267605">
+         </Place>
+
+         <Place
+            Name = "Heimdall"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-64"
+            Lng = "3"
+            Angle = "0"
+            ZoomLevel = "32.323325612963">
+         </Place>
+
+         <Place
+            Name = "Hepti"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "64.5"
+            Lng = "-23.8833333333333"
+            Angle = "0"
+            ZoomLevel = "18.9782965082643">
+         </Place>
+
+         <Place
+            Name = "Hijsi"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "61.5833333333333"
+            Lng = "-169.3"
+            Angle = "0"
+            ZoomLevel = "20.0425883833784">
+         </Place>
+
+         <Place
+            Name = "Hodr"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "69"
+            Lng = "-91"
+            Angle = "0"
+            ZoomLevel = "22.1444379280289">
+         </Place>
+
+         <Place
+            Name = "Hoenir"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-33.9"
+            Lng = "98.7833333333333"
+            Angle = "0"
+            ZoomLevel = "22.7055007802632">
+         </Place>
+
+         <Place
+            Name = "Hogni"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-12"
+            Lng = "-5"
+            Angle = "0"
+            ZoomLevel = "21.2955863582526">
+         </Place>
+
+         <Place
+            Name = "Holdr"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "44.0833333333333"
+            Lng = "-109.183333333333"
+            Angle = "0"
+            ZoomLevel = "20.9601179450343">
+         </Place>
+
+      </Folder>
+
+      <Folder
+         Name = "I - Crater"
+         Group = "Explorer"
+         Searchable = "True"
+         Type = "Planet"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+
+         <Place
+            Name = "Igaluk"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "5.58333333333333"
+            Lng = "44.1"
+            Angle = "0"
+            ZoomLevel = "24.0081440470776">
+         </Place>
+
+         <Place
+            Name = "Ilma"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-30"
+            Lng = "-167.183333333333"
+            Angle = "0"
+            ZoomLevel = "20.2362590730606">
+         </Place>
+
+         <Place
+            Name = "Ivarr"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-6.08333333333333"
+            Lng = "38.5"
+            Angle = "0"
+            ZoomLevel = "21.5371628326943">
+         </Place>
+
+      </Folder>
+
+      <Folder
+         Name = "J - Crater"
+         Group = "Explorer"
+         Searchable = "True"
+         Type = "Planet"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+
+         <Place
+            Name = "Jalkr"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-38.5833333333333"
+            Lng = "-83.1833333333333"
+            Angle = "0"
+            ZoomLevel = "21.9972906575139">
+         </Place>
+
+         <Place
+            Name = "Jumal"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "58.7833333333333"
+            Lng = "-119.5"
+            Angle = "0"
+            ZoomLevel = "20.8736826278531">
+         </Place>
+
+         <Place
+            Name = "Jumo"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "65.9"
+            Lng = "-12.3"
+            Angle = "0"
+            ZoomLevel = "18.4974428591974">
+         </Place>
+
+      </Folder>
+
+      <Folder
+         Name = "K - Crater"
+         Group = "Explorer"
+         Searchable = "True"
+         Type = "Planet"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+
+         <Place
+            Name = "Kari"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "48.2"
+            Lng = "-117.9"
+            Angle = "0"
+            ZoomLevel = "17.8381067250408">
+         </Place>
+
+         <Place
+            Name = "Karl"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "56.4"
+            Lng = "29.2833333333333"
+            Angle = "0"
+            ZoomLevel = "19.0929742126637">
+         </Place>
+
+         <Place
+            Name = "Keelut"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-77.3"
+            Lng = "-92.0833333333333"
+            Angle = "0"
+            ZoomLevel = "19.6374787402191">
+         </Place>
+
+         <Place
+            Name = "Kul\"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "62.7"
+            Lng = "-123.5"
+            Angle = "0"
+            ZoomLevel = "19.2056220152326">
+         </Place>
+
+      </Folder>
+
+      <Folder
+         Name = "L - Crater"
+         Group = "Explorer"
+         Searchable = "True"
+         Type = "Planet"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+
+         <Place
+            Name = "Lempo"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-25.6"
+            Lng = "40.5"
+            Angle = "0"
+            ZoomLevel = "19.5321801535516">
+         </Place>
+
+         <Place
+            Name = "Ljekio"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "47.9"
+            Lng = "-161.383333333333"
+            Angle = "0"
+            ZoomLevel = "18.3711730708738">
+         </Place>
+
+         <Place
+            Name = "Lodurr"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-51.2"
+            Lng = "89.2"
+            Angle = "0"
+            ZoomLevel = "22.1444379280289">
+         </Place>
+
+         <Place
+            Name = "Lofn"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-57"
+            Lng = "-24"
+            Angle = "0"
+            ZoomLevel = "28.204523198148">
+         </Place>
+
+         <Place
+            Name = "Loni"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-3.58333333333333"
+            Lng = "145.1"
+            Angle = "0"
+            ZoomLevel = "22.8394623485675">
+         </Place>
+
+         <Place
+            Name = "Losy"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "65.3"
+            Lng = "36.8833333333333"
+            Angle = "0"
+            ZoomLevel = "21.0454969747251">
+         </Place>
+
+         <Place
+            Name = "Lycaon"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-45.2"
+            Lng = "-5.8"
+            Angle = "0"
+            ZoomLevel = "20.4245236149863">
+         </Place>
+
+      </Folder>
+
+      <Folder
+         Name = "M - Crater"
+         Group = "Explorer"
+         Searchable = "True"
+         Type = "Planet"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+
+         <Place
+            Name = "Maderatcha"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "30.5"
+            Lng = "-95.9"
+            Angle = "0"
+            ZoomLevel = "20.6077215379085">
+         </Place>
+
+         <Place
+            Name = "Mera"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "64.0833333333333"
+            Lng = "-75.8"
+            Angle = "0"
+            ZoomLevel = "18.3711730708738">
+         </Place>
+
+         <Place
+            Name = "Mimir"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "32.5833333333333"
+            Lng = "-53.2"
+            Angle = "0"
+            ZoomLevel = "20.0425883833784">
+         </Place>
+
+         <Place
+            Name = "Mitsina"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "57.5"
+            Lng = "-104.683333333333"
+            Angle = "0"
+            ZoomLevel = "19.2056220152326">
+         </Place>
+
+         <Place
+            Name = "Modi"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "66.4"
+            Lng = "-120.9"
+            Angle = "0"
+            ZoomLevel = "19.2056220152326">
+         </Place>
+
+      </Folder>
+
+      <Folder
+         Name = "N - Crater"
+         Group = "Explorer"
+         Searchable = "True"
+         Type = "Planet"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+
+         <Place
+            Name = "Nakki"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-56.5833333333333"
+            Lng = "-69.9"
+            Angle = "0"
+            ZoomLevel = "21.2955863582526">
+         </Place>
+
+         <Place
+            Name = "Nama"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "57.2"
+            Lng = "28.7"
+            Angle = "0"
+            ZoomLevel = "20.9601179450343">
+         </Place>
+
+         <Place
+            Name = "Nar"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-1.7"
+            Lng = "-46.4"
+            Angle = "0"
+            ZoomLevel = "21.1298493544594">
+         </Place>
+
+         <Place
+            Name = "Nerrivik"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-17.1"
+            Lng = "-57.0833333333333"
+            Angle = "0"
+            ZoomLevel = "18.4974428591974">
+         </Place>
+
+         <Place
+            Name = "Nidi"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "66.6833333333333"
+            Lng = "-96.5"
+            Angle = "0"
+            ZoomLevel = "19.2056220152326">
+         </Place>
+
+         <Place
+            Name = "Nirkes"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "29.7833333333333"
+            Lng = "-163.6"
+            Angle = "0"
+            ZoomLevel = "19.7411101942874">
+         </Place>
+
+         <Place
+            Name = "Njord"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "16.5"
+            Lng = "-132.8"
+            Angle = "0"
+            ZoomLevel = "18.1105230207481">
+         </Place>
+
+         <Place
+            Name = "Nori"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "45.4"
+            Lng = "16.5"
+            Angle = "0"
+            ZoomLevel = "22.8394623485675">
+         </Place>
+
+         <Place
+            Name = "Norov-Ava"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "54.5833333333333"
+            Lng = "-113.683333333333"
+            Angle = "0"
+            ZoomLevel = "19.6374787402191">
+         </Place>
+
+         <Place
+            Name = "Nuada"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "62.0833333333333"
+            Lng = "86.7833333333333"
+            Angle = "0"
+            ZoomLevel = "21.3770241207885">
+         </Place>
+
+         <Place
+            Name = "Numi-Torum"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-50.2"
+            Lng = "-93.4"
+            Angle = "0"
+            ZoomLevel = "21.2955863582526">
+         </Place>
+
+         <Place
+            Name = "Nyctimus"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-62.7"
+            Lng = "-3.78333333333333"
+            Angle = "0"
+            ZoomLevel = "17.4044684032956">
+         </Place>
+
+      </Folder>
+
+      <Folder
+         Name = "O - Crater"
+         Group = "Explorer"
+         Searchable = "True"
+         Type = "Planet"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+
+         <Place
+            Name = "Oluksak"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-47.9"
+            Lng = "-63.9"
+            Angle = "0"
+            ZoomLevel = "21.9972906575139">
+         </Place>
+
+         <Place
+            Name = "Omol\"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "42.2"
+            Lng = "-118.4"
+            Angle = "0"
+            ZoomLevel = "20.8736826278531">
+         </Place>
+
+         <Place
+            Name = "Orestheus"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-46.7"
+            Lng = "-47.5"
+            Angle = "0"
+            ZoomLevel = "17.5526048949054">
+         </Place>
+
+         <Place
+            Name = "Oski"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "57.2"
+            Lng = "90.7"
+            Angle = "0"
+            ZoomLevel = "20.6077215379085">
+         </Place>
+
+         <Place
+            Name = "Ottar"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "61.5"
+            Lng = "-104.8"
+            Angle = "0"
+            ZoomLevel = "19.9436096135437">
+         </Place>
+
+      </Folder>
+
+      <Folder
+         Name = "P - Crater"
+         Group = "Explorer"
+         Searchable = "True"
+         Type = "Planet"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+
+         <Place
+            Name = "Pekko"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "18.2833333333333"
+            Lng = "-5.4"
+            Angle = "0"
+            ZoomLevel = "20.9601179450343">
+         </Place>
+
+      </Folder>
+
+      <Folder
+         Name = "R - Crater"
+         Group = "Explorer"
+         Searchable = "True"
+         Type = "Planet"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+
+         <Place
+            Name = "Randver"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-72.3"
+            Lng = "-53.5833333333333"
+            Angle = "0"
+            ZoomLevel = "16.0552135719605">
+         </Place>
+
+         <Place
+            Name = "Reginleif"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-66.1833333333333"
+            Lng = "-97.1833333333333"
+            Angle = "0"
+            ZoomLevel = "17.8381067250408">
+         </Place>
+
+         <Place
+            Name = "Reginn"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "39.7"
+            Lng = "-90.8"
+            Angle = "0"
+            ZoomLevel = "20.0425883833784">
+         </Place>
+
+         <Place
+            Name = "Reifnir"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-50.7833333333333"
+            Lng = "-63.7833333333333"
+            Angle = "0"
+            ZoomLevel = "18.7424954957954">
+         </Place>
+
+         <Place
+            Name = "Rigr"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "70.9"
+            Lng = "115"
+            Angle = "0"
+            ZoomLevel = "20.3310450812215">
+         </Place>
+
+         <Place
+            Name = "Rongoteus"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "53.5"
+            Lng = "-106.8"
+            Angle = "0"
+            ZoomLevel = "18.2422445932334">
+         </Place>
+
+         <Place
+            Name = "Rota"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "27.7833333333333"
+            Lng = "-109.8"
+            Angle = "0"
+            ZoomLevel = "20.4245236149863">
+         </Place>
+
+      </Folder>
+
+      <Folder
+         Name = "S - Crater"
+         Group = "Explorer"
+         Searchable = "True"
+         Type = "Planet"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+
+         <Place
+            Name = "Saga"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "0.8"
+            Lng = "34"
+            Angle = "0"
+            ZoomLevel = "15.8605689516085">
+         </Place>
+
+         <Place
+            Name = "Sarakka"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-3.7"
+            Lng = "-53.7"
+            Angle = "0"
+            ZoomLevel = "20.5167359980107">
+         </Place>
+
+         <Place
+            Name = "Seqinek"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "55.5"
+            Lng = "-25.5"
+            Angle = "0"
+            ZoomLevel = "22.4302317183183">
+         </Place>
+
+         <Place
+            Name = "Sholmo"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "53.9"
+            Lng = "-16.3833333333333"
+            Angle = "0"
+            ZoomLevel = "20.6975176580392">
+         </Place>
+
+         <Place
+            Name = "Sigyn"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "35.7833333333333"
+            Lng = "-29.2"
+            Angle = "0"
+            ZoomLevel = "19.3163218267605">
+         </Place>
+
+         <Place
+            Name = "Skeggold"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-49.5833333333333"
+            Lng = "-31.8833333333333"
+            Angle = "0"
+            ZoomLevel = "18.7424954957954">
+         </Place>
+
+         <Place
+            Name = "Skoll"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "55.5833333333333"
+            Lng = "44.7"
+            Angle = "0"
+            ZoomLevel = "20.4245236149863">
+         </Place>
+
+         <Place
+            Name = "Skuld"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "10.1"
+            Lng = "-37.7"
+            Angle = "0"
+            ZoomLevel = "22.5">
+         </Place>
+
+         <Place
+            Name = "Sudri"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "55.4"
+            Lng = "-137.1"
+            Angle = "0"
+            ZoomLevel = "21.615910628265">
+         </Place>
+
+         <Place
+            Name = "Sumbur"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "67.0833333333333"
+            Lng = "35.2"
+            Angle = "0"
+            ZoomLevel = "18.6211784714879">
+         </Place>
+
+      </Folder>
+
+      <Folder
+         Name = "T - Crater"
+         Group = "Explorer"
+         Searchable = "True"
+         Type = "Planet"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+
+         <Place
+            Name = "Tapio"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "30.6"
+            Lng = "-109.683333333333"
+            Angle = "0"
+            ZoomLevel = "20.5167359980107">
+         </Place>
+
+         <Place
+            Name = "Thekkr"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-80.8"
+            Lng = "-61.5833333333333"
+            Angle = "0"
+            ZoomLevel = "13.3370955752919">
+         </Place>
+
+         <Place
+            Name = "Thorir"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-32"
+            Lng = "-67.3"
+            Angle = "0"
+            ZoomLevel = "19.2056220152326">
+         </Place>
+
+         <Place
+            Name = "Tindr"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-2.5"
+            Lng = "4.5"
+            Angle = "0"
+            ZoomLevel = "21.2132034355964">
+         </Place>
+
+         <Place
+            Name = "Tontu"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "27.6"
+            Lng = "-100.3"
+            Angle = "0"
+            ZoomLevel = "19.6374787402191">
+         </Place>
+
+         <Place
+            Name = "Tornarsuk"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "28.7"
+            Lng = "-128.6"
+            Angle = "0"
+            ZoomLevel = "23.9507765068105">
+         </Place>
+
+         <Place
+            Name = "Tyll"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "45"
+            Lng = "-166"
+            Angle = "0"
+            ZoomLevel = "21.2955863582526">
+         </Place>
+
+         <Place
+            Name = "Tyn"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "70.8"
+            Lng = "126.383333333333"
+            Angle = "0"
+            ZoomLevel = "20.8736826278531">
+         </Place>
+
+      </Folder>
+
+      <Folder
+         Name = "U - Crater"
+         Group = "Explorer"
+         Searchable = "True"
+         Type = "Planet"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+
+         <Place
+            Name = "Uksakka"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-49.5"
+            Lng = "-42.2833333333333"
+            Angle = "0"
+            ZoomLevel = "16.24302578001">
+         </Place>
+
+      </Folder>
+
+      <Folder
+         Name = "V - Crater"
+         Group = "Explorer"
+         Searchable = "True"
+         Type = "Planet"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+
+         <Place
+            Name = "Valfodr"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-1.2"
+            Lng = "112.183333333333"
+            Angle = "0"
+            ZoomLevel = "22.5">
+         </Place>
+
+         <Place
+            Name = "Vali"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "9.8"
+            Lng = "34.7833333333333"
+            Angle = "0"
+            ZoomLevel = "19.5321801535516">
+         </Place>
+
+         <Place
+            Name = "Vanapagan"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "38.0833333333333"
+            Lng = "-158"
+            Angle = "0"
+            ZoomLevel = "21.0454969747251">
+         </Place>
+
+         <Place
+            Name = "Veralden"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "33.2"
+            Lng = "-96.0833333333333"
+            Angle = "0"
+            ZoomLevel = "22.0712321728703">
+         </Place>
+
+         <Place
+            Name = "Vestri"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "45.2833333333333"
+            Lng = "-52.7833333333333"
+            Angle = "0"
+            ZoomLevel = "22.0712321728703">
+         </Place>
+
+         <Place
+            Name = "Vidarr"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "11.8833333333333"
+            Lng = "166.383333333333"
+            Angle = "0"
+            ZoomLevel = "22.7055007802632">
+         </Place>
+
+         <Place
+            Name = "Vitr"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-22.3833333333333"
+            Lng = "10.7"
+            Angle = "0"
+            ZoomLevel = "22.1444379280289">
+         </Place>
+
+         <Place
+            Name = "Vu-Murt"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "22.8833333333333"
+            Lng = "-170.883333333333"
+            Angle = "0"
+            ZoomLevel = "22.35980625976">
+         </Place>
+
+         <Place
+            Name = "Vutash"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "31.8833333333333"
+            Lng = "-102.9"
+            Angle = "0"
+            ZoomLevel = "20.4245236149863">
+         </Place>
+
+      </Folder>
+
+      <Folder
+         Name = "Y - Crater"
+         Group = "Explorer"
+         Searchable = "True"
+         Type = "Planet"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+
+         <Place
+            Name = "Ymir"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "51.4"
+            Lng = "-101.3"
+            Angle = "0"
+            ZoomLevel = "22.2169247824897">
+         </Place>
+
+         <Place
+            Name = "Yuryung"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-54.9"
+            Lng = "-86.0833333333333"
+            Angle = "0"
+            ZoomLevel = "21.9972906575139">
+         </Place>
+
+      </Folder>
+
+   </Folder>
+
+   <Folder
+      Name = "Crater chain"
+      Group = "Explorer"
+      Searchable = "True"
+      Type = "Planet"
+      Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Craterchain.jpg">
+
+      <Place
+         Name = "Eikin Catena"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Craterchain.jpg"
+         DataSetType = "Planet"
+         Lat = "-8.5"
+         Lng = "-15.8833333333333"
+         Angle = "0"
+         ZoomLevel = "27.8817228047523">
+      </Place>
+
+      <Place
+         Name = "Fimbulthul Catena"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Craterchain.jpg"
+         DataSetType = "Planet"
+         Lat = "8.38333333333333"
+         Lng = "-65.4"
+         Angle = "0"
+         ZoomLevel = "33.070001403936">
+      </Place>
+
+      <Place
+         Name = "Geirvimul Catena"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Craterchain.jpg"
+         DataSetType = "Planet"
+         Lat = "49"
+         Lng = "12.8833333333333"
+         Angle = "0"
+         ZoomLevel = "23.1005271618077">
+      </Place>
+
+      <Place
+         Name = "Gipul Catena"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Craterchain.jpg"
+         DataSetType = "Planet"
+         Lat = "70.1833333333333"
+         Lng = "-48.2"
+         Angle = "0"
+         ZoomLevel = "36.9322353907869">
+      </Place>
+
+      <Place
+         Name = "Gomul Catena"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Craterchain.jpg"
+         DataSetType = "Planet"
+         Lat = "35.4"
+         Lng = "-48"
+         Angle = "0"
+         ZoomLevel = "31.8198051533946">
+      </Place>
+
+      <Place
+         Name = "Gunntro Catena"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Craterchain.jpg"
+         DataSetType = "Planet"
+         Lat = "-19.2833333333333"
+         Lng = "16.7"
+         Angle = "0"
+         ZoomLevel = "25.6121472776122">
+      </Place>
+
+      <Place
+         Name = "Sid Catena"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Craterchain.jpg"
+         DataSetType = "Planet"
+         Lat = "48.7"
+         Lng = "-105.4"
+         Angle = "0"
+         ZoomLevel = "22.2887089965063">
+      </Place>
+
+      <Place
+         Name = "Svol Catena"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Craterchain.jpg"
+         DataSetType = "Planet"
+         Lat = "11"
+         Lng = "-37.0833333333333"
+         Angle = "0"
+         ZoomLevel = "25.7984297118779">
+      </Place>
+
+   </Folder>
+
+   <Folder
+      Name = "Large crater"
+      Group = "Explorer"
+      Searchable = "True"
+      Type = "Planet"
+      Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Largecrater.jpg">
+
+      <Place
+         Name = "Adlinda"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Largecrater.jpg"
+         DataSetType = "Planet"
+         Lat = "-46"
+         Lng = "-33"
+         Angle = "0"
+         ZoomLevel = "37.1192400287982">
+      </Place>
+
+      <Place
+         Name = "Asgard"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Largecrater.jpg"
+         DataSetType = "Planet"
+         Lat = "32"
+         Lng = "-139.8"
+         Angle = "0"
+         ZoomLevel = "45.4363213370541">
+      </Place>
+
+      <Place
+         Name = "Utgard"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Largecrater.jpg"
+         DataSetType = "Planet"
+         Lat = "45"
+         Lng = "-134"
+         Angle = "0"
+         ZoomLevel = "37.2729461736418">
+      </Place>
+
+      <Place
+         Name = "Valhalla"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Largecrater.jpg"
+         DataSetType = "Planet"
+         Lat = "15.8833333333333"
+         Lng = "-56.5833333333333"
+         Angle = "0"
+         ZoomLevel = "54.3019524968326">
+      </Place>
+
+   </Folder>
+
+</Folder>
+

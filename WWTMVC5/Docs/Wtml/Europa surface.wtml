@@ -1,0 +1,1078 @@
+<?xml version="1.0"?>
+<Folder
+   Name = "The Surface of Europa surface"
+   Group = "Explorer"
+   Searchable = "True"
+   Type = "Planet"
+   Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Europa surface.jpg">
+
+   <Folder
+      Name = "Zero Lat Lon"
+      Group = "Explorer"
+      Searchable = "True"
+      Type = "Planet"
+      Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_ZeroLatLon.jpg">
+
+      <Place
+         Name = "Zero Zero"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_ZeroLatLon.jpg"
+         DataSetType = "Planet"
+         Lat = "0"
+         Lng = "0"
+         Angle = "0"
+         ZoomLevel = "7.5">
+      </Place>
+
+   </Folder>
+
+   <Folder
+      Name = "Crater"
+      Group = "Explorer"
+      Searchable = "True"
+      Type = "Planet"
+      Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+
+      <Folder
+         Name = "A - Crater"
+         Group = "Explorer"
+         Searchable = "True"
+         Type = "Planet"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+
+         <Place
+            Name = "Aine"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-43"
+            Lng = "-177"
+            Angle = "0"
+            ZoomLevel = "11.2151158591592">
+         </Place>
+
+         <Place
+            Name = "Amergin"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-14"
+            Lng = "130"
+            Angle = "0"
+            ZoomLevel = "15.229073886517">
+         </Place>
+
+         <Place
+            Name = "Angus"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-13"
+            Lng = "-74"
+            Angle = "0"
+            ZoomLevel = "10.9235648634148">
+         </Place>
+
+         <Place
+            Name = "Avagddu"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "1.2"
+            Lng = "-170"
+            Angle = "0"
+            ZoomLevel = "12.6134462288057">
+         </Place>
+
+      </Folder>
+
+      <Folder
+         Name = "B - Crater"
+         Group = "Explorer"
+         Searchable = "True"
+         Type = "Planet"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+
+         <Place
+            Name = "Balor"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-53"
+            Lng = "-94"
+            Angle = "0"
+            ZoomLevel = "10.9837520714049">
+         </Place>
+
+         <Place
+            Name = "Brigid"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "11"
+            Lng = "-80"
+            Angle = "0"
+            ZoomLevel = "12.9903810567666">
+         </Place>
+
+      </Folder>
+
+      <Folder
+         Name = "C - Crater"
+         Group = "Explorer"
+         Searchable = "True"
+         Type = "Planet"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+
+         <Place
+            Name = "Camulus"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-27"
+            Lng = "-79"
+            Angle = "0"
+            ZoomLevel = "11.0429658181721">
+         </Place>
+
+         <Place
+            Name = "Cilix"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "1.2"
+            Lng = "178.1"
+            Angle = "0"
+            ZoomLevel = "16.4245402732113">
+         </Place>
+
+         <Place
+            Name = "Cliodhna"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-3"
+            Lng = "-75"
+            Angle = "0"
+            ZoomLevel = "9.87055509714369">
+         </Place>
+
+         <Place
+            Name = "Cormac"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-37"
+            Lng = "-86"
+            Angle = "0"
+            ZoomLevel = "10.6066017177982">
+         </Place>
+
+      </Folder>
+
+      <Folder
+         Name = "D - Crater"
+         Group = "Explorer"
+         Searchable = "True"
+         Type = "Planet"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+
+         <Place
+            Name = "Deirdre"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-65"
+            Lng = "152"
+            Angle = "0"
+            ZoomLevel = "10.8001149351508">
+         </Place>
+
+         <Place
+            Name = "Diarmuid"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-61"
+            Lng = "-97"
+            Angle = "0"
+            ZoomLevel = "12.6134462288057">
+         </Place>
+
+         <Place
+            Name = "Dylan"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-55"
+            Lng = "-82"
+            Angle = "0"
+            ZoomLevel = "11.3256229552132">
+         </Place>
+
+      </Folder>
+
+      <Folder
+         Name = "E - Crater"
+         Group = "Explorer"
+         Searchable = "True"
+         Type = "Planet"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+
+         <Place
+            Name = "Elathan"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-31.6"
+            Lng = "-78"
+            Angle = "0"
+            ZoomLevel = "9.52367574355399">
+         </Place>
+
+      </Folder>
+
+      <Folder
+         Name = "G - Crater"
+         Group = "Explorer"
+         Searchable = "True"
+         Type = "Planet"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+
+         <Place
+            Name = "Govannan"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-37.5"
+            Lng = "57.3833333333333"
+            Angle = "0"
+            ZoomLevel = "13.3370955752919">
+         </Place>
+
+         <Place
+            Name = "Grainne"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-60"
+            Lng = "-95"
+            Angle = "0"
+            ZoomLevel = "14.2412169158696">
+         </Place>
+
+         <Place
+            Name = "Gwydion"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-61"
+            Lng = "-79"
+            Angle = "0"
+            ZoomLevel = "11.1012420673843">
+         </Place>
+
+      </Folder>
+
+      <Folder
+         Name = "L - Crater"
+         Group = "Explorer"
+         Searchable = "True"
+         Type = "Planet"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+
+         <Place
+            Name = "Llyr"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-1.7"
+            Lng = "138.5"
+            Angle = "0"
+            ZoomLevel = "7.68085266813334">
+         </Place>
+
+      </Folder>
+
+      <Folder
+         Name = "M - Crater"
+         Group = "Explorer"
+         Searchable = "True"
+         Type = "Planet"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+
+         <Place
+            Name = "Mael Duin"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-17"
+            Lng = "162.1"
+            Angle = "0"
+            ZoomLevel = "8.91905336252041">
+         </Place>
+
+         <Place
+            Name = "Maeve"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "58"
+            Lng = "-75"
+            Angle = "0"
+            ZoomLevel = "15.4482535793034">
+         </Place>
+
+         <Place
+            Name = "Manannan"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "2"
+            Lng = "120"
+            Angle = "0"
+            ZoomLevel = "17.5526048949054">
+         </Place>
+
+         <Place
+            Name = "Math"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-26"
+            Lng = "177"
+            Angle = "0"
+            ZoomLevel = "14.5075231520075">
+         </Place>
+
+         <Place
+            Name = "Morvran"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-5.68333333333333"
+            Lng = "-152.183333333333"
+            Angle = "0"
+            ZoomLevel = "16.7705098312484">
+         </Place>
+
+      </Folder>
+
+      <Folder
+         Name = "N - Crater"
+         Group = "Explorer"
+         Searchable = "True"
+         Type = "Planet"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+
+         <Place
+            Name = "Niamh"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "21"
+            Lng = "143"
+            Angle = "0"
+            ZoomLevel = "11.2151158591592">
+         </Place>
+
+      </Folder>
+
+      <Folder
+         Name = "O - Crater"
+         Group = "Explorer"
+         Searchable = "True"
+         Type = "Planet"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+
+         <Place
+            Name = "Oisin"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-52"
+            Lng = "146"
+            Angle = "0"
+            ZoomLevel = "11.7381343505497">
+         </Place>
+
+      </Folder>
+
+      <Folder
+         Name = "P - Crater"
+         Group = "Explorer"
+         Searchable = "True"
+         Type = "Planet"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+
+         <Place
+            Name = "Pryderi"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-66"
+            Lng = "-159"
+            Angle = "0"
+            ZoomLevel = "8.5639375907657">
+         </Place>
+
+         <Place
+            Name = "Pwyll"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-26"
+            Lng = "89"
+            Angle = "0"
+            ZoomLevel = "18.6211784714879">
+         </Place>
+
+      </Folder>
+
+      <Folder
+         Name = "R - Crater"
+         Group = "Explorer"
+         Searchable = "True"
+         Type = "Planet"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+
+         <Place
+            Name = "Rhiannon"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-81.8"
+            Lng = "160.3"
+            Angle = "0"
+            ZoomLevel = "16.7705098312484">
+         </Place>
+
+      </Folder>
+
+      <Folder
+         Name = "T - Crater"
+         Group = "Explorer"
+         Searchable = "True"
+         Type = "Planet"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+
+         <Place
+            Name = "Taliesin"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-23.2"
+            Lng = "-137.383333333333"
+            Angle = "0"
+            ZoomLevel = "19.7411101942874">
+         </Place>
+
+         <Place
+            Name = "Tegid"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-0.5"
+            Lng = "-164"
+            Angle = "0"
+            ZoomLevel = "17.4044684032956">
+         </Place>
+
+      </Folder>
+
+      <Folder
+         Name = "U - Crater"
+         Group = "Explorer"
+         Searchable = "True"
+         Type = "Planet"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+
+         <Place
+            Name = "Uaithne"
+            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            DataSetType = "Planet"
+            Lat = "-49"
+            Lng = "-88"
+            Angle = "0"
+            ZoomLevel = "11.9753882534053">
+         </Place>
+
+      </Folder>
+
+   </Folder>
+
+   <Folder
+      Name = "Dark spot"
+      Group = "Explorer"
+      Searchable = "True"
+      Type = "Planet"
+      Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Darkspot.jpg">
+
+      <Place
+         Name = "Boeotia Macula"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Darkspot.jpg"
+         DataSetType = "Planet"
+         Lat = "-54"
+         Lng = "-166"
+         Angle = "0"
+         ZoomLevel = "16.24302578001">
+      </Place>
+
+      <Place
+         Name = "Castalia Macula"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Darkspot.jpg"
+         DataSetType = "Planet"
+         Lat = "-1.5"
+         Lng = "134.3"
+         Angle = "0"
+         ZoomLevel = "18.03008939878">
+      </Place>
+
+      <Place
+         Name = "Cyclades Macula"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Darkspot.jpg"
+         DataSetType = "Planet"
+         Lat = "-64"
+         Lng = "168"
+         Angle = "0"
+         ZoomLevel = "24.0081440470776">
+      </Place>
+
+      <Place
+         Name = "Thera Macula"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Darkspot.jpg"
+         DataSetType = "Planet"
+         Lat = "-47.7"
+         Lng = "179.1"
+         Angle = "0"
+         ZoomLevel = "22.2887089965063">
+      </Place>
+
+      <Place
+         Name = "Thrace Macula"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Darkspot.jpg"
+         DataSetType = "Planet"
+         Lat = "-46.5833333333333"
+         Lng = "-171.183333333333"
+         Angle = "0"
+         ZoomLevel = "27.2002433286098">
+      </Place>
+
+   </Folder>
+
+   <Folder
+      Name = "Large crater"
+      Group = "Explorer"
+      Searchable = "True"
+      Type = "Planet"
+      Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Largecrater.jpg">
+
+      <Place
+         Name = "Callanish"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Largecrater.jpg"
+         DataSetType = "Planet"
+         Lat = "-16"
+         Lng = "26.6"
+         Angle = "0"
+         ZoomLevel = "23.7170824512628">
+      </Place>
+
+      <Place
+         Name = "Tyre"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Largecrater.jpg"
+         DataSetType = "Planet"
+         Lat = "31.7"
+         Lng = "-147"
+         Angle = "0"
+         ZoomLevel = "26.1593345606984">
+      </Place>
+
+   </Folder>
+
+   <Folder
+      Name = "Linear feature"
+      Group = "Explorer"
+      Searchable = "True"
+      Type = "Planet"
+      Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg">
+
+      <Place
+         Name = "Adonis Linea"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         DataSetType = "Planet"
+         Lat = "-51.7833333333333"
+         Lng = "-113.183333333333"
+         Angle = "0"
+         ZoomLevel = "39.3530651730945">
+      </Place>
+
+      <Place
+         Name = "Agave Linea"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         DataSetType = "Planet"
+         Lat = "12.6"
+         Lng = "87"
+         Angle = "0"
+         ZoomLevel = "44.595266812602">
+      </Place>
+
+      <Place
+         Name = "Agenor Linea"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         DataSetType = "Planet"
+         Lat = "-43.5833333333333"
+         Lng = "151.8"
+         Angle = "0"
+         ZoomLevel = "45.2581861523827">
+      </Place>
+
+      <Place
+         Name = "Alphesiboea Linea"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         DataSetType = "Planet"
+         Lat = "-28"
+         Lng = "177.383333333333"
+         Angle = "0"
+         ZoomLevel = "47.7424334717284">
+      </Place>
+
+      <Place
+         Name = "Androgeos Linea"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         DataSetType = "Planet"
+         Lat = "12.8"
+         Lng = "81.2"
+         Angle = "0"
+         ZoomLevel = "37.7964657562057">
+      </Place>
+
+      <Place
+         Name = "Argiope Linea"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         DataSetType = "Planet"
+         Lat = "-8.18333333333333"
+         Lng = "157.8"
+         Angle = "0"
+         ZoomLevel = "41.4617837757593">
+      </Place>
+
+      <Place
+         Name = "Asterius Linea"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         DataSetType = "Planet"
+         Lat = "17.7"
+         Lng = "94.3833333333333"
+         Angle = "0"
+         ZoomLevel = "54.3266363308792">
+      </Place>
+
+      <Place
+         Name = "Astypalaea Linea"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         DataSetType = "Planet"
+         Lat = "-76.5"
+         Lng = "139.683333333333"
+         Angle = "0"
+         ZoomLevel = "42.4884188372153">
+      </Place>
+
+      <Place
+         Name = "Autonoe Linea"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         DataSetType = "Planet"
+         Lat = "17"
+         Lng = "-164.5"
+         Angle = "0"
+         ZoomLevel = "45.3771758375712">
+      </Place>
+
+      <Place
+         Name = "Belus Linea"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         DataSetType = "Planet"
+         Lat = "11.8"
+         Lng = "131.683333333333"
+         Angle = "0"
+         ZoomLevel = "53.4522744821964">
+      </Place>
+
+      <Place
+         Name = "Cadmus Linea"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         DataSetType = "Planet"
+         Lat = "27.7833333333333"
+         Lng = "-173.1"
+         Angle = "0"
+         ZoomLevel = "44.2524090685698">
+      </Place>
+
+      <Place
+         Name = "Chthonius Linea"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         DataSetType = "Planet"
+         Lat = "0.1"
+         Lng = "48.7"
+         Angle = "0"
+         ZoomLevel = "49.1874372310221">
+      </Place>
+
+      <Place
+         Name = "Echion Linea"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         DataSetType = "Planet"
+         Lat = "-13.1"
+         Lng = "175.683333333333"
+         Angle = "0"
+         ZoomLevel = "44.2979784926202">
+      </Place>
+
+      <Place
+         Name = "Harmonia Linea"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         DataSetType = "Planet"
+         Lat = "27"
+         Lng = "-168"
+         Angle = "0"
+         ZoomLevel = "41.3615396430836">
+      </Place>
+
+      <Place
+         Name = "Hyperenor Linea"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         DataSetType = "Planet"
+         Lat = "-3.08333333333333"
+         Lng = "45.2833333333333"
+         Angle = "0"
+         ZoomLevel = "51.3649575576645">
+      </Place>
+
+      <Place
+         Name = "Ino Linea"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         DataSetType = "Planet"
+         Lat = "-5"
+         Lng = "-163"
+         Angle = "0"
+         ZoomLevel = "45.8768163679689">
+      </Place>
+
+      <Place
+         Name = "Katreus Linea"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         DataSetType = "Planet"
+         Lat = "-39.5"
+         Lng = "144.5"
+         Angle = "0"
+         ZoomLevel = "29.6724074881116">
+      </Place>
+
+      <Place
+         Name = "Libya Linea"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         DataSetType = "Planet"
+         Lat = "-56.2"
+         Lng = "176.683333333333"
+         Angle = "0"
+         ZoomLevel = "34.5816628277567">
+      </Place>
+
+      <Place
+         Name = "Minos Linea"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         DataSetType = "Planet"
+         Lat = "45.2833333333333"
+         Lng = "164.3"
+         Angle = "0"
+         ZoomLevel = "50.9753090137911">
+      </Place>
+
+      <Place
+         Name = "Onga Linea"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         DataSetType = "Planet"
+         Lat = "-38.7833333333333"
+         Lng = "150.383333333333"
+         Angle = "0"
+         ZoomLevel = "39.9617983359116">
+      </Place>
+
+      <Place
+         Name = "Pelagon Linea"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         DataSetType = "Planet"
+         Lat = "34"
+         Lng = "-170"
+         Angle = "0"
+         ZoomLevel = "39.8872192270874">
+      </Place>
+
+      <Place
+         Name = "Pelorus Linea"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         DataSetType = "Planet"
+         Lat = "-17.1"
+         Lng = "-175.883333333333"
+         Angle = "0"
+         ZoomLevel = "48.6468338784324">
+      </Place>
+
+      <Place
+         Name = "Phineus Linea"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         DataSetType = "Planet"
+         Lat = "-33"
+         Lng = "90.7833333333333"
+         Angle = "0"
+         ZoomLevel = "50.0549094822227">
+      </Place>
+
+      <Place
+         Name = "Phoenix Linea"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         DataSetType = "Planet"
+         Lat = "14.5"
+         Lng = "175.3"
+         Angle = "0"
+         ZoomLevel = "39.0111752140041">
+      </Place>
+
+      <Place
+         Name = "Rhadamanthys Linea"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         DataSetType = "Planet"
+         Lat = "18.5"
+         Lng = "159.183333333333"
+         Angle = "0"
+         ZoomLevel = "48.7153990011835">
+      </Place>
+
+      <Place
+         Name = "Sarpedon Linea"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         DataSetType = "Planet"
+         Lat = "-42.2"
+         Lng = "-89.4"
+         Angle = "0"
+         ZoomLevel = "41.5282114126655">
+      </Place>
+
+      <Place
+         Name = "Tectamus Linea"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         DataSetType = "Planet"
+         Lat = "17.8833333333333"
+         Lng = "178.1"
+         Angle = "0"
+         ZoomLevel = "38.8368042422596">
+      </Place>
+
+      <Place
+         Name = "Telephassa Linea"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         DataSetType = "Planet"
+         Lat = "-2.78333333333333"
+         Lng = "-178.8"
+         Angle = "0"
+         ZoomLevel = "39.8872192270874">
+      </Place>
+
+      <Place
+         Name = "Thasus Linea"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         DataSetType = "Planet"
+         Lat = "-68.6833333333333"
+         Lng = "172.6"
+         Angle = "0"
+         ZoomLevel = "42.4574468189413">
+      </Place>
+
+      <Place
+         Name = "Thynia Linea"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         DataSetType = "Planet"
+         Lat = "-57.9"
+         Lng = "-148.6"
+         Angle = "0"
+         ZoomLevel = "33.4990145460784">
+      </Place>
+
+   </Folder>
+
+   <Folder
+      Name = "Low ridge"
+      Group = "Explorer"
+      Searchable = "True"
+      Type = "Planet"
+      Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Lowridge.jpg">
+
+      <Place
+         Name = "Cilicia Flexus"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Lowridge.jpg"
+         DataSetType = "Planet"
+         Lat = "-47.5833333333333"
+         Lng = "-142.6"
+         Angle = "0"
+         ZoomLevel = "37.7082587004957">
+      </Place>
+
+      <Place
+         Name = "Delphi Flexus"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Lowridge.jpg"
+         DataSetType = "Planet"
+         Lat = "-69.6833333333333"
+         Lng = "-172.3"
+         Angle = "0"
+         ZoomLevel = "43.4359569483101">
+      </Place>
+
+      <Place
+         Name = "Gortyna Flexus"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Lowridge.jpg"
+         DataSetType = "Planet"
+         Lat = "-42.4"
+         Lng = "-144.6"
+         Angle = "0"
+         ZoomLevel = "44.6930542899401">
+      </Place>
+
+      <Place
+         Name = "Phocis Flexus"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Lowridge.jpg"
+         DataSetType = "Planet"
+         Lat = "-48.5833333333333"
+         Lng = "162.8"
+         Angle = "0"
+         ZoomLevel = "31.1612829199442">
+      </Place>
+
+      <Place
+         Name = "Sidon Flexus"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Lowridge.jpg"
+         DataSetType = "Planet"
+         Lat = "-64.5"
+         Lng = "-170.383333333333"
+         Angle = "0"
+         ZoomLevel = "44.2888758560578">
+      </Place>
+
+   </Folder>
+
+   <Folder
+      Name = "Region"
+      Group = "Explorer"
+      Searchable = "True"
+      Type = "Planet"
+      Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Region.jpg">
+
+      <Place
+         Name = "Annwn Regio"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Region.jpg"
+         DataSetType = "Planet"
+         Lat = "20"
+         Lng = "-40"
+         Angle = "0"
+         ZoomLevel = "51.938956784512">
+      </Place>
+
+      <Place
+         Name = "Argadnel Regio"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Region.jpg"
+         DataSetType = "Planet"
+         Lat = "-14.6"
+         Lng = "-151.5"
+         Angle = "0"
+         ZoomLevel = "49.5164685305973">
+      </Place>
+
+      <Place
+         Name = "Balgatan Regio"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Region.jpg"
+         DataSetType = "Planet"
+         Lat = "-50"
+         Lng = "30"
+         Angle = "0"
+         ZoomLevel = "53.0330085889911">
+      </Place>
+
+      <Place
+         Name = "Dyfed Regio"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Region.jpg"
+         DataSetType = "Planet"
+         Lat = "10"
+         Lng = "-110"
+         Angle = "0"
+         ZoomLevel = "48.5088272856301">
+      </Place>
+
+      <Place
+         Name = "Falga Regio"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Region.jpg"
+         DataSetType = "Planet"
+         Lat = "30"
+         Lng = "-150"
+         Angle = "0"
+         ZoomLevel = "53.0330085889911">
+      </Place>
+
+      <Place
+         Name = "Moytura Regio"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Region.jpg"
+         DataSetType = "Planet"
+         Lat = "-50"
+         Lng = "-65.7166666666667"
+         Angle = "0"
+         ZoomLevel = "35.15993358769">
+      </Place>
+
+      <Place
+         Name = "Powys Regio"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Region.jpg"
+         DataSetType = "Planet"
+         Lat = "0"
+         Lng = "145"
+         Angle = "0"
+         ZoomLevel = "50.1555228732316">
+      </Place>
+
+      <Place
+         Name = "Tara Regio"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Region.jpg"
+         DataSetType = "Planet"
+         Lat = "-10"
+         Lng = "75"
+         Angle = "0"
+         ZoomLevel = "48.7153990011835">
+      </Place>
+
+   </Folder>
+
+   <Folder
+      Name = "Rough terrain"
+      Group = "Explorer"
+      Searchable = "True"
+      Type = "Planet"
+      Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Roughterrain.jpg">
+
+      <Place
+         Name = "Arran Chaos"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Roughterrain.jpg"
+         DataSetType = "Planet"
+         Lat = "13.4"
+         Lng = "80.5"
+         Angle = "0"
+         ZoomLevel = "16.9357564826492">
+      </Place>
+
+      <Place
+         Name = "Conamara Chaos"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Roughterrain.jpg"
+         DataSetType = "Planet"
+         Lat = "9.5"
+         Lng = "86.7"
+         Angle = "0"
+         ZoomLevel = "25.177476172447">
+      </Place>
+
+      <Place
+         Name = "Murias Chaos"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Roughterrain.jpg"
+         DataSetType = "Planet"
+         Lat = "22.3833333333333"
+         Lng = "-83.9"
+         Angle = "0"
+         ZoomLevel = "24.5068490768757">
+      </Place>
+
+      <Place
+         Name = "Narberth Chaos"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Roughterrain.jpg"
+         DataSetType = "Planet"
+         Lat = "-26"
+         Lng = "-87"
+         Angle = "0"
+         ZoomLevel = "15.8605689516085">
+      </Place>
+
+      <Place
+         Name = "Rathmore Chaos"
+         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Roughterrain.jpg"
+         DataSetType = "Planet"
+         Lat = "25.4"
+         Lng = "75"
+         Angle = "0"
+         ZoomLevel = "20.6077215379085">
+      </Place>
+
+   </Folder>
+
+</Folder>
+

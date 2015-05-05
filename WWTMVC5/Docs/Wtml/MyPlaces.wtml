@@ -1,0 +1,58 @@
+﻿<?xml version="1.0"?>
+<Folder 
+	Name="My Places" 
+	Group="Explorer" 
+	Searchable="True" 
+	Type="Sky"
+	Thumbnail="G:\Peter\Images\T_Earth.jpg">
+
+  	<VersionDependent>false</VersionDependent>
+
+
+  <Place Name="Serpens Dark Cloud" 
+
+DataSetType="Sky" RA="16.5496517733333" Dec="-23.25002666" Constellation="AND" Classification="Unfiltered" Magnitude="0" Distance="0" ZoomLevel="61.76666816142" Rotation="0" Angle="0" Opacity="100" AngularSize="1">
+    <Target>Undefined</Target>
+    <ForegroundImageSet>
+      <ImageSet Generic="False" DataSetType="Sky" BandPass="Visible" Url="http://www.cfa.harvard.edu/~gmuench/wwtimages/161419573/{1}/{3}/{3}_{2}.png" TileLevels="4" WidthFactor="2" Sparse="True" Rotation="0" QuadTreeMap="" Projection="Tangent" Name="1120 micron  image of the Serpens Dark Cloud;Serpens;Serpens Dark Cloud" FileType=".png" CenterY="-23.25002666" CenterX="248.2447766" BottomsUp="False" OffsetX="-0.0013888889225" OffsetY="-0.0013888889225" BaseTileLevel="0" BaseDegreesPerTile="11.37777805312">
+        <Credits>Enoch/COMPLETE/CSO
+1120 micron  image of the Serpens Dark Cloud.  Data were taken May-June 2003 and 2005. Flux units are in mJy per 31 arcsecond beam. 
+
+Reference:  Melissa Enoch et al., Comparing Star Formation on Large Scales in the c2d Legacy Clouds: Bolocam 1.1 mm Dust Continuum Surveys of Serpens, Perseus, and Ophiuchus, ApJ, 2007, 666, 982 </Credits>
+        <CreditsUrl>http://www.cfa.harvard.edu/COMPLETE/data_html_pages/SerA_1120uBolo_F.html</CreditsUrl>
+        <ThumbnailUrl>http://www.cfa.harvard.edu/~gmuench/wwtimages/161419573.jpg</ThumbnailUrl>
+      </ImageSet>
+    </ForegroundImageSet>
+  </Place>
+
+ <Place Name="Perseus Molecular Cloud" 
+
+DataSetType="Sky" RA="3.60308" Dec="31.4979" Constellation="AND" Classification="Unfiltered" Magnitude="0" ZoomLevel="52.18673064" Rotation="0" Angle="0" Opacity="100" AngularSize="1">
+    <ForegroundImageSet>
+      <ImageSet Name="Spitzer/MIPS Temperature Map of Perseus Molecular Cloud;Perseus Molecular Cloud" Url="http://www.cfa.harvard.edu/~gmuench/wwtimages/612426775/{1}/{3}/{3}_{2}.png" BaseTileLevel="0" TileLevels="3" BaseDegreesPerTile="9.09758464" FileType=".png" BottomsUp="False" Projection="Tan" QuadTreeMap="" CenterX="54.0462" CenterY="31.4979" OffsetX="-0.0696445314999998" OffsetY="-0.149131978524" Rotation="0" DataSetType="Sky" BandPass="Visible" Sparse="True" WidthFactor="2">
+        <Credits>COMPLETE/Schnee
+Combining Spitzer/MIPS maps at 70 and 160 microns with IRAS maps at 60 and 100 microns we have produced high-resolution column density and temperature maps of Perseus. The emission maps at 60 and 70 microns are statistically corrected for emission from Very Small Grains (VSG's), and the dust emissivity is seen to increase in colder and denser regions within the molecular cloud. The resolution of the map is 40", set by the resolution of the Spitzer 160 micron map.
+
+This map is a linear scaling of Temperature expressed in Kelvins including values from 10-30K.</Credits>
+        <CreditsUrl>http://www.cfa.harvard.edu/COMPLETE/data_html_pages/PerA_AvTemMIPS_F.html</CreditsUrl>
+        <ThumbnailUrl>http://www.cfa.harvard.edu/~gmuench/wwtimages/612426775.jpg</ThumbnailUrl>
+        <Description />
+      </ImageSet>
+    </ForegroundImageSet>
+  </Place>
+
+
+  <Place Name="Ophiuchus Molecular Cloud" DataSetType="Sky" RA="16.586008" Dec="-23.048483" Constellation="AND" Classification="Unfiltered" Magnitude="0" Distance="0" ZoomLevel="57.50001" Rotation="0" Angle="0" Opacity="100" AngularSize="1">
+    <Target>Undefined</Target>
+    <ForegroundImageSet>
+      <ImageSet Generic="False" DataSetType="Sky" BandPass="Visible" Url="http://www.cfa.harvard.edu/~gmuench/wwtimages/776386108/{1}/{3}/{3}_{2}.png" TileLevels="3" WidthFactor="2" Sparse="True" Rotation="0" QuadTreeMap="" Projection="Tangent" Name="13CO Image of the Ophiuchus Molecular Cloud;Ophiuchus Molecular Cloud" FileType=".png" CenterY="-23.048483" CenterX="248.79012" BottomsUp="False" OffsetX="0" OffsetY="0" BaseTileLevel="0" BaseDegreesPerTile="13.08444672">
+        <Credits>Ridge/COMPLETE/FCRAO
+2D Integrated Image of Ophiuchus taken from a 3D data cube of 13CO emission in Ophiuchus. Data were obtained at FCRAO using the On-the-Fly (OTF) mapping method during 2002-2005. Units are uncorrected antenna temperature (TA*) in Kelvin. Up-to-date values of the forward-scattering efficiency (eta_n) can be obtained from the FCRAO website. Velocities are in m/s. </Credits>
+        <CreditsUrl>http://www.cfa.harvard.edu/COMPLETE/data_html_pages/OphA_13coFCRAO_P.html</CreditsUrl>
+        <ThumbnailUrl>http://www.cfa.harvard.edu/~gmuench/wwtimages/776386108.jpg</ThumbnailUrl>
+      </ImageSet>
+    </ForegroundImageSet>
+  </Place>
+
+ 
+</Folder>

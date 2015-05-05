@@ -1,0 +1,38 @@
+﻿@{
+	Layout = "~/Views/Shared/_ContentPage.cshtml";
+	ViewBag.HideTranslateWidget = 1;
+}
+@section leftnav{
+	@Html.Partial("~/Views/Developers/LeftNav.cshtml")
+}
+<script>
+$(function() {
+	$(window).on('sdkready', function () {
+		
+		$('.sdk-page:visible a').each(function (i, item) {
+			//console.log($(item).attr('href'));
+			switch ($(item).attr('href')) {
+				case 'WorldWideTelescopeWebControlScriptReference.html':
+					$(this).attr('href', '/Developers/HTML5SDK').text('HTML5 Control SDK');
+					break;
+				case 'WorldWideTelescopeDataFilesReference.html':
+					$(this).attr('href', '/Developers/DataFilesReference').text('Data Files Reference');
+					break;
+				case 'WorldWideTelescopeDataToolsGuide.html':
+					$(this).attr('href', '/Developers/DataToolsGuide').text('Data Tools Guide');
+					break;
+				case 'WorldWideTelescopeProjectionReference.html':
+					$(this).attr('href', '/Developers/ProjectionReference').text('Projection Reference');
+					break;
+				case 'http://www.worldwidetelescope.org/help/SupportHelp.aspx':
+					$(this).attr({
+						'href': '/Support/'
+					});
+					break;
+			}
+		});
+	});
+});
+</script>
+<iframe id='sdkFrame' src="/docs/worldwidetelescopesdkoverview.html"></iframe>
+<div class="rightContentContainer"></div>

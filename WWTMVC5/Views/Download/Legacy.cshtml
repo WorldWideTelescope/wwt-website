@@ -1,0 +1,22 @@
+﻿@{
+	Layout = "~/Views/Shared/_ContentPage.cshtml";
+}
+@section leftnav{
+	@Html.Partial("~/Views/Download/LeftNav.cshtml")
+}
+
+	<h1>
+		<a href="@Model.LegacyUrl">WWT Legacy for Windows</a></h1>
+	<p>The Legacy Release supports Windows XP & Vista and DirectX9.0c hardware running as a 32bit application. Do not attempt to install WWT 5.0 on Windows XP. It does not run, and can potentially prevent the Legacy version from running.</p>
+
+	<h4>System Requirements for Legacy version</h4>
+
+ <p>To run this software, you’ll need the following:</p>
+	<ul>
+		<li>Windows XP or Vista</li>
+		<li>Discrete graphics card w/ 512MB VRAM, High End GTX480 class or better w/ 1GB VRAM recommended</li>
+		<li><a href="@Model.LegacyUrl">WorldWide Telescope Legacy</a></li>
+		<li><a href="http://www.microsoft.com/en-us/download/details.aspx?id=17718" target="_blank"> Microsoft .NET Framework 4.0</a></li>
+	</ul>
+
+

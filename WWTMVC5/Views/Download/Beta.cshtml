@@ -1,0 +1,87 @@
+﻿@{
+	Layout = "~/Views/Shared/_ContentPage.cshtml";
+	ViewBag.title = "WorldWide Telescope Launches New Beta Release";
+	ViewBag.betaLink = Model.ResLoc + "/beta/wwtsetup.5.1.09.msi";
+}
+@section leftnav{
+	@Html.Partial("~/Views/Download/LeftNav.cshtml")
+	
+}
+
+
+<script>
+	$(function () {
+		if (navigator.platform == 'Win32' || navigator.platform == 'Win64') {
+			var ua = navigator.userAgent;
+			if (ua.indexOf('Windows NT 6') !== -1 && ua.indexOf('Windows NT 6.0') === -1) {
+				setTimeout(function () {
+					location.href = '@ViewBag.betaLink';
+				}, 3000);
+			} else {
+				$('#modalSpawner').click();
+			}
+
+		}
+	})
+</script>
+<section>
+	<h1><a href="@ViewBag.betaLink">WorldWide Telescope 5.1 Gold RC for Windows</a></h1>
+	<p>WWT 5.1 Gold RC Features Include</p>
+	<ul>
+		<li>Sandbox mode: Bring in your own data from the microscopic to the scale of the universe, as we did with EyeWire at TED</li>
+		<li>3d Cities : Explore the same 3d Cites featured in <a href="http://www.bing.com/dev/en-us/maps-preview-app">Bing Maps Preview</a></li>
+		<li>Improvements to key-frame animation in timeline slides</li>
+		<li>On Screen controls are now “Auto pilot” like for cinematic real-time driving with a mouse</li>
+		<li>Support for foot pedal controls for activating features like all-stop and zooming</li>
+		<li>Support for 3d printing any feature of terrestrial planet or moon using STL file export</li>
+		<li>Oculus Improvements</li>
+		<li>Volumetric Milky Way : See the milky way like never before with real-time volumetric rendering</li>
+		<li>Planet by planet orbit visibility: Turn on and off orbits on a planet-by-planet basis.</li>
+		<li>Visibility by grouping for asteroids</li>
+		<li>Improved OBJ support</li>
+		<li>Galactic Mode: The sky mode now allows your to align to galactic coordinates for navigation.</li>
+		<li>LCAPI updates</li>
+		<li>Map Constellation groups to Midi (or other) Buttons</li>
+		<li>Fixed Crash when running tours while not in master mode</li>
+		<li>Fixed several keyframing issues</li>
+		<li>Current slide advances during tour playback when slides are visible</li>
+		<li>Overlay rotation is not available in tour editor properties</li>
+		<li>Fixed several issues with on-screen controls</li>
+		<li>Fixed Bugs</li>
+	</ul>
+	<p><a href="@ViewBag.betaLink">Install WWT 5.1 Gold RC</a></p>
+</section>
+<section>
+	<h3>WWT 5.1 Gold RC System Requirements</h3>
+	<p>To run this software, you need the following on your computer:</p>
+	<ul>
+		<li>Windows 7 or Windows 8 (older versions of Windows are not supported)</li>
+		<li>Discrete graphics card with 512 MB VRAM, DirectX 10 or DirectX 11 compatibility,  high-end GTX 480 class or better, and 1 GB VRAM recommended</li>
+		<li><a href="@ViewBag.betaLink">WorldWide Telescope 5.1</a></li>
+		<li><a href="http://www.microsoft.com/en-us/download/details.aspx?id=17718">Microsoft .NET Framework 4.0</a></li>
+	</ul>
+	<p>Do not attempt to install WWT 5.1 Gold RC on Windows XP. It does not run and can potentially prevent the legacy version from running.</p>
+
+</section>
+
+<a id="modalSpawner" class="hide" href="javascript:void(0)" data-toggle="modal" data-target="#legacyWindowsModal">
+	Legacy Windows Modal
+</a>
+
+<div class="modal fade" id="legacyWindowsModal" tabindex="-1" role="dialog" aria-labelledby="legacyWindowsModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="legacyWindowsModalLabel">Windows Version</h4>
+			</div>
+			<div class="modal-body">
+				<p>We’ve detected you may be running an older version of Windows.  Please review the Legacy option if you are installing on a version of Windows prior to Windows 7. </p>
+				<br /><br />
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>

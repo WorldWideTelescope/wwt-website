@@ -1,0 +1,39 @@
+﻿
+@{
+	ViewBag.Title = "Mobile Accelerometer Test Page";
+	Layout = "~/Views/Shared/_ContentPage.cshtml";
+}
+
+<h2 onclick="alert(wwt.wcLink)">Click to see mobile link</h2>
+<h4>Device Orientation</h4>
+<div id="orientinfo">
+
+</div>
+<h4>Device Motion</h4>
+<div id="motioninfo">
+
+</div>
+<script>
+	$(window).on('load', function() {
+		window.addEventListener('deviceorientation', function (event) {
+			
+			var s = '';
+			$.each(event, function(k, v) {
+				s += k + ':\t' + v + '<br>';
+			});
+			$('#orientinfo').html(s);
+		}, false);
+		window.addEventListener('devicemotion', function (event) {
+			var s = '';
+			$.each(event, function (k, v) {
+				s += k + ':\t' + v + '<br>';
+				if (k == 'accelerationIncludingGravity') {
+					$.each(v, function(k2, v2) {
+						s += k2 + ':\t' + v2 + '<br>';
+					});
+				}
+			});
+			$('#motioninfo').html(s);
+		}, false);
+	});
+</script>

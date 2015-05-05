@@ -1,0 +1,69 @@
+﻿@using System.Configuration
+@{
+        var title = "WorldWide Telescope (OpenWWT)";
+        try
+        {
+            if (ViewBag.Title != null && ViewBag.Title != "")
+            {
+                title = ViewBag.Title;
+            }
+        }
+        catch (Exception)
+        {
+            // ignored
+        }
+    }
+<!DOCTYPE html>
+<html>
+	<head>
+	    <title>@title</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="description" content="@(ViewBag.MetaDescription ?? "Worldwide Telescope enables your computer to function as a virtual telescope, bringing together imagery from the best telescopes in the world.")" />
+        <meta property="twitter:account_id" content="@(ConfigurationManager.AppSettings["twitterId"])" />
+		<meta name="ROBOTS" content="INDEX, FOLLOW">
+	    <script src="@Model.JsDir/ext/jquery.js?v=@Model.ResVer" type="text/javascript"></script>
+
+	    <script src="//js.live.net/v5.0/wl.js"></script>
+	    
+		<link href="@Model.CssDir/wwt.min.css?v=@Model.ResVer" rel="stylesheet" />
+		<link href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
+		<script src="@Model.JsDir/ext/bootstrap.js"></script>
+		<script src="@Model.JsDir/main.js?v=@Model.ResVer"></script>
+	    <script src="@Model.JsDir/controls/user.js?v=@Model.ResVer"></script>
+
+		<style>
+			body.wwt {
+				background: #011e34 url('@Model.ImgDir/bg/starfield2.png') center 0;
+				background-repeat: no-repeat;
+			}
+			.navbar-inverse {
+				background: rgba(1,30,52,.7) url(@Model.ImgDir/bg/starfield2.png) center 0;
+				background-repeat: no-repeat;
+			}
+			.navbar-fixed-top .container {
+				background-image: url(@Model.ImgDir/bg/navbar-logo-glow.png);
+			}
+		</style>
+		@if (ViewBag.KnowledgeWidget == true)
+		{
+			<script type='text/javascript' src='//www.bing.com/widget/bootstrap.js' data-visualization='linksandimages' data-carouselstate='collapsed' data-strength='moderate' data-maxlinks='12' data-maxentitylinks='4' data-maxparagraphlinks='5' data-version='1.0b' data-autosnapshot='true' data-id='829a001add0c423c851b167315a8bd8f' data-options='dc=dotyellow,cse=1' async></script>
+		}
+		
+		@RenderSection("head", required: false)
+	</head>
+<body class="wwt" resLoc="@Model.ResLoc">
+	<div class="bg-gradient"></div>
+
+	@Html.Partial("TopNav")
+
+
+	<div class="container" id="divMain">
+		@RenderBody()
+	</div>
+
+	@Html.Partial("Footer")
+
+
+</body>
+</html>

@@ -1,0 +1,402 @@
+﻿/* Style Definitions */
+iframe#sdkFrame{
+    height:0;width:0;
+    display:none;
+}
+div.pager-div{
+    position:relative;
+    margin-top: 150px;
+}
+/*div.pager-div:last-child{
+    top:10px;
+    margin-top:10px;
+}
+div.pager-div:last-child a.print, div.pager-div:last-child div.right{
+    display:none;
+}
+*/
+div.progress {
+    margin: 150px 0;
+}
+div.pager-div input.search{
+    font:9pt;
+    width:120px;
+    display:none;
+}
+div.pager-div div.right{
+    float:right;
+    width:182px;
+    vertical-align:middle;
+}
+div.pager-div div.right a, div.pager-div div.right input, div.pager-div div.right img{
+    vertical-align:middle;
+}
+div.pager-div .print{
+    position:absolute;
+    top:42px;
+    right: 15px;
+    width:110px;
+    text-align:right;
+    z-index:2;
+    float:right;
+    text-decoration:none;
+    height:20px;
+    display: inline-block;
+
+}
+
+div.sdk-content{
+    margin:15px 0;
+    
+    /*overflow:hidden;*/
+}
+div.sdk-content div.sdk-page{
+    display:none;
+    margin-top: 36px;
+}
+div.sdk-content a{
+    font-size:inherit;
+}
+div.sdk-content div.page-num-links{
+    display:inline;
+    margin:0 4px;
+}
+div.sdk-content a.pager{
+    /*display:inline-block;
+    padding:1px 0;
+    border:solid 1px #5BABFD;
+    color:#ffffff;
+    width:22px !important;
+    overflow:hidden;
+    margin:3px 3px 0 3px;
+    text-align:center;*/
+    margin: 0;
+    padding-left: 12px;
+}
+div.pager-div a.first-page.disabled,div.pager-div a.last-page.disabled,div.pager-div a.next-page.disabled,div.pager-div a.prev-page.disabled{
+    color:#cccccc;
+}
+
+div.pager-div a.print img{
+    border:0;
+    margin:2px 4px 2px 6px;
+    vertical-align:middle;
+    height:16px;width:16px;
+}
+div.sdk-content a.selected-page{
+    display:inline-block;
+    padding:1px 0;
+    border:none;
+    color:white;
+    font-weight:bold;
+    margin:3px 3px 0 3px;
+    width:22px !important;
+    overflow:hidden;
+    text-align:center;
+}
+div.sdk-content a.hidden{
+    display:none;
+}
+div.sdk-content p, div.sdk-content div
+{
+    margin-top:0pt;
+    margin-bottom:7.5pt;
+    
+    
+}
+div.sdk-content p{
+    margin-right:12pt;
+}
+div.sdk-content dl
+{
+    margin-top: 0.0pt;
+    margin-bottom:12.0pt
+}
+div.sdk-content font[color=red]{
+    color:#f6ff00 !important;
+    font-weight: bold;
+}
+    
+div.sdk-content li
+{
+    margin-left: 12.0pt;
+    margin-top: 0;
+    margin-bottom: 2.0pt;
+    
+    
+    text-indent: 0;
+}
+div.sdk-content td li
+{
+    
+}
+
+/*div.sdk-content td, div.sdk-content tr, div.sdk-content tbody, div.sdk-content td div, div.sdk-content table {
+    max-width:700px !important;
+    overflow:hidden;
+}
+div.sdk-content table td code, tr, tbody, table{
+    display:block;
+}*/
+div.sdk-content table td code{
+    max-width:95%;
+    overflow:hidden;
+}
+
+div.sdk-content td img{
+    vertical-align:middle;
+}
+
+div.sdk-content ul table, div.sdk-content ol table{
+    position:relative;
+    left:-30px !important;
+    max-width:100% !important;
+}
+    
+div.sdk-content p.Link,div.sdk-content  div.link
+{
+    margin-top:0pt;
+    margin-bottom:.0001pt;
+    
+    
+}
+
+
+div.sdk-content .file 
+{
+    border-color:#778899;
+    border-width:1px;
+    border-style:solid;
+    background-color:#e6e6fa;
+    padding:25px;
+    margin:30px;
+    
+    font-family:"Courier New";
+}
+
+div.sdk-content li.Link
+{
+    margin-top:0pt;
+    margin-bottom:.0001pt;
+    
+    
+}
+
+div.sdk-content hr
+{
+    margin-top:12.0pt;
+    margin-bottom:12.0pt
+}
+    
+div.sdk-content img
+{
+    margin-top:6.0pt;
+    margin-bottom:6.0pt
+}
+    
+div.sdk-content img.tag
+{
+    margin-top:6.0pt;
+    margin-bottom:0.0pt
+}
+
+div.sdk-content h1
+{
+    margin-top: 10.0pt;
+    margin-right: 0pt;
+    margin-bottom: 12.0pt;
+    margin-left: 0pt;
+    text-align: left;
+    line-height: 150%;
+    page-break-after: avoid;
+    /*font-size: 16.0pt;*/
+    font-weight: bold;
+    /*color: black;*/
+}
+
+div.sdk-content h2
+{
+    margin-top: 0pt;
+    margin-right: 0pt;
+    margin-bottom: 6.0pt;
+    margin-left: 0pt;
+    text-align: left;
+    line-height: 150%;
+    page-break-after: avoid;
+    /*font-size: 13pt;*/
+    font-weight: bold;
+    /*color: black;*/
+}
+
+div.sdk-content h3
+{
+    margin-top: 12.0pt;
+    margin-right: 0pt;
+    margin-bottom: 6pt;
+    margin-left: 0pt;
+    text-align: left;
+    page-break-after: avoid;
+    /*font-size: 11.0pt;*/
+    font-weight: bold;
+    /*color: #454545;*/
+}
+
+div.sdk-content h4
+{
+    margin-top:12.0pt;
+    margin-right:0pt;
+    margin-bottom:6.0pt;
+    margin-left:0pt;
+    text-align:left;
+    page-break-after:avoid;
+    /*font-size:10.0pt;*/
+    font-weight:bold;
+}
+
+div.sdk-content h5
+{
+    margin-top:0.3pt;
+    margin-right:0pt;
+    margin-bottom:6.0pt;
+    margin-left:0pt;
+    text-align:left;
+    page-break-after:avoid;
+    /*font-size:10.0pt;*/
+}
+
+div.sdk-content h6
+{
+    margin-top: 12.0pt;
+    margin-right: 0.0pt;
+    margin-bottom: 5.0pt;
+    margin-left: 0pt;
+    text-align: left;
+    page-break-after: avoid;
+    /*font-size: 9.0pt;*/
+    font-weight: normal;
+    font-style: italic;
+    /*color: black;*/
+    color:White;
+}
+
+div.sdk-content h7
+{
+    margin-top:0.3pt;
+    margin-right:0pt;
+    margin-bottom:0.0pt;
+    margin-left:0pt;
+    text-align:left;
+    page-break-after:avoid;
+    /*font-size:10.0pt;*/
+    font-weight:normal;
+    font-style:italic;
+    
+    /*color: black;*/
+    color:White;
+}
+
+div.sdk-content table h1,div.sdk-content table h2,div.sdk-content table h3,div.sdk-content table h4,div.sdk-content table h5,div.sdk-content table h6,div.sdk-content table h7{
+    color:#white;
+}
+
+
+div.sdk-content CODE
+{
+    margin:0pt;	
+    margin-bottom:.0001pt;
+    font-size:10.0pt;
+    font-weight:400;
+    font-family:"Courier New";
+    /*color:#ffffff;*/
+    max-width:95%;
+}
+div.sdk-content table CODE
+{
+    margin:0pt;	
+    margin-bottom:.0001pt;
+    /*font-size:10.0pt;*/
+    font-weight:400;
+    font-family:"Courier New";
+    /*color:#000000;*/
+
+}
+
+
+/*div.sdk-content A:Hover
+{
+    color:#4682b4;
+}*/
+
+
+@page Section1
+{
+    margin:72.0pt 90.0pt 72.0pt 90.0pt;
+}
+
+
+
+div.sdk-content table.T1
+{	
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    border-collapse: collapse;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    margin:16pt 8pt;
+    text-align: left;
+    width: 95%;
+}
+
+div.sdk-content table.T2 {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    border-collapse: collapse;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    margin: 16pt 8pt;
+    width: 95%;
+    text-align: left;
+    
+}
+
+div.sdk-content table.T3
+{	
+background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    border-collapse: collapse;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    margin:16pt 8pt;
+    width: 95%;
+    text-align: left;
+    /*font-size: 9.5pt;*/
+    
+}
+
+div.sdk-content table.Tfile
+{    	
+    border-color:#778899;
+    border-width:1px;
+    border-style:solid;
+    background-color:#e6e6fa;
+    padding:25px;
+    margin:16pt 8pt;
+    
+    font-family:"Courier New";
+    text-align:left;
+}
+     
+     
+div.sdk-content tr 
+{
+    vertical-align:top;
+}
+
+div.sdk-content td,div.sdk-content td div,div.sdk-content td p
+{
+    
+    line-height:140%;
+    
+    color:inherit;
+    min-width: 150px;
+}

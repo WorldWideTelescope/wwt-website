@@ -1,0 +1,300 @@
+﻿<!DOCTYPE html "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  
+<title>WWT Web Client Moon Explorer</title>
+	
+<script type="text/jscript" language="javascript">
+
+    // Create the WorldWide telescope object
+
+    var wwtView;
+
+    // Create variables to hold the changeable settings
+
+    var bShowCrosshairs = true;
+    var bShowUI = true;
+    var closeUp = 5;
+    var current = 0;
+
+    var moonData = [
+    // The first feature must match that set in the HTML table below
+                     ['Mons Blanc', 45, 0, 'N', 1, 0, 'E', 'Mountain'],
+
+    // Add features in the format: Name Latitude (deg, min, N/S) Longitude (deg, min, E/W) Type
+
+['Mons Huygens', 20, 0, 'N', 2, 54, 'W', 'Mountain'],
+['Mons Hadley', 26, 30, 'N', 4, 42, 'E', 'Mountain'],
+['Montes Alpes', 46, 24, 'N', 0, 48, 'W', 'Mountain range'],
+['Montes Agricola', 29, 6, 'N', 54, 12, 'W', 'Mountain range'],
+['Montes Secchi', 3, 0, 'N', 43, 0, 'E', 'Mountain range'],
+['Catena Leuschner', 4, 42, 'N', 110, 6, 'w', 'Catena crater chain'],
+['Catena Summer', 37, 18, 'N', 112, 18, 'E', 'Catena crater chain'],
+['Catena Humboldt', 21, 30, 'S', 84, 36, 'E', 'Catena crater chain'],
+['Dorsa Burnet', 28, 24, 'N', 57, 0, 'W', 'Ridge system'],
+['Dorsa Cato', 1, 0, 'N', 47, 0, 'E', 'Ridge system'],
+['Dorsa Mawson', 7, 0, 'S', 53, 0, 'E', 'Ridge system'],
+['Dorsum Buckland', 20, 24, 'N', 12, 48, 'E', 'Ridge system'],
+['Dorsum Guettard', 10, 0, 'S', 18, 0, 'W', 'Ridge system'],
+['Promontorium Agarum', 14, 0, 'N', 66, 0, 'E', 'Headland'],
+['Promontorium Heraclides', 40, 18, 'N', 33, 12, 'W', 'Headland'],
+['Promontorium Kelvin', 27, 0, 'S', 33, 0, 'W', 'Headland'],
+['Rima Ariadaeus', 6, 24, 'N', 14, 0, 'E', 'Depression'],
+['Rima Birt', 21, 0, 'S', 9, 0, 'W', 'Depression'],
+['Rima Hadley', 25, 0, 'N', 3, 0, 'E', 'Depression'],
+['Rimae Fresnel', 28, 0, 'N', 4, 0, 'E', 'Depression system'],
+['Rimae Hypatia', 0, 24, 'S', 22, 24, 'E', 'Depression system'],
+['Rimae Sirsalis', 15, 42, 'S', 61, 42, 'W', 'Depression system'],
+['Rupes Altai', 24, 18, 'S', 22, 36, 'E', 'Escarpment'],
+['Rupes Kelvin', 27, 18, 'S', 33, 6, 'W', 'Escarpment'],
+['Rupes Recta', 22, 6, 'S', 7, 48, 'W', 'Escarpment (cliff)'],
+['Mare Anguis', 22, 36, 'N', 67, 42, 'E', 'Sea (Serpent)'],
+['Mare Frigoris', 56, 0, 'N', 1, 24, 'E', 'Sea (Cold)'],
+['Mare Tranquillitatis', 8, 30, 'N', 31, 24, 'E', 'Sea (Tranquility)'],
+['Vallis Bouvard', 38, 18, 'S', 83, 6, 'W', 'Valley'],
+['Vallis Planck', 58, 24, 'S', 126, 6, 'E', 'Valley'],
+['Vallis Rheita', 42, 30, 'S', 51, 30, 'E', 'Valley'],
+['Copernicus', 9, 42, 'N', 20, 6, 'W', 'Crater'],
+['Tchyo', 43, 18, 'S', 11, 12, 'W', 'Crater'],
+['Picard', 14, 36, 'N', 54, 42, 'E', 'Crater'],
+
+    // Add more data here
+
+    // This must end array                     
+                     ['Zero Zero', 0, 0, 'N', 0, 0, 'E', 'Zero Lat Lon']
+                     ];
+
+    function showCurrent() {
+
+        document.getElementById('feature').value = moonData[current][0];
+        document.getElementById('latdegrees').value = moonData[current][1];
+        document.getElementById('latminutes').value = moonData[current][2];
+
+        if (moonData[current][3] == 'N')
+            document.getElementById('north1').checked = true; else
+            document.getElementById('north1').checked = false;
+
+        document.getElementById('londegrees').value = moonData[current][4];
+        document.getElementById('lonminutes').value = moonData[current][5];
+
+        if (moonData[current][6] == 'E')
+            document.getElementById('east1').checked = true; else
+            document.getElementById('east1').checked = false;
+
+        document.getElementById('type').value = moonData[current][7];
+    }
+
+    function clickFirst() {
+        current = 0;
+        showCurrent();
+    }
+
+    function clickLast() {
+        current = moonData.length - 1;
+        showCurrent();
+    }
+    
+    function clickNext() {
+        if (moonData[current][0] != 'Zero Zero') {
+            ++current;
+            showCurrent();
+        }
+    }
+
+    function clickPrev() {
+        if (current > 0) {
+            --current;
+            showCurrent();
+        }
+    }
+
+    function showFeature() {
+        var latD = 1.0 * document.getElementById('latdegrees').value;
+        var latM = 1.0 * document.getElementById('latminutes').value;
+        var north = document.getElementById('north1').checked;
+        var lonD = 1.0 * document.getElementById('londegrees').value;
+        var lonM = 1.0 * document.getElementById('lonminutes').value;
+        var east = document.getElementById('east1').checked;
+
+        if (latD < 0 || latD > 90) {
+            document.getElementById('latdegrees').value = "Out of range (0-90)";
+        } else
+            if (lonD < 0 || lonD > 180) {
+            document.getElementById('londegrees').value = "Out of range (0-180)";
+        } else
+            if (lonM < 0 || lonM > 60) {
+            document.getElementById('lonminutes').value = "Out of range (0-60)";
+        } else
+            if (latM < 0 || latM > 60) {
+            document.getElementById('latminutes').value = "Out of range (0-60)";
+        } else
+            wwtView.Goto(convertLongRA(lonD, lonM, east), convertLatDec(latD, latM, north), closeUp, false);
+    }
+    
+    // A simple function to toggle the settings
+    // This function is called from the checkbox entries setup in the html table
+
+    function toggleSetting(text) {
+        switch (text) {
+            case 'ShowUI':
+                bShowUI = !bShowUI;
+                wwtView.HideUI(!bShowUI);
+                break;
+
+            case 'ShowCrosshairs':
+                bShowCrosshairs = !bShowCrosshairs;
+                wwtView.Settings.ShowCrosshairs = bShowCrosshairs;
+                break;
+
+        }
+    }
+
+    // A function to convert longitude to RA.
+    
+    function convertLongRA(degrees, minutes, east) {
+        var longitude = degrees + (minutes / 60);
+        var x;
+        if (east)
+            x = 360 - longitude; else
+            x = longitude;
+        return x;
+    }
+
+    // A function to convert latitude to Dec
+    
+    function convertLatDec(degrees, minutes, north) {
+    
+        var latitude = degrees + (minutes/60);
+        if (north)
+            return latitude; else
+            return -1 * latitude;   
+    }
+  
+    // The wwtReady function is called by the WWT Web Control software
+    // This function sets up the wwt object, and the initial defaults
+
+    function wwtReady() {
+        wwtView = document.getElementById("WWTView").content.WWT;
+
+        wwtView.Settings.ShowCrosshairs = bShowCrosshairs;
+        wwtView.Settings.ShowConstellationFigures = bShowFigures;
+        wwtView.HideUI(!bShowUI);
+    }
+
+</script>
+
+</head>
+
+<body>
+
+<!-- The body section creates a table with two columns. The first contains the -->
+<!-- silverlight object that is the WWT web client. And the second a table within-->
+<!-- the table, containing some buttons and checkboxes.-->
+
+<table border="2" bgcolor="lightgrey">
+	<tr><td>
+        <div id="WorldWideTelescopeControlHost">
+        
+        <object id="WWTView" 
+			data="data:application/x-silverlight," 
+			type="application/x-silverlight-2" 			
+			width="1600" height="1000">
+
+<!-- Ensure the source parameter links correctly to the wwtsl.xap file -->
+
+			<param name="source" value="http://www.worldwidetelescope.org/webclient/clientbin/WWTSL.xap"/>
+			<param name="background" value="black" />
+			<param name="minRuntimeVersion" value="3.0.40624.0" />
+			<param name="autoUpgrade" value="true" />
+			<param name="initParams" value="NoUI=false,wtml=,webkey=AX2011Gqqu" />
+		    <param name="enableHtmlAccess" value="true" />
+			<a href="http://go.microsoft.com/fwlink/?LinkID=149156&v=3.0.40624.0">
+     			<img src="http://go.microsoft.com/fwlink/?LinkId=108181" alt="Install Microsoft Silverlight" /></a>
+		</object>
+    </div>
+	</td><td>
+
+	<table border="2" cellspacing="4" cellpadding="4" bgcolor="gold">
+	
+	<tr>
+	<th colspan="2"><h2>WWT Web Client Moon Explorer</h2></th>
+	</tr>
+    <tr>
+	<th colspan = "2">Feature</th>
+	</tr>
+		
+	<tr><th colspan="2">
+	<input type="button" id="prev" value ="Prev" onclick="clickPrev();" />
+	<input type="button" id="next" value ="Next" onclick="clickNext();" />
+	</th>
+	</tr>
+			
+    <tr><th colspan="2">
+	<input type="button" id="first" value ="First" onclick="clickFirst();" />
+	<input type="button" id="last" value ="Last" onclick="clickLast();" />
+	</th>
+	</tr>
+	
+	<tr>
+	<td>Feature</td>
+	<td> <input id="feature" type="text" value="Mons Blanc" readonly="readonly"/></td>
+	</tr>
+	
+	<tr>
+		<td>Type</td>
+	<td> <input id="type" type="text" value="Mountain" readonly="readonly"/></td>
+	</tr>
+    <tr>
+	<td>Latitude degrees</td>
+	<td> <input id="latdegrees" type="text" value="45" /></td>
+	</tr>
+	    <tr>
+	<td>Latitude minutes</td>
+	<td> <input id="latminutes" type="text" value="0" /></td>
+	</tr>
+		<tr>
+	<td>North</td>
+	<td> <input id ="north1" type="checkbox" checked="checked" /></td>
+	</tr>
+	    <tr>
+	<td>Longitude degrees</td>
+	<td> <input id="londegrees" type="text" value="1" /></td>
+	</tr>
+	    <tr>
+	<td>Longitude minutes</td>
+	<td> <input id="lonminutes" type="text" value="0" /></td>
+	</tr>
+		<tr>
+	<td>East</td>
+	<td> <input id ="east1" type="checkbox" checked="checked" /></td>
+	</tr>
+	
+				<tr><th colspan="2">
+	<input type="button" id="goto" value="Goto" onclick="showFeature();"/>
+	</th></tr>
+	
+	<tr>
+	<th colspan = "2">Settings</th>
+	</tr>
+	
+	<tr>
+		<td> Show UI </td>
+		<td> <input id="UI" type="checkbox" checked="checked" onclick="toggleSetting('ShowUI');"/></td>
+
+	</tr>
+	
+	<tr>
+		<td> Show Crosshairs</td>
+		<td> <input id="Crosshairs" type="checkbox" checked="checked" onclick="toggleSetting('ShowCrosshairs');"/></td>
+
+	</tr>
+</table>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>

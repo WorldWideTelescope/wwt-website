@@ -1,0 +1,11 @@
+User-agent: *
+Disallow: /search/
+Disallow: /webclient/
+Disallow: /data/
+Disallow: /scripts/
+Disallow: /Thumbnails/
+Disallow: /WWTWeb/
+Disallow: /press/press.aspx?supp=factsheets
+Disallow: /press/press.aspx?page=factsheets
+Disallow: /whatis/whatiswwt.aspx?page=indepth
+Disallow: /whatis/whatiswwt.aspx?wwt=indepth

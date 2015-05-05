@@ -1,0 +1,204 @@
+﻿@{
+	ViewBag.Title = "WCS Service - WorldWide Telescope";
+	Layout = "~/Views/Shared/_ContentPage.cshtml";
+}
+<script>
+
+	$(function () {
+
+		wwt.avmService = (function () {
+			var api = {
+				submitImage: function (imageUrl, callback) {
+					if (callback) {
+						statusCallback = callback;
+					}
+					uploadUrl = imageUrl;
+					$('#resultDivContainer').html('');
+					login();
+				}
+			};
+
+			var uploadUrl = "http://www.noao.edu/outreach/aop/observers/m51rolfe.jpg", statusCallback;
+
+			var upload = '{"session": "####", "url": "http://apod.nasa.gov/apod/image/1206/ldn673s_block1123.jpg", "scale_units": "degwidth", "scale_lower": 0.5, "scale_upper": 1.0, "center_ra": 290, "center_dec": 11, "radius": 2.0 }      ';
+
+
+			var session = "";
+			var subId = "";
+			var jobId = "";
+
+			function login() {
+
+				showStatus("Logging In");
+
+				//var loginParams = "request-json=%7B%22apikey%22%3A+%22ukrhxcwceyorvepj%22%7D";
+
+				var li = {};
+				li.apikey = "ukrhxcwceyorvepj"; // this may change we should put it in the web.config
+
+				var liJSON = encodeURIComponent(JSON.stringify(li));
+
+				$.ajax({
+					url: "http://supernova.astrometry.net/api/login",
+					type: "POST",
+					data: "request-json=" + liJSON,
+					dataType: "json",
+					crossDomain: true,
+					success: function (result) {
+						session = result.session;
+						showStatus("Log in Sucess. Session Id: " + session);
+						uploadImage();
+					},
+					error: function (xhr, ajaxOptions, thrownError) {
+						showStatus("Log in Failed!");
+					}
+				});
+
+
+			}
+
+			function uploadImage() {
+				showStatus("Uploading Image");
+				var upload = {};
+				upload.url = uploadUrl; //"http://www.noao.edu/outreach/aop/observers/m51rolfe.jpg";
+				upload.session = session;
+
+				var upJSON = encodeURIComponent(JSON.stringify(upload));
+				var loginUrl = 'http://nova.astrometry.net/api/login';
+				$.ajax({
+					url: "http://supernova.astrometry.net/api/url_upload",
+					type: "POST",
+					data: "request-json=" + upJSON,
+					dataType: "json",
+					crossDomain: true,
+					success: function (result) {
+						subId = result.subid;
+						checkStatus();
+					},
+					error: function (xhr, ajaxOptions, thrownError) {
+						showStatus("Upload Failed!");
+					}
+				});
+			}
+
+			function checkStatus() {
+				showStatus("Getting submission Status: " + subId);
+				$.ajax({
+					url: "http://supernova.astrometry.net/api/submissions/" + subId,
+					type: "GET",
+					dataType: "json",
+					crossDomain: true,
+					success: function (result) {
+						if (result.jobs.length > 0) {
+							for (var i = 0; i < result.jobs.length; i++) {
+								if (result.jobs[i] != null) {
+									jobId = result.jobs[i];
+									checkJobStatus();
+									return;
+								}
+							}
+						}
+
+						// Try again
+						showStatus("Trying Again");
+						window.setTimeout(checkStatus, 2000);
+
+					},
+					error: function (xhr, ajaxOptions, thrownError) {
+						showStatus("Status Check Failed!");
+					}
+				});
+			}
+
+
+			function checkJobStatus() {
+				showStatus("Checking Job Status: " + jobId);
+				$.ajax({
+					url: "http://supernova.astrometry.net/api/jobs/" + jobId,
+					type: "GET",
+					dataType: "json",
+					crossDomain: true,
+					success: function (result) {
+
+
+						if (result.status == "failed") {
+							// do stuff to notify user image could not be solved
+							showStatus("Image Solution failed");
+							return;
+						}
+						showStatus("Job Status: " + result.status);
+
+						if (result.status != "success") {
+							showStatus("trying again");
+							window.setTimeout(checkJobStatus, 10000);
+						} else {
+							// got the job status we are done
+							showStatus("Job Complete");
+							getCalibration();
+						}
+
+					},
+					error: function (xhr, ajaxOptions, thrownError) {
+						showStatus("Job Status Failed!", 'failed');
+					}
+				});
+			}
+
+			function getCalibration() {
+				showStatus("Getting Calibration");
+				$.ajax({
+					url: "http://supernova.astrometry.net/api/jobs/" + jobId + "/calibration",
+					type: "GET",
+					dataType: "json",
+					crossDomain: true,
+					success: function (result) {
+						showStatus("Calibration retreived");
+						var ra = result.ra; // in degrees devide 15 for hours
+						var dec = result.dec; // in degrees
+						var rotation = result.orientation;
+						var scale = result.pixscale;
+						var parity = result.parity;
+						var radius = result.radius;
+						var stat = JSON.stringify(result);
+						showStatus(stat, 'success', resultsForSpec);
+					},
+					error: function (xhr, ajaxOptions, thrownError) {
+
+						showStatus("Get Calibration Failed!", 'failed');
+
+					}
+				});
+			}
+
+			function showStatus(statusText, statusType, data) {
+				if (statusCallback) {
+					statusCallback(statusText, statusType, data);
+				}
+				// Change this to somehow show other status
+
+				$("#resultDivContainer").append(statusText + "<br>");
+				wwt.triggerResize();
+			}
+
+			return api;
+		})();
+	});
+
+</script>
+<h1>WCS Service</h1>
+<p>Enter an image url</p>
+<div class="input-group">
+	<input type="text" class="form-control" placeholder="Image Url" id="txtImageUrl" value="http://www.noao.edu/outreach/aop/observers/m51rolfe.jpg">
+
+	<a class="input-group-addon" style="color:#009cff" href="javascript:wwt.avmService.submitImage($('#txtImageUrl').val())" id="btnImportImage" data-toggle="tooltip" data-original-title="Submit this image">
+		<i class="fa fa-upload"></i>
+	</a>
+
+</div>
+<br/>
+<p>
+	Status:<br />
+	<pre id="resultDivContainer">[waiting for image url]</pre>
+</p>
+
+

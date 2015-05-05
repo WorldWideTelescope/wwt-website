@@ -1,0 +1,154 @@
+﻿<!DOCTYPE>
+<html>
+<head>
+    <meta charset="utf-8" content="chrome=1, IE=edge" http-equiv="X-UA-Compatible" />
+    <title>WWT Web Client Images</title>
+    <script src="http://www.worldwidetelescope.org/scripts/wwtsdk.aspx"></script>
+    <script language="javascript">
+
+    // Create the WorldWide telescope object variable
+
+    var wwt;
+
+    // Create variables to hold the changeable settings
+
+    var bShowCrosshairs = true;
+    var bShowUI = true;
+    var bShowFigures = true;
+
+    // This function initializes the wwt object and registers the wwtReady event
+    // once the initialization is done the wwtReady event will be fired
+    function initialize() {
+        wwt = wwtlib.WWTControl.initControl("WWTCanvas");
+        wwt.add_ready(wwtReady);
+    }
+
+    // A simple function to toggle the settings
+    // This function is called from the checkbox entries setup in the html table
+
+    function toggleSetting(text) {
+        switch (text) {
+            case 'ShowUI':
+                bShowUI = !bShowUI;
+                wwt.hideUI(!bShowUI);
+                break;
+
+            case 'ShowCrosshairs':
+                bShowCrosshairs = !bShowCrosshairs;
+                wwt.settings.set_showCrosshairs(bShowCrosshairs);
+                break;
+
+            case 'ShowFigures':
+                bShowFigures = !bShowFigures;
+                wwt.settings.set_showConstellationFigures(bShowFigures);
+                break;
+        }
+    }
+
+    // A function to change the view to different locations
+    // This function is called from the button entries in the html table
+
+
+    function Goto(text) {
+        switch (text) {
+            case 'Serpens Dark Cloud':
+                wwt.setForegroundImageByName('Serpens Dark Cloud');
+                // Change decimal hours to decimal degrees by multiplying by 15
+                wwt.gotoRaDecZoom(15 * 16.5496517733333, -23.25002666, 10, false);
+                break;
+
+            case 'Perseus Molecular Cloud':
+                wwt.setForegroundImageByName("Perseus Molecular Cloud");
+                wwt.gotoRaDecZoom(15 * 3.60308, 31.4979, 10, false);
+                break;
+
+            case 'Ophiuchus Molecular Cloud':
+                wwt.setForegroundImageByName("Ophiuchus Molecular Cloud");
+                wwt.gotoRaDecZoom(15 * 16.586008, -23.048483, 10, false);
+                break;
+        }
+    }
+
+    // The wwtReady function is called by the WWT Web Control software
+    // This function sets up the wwt object, and the initial defaults
+
+    function wwtReady() {
+        wwt.settings.set_showCrosshairs(bShowCrosshairs);
+        wwt.settings.set_showConstellationFigures(bShowFigures);
+        wwt.hideUI(!bShowUI);
+
+        wwt.settings.set_showConstellationBoundries(true);
+
+        // Load in the image collection file
+        wwt.loadImageCollection("http://www.worldwidetelescope.org/docs/wtml/myplaces.wtml");
+    }
+
+    </script>
+
+</head>
+
+<body onload="initialize()" >
+
+<!-- The body section creates a table with two columns. The first contains the -->
+<!-- WWTControl object that is the WWT web client. And the second a table within-->
+<!-- the table, containing some buttons and checkboxes.-->
+
+<table border="2" bgcolor="lightgrey">
+	<tr><td>
+       <div id="WorldWideTelescopeControlHost">
+           <div id="WWTCanvas" style="width: 750px; height: 750px; border-style: none; border-width: 0px;">
+           </div>
+    </div>
+	</td><td>
+
+	<table border="2" cellspacing="4" cellpadding="4" bgcolor="gold">
+	
+	<tr>
+	<th colspan="2"><h2>WWT Web Client Images</h2></th>
+	</tr>
+				<tr>
+	<th colspan = "2">Goto</th>
+	</tr>
+	<tr>
+	<th colspan = "2"> 
+	<input type="button" id="Serpens Dark Cloud" value="Serpens Dark Cloud" onclick="Goto('Serpens Dark Cloud')"/>
+	</th></tr>
+		
+	<tr>
+	<th colspan = "2">
+	<input type="button" id="Perseus Molecular Cloud" value="Perseus Molecular Cloud" onclick="Goto('Perseus Molecular Cloud')"/>		
+		</th></tr>
+		
+		<tr>
+	<th colspan = "2">
+	<input type="button" id="Ophiuchus Molecular Cloud" value="Ophiuchus Molecular Cloud" onclick="Goto('Ophiuchus Molecular Cloud')"/>	
+		</th></tr>
+
+	<tr>
+	<th colspan = "2">Settings</th>
+	</tr>
+	
+<!--	<tr>
+		<td> Show UI </td>
+		<td> <input id="UI" type="checkbox" checked="checked" onclick="toggleSetting('ShowUI');"/></td>
+
+	</tr>-->
+	
+	<tr>
+		<td> Show Crosshairs</td>
+		<td> <input id="Crosshairs" type="checkbox" checked="checked" onclick="toggleSetting('ShowCrosshairs');"/></td>
+
+	</tr>
+
+	<tr>
+		<td> Show Figures </td>
+		<td> <input id="Figures" type="checkbox" checked="checked" onclick="toggleSetting('ShowFigures');"/></td>
+
+	</tr>
+</table>
+</td>
+</tr>
+</table>
+
+</body>
+</html>

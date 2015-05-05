@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+
+<Folder 
+	Name="Sample Tours"
+	Group="Tour">
+
+	<Tour
+		Title="Inner Planets" 
+		ID="0C8F6692-2856-44c7-B39D-36C25AF2EF28"
+		Description="The inner planets: Mercury, Venus, Earth and Mars. There are a total of three moons around these planets, our Moon, and Phobos and Deimos orbit Mars."
+		Author="a.n. author"
+		OrganizationName="Microsoft Research"
+		AverageRating="1"
+		AuthorImageUrl="C:\WWT\NewWeb\Docs\Wtml\an_author.jpg"
+		ThumbnailUrl="C:\WWT\NewWeb\Docs\Wtml\Thumb1.jpg"
+		TourUrl="C:\WWT\NewWeb\Docs\Wtml\TourOne.wtt" 
+		LengthInSecs="80"  />
+
+	<Tour
+		Title="Outer Planets" 
+		ID="EDAF147C-D102-476f-AEEF-499E11B1A3D3"
+		Description="The outer planets: Jupiter, Saturn, Uranus and Neptune."
+		Author="a.n. author"
+		OrganizationName="Microsoft Research"
+		AverageRating="2"
+		AuthorImageUrl="C:\WWT\NewWeb\Docs\Wtml\an_author.jpg"
+		ThumbnailUrl="C:\WWT\NewWeb\Docs\Wtml\Thumb2.jpg"
+		TourUrl="C:\WWT\NewWeb\Docs\Wtml\TourTwo.wtt" 
+		LengthInSecs="125" />
+</Folder>
+		
+

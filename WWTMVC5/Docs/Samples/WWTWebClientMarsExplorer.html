@@ -1,0 +1,287 @@
+﻿<!DOCTYPE html "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  
+<title>WWT Web Client Mars Explorer</title>
+	
+<script type="text/jscript" language="javascript">
+
+    // Create the WorldWide telescope object
+
+    var wwtView;
+
+    // Create variables to hold the changeable settings
+
+    var bShowCrosshairs = true;
+    var bShowUI = true;
+    var closeUp = 5;
+    var current = 0;
+
+    var marsData = [
+    // The first feature must match that set in the HTML table below
+                     ['Olympus Mons', 19, 0, 'N', 134, 0, 'W', 'Mountain'],
+    
+    // Add features in the format: Name Latitude (deg, min, N/S) Longitude (deg, min, E/W) Type                 
+                     ['Valles Marineris',11, 0, 'S', 60, 0, 'W', 'Canyon'],
+                     ['North Polar Cap',90, 0, 'N', 0, 0, 'E', 'Pole'],
+                     ['South Polar Cap',90, 0, 'S', 0, 0, 'E', 'Pole'],
+                     ['Arsia Mons',9, 30, 'S', 120, 30, 'W', 'Mountain'],
+                     ['Pavonis Mons',0, 48, 'N', 113, 24, 'W', 'Mountain'],
+                     ['Ascraeus Mons',11, 18, 'N', 104, 30, 'W', 'Mountain'],
+                     ['Hydraotes Chaos', 0, 48, 'N', 35, 24, 'W', 'Rough terrain'],
+                     ['Hellas', 42, 42, 'S', 70, 0, 'E', 'Large Crater'],
+                     ['Artynia Catena', 47, 54, 'N', 119, 36, 'W', 'Catena crater chain'],
+                     ['Stygis Catena',23, 18, 'N', 150, 30, 'E', 'Catena crater chain'],
+                     ['Tractus Catena', 27, 48, 'N', 102, 42, 'W', 'Catena crater chain'],
+                     ['Hyblaeus Catena', 21, 36, 'N', 140, 30, 'E', 'Catena crater chain'],
+                     ['Arthenius',40, 18, 'S', 123, 36, 'E', 'Crater'],
+                     ['Crommelin',5, 6, 'N', 10, 12, 'W', 'Crater'],
+                     ['Flammarion',25, 24, 'N', 49, 12, 'E', 'Crater'],
+                     ['Kepler', 47, 6, 'S', 141, 52, 'E', 'Crater'],
+                     ['Galle (Happy Face)', 51, 12, 'S', 30, 54, 'W', 'Crater'],
+                     ['Syrtis Major', 8, 24, 'N', 69, 30, 'E', 'Dark spot (shield volcano)'],
+                     ['Amazonis Planitia', 24, 8, 'N', 172, 0, 'W', 'Plain'],
+                     ['Arabia Terra', 19, 48, 'N', 30, 0, 'E', 'Plain'],
+                     ['Ma\'adaim Vallis', 21, 48, 'S', 177, 18, 'E', 'Canyon'],
+                     
+    // Add more data here
+
+    // This must end array                     
+                     ['Zero Zero', 0, 0, 'N', 0, 0, 'E', 'Zero Lat Lon']
+                     ];
+
+
+    function showCurrent() {
+
+        document.getElementById('feature').value = marsData[current][0];
+        document.getElementById('latdegrees').value = marsData[current][1];
+        document.getElementById('latminutes').value = marsData[current][2];
+
+        if (marsData[current][3] == 'N')
+            document.getElementById('north1').checked = true; else
+            document.getElementById('north1').checked = false;
+
+        document.getElementById('londegrees').value = marsData[current][4];
+        document.getElementById('lonminutes').value = marsData[current][5];
+
+        if (marsData[current][6] == 'E')
+            document.getElementById('east1').checked = true; else
+            document.getElementById('east1').checked = false;
+
+        document.getElementById('type').value = marsData[current][7];
+    }
+
+    function clickFirst() {
+        current = 0;
+        showCurrent();
+    }
+
+    function clickLast() {
+        current = marsData.length - 1;
+        showCurrent();
+    }
+    
+    function clickNext() {
+        if (marsData[current][0] != 'Zero Zero') {
+            ++current;
+            showCurrent();
+        }
+    }
+
+    function clickPrev() {
+        if (current > 0) {
+            --current;
+            showCurrent();
+        }
+    }
+
+    function showFeature() {
+        var latD = 1.0 * document.getElementById('latdegrees').value;
+        var latM = 1.0 * document.getElementById('latminutes').value;
+        var north = document.getElementById('north1').checked;
+        var lonD = 1.0 * document.getElementById('londegrees').value;
+        var lonM = 1.0 * document.getElementById('lonminutes').value;
+        var east = document.getElementById('east1').checked;
+
+        if (latD < 0 || latD > 90) {
+            document.getElementById('latdegrees').value = "Out of range (0-90)";
+        } else
+            if (lonD < 0 || lonD > 180) {
+            document.getElementById('londegrees').value = "Out of range (0-180)";
+        } else
+            if (lonM < 0 || lonM > 60) {
+            document.getElementById('lonminutes').value = "Out of range (0-60)";
+        } else
+            if (latM < 0 || latM > 60) {
+            document.getElementById('latminutes').value = "Out of range (0-60)";
+        } else
+            wwtView.Goto(convertLongRA(lonD, lonM, east), convertLatDec(latD, latM, north), closeUp, false);
+    }
+    
+    // A simple function to toggle the settings
+    // This function is called from the checkbox entries setup in the html table
+
+    function toggleSetting(text) {
+        switch (text) {
+            case 'ShowUI':
+                bShowUI = !bShowUI;
+                wwtView.HideUI(!bShowUI);
+                break;
+
+            case 'ShowCrosshairs':
+                bShowCrosshairs = !bShowCrosshairs;
+                wwtView.Settings.ShowCrosshairs = bShowCrosshairs;
+                break;
+
+        }
+    }
+
+    // A function to convert longitude to RA.
+    
+    function convertLongRA(degrees, minutes, east) {
+        var longitude = degrees + (minutes / 60);
+        var x;
+        if (east)
+            x = 360 - longitude; else
+            x = longitude;
+        return x;
+    }
+
+    // A function to convert latitude to Dec
+    
+    function convertLatDec(degrees, minutes, north) {
+    
+        var latitude = degrees + (minutes/60);
+        if (north)
+            return latitude; else
+            return -1 * latitude;   
+    }
+  
+    // The wwtReady function is called by the WWT Web Control software
+    // This function sets up the wwt object, and the initial defaults
+
+    function wwtReady() {
+        wwtView = document.getElementById("WWTView").content.WWT;
+
+        wwtView.Settings.ShowCrosshairs = bShowCrosshairs;
+        wwtView.Settings.ShowConstellationFigures = bShowFigures;
+        wwtView.HideUI(!bShowUI);
+    }
+
+</script>
+
+</head>
+
+<body>
+
+<!-- The body section creates a table with two columns. The first contains the -->
+<!-- silverlight object that is the WWT web client. And the second a table within-->
+<!-- the table, containing some buttons and checkboxes.-->
+
+<table border="2" bgcolor="lightgrey">
+	<tr><td>
+        <div id="WorldWideTelescopeControlHost">
+        
+        <object id="WWTView" 
+			data="data:application/x-silverlight," 
+			type="application/x-silverlight-2" 			
+			width="1600" height="1000">
+
+<!-- Ensure the source parameter links correctly to the wwtsl.xap file -->
+
+			<param name="source" value="http://www.worldwidetelescope.org/webclient/clientbin/WWTSL.xap"/>
+			<param name="background" value="black" />
+			<param name="minRuntimeVersion" value="3.0.40624.0" />
+			<param name="autoUpgrade" value="true" />
+			<param name="initParams" value="NoUI=false,wtml=,webkey=AX2011Gqqu" />
+		    <param name="enableHtmlAccess" value="true" />
+			<a href="http://go.microsoft.com/fwlink/?LinkID=149156&v=3.0.40624.0">
+     			<img src="http://go.microsoft.com/fwlink/?LinkId=108181" alt="Install Microsoft Silverlight" /></a>
+		</object>
+    </div>
+	</td><td>
+
+	<table border="2" cellspacing="4" cellpadding="4" bgcolor="gold">
+	
+	<tr>
+	<th colspan="2"><h2>WWT Web Client Mars Explorer</h2></th>
+	</tr>
+    <tr>
+	<th colspan = "2">Feature</th>
+	</tr>
+		
+	<tr><th colspan="2">
+	<input type="button" id="prev" value ="Prev" onclick="clickPrev();" />
+	<input type="button" id="next" value ="Next" onclick="clickNext();" />
+	</th>
+	</tr>
+			
+    <tr><th colspan="2">
+	<input type="button" id="first" value ="First" onclick="clickFirst();" />
+	<input type="button" id="last" value ="Last" onclick="clickLast();" />
+	</th>
+	</tr>
+	
+	<tr>
+	<td>Feature</td>
+	<td> <input id="feature" type="text" value="Olympus Mons" readonly="readonly"/></td>
+	</tr>
+	
+	<tr>
+		<td>Type</td>
+	<td> <input id="type" type="text" value="Mountain" readonly="readonly"/></td>
+	</tr>
+    <tr>
+	<td>Latitude degrees</td>
+	<td> <input id="latdegrees" type="text" value="19" /></td>
+	</tr>
+	    <tr>
+	<td>Latitude minutes</td>
+	<td> <input id="latminutes" type="text" value="0" /></td>
+	</tr>
+		<tr>
+	<td>North</td>
+	<td> <input id ="north1" type="checkbox" checked="checked" /></td>
+	</tr>
+	    <tr>
+	<td>Longitude degrees</td>
+	<td> <input id="londegrees" type="text" value="134" /></td>
+	</tr>
+	    <tr>
+	<td>Longitude minutes</td>
+	<td> <input id="lonminutes" type="text" value="0" /></td>
+	</tr>
+		<tr>
+	<td>East</td>
+	<td> <input id ="east1" type="checkbox" /></td>
+	</tr>
+	
+				<tr><th colspan="2">
+	<input type="button" id="goto" value="Goto" onclick="showFeature();"/>
+	</th></tr>
+	
+	<tr>
+	<th colspan = "2">Settings</th>
+	</tr>
+	
+	<tr>
+		<td> Show UI </td>
+		<td> <input id="UI" type="checkbox" checked="checked" onclick="toggleSetting('ShowUI');"/></td>
+
+	</tr>
+	
+	<tr>
+		<td> Show Crosshairs</td>
+		<td> <input id="Crosshairs" type="checkbox" checked="checked" onclick="toggleSetting('ShowCrosshairs');"/></td>
+
+	</tr>
+</table>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>

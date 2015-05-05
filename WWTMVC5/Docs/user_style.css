@@ -1,0 +1,326 @@
+﻿  <style>
+<!--
+/* Style Definitions */
+
+
+p,div
+	{mso-style-name:Text;
+	margin-top:0pt;
+	margin-bottom:7.5pt;
+	mso-pagination:widow-orphan;
+	font-size:8.5pt;
+	mso-bidi-font-size:8.5pt;
+	font-family:"Verdana";
+	mso-fareast-font-family:"Verdana";
+	}
+	
+dl
+	{margin-top: 0.0pt;
+	margin-bottom:12.0pt}	
+li
+	{
+	margin-left: 12.0pt;
+	mso-style-name: Text;
+	margin-top: 0;
+	margin-bottom: 2.0pt;
+	mso-pagination: widow-orphan;
+	font-size: 8.5pt;
+	mso-bidi-font-size: 8.5pt;
+	font-family: "Verdana";
+	mso-fareast-font-family: "Verdana";
+	text-indent: 0;
+}
+	
+li.main
+	{
+	margin-left: 12.0pt;
+	mso-style-name: Text;
+	margin-top: 0;
+	margin-bottom: 12.0pt;
+	mso-pagination: widow-orphan;
+	font-size: 8.5pt;
+	mso-bidi-font-size: 8.5pt;
+	font-family: "Verdana";
+	mso-fareast-font-family: "Verdana";
+	text-indent: 0;
+}
+
+p.Link, div.link
+	{mso-style-name:Link;
+	margin-top:0pt;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Verdana";
+	mso-fareast-font-family:"Verdana";
+	color:#3366FF;}
+
+
+.file {
+     	border-color:#778899;
+     	border-width:1px;
+     	border-style:solid;
+    	background-color:#e6e6fa;
+     	padding:25px;
+     	margin:30px;
+     	font-size:10.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Courier New";
+	mso-fareast-font-family:"Courier New";
+}
+
+li.Link
+	{mso-style-name:Link;
+	margin-top:0pt;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:8.5pt;
+	mso-bidi-font-size:8.5pt;
+	font-family:"Verdana";
+	mso-fareast-font-family:"Verdana";
+	color:#3366FF;}
+
+hr
+	{
+		margin-top:12.0pt;
+		margin-bottom:12.0pt
+	}
+	
+img
+	{
+		margin-top:6.0pt;
+		margin-bottom:6.0pt
+	}
+	
+h1
+	{
+	mso-style-next: Normal;
+	margin-top: 10.0pt;
+	margin-right: 0pt;
+	margin-bottom: 12.0pt;
+	margin-left: 0pt;
+	text-align: left;
+	line-height: 150%;
+	mso-pagination: widow-orphan;
+	page-break-after: avoid;
+	mso-outline-level: 2;
+	font-size: 14.0pt;
+	font-weight: normal;
+	font-family: "Verdana";
+	color: black;
+}
+h2
+	{
+	mso-style-next: Normal;
+	margin-top: 0pt;
+	margin-right: 0pt;
+	margin-bottom: 1.0pt;
+	margin-left: 0pt;
+	text-align: left;
+	line-height: 150%;
+	mso-pagination: widow-orphan;
+	page-break-after: avoid;
+	mso-outline-level: 2;
+	font-size: 10.5pt;
+	font-weight: bold;
+	font-family: "Verdana";
+	color: black;
+}
+h3
+	{
+	mso-style-next: Normal;
+	margin-top: 12.0pt;
+	margin-right: 0pt;
+	margin-bottom: 1.0pt;
+	margin-left: 0pt;
+	text-align: left;
+	mso-pagination: widow-orphan;
+	page-break-after: avoid;
+	mso-outline-level: 3;
+	font-size: 9.0pt;
+	mso-bidi-font-size: 9.5pt;
+	font-family: "Verdana";
+	color: #454545;
+}
+h4
+	{mso-style-next:Normal;
+	margin-top:12.0pt;
+	margin-right:0pt;
+	margin-bottom:0.0pt;
+	margin-left:0pt;
+	text-align:left;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	mso-outline-level:3;
+	font-size:10.0pt;
+	font-weight:bold;
+	mso-bidi-font-size:12.0pt;
+	font-family:"Verdana";
+	color:black;}
+h5
+	{mso-style-next:Normal;
+	margin-top:0.3pt;
+	margin-right:0pt;
+	margin-bottom:0.0pt;
+	margin-left:0pt;
+	text-align:left;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	mso-outline-level:3;
+	font-size:10.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Verdana";
+	color:black;}
+
+
+h6
+	{
+	mso-style-next: Normal;
+	margin-top: 12.0pt;
+	margin-right: 0.0pt;
+	margin-bottom: 5.0pt;
+	margin-left: 0pt;
+	text-align: left;
+	mso-pagination: widow-orphan;
+	page-break-after: avoid;
+	mso-outline-level: 3;
+	font-size: 8.0pt;
+	font-weight: normal;
+	font-style: italic;
+	mso-bidi-font-size: 8.0pt;
+	font-family: "Verdana";
+	color: black;
+}
+
+h7
+	{mso-style-next:Normal;
+	margin-top:0.3pt;
+	margin-right:0pt;
+	margin-bottom:0.0pt;
+	margin-left:0pt;
+	text-align:left;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	mso-outline-level:3;
+	font-size:10.0pt;
+	font-weight:normal;
+	font-style:italic;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Verdana";
+	color:black;}
+
+CODE
+{mso-style-name:Code;
+margin:0pt;
+margin-bottom:.0001pt;
+mso-pagination:widow-orphan;
+font-size:9.0pt;
+font-weight:400;
+mso-bidi-font-size:10.0pt;
+font-family:"Courier New";
+mso-fareast-font-family:"Courier New";
+color:#000000;}
+
+
+A:Hover
+	{color:#4682b4;}
+
+
+BODY
+{
+	margin-left: 30.0pt;
+	background: #f5f5f5;
+	margin-top: 0pt;
+	margin-bottom: 8.0pt;
+	mso-pagination: widow-orphan;
+	width: 670;
+	font-size: 8.5pt;
+	line-height:140%;
+	mso-bidi-font-size: 10.0pt;
+	font-family: "Verdana";
+	mso-fareast-font-family: "Verdana";
+}
+
+
+@page Section1
+{size:612.0pt 792.0pt;
+margin:72.0pt 90.0pt 72.0pt 90.0pt;
+mso-header-margin:36.0pt;
+mso-footer-margin:36.0pt;
+mso-paper-source:0;}
+
+
+div.Section1
+{page:Section1;}
+
+
+table.T1
+{	
+	border-collapse: collapse;
+	border:1.0pt;
+	background-color: #e3e3e3;
+	border-color: black;
+	border-style: inset;
+	margin-top:20.0pt;
+	margin-bottom:20.0pt;
+	margin-left:40.0pt;
+	margin-right:20.0pt;
+	width: 670;
+	text-align: left;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 9.5pt;
+	color: #000000;
+}
+
+table.T2
+{	
+	border-collapse: collapse;
+	border:1.0pt;
+	background-color: #e3e3e3;
+	border-color: black;
+	border-style: inset;
+	margin-top:20.0pt;
+	margin-bottom:20.0pt;
+	margin-left:40.0pt;
+	margin-right:20.0pt;
+	text-align: left;
+	vertical-align: text-top;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 9.5pt;
+	color: #000000;
+	width: 800;
+}
+
+table.Tfile
+{    	
+border-color:#778899;
+     	border-width:1px;
+     	border-style:solid;
+     	background-color:#e6e6fa;
+     	padding:25px;
+	margin:30px;
+	margin-top:20.0pt;
+	margin-bottom:20.0pt;
+	margin-left:20.0pt;
+	margin-right:20.0pt;
+     	font-size:10.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Courier New";
+	mso-fareast-font-family:"Courier New";
+	text-align:left;}
+	 
+	 
+tr {vertical-align:top;}
+
+td
+{
+	font-size: 8.5pt;
+	line-height:140%;
+	mso-bidi-font-size: 10.0pt;
+	font-family: "Verdana";
+	mso-fareast-font-family: "Verdana";
+}
+
+-->
+  </style>

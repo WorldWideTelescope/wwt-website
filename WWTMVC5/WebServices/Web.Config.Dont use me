@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<!-- 
+    Note: As an alternative to hand editing this file you can use the 
+    web admin tool to configure settings for your application. Use
+    the Website->Asp.Net Configuration option in Visual Studio.
+    A full list of settings and comments can be found in 
+    machine.config.comments usually located in 
+    \Windows\Microsoft.Net\Framework\v2.x\Config 
+-->
+<configuration>
+<appSettings>
+    <add key="AstroObjectsDBConnectionString" value="server=tk2terrasql14\yukon;Trusted_Connection=false;database=AstroObjects;User ID=WWTUser;Password=WWT!99!pass;Network=dbmssocn"/>
+	<add key="WWTToursDBConnectionString"     value="server=tk2terrasql14\yukon;Trusted_Connection=false;database=WWTTours;User ID=WWTUser;Password=WWT!99!pass;Network=dbmssocn"/>
+	<add key="WWTToursTourFileUNC"            value="d:\WWTTours"/>
+	<add key="TourVersionCheckIntervalMinutes" value="5"/>
+  </appSettings>
+  <connectionStrings>
+    <add name="WWTToursConnectionString" connectionString="Data Source=NS-ANDROMEDA;Initial Catalog=WWTTours;Integrated Security=True"
+      providerName="System.Data.SqlClient" />
+  </connectionStrings>
+	<system.web>
+		<!-- 
+            Set compilation debug="true" to insert debugging 
+            symbols into the compiled page. Because this 
+            affects performance, set this value to true only 
+            during development.
+        -->
+    <compilation debug="true"/>
+
+
+		<!--
+            The <authentication> section enables configuration 
+            of the security authentication mode used by 
+            ASP.NET to identify an incoming user. 
+        -->
+		<!--
+            The <customErrors> section enables configuration 
+            of what to do if/when an unhandled error occurs 
+            during the execution of a request. Specifically, 
+            it enables developers to configure html error pages 
+            to be displayed in place of a error stack trace.
+
+        <customErrors mode="RemoteOnly" defaultRedirect="GenericErrorPage.htm">
+            <error statusCode="403" redirect="NoAccess.htm" />
+            <error statusCode="404" redirect="FileNotFound.htm" />
+        </customErrors>
+        
+        -->
+    <webServices>
+      <protocols>
+        <add name="HttpGet"/>
+        <add name="HttpPost"/>
+      </protocols>
+    </webServices>
+
+  </system.web>
+
+  <system.codedom>
+
+    <compilers>
+
+      <compiler language="c#;cs;csharp" extension=".cs" compilerOptions="/unsafe" type="Microsoft.CSharp.CSharpCodeProvider, System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"/>
+
+    </compilers>
+
+  </system.codedom>
+
+</configuration>

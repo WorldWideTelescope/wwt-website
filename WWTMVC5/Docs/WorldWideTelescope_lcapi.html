@@ -1,0 +1,2539 @@
+<HTML>
+
+<head>
+<title>WorldWide Telescope LCAPI</title>
+
+ <link rel=stylesheet href="SDK_style.css" type="text/css" media=screen>
+
+</head>
+
+<body>
+
+<style type="text/css">
+#content .inner {
+	margin: 10px 20px 10px 40px;
+}
+ .style1 {
+	font-size: 10pt;
+	}
+ .style2 {
+	margin-top: 19px;
+}
+ </style>
+ 
+<h1><a name="WorldWideTelescopeLayerControlAPI"></a>WorldWide Telescope Layer 
+Control API (LCAPI)</h1>
+
+<img alt="" height="27" src="UIImages/YesNo.bmp" width="220">
+<p><font color="red">Note: This documentation is preliminary and subject to change.</font></p>
+<p>This document describes how to write a software program to send data to 
+WorldWide Telescope, using the Layer Control API (LCAPI). For a large amount 
+of data the program might be a tool that reads data from a spreadsheet file, and 
+then sends 
+the appropriate fields of the data to WorldWide Telescope in appropriately sized 
+buffers for visualization. For a smaller amount of data the entire file could be 
+loaded in one go, or images or 3D models could be loaded. Time series 
+data would typically be time-and-location dependent event data such as:</p>
+<ul>
+	<li>Earthquakes</li>
+	<li>Volcanic eruptions</li>
+	<li>Disease outbreaks</li>
+	<li>More general social or natural events and trends</li>
+</ul>
+<p>The time-series system does <em>not</em> lend itself to data that varies either its 
+location or has a complex intensity - such as weather systems, or forest fires - though it is 
+possible a limited approach to this sort of data may be useful. The system does 
+lend itself to events that occur over an extended period of time, given the 
+ability to greatly accelerate simulated time, and also events that decay very 
+rapidly (lightning) or quite slowly (diseases) given the ability to control the 
+decay time of the rendered graphic. Although most examples are of time series 
+events on the Earth, the events can be on any of the supported Solar System 
+bodies, or simply the Sky.</p>
+<p>There are a number of constraints on the use of the LCAPI that should be 
+understood before commencing with the design of the tool:</p>
+<ul>
+	<li>The supported spreadsheet formats are comma or tab delimited files.</li>
+	<li>The LCAPI is a feature of the Windows Client version of WorldWide 
+	Telescope, not the Web Client.</li>
+	<li>The LCAPI provides event, image or model data specifically to the Layer 
+	Manager, not to any other component of WorldWide Telescope.</li>
+</ul>
+<h2>Table of Contents</h2>
+<ul>
+<li><a href="#Design Overview">Design Overview</a></li>
+	<li><a href="#LCAPI_Commands">LCAPI Commands</a></li>
+	<li><a href="#Utilities">Utilities</a></li>
+	<li><a href="#Sample_Application">Sample Application</a></li>
+</ul>
+<h4>See Also</h4>
+<p>For more information on WorldWide Telescope, refer to:</p>
+<ul>
+	<li><a href="worldwidetelescopeuserguide.html">WorldWide Telescope User Guide</a></li>
+	<li><a href="worldwidetelescopedatafilesreference.html">WorldWide Telescope Data Files Reference</a></li>
+
+</ul>
+<hr>
+<h2><a name="Design Overview">Design Overview</a></h2>
+<p>The Windows client version of WorldWide Telescope listens continuously, and 
+without any setup process, for a certain 
+format of communication on a particular port. 
+The format of this communication is in the form of strings, that themselves are 
+formatted in a specific way. An application may be quite short and only need a
+<a href="#load"><strong>load</strong></a> call, or perhaps just 
+need the <strong><a href="#new">new</a></strong> and <strong><a href="#update">update</a> </strong>
+commands<strong>. </strong>Typically a simple application will go through the following steps, <em>after</em> 
+WorldWide Telescope has been started:</p>
+<ol>
+	<li>Establish the IP address of the computer running WorldWide Telescope. If 
+	this is the same computer as the application use the <a href="#getIP">getIP</a> utility, if not 
+	a utility will have to be written or acquired that establishes the remote IP 
+	address. </li>
+	<li>Initialize and open a data file, or files, from a selected source.</li>
+	<li>Initialize the connection with WorldWide Telescope with a <a href="#new">
+	<strong>new</strong></a> or <strong><a href="#load">load</a></strong> call, which will create a new layer within 
+	WorldWide Telescope, and return a layer Id number.</li>
+	<li>If the <strong><a href="#new">new</a></strong> command is used:</li>
+	<ol type="a">
+	<li>Fill a string buffer with data from the opened files.</li>
+	<li>Transmit the data to WorldWide Telescope with an <strong>
+	<a href="#update">update</a></strong> call, using the layer Id number for 
+	reference.</li>
+	<li>Repeat this step until all the data has been transmitted.</li>
+	</ol>
+	<li>Use the <a href="#getprop"><strong>getprop</strong></a>,
+	<a href="#setprop"><strong>setprop</strong></a>, <a href="#uisettings">
+	<strong>uisettings</strong></a> commands and parameters to control the view 
+	in WorldWide Telescope from 
+	the LCAPI application. </li>
+	<li>Close down.</li>
+</ol>
+<p>A more complex application may initialize several layers, or a layer group, within WorldWide 
+Telescope, or may transmit the data under user control - enabling the user to 
+have some choice over which data is rendered, the speed and time of the 
+simulation, and other similar controls.</p>
+<h3>Development Environment</h3>
+<p>The samples and examples described in this document have been developed using 
+Microsoft Visual Studio (2008 or 2010) and the .NET framework, and written in 
+C#.</p>
+<p>The suggested development approach is first to get the sample application 
+working, then to modify it as required using the code examples for each command. 
+Note that the code examples themselves are not run-able code, but just 
+guidelines on how the calls can be made.</p>
+<h4>See Also</h4>
+<ul type="disc">
+	<li><a href="#LCAPI_Commands">Layer API commands</a></li>
+	<li><a href="#WorldWideTelescopeLayerControlAPI">WorldWide Telescope 
+	Layer Control API</a></li>
+</ul>
+
+<hr>
+<h2><a name="LCAPI_Commands">LCAPI Commands</a></h2>
+<p>The following commands can be used to control layers from the application. 
+Note that command names are <em>not</em> case-sensitive, and that the
+<a href="#general_parameters">general parameters</a> can be included along 
+with any other command.</p>
+<table class="T1" cellspacing="2" cellpadding="4">
+<tr><td><h5>Command</h5></td><td><h5>Description</h5></td></tr>
+<tr><td><a href="#activate"><strong>activate</strong></a></td><td>Highlights 
+	the selected layer in the layer manager.</td></tr>
+<tr><td><strong><a href="#delete">delete</a></strong></td><td>Specifies that a layer should be 
+		permanently deleted.</td></tr>
+		<tr><td><a href="#getprop"><strong>getprop</strong></a></td><td>
+<p>Used to retrieve a value of a single layer property.&nbsp;Remarks include the
+<a href="#Table_of_Properties">Table of Properties</a>.</p>
+		</td></tr>
+		<tr><td><a href="#getprops"><strong>getprops</strong></a></td><td>Used to retrieve all the properties for a 
+			specified layer. Includes lists for <a href="#Spreadsheet">
+			Spreadsheet</a>, <a href="#3D_model">3d Model,</a>
+			<a href="#Shapefile">Shapefile</a> and <a href="#ImageSet">ImageSet</a>.</td></tr>
+		<tr><td><b><a href="#group">group</a></b></td><td>Specifies that a layer group should be added.</td></tr>
+<tr><td><a href="#layerlist"><strong>layerlist</strong></a></td><td>Returns the structure of the layers 
+and layer group names (in an XML document format) that are currently in the 
+layer manager.</td></tr>
+<tr><td><a href="#load"><strong>load</strong></a></td><td>Specifies a data file, and and some optional parameters, to 
+		apply to a new layer.</td></tr>
+<tr><td><a href="#mode"><strong>mode</strong></a></td><td>Changes the view to 
+	one of <strong>Earth</strong>,
+<strong>Planet</strong>, <strong>Sky</strong>, <strong>Panorama</strong>,
+<strong>SolarSystem</strong>.</td></tr>
+<tr><td><strong><a href="#move">move</a></strong></td><td>Changes the view 
+	depending on the supplied parameter.</td></tr>
+<tr><td><strong><a href="#new">new</a></strong></td><td>Specifies that a new layer should be 
+	created.</td></tr>
+<tr><td style="height: 27px"><a href="#setprop"><strong>setprop</strong></a></td><td style="height: 27px">Used to 
+	specify a value of a single layer property.&nbsp;</td></tr>
+<tr><td style="height: 28px"><a href="#setprops"><strong>setprops</strong></a></td><td style="height: 28px">Used 
+	to specify multiple properties for a layer.</td></tr>
+<tr><td><a href="#state"><strong>state</strong></a></td><td>Requests some 
+		details of the current view.</td></tr>
+<tr><td><a href="#uisettings"><strong>uisettings</strong></a></td><td>Used to change user interface settings, without 
+	altering the layer data.</td></tr>
+<tr><td><strong><a href="#update">update</a></strong></td><td>Specifies that the data attached to this 
+	command should be added to the layer.</td></tr>
+<tr><td><a href="#version"><strong>version</strong></a></td><td>Returns the version number of the running version of the 
+	LCAPI.</td></tr>
+<tr><td><a href="#general_parameters">general parameters</a></td><td>Parameters 
+	that can be applied to any of the commands.</td></tr>
+</table>
+
+
+<h4>See Also</h4>
+<ul type="disc">
+	<li><a href="#WorldWideTelescopeLayerControlAPI">WorldWide Telescope 
+	Layer Control API</a></li>
+</ul>
+
+<hr>
+<h3><a name="activate"></a>activate</h3>
+<p>The <strong>activate</strong> layer command will highlight the selected layer 
+in the layer manager.</p>
+<h4>Remarks</h4>
+<p><table class="T1" cellspacing="2" cellpadding="4">
+<tr><td><h5>Required Parameter</h5></td><td><h5>Description</h5></td></tr>
+<tr><td><strong>&amp;id</strong></td><td>Specifies the id number of the 
+		layer.</td></tr>
+</table>
+</p>
+<h4>Return Value</h4>
+<p>The following string will be included in the response if the call is 
+successful:</p>
+<p><font COLOR="#a31515">&lt;Status&gt;Success&lt;/Status&gt;</font></p>
+<p>If the call is not successful the following string may be included in the 
+response, or other errors may be returned: </p>
+<p><font COLOR="#a31515">
+&lt;Status&gt;Error - Invalid layer ID&lt;/Status&gt;</font>&nbsp;</p>
+
+
+<h4>See Also</h4>
+<ul type="disc">
+	<li><a href="#layerlist"><strong>layerlist</strong></a></li>
+	<li><strong><a href="#load">load</a></strong></li>
+	<li><strong><a href="#new">new</a></strong></li>
+	<li><a href="#LCAPI_Commands">Layer API commands</a></li>
+</ul>
+
+<hr>
+<h3><a name="delete"></a>delete</h3>
+<p>The <strong>delete</strong> command specifies that a layer should be 
+permanently deleted.</p>
+<h4>Remarks</h4>
+<p>All sub-components of the layer will also be deleted.<table class="T1" cellspacing="2" cellpadding="4">
+<tr><td><h5>Required Parameter</h5></td><td><h5>Description</h5></td></tr>
+<tr><td><strong>&amp;id</strong></td><td>Specifies the id number of the 
+		layer.</td></tr>
+</table>
+</p>
+<h4>Return Value</h4>
+<p>The following string will be included in the response if the call is 
+successful:</p>
+<p><font COLOR="#a31515">&lt;Status&gt;Success&lt;/Status&gt;</font></p>
+<p>If the call is not successful the following string may be included in the 
+response, or other errors may be returned: </p>
+<font COLOR="#a31515">
+<p>&lt;Status&gt;Error - Invalid layer ID&lt;/Status&gt;</p>
+</font>
+
+<h4>Example Code</h4>
+<table class="T3" cellspacing="4" cellpadding="4">
+<tr><td>
+		<span style='font-size:10.0pt;font-family:"Courier New";'>
+
+	&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+	&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Send&nbsp;a 
+		DELETE&nbsp;command</span> <br />
+	&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+		&nbsp;&nbsp;&nbsp;&nbsp;WebClient&nbsp;client&nbsp;=&nbsp;<span style="color:blue;">new</span>&nbsp;WebClient(); <br />
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;url&nbsp;=&nbsp;<span style="color:blue;">string</span>.Format(<span style="color:#A31515;">&quot;http://{0}:5050/layerApi.aspx?cmd=delete&amp;id={1}&quot;</span>,&nbsp;getIP().ToString(),&nbsp;layerId); <br />
+	&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;response&nbsp;=&nbsp;client.UploadString(url,&nbsp;&quot;&quot;); <br />
+	&nbsp;&nbsp;&nbsp;&nbsp;XmlDocument&nbsp;doc&nbsp;=&nbsp;<span style="color:blue;">new</span>&nbsp;XmlDocument(); <br />
+	&nbsp;&nbsp;&nbsp;&nbsp;doc.LoadXml(response); <br />
+	&nbsp;&nbsp;&nbsp;&nbsp;XmlNode&nbsp;node&nbsp;=&nbsp;doc[<span style="color:#A31515;">&quot;LayerApi&quot;</span>]; <br />
+	&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;s&nbsp;=&nbsp;node.InnerText; <br />
+ 	   &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+	&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Handle&nbsp;an&nbsp;error&nbsp;situation</span> <br />
+	&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+	&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">if</span>&nbsp;(s.Contains(<span style="color:#A31515;">&quot;Error&quot;</span>)) <br />
+	&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">throw</span>&nbsp;<span style="color:blue;">new</span>&nbsp;<span style="color:#2B91AF;">Exception</span>(s); <br />
+	&nbsp;&nbsp;&nbsp;&nbsp;}
+</span>
+</td></tr>
+</table>
+<h4>See Also</h4>
+<ul type="disc">
+	<li><strong><a href="#load">load</a></strong></li>
+	<li><strong><a href="#new">new</a></strong></li>
+	<li><a href="#LCAPI_Commands">Layer API commands</a></li>
+</ul>
+
+<hr>
+<h3><a name="getprop"></a>getprop</h3>
+<p>The <strong>getprop</strong> command is used to retrieve a value of a single 
+layer property.</p>
+<h4>Remarks</h4>
+<p><table class="T1" cellspacing="2" cellpadding="4">
+<tr><td><h5>Required Parameters</h5></td><td><h5>Description</h5></td></tr>
+<tr><td><strong>&amp;id</strong></td><td>Specifies the id number of the 
+		layer.</td></tr>
+<tr><td><strong>&amp;propname</strong></td><td>Property name, one from the table 
+	below.</td></tr>
+</table>
+</p>
+<h4><a name="Table_of_Properties">Table of Properties</a></h4>
+<p>The following table lists the properties that can be get or set on a layer 
+(note that the property names and Enum values are case-sensitive). Also refer to 
+the Notes below the table.</p>
+
+<table class="T1" cellpadding="4" cellspacing="4">
+<tr><td><h5>Property</h5></td><td>
+	<h5>Type</h5>
+	</td><td><h5>Description</h5></td><td>
+	<h5>Layer Type</h5>
+		</td><td>
+	<h5>Default</h5>
+		</td></tr>
+
+
+<tr><td><strong>AltColumn</strong></td><td>Int</td><td>Column number containing 
+	the altitude/depth data. </td><td>Spreadsheet</td><td>-1</td></tr>
+
+
+<tr><td><strong>AltType</strong></td><td>Enum</td><td>One of: <strong>Depth, 
+	Altitude, SeaLevel, Terrain</strong>.</td><td>Spreadsheet</td><td>
+	SeaLevel</td></tr>
+
+
+<tr><td><strong>AltUnit</strong></td><td>Enum</td><td>One of:<strong> Meters, 
+	Feet, Inches, Miles, Kilometers, AstronomicalUnits, LightYears, Parsecs, 
+	MegaParsecs.</strong></td><td>Spreadsheet</td><td>Meters 
+	for altitude and kilometers for depth.</td></tr>
+
+
+<tr><td><strong>Astronomical</strong></td><td>Boolean</td><td>True if the data 
+	is astronomical rather than terrestrial. If this is set to true the 
+	declination will be by default the Latitude column, and the right ascension 
+	the Longitude column.</td><td>All</td><td>False</td></tr>
+
+
+<tr><td><strong>BeginRange</strong></td><td>DateTime</td><td>Date and time of 
+	the first data entry in a time series,<br>in one the formats 
+	(month/day/year):<br>&quot;1/1/2010 11:00:00 PM&quot;<br>&quot;1/1/2010 11:30 AM&quot;<br>
+	&quot;1/1/2010 11 am&quot;<br>&quot;1/1/2000&quot;<br>&quot;1/2000&quot;</td><td>
+		Spreadsheet</td><td>
+		Maximum system value</td></tr>
+
+
+<tr><td style="height: 28px"><strong>CartesianCustomScale</strong></td>
+	<td style="height: 28px">Double</td><td style="height: 28px">Used to divide 
+	the Cartesian co-ordinate values to a custom scale. If this value was set to &quot;0.01&quot; 
+	and the scale to Meters, the custom scale would be &quot;centimeters&quot;.</td><td style="height: 28px">Spreadsheet</td><td style="height: 28px">
+	1</td></tr>
+
+
+<tr><td><strong>CartesianScale</strong></td><td>Enum</td><td>If the <strong>
+	CoordinatesType</strong> is not <strong>Spherical</strong> then the 
+	co-ordinate system uses X,Y and Z values.<br>One of:<strong> 
+	Meters, Feet, Inches, Miles, Kilometers, AstronomicalUnits, LightYears, 
+	Parsecs, MegaParsecs, Custom</strong>.</td><td>Spreadsheet</td><td>Meters</td></tr>
+
+
+<tr><td><strong>ColorMap</strong></td><td>Enum</td><td>One of:<strong> 
+	Same_For_All, Group_by_Values.</strong></td><td>Spreadsheet</td><td>
+	Same_For_All</td></tr>
+
+
+<tr><td><strong>ColorMapColumn</strong></td><td>Int</td><td>Column number 
+	containing the color map data. Columns are numbered from zero, -1 indicates 
+	there is no data for this.</td><td>Spreadsheet</td><td>-1</td></tr>
+
+
+<tr><td><strong>ColorValue</strong></td><td>String</td><td>String containing 
+	ARGB value of the color, in the format:<br>&quot;ARGBColor:255:255:255:255&quot;. </td><td>
+		All</td><td>
+	White</td></tr>
+
+
+<tr><td><strong>CoordinatesType</strong></td><td>Enum</td><td>One of: <strong>
+	Spherical, Rectangular, Orbital</strong>.<br><br><strong>Spherical</strong> 
+	applies when the reference frame is a sphere, and the coordinates will be 
+	Lat/Lng or RA/Dec. <br><br><strong>Rectangular</strong> applies if there are 
+	X,Y and Z coordinates. 0,0,0 in this case is the center of the reference 
+	frame.<br></td><td>Spreadsheet</td><td>
+	Spherical</td></tr>
+
+
+<tr><td><strong>Decay</strong></td><td>Float</td><td>Decay rate of the 
+	visualization, in days, in the range 0.00025 to 4096.</td><td>
+	Spreadsheet</td><td>
+	16</td></tr>
+
+
+<tr><td><strong>Enabled</strong></td><td>Boolean</td><td>True if the layer is 
+	enabled.</td><td>All</td><td>True</td></tr>
+
+
+<tr><td><strong>EndDateColumn</strong></td><td>Int</td><td>Column containing the 
+	end date/time data.</td><td>Spreadsheet</td><td>-1</td></tr>
+
+
+<tr><td><strong>EndRange</strong></td><td>DateTime</td><td>Date and time 
+	of the last data entry in a time series, <br>in one the formats 
+	(month/day/year):<br>&quot;1/1/2010 11:00:00 PM&quot;<br>&quot;1/1/2010 11:30 AM&quot;<br>
+	&quot;1/1/2010 11 am&quot;<br>&quot;1/1/2000&quot;<br>&quot;1/2000&quot;</td><td>
+		Spreadsheet</td><td>
+		Minimum system value</td></tr>
+
+
+<tr><td><strong>EndTime</strong></td><td>DateTime</td><td>Date and time to 
+	end the visualizations, and return to the start time in the case of an auto 
+	loop.&nbsp; This property is visible in the Lifetime dialog for a layer.<br>
+	Format (month/day/year):<br>&quot;1/1/2010 11:00:00 PM&quot;<br>&quot;1/1/2010 11:30 AM&quot;<br>
+	&quot;1/1/2010 11 am&quot;<br>&quot;1/1/2000&quot;<br>&quot;1/2000&quot;</td><td>
+		All</td><td>
+	Maximum system time.</td></tr>
+
+
+<tr><td><strong>GeometryColumn</strong></td><td>Int</td><td>Column containing 
+	the geometry data.</td><td>Spreadsheet</td><td>-1</td></tr>
+
+
+<tr><td><strong>Heading</strong></td><td>Double</td><td>Heading angle&nbsp; of 
+	the model in radians.</td><td>3D Model</td><td>0</td></tr>
+
+
+<tr><td><strong>HyperlinkColumn</strong></td><td>Int</td><td>Column containing 
+	the hyperlink data.</td><td>Spreadsheet</td><td>-1</td></tr>
+
+
+<tr><td><strong>HyperlinkFormat</strong></td><td>String</td><td>&nbsp;</td><td>
+		Spreadsheet</td><td>
+		&quot;&quot;</td></tr>
+
+
+<tr><td><strong>FadeSpan</strong></td><td>Time</td><td>The time it 
+	takes to fade out the graphic.<br>This property is visible in the <strong>
+	Lifetime</strong> dialog for the layer and is shown in days in the dialog. 
+	When using the SDK use the format D.HH:MM:SS, so for one day use<strong> 
+	1.00:00:00</strong>.<br></td><td>All</td><td>0</td></tr>
+
+
+<tr><td><strong>FadeType</strong></td><td>Enum</td><td>One of: <strong>In, Out, 
+	Both, None</strong>.</td><td>All</td><td>None</td></tr>
+
+
+<tr><td><strong>FlipV</strong></td><td>Boolean</td><td>True if the textures for 
+	the 3D model should be flipped.</td><td>3D Model</td><td>False</td></tr>
+
+
+<tr><td><strong>LatColumn</strong></td><td>Int</td><td>Column number for the 
+	Latitude data.</td><td>Spreadsheet</td><td>-1</td></tr>
+
+
+<tr><td><strong>LngColumn</strong></td><td>Int</td><td>Column number for the 
+	Longitude data.</td><td>Spreadsheet</td><td>-1</td></tr>
+
+
+<tr><td><strong>MarkerColumn</strong></td><td>Int</td><td>Column number for the 
+	marker data.</td><td>Spreadsheet</td><td>-1</td></tr>
+
+
+<tr><td><strong>MarkerIndex</strong></td><td>Int</td><td>Index number of marker 
+	graphic selected, or -1 if no marker has been selected.</td><td>Spreadsheet</td><td>
+	-1</td></tr>
+
+
+<tr><td><strong>MarkerMix</strong></td><td>Enum</td><td>One of: <strong>
+	Same_For_All, Group_by_Values.</strong></td><td>Spreadsheet</td><td>
+	Same_For_All</td></tr>
+
+
+<tr><td><strong>MarkerScale</strong></td><td>Enum</td><td>One of:<strong> 
+	Screen, World</strong>. <br>If this is set to <strong>Screen</strong> the 
+	graphic will not change in size as the viewer zooms in and out. If it is set 
+	to <strong>World</strong> the graphic (<strong>Pushpin</strong> or <strong>
+	Gaussian</strong>) will scale with the view.</td><td>Spreadsheet</td><td>World</td></tr>
+
+
+<tr><td><strong>Name</strong></td><td>String</td><td>Name of the layer.</td><td>
+		All</td><td>
+		&quot;New layer&quot;</td></tr>
+
+
+<tr><td><strong>NameColumn</strong></td><td>Int</td><td>Column containing the 
+	event name data.</td><td>Spreadsheet</td><td>-1</td></tr>
+
+
+<tr><td><strong>Opacity</strong></td><td>Float</td><td>Opacity of the layer 
+	graphics from 0.0 to 1.0.</td><td>All</td><td>1</td></tr>
+
+
+<tr><td><strong>Pitch</strong></td><td>Double</td><td>Pitch angle of the model 
+	in radians.</td><td>
+	3d Model</td><td>
+	0</td></tr>
+
+
+<tr><td><strong>PlotType</strong></td><td>Enum</td><td>One of:<strong> Gaussian, 
+	Point, PushPin</strong>.</td><td>Spreadsheet</td><td>Gaussian</td></tr>
+
+
+<tr><td><strong>PointScaleType</strong></td><td>Enum</td><td>One of: <strong>
+	Linear</strong>, <strong>Power, Log, Constant, StellarMagnitude.</strong></td><td>Spreadsheet</td><td>
+	Power</td></tr>
+
+
+<tr><td><strong>RaUnits</strong></td><td>Enum</td><td>When the longitude column 
+	is being used for RA in astronomical data.<br>One of: <strong>Hours</strong>,
+	<strong>Degrees</strong>.</td><td>Spreadsheet</td><td>Hours</td></tr>
+
+
+<tr><td><strong>Roll</strong></td><td>Double </td><td>Roll angle of the model in 
+	radians.</td><td>3D Model</td><td>0</td></tr>
+
+
+<tr><td><strong>Scale</strong></td><td>Vector3d</td><td>Scale of the model in x, 
+	y and z dimensions.<br>Format: 1,1,1<br></td><td>3D Model</td><td>
+	1,1,1</td></tr>
+
+
+<tr><td><strong>ScaleFactor</strong></td><td>Float</td><td>Scale factor to apply 
+	to the magnitude of the event.</td><td>Spreadsheet</td><td>1</td></tr>
+
+
+<tr><td><strong>ShowFarSide</strong></td><td>Boolean</td><td>True if the data 
+	points on the invisible side of the body should be shown.</td><td>
+	Spreadsheet</td><td>
+	False</td></tr>
+
+
+<tr><td><strong>SizeColumn</strong></td><td>Int</td><td>Column containing the 
+	size (magnitude) data.</td><td>Spreadsheet</td><td>-1</td></tr>
+
+
+<tr><td><strong>Smooth</strong></td><td>Boolean</td><td>True if the 3D Model 
+	should have its normals smoothed.</td><td>3D Model</td><td>True</td></tr>
+
+
+<tr><td><strong>StartDateColumn</strong></td><td>Int</td><td>Column containing 
+	the start date/time data.</td><td>Spreadsheet</td><td>-1</td></tr>
+
+
+<tr><td><strong>StartTime</strong></td><td>DateTime</td><td>Date and time to 
+	start the visualizations. This 
+	property is visible in the Lifetime dialog for the layer. Formats 
+	(month/day/year):<br>&quot;1/1/2010 11:00:00 PM&quot;<br>&quot;1/1/2010 11:30 AM&quot;<br>
+	&quot;1/1/2010 11 am&quot;<br>&quot;1/1/2000&quot;<br>&quot;1/2000&quot;<br></td><td>
+		All</td><td>
+	Minimum system time</td></tr>
+
+
+<tr><td><strong>TimeSeries</strong></td><td>Boolean</td><td>True if the layer 
+	should be treated as time series data.</td><td>Spreadsheet</td><td>False</td></tr>
+
+
+<tr><td><strong>Translate</strong></td><td>Vector3d</td><td>Translation 
+	(movement offset) of the model in x, y and z dimensions, in units of the 
+	model size.<br>Format: 1,1,1</td><td>3D Model</td><td>0,0,0</td></tr>
+
+
+<tr><td><strong>XAxisColumn</strong></td><td>Int</td><td>Column number for X 
+	data.</td><td>Spreadsheet</td><td>-1</td></tr>
+
+
+<tr><td><strong>YAxisColumn</strong></td><td>Int</td><td>Column number for Y 
+	data.</td><td>Spreadsheet</td><td>-1</td></tr>
+
+
+<tr><td><strong>ZAxisColumn</strong></td><td>Int</td><td>Column number for Z 
+	data.</td><td>Spreadsheet</td><td>-1</td></tr>
+
+
+		<tr>
+			<td><strong>XAxisReverse</strong></td><td>Boolean</td><td>True if 
+			the direction of the X axis is reversed.</td><td>
+			Spreadsheet</td>
+			<td>
+			False</td>
+		</tr>
+		<tr>
+			<td><strong>YAxisReverse</strong></td><td>Boolean</td><td>True if 
+			the direction of the Y axis is reversed.</td><td>
+			Spreadsheet</td>
+			<td>
+			False</td>
+		</tr>
+		<tr>
+			<td><strong>ZAxisReverse</strong></td><td>Boolean</td><td>True if 
+			the direction of the Z axis is reversed.</td><td>
+			Spreadsheet</td>
+			<td>
+			False</td>
+	</tr>
+
+
+</table>
+
+
+<h4>Notes</h4>
+<ul>
+	<li>
+	Columns are numbered from zero. A value of -1 for any column entry indicates 
+	that there is no data of that type.</li>
+	<li>
+	AM and PM in times: The time 1/1/2000 12:00:00 AM is equivalent to midnight on the previous night 
+- so is one second after 12/31/1999 23:59:59. If the time was set to PM rather 
+than AM then 12:00:00 references noon.
+	</li>
+</ul>
+<h4>Return Value</h4>
+<p>If the call is successful the response will contain the following string:</p>
+<font COLOR="#a31515">
+<p>&lt;Status&gt;Success&lt;/Status&gt;&lt;Layer <em>propertyName</em>=&quot;<em>propertyValue</em>&quot;&lt;/Layer&gt;&lt;/LayerApi&gt;</p>
+</font>
+<p>Where <em>propertyName</em> is the property name requested, and <em>
+propertyValue</em> is the value returned. For example:</p>
+<table class="T1" cellspacing="8" cellpadding="8">
+<tr><td><h5>Get properties</h5></td></tr>
+<tr><td><span style='font-size:10.0pt;font-family:"Courier New";'>
+&lt;<span style="color:firebrick;">LayerApi</span>&gt;&lt;<span style="color:firebrick;">Status</span>&gt;Success&lt;/<span style="color:firebrick;">Status</span>&gt;&lt;<span style="color:firebrick;">Layer</span>&nbsp;AltType=&quot;Depth&quot;&lt;/<span style="color:firebrick;">Layer</span>&gt;&lt;/<span style="color:firebrick;">LayerApi</span>&gt; <br />
+&lt;<span style="color:firebrick;">LayerApi</span>&gt;&lt;<span style="color:firebrick;">Status</span>&gt;Success&lt;/<span style="color:firebrick;">Status</span>&gt;&lt;<span style="color:firebrick;">Layer</span>&nbsp;AltColumn=&quot;3&quot;&lt;/<span style="color:firebrick;">Layer</span>&gt;&lt;/<span style="color:firebrick;">LayerApi</span>&gt; <br />
+&lt;<span style="color:firebrick;">LayerApi</span>&gt;&lt;<span style="color:firebrick;">Status</span>&gt;Success&lt;/<span style="color:firebrick;">Status</span>&gt;&lt;<span style="color:firebrick;">Layer</span>&nbsp;Astronomical=&quot;False&quot;&lt;/<span style="color:firebrick;">Layer</span>&gt;&lt;/<span style="color:firebrick;">LayerApi</span>&gt; <br />
+&lt;<span style="color:firebrick;">LayerApi</span>&gt;&lt;<span style="color:firebrick;">Status</span>&gt;Success&lt;/<span style="color:firebrick;">Status</span>&gt;&lt;<span style="color:firebrick;">Layer</span>&nbsp;BeginRange=&quot;1/9/2009&nbsp;11:44:38&nbsp;AM&quot;&lt;/<span style="color:firebrick;">Layer</span>&gt;&lt;/<span style="color:firebrick;">LayerApi</span>&gt; <br />
+&lt;<span style="color:firebrick;">LayerApi</span>&gt;&lt;<span style="color:firebrick;">Status</span>&gt;Success&lt;/<span style="color:firebrick;">Status</span>&gt;&lt;<span style="color:firebrick;">Layer</span>&nbsp;EndRange=&quot;9/9/2009&nbsp;11:13:52&nbsp;PM&quot;&lt;/<span style="color:firebrick;">Layer</span>&gt;&lt;/<span style="color:firebrick;">LayerApi</span>&gt; <br />
+&lt;<span style="color:firebrick;">LayerApi</span>&gt;&lt;<span style="color:firebrick;">Status</span>&gt;Success&lt;/<span style="color:firebrick;">Status</span>&gt;&lt;<span style="color:firebrick;">Layer</span>&nbsp;Decay=&quot;16&quot;&lt;/<span style="color:firebrick;">Layer</span>&gt;&lt;/<span style="color:firebrick;">LayerApi</span>&gt; <br />
+&lt;<span style="color:firebrick;">LayerApi</span>&gt;&lt;<span style="color:firebrick;">Status</span>&gt;Success&lt;/<span style="color:firebrick;">Status</span>&gt;&lt;<span style="color:firebrick;">Layer</span>&nbsp;Name=&quot;EarthQuakes2009&quot;&lt;/<span style="color:firebrick;">Layer</span>&gt;&lt;/<span style="color:firebrick;">LayerApi</span>&gt; <br />
+&lt;<span style="color:firebrick;">LayerApi</span>&gt;&lt;<span style="color:firebrick;">Status</span>&gt;Success&lt;/<span style="color:firebrick;">Status</span>&gt;&lt;<span style="color:firebrick;">Layer</span>&nbsp;FadeSpan=&quot;00:00:00&quot;&lt;/<span style="color:firebrick;">Layer</span>&gt;&lt;/<span style="color:firebrick;">LayerApi</span>&gt; <br />
+&lt;<span style="color:firebrick;">LayerApi</span>&gt;&lt;<span style="color:firebrick;">Status</span>&gt;Success&lt;/<span style="color:firebrick;">Status</span>&gt;&lt;<span style="color:firebrick;">Layer</span>&nbsp;MarkerIndex=&quot;-1&quot;&lt;/<span style="color:firebrick;">Layer</span>&gt;&lt;/<span style="color:firebrick;">LayerApi</span>&gt; 
+</span></td></tr></table>
+<p>If the call is not successful the following string may be included in the 
+response, or other errors may be returned: </p>
+<font COLOR="#a31515">
+<p>&lt;Status&gt;Error - Invalid parameter&lt;/Status&gt;</p>
+</font>
+<h4>Example Code</h4>
+<table class="T3" cellspacing="8" cellpadding="8" style="width: 1093px">
+<tr><td><h5>Get altitude units</h5></td></tr>
+<tr><td><span style='font-size:10.0pt;font-family:"Courier New";'>
+	WebClient&nbsp;client&nbsp;=&nbsp;<span style="color:blue;">new</span>&nbsp;WebClient(); <br />
+	<span style="color:blue;">string</span>&nbsp;url&nbsp;=&nbsp;<span style="color:blue;">string</span>.Format(<span style="color:#A31515;">&quot;http://{0}:5050/layerApi.aspx?cmd=getprop&id={1}&propname={2}&quot;</span>,&nbsp;getIP().ToString(),&nbsp;layerId,&nbsp;<span style="color:#A31515;">&quot;AltUnit&quot;</span>); <br />
+	<span style="color:blue;">string</span>&nbsp;response&nbsp;=&nbsp;client.UploadString(url,&nbsp;<span style="color:#A31515;">&quot;&quot;</span>); 
+    </span></td></tr></table>
+    
+<table class="T3" cellspacing="8" cellpadding="8">
+<tr><td><h5>response&nbsp;</h5></td></tr>
+<tr><td><span style='font-size:10.0pt;font-family:"Courier New";'>
+&lt;?xml&nbsp;version=<span style="color:#A31515;">&quot;1.0&quot;</span>&nbsp;encoding=<span style="color:#A31515;">&quot;utf-8&quot;</span>?&gt;&lt;<span style="color:#2B91AF;">LayerApi</span>&gt;&lt;<span style="color:#2B91AF;">Status</span>&gt;Success&lt;/<span style="color:#2B91AF;">Status</span>&gt;&lt;<span style="color:#2B91AF;">Layer</span>&nbsp;AltUnit=<span style="color:#A31515;">&quot;Kilometers&quot;</span>&lt;/<span style="color:#2B91AF;">Layer</span>&gt;&lt;/<span style="color:#2B91AF;">LayerApi</span>&gt; 
+</span></td></tr></table>
+<h4>See Also</h4>
+<ul type="disc">
+	<li><a href="#getprops"><strong>getprops</strong></a></li>
+	<li><a href="#setprop"><strong>setprop</strong></a></li>
+	<li><a href="#setprops"><strong>setprops</strong></a></li>
+	<li><a href="#LCAPI_Commands">Layer API commands</a></li>
+</ul>
+<hr>
+
+<h3><a name="getprops"></a>getprops</h3>
+
+<p>The <strong>getprops</strong> command is used to retrieve all the properties for a specified layer.</p>
+<h4>Remarks</h4>
+<p>Refer to the <a href="#Table_of_Properties">table of properties</a> listed for the <a href="#getprop"><strong>getprop</strong></a> 
+command.</p>
+<p><table class="T1" cellspacing="2" cellpadding="4">
+<tr><td><h5>Required Parameters</h5></td><td><h5>Description</h5></td></tr>
+<tr><td><strong>&amp;id</strong></td><td>Specifies the id number of the 
+		layer.</td></tr>
+</table>
+</p>
+<h4>Return Value</h4>
+<p>If the call is successful the response string will contain the following 
+string:</p>
+<p>
+<font COLOR="#a31515">
+&lt;Status&gt;Success&lt;/Status&gt;</font></p>
+<p>If the call is not successful the following string may be included in the 
+response, or other errors may be returned: </p>
+<p><font COLOR="#a31515">&lt;Status&gt;Error - Invalid layer ID&lt;/Status&gt;</font>&nbsp;</p>
+<h4>Example Code</h4>
+<p>The following example gets all the properties from any of the different types 
+of layer. Note that the response string does not 
+include newlines, these have been added for readability.</p>
+<table class="T3" cellspacing="8" cellpadding="8">
+<tr><td><h5>get all properties</h5></td></tr>
+<tr><td><span style='font-size:10.0pt;font-family:"Courier New";'>
+&nbsp;<span style="color:blue;">private</span>&nbsp;<span style="color:blue;">void</span>&nbsp;buttonGetProperties() <br />
+&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">try</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WebClient&nbsp;client&nbsp;=&nbsp;<span style="color:blue;">new</span>&nbsp;WebClient(); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;url&nbsp;=&nbsp;<span style="color:blue;">string</span>.Format(<span style="color:#A31515;">&quot;http://{0}:5050/layerApi.aspx?cmd=getprops&id={1}&quot;</span>,&nbsp;getIP().ToString(),&nbsp;layerId); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;response&nbsp;=&nbsp;client.UploadString(url,&nbsp;<span style="color:#A31515;">&quot;&quot;</span>); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XmlDocument&nbsp;doc&nbsp;=&nbsp;<span style="color:blue;">new</span>&nbsp;XmlDocument(); <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;doc.LoadXml(response); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XmlNode&nbsp;node&nbsp;=&nbsp;doc[<span style="color:#A31515;">&quot;LayerApi&quot;</span>]; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">if</span>&nbsp;(node.InnerText.Contains(<span style="color:#A31515;">&quot;Success&quot;</span>)) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XmlNode&nbsp;node2&nbsp;=&nbsp;node[<span style="color:#A31515;">&quot;Layer&quot;</span>]; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">if</span>&nbsp;(node2&nbsp;!=&nbsp;<span style="color:blue;">null</span>) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;propName; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;propValue; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">for</span>&nbsp;(<span style="color:blue;">int</span>&nbsp;i&nbsp;=&nbsp;0;&nbsp;i&nbsp;&lt;&nbsp;node2.Attributes.Count;&nbsp;i++) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;propName&nbsp;=&nbsp;node2.Attributes[i].Name; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;propValue&nbsp;=&nbsp;node2.Attributes[i].Value; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Do&nbsp;something&nbsp;with&nbsp;the&nbsp;name/value&nbsp;pair</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">else</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;No&nbsp;properties&nbsp;returned</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">else</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">throw</span>&nbsp;<span style="color:blue;">new</span>&nbsp;<span style="color:#2B91AF;">Exception</span>(response); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">catch</span>&nbsp;(<span style="color:#2B91AF;">Exception</span>&nbsp;ex) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Handle&nbsp;exception</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+} <br />
+</span></td></tr></table>
+
+<table class="T1" cellspacing="8" cellpadding="8">
+<tr><td><h5><a name="Spreadsheet">Spreadsheet</a></h5></td></tr>
+<tr><td><span style='font-size:10.0pt;font-family:"Courier New";'>
+&lt;?xml&nbsp;version=&#39;1.0&#39;&nbsp;encoding=&#39;UTF-8&#39;?&gt; <br />
+&lt;<span style="color:firebrick;">LayerApi</span>&gt; <br>&lt;<span style="color:firebrick;">Status</span>&gt;Success&lt;/<span style="color:firebrick;">Status</span>&gt; <br />
+	&lt;<span style="color:firebrick;">Layer</span>&nbsp;<br>&nbsp;&nbsp; Class=\&quot;SpreadSheetLayer\&quot;&nbsp; <br />
+&nbsp;&nbsp;
+TimeSeries=\&quot;True\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;BeginRange=\&quot;1/9/2009&nbsp;11:44:38&nbsp;AM\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;EndRange=\&quot;9/9/2009&nbsp;11:13:52&nbsp;PM\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;Decay=\&quot;16\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;CoordinatesType=\&quot;Spherical\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;LatColumn=\&quot;1\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;LngColumn=\&quot;2\&quot;&nbsp; <br>
+	&nbsp;&nbsp;&nbsp;GeometryColumn=\&quot;-1\&quot;&nbsp; <br>
+	&nbsp;&nbsp;&nbsp;XAxisColumn=\&quot;-1\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;YAxisColumn=\&quot;-1\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;ZAxisColumn=\&quot;-1\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;XAxisReverse=\&quot;False\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;YAxisReverse=\&quot;False\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;ZAxisReverse=\&quot;False\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;AltType=\&quot;Depth\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;RaUnits=\&quot;Hours\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;MarkerMix=\&quot;Same_For_All\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;MarkerColumn=\&quot;-1\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;ColorMapColumn=\&quot;-1\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;PlotType=\&quot;Gaussian\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;MarkerIndex=\&quot;-1\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;ShowFarSide=\&quot;False\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;MarkerScale=\&quot;World\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;AltUnit=\&quot;Kilometers\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;CartesianScale=\&quot;Meters\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;CartesianCustomScale=\&quot;1\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;AltColumn=\&quot;3\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;StartDateColumn=\&quot;0\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;EndDateColumn=\&quot;-1\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;SizeColumn=\&quot;4\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;NameColumn=\&quot;0\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;HyperlinkFormat=\&quot;\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;HyperlinkColumn=\&quot;-1\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;ScaleFactor=\&quot;1\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;PointScaleType=\&quot;Power\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;Opacity=\&quot;1\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;StartTime=\&quot;1/1/0001&nbsp;12:00:00&nbsp;AM\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;EndTime=\&quot;12/31/9999&nbsp;11:59:59&nbsp;PM\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;FadeSpan=\&quot;00:00:00\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;FadeType=\&quot;None\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;Name=\&quot;EarthQuakes2009\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;ColorValue=\&quot;ARGBColor:255:255:0:0\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;Enabled=\&quot;True\&quot;&nbsp; <br />
+	&nbsp;&nbsp;&nbsp;Astronomical=\&quot;False\&quot;&nbsp;/&gt; <br />
+&lt;/<span style="color:firebrick;">LayerApi</span>&gt; 
+</span></td></tr></table>
+
+<table class="T1" cellspacing="8" cellpadding="8">
+<tr><td><h5><a name="3D_model">3D Model</a></h5></td></tr>
+<tr><td><span style='font-size:10.0pt;font-family:"Courier New";'>
+&lt;?xml&nbsp;version=&#39;1.0&#39;&nbsp;encoding=&#39;UTF-8&#39;?&gt; <br />
+&lt;<span style="color:firebrick;">LayerApi</span>&gt;&nbsp;&nbsp;<br>&lt;<span style="color:firebrick;">Status</span>&gt;Success&lt;/<span style="color:firebrick;">Status</span>&gt;&nbsp;&nbsp; <br />
+&lt;<span style="color:firebrick;">Layer</span>&nbsp; <br />
+&nbsp;&nbsp;&nbsp;Class=\"Object3dLayer\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;FlipV=\"False\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;Smooth=\"True\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;Heading=\"0\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;Pitch=\"0\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;Roll=\"0\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;Scale=\"1,&nbsp;1,&nbsp;1\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;Translate=\"0,&nbsp;0,&nbsp;0\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;Opacity=\"1\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;StartTime=\"1/1/0001&nbsp;12:00:00&nbsp;AM\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;EndTime=\"12/31/9999&nbsp;11:59:59&nbsp;PM\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;FadeSpan=\"00:00:00\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;FadeType=\"None\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;Name=\"aurora\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;ColorValue=\"ARGBColor:255:255:0:0\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;Enabled=\"True\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;Astronomical=\"False\"&nbsp;/&gt; <br />
+&lt;/<span style="color:firebrick;">LayerApi</span>&gt; 
+</span></td></tr></table>
+	<table class="T1" cellspacing="8" cellpadding="8">
+<tr><td><h5><a name="Shapefile">Shapefile</a></h5></td></tr>
+<tr><td><span style='font-size:10.0pt;font-family:"Courier New";'>
+&lt;?xml&nbsp;version=&#39;1.0&#39;&nbsp;encoding=&#39;UTF-8&#39;?&gt; <br />
+&lt;<span style="color:firebrick;">LayerApi</span>&gt;&nbsp;&nbsp;<br>&lt;<span style="color:firebrick;">Status</span>&gt;Success&lt;/<span style="color:firebrick;">Status</span>&gt;&nbsp;&nbsp; <br />
+&lt;<span style="color:firebrick;">Layer</span>&nbsp; <br />
+&nbsp;&nbsp;&nbsp;Class=\"ShapeFileRenderer\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;Opacity=\"1\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;StartTime=\"1/1/0001&nbsp;12:00:00&nbsp;AM\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;EndTime=\"12/31/9999&nbsp;11:59:59&nbsp;PM\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;FadeSpan=\"00:00:00\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;FadeType=\"None\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;Name=\"state_bounds\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;ColorValue=\"ARGBColor:255:255:0:0\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;Enabled=\"True\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;Astronomical=\"False\"&nbsp;/&gt; <br />
+&lt;/<span style="color:firebrick;">LayerApi</span>&gt; 
+</span></td></tr></table>
+	
+	
+<table class="T1" cellspacing="8" cellpadding="8">
+<tr><td><h5><a name="ImageSet">ImageSet</a></h5></td></tr>
+<tr><td><span style='font-size:10.0pt;font-family:"Courier New";'>
+&lt;?xml&nbsp;version=&#39;1.0&#39;&nbsp;encoding=&#39;UTF-8&#39;?&gt; <br />
+&lt;<span style="color:firebrick;">LayerApi</span>&gt;&nbsp;&nbsp;<br>&lt;<span style="color:firebrick;">Status</span>&gt;Success&lt;/<span style="color:firebrick;">Status</span>&gt;&nbsp;&nbsp; <br />
+&lt;<span style="color:firebrick;">Layer</span>&nbsp; <br />
+&nbsp;&nbsp;&nbsp;Class=\"ImageSetLayer\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;Opacity=\"1\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;StartTime=\"1/1/0001&nbsp;12:00:00&nbsp;AM\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;EndTime=\"12/31/9999&nbsp;11:59:59&nbsp;PM\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;FadeSpan=\"00:00:00\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;FadeType=\"None\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;Name=\"Bathymetry\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;ColorValue=\"ARGBColor:255:255:0:0\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;Enabled=\"True\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;Astronomical=\"False\"&nbsp;/&gt; <br />
+&lt;/<span style="color:firebrick;">LayerApi</span>&gt; 
+</span></td></tr></table><h4>See Also</h4>
+<ul type="disc">
+	<li><a href="#getprop"><strong>getprop</strong></a></li>
+	<li><a href="#setprop"><strong>setprop</strong></a></li>
+	<li><a href="#setprops"><strong>setprops</strong></a></li>
+	<li><a href="#LCAPI_Commands">Layer API commands</a></li>
+</ul>
+
+<hr>
+<h3><a name="group"></a>group</h3>
+<p>The <strong>group</strong> command specifies that a layer group should be 
+added.</p>
+<h4>Remarks</h4>
+<p>Layer groups are just an organizational aid when using the layer manager. The 
+user will be able to collapse and expand groups in the Layer Manager, and have 
+groups that are sub-sets of other groups.</p>
+<p><table class="T1" cellspacing="2" cellpadding="4">
+<tr><td><h5>Required Parameter</h5></td><td><h5>Description</h5></td></tr>
+<tr><td><strong>&amp;name</strong></td><td>A unique name for the layer group.</td></tr>
+<tr><td><strong>&amp;frame</strong></td><td>The reference frame of the group. This 
+	can be a layer group created with the <strong>group</strong> command, or one of:<br><strong>
+	Earth, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, 
+	Io, Ganymede, Callisto, Europa, Sun, ISS.</strong></td></tr>
+</table>
+</p>
+<h4>Return Value</h4>
+<p>The following string will be included in the response if the call is 
+successful:</p>
+<p><font COLOR="#a31515">&lt;Status&gt;Success&lt;/Status&gt;</font></p>
+<p>If the call is not successful the following string may be included in the 
+response, or other errors may be returned: </p>
+<font COLOR="#a31515">
+<p>&lt;Status&gt;Error - Invalid layer ID&lt;/Status&gt;</p>
+</font>
+
+<h4>Example Code</h4>
+<table class="T3" cellspacing="4" cellpadding="4" style="width: 1078px">
+<tr><td>		<span style='font-size:10.0pt;font-family:"Courier New";'>
+		&nbsp;&nbsp;<span style="color:blue;">private</span>&nbsp;<span style="color:blue;">void</span>&nbsp;createLayerGroup(<span style="color:blue;">string</span>&nbsp;frame,&nbsp;<span style="color:blue;">string</span>&nbsp;name) <br />
+		&nbsp;&nbsp;{ <br />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">try</span> <br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WebClient&nbsp;client&nbsp;=&nbsp;<span style="color:blue;">new</span>&nbsp;WebClient(); <br />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;url&nbsp;=&nbsp;<span style="color:blue;">string</span>.Format(<span style="color:#A31515;">&quot;http://{0}:5050/layerApi.aspx?cmd=group&frame={1}&name={2}&quot;</span>,&nbsp;getIP().ToString(), frame, name); <br />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;response&nbsp;=&nbsp;client.UploadString(url,&nbsp;<span style="color:#A31515;">&quot;&quot;</span>); <br />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XmlDocument&nbsp;doc&nbsp;=&nbsp;<span style="color:blue;">new</span>&nbsp;XmlDocument(); <br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;doc.LoadXml(response); <br />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XmlNode&nbsp;node&nbsp;=&nbsp;doc[<span style="color:#A31515;">&quot;LayerApi&quot;</span>]; <br />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;s&nbsp;=&nbsp;node.InnerText; <br />
+ <br />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Handle&nbsp;an&nbsp;error&nbsp;situation</span> <br />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">if</span>&nbsp;(s.Contains(<span style="color:#A31515;">&quot;Error&quot;</span>)) <br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">throw</span>&nbsp;<span style="color:blue;">new</span>&nbsp;<span style="color:#2B91AF;">Exception</span>(s); <br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">catch</span>&nbsp;(<span style="color:#2B91AF;">Exception</span>&nbsp;ex) <br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+	&nbsp;&nbsp;}</span></td></tr>
+</table>
+<h4>See Also</h4>
+<ul type="disc">
+	<li><a href="#layerlist"><strong>layerlist</strong></a></li>
+	<li><strong><a href="#load">load</a></strong></li>
+	<li><strong><a href="#new">new</a></strong></li>
+	<li><a href="#LCAPI_Commands">Layer API commands</a></li>
+</ul>
+
+<hr>
+<h3><a name="layerlist">layerlist</a></h3>
+<p>The <strong>layerlist</strong> command returns the structure of the layers 
+and layer group names (in an XML document format) that are currently in the 
+layer manager.</p>
+<h4>Remarks</h4>
+	<table class="T1" cellspacing="2" cellpadding="4">
+<tr><td><h5>Optional Parameter</h5></td><td style="width: 514px"><h5>Description</h5></td><td>
+		<h5>Default</h5>
+		</td></tr>
+<tr><td><strong>&amp;layersonly</strong></td><td style="width: 514px">True 
+	indicates that only layers, and not reference frames or group names, should 
+	be returned.</td><td>False</td></tr>
+</table>
+<h4>Return value</h4>
+<p>If the call is successful a string will be returned that is an XML document. 
+Refer to the <strong>Example</strong> <strong>Code</strong> for the format and contents of the document.</p>
+<p>If the call is not successful the following string may be included in the 
+response, or other errors may be returned: </p>
+<font COLOR="#a31515">
+<p>&lt;Status&gt;Error - Invalid layer ID&lt;/Status&gt;</p>
+</font>
+
+<h4>Example Code</h4>
+<p>The following code will result in the response given below, though note that 
+one layer (EarthQuakes2009) and one group (New Mercury Group) have been added to 
+the layer manager prior to the <strong>layerlist</strong> call.</p>
+
+<table class="T3" cellspacing="8" cellpadding="8">
+<tr><td><h5>layerlist</h5></td></tr>
+<tr><td><span style='font-size:10.0pt;font-family:"Courier New";'>
+<span style="color:green;">//</span> <br />
+<span style="color:green;">//&nbsp;Recursive&nbsp;scanning&nbsp;of&nbsp;child&nbsp;nodes</span> <br />
+<span style="color:green;">//</span> <br />
+<span style="color:blue;">private</span>&nbsp;<span style="color:blue;">void</span>&nbsp;scanNode(XmlNode&nbsp;node) <br />
+{ <br />
+&nbsp;&nbsp;&nbsp;<span style="color:blue;">int</span>&nbsp;i,n; <br />
+&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;First&nbsp;loop&nbsp;through&nbsp;the&nbsp;attributes&nbsp;of&nbsp;the&nbsp;node</span> <br />
+&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp; <br />
+&nbsp;&nbsp;&nbsp;<span style="color:blue;">for</span>&nbsp;(i&nbsp;=&nbsp;0;&nbsp;i&nbsp;&lt;&nbsp;node.Attributes.Count;&nbsp;i++) <br />
+&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Do&nbsp;something&nbsp;with&nbsp;the&nbsp;node.Attributes[i].Name&nbsp;and&nbsp;node.Attributes[i].Value</span> <br />
+&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+ <br />
+&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Next&nbsp;recurse&nbsp;the&nbsp;node&nbsp;tree</span> <br />
+&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;<span style="color:blue;">for</span>&nbsp;(n&nbsp;=&nbsp;0;&nbsp;n&nbsp;&lt;&nbsp;node.ChildNodes.Count;&nbsp;n++) <br />
+&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;scanNode(node.ChildNodes[n]) <br />
+&nbsp;&nbsp;&nbsp;} <br />
+} <br />
+<span style="color:green;">//</span> <br />
+<span style="color:green;">//&nbsp;Get the current list of Reference Frames, groups 
+	and layers</span> <br />
+<span style="color:green;">//</span> 
+ <br />
+<span style="color:blue;">private</span>&nbsp;<span style="color:blue;">void</span>&nbsp;getLayerlist(<span style="color:blue;">string</span>&nbsp;layersonly) <br />
+{ <br />
+&nbsp;&nbsp;&nbsp;<span style="color:blue;">try</span> <br />
+&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WebClient&nbsp;client&nbsp;=&nbsp;<span style="color:blue;">new</span>&nbsp;WebClient(); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;url&nbsp;=&nbsp;<span style="color:blue;">string</span>.Format(<span style="color:#A31515;">&quot;http://{0}:5050/layerApi.aspx?cmd=layerlist&layersonly={1}&quot;</span>,&nbsp;getIP().ToString(),&nbsp;layersonly); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;response&nbsp;=&nbsp;client.UploadString(url,&nbsp;<span style="color:#A31515;">&quot;&quot;</span>); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XmlDocument&nbsp;doc&nbsp;=&nbsp;<span style="color:blue;">new</span>&nbsp;XmlDocument(); <br />
+ <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;doc.LoadXml(response); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XmlNode&nbsp;node&nbsp;=&nbsp;doc[<span style="color:#A31515;">&quot;LayerApi&quot;</span>]; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">if</span>&nbsp;(node.InnerText.Contains(<span style="color:#A31515;">&quot;Success&quot;</span>)) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XmlNode&nbsp;node2&nbsp;=&nbsp;node[<span style="color:#A31515;">&quot;LayerList&quot;</span>]; <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">if</span>&nbsp;(node2&nbsp;!=&nbsp;<span style="color:blue;">null</span>) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Top&nbsp;level&nbsp;items&nbsp;returned&nbsp;=&nbsp;node2.ChildNodes.Count</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;scanNode(node2); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">else</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;No&nbsp;items&nbsp;returned</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">else</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">throw</span>&nbsp;<span style="color:blue;">new</span>&nbsp;<span style="color:#2B91AF;">Exception</span>(response); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+&nbsp;&nbsp;&nbsp;} <br />
+&nbsp;&nbsp;&nbsp;<span style="color:blue;">catch</span>&nbsp;(<span style="color:#2B91AF;">Exception</span>&nbsp;ex) <br />
+&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Handle&nbsp;exception</span> <br />
+&nbsp;&nbsp;&nbsp;} <br />
+} 
+</span></td></tr></table>
+
+
+<table class="T3" cellspacing="8" cellpadding="8">
+<tr><td><h5>response&nbsp; (layersonly = &quot;false&quot;)</h5></td></tr>
+<tr><td><span style='font-size:10.0pt;font-family:"Courier New";'>
+	&lt;?xml&nbsp;version='1.0'&nbsp;encoding='UTF-8'?&gt; <br />
+&lt;<span style="color:firebrick;">LayerApi</span>&gt;&nbsp;&nbsp; <br />
+&lt;<span style="color:firebrick;">Status</span>&gt;Success&lt;/<span style="color:firebrick;">Status</span>&gt;&nbsp;&nbsp; <br />
+&lt;<span style="color:firebrick;">LayerList</span>&gt;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&lt;<span style="color:firebrick;">ReferenceFrame</span>&nbsp;Name=\"Sun\"&nbsp;Enabled=\"True\"&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&lt;<span style="color:firebrick;">ReferenceFrame</span>&nbsp;Name=\"Mercury\"&nbsp;Enabled=\"True\"&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span style="color:firebrick;">LayerGroup</span>&nbsp;Name=\"New&nbsp;Mercury&nbsp;Group\"&nbsp;Enabled=\"True\"&nbsp;/&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&lt;/<span style="color:firebrick;">ReferenceFrame</span>&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&lt;<span style="color:firebrick;">ReferenceFrame</span>&nbsp;Name=\"Venus\"&nbsp;Enabled=\"True\"&nbsp;/&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&lt;<span style="color:firebrick;">ReferenceFrame</span>&nbsp;Name=\"Earth\"&nbsp;Enabled=\"True\"&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span style="color:firebrick;">Layer</span>&nbsp;Name=\"EarthQuakes2009\"&nbsp;ID=\"712cdef2-907f-4fc5-ae2c-c57488be4517\"&nbsp;Type=&quot;SpreadSheetLayer&quot; Enabled=\"True\"&nbsp;/&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span style="color:firebrick;">ReferenceFrame</span>&nbsp;Name=\"Moon\"&nbsp;Enabled=\"True\"&nbsp;/&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span style="color:firebrick;">ReferenceFrame</span>&nbsp;Name=\"ISS\"&nbsp;Enabled=\"True\"&nbsp;/&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&lt;/<span style="color:firebrick;">ReferenceFrame</span>&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&lt;<span style="color:firebrick;">ReferenceFrame</span>&nbsp;Name=\"Mars\"&nbsp;Enabled=\"True\"&nbsp;/&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&lt;<span style="color:firebrick;">ReferenceFrame</span>&nbsp;Name=\"Jupiter\"&nbsp;Enabled=\"True\"&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span style="color:firebrick;">ReferenceFrame</span>&nbsp;Name=\"Io\"&nbsp;Enabled=\"True\"&nbsp;/&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span style="color:firebrick;">ReferenceFrame</span>&nbsp;Name=\"Europa\"&nbsp;Enabled=\"True\"&nbsp;/&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span style="color:firebrick;">ReferenceFrame</span>&nbsp;Name=\&quot;Ganymede\&quot;&nbsp;Enabled=\&quot;True\&quot;&nbsp;/&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span style="color:firebrick;">ReferenceFrame</span>&nbsp;Name=\"Callisto\"&nbsp;Enabled=\"True\"&nbsp;/&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&lt;/<span style="color:firebrick;">ReferenceFrame</span>&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&lt;<span style="color:firebrick;">ReferenceFrame</span>&nbsp;Name=\"Saturn\"&nbsp;Enabled=\"True\"&nbsp;/&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&lt;<span style="color:firebrick;">ReferenceFrame</span>&nbsp;Name=\"Uranus\"&nbsp;Enabled=\"True\"&nbsp;/&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&lt;<span style="color:firebrick;">ReferenceFrame</span>&nbsp;Name=\&quot;Neptune\&quot;&nbsp;Enabled=\&quot;True\&quot;&nbsp;/&gt; <br />
+&lt;<span style="color:firebrick;">ReferenceFrame</span>&nbsp;Name=\"Pluto\"&nbsp;Enabled=\"True\"&nbsp;/&gt;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&lt;/<span style="color:firebrick;">ReferenceFrame</span>&gt;&nbsp;&nbsp; <br />
+&lt;/<span style="color:firebrick;">LayerList</span>&gt; <br />
+&lt;/<span style="color:firebrick;">LayerApi</span>&gt; 
+</span></td></tr></table>
+<table class="T3" cellspacing="8" cellpadding="8">
+<tr><td><h5>response (layersonly = &quot;true&quot;)</h5></td></tr>
+<tr><td><span style='font-size:10.0pt;font-family:"Courier New";'>
+&lt;?xml&nbsp;version=&#39;1.0&#39;&nbsp;encoding=&#39;UTF-8&#39;?&gt; <br />
+&lt;<span style="color:firebrick;">LayerApi</span>&gt; <br />
+&nbsp;&nbsp;&lt;<span style="color:firebrick;">Status</span>&gt;Success&lt;/<span style="color:firebrick;">Status</span>&gt; <br />
+&nbsp;&nbsp;&lt;<span style="color:firebrick;">LayerList</span>&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span style="color:firebrick;">Layer</span>&nbsp;Name=\&quot;EarthQuakes2009\&quot;&nbsp;ID=\&quot;<span style='font-size:10.0pt;font-family:"Courier New";'>712cdef2-907f-4fc5-ae2c-c57488be4517\</span>&quot;&nbsp;Type=&quot;SpreadSheetLayer&quot;&nbsp; Enabled=\&quot;True\&quot;&nbsp;/&gt; <br />
+&nbsp;&nbsp;&lt;/<span style="color:firebrick;">LayerList</span>&gt; <br />
+&lt;/<span style="color:firebrick;">LayerApi</span>&gt; 
+</span></td></tr></table>
+
+<h4>See Also</h4>
+<ul type="disc">
+	<li><a href="#activate"><strong>activate</strong></a></li>
+	<li><a href="#group"><strong>group</strong></a></li>
+	<li><a href="#load"><strong>load</strong></a></li>
+	<li><strong><a href="#new">new</a></strong></li>
+	<li><a href="#LCAPI_Commands">Layer API commands</a></li>
+</ul>
+
+
+<hr>
+<h3><a name="load">load</a></h3>
+<p>The <strong>load</strong> command specifies a data file, and and some optional parameters, to 
+		apply to a new layer.</p>
+<h4>Remarks</h4>
+<p>Files that can be loaded using this commend include spreadsheet data (comma 
+or tab delimited), shape files (.shp), 3D model files (.3ds), and WTML files 
+containing <strong>ImageSet</strong> references. In the latter case the first 
+image set found in the file will be loaded. Refer to the
+	<a href="http://www.worldwidetelescope.org/Docs/WorldWideTelescopeDataFilesReference.html">
+	WorldWide Telescope Data Files Reference</a> for more details on WTML files.</p>
+<p>If a spreadsheet of data is loaded, the <strong>load</strong> command will 
+initiate an import wizard of WorldWide Telescope, in order to select the 
+appropriate columns, timing data, and so on.&nbsp; An import wizard is not 
+automatically invoked by the other data file types.</p>
+<p>Note that parameter names are 
+case-sensitive.</p>
+<p><table class="T1" cellspacing="2" cellpadding="4">
+<tr><td><h5>Required Parameter</h5></td><td><h5>Description</h5></td><td>&nbsp;</td></tr>
+<tr><td><strong>&amp;frame</strong></td><td>The reference frame of the group. 
+	This can be an existing layer group name, or one of:<br><strong>
+	Earth, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, 
+	Io, Ganymede, Callisto, Europa, Sun, ISS.</strong></td><td>&nbsp;</td></tr>
+<tr><td><strong>&amp;filename</strong></td><td>The full path of the file to 
+	load.</td><td>&nbsp;</td></tr>
+<tr><td>
+	&nbsp;</td><td>&nbsp;</td><td>
+	&nbsp;</td></tr>
+<tr><td>
+	<h5>Optional Parameter</h5>
+	</td><td>&nbsp;</td><td>
+	<h5>Default</h5>
+	</td></tr>
+	<tr>
+		<td><strong>&amp;name</strong></td><td>A friendly name for the layer. </td><td>
+		&quot;New Layer&quot;</td>
+	</tr>
+	<tr>
+		<td><strong>&amp;color</strong></td><td>ARBG hex value of the color to be used 
+	when rendering the events of the layer.</td><td>FFFFFFFF<br>(white)</td>
+	</tr>
+<tr><td><strong>&amp;startdate</strong></td><td>With time series data, the date and 
+	time to start the visualization for this layer. This could for example be slightly earlier 
+	than the date of the first event in the actual data. For example:
+		<font COLOR="#a31515">&quot;1/1/2000 12:30:30 AM&quot;</font>.<br>
+	Formats (month/day/year):<br>&quot;1/1/2010 11:00:00 PM&quot;<br>&quot;1/1/2010 11:30 AM&quot;<br>
+	&quot;1/1/2010 11 am&quot;<br>&quot;1/1/2000&quot;<br>&quot;1/2000&quot;</td><td>
+	The System minimum date value</td></tr>
+<tr><td><strong>&amp;enddate</strong></td><td>With time series data, the date 
+	and time to end the visualization for this layer.</td><td>The System maximum date value</td></tr>
+<tr><td><strong>&amp;fadetype</strong></td><td>Fades the data visualization. One of: <strong>In</strong>, <strong>
+	Out</strong>, <strong>Both</strong> or <strong>None</strong>.</td><td>None</td></tr>
+<tr><td><strong>&amp;faderange</strong></td><td>Fade time in days.</td><td>Zero</td></tr>
+</table>
+</p>
+<h4>Return Value</h4>
+<p>The following string will be included in the response string:</p>
+
+<p><font COLOR="#a31515">&lt;LayerApi&gt;&lt;NewLayerID&gt;<em>nnnn</em>&lt;/NewLayerID&gt;&lt;/LayerApi&gt;</font></p>
+
+<p>Where <em>nnnn</em> is the layer id, which will be a GUID in string 
+format.</p>
+<p>If the call is not successful the following string may be included in the 
+response, or other errors may be returned: </p>
+<font COLOR="#a31515">
+<p>&lt;Status&gt;Error - Could not Load Layer&lt;/Status&gt;</p>
+</font>
+
+<h4>Example Code</h4>
+<p>Note that the example code uses <strong>datetime</strong>, one of the 
+<a href="#general_parameters">general parameters</a>, 
+to initiate the visualization of the data immediately.</p>
+<table class="T3" cellspacing="4" cellpadding="4">
+<tr><td style="width: 988px">
+		<span style='font-size:10.0pt;font-family:"Courier New";'>
+		<span style="color:blue;">private</span>&nbsp;<span style="color:blue;">void</span>&nbsp;loadDatafile(<span style="color:blue;">string</span>&nbsp;name,&nbsp;<span style="color:blue;">string</span>&nbsp;frame,&nbsp;<span style="color:blue;">string</span>&nbsp;filename,&nbsp;<span style="color:blue;">string</span>&nbsp;datetime) <br />
+		{ <br />
+		&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">try</span> <br />
+				&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+ 	    		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WebClient&nbsp;client&nbsp;=&nbsp;<span style="color:blue;">new</span>&nbsp;WebClient(); <br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;url&nbsp;=&nbsp;<span style="color:blue;">string</span>.Format(<span style="color:#A31515;">&quot;<a href="http://{0}:5050/layerApi.aspx?cmd=load&amp;frame={1}&amp;filename={2}&amp;name={3}&amp;datetime={4}">http://{0}:5050/layerApi.aspx?cmd=load&frame={1}&filename={2}&name={3}&datetime={4}</a>&quot;</span>,<br>getIP().ToString(), frame, filename,&nbsp;name,&nbsp;datetime); <br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;response&nbsp;=&nbsp;client.UploadString(url,&nbsp;<span style="color:#A31515;">&quot;&quot;</span>); <br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XmlDocument&nbsp;doc&nbsp;=&nbsp;<span style="color:blue;">new</span>&nbsp;XmlDocument(); <br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;doc.LoadXml(response); <br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XmlNode&nbsp;node&nbsp;=&nbsp;doc[<span style="color:#A31515;">&quot;LayerApi&quot;</span>]; 
+		<br>
+		<span style='font-size:10.0pt;font-family:"Courier New";'>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; XmlNode&nbsp;child&nbsp;=&nbsp;node.ChildNodes[0]; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; layerId&nbsp;=&nbsp;child.InnerText; 
+		</span>
+		<br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;s&nbsp;=&nbsp;node.InnerText; <br />
+ <br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Handle&nbsp;an&nbsp;error&nbsp;situation</span> <br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">if</span>&nbsp;(s.Contains(<span style="color:#A31515;">&quot;Error&quot;</span>)) <br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">throw</span>&nbsp;<span style="color:blue;">new</span>&nbsp;<span style="color:#2B91AF;">Exception</span>(s); <br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+		&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+		&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">catch</span>&nbsp;(<span style="color:#2B91AF;">Exception</span>&nbsp;ex) <br />
+		&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+		&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+		}</span></td></tr>
+</table>
+<h4>See Also</h4>
+<ul type="disc">
+	<li><strong><a href="#group">group</a></strong></li>
+	<li><a href="#uisettings"><b>uisettings</b></a></li>
+	<li><a href="#layerlist"><strong>layerlist</strong></a></li>
+	<li><strong><a href="#new">new</a></strong></li>
+	<li><strong><a href="#update">update</a></strong></li>
+	<li><a href="#LCAPI_Commands">Layer API commands</a></li>
+</ul>
+
+<hr>
+<h3><a name="mode"></a>mode</h3>
+<p>The <strong>mode</strong> command changes the view to one of <strong>Earth</strong>,
+<strong>Planet</strong>, <strong>Sky</strong>, <strong>Panorama</strong>,
+<strong>SolarSystem</strong>.</p>
+<h4>Remarks</h4>
+<p>This command does not take any parameters.</p>
+<h4>Return value</h4>
+<p>The following string will be included in the response if the call is successful:</p>
+<font COLOR="#a31515">
+<p>&lt;Status&gt;Success&lt;/Status&gt;</p>
+</font>
+
+<h4>Example code</h4>
+<table class="T3" cellspacing="8" cellpadding="8">
+<tr><td><h5>Change mode</h5></td></tr>
+<tr><td><span style='font-size:10.0pt;font-family:"Courier New";'>
+	WebClient&nbsp;client&nbsp;=&nbsp;<span style="color:blue;">new</span>&nbsp;WebClient(); <br />
+	<span style="color:blue;">string</span>&nbsp;url&nbsp;=&nbsp;<span style="color:blue;">string</span>.Format(<span style="color:#A31515;">&quot;http://{0}:5050/layerApi.aspx?cmd=mode&lookat={1}&quot;</span>,&nbsp;getIP().ToString(),&nbsp;&quot;SolarSystem&quot;); <br />
+	<span style="color:blue;">string</span>&nbsp;response&nbsp;=&nbsp;client.UploadString(url,&nbsp;<span style="color:#A31515;">&quot;&quot;</span>); 
+</span></td></tr></table><h4>See Also</h4>
+
+
+<ul type="disc">
+	<li><a href="#LCAPI_Commands">Layer API commands</a></li>
+	<li><a href="#uisettings"><strong>uisettings</strong></a></li>
+</ul>
+<hr>
+
+<h3><a name="move"></a>move</h3>
+<p>The <strong>move</strong> command changes the view depending on the supplied 
+parameter.</p>
+<h4>Remarks</h4>
+<p>One move parameter must be supplied,<strong> &amp;move=<em>nnnn</em></strong>, 
+where <em>nnnn</em> is one of the following:</p>
+	<table class="T1" cellspacing="2" cellpadding="4">
+<tr><td><h5>Required Parameter</h5></td><td style="width: 514px"><h5>Description</h5></td></tr>
+<tr><td><strong>ZoomIn</strong></td><td style="width: 514px">Zoom in on the 
+	current view.</td></tr>
+<tr><td><strong>ZoomOut</strong></td><td style="width: 514px">Zoom out of the 
+	current view.</td></tr>
+<tr><td><strong>Up</strong></td><td style="width: 514px">Move the current view 
+	up.</td></tr>
+<tr><td><strong>Down</strong></td><td style="width: 514px">Move the current 
+	view down.</td></tr>
+<tr><td><strong>Left</strong></td><td style="width: 514px">Move the current 
+	view left.</td></tr>
+<tr><td><strong>Right</strong></td><td style="width: 514px">Move the current 
+	view right.</td></tr>
+<tr><td><strong>Clockwise</strong></td><td style="width: 514px">Rotate the view 
+	clockwise 0.2 of one radian.</td></tr>
+<tr><td><strong>CounterClockwise</strong></td><td style="width: 514px">Rotate 
+	the view counterclockwise 0.2 of one radian.</td></tr>
+<tr><td><strong>TiltUp</strong></td><td style="width: 514px">Angle the view up 
+	0.2 of one radian.</td></tr>
+<tr><td><strong>TiltDown</strong></td><td style="width: 514px">Angle the view 
+	down 0.2 of one radian.</td></tr>
+<tr><td><strong>Finder</strong></td><td style="width: 514px">Currently 
+	unimplemented.</td></tr>
+
+</table>
+<h4>Return value</h4>
+<p>The following string will be included in the response if the call is successful:</p>
+<font COLOR="#a31515">
+<p>&lt;Status&gt;Success&lt;/Status&gt;</p></font>
+<p>The following code will be included in the response if the move parameter is 
+invalid:</p>
+<p>
+<font COLOR="#a31515">
+&lt;Status&gt;Error - Invalid parameter&lt;/Status&gt;</font></p>
+
+
+<h4>Example code</h4>
+<table class="T3" cellspacing="8" cellpadding="8">
+<tr><td><span style='font-size:10.0pt;font-family:"Courier New";'>
+	WebClient&nbsp;client&nbsp;=&nbsp;<span style="color:blue;">new</span>&nbsp;WebClient(); <br />
+	<span style="color:blue;">string</span>&nbsp;url&nbsp;=&nbsp;<span style="color:blue;">string</span>.Format(<span style="color:#A31515;">&quot;http://{0}:5050/layerApi.aspx?cmd=move&move={1}&quot;</span>,&nbsp;getIP().ToString(),&nbsp;&quot;ZoomIn&quot;); <br />
+	<span style="color:blue;">string</span>&nbsp;response&nbsp;=&nbsp;client.UploadString(url,&nbsp;<span style="color:#A31515;">&quot;&quot;</span>); 
+</span></td></tr></table>
+
+
+<h4>See Also</h4>
+
+
+<ul type="disc">
+	<li><a href="#LCAPI_Commands">Layer API commands</a></li>
+	<li><a href="#uisettings"><strong>uisettings</strong></a></li>
+</ul>
+
+<hr>
+<h3><a name="new"></a>new</h3>
+<p>The <b>new</b> command specifies that a new layer should be created.</p>
+<h4>Remarks</h4>
+<p>The <strong>new</strong> command will request that an entirely new layer be 
+created, with the following parameters (note that the parameter names are case-sensitive):</p>
+<table class="T1" cellspacing="2" cellpadding="4">
+<tr><td>
+	<h5>Required<br>Parameter</h5>
+	</td><td>
+	<h5>Description</h5>
+	</td><td>
+	&nbsp;</td></tr>
+<tr><td>
+	<strong>&amp;frame</strong></td><td>The reference frame of the layer. This 
+		can be&nbsp;one of:<br><strong>
+	Earth, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, 
+	Io, Ganymede, Callisto, Europa, Sun, ISS.</strong></td><td>
+	&nbsp;</td></tr>
+<tr><td>
+	&nbsp;</td><td>&nbsp;</td><td>
+	&nbsp;</td></tr>
+<tr><td>
+	<h5>Optional Parameters</h5>
+	</td><td><h5>&nbsp;</h5></td><td>
+	<h5>Default</h5>
+	</td></tr>
+	<tr>
+		<td><strong>&amp;name</strong></td><td>A friendly name for the layer. </td><td>
+		&quot;New Layer&quot;</td>
+	</tr>
+	<tr>
+		<td><strong>&amp;color</strong></td><td>ARBG hex value of the color to be used 
+	when rendering the events of the layer.</td><td>FFFFFFFF<br>(white)</td>
+	</tr>
+	<tr>
+		<td><strong>&amp;startdate</strong></td><td>With time series data, the date 
+		and time to start the visualization for this layer. This could for example be slightly 
+		earlier than the date of the first event in the actual data. For 
+		example:
+		<font COLOR="#a31515">&quot;1/1/2000 12:30:30 AM&quot;</font>.<br>
+		Formats (month/day/year):<br>&quot;1/1/2010 11:00:00 PM&quot;<br>&quot;1/1/2010 11:30 AM&quot;<br>
+	&quot;1/1/2010 11 am&quot;<br>&quot;1/1/2000&quot;<br>&quot;1/2000&quot;</td><td>
+		The System minimum date value</td>
+	</tr>
+	<tr>
+		<td><strong>&amp;enddate</strong></td><td>With time series data, the 
+		date and time to end the visualization for this layer.</td><td>The System maximum date value</td>
+	</tr>
+	<tr>
+		<td><strong>&amp;fadetype</strong></td><td>Fades the data visualization. One of: <strong>In</strong>,
+		<strong>Out</strong>, <strong>Both</strong> or <strong>None</strong>.</td><td>
+		None</td>
+	</tr>
+	<tr>
+		<td><strong>&amp;faderange</strong></td><td>Fade time in days.</td><td>Zero</td>
+	</tr>
+</table>
+<p>The <strong>new</strong> command is embedded in a formatted string (see the
+<strong>Example Code)</strong>. This formatted string forms the first of two 
+parameters to the <strong>WebClient</strong> <strong>UploadString</strong> 
+method.</p>
+<p>The second string parameter to <strong>UploadString</strong> should contain a 
+comma or tab delimited string containing the heading names of the columns in the 
+layer. The supported column names are listed in the following table. The names 
+of the columns in the data file must <em>contain</em> the names listed here (so
+<strong>&quot;Latitude&quot;</strong> is acceptable for <strong>&quot;Lat&quot;</strong>, or &quot;<strong>dMag</strong>&quot; 
+acceptable for &quot;<strong>Mag</strong>&quot;, for example).</p>
+<table class="T1" cellspacing="2" cellpadding="4">
+<tr><td class="style1">
+	<strong>Column Heading</strong></td><td><h5>Description</h5></td></tr>
+	<tr>
+		<td><strong>Time</strong></td><td>UTC time, for example:
+		<font COLOR="#a31515">&quot;1/1/2000 12:02:46 AM&quot;</font></td>
+	</tr>
+	<tr>
+		<td><strong>Lat</strong></td><td>Latitude in decimal degrees.</td>
+	</tr>
+	<tr>
+		<td><strong>Lon</strong></td><td>Longitude in decimal degrees.</td>
+	</tr>
+	<tr>
+		<td><strong>RA</strong></td><td>Right ascension in decimal degrees.</td>
+	</tr>
+	<tr>
+		<td><strong>Dec</strong></td><td>Declination in decimal degrees.</td>
+	</tr>
+	<tr>
+		<td><strong>Depth</strong></td><td>Depth in kilometers.</td>
+	</tr>
+	<tr>
+		<td><strong>Altitude</strong></td><td>Altitude in meters.</td>
+	</tr>
+<tr><td><strong>Mag</strong></td><td>Magnitude as a floating point number.</td></tr>
+<tr><td><strong>X</strong></td><td>X co-ordinate, if a Rectangular co-ordinate 
+		system is being used.</td></tr>
+<tr><td><strong>Y</strong></td><td>Y co-ordinate.</td></tr>
+<tr><td><strong>Z</strong></td><td>Z co-ordinate.</td></tr>
+</table>
+<h4>Return Value</h4>
+<p>The following string will be included in the response string:</p>
+
+<p><font COLOR="#a31515">&lt;LayerApi&gt;&lt;NewLayerID&gt;<em>nnnn</em>&lt;/NewLayerID&gt;&lt;/LayerApi&gt;</font></p>
+
+<p>Where <em>nnnn</em> is the layer id number, which will be a GUID in string 
+format. If a GUID is not received, then the call was 
+not successful.</p>
+<h4>Example Code</h4>
+<p>Note that the example code uses <strong>datetime</strong>, one of the 
+<a href="#general_parameters">general parameters</a>, 
+to initiate the visualization of the data immediately.</p>
+<table class="T3" cellspacing="4" cellpadding="4">
+<tr><td>
+		<span style='font-size:10.0pt;font-family:"Courier New";'>
+		&nbsp;<span style="color:green;">&nbsp; //</span> <br />
+&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Send&nbsp;a&nbsp;NEW&nbsp;command,&nbsp;extracting&nbsp;info&nbsp;from&nbsp;the&nbsp;data&nbsp;file&nbsp;and&nbsp;the&nbsp;UI</span> <br />
+&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;WebClient&nbsp;client&nbsp;=&nbsp;<span style="color:blue;">new</span>&nbsp;WebClient(); <br />
+&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;datetime&nbsp;=&nbsp;
+		<font COLOR="#a31515">&quot;1/1/2009 12:00:00 AM&quot;</font>; <br />
+&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;name&nbsp;=&nbsp;<font COLOR="#a31515">&quot;Earthquakes 
+		2009&quot;</font>; <br />
+&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;rate&nbsp;=&nbsp;<font COLOR="#a31515">&quot;10000&quot;</font>; <br />
+&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;frame&nbsp;=&nbsp;<font COLOR="#a31515">&quot;Earth&quot;</font>; <br />
+&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;color&nbsp;=&nbsp;<font COLOR="#a31515">&quot;FFFF0000&quot;</font>; <br />
+ <br />
+&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;url&nbsp;=&nbsp;<span style="color:blue;">string</span>.Format(<span style="color:#A31515;">&quot;http://{0}:5050/layerApi.aspx?cmd=new&amp;datetime={1}&amp;timerate={2}&amp;name={3}&amp;frame={4}&amp;color={5}&quot;</span>,&nbsp;&nbsp;getIP().ToString(),&nbsp;datetime,&nbsp;rate,&nbsp;name,&nbsp;frame,&nbsp;color);
+		<br> <br />
+&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;field&nbsp;string&nbsp;below&nbsp;is&nbsp;delimited&nbsp;by&nbsp;tabs,&nbsp;not 
+	spaces</span><br />
+&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;response&nbsp;=&nbsp;client.UploadString(url,&nbsp;<span style="color:#A31515;">&quot;TIME&nbsp;&nbsp;&nbsp;&nbsp;LAT&nbsp;&nbsp;&nbsp;&nbsp;LON&nbsp;&nbsp;&nbsp;&nbsp;DEPTH&nbsp;&nbsp;&nbsp;&nbsp;MAG&quot;</span>); <br />
+&nbsp;&nbsp;&nbsp;XmlDocument&nbsp;doc&nbsp;=&nbsp;<span style="color:blue;">new</span>&nbsp;XmlDocument(); <br />
+&nbsp;&nbsp;&nbsp;doc.LoadXml(response); <br />
+&nbsp;&nbsp;&nbsp;XmlNode&nbsp;node&nbsp;=&nbsp;doc[<span style="color:#A31515;">&quot;LayerApi&quot;</span>]; <br />
+&nbsp;&nbsp;&nbsp;XmlNode&nbsp;child&nbsp;=&nbsp;node.ChildNodes[0]; <br />
+&nbsp;&nbsp;&nbsp;layerId&nbsp;=&nbsp;child.InnerText; <br />
+ <br />
+&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Handle&nbsp;an&nbsp;error&nbsp;situation</span> <br />
+&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;<span style="color:blue;">if</span>&nbsp;(layerId.Length&nbsp;!=&nbsp;36) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">throw</span>&nbsp;<span style="color:blue;">new</span>&nbsp;<span style="color:#2B91AF;">Exception</span>(<span style="color:#A31515;">&quot;Invalid&nbsp;Layer&nbsp;Id&nbsp;received&quot;</span>); <br />
+ <br />
+&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> 
+		</span>
+	</td></tr>
+</table>
+<p>For an example of the use of this command in the sample application, see
+<a href="#initWWTLayer">initWWTLayer</a>.</p>
+<h4>See Also</h4>
+<ul type="disc">
+	<li><strong><a href="#delete">delete</a></strong></li>
+	<li><strong><a href="#getIP">getIP</a></strong></li>
+	<li><strong><a href="#group">group</a></strong></li>
+	<li><a href="#uisettings"><b>uisettings</b></a></li>
+	<li><strong><a href="#load">load</a></strong></li>
+	<li><strong><a href="#update">update</a></strong></li>
+	<li><a href="#LCAPI_Commands">Layer API commands</a></li>
+</ul>
+
+
+
+<hr>
+<h3><a name="setprop"></a>setprop</h3>
+	<p>The <strong>setprop</strong> command is used to specify a value for a single 
+layer property.</p>
+	<h4>Remarks</h4>
+<table class="T1" cellspacing="2" cellpadding="4">
+<tr><td><h5>Required Parameters</h5></td><td><h5>Description</h5></td></tr>
+<tr><td><strong>&amp;id</strong></td><td>Specifies the id number of the 
+		layer.</td></tr>
+<tr><td><strong>&amp;propname</strong></td><td>Property name. Refer to the 
+	<a href="#Table_of_Properties">table of properties</a> listed for the <a href="#getprop"><strong>getprop</strong></a> 
+command.</td></tr>
+<tr><td><strong>&amp;propvalue</strong></td><td>Property value in string form.</td></tr>
+</table>
+<h4>Return Value</h4>
+<p>If the call is successful, then the response will contain the string:</p>
+<p>
+<font COLOR="#a31515">
+&lt;Status&gt;Success&lt;/Status&gt;</font></p>
+<p>If the call is not successful the following string may be included in the 
+response, or other errors may be returned: </p>
+<p><font COLOR="#a31515">
+&lt;Status&gt;Error - Invalid parameter&lt;/Status&gt;</font>&nbsp;</p>
+<h4>Example Code</h4>
+
+<table class="T3" cellspacing="8" cellpadding="8">
+<tr><td><h5>Set Opacity property</h5></td></tr>
+<tr><td><span style='font-size:10.0pt;font-family:"Courier New";'>
+&nbsp;WebClient&nbsp;client&nbsp;=&nbsp;<span style="color:blue;">new</span>&nbsp;WebClient(); <br />
+	&nbsp;<span style="color:blue;">string</span>&nbsp;url&nbsp;=&nbsp;<span style="color:blue;">string</span>.Format(<span style="color:#A31515;">&quot;http://{0}:5050/layerApi.aspx?cmd=setprop&id={1}&propname={2}&propvalue={3}&quot;</span>,&nbsp;getIP().ToString(),&nbsp;layerId,&quot;Opacity&quot;,&nbsp;&quot;0.5&quot;); <br />
+&nbsp;<span style="color:blue;">string</span>&nbsp;response&nbsp;=&nbsp;client.UploadString(url,&nbsp;<span style="color:#A31515;">&quot;&quot;</span>); 
+</span></td></tr></table>
+
+
+<h4>See Also</h4>
+<ul type="disc">
+	<li><a href="#getprop"><strong>getprop</strong></a></li>
+	<li><a href="#getprops"><strong>getprops</strong></a></li>
+	<li><a href="#setprops"><strong>setprops</strong></a></li>
+	<li><a href="#LCAPI_Commands">Layer API commands</a></li>
+</ul>
+
+
+<hr>
+<h3><a name="setprops"></a>setprops</h3>
+<p>The <strong>setprops</strong> command is used to specify multiple properties 
+for a layer.</p>
+	<h4>Remarks</h4>
+<table class="T1" cellspacing="2" cellpadding="4">
+<tr><td><h5>Required Parameters</h5></td><td><h5>Description</h5></td></tr>
+<tr><td><strong>&amp;id</strong></td><td>Specifies the id number of the 
+		layer.</td></tr>
+</table>
+	<p>Note that the second string parameter to the <strong>UploadString</strong> 
+	method contains the xml encoding of the properties. The string should be a 
+	correctly formatted XML file, with <strong>xml</strong>, <strong>LayerApi</strong> 
+	and <strong>Layer</strong> entries. Each attribute to the <strong>Layer</strong> 
+	entry should be a property name/property value pair.</p>
+<p>This method can be used to set a single property, though the
+<a href="#setprop"><strong>setprop</strong></a> command is specifically designed 
+for this.</p>
+<p>Refer to the <a href="#Table_of_Properties">table of properties</a> listed for the <a href="#getprop"><strong>getprop</strong></a> 
+command.</p>
+<h4>Return Value</h4>
+<p>If the call is successful, then the response will contain the string:</p>
+<p>
+<font COLOR="#a31515">
+&lt;Status&gt;Success&lt;/Status&gt;</font></p>
+<p>If the call is not successful the following string may be included in the 
+response, or other errors may be returned: </p>
+<p><font COLOR="#a31515">
+&lt;Status&gt;Error - Invalid parameter&lt;/Status&gt;</font></p>
+<h4>Example Code</h4>
+
+<table class="T3" cellspacing="8" cellpadding="8" style="width: 1186px">
+<tr><td style="width: 1165px"><h5>Set BeginRange and Decay properties</h5></td></tr>
+<tr><td style="width: 1165px">
+	<span style='font-size:10.0pt;font-family:"Courier New";'>
+	<span style="color:blue;">string</span>&nbsp;propertyXML&nbsp;=&nbsp;<span style="color:#A31515;">&quot;&lt;?xml&nbsp;version='1.0'&nbsp;encoding='UTF-8'?&gt;&lt;LayerApi&gt;&lt;Layer&nbsp;BeginRange=\"1/9/2008&nbsp;11:44:38&nbsp;AM\"&nbsp;Decay=\"5.5\"&nbsp;/&gt;&nbsp;&lt;/LayerApi&gt;&quot;</span>;&nbsp; <br />
+ <br />
+WebClient&nbsp;client&nbsp;=&nbsp;<span style="color:blue;">new</span>&nbsp;WebClient(); <br />
+	<span style="color:blue;">string</span>&nbsp;url&nbsp;=&nbsp;<span style="color:blue;">string</span>.Format(<span style="color:#A31515;">&quot;http://{0}:5050/layerApi.aspx?cmd=setprops&id={1}&quot;</span>,&nbsp;getIP().ToString(),&nbsp;layerId); <br />
+	<span style="color:blue;">string</span>&nbsp;response&nbsp;=&nbsp;client.UploadString(url,&nbsp;propertyXML); <br />
+</span></td></tr></table>
+
+
+<h4>See Also</h4>
+<ul type="disc">
+	<li><a href="#getprop"><strong>getprop</strong></a></li>
+	<li><a href="#getprops"><strong>getprops</strong></a></li>
+	<li><a href="#setprop"><strong>setprop</strong></a></li>
+	<li><a href="#LCAPI_Commands">Layer API commands</a></li>
+</ul>
+
+
+<hr>
+<h3><a name="state"></a>state</h3>
+<p>The <strong>state</strong> command requests some details of the current view.</p>
+<h4>Remarks</h4>
+<p>This command does not take any parameters. The details returned vary slightly 
+depending on the view mode, and include the 
+current view mode, latitude (or declination) in decimal degrees, longitude (or right ascension) 
+in decimal degrees, 
+zoom factor (0 to 360), angle in radians, rotation in radians, current UTC time, 
+time rate, reference frame, a view token, and zoom text.</p>
+<h4>Return Value</h4>
+<p>If the call is successful the following string will be returned:</p>
+<font COLOR="#a31515">
+<p>&lt;LayerApi&gt;&lt;Status&gt;Success&lt;/Status&gt;&lt;ViewState&gt; 
+<a href="#State_information">state 
+information</a> &lt;/ViewState&gt;&lt;/LayerApi&gt;</p>
+</font>
+<h4>Example code</h4>
+<table class="T3" cellspacing="8" cellpadding="8">
+<tr><td><h5>Get state</h5></td></tr>
+<tr><td><span style='font-size:10.0pt;font-family:"Courier New";'>
+<span style="color:blue;">private</span>&nbsp;<span style="color:blue;">void</span>&nbsp;getState() <br />
+{ <br />
+&nbsp;&nbsp;&nbsp;<span style="color:blue;">try</span> <br />
+&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WebClient&nbsp;client&nbsp;=&nbsp;<span style="color:blue;">new</span>&nbsp;WebClient(); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;url&nbsp;=&nbsp;<span style="color:blue;">string</span>.Format(<span style="color:#A31515;">&quot;http://{0}:5050/layerApi.aspx?cmd=state&quot;</span>,&nbsp;getIP().ToString()); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;response&nbsp;=&nbsp;client.UploadString(url,&nbsp;<span style="color:#A31515;">&quot;&quot;</span>); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XmlDocument&nbsp;doc&nbsp;=&nbsp;<span style="color:blue;">new</span>&nbsp;XmlDocument(); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;doc.LoadXml(response); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XmlNode&nbsp;node&nbsp;=&nbsp;doc[<span style="color:#A31515;">&quot;LayerApi&quot;</span>]; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">if</span>&nbsp;(node.InnerText.Contains(<span style="color:#A31515;">&quot;Success&quot;</span>)) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XmlNode&nbsp;node2&nbsp;=&nbsp;node[<span style="color:#A31515;">&quot;ViewState&quot;</span>]; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">if</span>&nbsp;(node2&nbsp;!=&nbsp;<span style="color:blue;">null</span>) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;propName; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;propValue; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">for</span>&nbsp;(<span style="color:blue;">int</span>&nbsp;i&nbsp;=&nbsp;0;&nbsp;i&nbsp;&lt;&nbsp;node2.Attributes.Count;&nbsp;i++) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;propName&nbsp;=&nbsp;node2.Attributes[i].Name; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; propValue&nbsp;=&nbsp;&nbsp;node2.Attributes[i].Value; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Do&nbsp;something&nbsp;with&nbsp;the&nbsp;name&nbsp;value&nbsp;pair</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">else</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Success&nbsp;message&nbsp;was&nbsp;a&nbsp;false&nbsp;positive,&nbsp;no&nbsp;state&nbsp;was&nbsp;returned</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">else</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">throw</span>&nbsp;<span style="color:blue;">new</span>&nbsp;<span style="color:#2B91AF;">Exception</span>(response); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+&nbsp;&nbsp;&nbsp;} <br />
+&nbsp;&nbsp;&nbsp;<span style="color:blue;">catch</span>&nbsp;(<span style="color:#2B91AF;">Exception</span>&nbsp;ex) <br />
+&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Handle&nbsp;the&nbsp;exception</span> <br />
+&nbsp;&nbsp;&nbsp;} <br />
+} 
+</span></td></tr></table>
+
+
+<table class="T1" cellspacing="8" cellpadding="8">
+<tr><td><h5><a name="State_information">State information</a> for each of the 
+	five modes:</h5></td></tr>
+<tr><td><span style='font-size:10.0pt;font-family:"Courier New";'>
+&lt;<span style="color:firebrick;">ViewState</span>&nbsp; <br />
+&nbsp;&nbsp;&nbsp;lookat=\"Earth\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;lat=\"86.1800140779305\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;lng=\"4.56191579793961\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;zoom=\"30.9237645312\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;angle=\"-1.52\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;rotation=\"0\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;time=\"2/23/2011&nbsp;7:03:31&nbsp;PM\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;timerate=\"1\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;<span style="color:firebrick;">ReferenceFrame</span>=\"Earth\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;ViewToken=\"SD8834DFA\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;zoomText=\"5085&nbsp;km\"&gt; <br />
+&lt;/<span style="color:firebrick;">ViewState</span>&gt; <br />
+ <br />
+ <br />
+&lt;<span style="color:firebrick;">ViewState</span>&nbsp; <br />
+&nbsp;&nbsp;&nbsp;lookat=\"Planet\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;lat=\"86.1800140779305\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;lng=\"4.58610934632668\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;zoom=\"360\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;angle=\"-1.52\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;rotation=\"0\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;time=\"2/23/2011&nbsp;7:04:19&nbsp;PM\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;timerate=\"1\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;<span style="color:firebrick;">ReferenceFrame</span>=\"Mars\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;ViewToken=\"SD8834DFA\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;zoomText=\"59200&nbsp;km\"&gt; <br />
+&lt;/<span style="color:firebrick;">ViewState</span>&gt; <br />
+ <br />
+ <br />
+&lt;<span style="color:firebrick;">ViewState</span>&nbsp; <br />
+&nbsp;&nbsp;&nbsp;lookat=\"Sky\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;ra=\"10.2626615902966\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;dec=\"46.1799337621283\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;zoom=\"30.9237645312\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;rotation=\"0\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;time=\"2/23/2011&nbsp;7:04:51&nbsp;PM\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;timerate=\"1\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;<span style="color:firebrick;">ReferenceFrame</span>=\"Space\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;ViewToken=\"SD8834DFA\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;zoomText=\"05:09:14\"&gt; <br />
+&lt;/<span style="color:firebrick;">ViewState</span>&gt; <br />
+ <br />
+ <br />
+&lt;<span style="color:firebrick;">ViewState</span>&nbsp; <br />
+&nbsp;&nbsp;&nbsp;lookat=\"Panorama\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;lat=\"-3.07957843596986\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;lng=\"-39.9196238171819\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;zoom=\"117.9648\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;angle=\"-1.52\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;rotation=\"0\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;time=\"2/23/2011&nbsp;7:05:35&nbsp;PM\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;timerate=\"1\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;<span style="color:firebrick;">ReferenceFrame</span>=\"Panorama\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;ViewToken=\"SD8834DFA\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;zoomText=\"19:39:39\"&gt; <br />
+&lt;/<span style="color:firebrick;">ViewState</span>&gt; <br />
+ <br />
+ <br />
+&lt;<span style="color:firebrick;">ViewState</span>&nbsp; <br />
+&nbsp;&nbsp;&nbsp;lookat=\"SolarSystem\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;lat=\"2.25294244185011\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;lng=\"262.382989924732\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;zoom=\"0.000578857064151695\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;angle=\"-1.52\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;rotation=\"0\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;time=\"2/23/2011&nbsp;7:06:13&nbsp;PM\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;timerate=\"1\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;<span style="color:firebrick;">ReferenceFrame</span>=\"Sun\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;ViewToken=\"SD8834DFA\"&nbsp; <br />
+&nbsp;&nbsp;&nbsp;zoomText=\"38636&nbsp;km\"&gt; <br />
+&lt;/<span style="color:firebrick;">ViewState</span>&gt; 
+</span></td></tr></table>
+<h4>See Also</h4>
+<ul type="disc">
+	<li><a href="#uisettings"><strong>uisettings</strong></a></li>
+	<li><a href="#LCAPI_Commands">Layer API commands</a></li>
+</ul>
+
+
+<hr>
+<h3><a name="uisettings"></a>uisettings</h3>
+<p>The <strong>uisettings </strong>command is used to change user interface settings, without altering the layer data. 
+Note that the spelling errors in the names of the properties must be matched.</p>
+<table class="T1" cellspacing="4" cellpadding="4">
+<tr><td>
+	<h5>Setting Name</h5>
+	</td><td>
+	<h5>Setting Type</h5>
+	</td></tr>
+<tr><td><b>AutoHideContext</b></td><td>True or False</td></tr>
+<tr><td><b>AutoHideTabs</b></td><td>True or False</td></tr>
+<tr><td><b>AutoRepeatTour</b></td><td>True or False</td></tr>
+<tr><td><b>AutoRepeatTourAll</b></td><td>True or False</td></tr>
+<tr><td><b>ConstellationBoundryColor</b></td><td>RGB color (default,
+	
+	&quot;MidnightBlue&quot;)
+	</td></tr>
+<tr><td><b>ConstellationFigureColor</b></td><td>RGB color (default,
+	
+	&quot;DarkRed&quot;)
+		</td></tr>
+<tr><td><b>ConstellationFiguresFile</b></td><td>String (a filename)</td></tr>
+<tr><td><b>ConstellationSelectionColor</b></td><td>RGB color (default,
+	
+	&quot;DarkGoldenrod&quot;)
+	</td></tr>
+<tr><td><b>ContextSearchFilter</b></td><td>String (default &quot;Unfiltered&quot;)</td></tr>
+<tr><td><b>DomeTilt</b></td><td>Double (default &quot;0&quot;)</td></tr>
+<tr><td><b>DomeTypeIndex</b></td><td>Integer (default, &quot;0&quot;)</td></tr>
+<tr><td><b>DomeView</b></td><td>True or False</td></tr>
+<tr><td><b>EclipticColor</b></td><td>RGB color (default,
+	
+	&quot;CornflowerBlue &quot;)
+		</td></tr>
+<tr><td><b>FollowMouseOnZoom</b></td><td>True or False</td></tr>
+<tr><td><b>FovCamera</b></td><td>Integer (default, &quot;0&quot;)</td></tr>
+<tr><td><b>FovColor</b></td><td>RGB color (default,
+	
+	&quot;white&quot;)
+	</td></tr>
+<tr><td><b>FovEyepiece</b></td><td>Integer (default, &quot;0&quot;)</td></tr>
+<tr><td><b>FovTelescope</b></td><td>Integer (default, &quot;0&quot;)</td></tr>
+<tr><td><b>FullScreenTours</b></td><td>True or False</td></tr>
+<tr><td><b>GridColor</b></td><td>RGB color (default,
+	
+	&quot;64, 64, 64&quot;)
+	</td></tr>
+<tr><td><b>ImageQuality</b></td><td>Integer: 0 to 100 (default, 100)</td></tr>
+<tr><td><b>LargeDomeTextures</b></td><td>True or False</td></tr>
+<tr><td><b>LastLookAtMode</b></td><td>Integer (default, &quot;2&quot;)</td></tr>
+<tr><td><b>LineSmoothing</b></td><td>True or False</td></tr>
+<tr><td><b>ListenMode</b></td><td>True 
+	or False</td></tr>
+<tr><td><b>LocalHorizonMode</b></td><td>True or False</td></tr>
+<tr><td><b>LocationAltitude</b></td><td>Double (default, &quot;100&quot;)</td></tr>
+<tr><td><b>LocationLat</b></td><td>Double (default,
+	
+	&quot;47.64222&quot;)</td></tr>
+<tr><td><b>LocationLng</b></td><td>Double (default,
+	
+	&quot;-122.142&quot;)</td></tr>
+<tr><td><b>LocationName</b></td><td>String (default,
+	&quot;Microsoft Research Building 99&quot;)
+		</td></tr>
+<tr><td><b>MasterController</b></td><td>True or False</td></tr>
+<tr><td><b>ShowClouds</b></td><td>True or False</td></tr>
+<tr><td><b>ShowConstellationBoundries</b></td><td>True or False</td></tr>
+<tr><td><b>ShowConstellationFigures</b></td><td>True or False</td></tr>
+<tr><td><b>ShowConstellationNames</b></td><td>True or False</td></tr>
+<tr><td><b>ShowConstellationSelection</b></td><td>True or False</td></tr>
+<tr><td><b>ShowCrosshairs</b></td><td>True or False</td></tr>
+<tr><td><b>ShowDatasetNames</b></td><td>True or False</td></tr>
+<tr><td><b>ShowEarthSky</b></td><td>True or False</td></tr>
+<tr><td><b>ShowEcliptic</b></td><td>True or False</td></tr>
+<tr><td><b>ShowElevationModel</b></td><td>True or False</td></tr>
+<tr><td><b>ShowFieldOfView</b></td><td>True or False</td></tr>
+<tr><td><b>ShowGrid</b></td><td>True or False</td></tr>
+<tr><td><b>ShowSolarSystem</b></td><td>True or False</td></tr>
+<tr><td><b>ShowTouchControls</b></td><td>True or False</td></tr>
+<tr><td><b>ShowUTCTime</b></td><td>True or False</td></tr>
+<tr><td><b>SolarSystemCosmos</b></td><td>True or False</td></tr>
+<tr><td><b>SolarSystemLighting</b></td><td>True or False</td></tr>
+<tr><td><b>SolarSystemMilkyWay</b></td><td>True or False</td></tr>
+<tr><td><b>SolarSystemMinorOrbits</b></td><td>True or False</td></tr>
+<tr><td><b>SolarSystemMinorPlanets</b></td><td>True or False</td></tr>
+<tr><td><b>SolarSystemMultiRes</b></td><td>True or False</td></tr>
+<tr><td><b>SolarSystemOrbitColor</b></td><td>RGB color (default,
+	
+	&quot;64, 64, 64&quot;)</td></tr>
+<tr><td><b>SolarSystemOrbits</b></td><td>True or False</td></tr>
+<tr><td><b>SolarSystemOverlays</b></td><td>True or False</td></tr>
+<tr><td><b>SolarSystemPlanets</b></td><td>True or False</td></tr>
+<tr><td><b>SolarSystemScale</b></td><td>True or False</td></tr>
+<tr><td><b>SolarSystemStars</b></td><td>True or False</td></tr>
+<tr><td><b>StartUpLookAt</b></td><td>Integer (default, &quot;4&quot;)</td></tr>
+</table>
+<h4>Remarks</h4>
+<p>This command does not perform any action other than that of  
+changing of the user interface settings.</p>
+
+
+
+<h4>Return Value</h4>
+<p>If the call is successful, then the response will contain the string:</p>
+<p>
+<font COLOR="#a31515">
+&lt;Status&gt;Success&lt;/Status&gt;</font></p>
+<h4>Example Code</h4>
+<table class="T3" cellspacing="8" cellpadding="8">
+<tr><td style="width: 1101px"><h5>Fly to a location</h5></td></tr>
+<tr><td style="width: 1101px">
+	<span style='font-size:10.0pt;font-family:"Courier New";'>
+	<span style="color:green;">//<br>//&nbsp;Sets the property 
+	&quot;ShowConstellationFigures&quot; to true.</span> <br />
+ <br />
+	WebClient&nbsp;client&nbsp;=&nbsp;<span style="color:blue;">new</span>&nbsp;WebClient(); <br />
+	<span style="color:blue;">string</span>&nbsp;&nbsp;url&nbsp;=&nbsp;<span style="color:blue;">string</span>.Format(<span style="color:#A31515;">&quot;http://{0}:5050/layerApi.aspx?cmd=uisettings&ShowConstellationFigures=True&quot;</span>,&nbsp;getIP().ToString<span style='font-size:10.0pt;font-family:"Courier New";'>()</span>);<span style="color:blue;"><br>
+	string</span>&nbsp;response&nbsp;=&nbsp;client.UploadString(url,&nbsp;<span style="color:#A31515;">&quot;&quot;</span>);</span></td></tr></table><h4>See Also</h4>
+<ul type="disc">
+	<li><a href="#LCAPI_Commands">Layer API commands</a></li>
+	<li><a href="#move"><strong>move</strong></a></li>
+	<li><a href="#state"><strong>state</strong></a></li>
+	<li><a href="#update"><strong>update</strong></a></li>
+</ul>
+
+
+<hr>
+<h3><a name="update"></a>update</h3>
+<p>The <strong>update</strong> command specifies that the data attached to this 
+command should be added to the layer.</p>
+<h4>Remarks</h4>
+<p>The <strong>update</strong> command will request that data for a layer be 
+updated, with the following parameters (note that the parameter names are case-sensitive):</p>
+<table class="T1" cellspacing="2" cellpadding="4">
+<tr><td><h5>Required Parameter</h5></td><td><h5>Description</h5></td><td>
+	<h5>&nbsp;</h5>
+	</td></tr>
+<tr><td><strong>&amp;id</strong></td><td>Specifies the id number of the layer.</td><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>
+	<h5>Optional Parameters</h5>
+	</td><td>
+	<h5>Description</h5>
+	</td><td>
+	<h5>Default</h5>
+	</td></tr>
+	<tr>
+		<td><strong>&amp;hasheader</strong></td><td>Set to true if the data has a 
+		header row. The header should be the first row of the data.</td><td>
+		False</td>
+	</tr>
+	<tr>
+		<td><strong>&amp;name</strong></td><td>A friendly name to rename the 
+		layer. </td><td>
+		No change</td>
+	</tr>
+<tr><td><strong>&amp;nopurge</strong></td><td>The sending of an update command will 
+	delete events that occur before the start time of any events in the update 
+	and that have already decayed. Set this flag to <strong>true</strong> if the event data 
+	should not be deleted.</td><td>False</td></tr>
+<tr><td><strong>&amp;purgeall</strong></td><td>Purge (delete) all events.<td>
+	False</td></tr>
+<tr><td><strong>&amp;show</strong></td><td>Set to <strong>true</strong> to show the layer, 
+	<strong>false</strong> 
+	to hide it. True and false are not case-sensitive.</td><td>True</td></tr>
+</table>
+<p>The second string parameter to <strong>UploadString</strong> should contain a 
+comma or tab delimited string containing the data in a form that matches the 
+heading names of the columns in the layer provided in the <strong><a href="#new">new</a></strong>
+command.</p>
+<h4>Return Value</h4>
+<p>The following string will be included in the response if the call is 
+successful:</p>
+<p><font COLOR="#a31515">&lt;Status&gt;Success&lt;/Status&gt;</font></p>
+<p>If the call is not successful the following string may be included in the 
+response, or other errors may be returned: </p>
+<font COLOR="#a31515">
+<p>&lt;Status&gt;Error - Invalid layer ID&lt;/Status&gt;</p>
+</font>
+
+<h4>Example Code</h4>
+<table class="T3" cellspacing="4" cellpadding="4">
+<tr><td>	<span style='font-size:10.0pt;font-family:"Courier New";'>
+
+	&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+	&nbsp;&nbsp;<span style="color:green;">//&nbsp;Send&nbsp;an&nbsp;UPDATE&nbsp;command</span> <br />
+	&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+		&nbsp;&nbsp;WebClient&nbsp;client&nbsp;=&nbsp;<span style="color:blue;">new</span>&nbsp;WebClient(); <br />
+    &nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;url&nbsp;=&nbsp;<span style="color:blue;">string</span>.Format(<span style="color:#A31515;">&quot;http://{0}:5050/layerApi.aspx?cmd=update&amp;id={1}&quot;</span>,&nbsp;getIP().ToString(),&nbsp;layerId); <br />
+	&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;response&nbsp;=&nbsp;client.UploadString(url,&nbsp;lineBuffer); <br />
+	&nbsp;&nbsp;XmlDocument&nbsp;doc&nbsp;=&nbsp;<span style="color:blue;">new</span>&nbsp;XmlDocument(); <br />
+	&nbsp;&nbsp;doc.LoadXml(response); <br />
+	&nbsp;&nbsp;XmlNode&nbsp;node&nbsp;=&nbsp;doc[<span style="color:#A31515;">&quot;LayerApi&quot;</span>]; <br />
+	&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;s&nbsp;=&nbsp;node.InnerText; <br />
+ <br />
+	&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+	&nbsp;&nbsp;<span style="color:green;">//&nbsp;Handle&nbsp;an&nbsp;error&nbsp;situation</span> <br />
+	&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+	&nbsp;&nbsp;<span style="color:blue;">if</span>&nbsp;(s.Contains(<span style="color:#A31515;">&quot;Error&quot;</span>)) <br />
+	&nbsp;&nbsp;{ <br />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">throw</span>&nbsp;<span style="color:blue;">new</span>&nbsp;<span style="color:#2B91AF;">Exception</span>(s); <br />
+	&nbsp;&nbsp;}<br><br><br>
+	
+	&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+	&nbsp;&nbsp;<span style="color:green;">//&nbsp;Send&nbsp;an&nbsp;UPDATE&nbsp;command 
+	with a flyTo parameter</span><br />
+	&nbsp;&nbsp;<span style="color:green;">//</span> 
+	<br>	<span style='font-size:10.0pt;font-family:"Courier New";'>
+
+	<span style="color:blue;">&nbsp; string</span>&nbsp;lat, 
+	lon, zoom, rotation, angle;<br>
+
+	
+	
+</span>&nbsp;&nbsp;WebClient&nbsp;client&nbsp;=&nbsp;<span style="color:blue;">new</span>&nbsp;WebClient(); <br />
+    &nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;url&nbsp;=&nbsp;<span style="color:blue;">string</span>.Format(<span style="color:#A31515;">&quot;http://{0}:5050/layerApi.aspx?cmd=update&amp;id={1}&amp;flyTo={2},{3},{4},{5},{6}&amp;instant=True&quot;</span>,&nbsp;getIP().ToString(),&nbsp;layerId, 
+	lat, lon, zoom, rotation, angle); <br />
+	&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;response&nbsp;=&nbsp;client.UploadString(url,&nbsp;lineBuffer); <br />
+	&nbsp;&nbsp;XmlDocument&nbsp;doc&nbsp;=&nbsp;<span style="color:blue;">new</span>&nbsp;XmlDocument(); <br />
+		&nbsp;&nbsp;doc.LoadXml(response); <br />
+	&nbsp;&nbsp;XmlNode&nbsp;node&nbsp;=&nbsp;doc[<span style="color:#A31515;">&quot;LayerApi&quot;</span>]; <br />
+	&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;s&nbsp;=&nbsp;node.InnerText; <br />
+ <br />
+	&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+	&nbsp;&nbsp;<span style="color:green;">//&nbsp;Handle&nbsp;an&nbsp;error&nbsp;situation</span> <br />
+	&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+	&nbsp;&nbsp;<span style="color:blue;">if</span>&nbsp;(s.Contains(<span style="color:#A31515;">&quot;Error&quot;</span>)) <br />
+		&nbsp;&nbsp;{ <br />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">throw</span>&nbsp;<span style="color:blue;">new</span>&nbsp;<span style="color:#2B91AF;">Exception</span>(s); <br />
+	&nbsp;&nbsp;}
+
+	
+	
+</span>
+	</td></tr>
+</table>
+<p>For an example of the use of this command in the sample application, see
+<a href="#flushBufferToWWT">flushBufferToWWT</a>.</p>
+	<h4>See Also</h4>
+<ul type="disc">
+	<li><a href="#getIP"><strong>getIP</strong></a></li>
+	<li><a href="#uisettings"><b>uisettings</b></a></li>
+	<li><strong><a href="#new">new</a></strong></li>
+	<li><strong><a href="#load">load</a></strong></li>
+	<li><a href="#LCAPI_Commands">Layer API commands</a></li>
+</ul>
+<hr>
+<h3><a name="version"></a>version</h3>
+<p>The <strong>version</strong> command returns the version number of the 
+running version of the LCAPI.</p>
+<h4>Remarks</h4>
+<p>The version number should be used in an application to ensure that the LCAPI 
+features used are supported by the version of the LCAPI running on the client 
+computer.</p>
+<h4>Return Value</h4>
+<p>The following string will be included in the response if the call is 
+successful (the version number will be more recent than the one shown below) :</p>
+<p><font COLOR="#a31515">&lt;LayerApi&gt;&lt;Version&gt;2.8.21.1&lt;/Version&gt;&lt;/LayerApi&gt;</font></p>
+<p>There are no specific errors returned if the call is not successful.</p>
+
+<h4>Example Code</h4>
+	<p>Refer to the <a href="#getIP">getIP</a> utility to see how to extract and 
+	check a version number.</p>
+<h4>See Also</h4>
+<ul type="disc">
+	<li><a href="#LCAPI_Commands">Layer API commands</a></li>
+</ul>
+
+<hr>
+<h3><a name="general_parameters"></a>General Parameters</h3>
+<p>The general parameters can be used with any of the commands.</p>
+<h4>Remarks</h4>
+<table class="T1" cellspacing="2" cellpadding="4">
+<tr><td>
+	<h5>Parameter</h5>
+	</td><td>
+	<h5>Description</h5>
+	</td></tr>
+	<tr>
+		<td><strong>&amp;datetime</strong></td><td>Sets the viewing clock to the 
+		given date and time, in UTC format, for example:
+		<font COLOR="#a31515">&quot;1/1/2000 12:02:46 AM&quot;</font>. This is 
+		the date and time that can be set through the <strong>View</strong> 
+		menu.<br>Formats (month/day/year):<br>&quot;1/1/2010 11:00:00 PM&quot;<br>&quot;1/1/2010 11:30 AM&quot;<br>
+	&quot;1/1/2010 11 am&quot;<br>&quot;1/1/2000&quot;<br>&quot;1/2000&quot;</td>
+	</tr>
+	<tr>
+		<td><strong>&amp;timerate</strong></td><td>The accelerated time to render the 
+		visualization, as a multiple of 10.</td>
+	</tr>
+<tr><td><strong>&amp;flyto</strong></td><td>Sets the position of the view 
+	camera. Requires five floating point numbers separated by commas: latitude, 
+	longitude, zoom level, rotation and angle.<br>
+	<ul>
+	<li>Latitude is in decimal degrees, positive to the North.</li>
+	<li>Longitude is in decimal degrees, positive to the East.</li>
+	<li>Zoom level varies from 360 (the most distant view) to 0.00023 (the closest view).</li>
+	<li>Rotation is in radians, positive moves the camera to the left.</li>
+	<li>Angle is in radians, positive moves the camera forward.</li>
+	</ul>
+	<p>Optionally there can be a sixth parameter containing the frame to change 
+	the view to, which can be&nbsp;one of:<br><strong>
+	Earth, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, 
+	Io, Ganymede, Callisto, Europa, Sun, ISS.</strong></p>
+</td></tr>
+<tr><td><strong>&amp;instant</strong></td><td>Used with the <strong>&amp;flyto</strong> parameter, set this to 
+	<strong>true</strong> to specify that the camera should jump to the location, or 
+	<strong>false</strong> that 
+	the camera should smoothly pan and zoom to the location.</td></tr>
+<tr><td><strong>&amp;autoloop</strong></td><td>True sets the layer manager to auto 
+	loop.</td></tr>
+</table>
+
+
+
+<h4>Example Code</h4>
+<table class="T3" cellspacing="8" cellpadding="8">
+<tr><td style="width: 1101px"><h5>Fly to a location</h5></td></tr>
+<tr><td style="width: 1101px">
+	<span style='font-size:10.0pt;font-family:"Courier New";'>
+	<span style="color:green;">//<br>//&nbsp;Extract&nbsp;the&nbsp;values&nbsp;from&nbsp;the&nbsp;text&nbsp;boxes&nbsp;of&nbsp;a&nbsp;dialog, 
+	assuming there are rich text boxes with the names shown below.<br>//</span><br />
+	<span style="color:blue;">string</span>&nbsp;flyString&nbsp;=&nbsp;richLat.Text&nbsp;+&nbsp;<span style="color:#A31515;">&quot;,&quot;</span>&nbsp;+&nbsp;richLong.Text&nbsp;+&nbsp;<span style="color:#A31515;">&quot;,&quot;</span>&nbsp;+&nbsp;richZoom.Text&nbsp;+&nbsp;<span style="color:#A31515;">&quot;,&quot;</span>&nbsp;+&nbsp;richRotation.Text&nbsp;+&nbsp;<span style="color:#A31515;">&quot;,&quot;</span>&nbsp;+&nbsp;richAngle.Text; <br />
+ <br />
+	WebClient&nbsp;client&nbsp;=&nbsp;<span style="color:blue;">new</span>&nbsp;WebClient(); <br />
+	<span style="color:blue;">string</span>&nbsp;url&nbsp;=&nbsp;<span style="color:blue;">string</span>.Format(<span style="color:#A31515;">&quot;http://{0}:5050/layerApi.aspx?cmd=state&flyto={1}&instant={2}&quot;</span>,&nbsp;getIP().ToString<span style='font-size:10.0pt;font-family:"Courier New";'>(),&nbsp;</span>flyString, richInstant.Text);<span style="color:blue;"><br>
+	string</span>&nbsp;response&nbsp;=&nbsp;client.UploadString(url,&nbsp;<span style="color:#A31515;">&quot;&quot;</span>);</span></td></tr></table><h4>See Also</h4>
+<ul type="disc">
+	<li><a href="#LCAPI_Commands">Layer API commands</a></li>
+	<li><a href="#move"><strong>move</strong></a></li>
+	<li><a href="#state"><strong>state</strong></a></li>
+	<li><a href="#update"><strong>update</strong></a></li>
+</ul>
+
+
+
+<hr>
+<h2>&nbsp;</h2>
+<h2><a name="Utilities">Utilities</a></h2>
+<p>The following utilities are not part of the API, but should be useful in 
+building an application.</p>
+<ul>
+	<li><a href="#getIP"><strong>getIP</strong></a></li>
+	<li><strong><a href="#getUTCtime">getUTCtime</a></strong></li>
+</ul>
+<h4>See Also</h4>
+<ul type="disc">
+	<li><a href="#LCAPI_Commands">Layer API commands</a></li>
+	<li><a href="#WorldWideTelescopeLayerControlAPI">WorldWide Telescope 
+	Layer Control API</a></li>
+</ul>
+
+
+<hr>
+<h3><a name="getIP">getIP</a></h3>
+<p class="style2">If the LCAPI application and WorldWide Telescope are running 
+on the same computer, you can use the following utility to extract the IP address. 
+</p>
+<p class="style2">The <strong>getIP</strong> function extracts each IP address 
+in turn, then calls the <strong>CheckForWWTWebServer</strong> function to check that 
+WorldWide Telescope is both running at the given address and is recent enough that the LCAPI is 
+supported.</p>
+<table class="T3" cellspacing="8" cellpadding="8">
+<tr><td><h5>Get IP address</h5></td></tr>
+<tr><td><span style='font-size:10.0pt;font-family:"Courier New";'>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">&nbsp;&nbsp;&nbsp; private</span>&nbsp;IPAddress&nbsp;getIP() <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IPAddress&nbsp;ipAddress&nbsp;=&nbsp;IPAddress.Loopback; <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Find&nbsp;IPV4&nbsp;Address </span> <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">foreach</span>&nbsp;(IPAddress&nbsp;ipAdd&nbsp;<span style="color:blue;">in</span>&nbsp;Dns.GetHostEntry(Dns.GetHostName()).AddressList) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">if</span>&nbsp;(ipAdd.AddressFamily&nbsp;==&nbsp;AddressFamily.InterNetwork) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">if</span>&nbsp;(CheckForWWTWebServer(ipAdd)) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ipAddress&nbsp;=&nbsp;ipAdd; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">break</span>; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">return</span>&nbsp;ipAddress; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+    <br><br>
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">private</span>&nbsp;<span style="color:blue;">bool</span>&nbsp;CheckForWWTWebServer(IPAddress&nbsp;address) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WebClient&nbsp;client&nbsp;=&nbsp;<span style="color:blue;">new</span>&nbsp;WebClient(); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">try</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;version&nbsp;=&nbsp;client.DownloadString(<span style="color:blue;">string</span>.Format(<span style="color:#A31515;">&quot;http://{0}:5050/layerapi.aspx?cmd=version&quot;</span>,&nbsp;address.ToString())); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XmlDocument&nbsp;doc&nbsp;=&nbsp;<span style="color:blue;">new</span>&nbsp;XmlDocument(); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;doc.LoadXml(version); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XmlNode&nbsp;node&nbsp;=&nbsp;doc[<span style="color:#A31515;">&quot;LayerApi&quot;</span>]; <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">if</span>&nbsp;(node.OuterXml.Contains(<span style="color:#A31515;">&quot;Version&quot;</span>)) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">&nbsp;&nbsp;&nbsp; //&nbsp;As 
+	version numbers are in the format xx.xx.xx.xx, an individual comparison of 
+	each</span><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">&nbsp;&nbsp;&nbsp; //&nbsp;number 
+	is necessary - a simple string comparison will give unreliable results<br></span><br />
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>[]&nbsp;versionNumbers&nbsp;=&nbsp;node.InnerText.Split(<span style="color:#A31515;">&#39;.&#39;</span>); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">if</span>&nbsp;(versionNumbers[0].CompareTo(<span style="color:#A31515;">&quot;2&quot;</span>)&nbsp;&gt;=&nbsp;0&nbsp;&& <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;versionNumbers[1].CompareTo(<span style="color:#A31515;">&quot;8&quot;</span>)&nbsp;&gt;=&nbsp;0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">return</span>&nbsp;<span style="color:blue;">true</span>; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">catch</span>&nbsp;(<span style="color:#2B91AF;">Exception</span>&nbsp;ex) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;handle&nbsp;exception</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">return</span>&nbsp;<span style="color:blue;">false</span>; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+</span></td></tr></table><h4>See Also</h4>
+<ul type="disc">
+	<li><strong><a href="#load">load</a></strong></li>
+	<li><strong><a href="#new">new</a></strong></li>
+	<li><strong><a href="#update">update</a></strong></li>
+	<li><a href="#LCAPI_Commands">Layer API commands</a></li>
+</ul>
+
+
+<hr>
+<h3><a name="getUTCtime">getUTCtime</a></h3>
+<p>With time series data care should be taken with the timings given in the data 
+file. To convert local times to the recommended UTC time the following function 
+could be used. Note that the local time is taken from the computer System time 
+in the example below, so you may need to add some functionality to support local 
+times that are not the same as your computer System time.</p>
+<table class="T3" cellspacing="4" cellpadding="4">
+<tr><td>
+	<span style='font-size:10.0pt;font-family:"Courier New";'>
+&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;<span style="color:green;">//&nbsp;Convert&nbsp;a&nbsp;string&nbsp;time&nbsp;to&nbsp;the&nbsp;correct&nbsp;format</span> <br />
+&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;<span style="color:blue;">private</span>&nbsp;<span style="color:blue;">string</span>&nbsp;getUTCtime(<span style="color:blue;">string</span>&nbsp;time) <br />
+&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DateTime&nbsp;d&nbsp;=&nbsp;DateTime.Parse(time); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;s&nbsp;=&nbsp;d.ToUniversalTime().ToString(); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">return</span>&nbsp;s; <br />
+&nbsp;} </span></td></tr>
+</table>
+<h4>See Also</h4>
+<ul type="disc">
+	<li><strong><a href="#new">new</a></strong></li>
+	<li><strong><a href="#update">update</a></strong></li>
+	<li><a href="#LCAPI_Commands">Layer API commands</a></li>
+</ul>
+
+
+<hr>
+<h2>&nbsp;</h2>
+<h2><a name="Sample_Application">Sample Application</a></h2>
+<p>The following sample application loads earthquake data from a CSV file, sends 
+it in buffers of up to 100 events, and 
+displays it as a time series in WorldWide Telescope.</p>
+<table class="T1" cellpadding="4" cellspacing="4">
+<tr><td>
+
+
+	<img alt="" height="658" src="Images/LCAPI_sample.jpg" width="902"></td></tr>
+	<tr><td>
+	
+		<img alt="" height="580" src="Images/LCAPI_quakes.jpg" width="960"></td></tr>
+</table>
+
+<p>&nbsp;</p>
+<table class="T3" cellspacing="8" cellpadding="8">
+<tr><td><h5>Sample program</h5></td></tr>
+<tr><td><span style='font-size:10.0pt;font-family:"Courier New";'>
+<span style="color:blue;">using</span>&nbsp;System; <br />
+<span style="color:blue;">using</span>&nbsp;System.Collections.Generic; <br />
+<span style="color:blue;">using</span>&nbsp;System.ComponentModel; <br />
+<span style="color:blue;">using</span>&nbsp;System.Data; <br />
+<span style="color:blue;">using</span>&nbsp;System.Drawing; <br />
+<span style="color:blue;">using</span>&nbsp;System.Linq; <br />
+<span style="color:blue;">using</span>&nbsp;System.Text; <br />
+<span style="color:blue;">using</span>&nbsp;System.Windows.Forms; <br />
+ <br />
+<span style="color:green;">//</span> <br />
+<span style="color:green;">//&nbsp;Added&nbsp;References</span> <br />
+<span style="color:green;">//</span> <br />
+<span style="color:blue;">using</span>&nbsp;System.IO; <br />
+<span style="color:blue;">using</span>&nbsp;System.Net; <br />
+<span style="color:blue;">using</span>&nbsp;System.Net.Sockets; <br />
+<span style="color:blue;">using</span>&nbsp;System.Xml; <br />
+ <br />
+<span style="color:green;">//</span> <br />
+<span style="color:green;">//&nbsp;&nbsp;Quakes&nbsp;is&nbsp;a&nbsp;sample&nbsp;of&nbsp;the&nbsp;WorldWide&nbsp;Telescope&nbsp;LCAPI</span> <br />
+<span style="color:green;">//&nbsp; </span> <br />
+ <br />
+<span style="color:blue;">namespace</span>&nbsp;Quakes <br />
+{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">public</span>&nbsp;<span style="color:blue;">partial</span>&nbsp;<span style="color:blue;">class</span>&nbsp;Quakes&nbsp;:&nbsp;<span style="color:#2B91AF;">Form</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">public</span>&nbsp;Quakes() <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;InitializeComponent(); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Set&nbsp;defaults</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;listBox1.SelectedItem&nbsp;=&nbsp;<span style="color:#A31515;">&quot;1000000&quot;</span>; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;listBox2.SelectedItem&nbsp;=&nbsp;<span style="color:#A31515;">&quot;Earth&quot;</span>; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">private</span>&nbsp;<span style="color:blue;">void</span>&nbsp;buttonExit_Click(<span style="color:blue;">object</span>&nbsp;sender,&nbsp;<span style="color:#2B91AF;">EventArgs</span>&nbsp;e) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dispose(<span style="color:blue;">true</span>); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">private</span>&nbsp;<span style="color:blue;">void</span>&nbsp;buttonBrowse_Click(<span style="color:blue;">object</span>&nbsp;sender,&nbsp;<span style="color:#2B91AF;">EventArgs</span>&nbsp;e) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">if</span>&nbsp;(openFileDialog1.ShowDialog()&nbsp;==&nbsp;DialogResult.OK) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;richFilename.Text&nbsp;=&nbsp;openFileDialog1.FileName; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Add&nbsp;messages&nbsp;to&nbsp;the&nbsp;list&nbsp;box</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">private</span>&nbsp;<span style="color:blue;">void</span>&nbsp;addMessage(<span style="color:blue;">string</span>&nbsp;m) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">int</span>&nbsp;i&nbsp;=&nbsp;richMessages.Items.Add(m); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;richMessages.SelectedIndex&nbsp;=&nbsp;i; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Go!</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">private</span>&nbsp;<span style="color:blue;">void</span>&nbsp;buttonGo_Click(<span style="color:blue;">object</span>&nbsp;sender,&nbsp;<span style="color:#2B91AF;">EventArgs</span>&nbsp;e) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;line; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;w; <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;richMessages.Items.Clear(); <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">try</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;initWWTLayer();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#2B91AF;">StreamReader</span>&nbsp;sr&nbsp;=&nbsp;<span style="color:blue;">new</span>&nbsp;<span style="color:#2B91AF;">StreamReader</span>(richFilename.Text); <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Ignore&nbsp;first&nbsp;line&nbsp;of&nbsp;data&nbsp;(the&nbsp;headings)</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w&nbsp;=&nbsp;sr.ReadLine(); <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Read&nbsp;lines&nbsp;of&nbsp;data&nbsp;until&nbsp;there&nbsp;are&nbsp;none&nbsp;left</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">while</span>&nbsp;((w&nbsp;=&nbsp;sr.ReadLine())&nbsp;!=&nbsp;<span style="color:blue;">null</span>) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;line&nbsp;=&nbsp;parseLine(w,<span style="color:blue;">false</span>); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;flushBufferToWWT(line); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sr.Close(); <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Flush&nbsp;buffer&nbsp;for&nbsp;last&nbsp;time&nbsp;-&nbsp;empty&nbsp;string&nbsp;indicates&nbsp;this&nbsp;is&nbsp;the&nbsp;last&nbsp;flush</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;flushBufferToWWT(<span style="color:#A31515;">&quot;&quot;</span>); <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Record&nbsp;the&nbsp;end</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;addMessage(<span style="color:#A31515;">&quot;Data&nbsp;transmission&nbsp;ended:&nbsp;&quot;</span>&nbsp;+&nbsp;totalEvents&nbsp;+&nbsp;<span style="color:#A31515;">&quot;&nbsp;events&quot;</span>); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">catch</span>&nbsp;(<span style="color:#2B91AF;">Exception</span>&nbsp;ex) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;addMessage(ex.Message); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Change&nbsp;the&nbsp;event&nbsp;color</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">private</span>&nbsp;<span style="color:blue;">void</span>&nbsp;buttonColor_Click(<span style="color:blue;">object</span>&nbsp;sender,&nbsp;<span style="color:#2B91AF;">EventArgs</span>&nbsp;e) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">if</span>&nbsp;(colorDialog.ShowDialog()&nbsp;==&nbsp;DialogResult.OK) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buttonColor.BackColor&nbsp;=&nbsp;colorDialog.Color; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">int</span>&nbsp;timeSlot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Data&nbsp;column&nbsp;number&nbsp;for&nbsp;time</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">int</span>&nbsp;latSlot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Data&nbsp;column&nbsp;number&nbsp;for&nbsp;latitude</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">int</span>&nbsp;lonSlot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Data&nbsp;column&nbsp;number&nbsp;for&nbsp;longitude</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">int</span>&nbsp;depSlot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Data&nbsp;column&nbsp;number&nbsp;for&nbsp;depth</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">int</span>&nbsp;magSlot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Data&nbsp;column&nbsp;number&nbsp;for&nbsp;magnitude</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;layerId;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;string&nbsp;GUID&nbsp;for&nbsp;the&nbsp;WWT&nbsp;Layer</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;lineBuffer;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Buffer&nbsp;to&nbsp;hold&nbsp;events&nbsp;until&nbsp;they&nbsp;are&nbsp;sent</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">int</span>&nbsp;lineCountInBuffer;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Number&nbsp;of&nbsp;events&nbsp;in&nbsp;the&nbsp;buffer</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">int</span>&nbsp;totalEvents;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Count&nbsp;of&nbsp;total&nbsp;events&nbsp;transmitted</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DateTime&nbsp;lastTimeBufferFlushed;&nbsp;<span style="color:green;">//&nbsp;Time&nbsp;of&nbsp;last&nbsp;transmission,&nbsp;used&nbsp;to&nbsp;check&nbsp;for&nbsp;time-out</span> <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Locate&nbsp;the&nbsp;columns&nbsp;of&nbsp;the&nbsp;required&nbsp;data,&nbsp;they&nbsp;must&nbsp;be&nbsp;present&nbsp;but&nbsp;can&nbsp;be&nbsp;in&nbsp;any</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;order&nbsp;in&nbsp;the&nbsp;data&nbsp;file</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">private</span>&nbsp;<span style="color:blue;">string</span>&nbsp;initCSVData(<span style="color:blue;">string</span>&nbsp;filename) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;w;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;line&nbsp;of&nbsp;data&nbsp;from&nbsp;data&nbsp;file</span> <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;timeSlot&nbsp;=&nbsp;-1; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;latSlot&nbsp;=&nbsp;-1; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lonSlot&nbsp;=&nbsp;-1; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;depSlot&nbsp;=&nbsp;-1; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;magSlot&nbsp;=&nbsp;-1; <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;First&nbsp;line&nbsp;(line&nbsp;0)&nbsp;of&nbsp;the&nbsp;data&nbsp;file&nbsp;must&nbsp;contain&nbsp;the&nbsp;column&nbsp;headings</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#2B91AF;">StreamReader</span>&nbsp;sr&nbsp;=&nbsp;<span style="color:blue;">new</span>&nbsp;<span style="color:#2B91AF;">StreamReader</span>(filename); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w&nbsp;=&nbsp;sr.ReadLine(); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>[]&nbsp;words&nbsp;=&nbsp;w.Split(<span style="color:blue;">new</span>&nbsp;<span style="color:blue;">char</span>[]&nbsp;{&nbsp;<span style="color:#A31515;">&#39;,&#39;</span>&nbsp;}); <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">for</span>&nbsp;(<span style="color:blue;">int</span>&nbsp;i&nbsp;=&nbsp;0;&nbsp;i&nbsp;&lt;&nbsp;words.Length;&nbsp;i++) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">if</span>&nbsp;(words[i].IndexOf(<span style="color:#A31515;">&quot;Time&quot;</span>,&nbsp;StringComparison.OrdinalIgnoreCase)&nbsp;!=&nbsp;-1) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;timeSlot&nbsp;=&nbsp;i; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">else</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">if</span>&nbsp;(words[i].IndexOf(<span style="color:#A31515;">&quot;Lat&quot;</span>,&nbsp;StringComparison.OrdinalIgnoreCase)&nbsp;!=&nbsp;-1) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;latSlot&nbsp;=&nbsp;i; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">else</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">if</span>&nbsp;(words[i].IndexOf(<span style="color:#A31515;">&quot;Lon&quot;</span>,&nbsp;StringComparison.OrdinalIgnoreCase)&nbsp;!=&nbsp;-1) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lonSlot&nbsp;=&nbsp;i; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">else</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">if</span>&nbsp;(words[i].IndexOf(<span style="color:#A31515;">&quot;Depth&quot;</span>,&nbsp;StringComparison.OrdinalIgnoreCase)&nbsp;!=&nbsp;-1) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;depSlot&nbsp;=&nbsp;i; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">else</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">if</span>&nbsp;(words[i].IndexOf(<span style="color:#A31515;">&quot;Mag&quot;</span>,&nbsp;StringComparison.OrdinalIgnoreCase)&nbsp;!=&nbsp;-1) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;magSlot&nbsp;=&nbsp;i; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;One&nbsp;of&nbsp;more&nbsp;heading&nbsp;is&nbsp;missing....</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">if</span>&nbsp;(timeSlot&nbsp;==&nbsp;-1&nbsp;||&nbsp;latSlot&nbsp;==&nbsp;-1&nbsp;||&nbsp;lonSlot&nbsp;==&nbsp;-1&nbsp;||&nbsp;depSlot&nbsp;==&nbsp;-1&nbsp;||&nbsp;magSlot&nbsp;==&nbsp;-1) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">throw</span>&nbsp;<span style="color:blue;">new</span>&nbsp;<span style="color:#2B91AF;">Exception</span>(<span style="color:#A31515;">&quot;Source&nbsp;file&nbsp;does&nbsp;not&nbsp;contain&nbsp;one&nbsp;or&nbsp;more&nbsp;of:&nbsp;time,&nbsp;lat,&nbsp;lon,&nbsp;depth,&nbsp;mag&quot;</span>); <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Record&nbsp;a&nbsp;successful&nbsp;reading&nbsp;of&nbsp;the&nbsp;headings</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;addMessage(<span style="color:#A31515;">&quot;Time&nbsp;=&nbsp;&quot;</span>&nbsp;+&nbsp;timeSlot.ToString()&nbsp;+&nbsp;<span style="color:#A31515;">&quot;&nbsp;Lat&nbsp;=&nbsp;&quot;</span>&nbsp;+&nbsp;latSlot.ToString()&nbsp;+&nbsp;<span style="color:#A31515;">&quot;&nbsp;Lon&nbsp;=&nbsp;&quot;</span>&nbsp;+&nbsp;lonSlot.ToString()&nbsp;+&nbsp;<span style="color:#A31515;">&quot;&nbsp;Depth&nbsp;=&nbsp;&quot;</span>&nbsp;+&nbsp;depSlot.ToString()&nbsp;+&nbsp;<span style="color:#A31515;">&quot;&nbsp;Mag&nbsp;=&nbsp;&quot;</span>&nbsp;+&nbsp;magSlot.ToString()); <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Extract&nbsp;the&nbsp;start&nbsp;time&nbsp;from&nbsp;the&nbsp;data&nbsp;file&nbsp;by&nbsp;reading&nbsp;line&nbsp;1</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">// </span> <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w&nbsp;=&nbsp;sr.ReadLine(); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;startDate&nbsp;=&nbsp;parseLine(w,&nbsp;<span style="color:blue;">true</span>); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sr.Close(); <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Record&nbsp;a&nbsp;successful&nbsp;reading&nbsp;of&nbsp;the&nbsp;start</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;addMessage(<span style="color:#A31515;">&quot;Start&nbsp;time&nbsp;=&nbsp;&quot;</span>&nbsp;+&nbsp;startDate);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">return</span>&nbsp;startDate; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Convert&nbsp;a&nbsp;string&nbsp;time&nbsp;to&nbsp;the&nbsp;correct&nbsp;format</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">private</span>&nbsp;<span style="color:blue;">string</span>&nbsp;getUTCtime(<span style="color:blue;">string</span>&nbsp;time) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DateTime&nbsp;d&nbsp;=&nbsp;DateTime.Parse(time); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;s&nbsp;=&nbsp;d.ToUniversalTime().ToString(); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">return</span>&nbsp;s; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Parses&nbsp;a&nbsp;line&nbsp;from&nbsp;the&nbsp;data&nbsp;file</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">private</span>&nbsp;<span style="color:blue;">string</span>&nbsp;parseLine(<span style="color:blue;">string</span>&nbsp;w,&nbsp;<span style="color:blue;">bool</span>&nbsp;timeOnly) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>[]&nbsp;words&nbsp;=&nbsp;w.Split(<span style="color:blue;">new</span>&nbsp;<span style="color:blue;">char</span>[]&nbsp;{&nbsp;<span style="color:#A31515;">&#39;,&#39;</span>&nbsp;}); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;line&nbsp;=&nbsp;<span style="color:#A31515;">&quot;&quot;</span>; <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;time&nbsp;=&nbsp;getUTCtime(words[timeSlot]); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;lat&nbsp;=&nbsp;words[latSlot]; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;lon&nbsp;=&nbsp;words[lonSlot]; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;depth&nbsp;=&nbsp;words[depSlot]; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;mag&nbsp;=&nbsp;words[magSlot]; <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">if</span>&nbsp;(timeOnly) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">return</span>&nbsp;time; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;line&nbsp;=&nbsp;time&nbsp;+&nbsp;<span style="color:#A31515;">&quot;\t&quot;</span>&nbsp;+&nbsp;lat&nbsp;+&nbsp;<span style="color:#A31515;">&quot;\t&quot;</span>&nbsp;+&nbsp;lon&nbsp;+&nbsp;<span style="color:#A31515;">&quot;\t&quot;</span>&nbsp;+&nbsp;depth&nbsp;+&nbsp;<span style="color:#A31515;">&quot;\t&quot;</span>&nbsp;+&nbsp;mag&nbsp;+&nbsp;<span style="color:#A31515;">&quot;\t&quot;</span>; <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">return</span>&nbsp;line; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Create&nbsp;a&nbsp;new&nbsp;WWT&nbsp;layer</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">private</span>&nbsp;<span style="color:blue;">void</span>&nbsp;<a name="initWWTLayer">initWWTLayer</a>() <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Send&nbsp;a&nbsp;NEW&nbsp;command,&nbsp;extracting&nbsp;info&nbsp;from&nbsp;the&nbsp;data&nbsp;file&nbsp;and&nbsp;the&nbsp;UI</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WebClient&nbsp;client&nbsp;=&nbsp;<span style="color:blue;">new</span>&nbsp;WebClient(); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;startDate&nbsp;=&nbsp;initCSVData(richFilename.Text); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;name&nbsp;=&nbsp;<span style="color:#2B91AF;">Path</span>.GetFileNameWithoutExtension(richFilename.Text); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;rate&nbsp;=&nbsp;listBox1.SelectedItem.ToString(); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;frame&nbsp;=&nbsp;listBox2.SelectedItem.ToString(); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;color&nbsp;=&nbsp;buttonColor.BackColor.ToArgb().ToString(&quot;X8&quot;</font><font SIZE="2">);
+	</font> <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;url&nbsp;=&nbsp;<span style="color:blue;">string</span>.Format(<span style="color:#A31515;">&quot;http://{0}:5050/layerApi.aspx?cmd=new&datetime={1}&timerate={2}&name={3}&frame={4}&color={5}&quot;</span>,&nbsp;&nbsp;getIP().ToString(),&nbsp;startDate,&nbsp;rate,&nbsp;name,&nbsp;frame,&nbsp;color); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;field&nbsp;string&nbsp;below&nbsp;is&nbsp;delimited&nbsp;by&nbsp;tabs,&nbsp;not&nbsp;spaces</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;response&nbsp;=&nbsp;client.UploadString(url,&nbsp;<span style="color:#A31515;">&quot;TIME&nbsp;&nbsp;&nbsp;&nbsp;LAT&nbsp;&nbsp;&nbsp;&nbsp;LON&nbsp;&nbsp;&nbsp;&nbsp;DEPTH&nbsp;&nbsp;&nbsp;&nbsp;MAG&quot;</span>); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XmlDocument&nbsp;doc&nbsp;=&nbsp;<span style="color:blue;">new</span>&nbsp;XmlDocument(); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;doc.LoadXml(response); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XmlNode&nbsp;node&nbsp;=&nbsp;doc[<span style="color:#A31515;">&quot;LayerApi&quot;</span>]; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XmlNode&nbsp;child&nbsp;=&nbsp;node.ChildNodes[0]; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;layerId&nbsp;=&nbsp;child.InnerText; <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Handle&nbsp;an&nbsp;error&nbsp;situation</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">if</span>&nbsp;(layerId.Length&nbsp;!=&nbsp;36) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">throw</span>&nbsp;<span style="color:blue;">new</span>&nbsp;<span style="color:#2B91AF;">Exception</span>(<span style="color:#A31515;">&quot;Invalid&nbsp;Layer&nbsp;Id&nbsp;received&quot;</span>); <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Record&nbsp;a&nbsp;successful&nbsp;creation&nbsp;of&nbsp;a&nbsp;new&nbsp;layer</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;addMessage(<span style="color:#A31515;">&quot;New&nbsp;layer&nbsp;Id&nbsp;=&nbsp;&quot;</span>&nbsp;+&nbsp;layerId); <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Clear&nbsp;the&nbsp;buffer</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lineBuffer&nbsp;=&nbsp;<span style="color:blue;">string</span>.Empty; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lineCountInBuffer&nbsp;=&nbsp;0; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;totalEvents&nbsp;=&nbsp;0; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lastTimeBufferFlushed&nbsp;=&nbsp;DateTime.Now; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Utility&nbsp;to&nbsp;extract&nbsp;IP&nbsp;address</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style='font-size:10.0pt;font-family:"Courier New";'><span style="color:blue;">private</span>&nbsp;IPAddress&nbsp;getIP() <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IPAddress&nbsp;ipAddress&nbsp;=&nbsp;IPAddress.Loopback; <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Find&nbsp;IPV4&nbsp;Address </span> <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">foreach</span>&nbsp;(IPAddress&nbsp;ipAdd&nbsp;<span style="color:blue;">in</span>&nbsp;Dns.GetHostEntry(Dns.GetHostName()).AddressList) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">if</span>&nbsp;(ipAdd.AddressFamily&nbsp;==&nbsp;AddressFamily.InterNetwork) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">if</span>&nbsp;(CheckForWWTWebServer(ipAdd)) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ipAddress&nbsp;=&nbsp;ipAdd; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">break</span>; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">return</span>&nbsp;ipAddress; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">private</span>&nbsp;<span style="color:blue;">bool</span>&nbsp;CheckForWWTWebServer(IPAddress&nbsp;address) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WebClient&nbsp;client&nbsp;=&nbsp;<span style="color:blue;">new</span>&nbsp;WebClient(); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">try</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;version&nbsp;=&nbsp;client.DownloadString(<span style="color:blue;">string</span>.Format(<span style="color:#A31515;">&quot;http://{0}:5050/layerapi.aspx?cmd=version&quot;</span>,&nbsp;address.ToString())); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XmlDocument&nbsp;doc&nbsp;=&nbsp;<span style="color:blue;">new</span>&nbsp;XmlDocument(); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;doc.LoadXml(version); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XmlNode&nbsp;node&nbsp;=&nbsp;doc[<span style="color:#A31515;">&quot;LayerApi&quot;</span>]; <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">if</span>&nbsp;(node.OuterXml.Contains(<span style="color:#A31515;">&quot;Version&quot;</span>)) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">&nbsp;&nbsp;&nbsp; //&nbsp;As 
+	version numbers are in the format xx.xx.xx.xx, an individual comparison of 
+	each</span><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">&nbsp;&nbsp;&nbsp; //&nbsp;number 
+	is necessary - a simple string comparison will give unreliable results<br></span><br />
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>[]&nbsp;versionNumbers&nbsp;=&nbsp;node.InnerText.Split(<span style="color:#A31515;">&#39;.&#39;</span>); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">if</span>&nbsp;(versionNumbers[0].CompareTo(<span style="color:#A31515;">&quot;2&quot;</span>)&nbsp;&gt;=&nbsp;0&nbsp;&& <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;versionNumbers[1].CompareTo(<span style="color:#A31515;">&quot;8&quot;</span>)&nbsp;&gt;=&nbsp;0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">return</span>&nbsp;<span style="color:blue;">true</span>; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">catch</span>&nbsp;(<span style="color:#2B91AF;">Exception</span>&nbsp;ex) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;handle&nbsp;exception</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">return</span>&nbsp;<span style="color:blue;">false</span>; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Buffer&nbsp;the&nbsp;data&nbsp;and&nbsp;send&nbsp;it&nbsp;to&nbsp;WWT&nbsp;every&nbsp;N&nbsp;events&nbsp;or&nbsp;every&nbsp;T&nbsp;time&nbsp;units</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">private</span>&nbsp;<span style="color:blue;">void</span>&nbsp;<a name="flushBufferToWWT">flushBufferToWWT</a>(<span style="color:blue;">string</span>&nbsp;line) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">const</span>&nbsp;<span style="color:blue;">int</span>&nbsp;FlushThresholdInEventCount&nbsp;=&nbsp;100;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Flush&nbsp;the&nbsp;buffer&nbsp;when&nbsp;this&nbsp;number&nbsp;of&nbsp;events&nbsp;is&nbsp;stored</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">const</span>&nbsp;<span style="color:blue;">int</span>&nbsp;FlushThresholdInSeconds&nbsp;=&nbsp;2;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Flush&nbsp;the&nbsp;buffer&nbsp;after&nbsp;this&nbsp;number&nbsp;of&nbsp;seconds&nbsp;has&nbsp;elapsed</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;If&nbsp;line&nbsp;length&nbsp;is&nbsp;zero,&nbsp;this&nbsp;is&nbsp;the&nbsp;last&nbsp;transmission</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">if</span>&nbsp;(line.Length&nbsp;&gt;&nbsp;0) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lineBuffer&nbsp;=&nbsp;lineBuffer&nbsp;+&nbsp;line&nbsp;+&nbsp;Environment.NewLine; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lineCountInBuffer++; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DateTime&nbsp;now&nbsp;=&nbsp;DateTime.Now; <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Send&nbsp;the&nbsp;buffer&nbsp;if&nbsp;flushing&nbsp;for&nbsp;the&nbsp;last&nbsp;time&nbsp;OR&nbsp;the&nbsp;buffer&nbsp;is&nbsp;full&nbsp;OR&nbsp;the&nbsp;timeout&nbsp;has&nbsp;been&nbsp;reached</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">if</span>&nbsp;((line.Length&nbsp;==&nbsp;0&nbsp;&nbsp;lineCountInBuffer&nbsp;&gt;&nbsp;0)&nbsp;|| <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lineCountInBuffer&nbsp;==&nbsp;FlushThresholdInEventCount&nbsp;|| <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;now.Subtract(lastTimeBufferFlushed)&nbsp;&gt;&nbsp;TimeSpan.FromSeconds(FlushThresholdInSeconds)) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Send&nbsp;an&nbsp;UPDATE&nbsp;command</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WebClient&nbsp;client&nbsp;=&nbsp;<span style="color:blue;">new</span>&nbsp;WebClient(); <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;url&nbsp;=&nbsp;<span style="color:blue;">string</span>.Format(<span style="color:#A31515;">&quot;http://{0}:5050/layerApi.aspx?cmd=update&id={1}&quot;</span>,&nbsp;getIP().ToString(),&nbsp;layerId); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;response&nbsp;=&nbsp;client.UploadString(url,&nbsp;lineBuffer); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XmlDocument&nbsp;doc&nbsp;=&nbsp;<span style="color:blue;">new</span>&nbsp;XmlDocument(); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;doc.LoadXml(response); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XmlNode&nbsp;node&nbsp;=&nbsp;doc[<span style="color:#A31515;">&quot;LayerApi&quot;</span>]; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">string</span>&nbsp;s&nbsp;=&nbsp;node.InnerText; <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Handle&nbsp;an&nbsp;error&nbsp;situation</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">if</span>&nbsp;(s.Contains(<span style="color:#A31515;">&quot;Error&quot;</span>)) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">throw</span>&nbsp;<span style="color:blue;">new</span>&nbsp;<span style="color:#2B91AF;">Exception</span>(s); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Record&nbsp;a&nbsp;successful&nbsp;transmission</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;addMessage(now.ToString()&nbsp;+&nbsp;<span style="color:#A31515;">&quot;:&nbsp;&quot;</span>&nbsp;+&nbsp;lineCountInBuffer.ToString()&nbsp;+&nbsp;<span style="color:#A31515;">&quot;&nbsp;events&nbsp;sent&quot;</span>); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;totalEvents&nbsp;+=&nbsp;lineCountInBuffer; <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;Clear&nbsp;the&nbsp;buffer</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lineBuffer&nbsp;=&nbsp;<span style="color:blue;">string</span>.Empty; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lastTimeBufferFlushed&nbsp;=&nbsp;now; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lineCountInBuffer&nbsp;=&nbsp;0; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+} <br />
+<span style="color:green;">//</span> <br />
+<span style="color:green;">//&nbsp;End</span> <br />
+<span style="color:green;">//</span>
+</span></td></tr></table>
+
+
+
+
+<h4>See Also</h4>
+<ul type="disc">
+	<li><a href="#LCAPI_Commands">Layer API commands</a></li>
+	<li><a href="#WorldWideTelescopeLayerControlAPI">WorldWide Telescope 
+	Layer Control API</a></li>
+</ul>
+
+
+</body>
+</html>

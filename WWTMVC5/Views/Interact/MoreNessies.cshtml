@@ -1,0 +1,27 @@
+﻿@{
+	Layout = "~/Views/Shared/_ContentPage.cshtml";
+}
+@section leftnav{
+	@Html.Partial("~/Views/Interact/LeftNav.cshtml")
+}
+
+<script>$(window).on('load', function() {
+    wwt.TourPlayer.init({
+        resLoc: '@Model.ResLoc',
+        tour: 'http://thewebkid.com/MoreNessies.wtt'
+    });
+});</script>
+<section>
+    <h1>More Nessies</h1>
+    <p id="txtIntro">This short Tour shows regions near the Galactic Plane that might harbor dense gas and dust filaments that mark out the endoskeleton of the Milky Way.  The first "bone" of the Milky Way to be discovered was "Nessie," which is featured toward the end of this Tour.  More information is at <a href="http://milkywaybones.org" target="_blank">http://milkywaybones.org</a>, and in the <a href="https://www.authorea.com/users/23/articles/249/_show_article" target="_blank">"Bones of the Milky Way"</a> paper, by Alyssa Goodman et al.
+    </p>
+    <div id="WorldWideTelescopeControlHost">
+        
+    </div>
+    <br/>
+    <p>Brightly-colored symbols stretched out on long curving lines show the true Sky positions of what Astronomers now believe to be the exact mid-plane of the Milky Way, for its various spiral arms, as labeled within the Tour.</p>
+   
+</section>
+
+
+   

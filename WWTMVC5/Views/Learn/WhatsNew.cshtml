@@ -1,0 +1,54 @@
+﻿@{
+	Layout = "~/Views/Shared/_ContentPage.cshtml";
+	ViewBag.Title = "What's New - WorldWide Telescope";
+	ViewBag.HideTranslateWidget = 1;
+}
+@section leftnav{
+	@Html.Partial("~/Views/Learn/LeftNav.cshtml")
+}
+
+<section>
+	<h1>What's New in WWT 5.1 (November 2014)</h1>
+	<p>WorldWide Telescope version 5.1 builds on the features of 5.0 with improvements in functionality and performance. </p>
+	<div class="large-video-player autoresize" style="margin:16px 0">      
+		<iframe width="560" height="315" src="//www.youtube.com/embed/rfUFXE1xVcc" frameborder="0" allowfullscreen></iframe>
+	</div>
+	<br />
+	<p>As you zoom into mapped cities 3D data will be automatically shown.  You can explore on your own or take a look at this tour: <a href="@Model.ContentDir/Tours/Flight over San Francisco v1.0.wtt">Flight over San Francisco v1.0.wtt</a>. Note, this tour and the Neuron one below look great in Virtual Reality.</p>
+	<img src="@Model.ImgDir/learn/3dcities.jpg" alt="Bing 3D Maps" class="img-responsive img-border" />
+	<p><em>Sandbox Mode for Exploring Arbitrary 3D Models</em></p>
+	<br />
+	<p>Load arbitrary 3D models from various sources and explore them in a Sandbox Mode to view only imported models and dynamic lighting.  For example, explore neurons in the retina of a mouse from the <a href="https://eyewire.org">Eyewire project</a> in <a href="@Model.ContentDir/Tours/Neuron v1.1.wtt">this tour</a>.</p>
+	<img src="@Model.ImgDir/learn/neurons.jpg" alt="Eyewire" class="img-responsive img-border" />
+	<br />
+	<p><em>Prepare and print three-dimensional terrain with 3D Printing Support</em></p>
+	<img src="@Model.ImgDir/learn/3dprinting.jpg" alt="3D printing" class="img-responsive img-border" />
+	<br />
+</section>
+<section>
+	<h3>What's New in WWT 5.0 (January 2014)</h3>
+	<p>WorldWide Telescope 5.0 is the latest version and is already in production use in some of the world’s premiere planetariums. This feature-rich application is now available to everyone as a <a href="/Download">free download</a>.</p>
+	<p><em>The timeline editor gives you true cinematic control for optimal animations and transitions.</em></p>
+	<img src="@Model.ImgDir/TimelineEditor.png" alt="Timeline Editor" class="img-responsive img-border" />
+	<br />
+	<p><em>Display new, highly detailed models of the International Space Station and the Gemini Observatory, or import your own 3D models.</em></p>
+	<img src="@Model.ImgDir/ISS.png" alt="International Space Station" class="img-responsive img-border" />
+	<br/>
+	<p><em>Deeply detailed Mars imagery from the <a href="http://hirise.lpl.arizona.edu/">HiRISE</a> Mars Reconnaissance Orbiter</em></p>
+	<img src="@Model.ImgDir/learn/Mars-hirise.jpg" alt="HIRISE Mars" class="img-responsive img-border" />
+	<br />
+	<p><em>Atmospheric and lighting controls help you visualize Earth and other planets more realistically.</em></p>
+	<img src="@Model.ImgDir/Earthmoon2crop.png" alt="Earth Lighting" class="img-responsive img-border" />
+	<br />
+	<p><em>Tilt and rotate controls let you explore planet surfaces in Solar System mode.</em></p>
+	<img src="@Model.ImgDir/Saturn.png" alt="Saturn" class="img-responsive img-border" />
+	<br />
+	<br />
+	<p><em>A comprehensive set of planetarium and dome features help you create seamless displays on complex single- or multi-projector domes.</em></p>
+	<ul>
+		<li>Experience full-dome tour authoring and instant full-dome playback of desktop tours with overlays and images</li>
+		<li>For easier control of your displays, new MIDI controller support enables you to customize control panels by using inexpensive but powerful MIDI performance controllers</li>
+		<li>You can now manage projector nodes, check status, and render performance—all from the WWT console</li>
+		<li>The new Screen Broadcast feature allows any application on the console to display as a window in Full Dome mode</li>
+	</ul>
+</section>

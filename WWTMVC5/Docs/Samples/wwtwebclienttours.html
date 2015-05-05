@@ -1,0 +1,130 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="WebApplication2._Default" %>
+
+<!DOCTYPE html "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  
+<title>WWT Web Client Tours</title>
+	
+<script type="text/javascript" language="javascript">
+
+// The WorldWide telescope object
+
+    var wwtView;
+
+
+    // loadTour
+
+    function loadTour(n) {
+        
+        switch (n) {
+            case 1:
+                wwtView.LoadTour("http://www.worldwidetelescope.org/docs/wtml/tourone.wtt");
+
+                document.getElementById("playing").value = "Playing Tour 1";
+                break;
+
+            case 2:
+                wwtView.LoadTour("http://www.worldwidetelescope.org/docs/wtml/tourtwo.wtt");
+
+                document.getElementById("playing").value = "Playing Tour 2";
+                break;
+        }
+        
+        document.getElementById("tour1").disabled = true;
+        document.getElementById("tour2").disabled = true;
+        document.getElementById("restart").disabled = false;
+        document.getElementById("stop").disabled = false;
+    }
+
+
+    // stopTour
+
+    function stopTour() {
+        
+        wwtView.StopTour();
+        
+        document.getElementById("tour1").disabled = false;
+        document.getElementById("tour2").disabled = false;
+        document.getElementById("restart").disabled = true;
+        document.getElementById("stop").disabled = true;
+
+        document.getElementById("playing").value = "No tour currently playing";
+    }
+
+    // restartTour
+
+    function restartTour() {
+        wwtView.PlayTour();
+    }
+	
+// The wwtReady function is called by the WWT Web Control software
+// This function sets up the wwt object, and the initial defaults
+
+	function wwtReady() {
+	    wwtView = document.getElementById("WWTView").content.WWT;
+
+	}
+
+</script>
+
+</head>
+
+<body>
+
+<!-- The body section creates a table with two columns. The first contains the -->
+<!-- silverlight object that is the WWT web client. And the second a table within-->
+<!-- the table, containing some controls.-->
+
+<table border="2" bgcolor="lightgrey">
+	<tr><td>
+		   <div id="WorldWideTelescopeControlHost">
+        
+        <object id="WWTView" 
+			data="data:application/x-silverlight," 
+			type="application/x-silverlight-2" 			
+			width="1400" height="1000">
+
+<!-- Ensure the source parameter links correctly to the wwtsl.xap file -->
+
+			<param name="source" value="http://www.worldwidetelescope.org/webclient/clientbin/WWTSL.xap"/>
+			<param name="background" value="black" />
+			<param name="minRuntimeVersion" value="3.0.40624.0" />
+			<param name="autoUpgrade" value="true" />
+			<param name="initParams" value="NoUI=false,wtml=,webkey=AX2011Gqqu" />
+		    <param name="enableHtmlAccess" value="true" />
+			<a href="http://go.microsoft.com/fwlink/?LinkID=149156&v=3.0.40624.0">
+     			<img src="http://go.microsoft.com/fwlink/?LinkId=108181" alt="Install Microsoft Silverlight" /></a>
+		</object>
+    </div>
+	</td><td>
+
+	<table border="2" cellspacing="4" cellpadding="4" bgcolor="gold">
+	
+	<tr>
+	<th><h2>Sample WWT Web Client Tours</h2></th>
+	</tr>
+		
+	<tr>
+	<th><input id="tour1" type="button" value="Load Tour 1" onclick="loadTour(1);"/>
+	<input id="tour2" type="button" value="Load Tour 2" onclick="loadTour(2);"/></th>
+	</tr>
+	
+	<tr>
+	<th><input id="playing" type="text" value="No tour currently playing" /></th>
+	</tr>
+		
+	<tr>
+    <th><input id="restart" type="button" value="Restart" disabled="disabled" onclick="restartTour();"/>
+		<input id="stop"    type="button" value="Stop"    disabled="disabled" onclick="stopTour();"/></th>
+	</tr>
+	
+</table>
+</td>
+</tr>
+</table>
+
+</body>
+</html>

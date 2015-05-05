@@ -1,0 +1,343 @@
+﻿@{
+	Layout = "~/Views/Shared/_ContentPage.cshtml";
+}
+@section leftnav{
+	@Html.Partial("~/Views/Learn/LeftNav.cshtml")
+}
+
+	<h1>Setting Up</h1>
+	<p>Choose a topic below. (click to view)</p>
+	<div class="panel-group" id="accordion">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4 class="panel-title">
+					<a data-toggle="collapse" data-parent="#accordion" href="#wwtkiosk">
+						WWT Kiosk
+					</a>
+				</h4>
+			</div>
+			<div id="wwtkiosk" class="panel-collapse collapse">
+				<div class="panel-body">
+					<h4>Overview</h4>
+					<p>WorldWide Telescope can be launched in a Kiosk mode, which is designed for unfacilitated use in museums or other informal learning environments.    There are two general ways this can be done.  One is to show a narrative presentation in the form of a tour. The other mode is to allow free exploration.  </p>
+					<p>Unless you go to great lengths to harden your kiosk computer by installing software to intercept certain windows keyboard commands, you should not have a publically-accessible keyboard connected. A connected keyboard gives the user the ability to Control-Alt-Delete to get task manager, which could break out of WWT and give access to the computer.  For administration purposes, museum staff will want to be able to connect a keyboard or remote desktop to the computer to do this.</p>
+					<h4>Kiosk Tour</h4>
+					<ol>
+						<li>Create the tour in WWT.  Save it to a file at a folder on your PC.</li>
+						<li>On the last slide of your tour Right-click and choose “Set Next Slide.”  This will bring up a dialog box click the first slide of the tour.  Clicking the slide will also check the box “Link to Slide (Selected below).”  Click Ok.</li>
+						<li>Create a shortcut.
+							<ol type="a">
+								<li>Right-click at the location you want the shortcut to live and select “New/Shortcut”</li>
+								<li>This will open a dialog box to type the location of the item.  You can browse to the WWT install or if it is a standard installation, you can enter "C:\Program Files (x86)\Microsoft Research\Microsoft WorldWide Telescope\WWTExplorer.exe".  Don’t forget that the entire path should be enclosed in double quotes.</li>
+								<li>Following the location for WWTExplorer.exe (which is the WWT application), you should put the location of the Kiosk Tour you created in the first step.  In this example, the tour (named “Kiosk Tour.wtt”) is on the desktop for the user named Exhibit and the full path to the tour "C:\Users\Exhibit\Desktop\Kiosk Tour.wtt”.</li>
+								<li>Following the path to the tour, put the flag that puts the application into the kiosk mode “-kiosk”.</li>
+								<li>For the above example, the entire entry for the location of the item would be: "C:\Program Files (x86)\Microsoft Research\Microsoft WorldWide Telescope\WWTExplorer.exe" "C:\Users\Exhibit\Desktop\Kiosk Tour.wtt” -kiosk.  When you are finished you might want to change the name of the shortcut to something relating to the tour, such as “Run Cool WWT Kiosk Tour,” otherwise it will default to the name “WWTExplorer.exe”.</li>
+								<li>You can always change this by right-clicking on the shortcut and selecting “Properties”.  In the dialog box that comes up you can edit the Target field.</li>
+							</ol>
+						</li>
+					</ol>
+					
+					<h4>Interactive Kiosk Tour</h4>
+					<p>In all cases you should consider what interaction you want with the public to have with WWT.  Possibilities are:</p>
+					<ul>
+						<li>Mouse/trackball</li>
+						<li>Xbox controller</li>
+						<li>Touch screen</li>
+					</ul>
+					<h4>Auto-start the Tour on Startup</h4>
+					<ol>
+						<li>Setup auto-login for user running WWT.</li>
+						<li>Setup shortcut to be executed on login</li>
+						<li>Links to tools for timed startup and shutdown.</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4 class="panel-title">
+					<a data-toggle="collapse" data-parent="#accordion" href="#multichannel">
+					   Multi-Channel Setup 
+					</a>
+				</h4>
+			</div>
+			<div id="multichannel" class="panel-collapse collapse">
+				<div class="panel-body">
+					<p>WorldWide Telescope can be used to produce and deliver experiences for planetarium domes.  WWT is currently being used at several planetaria, from small inflatable domes all the way to large domes, such as the 20-projector Grainger Sky Theater at the Adler Planetarium in Chicago.  In addition to multi-projector domes, WWT can be used to drive multiple monitor systems for flat or curved large format tiled displays.  WWT has built-in support for coordinating multiple servers as well as the warps and blends necessary to create the correct projection for specific display layouts.  </p>
+					<p>Instructions on how to setup and calibrate multi-channel systems can be found <a href="@Model.ContentDir/Planetariums/WWT%20Multi%20Channel%20Setup%20v1.5.pdf">here</a>.
+	 </p>
+		   </div>
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4 class="panel-title">
+					<a data-toggle="collapse" data-parent="#accordion" href="#controllersandbuttons">
+					   Controllers & Virtual Buttons 
+					</a>
+				</h4>
+			</div>
+			<div id="controllersandbuttons" class="panel-collapse collapse">
+				<div class="panel-body">
+					<p>Currently, WorldWide Telescope (WWT) can be controlled by a variety of controllers.  Custom mapping can be done for MIDI and Xbox controllers, connected by USB to the computer running WWT as well as configurable virtual buttons.</p>
+					<h4>MIDI Controller</h4>
+					<p>Any MIDI controller can be used to control WorldWide Telescope.  You can re-use mapping of WWT functions created by someone else.  You can also create your own or edit a previously-created mapping.  Start by selecting “Settings/Controller Setup...”  This brings up a dialog window where you can select a file containing the mapping functions.  For the Numark DJ2Go you can <a href="@Model.ContentDir/Learn/Numark%20DJ2Go.wwtmm">download a standard mapping file</a>.</p>
+					<img src="@Model.ImgDir/learn/numark_djtogo.jpg" alt="Numark DJ2Go" class="img-responsive img-border" />
+					<p>You can save and load different files with different mappings.</p>
+					<p>Highlighting a device in the list of MIDI devices on the left and clicking “Properties” below will bring up the Controller Properties window that presents the status of the controller and location to the image file used for mapping.  Note, that this image can be specified as a URL, such as</p>
+					<p>@Model.ImgDir/learn/numark_djtogo.jpg</p>
+					<p>or it can point to a local file, such as </p>
+					<p>\Documents\MIDI\numarkdj2go.png.</p>
+					<p>To remove an existing binding, select it in the list and click the “-” button.   A box will come up to ask you to confirm the removal of the control.</p>
+					<p>To remove an existing binding, select it in the list and click the “-” button.   A box will come up to ask you to confirm the removal of the control.</p>
+					<p>To add a new binding, click the “+” button.  This will bring up a box saying that WorldWide Telescope is listening to the controller waiting for you to manipulate a control that has not been previously mapped.  When such a control is moved, it will ask for the control type; select one of: </p>
+					<ul>
+						<li><strong>KeyPress </strong> &mdash; detects that a key has been pressed and does some action.</li>
+						<li><strong>KeyUpDown</strong> &mdash; this sets up two actions, one when the key goes from Down to Up and the other from Up to Down.  These can be defined separately.</li>
+						<li><strong>Slider</strong>    &mdash; linear slider from one value to another</li>
+						<li><strong>Knob</strong>      &mdash; rotating know from one value to another</li>
+						<li><strong>Jog</strong>       &mdash; jog dial that can be move spun repeatedly, often used in advancing time</li>
+					</ul>
+					<p>Once you have selected the control type it will be added to the list of control bindings with the Control Name the same is the ID number.  You can then define what you want to happen when you manipulate the control.  When you select a control binding the properties are shown below the list and you can change or set the following properties:</p>
+					<ul>
+						<li><strong>Binding Target Type pull-down </strong> &mdash; Categories of actions that can be sent to WWT.</li>
+						<li><strong>Bind Type pull-down           </strong> &mdash; Ways to bind the controller to WWT.</li>
+						<li><strong>Property pull-down           </strong>  &mdash; Specific properties controlled.</li>
+						<li><strong>Repeat checkbox              </strong>  &mdash; If this is checked, holding down will continuously send the same command. This makes sense for actions like zooming.</li>
+						
+					</ul>
+					<p>A full list of potential bindings is available in an Excel spreadsheet <a href="@Model.ContentDir/Learn/Binding%20Properties.xlsx">here</a>.</p>
+					<p>The labels for the functions can be placed on the position of the corresponding knob on the image for the controller.  In the case of the default map this has already been done.  Click the function in the list and hold and drag onto the image.  Release your mouse when the label is at the desired location.  Note that when the “Monitor” box is checked and the key is pressed on the controller the label changes from white to yellow.
+</p>
+					<h4>Xbox Controller</h4>
+					<p>WWT can be controlled by a PC version of an Xbox Controller.  This is an excellent interface to use in a planetarium or presentation environment because the controller is portable and the buttons can be distinguished in the dark.</p>
+					<p>WWT comes with a standard binding of functions.  This default is for the left/right triggers to zoom out/in.  The right bumper steps through objects in the context menu (at the bottom of WWT screen).  The left thumbstick pan and scroll and the right thumbstick rotates the view.  The Back key steps backwards and the Start key steps forwards through LookAt modes (Sky, Earth, SolarSystem etc.).  The ABXY keys are defined in the table below.</p>
+					<table class="table">
+						<thead>
+							<tr>
+								<th>&nbsp;</th>
+								<th>Look At Earth</th>
+								<th>Look At Sky</th>
+								<th>Look At Solar System</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><strong>A</strong></td>
+								<td>&nbsp;</td>
+								<td>Equatorial Grid</td>
+								<td>Asteroids</td>
+							</tr>
+							<tr>
+								<td><strong>B</strong></td>
+								<td>&nbsp;</td>
+								<td>Constellation Boundaries</td>
+								<td>Milky Way Model</td>
+							</tr>
+							<tr>
+								<td><strong>X</strong></td>
+								<td>Clouds</td>
+								<td>Ecliptic Overview</td>
+								<td>Planetary Orbits</td>
+							</tr>
+							<tr>
+								<td><strong>Y</strong></td>
+								<td>Clouds</td>
+								<td>Constellation Figures</td>
+								<td>3D Stars</td>
+							</tr>
+						</tbody>
+					</table>
+					<p>Default mappings appropriate for print or reference is available <a href="@Model.ContentDir/Learn/Xbox%20Controller%20Mapping.pdf">here</a>.</p>
+					
+					<p>In order to define your own settings select “Settings/Xbox Controller Setup...”  This brings up a dialog window where you can select a file containing the mapping functions.  Check the “Use Custom Mappings” box and you can see the default mapping and change any of them.  You can control the properties in the same way as the MIDI controller, described above. Checking the “Use Mode Dependent Mappings” allows a different mapping to be used depending on the mode.</p>
+					<p>A full list of potential bindings is available in an Excel spreadsheet <a href="@Model.ContentDir/Learn/Binding%20Properties.xlsx">here</a>.</p>
+					<p>You can save, load and share custom mappings files (extension .wwtxm) from this dialog box.</p>
+					<h4>Virtual Buttons</h4>
+					<p>Clicking the View button will show the View controls at the top of the WWT window.  The blank area to the right of the control – identified by the green box in the image below – is a place where you can define and place custom virtual buttons. These buttons can have the same bindings as the MIDI and Xbox controllers.  </p>
+					<img src="@Model.ImgDir/learn/virtual_buttons.jpg" alt="Numark DJ2Go" class="img-responsive img-border" data-coords="550,3"/>
+					<p>Clicking the “+” key brings up a binding dialog box.  You can give the button a “Name,” select “Button Type,” “Binding Target Type,” “Bind Type,” and “Property,” just like the MIDI controller, described above.</p>
+					<p>In the example above I have defined a Longitude and Latitude slider.  Clicking the “E” enters an editing mode for the buttons.  When in edit mode, you can rearrange the buttons. Right clicking on a button will allow you to toggle the button editing mode, change the binding properties or delete a virtual button.</p>
+				</div>
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4 class="panel-title">
+					<a data-toggle="collapse" data-parent="#accordion" href="#performance">
+						Tweaking Performance
+					</a>
+				</h4>
+			</div>
+			<div id="performance" class="panel-collapse collapse">
+				<div class="panel-body">
+					<h5>Evaluating Performance</h5>
+					<p>WorldWide Telescope can show many layers and types of data, but various things can affect visual performance, both interactivity and during playback.  A rule of thumb is that a modern PC with a dedicated graphics card will likely perform fine for most installations.  But older machines or modern ones that have integrated graphics might not be adequate for the most accurate rendering. The most immediate way to evaluate performance is to show the frame rate. This can be done by selecting: <strong>Settings/Advanced/Show Performance Data</strong>.</p>
+					<p>When this is selected, WorldWide Telescope displays the frames per second (FPS) along with other information about loaded data in the title bar of the main WWT window.</p>
+					<p><img class="img-responsive img-border" src="@Model.ImgDir/learn/Performance Data.jpg" alt="Perforamnce data" /></p>
+					<p>For cluster and dome installations, WWT can also report this frame rate for all projector servers in a GUI on the master.  To show this GUI, select <strong>Settings/Advanced/Projector Server List</strong>.  This GUI shows the status of each projector server.  This example has a single projection server (Pluto) and shows whether the computer is on the network (Online), if WWT is running (Ready), the IP for the projection server (192.168.0.110) and the frame rate for that projector (20.5 FPS).</p>
+					<p><img class="img-responsive img-border" src="@Model.ImgDir/learn/Projector Server List.jpg" alt="Server List" /></p>
+					<p>The frame rate could be capped by the WWT itself – see below – otherwise WWT tries to draw as a new frame as fast as it can and the effective frame rate is shown in the window.  Frame rates of less than 30 will introduce noticeable stuttering and numbers of less than 15 FPS will be very distracting.  Note that for simple scenes and fast hardware the FPS could be a large number – hundreds – much larger in fact than the ability of a projector or monitor to display it.</p>
+					<h3>Optimizing Performance</h3>
+					<p>All visualization programs trade off visual fidelity with rendering time.  When you are using WWT to run a live program usually you want to trade off fidelity with rendering time.  In fast moving scenes where it may be hard to keep up visually without having very low frame rates, the human perception of fidelity is limited.  So usually, you want to do what you can to keep FPS to 30 or above and compromise on rendering quality if necessary.</p>
+					<p>For interactive and playback uses, you can change the following settings to try to improve the performance.  </p>
+					<h5>Anti-aliasing</h5>
+					<p>Antialiasing is a graphics technique to redraw lines and edges with to avoid showing them as jagged lines made up of individual pixels.  Modern graphics cards can usually handle this easily.  However, most integrated graphics can’t do this and thus those calculations are done by the CPU not the GPU, resulting in very poor performance.  The first step in improving performance is turning off anti-aliasing.  Open the menu <strong>View/Multi-Sample Antialiasing</strong> and select <strong>None</strong>.  Note, changing this value will require a restart of WWT to take effect.  When you have restarted play the tour again and look at the FPS and see if that has improved the frame rate adequately.</p>
+					<p><img class="img-responsive img-border" src="@Model.ImgDir/learn/Anti-Aliasing.jpg" alt="anti-aliasing" /></p>
+					<h5>Content</h5>
+					<p>The frame rate depends on the scene as well as the performance of the graphics hardware.  Within the constraints of the graphics hardware the only other thing you can change is the content.  The most difficult content to render is 3D content: terrains of planetary surfaces, 3D models, or 3D cities. Content affects performance in two stages.  The first stage is data loading.  Running the tour through will load the data onto your local disk cache. This is the first step, but final performance depends on how quickly you can get the data into the computer’s GPU. When you play the tour if the data is being drawn as you move through a scene then you want to make sure that data loading is done before the audience sees it.  The easiest way to do this is add the have the first 1-2 seconds of the scene rendered while the display is faded to black. Then fade up from black and most of the data will have been loaded for the scene.</p>
+					<ol>
+						<li>In the lower part of the layer manager, right-click on <strong>Dome/Overlays/Fade to black</strong> and select <strong>Add to Timeline</strong>.  Unless the Tour will only be shown in a dome environment, make sure the <strong>Fade Dome Only</strong> under <strong>Fade to black</strong> is <em>not</em> checked.</li>
+						<li>In the Timeline editor make a key for <strong>FadeToBlack</strong> at start time 00:00 and set the Opacity, which is the only sub-property, to 1, which means it is faded to black.  If the timeline editor is not shown, you can expose it be selecting <strong>Show Timeline Editor</strong> under the <strong>Guided Tours</strong> tab.</li>
+						<li>Then move the time slider to 2 seconds into the slide and make another <strong>FadeToBlack</strong> key and set it to 1 as well.  </li>
+						<li>Make a third <strong>FadeToBlack</strong> key 1 second following the second key (at 3 seconds) and set that value to 0. </li>
+						<li>Play the slide and it should be black for the first 2 seconds, and hopefully that is enough time to load the necessary data.  Then between 2 and 3 seconds the scene should fade in from black.</li>
+						<li>6.	Adjust the time locations of the keys to keep it black for long enough to hide the data loading if the suggested times are not sufficient.</li>
+					</ol>
+					<h5>Target Frame Rate</h5>
+					<p>WWT attempts to render frames as fast as the GPU can make them.  This results in the GPU being pushed hard and will cause it to consume more power and heat up.  If the GPU overheats, it can scale back its performance or shut down completely.  In real-world environments, the projectors and monitors only operate at a certain refresh rate and rendering more frames per second isn’t necessary.   You can set the limit on the frame rate in the menu View/Target Frame Rate.   In most cases you want to choose 60 or 30 FPS.</p>
+					<h3>Rendering to Video</h3>
+					<p>Interactive performance requires WWT to render the scene every frame, every 1/30 of a second.  For playback that doesn’t require interactivity – for instance in a planetarium system – one way to deal with performance issues it to render the tour to a video for playback.  That way, WWT can take as much time as it needs to render a frame including fetching the data, putting the scene together and finally rendering.  To do this, load the desired tour.  Then under the open the <strong>Render Tour to Video</strong> dialog box under <strong>Guided Tours/Render to Video</strong>.  Then make sure the “Wait for all downloads” is checked before rendering.  More details on rendering to video are available <a href="/Learn/Authoring#rendertovideo">here</a>.</p>
+					</div>
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4 class="panel-title">
+					<a data-toggle="collapse" data-parent="#accordion" href="#creatingcaches">
+						Creating WorldWide Telescope Caches
+					</a>
+				</h4>
+			</div>
+			<div id="creatingcaches" class="panel-collapse collapse">
+				<div class="panel-body">
+					<h4>Overview</h4>
+					<p>WorldWide Telescope (WWT)  is a great tool with access to Petabytes of image data from the cloud, but in some educational contexts the internet may not be available but it is desirable to use WWT as a tool on a stand-alone basis. WorldWide Telescope already can operate off-line when the internet is available, and browse any data previously viewed by that user on that machine. In a new installation, there is no cache history for a user to rely on and the experience is not acceptable.</p>
+					<p>To solve this issue we have created a tool that will allow for the creation of curated cache content that would be installed from a DVD or thumb drive along with the WWT client to allow a disconnected or poorly connected machine to run most of WWT features without ever having to connect to the internet.</p>
+					<h4>Tools</h4>
+					<p>WWT already has existing tools for basic cache management. With the Eclipse release WWT adds several new tools to help curate the cache contents. This is a combined list of both the new and old tools.</p>
+					<ul>
+						<li>Cache measurement/purge utility in the Settings tab</li>
+						<li>Cache Management Menu  from Right click menu item in explore/context tabs.
+							<ul>
+								<li>Cache Image Tile Pyramid</li>
+								<li>Show Cache Space Used </li>
+								<li>Remove from Image Cache</li>
+							</ul>
+						</li>
+						<li>Playing a tour caches all data it views.</li>
+						<li>Playing tours with “Play all” option will play and repeat tours in a collection</li>
+						<li>Browsing collections will add images you view to the cache.</li>
+						<li>Play collection as slideshow will go from image to image and cache data as it goes.</li>
+						<li>Editing the cache directory manually thru Windows explorer.
+							<ul>
+								<li>C:\Users\{user name here}\AppData\Local\Microsoft\WorldWideTelescope</li>
+							
+							</ul>
+						</li>
+						<li>Setting up WMS servers, and caching data they use.</li>
+						<li>Running WWT in Solar System mode with Multi-Resolution planets will load in base maps need for that mode.</li>
+						<li>Save the Cache in Settings…Advanced..Save Cache as Cabinet File…</li>
+						<li>Load the Cache in Settings…Advances…Restore Cache from Cabinet File…</li>
+					</ul>
+					<h4>Process</h4>
+					<ol>
+						<li>Ensure your WWT instance has a fresh, clean cache.</li>
+						<li>Use the cache tools to load data you thing is important .</li>
+						<li>Measure the cache size as you go budgeting for the data sets you need.</li>
+						<li>Use the UI or manual cache management in Explorer to trim excess if needed.</li>
+						<li>Save The Cache file to a cabinet file.</li>
+						<li>Move the cabinet file to a fresh non-internet connected machine.</li>
+						<li>Install a fresh WWT install.</li>
+						<li>Restore the Cabinet file.</li>
+						<li>Verity operation and note any missing data.</li>
+						<li>Repeat the above steps as necessary until the cache meets the educational requirements.</li>
+					</ol>
+					<h4>Deployment</h4>
+					<p>In the final Eclipse release the setup will detect the presence of a cache cabinet file and offer to install it automatically. This file should be named “WwtFileCache.cabinet” and be placed next to the WWTSetup.5.x.x.msi file. After installation WWT will use this cache transparently as if it actually visited all the data already.</p>
+					
+					<div class="large-video-player" style="margin:16px 0">
+							<video id="cachemgt" controls width="100%" class="img-responsive">
+								<source src="@Model.ResLoc/videos/v5/cachemanagement.ogv" type='video/ogg; codecs="theora, vorbis"'/>
+								<source src="@Model.ResLoc/videos/v5/cachemanagement.webm" type='video/webm' >
+								<source src="@Model.ResLoc/videos/v5/cachemanagement.mp4" type='video/mp4'>
+								<p>Video is not visible, most likely your browser does not support HTML5 video</p>
+							</video>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4 class="panel-title">
+					<a data-toggle="collapse" data-parent="#accordion" href="#AdvancedAudioPlayback">
+						Advanced Audio Playback
+					</a>
+				</h4>
+			</div>
+			<div id="AdvancedAudioPlayback" class="panel-collapse collapse">
+				<div class="panel-body">
+					<p>
+						WorldWide Telescope (WWT) can playback an SMPTE timing track to provide timing control of off-board audio or other SMPTE-controller effects.  SMPTE provides a flexible, easy-to-implement control solution; this flexibility makes it possible to setup things in various ways.  This document will provide a description of two potential scenarios, but more can be created if these don’t map to your facility.
+					</p>
+					<h5>Simple Audio Using Embedded Audio File in WWT Tour</h5>
+					<p>
+						The easiest way to setup a system is for the Master Server to output audio, via analog or digital audio output.  The mono or stereo audio tracks are created for narration and music on per-slide or Master-slide basis in the tour – see LINK: Authoring/Dealing with Audio and LINK: Authoring/Editing Audio.  Then direct connections between the Master Server and hardware sound system (amplifiers and speakers) takes care of the audio. This is a simple case with few pieces, but is limited by the number of audio channels and potentially the quality of the underlying audio files.
+					</p>
+					<p>
+						<strong>Note</strong>: For all WWT cluster implementations, Tours that are distributed to Projector Servers have the audio stripped out, to reduce file size and speed updating.
+					</p>
+					<h5>Multi-Channel Dome with SMPTE-controlled Audio Server</h5>
+					<p>
+						At some planetaria, such as the Grainger Sky Theater at the Adler Planetarium, they have a configuration with three types of servers: Master, Projector and Audio.
+					</p>
+					<p>
+						The Master Server controls any number or Projection Servers over the network via WWT and WWT Remote.  These controls include:
+					</p>
+					<ul>
+						<li>Power control of Projection Servers from Master.</li>
+						<li>Updating Tour and Data from Master to Projection Servers.</li>
+						<li>Synchronization of playback on multiple Projection Servers.</li>
+					</ul>
+					<p>
+						For audio, audio tracks (mono, stereo or multi-channel) are loaded onto a dedicated Audio Server.  On the WWT Master Server the normal audio track is replaced with a SMPTE timing track.  This is usually done with a short-duration slide at the beginning of the tour that is a master and has the SMPTE track as MP3 or WAV format.  The analog audio output of the Master Server is connected to an input port on the Audio Server.   Once the appropriate audio track(s) are loaded on the Audio Server and the Audio Server is setup to be controlled by input SMPTE timing from Master (via analog audio connections), the audio and video are synchronized via the Master Server.
+					</p>
+					<p>
+						<strong>Note</strong>: Currently, the timing of WWT cannot be controlled by an external SMPTE source, such as a stand-alone SMPTE generator or Audio Server.
+					</p>
+				</div>
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4 class="panel-title">
+					<a data-toggle="collapse" data-parent="#accordion" href="#Oculus">
+						Using Oculus with WWT
+					</a>
+				</h4>
+			</div>
+			<div id="Oculus" class="panel-collapse collapse">
+				<div class="panel-body">
+					<p>WorldWide Telescope (WWT) works with Oculus Rift virtual reality headset as a special stereo mode.  Note, currently WWT supports Oculus Rift Development Kit 1, (Oculus Rift DK1).  You can use this mode by following these steps.  </p>
+					<ol>
+					<li>Make sure you are running WorldWide Telescope 5.0 or later, which is available here: <a href="/Download/">http://www.worldwidetelescope.org/Download/</a>.</li>
+					<li>Connect the Oculus to the computer.</li>
+					<li>Turn the Oculus on. The Oculus will appear as a secondary monitor. If you look through the Oculus without WWT running you should see a desktop similar to what you see if you connected a secondary monitor.</li>
+					<li>Note, you should try to put the Oculus over your eyeglasses.</li>
+					<li>Start WWT.</li>
+					<li>Enable Oculus Rift mode. Open the menu under View and select Stereo/Oculus Rift. See screenshot below.
+						<br/>
+						<img src="@Model.ImgDir/learn/stereo_oculus.jpg" alt="Enable Oculus Rift mode" class="img-responsive img-border"/>
+					</li>
+
+					<li>The scene should be visible in the Oculus. Note the menu items are still on the primary display and the main window in the primary will go blank when outputting to Oculus.</li>
+					<li>You can interact with WWT while wearing the headset.  Since you can’t see the keyboard and menus, it is easier to use an Xbox or MIDI controller.  However, be careful doing fast rotations with the controller, since if the motion is not coordinated with your head rotations, you can induce motion sickness.</li>                     
+					<li>You can also download and play a tour on asteroid impacts which was created by the WWT team specifically for virtual reality.  This tour, called Impacts, and additional information is available here <a href="http://www.worldwidetelescope.org/Planetariums/Impacts">http://www.worldwidetelescope.org/Planetariums/Impacts</a></li>
+					<li>You can create a virtual or physical button (see <a href="/Learn/SettingUp#controllersandbuttons" target="_blank">http://worldwidetelescope.org/Learn/SettingUp#controllersandbuttons</a>) to reset the Oculus Rift view.  The function ResetRiftView is under Navigation/Action.  This can be useful to set the initial orientation of the virtual environment relative the physical orientation of the Rift.</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+	<p>&nbsp;</p>

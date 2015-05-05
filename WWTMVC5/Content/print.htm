@@ -1,0 +1,24 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>WorldWide Telescope</title>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js" type="text/javascript"></script>
+	<link href="/Docs/SDK_style.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript">
+		$(function() {
+			$(document.body).append(opener.pager.setPrintContent());
+			//window.print();? maybe do this automatically and kill the link below?
+		});
+		function doPrint() {
+			$('div').first().css('display', 'none');
+			window.print();
+			$('div').first().css('display', 'block');
+		}
+	</script>
+</head>
+<body>
+	<div>
+		<a href="javascript:doPrint()">Send to printer</a>
+	</div>
+</body>
+</html>

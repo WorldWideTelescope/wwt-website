@@ -1,0 +1,218 @@
+﻿<!DOCTYPE html "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  
+<title>WWT Web Client Click Event</title>
+	
+<script language="javascript">
+
+// Create the WorldWide telescope object
+
+    var wwtView;
+
+// Create variables to hold the changeable settings
+
+	var bShowCrosshairs = true;
+	var bShowUI = true;
+	var bShowFigures = true;
+	var bShowCircles = false;
+	var bShowAlerts = false;
+	
+// A simple function to toggle the settings
+// This function is called from the checkbox entries setup in the html table
+
+	function toggleSetting(text) {
+	    switch (text) {
+	        case 'ShowUI':
+	            bShowUI = !bShowUI;
+	            wwtView.HideUI(!bShowUI);
+	            break;
+
+	        case 'ShowCrosshairs':
+	            bShowCrosshairs = !bShowCrosshairs;
+	            wwtView.Settings.ShowCrosshairs = bShowCrosshairs;
+	            break;
+
+	        case 'ShowFigures':
+	            bShowFigures = !bShowFigures;
+	            wwtView.Settings.ShowConstellationFigures = bShowFigures;
+	            break;
+
+	        case 'ShowCircles':
+	            bShowCircles = !bShowCircles;
+	            break;
+
+	        case 'ShowAlerts':
+	            bShowAlerts = !bShowAlerts;
+	            break;
+	    }
+	}
+
+// A function to change the view to different constellations
+// This function is called from the button entries in the html table
+
+
+	function GotoConstellation(text) {    
+	    
+	    switch (text) {
+	        case 'Sagittarius':
+	            wwtView.Goto(286.485, -27.5231666666667, 60, false);
+	            break;
+
+	        case 'Aquarius':
+	            wwtView.Goto(334.345, -9.21083333333333, 60, false);
+	            break;
+
+	        case 'Camelopardalis':
+	            wwtView.Goto(90.0, 72.000, 100, false);
+	            break;
+
+	        case 'Vulpecula':
+	            wwtView.Goto(303.47, 24.4426666666667, 100, false);
+	            break; 
+	    }
+	}
+	
+	// A function to create a circle, and return a reference to the circle
+
+	function createWWTCircle(fill, lineColor, fillColor, lineWidth, opacity, radius, skyRelative, ra, dec) {
+	    var circle = wwtView.CreateCircle(fill);
+	    circle.LineColor = lineColor;
+	    circle.FillColor = fillColor;
+	    circle.LineWidth = lineWidth;
+	    circle.Opacity = opacity;
+	    circle.Radius = radius;
+	    circle.SkyRelative = skyRelative;
+	    circle.SetCenter(ra, dec);
+	    return circle;
+	}
+
+	// Simple function to clear all the annotations from the view
+
+	function clearAnnotations() {
+	    wwtView.ClearAnnotations();
+	}
+
+	// Function that responds to the mouse click event
+
+	function wwtClick(ra, dec) {
+	    if (bShowCircles) {
+	        var circle1 = createWWTCircle(false, 0x88FF0000, 0x00000000, 4, 1.0, 1, true, ra, dec);
+	        wwtView.AddAnnotation(circle1);
+	    }
+	    if (bShowAlerts){
+            alert("Click at " + ra.toString() + ", " + dec.toString());
+	    }
+	}
+	
+	// The wwtReady function is called by the WWT Web Control software
+	// This function sets up the wwt object, and the initial defaults
+
+	function wwtReady() {
+	    wwtView = document.getElementById("WWTView").content.WWT;
+
+	    wwtView.Settings.ShowCrosshairs = bShowCrosshairs;
+	    wwtView.Settings.ShowConstellationFigures = bShowFigures;
+	    wwtView.HideUI(!bShowUI);
+
+	    wwtView.Settings.ShowConstellationBoundries = true;
+
+	}
+
+</script>
+
+</head>
+
+<body>
+
+<!-- The body section creates a table with two columns. The first contains the -->
+<!-- silverlight object that is the WWT web client. And the second a table within-->
+<!-- the table, containing some buttons and checkboxes.-->
+
+<table border="2" bgcolor="lightgrey">
+	<tr><td>
+        <div id="WorldWideTelescopeControlHost">
+        
+        <object id="WWTView" 
+			data="data:application/x-silverlight," 
+			type="application/x-silverlight-2" 			
+			width="1000" height="800">
+
+<!-- Ensure the source parameter links correctly to the wwtsl.xap file -->
+
+			<param name="source" value="http://www.worldwidetelescope.org/webclient/clientbin/WWTSL.xap"/>
+			<param name="background" value="black" />
+			<param name="minRuntimeVersion" value="3.0.40624.0" />
+			<param name="autoUpgrade" value="true" />
+			<param name="initParams" value="NoUI=false,wtml=,webkey=AX2011Gqqu" />
+		    <param name="enableHtmlAccess" value="true" />
+			<a href="http://go.microsoft.com/fwlink/?LinkID=149156&v=3.0.40624.0">
+     			<img src="http://go.microsoft.com/fwlink/?LinkId=108181" alt="Install Microsoft Silverlight" /></a>
+		</object>
+    </div>
+	</td><td>
+
+	<table border="2" cellspacing="4" cellpadding="4" bgcolor="gold">
+	
+	<tr>
+	<th colspan="2"><h2>WWT Web Client Click Event</h2></th>
+	</tr>
+			
+	<tr>
+	<th colspan = "2"> 
+	<input type="button" id="Sagittarius" value="Goto Sagittarius" onclick="GotoConstellation('Sagittarius')"/>
+	<input type="button" id="Aquarius" value="Goto Aquarius" onclick="GotoConstellation('Aquarius')"/></th>		
+	</tr>
+	<tr>
+	<th colspan = "2"> 
+	<input type="button" id="Camelopardalis" value="Goto Camelopardalis" onclick="GotoConstellation('Camelopardalis')"/>
+	<input type="button" id="Vulpecula" value="Goto Vulpecula" onclick="GotoConstellation('Vulpecula')"/></th>		
+	</tr>
+	<tr>
+	<th colspan = "2">Settings</th>
+	</tr>
+	
+	<tr>
+		<td> Show UI </td>
+		<td> <input id="UI" type="checkbox" checked="checked" onclick="toggleSetting('ShowUI');"/></td>
+
+	</tr>
+	
+	<tr>
+		<td> Show Crosshairs</td>
+		<td> <input id="Crosshairs" type="checkbox" checked="checked" onclick="toggleSetting('ShowCrosshairs');"/></td>
+
+	</tr>
+
+	<tr>
+		<td> Show Figures </td>
+		<td> <input id="Figures" type="checkbox" checked="checked" onclick="toggleSetting('ShowFigures');"/></td>
+
+	</tr>
+	<tr>
+	<th colspan = "2">On Click</th>
+	</tr>
+	<tr>
+		<td> Show circles </td>
+		<td> <input id="circles" type="checkbox" onclick="toggleSetting('ShowCircles');"/></td>
+
+	</tr>
+	<tr>
+		<td> Show Alerts </td>
+		<td> <input id="alerts" type="checkbox" onclick="toggleSetting('ShowAlerts');"/></td>
+
+	</tr>
+		<tr>
+		<td> Clear all the current circles</td>
+		<td> <input id="clear" type="button" value="Clear" onclick="clearAnnotations();"/></td>
+		
+	</tr>
+</table>
+</td>
+</tr>
+</table>
+
+</body>
+</html>

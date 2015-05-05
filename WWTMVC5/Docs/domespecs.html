@@ -1,0 +1,245 @@
+﻿
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1">
+
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  
+<title>WorldWide Telescope Planetarium</title>
+	
+<script type="text/javascript" language="javascript">
+
+    var radiansToDegrees = 57.2957795;
+    var degreesToRadians = 0.0174532925;
+	
+	var six = ["", "1/16", "1/8", "3/16", "1/4", "5/16", "3/8", "7/16", "1/2", "9/16", "5/8", "11/16", "3/4", "13/16", "7/8", "15/16"]; 
+ 
+    function calcX(Y, Z) {
+        var Xsquared = (Z * Z) - (Y * Y);
+        return Math.sqrt(Xsquared);
+    }
+
+    function outputNumber(f) {
+
+        if (document.getElementById("Inches").checked) {
+        // For inches give fraction parts in sixteenths
+            var sixteenths = 1.0 * (0.0312 + f) / 0.0625;
+            var n = Math.floor(sixteenths / 16);
+            var s = Math.floor(sixteenths - (n * 16));
+
+            return n + " " + six[s];
+        } else {
+        // Multiply by 100, remove the fractions, and divide by 100, to get two decimal places
+            var v1 = Math.floor(100 * f);
+            var v2 = v1 / 100;
+
+            return v2;
+        }
+    }
+
+    function outputAngle(a)
+    {
+        var v1 = Math.floor( a * 100 );
+        var v2 = v1 / 100;
+        return v2; 
+    }
+    
+    function CalcDomeSpecs() {
+        var tw = document.getElementById("BaseA").value;
+
+        // Triangle sides
+        document.getElementById("SideA").value = tw;
+        document.getElementById("SideB1").value = tw;
+
+        var bSides = tw * 0.8712;
+        document.getElementById("SideB2").value = outputNumber(bSides);
+
+        // Panels
+
+        var decagonAngle1 = (180 - 144) * degreesToRadians;
+        var tilt = document.getElementById("Tilt").value * degreesToRadians;
+        var lowH = 1.0 * document.getElementById("Height").value;
+
+        document.getElementById("ShortLeft").value = lowH;
+        document.getElementById("ShortRight").value = lowH;
+        document.getElementById("ShortWidth").value = tw;
+
+        var d1 = tw * Math.sin(decagonAngle1);
+        var h1d = d1 * Math.sin(tilt);
+        var h1 = lowH + h1d;
+
+        document.getElementById("Side1Left").value = lowH;
+        document.getElementById("Side1Right").value = outputNumber(h1);
+        document.getElementById("Side1Width").value = outputNumber(calcX(h1d, tw));
+
+        var d2 = tw * Math.sin(2 * decagonAngle1);
+        var h2d = d2 * Math.sin(tilt);
+        var h2 = lowH + h1d + h2d;
+
+        document.getElementById("Side2Left").value = document.getElementById("Side1Right").value;
+        document.getElementById("Side2Right").value = outputNumber(h2);
+        document.getElementById("Side2Width").value = outputNumber(calcX(h2d, tw));
+
+        var h3 = h2 + h2d;
+
+        document.getElementById("Side3Left").value = document.getElementById("Side2Right").value;
+        document.getElementById("Side3Right").value = outputNumber(h3);
+        document.getElementById("Side3Width").value = document.getElementById("Side2Width").value
+
+        var h4 = h3 + h1d;
+
+        document.getElementById("Side4Left").value = document.getElementById("Side3Right").value;
+        document.getElementById("Side4Right").value = outputNumber(h4);
+        document.getElementById("Side4Width").value = document.getElementById("Side1Width").value;
+
+        document.getElementById("TallLeft").value = document.getElementById("Side4Right").value;
+        document.getElementById("TallRight").value = document.getElementById("Side4Right").value;
+        document.getElementById("TallWidth").value = tw;
+        
+        // Calc internal angle A
+        var V1 = tw * Math.sin( degreesToRadians * 36 );
+        var V2 = V1 * Math.cos( tilt );
+        var V3 = V2 / (calcX(h1d, tw));
+        var V4 = Math.acos(V3) * radiansToDegrees;
+        
+        var angleA = 90 + V4;
+        document.getElementById("angleA").value = outputAngle( angleA ) + " ( 2 x " + outputAngle( angleA/2 ) + " )";
+        
+        var V5 = tw * Math.sin( degreesToRadians * 72 );
+        var V6 = V5 * Math.cos( tilt );
+        var V7 = V6 / (calcX(h2d, tw));
+        var V8 = Math.acos(V7) * radiansToDegrees;
+        
+        var angleB = (90 - V4) + 90 + V8;
+        document.getElementById("angleB").value = outputAngle(angleB) + " ( 2 x " + outputAngle( angleB/2 ) + " )";
+        var angleC = 2 * (90 - V8)
+        document.getElementById("angleC").value = outputAngle(angleC) + " ( 2 x " + outputAngle( angleC/2 ) + " )";
+        
+        // Total should add up to 1440: 
+        // document.getElementById("test1").value = outputAngle( 4 * angleA + 4 * angleB + 2 * angleC );
+        
+        var ww = 2 * (tw/2 + (Math.cos(decagonAngle1) * tw) + (Math.cos(decagonAngle1 * 2) * tw));
+        
+        document.getElementById("width").value = outputNumber(ww); 
+        document.getElementById("length").value = outputNumber( 2 * (V2 + V6) );
+    }
+
+
+</script>
+
+</head>
+
+<body>
+    <form id="form1">
+    <div>
+
+<table border="2" bgcolor="lightgrey">
+	<tr><td>
+           <img alt="" height="509" src="PlanetariumImages/FinishedThree.jpg" width="622"/>      
+	</td><td>
+
+	<table border="2" cellspacing="4" cellpadding="4" bgcolor="gold">
+	
+	<tr>
+	<th colspan="4"><h2>WorldWide Telescope Planetarium</h2></th>
+	</tr>
+			
+	<tr>
+	<th colspan = "4">Input</th>
+	</tr>
+	
+	<tr>
+	    <td>Base of triangle A:</td>
+	    <td><input id="BaseA" type="text" value="48"/></td>
+	    <td>Inches (unchecked is metric):</td>
+	    <td><input id="Inches" type="checkbox" checked="checked" /></td>
+
+	</tr>
+		<tr>
+	    <td>Base height of support:</td>
+	    <td><input id="Height" type="text" value="12"/></td>
+	</tr>
+	<tr>
+	    <td>Dome tilt angle:</td>
+	    <td><input id="Tilt" type="text" value="20"/></td>
+	</tr>
+	
+		<tr>
+	<th colspan = "4"> 
+	<input type="button" id="Go" value="Go" onclick="CalcDomeSpecs()"/></th>		
+	</tr>
+	
+		<tr>
+	<th colspan = "4">Specifications</th>
+	</tr>
+		<tr>
+	    <td>Side lengths of triangle A:</td>
+	    <td><input id="SideA" type="text" readonly="readonly"/></td>
+	    </tr>
+			<tr>
+	    <td>Side lengths of triangle B:</td>
+	    <td><input id="SideB1" type="text" readonly="readonly"/></td>
+	    <td><input id="SideB2" type="text" readonly="readonly"/></td>
+	    </tr>
+	    <tr><td>Panel</td><td>Width</td><td>Left Height</td><td>Right Height</td></tr>
+	    <tr><td>1 x short rectangular panel:</td>
+	    <td><input id="ShortWidth" type="text" readonly="readonly"/></td>
+	    <td><input id="ShortLeft" type="text" readonly="readonly"/></td>
+	    <td><input id="ShortRight" type="text" readonly="readonly"/></td>
+	    </tr>
+	    
+	    <tr><td>2 x side panels:</td>
+	    <td><input id="Side1Width" type="text" readonly="readonly"/></td>
+	    <td><input id="Side1Left" type="text" readonly="readonly"/></td>
+	    <td><input id="Side1Right" type="text" readonly="readonly"/></td>
+	    </tr>
+
+	    <tr><td>2 x side panels:</td>
+	    <td><input id="Side2Width" type="text" readonly="readonly"/></td>
+	    <td><input id="Side2Left" type="text" readonly="readonly"/></td>
+	    <td><input id="Side2Right" type="text" readonly="readonly"/></td>
+	    </tr>
+
+	    <tr><td>2 x side panels:</td>
+	    <td><input id="Side3Width" type="text" readonly="readonly"/></td>
+	    <td><input id="Side3Left" type="text" readonly="readonly"/></td>
+	    <td><input id="Side3Right" type="text" readonly="readonly"/></td>
+	    </tr>
+
+	    <tr><td>2 x side panels:</td>
+	    <td><input id="Side4Width" type="text" readonly="readonly"/></td>
+	    <td><input id="Side4Left" type="text" readonly="readonly"/></td>
+	    <td><input id="Side4Right" type="text" readonly="readonly"/></td>
+	    </tr>
+
+	    <tr><td>1 x tall rectangular panel:</td>
+	    <td><input id="TallWidth" type="text" readonly="readonly"/></td>
+	    <td><input id="TallLeft" type="text" readonly="readonly"/></td>
+	    <td><input id="TallRight" type="text" readonly="readonly"/></td>
+	    </tr>
+	    <tr><td>Dome support angles</td><td>A</td><td>B</td><td>C</td></tr>
+	    <tr>
+	    <td>Angle in degrees:</td>
+	    <td><input id="angleA" type="text" readonly="readonly"/></td>
+	    <td><input id="angleB" type="text" readonly="readonly"/></td>
+	    <td><input id="angleC" type="text" readonly="readonly"/></td>
+	    </tr>
+	    <tr>
+	    <td>Dome width:</td>
+	    <td><input id="width" type="text" readonly="readonly" /></td>
+	    </tr>
+    	<tr>
+	    <td>Dome length:</td>
+	    <td><input id="length" type="text" readonly="readonly" /></td>
+	    </tr>
+</table>
+</td>
+</tr>
+</table>
+</div>
+</form>
+
+</body>
+</html>

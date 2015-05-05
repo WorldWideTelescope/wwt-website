@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Sample_WWTWebClientTours.html</title>
+<LINK REL=StyleSheet HREF="..\SDK_style.css" TYPE="text/css" MEDIA=screen>
+</head>
+<body>
+<table class="T1" cellspacing="8" cellpadding="8">
+<tr><td><h5>WWTWebClientTours.html</h5></td></tr>
+<tr><td><span style='font-size:10.0pt;font-family:"Courier New";'>
+&lt;%@&nbsp;Page&nbsp;Language=<span style="color:#A31515;">&quot;C#&quot;</span>&nbsp;AutoEventWireup=<span style="color:#A31515;">&quot;true&quot;</span>&nbsp;CodeBehind=<span style="color:#A31515;">&quot;Default.aspx.cs&quot;</span>&nbsp;Inherits=<span style="color:#A31515;">&quot;WebApplication2._Default&quot;</span>&nbsp;%&gt; <br />
+ <br />
+&lt;!DOCTYPE&nbsp;<span style="color:#2B91AF;">html</span>&nbsp;<span style="color:#A31515;">&quot;-//W3C//DTD&nbsp;XHTML&nbsp;1.0&nbsp;Strict//EN&quot;</span>&nbsp;<span style="color:#A31515;">&quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd&quot;</span>&gt; <br />
+&lt;<span style="color:#2B91AF;">html</span>&nbsp;xmlns=<span style="color:#A31515;">&quot;http://www.w3.org/1999/xhtml&quot;</span>&gt; <br />
+&lt;<span style="color:#2B91AF;">head</span>&gt; <br />
+ <br />
+&lt;meta&nbsp;http-equiv=<span style="color:#A31515;">&quot;content-type&quot;</span>&nbsp;content=<span style="color:#A31515;">&quot;text/html;&nbsp;charset=utf-8&quot;</span>/&gt; <br />
+&nbsp;&nbsp; <br />
+&lt;<span style="color:#2B91AF;">title</span>&gt;WWT&nbsp;Web&nbsp;Client&nbsp;Tours&lt;/<span style="color:#2B91AF;">title</span>&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&lt;<span style="color:#2B91AF;">script</span>&nbsp;type=<span style="color:#A31515;">&quot;text/javascript&quot;</span>&nbsp;language=<span style="color:#A31515;">&quot;javascript&quot;</span>&gt; <br />
+ <br />
+<span style="color:green;">//&nbsp;The&nbsp;WorldWide&nbsp;telescope&nbsp;object</span> <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">var</span>&nbsp;wwtView; <br />
+ <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;loadTour</span> <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">function</span>&nbsp;loadTour(n)&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">switch</span>&nbsp;(n)&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">case</span>&nbsp;1: <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wwtView.LoadTour(<span style="color:#A31515;">&quot;http://www.worldwidetelescope.org/docs/wtml/tourone.wtt&quot;</span>); <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document.getElementById(<span style="color:#A31515;">&quot;playing&quot;</span>).<span style="color:blue;">value</span>&nbsp;=&nbsp;<span style="color:#A31515;">&quot;Playing&nbsp;Tour&nbsp;1&quot;</span>; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">break</span>; <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">case</span>&nbsp;2: <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wwtView.LoadTour(<span style="color:#A31515;">&quot;http://www.worldwidetelescope.org/docs/wtml/tourtwo.wtt&quot;</span>); <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document.getElementById(<span style="color:#A31515;">&quot;playing&quot;</span>).<span style="color:blue;">value</span>&nbsp;=&nbsp;<span style="color:#A31515;">&quot;Playing&nbsp;Tour&nbsp;2&quot;</span>; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">break</span>; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document.getElementById(<span style="color:#A31515;">&quot;tour1&quot;</span>).disabled&nbsp;=&nbsp;<span style="color:blue;">true</span>; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document.getElementById(<span style="color:#A31515;">&quot;tour2&quot;</span>).disabled&nbsp;=&nbsp;<span style="color:blue;">true</span>; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document.getElementById(<span style="color:#A31515;">&quot;restart&quot;</span>).disabled&nbsp;=&nbsp;<span style="color:blue;">false</span>; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document.getElementById(<span style="color:#A31515;">&quot;stop&quot;</span>).disabled&nbsp;=&nbsp;<span style="color:blue;">false</span>; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+ <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;stopTour</span> <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">function</span>&nbsp;stopTour()&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wwtView.StopTour(); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document.getElementById(<span style="color:#A31515;">&quot;tour1&quot;</span>).disabled&nbsp;=&nbsp;<span style="color:blue;">false</span>; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document.getElementById(<span style="color:#A31515;">&quot;tour2&quot;</span>).disabled&nbsp;=&nbsp;<span style="color:blue;">false</span>; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document.getElementById(<span style="color:#A31515;">&quot;restart&quot;</span>).disabled&nbsp;=&nbsp;<span style="color:blue;">true</span>; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document.getElementById(<span style="color:#A31515;">&quot;stop&quot;</span>).disabled&nbsp;=&nbsp;<span style="color:blue;">true</span>; <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document.getElementById(<span style="color:#A31515;">&quot;playing&quot;</span>).<span style="color:blue;">value</span>&nbsp;=&nbsp;<span style="color:#A31515;">&quot;No&nbsp;tour&nbsp;currently&nbsp;playing&quot;</span>; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:green;">//&nbsp;restartTour</span> <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">function</span>&nbsp;restartTour()&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wwtView.PlayTour(); <br />
+&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+&nbsp;&nbsp;&nbsp;&nbsp; <br />
+<span style="color:green;">//&nbsp;The&nbsp;wwtReady&nbsp;function&nbsp;is&nbsp;called&nbsp;by&nbsp;the&nbsp;WWT&nbsp;Web&nbsp;Control&nbsp;software</span> <br />
+<span style="color:green;">//&nbsp;This&nbsp;function&nbsp;sets&nbsp;up&nbsp;the&nbsp;wwt&nbsp;object,&nbsp;and&nbsp;the&nbsp;initial&nbsp;defaults</span> <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">function</span>&nbsp;wwtReady()&nbsp;{ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wwtView&nbsp;=&nbsp;document.getElementById(<span style="color:#A31515;">&quot;WWTView&quot;</span>).content.WWT; <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;} <br />
+ <br />
+&lt;/<span style="color:#2B91AF;">script</span>&gt; <br />
+ <br />
+&lt;/<span style="color:#2B91AF;">head</span>&gt; <br />
+ <br />
+&lt;<span style="color:#2B91AF;">body</span>&gt; <br />
+ <br />
+&lt;!--&nbsp;The&nbsp;<span style="color:#2B91AF;">body</span>&nbsp;section&nbsp;creates&nbsp;a&nbsp;<span style="color:#2B91AF;">table</span>&nbsp;with&nbsp;two&nbsp;columns.&nbsp;The&nbsp;first&nbsp;contains&nbsp;the&nbsp;--&gt; <br />
+&lt;!--&nbsp;silverlight&nbsp;object&nbsp;that&nbsp;is&nbsp;the&nbsp;WWT&nbsp;web&nbsp;client.&nbsp;And&nbsp;the&nbsp;second&nbsp;a&nbsp;<span style="color:#2B91AF;">table</span>&nbsp;within--&gt; <br />
+&lt;!--&nbsp;the&nbsp;<span style="color:#2B91AF;">table</span>,&nbsp;containing&nbsp;some&nbsp;controls.--&gt; <br />
+ <br />
+&lt;<span style="color:#2B91AF;">table</span>&nbsp;border=<span style="color:#A31515;">&quot;2&quot;</span>&nbsp;bgcolor=<span style="color:#A31515;">&quot;lightgrey&quot;</span>&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span style="color:#2B91AF;">tr</span>&gt;&lt;<span style="color:#2B91AF;">td</span>&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div&nbsp;id=<span style="color:#A31515;">&quot;WorldWideTelescopeControlHost&quot;</span>&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;object&nbsp;id=<span style="color:#A31515;">&quot;WWTView&quot;</span>&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data=<span style="color:#A31515;">&quot;data:application/x-silverlight,&quot;</span>&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type=<span style="color:#A31515;">&quot;application/x-silverlight-2&quot;</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;width=<span style="color:#A31515;">&quot;1400&quot;</span>&nbsp;height=<span style="color:#A31515;">&quot;1000&quot;</span>&gt; <br />
+ <br />
+&lt;!--&nbsp;Ensure&nbsp;the&nbsp;source&nbsp;parameter&nbsp;links&nbsp;correctly&nbsp;to&nbsp;the&nbsp;wwtsl.xap&nbsp;file&nbsp;--&gt; <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;param&nbsp;<span style="color:blue;">name</span>=<span style="color:#A31515;">&quot;source&quot;</span>&nbsp;<span style="color:blue;">value</span>=<span style="color:#A31515;">&quot;http://www.worldwidetelescope.org/webclient/clientbin/WWTSL.xap&quot;</span>/&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;param&nbsp;<span style="color:blue;">name</span>=<span style="color:#A31515;">&quot;background&quot;</span>&nbsp;<span style="color:blue;">value</span>=<span style="color:#A31515;">&quot;black&quot;</span>&nbsp;/&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;param&nbsp;<span style="color:blue;">name</span>=<span style="color:#A31515;">&quot;minRuntimeVersion&quot;</span>&nbsp;<span style="color:blue;">value</span>=<span style="color:#A31515;">&quot;3.0.40624.0&quot;</span>&nbsp;/&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;param&nbsp;<span style="color:blue;">name</span>=<span style="color:#A31515;">&quot;autoUpgrade&quot;</span>&nbsp;<span style="color:blue;">value</span>=<span style="color:#A31515;">&quot;true&quot;</span>&nbsp;/&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;param&nbsp;<span style="color:blue;">name</span>=<span style="color:#A31515;">&quot;initParams&quot;</span>&nbsp;<span style="color:blue;">value</span>=<span style="color:#A31515;">&quot;NoUI=false,wtml=,webkey=AX2011Gqqu&quot;</span>&nbsp;/&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;param&nbsp;<span style="color:blue;">name</span>=<span style="color:#A31515;">&quot;enableHtmlAccess&quot;</span>&nbsp;<span style="color:blue;">value</span>=<span style="color:#A31515;">&quot;true&quot;</span>&nbsp;/&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;a&nbsp;href=<span style="color:#A31515;">&quot;http://go.microsoft.com/fwlink/?LinkID=149156&v=3.0.40624.0&quot;</span>&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;img&nbsp;src=<span style="color:#A31515;">&quot;http://go.microsoft.com/fwlink/?LinkId=108181&quot;</span>&nbsp;alt=<span style="color:#A31515;">&quot;Install&nbsp;Microsoft&nbsp;Silverlight&quot;</span>&nbsp;/&gt;&lt;/a&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/object&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/<span style="color:#2B91AF;">td</span>&gt;&lt;<span style="color:#2B91AF;">td</span>&gt; <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span style="color:#2B91AF;">table</span>&nbsp;border=<span style="color:#A31515;">&quot;2&quot;</span>&nbsp;cellspacing=<span style="color:#A31515;">&quot;4&quot;</span>&nbsp;cellpadding=<span style="color:#A31515;">&quot;4&quot;</span>&nbsp;bgcolor=<span style="color:#A31515;">&quot;gold&quot;</span>&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span style="color:#2B91AF;">tr</span>&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span style="color:#2B91AF;">th</span>&gt;&lt;h2&gt;Sample&nbsp;WWT&nbsp;Web&nbsp;Client&nbsp;Tours&lt;/h2&gt;&lt;/<span style="color:#2B91AF;">th</span>&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/<span style="color:#2B91AF;">tr</span>&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span style="color:#2B91AF;">tr</span>&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span style="color:#2B91AF;">th</span>&gt;&lt;input&nbsp;id=<span style="color:#A31515;">&quot;tour1&quot;</span>&nbsp;type=<span style="color:#A31515;">&quot;button&quot;</span>&nbsp;<span style="color:blue;">value</span>=<span style="color:#A31515;">&quot;Load&nbsp;Tour&nbsp;1&quot;</span>&nbsp;onclick=<span style="color:#A31515;">&quot;loadTour(1);&quot;</span>/&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;input&nbsp;id=<span style="color:#A31515;">&quot;tour2&quot;</span>&nbsp;type=<span style="color:#A31515;">&quot;button&quot;</span>&nbsp;<span style="color:blue;">value</span>=<span style="color:#A31515;">&quot;Load&nbsp;Tour&nbsp;2&quot;</span>&nbsp;onclick=<span style="color:#A31515;">&quot;loadTour(2);&quot;</span>/&gt;&lt;/<span style="color:#2B91AF;">th</span>&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/<span style="color:#2B91AF;">tr</span>&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span style="color:#2B91AF;">tr</span>&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span style="color:#2B91AF;">th</span>&gt;&lt;input&nbsp;id=<span style="color:#A31515;">&quot;playing&quot;</span>&nbsp;type=<span style="color:#A31515;">&quot;text&quot;</span>&nbsp;<span style="color:blue;">value</span>=<span style="color:#A31515;">&quot;No&nbsp;tour&nbsp;currently&nbsp;playing&quot;</span>&nbsp;/&gt;&lt;/<span style="color:#2B91AF;">th</span>&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/<span style="color:#2B91AF;">tr</span>&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span style="color:#2B91AF;">tr</span>&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span style="color:#2B91AF;">th</span>&gt;&lt;input&nbsp;id=<span style="color:#A31515;">&quot;restart&quot;</span>&nbsp;type=<span style="color:#A31515;">&quot;button&quot;</span>&nbsp;<span style="color:blue;">value</span>=<span style="color:#A31515;">&quot;Restart&quot;</span>&nbsp;disabled=<span style="color:#A31515;">&quot;disabled&quot;</span>&nbsp;onclick=<span style="color:#A31515;">&quot;restartTour();&quot;</span>/&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input&nbsp;id=<span style="color:#A31515;">&quot;stop&quot;</span>&nbsp;&nbsp;&nbsp;&nbsp;type=<span style="color:#A31515;">&quot;button&quot;</span>&nbsp;<span style="color:blue;">value</span>=<span style="color:#A31515;">&quot;Stop&quot;</span>&nbsp;&nbsp;&nbsp;&nbsp;disabled=<span style="color:#A31515;">&quot;disabled&quot;</span>&nbsp;onclick=<span style="color:#A31515;">&quot;stopTour();&quot;</span>/&gt;&lt;/<span style="color:#2B91AF;">th</span>&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/<span style="color:#2B91AF;">tr</span>&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&lt;/<span style="color:#2B91AF;">table</span>&gt; <br />
+&lt;/<span style="color:#2B91AF;">td</span>&gt; <br />
+&lt;/<span style="color:#2B91AF;">tr</span>&gt; <br />
+&lt;/<span style="color:#2B91AF;">table</span>&gt; <br />
+ <br />
+&lt;/<span style="color:#2B91AF;">body</span>&gt; <br />
+&lt;/<span style="color:#2B91AF;">html</span>&gt; <br />
+</span></td></tr></table>
+<br /><img src="..\cpy1.jpg"/>
+</body></html>

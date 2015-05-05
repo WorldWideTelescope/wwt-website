@@ -1,0 +1,110 @@
+﻿@{
+	ViewBag.Title = "Planck";
+	ViewBag.HideTranslateWidget = true;
+	Layout = "~/Views/Shared/_ContentPage.cshtml";
+}
+@section leftnav{
+	<li><a href="#">(secret page)</a></li>
+}
+
+<h2>Planck Embedded Control Demo</h2>
+
+<div id="wwtControl"
+	 data-wtml="http://thewebkid.com/planck.azure.wtml"
+	 data-display="Cross fade"
+	 data-settings="figures=false,galacticPlaneMode=true,galacticGrid=true"
+	 data-aspect-ratio="8:5"></div>
+<script src="http://www.worldwidetelescope.org/embedded-webcontrol.js"></script>
+
+<script>
+	/* runtime api = 
+
+	wwt.importImage(url) [must be avm tagged]
+	wwt.showCrosshairs(bool)
+	wwt.showEcliptic(bool)
+	wwt.showEclipticGrid(bool)
+	wwt.showAltAzGrid(bool)
+	wwt.showGalacticGrid(bool)
+	wwt.showEquatorialGrid(bool)
+	wwt.showFigures(bool)
+	wwt.showBoundaries(bool)
+	wwt.showPictures(bool)
+	wwt.galacticPlaneMode(bool)
+
+	*/
+	$(function() {
+		$('label[setting]').on('click change', function() {
+			ewwt[$(this).attr('setting')]($(this).find('input').prop('checked'));
+		});
+	});
+</script>
+<style>
+	label {
+		font-weight: normal;
+	}
+</style>
+<p>
+	Settings:
+	<ul style="list-style:none">
+		<li>
+			<label setting="showCrosshairs">
+				<input type="checkbox" checked="checked" />
+				Show crosshairs
+			</label>
+
+		</li>
+		<li>
+			<label setting="showEcliptic">
+				<input type="checkbox" />
+				Show ecliptic overview
+			</label>
+
+		</li>
+		<li>
+			<label setting="showEclipticGrid">
+				<input type="checkbox" />
+				Show ecliptic grid
+			</label>
+
+		</li>
+		<li>
+			<label setting="showAltAzGrid">
+				<input type="checkbox" />
+				Show alt/az grid
+			</label>
+		</li>
+		<li>
+			<label setting="showGalacticGrid">
+				<input type="checkbox" checked="checked" />
+				Show galactic grid
+			</label>
+		</li>
+		<li>
+			<label setting="showEquatorialGrid">
+				<input type="checkbox" />
+				Show equatorial grid
+			</label>
+		</li>
+
+		<li>
+			<label setting="showFigures">
+				<input type="checkbox" />
+				Show constellation figures
+			</label>
+
+		</li>
+		<li>
+			<label setting="showPictures">
+				<input type="checkbox" />
+				Show constellation pictures
+			</label>
+		</li>
+		<li>
+			<label setting="galacticPlaneMode">
+				<input type="checkbox" checked="checked" />
+				Galactic Plane Mode
+			</label>
+
+		</li>
+	</ul>
+</p>

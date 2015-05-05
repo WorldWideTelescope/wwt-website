@@ -1,0 +1,25 @@
+﻿@{
+	Layout = "~/Views/Shared/_ContentPage.cshtml";
+}
+@section leftnav{
+	<li class="active"><a href="javascript:void(0)">Eyewire</a></li>
+}
+
+<script>
+	$(function () {
+		var aspect = 780 / 1280;
+		var resize = function() {
+			$('iframe').height($('iframe').width() * aspect);
+		};
+		$(window).on('resize', resize);
+		resize();
+	});
+	
+</script>
+<h1>WorldWide Telescope and MIT's EyeWire celebrate at TED2014 "The Next Chapter" with an interactive exhibit.</h1>
+<p>This video provides a view into the <a href="http://conferences.ted.com/TED2014/" target="ted">TED2014 Vancouver</a> exhibit from The Seung Lab at MIT and WorldWide Telescope: an immersive 360-degree virtual reality lets you explore spaces across the universe and down to the nanometer scale with Oculus Rift glasses and on large screens.</p>
+<p><iframe width="100%" src="//www.youtube.com/embed/qTKVeNokPrM" frameborder="0" allowfullscreen></iframe></p>
+<p>Navigate the neurons that send visual sensations to the eye and see the Earth and the International Space Station in WorldWide Telescope.</p>
+<p>Learn more about <a href="http://blog.eyewire.org/" target="eyewire">MIT’s Eyewire project</a>, which is advancing neuroscience by helping researchers discover how neurons connect and network to process information.</p>
+<p>Learn how <a href="/Learn/SettingUp#Oculus">WWT works with Oculus Rift</a> virtual reality headsets as a special stereo mode.</p>
+ 

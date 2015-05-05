@@ -1,0 +1,149 @@
+﻿<h1>Edit Content</h1>
+<div class="row">
+    <div class="col-md-3">
+        <div class="radio iblock">
+            <label>
+                <input type="radio" name="type" value="file" ng-model="content.type" ng-change="typeChange()" />
+                File
+            </label>
+        </div>
+        &nbsp;
+        <div class="radio iblock">
+            <label>
+                <input type="radio" name="type" value="link" ng-model="content.type" ng-change="typeChange()" />
+                Link
+            </label>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div>
+            <strong>&nbsp;</strong>
+        </div>
+        <div class="form-group form-group-sm">
+            <input ng-show="content.IsLink" ng-model="content.ContentUrl"
+                   type="url" class="form-control"
+                   placeholder="Link Url" />
+
+            <span class="btn btn-info btn-file btn-sm" ng-show="!content.IsLink">
+                Choose File...
+                <input type="file" nv-file-select uploader="contentuploader" />
+            </span>&nbsp;<span ng-if="content.ContentFileName && content.ContentFileName.length">({{content.ContentFileName}})</span>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div>
+            <strong>Community</strong>
+        </div>
+        <select style="max-width: 100%" ng-model="content.ParentID" id="lstCommunity" ng-options="c.Text for c in communities track by c.Value" ng-change="updateCommunity()"></select>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-3">
+        <div class="form-group form-group-sm">
+            <div>
+                <strong>Category</strong>
+            </div>
+            <select ng-model="CategoryName" id="lstCategory" ng-options="c.name for c in types.categoryValues" ng-change="updateCategory()"></select>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="form-group form-group-sm">
+            <div>
+                <strong>Name</strong>
+            </div>
+            <input ng-model="content.FileName"
+                   class="form-control"
+                   placeholder="Friendly File Name"
+                   data-toggle="tooltip"
+                   data-original-title="Provide a friendly name for the file or link" />
+
+
+        </div>
+    </div>
+</div>
+
+
+
+<h4>Visibility</h4>
+<div class="form-group form-group-sm">
+    <div class="radio">
+        <label>
+            <input type="radio" name="vis" value="2" ng-model="content.AccessTypeID" />
+            Public (Visible and accessible to all users, including unregistered users)
+        </label>
+    </div>
+
+    <div class="radio">
+        <label>
+            <input type="radio" name="vis" value="1" ng-model="content.AccessTypeID" />
+            Private (Visible and accessible only to a set of users that you have explicitly provided permissions to)
+        </label>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+
+        <div class="form-group form-group-sm">
+            <div>
+                <strong>Description</strong>
+            </div>
+            <textarea style="height:77px" rows="4" class="form-control" ng-model="content.Description"
+                      placeholder="Describe this content" data-toggle="tooltip"
+                      data-original-title="Enter a description of the content you are publishing..."></textarea>
+            <div class="form-group form-group-sm">
+                <div>
+                    <strong>Tags</strong>
+                </div>
+                <input ng-model="content.Tags"
+                       class="form-control"
+                       placeholder="Tags (separated by commas)"
+                       data-toggle="tooltip"
+                       data-original-title="Tags enable your content to be found using keywords. Provide as many tags (comma separated) as required to ensure your content is more discoverable." />
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+
+        <div class="form-group form-group-sm">
+            <div>
+                <strong>Author</strong>
+            </div>
+            <textarea style="height:42px" rows="2" class="form-control" ng-model="content.DistributedBy"
+                      placeholder="Author" data-toggle="tooltip"
+                      data-original-title="Enter details about the author"></textarea>
+        </div>
+        <div class="form-group form-group-sm" style="margin-top:20px">
+            <div>
+                <strong>Citation</strong>
+            </div>
+            <textarea style="height:42px" class="form-control" ng-model="content.Citation"
+                      placeholder="Citation" data-toggle="tooltip"
+                      data-original-title="Provide citation information, for example: Data provided / analyzed by ... { last =  , first =  , … etc} (Wikipedia-style citation)
+URL / website"></textarea>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="form-group">
+
+    <img ng-show="!content.ThumbnailID" class="pull-right" ng-src="/content/images/defaultDocthumbnail.png" />
+    <img ng-show="content.ThumbnailID" class="pull-right" ng-src="/file/TemporaryFile/{{content.ThumbnailID}}" />
+    <div>
+        <strong>Thumbnail</strong>
+    </div>
+    <span class="btn btn-primary btn-file">
+        Choose Thumbnail...
+        <input type="file" nv-file-select uploader="thumbuploader" />
+    </span>
+
+
+</div>
+<div class="clearfix"></div>
+<hr />
+<div class="pull-right iblock">
+    <a class="btn btn-info btn-sm" ng-click="publishContent()">Publish</a>
+    <a class="btn btn-primary btn-sm" href="#/MyProfile">Cancel</a>
+</div>
+<div class="clearfix"></div>

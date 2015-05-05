@@ -1,0 +1,149 @@
+@{
+	Layout = "~/Views/Shared/_ContentPage.cshtml";
+}
+@section leftnav{
+	@Html.Partial("~/Views/Support/LeftNav.cshtml")
+}
+
+<link href="@Model.CssDir/bootstrapValidator.css" rel="stylesheet" />
+<script src="@Model.JsDir/ext/bootstrapValidator.js"></script>
+<h1>Issues, Bugs and Support for WorldWide Telescope</h1> 
+
+
+	<p>Support for WorldWide Telescope is provided through our support forum <a class="reg" href="http://social.microsoft.com/Forums/en-US/worldwidetelescope">http://social.microsoft.com/Forums/en-US/worldwidetelescope</a>.<br><br> To find troubleshooting help please visit the WWT forum. To submit a suggestion via this page, provide your contact name and e-mail address (optional) in case we need to send you a response. Links to solutions for specific issues: </p>
+	<p>If you are having trouble installing or running the Windows® client version of WorldWide Telescope, you can use the WorldWide Telescope Web Client. The WorldWide Telescope Web Client beta version, which has a subset of the features in the full Windows version, but doesn’t require an application install and may run on systems that don't meet the system requirements for the Windows Client.</p>
+	<p>Because of the high volume we can't answer all e-mail personally. Please check the forums above to get the fastest asnwers to your questions.
+	So that we may better assist you, provide as many details as possible about the problem (all fields required) </p>
+	<form id="report">
+
+		<h3>Issue Form</h3>
+		<div class="form-group row">
+			<div class="col-md-8">
+				<label for="fullName" class="control-label">Full Name</label>
+				<div class="rel fa0">
+					<input type="text" placeholder="Full Name" class="form-control" name="fullName" />
+				</div>
+			</div>
+			
+		</div>
+		<div class="form-group row">
+			<div class="col-md-8">
+				<label for="email" class="control-label">Email Address</label>
+				<div class="rel fa0">
+					<input type="text" placeholder="Email Address" class="form-control" name="email" />
+				</div>
+			</div>
+		</div> 
+		<div class="form-group row">
+			<div class="col-md-8">
+				<label for="issueType" class="control-label">Issue Type</label>
+				<div class="rel">
+					<select name="issueType" class="form-control">
+						<option value="">[select]</option>
+						<option value="GeneralComment">General Comment</option>
+						<option value="Suggestion">Suggestion</option>
+						<option value="WindowsClientBug">Windows Client Bug</option>
+						<option value="WebClientBugPC">Web Client Bug - PC</option>
+						<option value="WebClientBugMac">Web Client Bug - Mac</option>
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-md-8">
+				<label for="comments" class="control-label">Comments</label>
+				<div class="rel fa0">
+					<textarea placeholder="Describe your issue in detail" class="form-control" name="comments"></textarea>
+				</div>
+				<div>(Be specific when describing the issue. The details that you include enable us to quickly identify the problem and its solution. Include your platform, operating system, browser and hardware you have such as processor, RAM and graphics card.)</div>
+			</div>
+		</div> 
+		<div class="form-group row">
+			<div class="col-md-8">
+				<button type="submit" class="btn btn-primary pull-right" id="btnSend">Send</button>
+			</div>
+		</div>
+	</form>
+	
+	
+	
+	
+	
+	<div id="confirmation" class="hide">
+
+		<p>An issue report has been filed.</p>
+		<p>Thank you for sending your feedback.</p>
+
+	</div>
+<script>
+	$(function () {
+
+		var reqField = function (msg) {
+			return {
+				validators: {
+					notEmpty: {
+						message: msg
+					}
+				}
+			}
+		}
+
+		$(window).on('initIssueForm', function () {
+			$('#report').bootstrapValidator({
+				excluded: ['specifics'],
+				fields: {
+					fullName: reqField('Please tell us your full name'),
+					email: {
+						validators: {
+							emailAddress: {
+								message: 'Enter a valid email address'
+							},
+							notEmpty:{message:'Please enter your email address'}
+						}
+					},
+					issueType: reqField('Select an issue type'),
+					comments: reqField('Please describe the issue')
+				},
+				//live: 'enabled',
+				message: 'invalid value',
+				submitButtons: '#btnSend',
+				submitHandler: function (validator, form) {
+					var data = {};
+					form.find('*[name]').each(function () {
+						data[$(this).attr('name')] = $(this).val();
+						//console.log($(this).attr('name'));
+					});
+					$.ajax({
+						url: '/Ashx/IssuesAndBugs.ashx',
+						data: data,
+						success: function (response, status, xhr) {
+							if (xhr.status == 200) {
+								$('#confirmation').removeClass('hide');
+								form.remove();
+								wwt.triggerResize();
+							}
+						}
+					});
+					return false;
+				},
+				trigger: null
+			});
+		});
+		$(window).trigger('initIssueForm');
+
+	});
+</script>
+<style>
+	.has-feedback i.fa {
+		top: 0;
+		right: 15px;
+	}
+
+	.has-feedback .fa0 i.fa {
+		right: 0;
+	}
+
+	.control-label.optional {
+		font-weight: 100;
+	}
+</style>

@@ -1,0 +1,186 @@
+﻿<!DOCTYPE html "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  
+<title>WWT Web Client Fov</title>
+	
+<script type="text/jscript">
+
+// Create the WorldWide telescope object
+
+    var wwtView;
+
+// Create variables to hold the changeable settings
+
+	var bShowCrosshairs = true;
+	var bShowUI = true;
+	var bShowFigures = true;
+
+
+	function FovInc() {
+	    var newFov = 1.1 * wwtView.Fov;
+	    if (newFov <= 60) {
+	        wwtView.Goto(wwtView.GetRA(), wwtView.GetDec(), newFov, false);
+	    }
+	}
+
+	function FovDec() {
+	    var newFov = wwtView.Fov / 1.1;
+	    if (wwtView.Fov >= 0.001373291015625) {
+	        wwtView.Goto(wwtView.GetRA(), wwtView.GetDec(), newFov, false);
+	    }
+	}
+
+	function showFov() {
+	    document.getElementById("currentfov").value = wwtView.Fov;
+	}
+
+	function wwtArrived() {
+	    showFov();
+	}
+	
+// A simple function to toggle the settings
+// This function is called from the checkbox entries setup in the html table
+
+	function toggleSetting(text) {
+	    switch (text) {
+	        case 'ShowUI':
+	            bShowUI = !bShowUI;
+	            wwtView.HideUI(!bShowUI);
+	            break;
+
+	        case 'ShowCrosshairs':
+	            bShowCrosshairs = !bShowCrosshairs;
+	            wwtView.Settings.ShowCrosshairs = bShowCrosshairs;
+	            break;
+
+	        case 'ShowFigures':
+	            bShowFigures = !bShowFigures;
+	            wwtView.Settings.ShowConstellationFigures = bShowFigures;
+	            break;
+	    }
+	}
+
+// A function to change the view to different constellations
+// This function is called from the button entries in the html table
+
+
+	function GotoConstellation(text) {
+   
+	    switch (text) {
+	        case 'Sagittarius':
+	            wwtView.Goto(19.099, -27.5231666666667, wwtView.Fov, false);
+	            break;
+
+	        case 'Aquarius':
+	            wwtView.Goto(22.2896666666667, -9.21083333333333, wwtView.Fov, false);
+	            break;
+	    }
+	}
+
+// The wwtReady function is called by the WWT Web Control software
+// This function sets up the wwt object, and the initial defaults
+
+	function wwtReady() {
+	    wwtView = document.getElementById("WWTView").content.WWT;
+
+	    wwtView.Settings.ShowCrosshairs = bShowCrosshairs;
+	    wwtView.Settings.ShowConstellationFigures = bShowFigures;
+	    wwtView.HideUI(!bShowUI);
+
+	    wwtView.Settings.ShowConstellationBoundries = true;
+
+	    showFov();
+	}
+
+</script>
+
+</head>
+
+<body>
+
+<!-- The body section creates a table with two columns. The first contains the -->
+<!-- silverlight object that is the WWT web client. And the second a table within-->
+<!-- the table, containing some buttons and checkboxes.-->
+
+<table border="2" bgcolor="lightgrey">
+	<tr><td>
+        <div id="WorldWideTelescopeControlHost">
+        
+        <object id="WWTView" 
+			data="data:application/x-silverlight," 
+			type="application/x-silverlight-2" 			
+			width="1000" height="800">
+
+<!-- Ensure the source parameter links correctly to the wwtsl.xap file -->
+
+			<param name="source" value="http://www.worldwidetelescope.org/webclient/WWTSL.xap"/>
+			<param name="background" value="black" />
+			<param name="minRuntimeVersion" value="2.0.31005.0" />
+			<param name="autoUpgrade" value="true" />
+			<param name="initParams" value="NoUI=false,wtml=,webkey=AX2011Gqqu" />
+		    <param name="enableHtmlAccess" value="true" />
+			<a href="http://go.microsoft.com/fwlink/?LinkID=124807">
+     			<img src="http://go.microsoft.com/fwlink/?LinkId=108181" alt="Install Microsoft Silverlight" /></a>
+		</object>
+    </div>
+	</td><td>
+
+	<table border="2" cellspacing="4" cellpadding="4" bgcolor="gold">
+	
+	<tr>
+	<th colspan="2"><h2>WWT Web Client Fov</h2></th>
+	</tr>
+			
+	<tr>
+	<th colspan = "2"> 
+	<input type="button" id="Sagittarius" value="Goto Sagittarius" onclick="GotoConstellation('Sagittarius')"/>
+	<input type="button" id="Aquarius" value="Goto Aquarius" onclick="GotoConstellation('Aquarius')"/></th>		
+	</tr>
+
+	<tr>
+	<th colspan = "2">Settings</th>
+	</tr>
+	
+	<tr>
+		<td> Show UI </td>
+		<td> <input id="UI" type="checkbox" checked="checked" onclick="toggleSetting('ShowUI');"/></td>
+
+	</tr>
+	
+	<tr>
+		<td> Show Crosshairs</td>
+		<td> <input id="Crosshairs" type="checkbox" checked="checked" onclick="toggleSetting('ShowCrosshairs');"/></td>
+
+	</tr>
+
+	<tr>
+		<td> Show Figures </td>
+		<td> <input id="Figures" type="checkbox" checked="checked" onclick="toggleSetting('ShowFigures');"/></td>
+
+	</tr>
+	
+		<tr>
+	<th colspan = "2">Field of View</th>
+	</tr>
+	
+		<tr>
+		<td>Current value: </td>
+		<td> <input id="currentfov" type="text" value="~"/></td>
+	</tr>
+	
+	<tr>
+	<th colspan = "2"> 
+	<input type="button" id="inc" value="Inc Fov" onclick="FovInc()"/>
+	<input type="button" id="dec" value="Dec Fov" onclick="FovDec()"/></th>		
+	</tr>
+
+</table>
+</td>
+</tr>
+</table>
+
+</body>
+</html>

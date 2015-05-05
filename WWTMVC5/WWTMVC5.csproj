@@ -1,0 +1,1511 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{53EB6FD6-9D50-45D4-9987-328A7AE53E2C}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WWTMVC5</RootNamespace>
+    <AssemblyName>WWTMVC5</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>false</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <TargetFrameworkProfile />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <WcfConfigValidationEnabled>True</WcfConfigValidationEnabled>
+    <NuGetPackageImportStamp>d94d85e8</NuGetPackageImportStamp>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <UseGlobalApplicationHostFile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutoMapper">
+      <HintPath>..\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.IdentityModel.6.1.7600.16394\lib\net35\Microsoft.IdentityModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Live.Web">
+      <HintPath>..\packages\LiveSDKServer.5.6\lib\net45\Microsoft.Live.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity">
+      <HintPath>..\packages\Unity.3.5.1404.0\lib\net45\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Mvc">
+      <HintPath>..\packages\Unity.Mvc.3.5.1404.0\lib\net45\Microsoft.Practices.Unity.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.ServiceRuntime, Version=2.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.StorageClient">
+      <HintPath>..\EarthOnline\Packages\WindowsAzure.StorageClient.1.0.0.0\lib\Microsoft.WindowsAzure.StorageClient.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp, Version=105.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\RestSharp.105.0.1\lib\net4\RestSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IdentityModel">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IdentityModel.Services">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Runtime.Serialization">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ServiceModel">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ServiceModel.Web">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Abstractions">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Routing">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Configuration">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\WebActivatorEx.2.0.6\lib\net40\WebActivatorEx.dll</HintPath>
+    </Reference>
+    <Reference Include="Wurfl, Version=1.6.0.1, Culture=neutral, PublicKeyToken=816aeec277aa13b9, processorArchitecture=MSIL">
+      <HintPath>..\packages\WURFL_Official_API.1.6.0.1\lib\Wurfl.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Wurfl.Aspnet.Extensions, Version=1.6.0.1, Culture=neutral, PublicKeyToken=816aeec277aa13b9, processorArchitecture=MSIL">
+      <HintPath>..\packages\WURFL_Official_API.1.6.0.1\lib\Wurfl.Aspnet.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\SessionAuthenticationConfig.cs" />
+    <Compile Include="App_Start\UnityConfig.cs" />
+    <Compile Include="App_Start\UnityMvcActivator.cs" />
+    <Compile Include="AutoMapperSettings.cs" />
+    <Compile Include="ConfigReader.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\AssetController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\CategoryController.cs" />
+    <Compile Include="Controllers\CommentController.cs" />
+    <Compile Include="Controllers\CommunityController.cs" />
+    <Compile Include="Controllers\ContentController.cs" />
+    <Compile Include="Controllers\ControllerBase.cs" />
+    <Compile Include="Controllers\DefaultController.cs" />
+    <Compile Include="Controllers\EntityController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\FileController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\OffensiveController.cs" />
+    <Compile Include="Controllers\ProfileController.cs" />
+    <Compile Include="Controllers\RatingController.cs" />
+    <Compile Include="Controllers\ResourcesController.cs" />
+    <Compile Include="Controllers\SearchController.cs" />
+    <Compile Include="Controllers\SitemapController.cs" />
+    <Compile Include="Controllers\SocialSharingController.cs" />
+    <Compile Include="Controllers\StaticContentController.cs" />
+    <Compile Include="Extensions\BitmapExtensions.cs" />
+    <Compile Include="Extensions\CommunityExtensions.cs" />
+    <Compile Include="Extensions\ContentDetailsExtensions.cs" />
+    <Compile Include="Extensions\ContentExtensions.cs" />
+    <Compile Include="Extensions\ContentInputViewModelExtensions.cs" />
+    <Compile Include="Extensions\ContentViewModelExtensions.cs" />
+    <Compile Include="Extensions\DataDetailExtensions.cs" />
+    <Compile Include="Extensions\DateTimeExtensions.cs" />
+    <Compile Include="Extensions\DeepZoomViewModelExtensions.cs" />
+    <Compile Include="Extensions\DoubleExtensions.cs" />
+    <Compile Include="Extensions\EntityDetailsExtensions.cs" />
+    <Compile Include="Extensions\EntityViewModelExtensions.cs" />
+    <Compile Include="Extensions\EnumExtensions.cs" />
+    <Compile Include="Extensions\FileDetailExtensions.cs" />
+    <Compile Include="Extensions\HttpRequestBaseExtensions.cs" />
+    <Compile Include="Extensions\ObjectExtensions.cs" />
+    <Compile Include="Extensions\PayloadDetailsExtensions.cs" />
+    <Compile Include="Extensions\PivotCollectionActionExtensions.cs" />
+    <Compile Include="Extensions\ProfileDetailsExtensions.cs" />
+    <Compile Include="Extensions\SerializerExtensions.cs" />
+    <Compile Include="Extensions\StreamExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Extensions\UriExtensions.cs" />
+    <Compile Include="Extensions\UserExtensions.cs" />
+    <Compile Include="Extensions\XmlDocumentExtensions.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Models\AccessType.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AdminEntityDetails.cs" />
+    <Compile Include="Models\AdminEntityDetailsList.cs" />
+    <Compile Include="Models\AdminReportProfileDetails.cs" />
+    <Compile Include="Models\AdminReportProfileDetailsList.cs" />
+    <Compile Include="Models\AdminUserDetails.cs" />
+    <Compile Include="Models\AdminUserDetailsList.cs" />
+    <Compile Include="Models\AllCommunitiesView.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AllContentsView.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\BaseModel.cs" />
+    <Compile Include="Models\BlobDetails.cs" />
+    <Compile Include="Models\Category.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CommentDetails.cs" />
+    <Compile Include="Models\CommentFilter.cs" />
+    <Compile Include="Models\CommunitiesView.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Community.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CommunityComments.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CommunityContents.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CommunityDetails.cs" />
+    <Compile Include="Models\CommunityRatings.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CommunityRelation.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CommunityTags.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CommunityType.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Content.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ContentComments.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ContentDetails.cs" />
+    <Compile Include="Models\ContentRatings.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ContentRelation.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ContentRelationshipType.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ContentsView.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ContentTags.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ContentType.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DataDetail.cs" />
+    <Compile Include="Models\DeepZoomItem.cs" />
+    <Compile Include="Models\DownloadDetails.cs" />
+    <Compile Include="Models\EarthOnline.Context1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EarthOnline.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\EarthOnline1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\EarthOnline1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EarthOnline.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\EntityAdminActionRequest.cs" />
+    <Compile Include="Models\EntityCommentRequest.cs" />
+    <Compile Include="Models\EntityDetails.cs" />
+    <Compile Include="Models\EntityHighlightFilter.cs" />
+    <Compile Include="Models\Enum.cs" />
+    <Compile Include="Models\FacetCategory.cs" />
+    <Compile Include="Models\FacetType.cs" />
+    <Compile Include="Models\FeaturedCommunities.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FeaturedCommunitiesView.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FeaturedContents.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FeaturedContentsView.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FileDetail.cs" />
+    <Compile Include="Models\FlaggedRequest.cs" />
+    <Compile Include="Models\InviteRequest.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\InviteRequestContent.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\InviteRequestItem.cs" />
+    <Compile Include="Models\InviteRequestsView.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\JoinCommunityRequest.cs" />
+    <Compile Include="Models\LinkDetail.cs" />
+    <Compile Include="Models\MessagePayload.cs" />
+    <Compile Include="Models\ModeratorPermissionStatusRequest.cs" />
+    <Compile Include="Models\NewEntityRequest.cs" />
+    <Compile Include="Models\NotifyInviteRequest.cs" />
+    <Compile Include="Models\OffenceType.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OffensiveCommunities.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OffensiveContent.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OffensiveEntityDetails.cs" />
+    <Compile Include="Models\OffensiveEntityDetailsList.cs" />
+    <Compile Include="Models\OffensiveEntry.cs" />
+    <Compile Include="Models\OffensiveStatus.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OpeartionStatus.cs" />
+    <Compile Include="Models\PageDetails.cs" />
+    <Compile Include="Models\PayloadDetails.cs" />
+    <Compile Include="Models\PermissionDetails.cs" />
+    <Compile Include="Models\PermissionItem.cs" />
+    <Compile Include="Models\PermissionRequest.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Place.cs" />
+    <Compile Include="Models\ProfileDetails.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\RatingDetails.cs" />
+    <Compile Include="Models\RemoveUserRequest.cs" />
+    <Compile Include="Models\ReportEntityDetails.cs" />
+    <Compile Include="Models\Role.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SearchQueryDetails.cs" />
+    <Compile Include="Models\SearchView.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SignUpDetails.cs" />
+    <Compile Include="Models\StaticContent.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\StaticContentDetails.cs" />
+    <Compile Include="Models\StaticContentType.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Tag.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TopCategoryEntities.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TourModel.cs" />
+    <Compile Include="Models\User.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UserCommunities.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UserPermissionChangedRequest.cs" />
+    <Compile Include="Models\UserPermissionStatusRequest.cs" />
+    <Compile Include="Models\UserType.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PerRequestLifetimeManager.cs" />
+    <Compile Include="ProfileCacheManager.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs" />
+    <Compile Include="Repositories\BlobDataRepository.cs" />
+    <Compile Include="Repositories\CommunitiesViewRepository.cs" />
+    <Compile Include="Repositories\CommunityCommentRepository.cs" />
+    <Compile Include="Repositories\CommunityRepository.cs" />
+    <Compile Include="Repositories\CommunityTagsRepository.cs" />
+    <Compile Include="Repositories\ContentCommentsRepository.cs" />
+    <Compile Include="Repositories\ContentRepository.cs" />
+    <Compile Include="Repositories\ContentsViewRepository.cs" />
+    <Compile Include="Repositories\ContentTagsRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IBlobDataRepository.cs" />
+    <Compile Include="Repositories\Interfaces\ICommunitiesViewRepository.cs" />
+    <Compile Include="Repositories\Interfaces\ICommunityCommentRepository.cs" />
+    <Compile Include="Repositories\Interfaces\ICommunityRepository.cs" />
+    <Compile Include="Repositories\Interfaces\ICommunityTagsRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IContentCommentsRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IContentRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IContentsViewRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IContentTagsRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IQueueRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IRepositoryBase.cs" />
+    <Compile Include="Repositories\Interfaces\ISearchViewRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IUserCommunitiesRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IUserRepository.cs" />
+    <Compile Include="Repositories\QueueRepository.cs" />
+    <Compile Include="Repositories\RepositoryBase.cs" />
+    <Compile Include="Repositories\SearchViewRepository.cs" />
+    <Compile Include="Repositories\UserCommunitiesRepository.cs" />
+    <Compile Include="Repositories\UserRepository.cs" />
+    <Compile Include="Services\BlobService.cs" />
+    <Compile Include="Services\CommentService.cs" />
+    <Compile Include="Services\CommunityService.cs" />
+    <Compile Include="Services\ContentService.cs" />
+    <Compile Include="Services\EntityService.cs" />
+    <Compile Include="Services\FeaturedEntityService.cs" />
+    <Compile Include="Services\Interfaces\IBlobService.cs" />
+    <Compile Include="Services\Interfaces\ICommentService.cs" />
+    <Compile Include="Services\Interfaces\ICommunityService.cs" />
+    <Compile Include="Services\Interfaces\IContentService.cs" />
+    <Compile Include="Services\Interfaces\IEntityService.cs" />
+    <Compile Include="Services\Interfaces\IFeaturedEntityService.cs" />
+    <Compile Include="Services\Interfaces\INotificationService.cs" />
+    <Compile Include="Services\Interfaces\IProfileService.cs" />
+    <Compile Include="Services\Interfaces\IRatingService.cs" />
+    <Compile Include="Services\Interfaces\IReportEntityService.cs" />
+    <Compile Include="Services\Interfaces\ISearchService.cs" />
+    <Compile Include="Services\Interfaces\IStaticContentService.cs" />
+    <Compile Include="Services\NotificationService.cs" />
+    <Compile Include="Services\PermissionService.cs" />
+    <Compile Include="Services\ProfileService.cs" />
+    <Compile Include="Services\RatingService.cs" />
+    <Compile Include="Services\ReportEntityService.cs" />
+    <Compile Include="Services\SearchService.cs" />
+    <Compile Include="Services\StaticContentService.cs" />
+    <Compile Include="SessionWrapper.cs" />
+    <Compile Include="UnityDependencyResolver.cs" />
+    <Compile Include="ViewModels\AssociatedFileViewModel.cs" />
+    <Compile Include="ViewModels\CommentItemViewModel.cs" />
+    <Compile Include="ViewModels\CommentViewModel.cs" />
+    <Compile Include="ViewModels\CommunityInputViewModel.cs" />
+    <Compile Include="ViewModels\CommunityViewModel.cs" />
+    <Compile Include="ViewModels\ContentDataViewModel.cs" />
+    <Compile Include="ViewModels\ContentInputViewModel.cs" />
+    <Compile Include="ViewModels\ContentViewModel.cs" />
+    <Compile Include="ViewModels\DeepZoomViewModel.cs" />
+    <Compile Include="ViewModels\DefaultThumbnailViewModel.cs" />
+    <Compile Include="ViewModels\EntityBaseDetailsViewModel.cs" />
+    <Compile Include="ViewModels\EntityInputBaseViewModel.cs" />
+    <Compile Include="ViewModels\EntityViewModel.cs" />
+    <Compile Include="ViewModels\InviteRequestDetailsViewModel.cs" />
+    <Compile Include="ViewModels\InviteRequestInputViewModel.cs" />
+    <Compile Include="ViewModels\InviteRequestViewModel.cs" />
+    <Compile Include="ViewModels\PermissionBaseViewModel.cs" />
+    <Compile Include="ViewModels\PermissionDetailsViewModel.cs" />
+    <Compile Include="ViewModels\PermissionViewModel.cs" />
+    <Compile Include="ViewModels\ProfileViewModel.cs" />
+    <Compile Include="ViewModels\RatingViewModel.cs" />
+    <Compile Include="ViewModels\SearchViewModel.cs" />
+    <Compile Include="ViewModels\ShareViewModel.cs" />
+    <Compile Include="ViewModels\StaticContentViewModel.cs" />
+    <Compile Include="ViewModels\TopCategoryViewModel.cs" />
+    <Compile Include="ViewModels\UploadAssetViewModel.cs" />
+    <Compile Include="ViewModels\VideoDataViewModel.cs" />
+    <Compile Include="WebRole.cs" />
+    <Compile Include="WebServices\AdministrationService.svc.cs">
+      <DependentUpon>AdministrationService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="WebServices\IAdministrationService.cs" />
+    <Compile Include="WebServices\IResourceService.cs" />
+    <Compile Include="WebServices\LiveIdAuth.svc.cs">
+      <DependentUpon>LiveIdAuth.svc</DependentUpon>
+    </Compile>
+    <Compile Include="WebServices\ResourceService.svc.cs">
+      <DependentUpon>ResourceService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="WebServices\ServiceBase.cs" />
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Views\CommunityDetail.html" />
+    <Content Include="Content\Views\ContentPreview.html" />
+    <Content Include="Content\Views\EditCommunity.html" />
+    <Content Include="Content\Views\EditContent.html" />
+    <Content Include="Content\Views\TestResources.html" />
+    <Content Include="GetTourFile.aspx" />
+    <Content Include="GetTourFile2.aspx" />
+    <Content Include="hello.aspx" />
+    <Content Include="hello2.aspx" />
+    <Content Include="msshrtmi.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="BingSiteAuth.xml" />
+    <Content Include="Content\CSS\angular-motion.css" />
+    <Content Include="Content\CSS\bootstrapValidator.css" />
+    <Content Include="Content\CSS\SDK_style.css" />
+    <Content Include="Content\CSS\wwt.css" />
+    <Content Include="Content\CSS\wwt.min.css" />
+    <Content Include="Content\print.htm" />
+    <Content Include="Content\Views\AddContent.html" />
+    <Content Include="Content\Views\CommunityContent.html" />
+    <Content Include="Content\Views\ContentDetail.html" />
+    <Content Include="Content\Views\MyProfile.html" />
+    <Content Include="Docs\archive\WorldWideTelescopeDataFilesReference.html" />
+    <Content Include="Docs\archive\WorldWideTelescopeDataToolsGuide.html" />
+    <Content Include="Docs\archive\worldwidetelescopelocalizationtool.html" />
+    <Content Include="Docs\archive\worldwidetelescopeplanetarium.html" />
+    <Content Include="Docs\archive\WorldWideTelescopeProjectionReference.html" />
+    <Content Include="Docs\archive\worldwidetelescopeuserguide.html" />
+    <Content Include="Docs\archive\WorldWideTelescopeWebControlScriptReference.html" />
+    <Content Include="Docs\conversionTutorial.htm" />
+    <Content Include="Docs\domespecs.html" />
+    <Content Include="Docs\ExcelAddinImages\EACaptureViewpoint.png" />
+    <Content Include="Docs\ExcelAddinImages\EAEarthquake.png" />
+    <Content Include="Docs\ExcelAddinImages\EAEarthquakeDisplay.png" />
+    <Content Include="Docs\ExcelAddinImages\EAGeometry.png" />
+    <Content Include="Docs\ExcelAddinImages\EAGeometryDisplay.png" />
+    <Content Include="Docs\ExcelAddinImages\EALayer.png" />
+    <Content Include="Docs\ExcelAddinImages\EAManageViewpoints.png" />
+    <Content Include="Docs\ExcelAddinImages\eamapcolumns.png" />
+    <Content Include="Docs\ExcelAddinImages\EAMarker.png" />
+    <Content Include="Docs\ExcelAddinImages\eaquickselect.png" />
+    <Content Include="Docs\ExcelAddinImages\eaquickselect2.png" />
+    <Content Include="Docs\ExcelAddinImages\earemote.png" />
+    <Content Include="Docs\ExcelAddinImages\EARibbon.png" />
+    <Content Include="Docs\ExcelAddinImages\markers.png" />
+    <Content Include="Docs\Images\AcademicKit.jpg" />
+    <Content Include="Docs\Images\ASPEnabled.bmp" />
+    <Content Include="Docs\Images\BackgroundImage.jpg" />
+    <Content Include="Docs\Images\BlankCollection.bmp" />
+    <Content Include="Docs\Images\BlankVO.jpg" />
+    <Content Include="Docs\Images\Boundarys.jpg" />
+    <Content Include="Docs\Images\CarribeanHiRes.jpg" />
+    <Content Include="Docs\Images\CarribeanLowRes.jpg" />
+    <Content Include="Docs\Images\Circles.jpg" />
+    <Content Include="Docs\Images\CommunityThumbnail.bmp" />
+    <Content Include="Docs\Images\ConversionTutorial\html tags.png" />
+    <Content Include="Docs\Images\ConversionTutorial\initialize function.png" />
+    <Content Include="Docs\Images\ConversionTutorial\object property access.png" />
+    <Content Include="Docs\Images\ConversionTutorial\script top.png" />
+    <Content Include="Docs\Images\ConversionTutorial\wwt tutorial doc header.png" />
+    <Content Include="Docs\Images\CrossHairs.jpg" />
+    <Content Include="Docs\Images\CT_OurCommunity.jpg" />
+    <Content Include="Docs\Images\EarthClouds.jpg" />
+    <Content Include="Docs\Images\EarthNoClouds.jpg" />
+    <Content Include="Docs\Images\Ecliptic.jpg" />
+    <Content Include="Docs\Images\EGrid.jpg" />
+    <Content Include="Docs\Images\Elevation Flat.jpg" />
+    <Content Include="Docs\Images\Elevation Model.jpg" />
+    <Content Include="Docs\Images\ElevationFlat.jpg" />
+    <Content Include="Docs\Images\ElevationModel.jpg" />
+    <Content Include="Docs\Images\endtourdialog.jpg" />
+    <Content Include="Docs\Images\Figures.jpg" />
+    <Content Include="Docs\Images\FillOption.bmp" />
+    <Content Include="Docs\Images\ForegroundSurveys.bmp" />
+    <Content Include="Docs\Images\FOV.jpg" />
+    <Content Include="Docs\Images\GotoNGC117.jpg" />
+    <Content Include="Docs\Images\Horsehead1.jpg" />
+    <Content Include="Docs\Images\Horsehead2.bmp" />
+    <Content Include="Docs\Images\horseheadinwindows.jpg" />
+    <Content Include="Docs\Images\IISpath.bmp" />
+    <Content Include="Docs\Images\ImageOffsetpp1pp2.jpg" />
+    <Content Include="Docs\Images\InnerPlanets.jpg" />
+    <Content Include="Docs\Images\keplervotable.jpg" />
+    <Content Include="Docs\Images\lcapi_quakes.jpg" />
+    <Content Include="Docs\Images\lcapi_sample.jpg" />
+    <Content Include="Docs\Images\LocalSydney.jpg" />
+    <Content Include="Docs\Images\LocTool\createnewlang.jpg" />
+    <Content Include="Docs\Images\LocTool\loadlangpack.jpg" />
+    <Content Include="Docs\Images\LocTool\newwwtlang.jpg" />
+    <Content Include="Docs\Images\LocTool\savenewlang.jpg" />
+    <Content Include="Docs\Images\LocTool\saveTDFfile.jpg" />
+    <Content Include="Docs\Images\LocTool\selectlang.jpg" />
+    <Content Include="Docs\Images\LocTool\UILocalization.jpg" />
+    <Content Include="Docs\Images\LocTool\WWTwelcome.jpg" />
+    <Content Include="Docs\Images\MapOfEarth.jpg" />
+    <Content Include="Docs\Images\MinimalTour.bmp" />
+    <Content Include="Docs\Images\NoChange.jpg" />
+    <Content Include="Docs\Images\NYAndromeda.jpg" />
+    <Content Include="Docs\Images\NYAndromedaNoHorizon.jpg" />
+    <Content Include="Docs\Images\PanoramaAverageOfTopRow.bmp" />
+    <Content Include="Docs\Images\PanoramaExtendTopRow.bmp" />
+    <Content Include="Docs\Images\PanoramaInput.bmp" />
+    <Content Include="Docs\Images\PanoramaNoFill.bmp" />
+    <Content Include="Docs\Images\PanoramaZoneGrey.bmp" />
+    <Content Include="Docs\Images\PlaceFomalhaut.bmp" />
+    <Content Include="Docs\Images\PlaceOpactity25.jpg" />
+    <Content Include="Docs\Images\PlaceRotation45.jpg" />
+    <Content Include="Docs\Images\Planet_Callisto.jpg" />
+    <Content Include="Docs\Images\Planet_Earth.jpg" />
+    <Content Include="Docs\Images\Planet_EarthCrescent1.jpg" />
+    <Content Include="Docs\Images\Planet_EarthCrescent2.jpg" />
+    <Content Include="Docs\Images\Planet_EarthMoon1.jpg" />
+    <Content Include="Docs\Images\Planet_EarthMoon2.jpg" />
+    <Content Include="Docs\Images\Planet_Europa.jpg" />
+    <Content Include="Docs\Images\Planet_Ganymede.jpg" />
+    <Content Include="Docs\Images\Planet_Io.jpg" />
+    <Content Include="Docs\Images\Planet_Io2.jpg" />
+    <Content Include="Docs\Images\Planet_Jupiter.jpg" />
+    <Content Include="Docs\Images\Planet_Jupiter2.jpg" />
+    <Content Include="Docs\Images\Planet_JupiterCrescent1.jpg" />
+    <Content Include="Docs\Images\Planet_Mars.jpg" />
+    <Content Include="Docs\Images\Planet_Mars2.jpg" />
+    <Content Include="Docs\Images\Planet_MarsCrescent1.jpg" />
+    <Content Include="Docs\Images\Planet_MarsCrescent2.jpg" />
+    <Content Include="Docs\Images\Planet_MarsCrescent3.jpg" />
+    <Content Include="Docs\Images\Planet_MarsH_1.jpg" />
+    <Content Include="Docs\Images\Planet_MarsH_2.jpg" />
+    <Content Include="Docs\Images\Planet_MarsH_3.jpg" />
+    <Content Include="Docs\Images\Planet_MarsH_4.jpg" />
+    <Content Include="Docs\Images\Planet_MarsH_5.jpg" />
+    <Content Include="Docs\Images\Planet_MarsH_6.jpg" />
+    <Content Include="Docs\Images\Planet_Mercury.jpg" />
+    <Content Include="Docs\Images\Planet_Moon.jpg" />
+    <Content Include="Docs\Images\Planet_Moon2.jpg" />
+    <Content Include="Docs\Images\Planet_Neptune.jpg" />
+    <Content Include="Docs\Images\Planet_Pluto.jpg" />
+    <Content Include="Docs\Images\Planet_Saturn.jpg" />
+    <Content Include="Docs\Images\Planet_Sun1.jpg" />
+    <Content Include="Docs\Images\Planet_Uranus.jpg" />
+    <Content Include="Docs\Images\Planet_Venus.jpg" />
+    <Content Include="Docs\Images\Polygons.jpg" />
+    <Content Include="Docs\Images\Polylines.jpg" />
+    <Content Include="Docs\Images\Polys.bmp" />
+    <Content Include="Docs\Images\Rotation0.jpg" />
+    <Content Include="Docs\Images\Rotation45.jpg" />
+    <Content Include="Docs\Images\RotationN45.jpg" />
+    <Content Include="Docs\Images\RunningASample.jpg" />
+    <Content Include="Docs\Images\RunningASample2.jpg" />
+    <Content Include="Docs\Images\SamplePoly.bmp" />
+    <Content Include="Docs\Images\Saturn.png" />
+    <Content Include="Docs\Images\SaturnChopped.jpg" />
+    <Content Include="Docs\Images\SaturnLighting.jpg" />
+    <Content Include="Docs\Images\SaturnMilkyWay.jpg" />
+    <Content Include="Docs\Images\SaturnOrbits.jpg" />
+    <Content Include="Docs\Images\SaturnStars.jpg" />
+    <Content Include="Docs\Images\Selection.jpg" />
+    <Content Include="Docs\Images\Serpens_wtml.bmp" />
+    <Content Include="Docs\Images\Serpens_wtml.png" />
+    <Content Include="Docs\Images\Spitzer1.jpg" />
+    <Content Include="Docs\Images\Spitzer2.jpg" />
+    <Content Include="Docs\Images\Spitzer3.jpg" />
+    <Content Include="Docs\Images\Spitzer4.jpg" />
+    <Content Include="Docs\Images\StudyChoppedDialog.jpg" />
+    <Content Include="Docs\Images\SunActual.jpg" />
+    <Content Include="Docs\Images\SunFull.jpg" />
+    <Content Include="Docs\Images\sunset_earth.jpg" />
+    <Content Include="Docs\Images\Toast16.jpg" />
+    <Content Include="Docs\Images\Toast16Flat.jpg" />
+    <Content Include="Docs\Images\Toast4.jpg" />
+    <Content Include="Docs\Images\Toast45.bmp" />
+    <Content Include="Docs\Images\Toast45degrees.jpg" />
+    <Content Include="Docs\Images\Toast4Flat.jpg" />
+    <Content Include="Docs\Images\Toast4FlatInside.jpg" />
+    <Content Include="Docs\Images\Toast4FlatMap.jpg" />
+    <Content Include="Docs\Images\Toast4FlatOutside.jpg" />
+    <Content Include="Docs\Images\Toast64.jpg" />
+    <Content Include="Docs\Images\Toast64Flat.jpg" />
+    <Content Include="Docs\Images\toastedredplanet.jpg" />
+    <Content Include="Docs\Images\ToastEQ1.jpg" />
+    <Content Include="Docs\Images\ToastEQ2.jpg" />
+    <Content Include="Docs\Images\ToastGalactic.bmp" />
+    <Content Include="Docs\Images\ToastInput1.bmp" />
+    <Content Include="Docs\Images\ToastInput1.jpg" />
+    <Content Include="Docs\Images\ToastLinks.jpg" />
+    <Content Include="Docs\Images\ToastLR.bmp" />
+    <Content Include="Docs\Images\ToastMapOfEarth.jpg" />
+    <Content Include="Docs\Images\ToastMulti1.bmp" />
+    <Content Include="Docs\Images\ToastMulti2.bmp" />
+    <Content Include="Docs\Images\ToastMulti3.bmp" />
+    <Content Include="Docs\Images\ToastMulti4.bmp" />
+    <Content Include="Docs\Images\ToastMulti5.bmp" />
+    <Content Include="Docs\Images\ToastMulti6.bmp" />
+    <Content Include="Docs\Images\ToastOffset1.jpg" />
+    <Content Include="Docs\Images\ToastOffset2.jpg" />
+    <Content Include="Docs\Images\ToastOffset3.bmp" />
+    <Content Include="Docs\Images\ToastOutput1.bmp" />
+    <Content Include="Docs\Images\ToastPanorama.bmp" />
+    <Content Include="Docs\Images\ToastPanorama2.bmp" />
+    <Content Include="Docs\Images\ToastPaths.jpg" />
+    <Content Include="Docs\Images\ToastRL.bmp" />
+    <Content Include="Docs\Images\ToastTest.bmp" />
+    <Content Include="Docs\Images\ToastWtml.jpg" />
+    <Content Include="Docs\Images\Toast_Input.bmp" />
+    <Content Include="Docs\Images\Toast_Output.bmp" />
+    <Content Include="Docs\Images\T_BlackHole.jpg" />
+    <Content Include="Docs\Images\T_Blue.jpg" />
+    <Content Include="Docs\Images\T_Comet.jpg" />
+    <Content Include="Docs\Images\T_DistantPlanet.jpg" />
+    <Content Include="Docs\Images\T_Earth.jpg" />
+    <Content Include="Docs\Images\T_FomalHaut.jpg" />
+    <Content Include="Docs\Images\T_Hot.jpg" />
+    <Content Include="Docs\Images\T_HotPole.jpg" />
+    <Content Include="Docs\Images\T_Ice.jpg" />
+    <Content Include="Docs\Images\T_Mars.jpg" />
+    <Content Include="Docs\Images\T_MilkyWay.jpg" />
+    <Content Include="Docs\Images\T_Nebula.jpg" />
+    <Content Include="Docs\Images\T_Red.jpg" />
+    <Content Include="Docs\Images\T_Saturn.jpg" />
+    <Content Include="Docs\Images\T_Saucer.jpg" />
+    <Content Include="Docs\Images\T_Spiral.jpg" />
+    <Content Include="Docs\Images\T_Star.jpg" />
+    <Content Include="Docs\Images\T_Sun.jpg" />
+    <Content Include="Docs\Images\T_Sunspot.jpg" />
+    <Content Include="Docs\Images\T_Tail.jpg" />
+    <Content Include="Docs\Images\T_Tours.jpg" />
+    <Content Include="Docs\Images\View North from Sydney.jpg" />
+    <Content Include="Docs\Images\ZoomLevel0p1233.jpg" />
+    <Content Include="Docs\Images\ZoomLevel0p2466.jpg" />
+    <Content Include="Docs\Images\ZoomLevel10.jpg" />
+    <Content Include="Docs\PlanetariumImages\blackpaint.jpg" />
+    <Content Include="Docs\PlanetariumImages\BlockAJig.JPG" />
+    <Content Include="Docs\PlanetariumImages\BlockBJig.JPG" />
+    <Content Include="Docs\PlanetariumImages\BlockBJig2.JPG" />
+    <Content Include="Docs\PlanetariumImages\BlockCJig.JPG" />
+    <Content Include="Docs\PlanetariumImages\BlockCJig2.JPG" />
+    <Content Include="Docs\PlanetariumImages\BlockConnector.bmp" />
+    <Content Include="Docs\PlanetariumImages\BlockConnectorA.bmp" />
+    <Content Include="Docs\PlanetariumImages\BlockConnectorA.jpg" />
+    <Content Include="Docs\PlanetariumImages\BlockConnectorB.bmp" />
+    <Content Include="Docs\PlanetariumImages\BlockConnectorB.jpg" />
+    <Content Include="Docs\PlanetariumImages\BlockConnectorC.bmp" />
+    <Content Include="Docs\PlanetariumImages\BlockConnectorC.jpg" />
+    <Content Include="Docs\PlanetariumImages\blockprogression.jpg" />
+    <Content Include="Docs\PlanetariumImages\blocksdone.jpg" />
+    <Content Include="Docs\PlanetariumImages\CompletedDome.bmp" />
+    <Content Include="Docs\PlanetariumImages\CompletedDome.jpg" />
+    <Content Include="Docs\PlanetariumImages\Decagon.bmp" />
+    <Content Include="Docs\PlanetariumImages\DecagonAfter.bmp" />
+    <Content Include="Docs\PlanetariumImages\DecagonAfter.jpg" />
+    <Content Include="Docs\PlanetariumImages\DecagonBefore.bmp" />
+    <Content Include="Docs\PlanetariumImages\DecagonBefore.jpg" />
+    <Content Include="Docs\PlanetariumImages\DecagonBlocks.bmp" />
+    <Content Include="Docs\PlanetariumImages\DecagonBlocks.jpg" />
+    <Content Include="Docs\PlanetariumImages\DecagonOrder.bmp" />
+    <Content Include="Docs\PlanetariumImages\DecagonOrder.jpg" />
+    <Content Include="Docs\PlanetariumImages\DecagonTriangles2.bmp" />
+    <Content Include="Docs\PlanetariumImages\decagontriangles3.bmp" />
+    <Content Include="Docs\PlanetariumImages\directprojection.jpg" />
+    <Content Include="Docs\PlanetariumImages\Dome heights.bmp" />
+    <Content Include="Docs\PlanetariumImages\Dome profile.bmp" />
+    <Content Include="Docs\PlanetariumImages\Dome profile.jpg" />
+    <Content Include="Docs\PlanetariumImages\Dome support plan.bmp" />
+    <Content Include="Docs\PlanetariumImages\DomeInTriangles.bmp" />
+    <Content Include="Docs\PlanetariumImages\domesetupdialog.jpg" />
+    <Content Include="Docs\PlanetariumImages\DomeShape.bmp" />
+    <Content Include="Docs\PlanetariumImages\DomeShape.jpg" />
+    <Content Include="Docs\PlanetariumImages\Door.bmp" />
+    <Content Include="Docs\PlanetariumImages\Door.jpg" />
+    <Content Include="Docs\PlanetariumImages\dvicable.jpg" />
+    <Content Include="Docs\PlanetariumImages\finishedfour.jpg" />
+    <Content Include="Docs\PlanetariumImages\finishedone.jpg" />
+    <Content Include="Docs\PlanetariumImages\finishedthree.jpg" />
+    <Content Include="Docs\PlanetariumImages\firstblock.jpg" />
+    <Content Include="Docs\PlanetariumImages\grill.jpg" />
+    <Content Include="Docs\PlanetariumImages\HoldingUptheDome.jpg" />
+    <Content Include="Docs\PlanetariumImages\ImprovedDoor.jpg" />
+    <Content Include="Docs\PlanetariumImages\ImprovedDoorInside.jpg" />
+    <Content Include="Docs\PlanetariumImages\mirrorinplace.jpg" />
+    <Content Include="Docs\PlanetariumImages\mirrors.jpg" />
+    <Content Include="Docs\PlanetariumImages\paintingblackandgrey.jpg" />
+    <Content Include="Docs\PlanetariumImages\paintingisfun.jpg" />
+    <Content Include="Docs\PlanetariumImages\paperfolder.jpg" />
+    <Content Include="Docs\PlanetariumImages\Pentagon.bmp" />
+    <Content Include="Docs\PlanetariumImages\Pentagon.jpg" />
+    <Content Include="Docs\PlanetariumImages\pentagonsclippedtogether.jpg" />
+    <Content Include="Docs\PlanetariumImages\pentagonshades.jpg" />
+    <Content Include="Docs\PlanetariumImages\Pentagon_tight.bmp" />
+    <Content Include="Docs\PlanetariumImages\planetarium34.jpg" />
+    <Content Include="Docs\PlanetariumImages\planetarium345.jpg" />
+    <Content Include="Docs\PlanetariumImages\planetariuma.jpg" />
+    <Content Include="Docs\PlanetariumImages\projectorstand.jpg" />
+    <Content Include="Docs\PlanetariumImages\seating4.jpg" />
+    <Content Include="Docs\PlanetariumImages\SecondaryMirror.jpg" />
+    <Content Include="Docs\PlanetariumImages\secondaryprojection.jpg" />
+    <Content Include="Docs\PlanetariumImages\SecondaryShelf.jpg" />
+    <Content Include="Docs\PlanetariumImages\shades.jpg" />
+    <Content Include="Docs\PlanetariumImages\Triangle41.bmp" />
+    <Content Include="Docs\PlanetariumImages\Triangle41.jpg" />
+    <Content Include="Docs\PlanetariumImages\Triangle48.bmp" />
+    <Content Include="Docs\PlanetariumImages\Triangle48.jpg" />
+    <Content Include="Docs\PlanetariumImages\wiring.jpg" />
+    <Content Include="Docs\Samples\displaycode.htm" />
+    <Content Include="Docs\Samples\Sample_WWT Web Client Arrived.html" />
+    <Content Include="Docs\Samples\Sample_WWT Web Client Click Event.html" />
+    <Content Include="Docs\Samples\Sample_WWT Web Client Fov.html" />
+    <Content Include="Docs\Samples\Sample_WWT Web Client Local View.html" />
+    <Content Include="Docs\Samples\Sample_WWT Web Client Poly.html" />
+    <Content Include="Docs\Samples\Sample_WWT Web Client Simple.html" />
+    <Content Include="Docs\Samples\Sample_WWTWebClientArrived.html" />
+    <Content Include="Docs\Samples\Sample_WWTWebClientClickEvent.html" />
+    <Content Include="Docs\Samples\Sample_WWTWebClientEarthCitySearch.html" />
+    <Content Include="Docs\Samples\Sample_WWTWebClientFov.html" />
+    <Content Include="Docs\Samples\sample_wwtwebclientimages.html" />
+    <Content Include="Docs\Samples\Sample_WWTWebClientLocalView.html" />
+    <Content Include="Docs\Samples\Sample_WWTWebClientMarsExplorer.html" />
+    <Content Include="Docs\Samples\Sample_WWTWebClientPoly.html" />
+    <Content Include="Docs\Samples\Sample_WWTWebClientSimple.html" />
+    <Content Include="Docs\Samples\sample_wwtwebclienttours.html" />
+    <Content Include="Docs\Samples\WWT Web Client Arrived.html" />
+    <Content Include="Docs\Samples\WWT Web Client Click Event.html" />
+    <Content Include="Docs\Samples\WWT Web Client Fov.html" />
+    <Content Include="Docs\Samples\WWT Web Client Local View.html" />
+    <Content Include="Docs\Samples\WWT Web Client Poly.html" />
+    <Content Include="Docs\Samples\WWT Web Client Simple.html" />
+    <Content Include="Docs\Samples\WWTWebClientArrived.html" />
+    <Content Include="Docs\Samples\WWTWebClientArrivedHtml5.html" />
+    <Content Include="Docs\Samples\WWTWebClientClickEvent.html" />
+    <Content Include="Docs\Samples\WWTWebClientClickEventHtml5.html" />
+    <Content Include="Docs\Samples\wwtwebclientdistantplanetexplorer.html" />
+    <Content Include="Docs\Samples\wwtwebclientdistantplanetexplorerHtml5.html" />
+    <Content Include="Docs\Samples\WWTWebClientEarthCitySearch.html" />
+    <Content Include="Docs\Samples\WWTWebClientEarthCitySearchHtml5.html" />
+    <Content Include="Docs\Samples\WWTWebClientFov.html" />
+    <Content Include="Docs\Samples\WWTWebClientFovHtml5.html" />
+    <Content Include="Docs\Samples\wwtwebclientimages.html" />
+    <Content Include="Docs\Samples\wwtwebclientimagesHtml5.html" />
+    <Content Include="Docs\Samples\wwtwebclientkepler.html" />
+    <Content Include="Docs\Samples\WWTWebClientLocalView.html" />
+    <Content Include="Docs\Samples\WWTWebClientLocalViewHtml5.html" />
+    <Content Include="Docs\Samples\WWTWebClientMarsExplorer.html" />
+    <Content Include="Docs\Samples\WWTWebClientMarsExplorerHtml5.html" />
+    <Content Include="Docs\Samples\wwtwebclientmessiercatalog.html" />
+    <Content Include="Docs\Samples\wwtwebclientmessiercatalogHtml5.html" />
+    <Content Include="Docs\Samples\WWTWebClientMoonExplorer.html" />
+    <Content Include="Docs\Samples\wwtwebclientplanetexplorer.html" />
+    <Content Include="Docs\Samples\wwtwebclientplanetexplorerHtml5.html" />
+    <Content Include="Docs\Samples\WWTWebClientPoly.html" />
+    <Content Include="Docs\Samples\WWTWebClientPolyHtml5.html" />
+    <Content Include="Docs\Samples\WWTWebClientSimple.html" />
+    <Content Include="Docs\Samples\WWTWebClientSimpleHtml5.html" />
+    <Content Include="Docs\Samples\WWTWebClientSimpleUIHtml5.html" />
+    <Content Include="Docs\Samples\wwtwebclienttour.html" />
+    <Content Include="Docs\Samples\wwtwebclienttours.html" />
+    <Content Include="Docs\Samples\wwtwebclienttoursHtml5.html" />
+    <Content Include="Docs\Scripts\jqueryCodeView.css" />
+    <Content Include="Docs\Scripts\jqueryCodeView.js" />
+    <Content Include="Docs\SDK_style.css" />
+    <Content Include="Docs\uiimages\3Dsolarsystem.jpg" />
+    <Content Include="Docs\uiimages\3Dsolarsystem2.jpg" />
+    <Content Include="Docs\uiimages\andromeda.jpg" />
+    <Content Include="Docs\uiimages\APlanet.jpg" />
+    <Content Include="Docs\uiimages\ASCOMDownload.jpg" />
+    <Content Include="Docs\uiimages\ASCOMInstalled.jpg" />
+    <Content Include="Docs\uiimages\ASCOMNotInstalled.jpg" />
+    <Content Include="Docs\uiimages\ASCOMSetup.jpg" />
+    <Content Include="Docs\uiimages\ASCOMTelescopeChooser.jpg" />
+    <Content Include="Docs\uiimages\ASCOMTraffic.jpg" />
+    <Content Include="Docs\uiimages\Asterism.jpg" />
+    <Content Include="Docs\uiimages\azimuthaltitude.jpg" />
+    <Content Include="Docs\uiimages\BlackHole1.jpg" />
+    <Content Include="Docs\uiimages\BlackHole2.jpg" />
+    <Content Include="Docs\uiimages\brightness.jpg" />
+    <Content Include="Docs\uiimages\CelestialSphere.jpg" />
+    <Content Include="Docs\uiimages\CenterOfMilkyWay.png" />
+    <Content Include="Docs\uiimages\circumpolar.jpg" />
+    <Content Include="Docs\uiimages\ClassificationOtherL1014.jpg" />
+    <Content Include="Docs\uiimages\cluster1.jpg" />
+    <Content Include="Docs\uiimages\cluster2.jpg" />
+    <Content Include="Docs\uiimages\ClusterOfGalaxies.jpg" />
+    <Content Include="Docs\uiimages\CommunityWebPage.jpg" />
+    <Content Include="Docs\uiimages\conesearch.jpg" />
+    <Content Include="Docs\uiimages\ConeSearchPulsar.jpg" />
+    <Content Include="Docs\uiimages\ConjunctionMoonVenusJupiter.jpg" />
+    <Content Include="Docs\uiimages\ConstellationYoungAndOld.jpg" />
+    <Content Include="Docs\uiimages\contextproperties.jpg" />
+    <Content Include="Docs\uiimages\ContextSearch.jpg" />
+    <Content Include="Docs\uiimages\ContextSearchFilter.jpg" />
+    <Content Include="Docs\uiimages\copernicuscrater.jpg" />
+    <Content Include="Docs\uiimages\cosmos.jpg" />
+    <Content Include="Docs\uiimages\deimos.jpg" />
+    <Content Include="Docs\uiimages\desktopicons.jpg" />
+    <Content Include="Docs\uiimages\domesetup.jpg" />
+    <Content Include="Docs\uiimages\domesetupoptions.jpg" />
+    <Content Include="Docs\uiimages\DoubleStars.jpg" />
+    <Content Include="Docs\uiimages\EarthMoonSun.jpg" />
+    <Content Include="Docs\uiimages\earthresearch_quakes.jpg" />
+    <Content Include="Docs\uiimages\earthresearch_quakesLayers.jpg" />
+    <Content Include="Docs\uiimages\EarthResearch_spreadsheetproperties.jpg" />
+    <Content Include="Docs\uiimages\eclipse.jpg" />
+    <Content Include="Docs\uiimages\Edinburgh.jpg" />
+    <Content Include="Docs\uiimages\EditObjectInformation.jpg" />
+    <Content Include="Docs\uiimages\EllipticalGalaxy.jpg" />
+    <Content Include="Docs\uiimages\ExploreMenuEntries2.jpg" />
+    <Content Include="Docs\uiimages\ex_3d-model-properties.png" />
+    <Content Include="Docs\uiimages\ex_3d-model-xyz.png" />
+    <Content Include="Docs\uiimages\ex_Earth-OzDay.png" />
+    <Content Include="Docs\uiimages\ex_Earth-OzNight.png" />
+    <Content Include="Docs\uiimages\ex_Sandbox-add.png" />
+    <Content Include="Docs\uiimages\FieldOfViewIndicator.jpg" />
+    <Content Include="Docs\uiimages\FinderScope.jpg" />
+    <Content Include="Docs\uiimages\FinderScopeExpandedMenu.jpg" />
+    <Content Include="Docs\uiimages\FinderScopeImagery.jpg" />
+    <Content Include="Docs\uiimages\FinderScopeInformation.jpg" />
+    <Content Include="Docs\uiimages\FinderScopeMenu1.jpg" />
+    <Content Include="Docs\uiimages\FinderScopeMenu2.jpg" />
+    <Content Include="Docs\uiimages\finderscopesampmenu.jpg" />
+    <Content Include="Docs\uiimages\FinderScopeVO.jpg" />
+    <Content Include="Docs\uiimages\finishedfour.jpg" />
+    <Content Include="Docs\uiimages\firstpointofaries.jpg" />
+    <Content Include="Docs\uiimages\FITSHistogram.jpg" />
+    <Content Include="Docs\uiimages\FITSScale.jpg" />
+    <Content Include="Docs\uiimages\FlamingStarNebula.jpg" />
+    <Content Include="Docs\uiimages\fulldome.jpg" />
+    <Content Include="Docs\uiimages\Galaxy.jpg" />
+    <Content Include="Docs\uiimages\GanymedeJupiter.jpg" />
+    <Content Include="Docs\uiimages\ganymedesurface.jpg" />
+    <Content Include="Docs\uiimages\GiantMolecularCloud.jpg" />
+    <Content Include="Docs\uiimages\GlobularCluster.jpg" />
+    <Content Include="Docs\uiimages\GuidedTourMenuEntries.jpg" />
+    <Content Include="Docs\uiimages\GuidedTourMenuEntries2.jpg" />
+    <Content Include="Docs\uiimages\HubbleStudies.jpg" />
+    <Content Include="Docs\uiimages\ImageAlignment.jpg" />
+    <Content Include="Docs\uiimages\ImageCrossfade.jpg" />
+    <Content Include="Docs\uiimages\InteractiveTourCorrect.jpg" />
+    <Content Include="Docs\uiimages\InteractiveTourMenu.jpg" />
+    <Content Include="Docs\uiimages\InteractiveTourSelectLink.jpg" />
+    <Content Include="Docs\uiimages\InteractiveTourWrong.jpg" />
+    <Content Include="Docs\uiimages\Io.jpg" />
+    <Content Include="Docs\uiimages\IoJupiterMilkyWay.jpg" />
+    <Content Include="Docs\uiimages\IrregularGalaxyM82.jpg" />
+    <Content Include="Docs\uiimages\Kepler.jpg" />
+    <Content Include="Docs\uiimages\Knot.jpg" />
+    <Content Include="Docs\uiimages\largemagellaniccloud.jpg" />
+    <Content Include="Docs\uiimages\LookAt.jpg" />
+    <Content Include="Docs\uiimages\LowerPanelFOV.jpg" />
+    <Content Include="Docs\uiimages\m33.jpg" />
+    <Content Include="Docs\uiimages\M51PlotName.jpg" />
+    <Content Include="Docs\uiimages\MainViewHeartNebula.jpg" />
+    <Content Include="Docs\uiimages\ManageDataCache.jpg" />
+    <Content Include="Docs\uiimages\MaxContext.jpg" />
+    <Content Include="Docs\uiimages\milkyway.jpg" />
+    <Content Include="Docs\uiimages\mimas.jpg" />
+    <Content Include="Docs\uiimages\mirandaovoid.jpg" />
+    <Content Include="Docs\uiimages\mirrorwarping.jpg" />
+    <Content Include="Docs\uiimages\moonrise.jpg" />
+    <Content Include="Docs\uiimages\moonset.jpg" />
+    <Content Include="Docs\uiimages\MultipleStars.jpg" />
+    <Content Include="Docs\uiimages\NearbyDustClouds.jpg" />
+    <Content Include="Docs\uiimages\Nebula.jpg" />
+    <Content Include="Docs\uiimages\NebulousCluster.jpg" />
+    <Content Include="Docs\uiimages\NEDSearch.jpg" />
+    <Content Include="Docs\uiimages\NEDSearchM51.jpg" />
+    <Content Include="Docs\uiimages\NEDSearchVOTable.jpg" />
+    <Content Include="Docs\uiimages\NeptuneMilkyWay.jpg" />
+    <Content Include="Docs\uiimages\NeptuneStars.jpg" />
+    <Content Include="Docs\uiimages\NeutronStar.jpg" />
+    <Content Include="Docs\uiimages\OlympusMons1.jpg" />
+    <Content Include="Docs\uiimages\OlympusMons2.jpg" />
+    <Content Include="Docs\uiimages\OlympusMons3.jpg" />
+    <Content Include="Docs\uiimages\OpenCluster.jpg" />
+    <Content Include="Docs\uiimages\OtherNGC.jpg" />
+    <Content Include="Docs\uiimages\Panorama.jpg" />
+    <Content Include="Docs\uiimages\Panorama_Cliff.jpg" />
+    <Content Include="Docs\uiimages\Panorama_Erebus.jpg" />
+    <Content Include="Docs\uiimages\Panorama_FalseColor.jpg" />
+    <Content Include="Docs\uiimages\Panorama_Lyell.jpg" />
+    <Content Include="Docs\uiimages\Panorama_ManyRovers.jpg" />
+    <Content Include="Docs\uiimages\partialeclipse.jpg" />
+    <Content Include="Docs\uiimages\PictureIcon.jpg" />
+    <Content Include="Docs\uiimages\Pinwheel.jpg" />
+    <Content Include="Docs\uiimages\PinwheelRADec.jpg" />
+    <Content Include="Docs\uiimages\piscesdwarf.jpg" />
+    <Content Include="Docs\uiimages\PlanetaryNebula.jpg" />
+    <Content Include="Docs\uiimages\PlotResults.jpg" />
+    <Content Include="Docs\uiimages\PlutoLighting.jpg" />
+    <Content Include="Docs\uiimages\PlutoNoLighting.jpg" />
+    <Content Include="Docs\uiimages\projectionsixa.jpg" />
+    <Content Include="Docs\uiimages\proximacentauri.jpg" />
+    <Content Include="Docs\uiimages\ReflectionNebula.jpg" />
+    <Content Include="Docs\uiimages\sagittariusdwarfgalaxy.jpg" />
+    <Content Include="Docs\uiimages\ScopeSimulator.jpg" />
+    <Content Include="Docs\uiimages\scopesimulatorblank.jpg" />
+    <Content Include="Docs\uiimages\ScopeSimulatorOnPolaris.jpg" />
+    <Content Include="Docs\uiimages\SDK_8.png" />
+    <Content Include="Docs\uiimages\SDK_9.png" />
+    <Content Include="Docs\uiimages\SearchAndPlot.jpg" />
+    <Content Include="Docs\uiimages\SearchMenuEntries.png" />
+    <Content Include="Docs\uiimages\SearchPanel1.jpg" />
+    <Content Include="Docs\uiimages\SearchPanel1.png" />
+    <Content Include="Docs\uiimages\shareddatacache.jpg" />
+    <Content Include="Docs\uiimages\sirius.jpg" />
+    <Content Include="Docs\uiimages\SkyContext.jpg" />
+    <Content Include="Docs\uiimages\skytonight_Canopus.jpg" />
+    <Content Include="Docs\uiimages\skytonight_jupiterfinder.jpg" />
+    <Content Include="Docs\uiimages\skytonight_Polaris.jpg" />
+    <Content Include="Docs\uiimages\skytonight_SouthernCross.jpg" />
+    <Content Include="Docs\uiimages\skytonight_summertriangle.jpg" />
+    <Content Include="Docs\uiimages\skytonight_wintertriangle.jpg" />
+    <Content Include="Docs\uiimages\SolarSystemIo.jpg" />
+    <Content Include="Docs\uiimages\SolarSystemJupiter.jpg" />
+    <Content Include="Docs\uiimages\SolarSystemSaturn.jpg" />
+    <Content Include="Docs\uiimages\SomeSome.bmp" />
+    <Content Include="Docs\uiimages\SomeYes.bmp" />
+    <Content Include="Docs\uiimages\SpiralGalaxy.jpg" />
+    <Content Include="Docs\uiimages\Star.jpg" />
+    <Content Include="Docs\uiimages\Supernova.jpg" />
+    <Content Include="Docs\uiimages\supernova2003.jpg" />
+    <Content Include="Docs\uiimages\supernova2004.jpg" />
+    <Content Include="Docs\uiimages\SupernovaRemnant.jpg" />
+    <Content Include="Docs\uiimages\survey_2mass.jpg" />
+    <Content Include="Docs\uiimages\survey_blacksky.jpg" />
+    <Content Include="Docs\uiimages\survey_dustmap.jpg" />
+    <Content Include="Docs\uiimages\survey_femmi.jpg" />
+    <Content Include="Docs\uiimages\survey_galex.jpg" />
+    <Content Include="Docs\uiimages\survey_hipparcos.jpg" />
+    <Content Include="Docs\uiimages\survey_hydrogen.jpg" />
+    <Content Include="Docs\uiimages\survey_iris.jpg" />
+    <Content Include="Docs\uiimages\survey_rass.jpg" />
+    <Content Include="Docs\uiimages\survey_sky.jpg" />
+    <Content Include="Docs\uiimages\survey_sloan.jpg" />
+    <Content Include="Docs\uiimages\survey_tycho.jpg" />
+    <Content Include="Docs\uiimages\survey_USNaval.jpg" />
+    <Content Include="Docs\uiimages\survey_vlss.jpg" />
+    <Content Include="Docs\uiimages\survey_wmap.jpg" />
+    <Content Include="Docs\uiimages\TelescopeMenuEntries.jpg" />
+    <Content Include="Docs\uiimages\TelescopePanel1.jpg" />
+    <Content Include="Docs\uiimages\TheEarth.jpg" />
+    <Content Include="Docs\uiimages\TheNightSky.jpg" />
+    <Content Include="Docs\uiimages\TopPanelNext.jpg" />
+    <Content Include="Docs\uiimages\totaleclipse.jpg" />
+    <Content Include="Docs\uiimages\tourrating.jpg" />
+    <Content Include="Docs\uiimages\Tours_closing.jpg" />
+    <Content Include="Docs\uiimages\Tours_Navigation.jpg" />
+    <Content Include="Docs\uiimages\Tours_New_Closing.jpg" />
+    <Content Include="Docs\uiimages\Tours_New_Colors.jpg" />
+    <Content Include="Docs\uiimages\Tours_New_Edit.jpg" />
+    <Content Include="Docs\uiimages\Tours_New_Properites.jpg" />
+    <Content Include="Docs\uiimages\Tours_New_Secs.jpg" />
+    <Content Include="Docs\uiimages\Tours_New_ShapesMenu.jpg" />
+    <Content Include="Docs\uiimages\Tours_New_SlideMenu.jpg" />
+    <Content Include="Docs\uiimages\Tours_New_SlideTitle.jpg" />
+    <Content Include="Docs\uiimages\Tours_New_Text.jpg" />
+    <Content Include="Docs\uiimages\Tours_Playing.jpg" />
+    <Content Include="Docs\uiimages\Tours_Properties.jpg" />
+    <Content Include="Docs\uiimages\Tours_Running.jpg" />
+    <Content Include="Docs\uiimages\ui_Manage-Data-Cache.png" />
+    <Content Include="Docs\uiimages\ui_Network-Cache.png" />
+    <Content Include="Docs\uiimages\ui_Quito-View.png" />
+    <Content Include="Docs\uiimages\ui_win_Advanced-Settings-Menu.png" />
+    <Content Include="Docs\uiimages\ui_win_Constellation-Lines.png" />
+    <Content Include="Docs\uiimages\ui_win_Date-Time-Selection.png" />
+    <Content Include="Docs\uiimages\ui_win_Explore-Menu-Submenu-Open.png" />
+    <Content Include="Docs\uiimages\ui_win_Explore-Menu.png" />
+    <Content Include="Docs\uiimages\ui_win_Export-STL-for-3D-Printing.png" />
+    <Content Include="Docs\uiimages\ui_win_Frame-Rate.png" />
+    <Content Include="Docs\uiimages\ui_win_Full-Dome.png" />
+    <Content Include="Docs\uiimages\ui_win_Image-Stack.png" />
+    <Content Include="Docs\uiimages\ui_win_Layer-Manager-Toggle.png" />
+    <Content Include="Docs\uiimages\ui_win_Layer-Manager.png" />
+    <Content Include="Docs\uiimages\ui_win_Main-Menu-Down-Arrow.png" />
+    <Content Include="Docs\uiimages\ui_win_Multi-Sample-Antialiasing.png" />
+    <Content Include="Docs\uiimages\ui_win_Observing-Location-Options.png" />
+    <Content Include="Docs\uiimages\ui_win_Observing-Location.png" />
+    <Content Include="Docs\uiimages\ui_win_Observing-Time.png" />
+    <Content Include="Docs\uiimages\ui_win_Opening-View.png" />
+    <Content Include="Docs\uiimages\ui_win_Screen-Broadcast.png" />
+    <Content Include="Docs\uiimages\ui_win_Settings-Experience.png" />
+    <Content Include="Docs\uiimages\ui_win_Settings-Menu-Items.png" />
+    <Content Include="Docs\uiimages\ui_win_Settings-Panel.png" />
+    <Content Include="Docs\uiimages\ui_win_Startup-Look-At.jpg" />
+    <Content Include="Docs\uiimages\ui_win_Stereo.png" />
+    <Content Include="Docs\uiimages\ui_win_Top-Panel.png" />
+    <Content Include="Docs\uiimages\ui_win_View-Menu-Entries.png" />
+    <Content Include="Docs\uiimages\Unidentified.jpg" />
+    <Content Include="Docs\uiimages\ViewMenu1.jpg" />
+    <Content Include="Docs\uiimages\ViewMenu2.jpg" />
+    <Content Include="Docs\uiimages\virgocluster.jpg" />
+    <Content Include="Docs\uiimages\visiblelight.jpg" />
+    <Content Include="Docs\uiimages\xboxcontroller.jpg" />
+    <Content Include="Docs\user_style.css" />
+    <Content Include="Docs\WorldWideTelescopeDataFilesReference.html" />
+    <Content Include="Docs\WorldWideTelescopeDataToolsGuide.html" />
+    <Content Include="Docs\worldwidetelescopeexceladdin.html" />
+    <Content Include="Docs\worldwidetelescopelcapi.html" />
+    <Content Include="Docs\worldwidetelescopelocalizationtool.html" />
+    <Content Include="Docs\worldwidetelescopeplanetarium.html" />
+    <Content Include="Docs\WorldWideTelescopeProjectionReference.html" />
+    <Content Include="Docs\worldwidetelescopesdkgettingstarted.html" />
+    <Content Include="Docs\WorldWideTelescopeSDKOverview.html" />
+    <Content Include="Docs\worldwidetelescopetilepyramidsdk.html" />
+    <Content Include="Docs\worldwidetelescopetilepyramidsdksamples.html" />
+    <Content Include="Docs\worldwidetelescopeuserguide.html" />
+    <Content Include="Docs\WorldWideTelescopeWebControlScriptReference.html" />
+    <Content Include="Docs\WorldWideTelescope_lcapi.html" />
+    <Content Include="Docs\Wtml\an_author.jpg" />
+    <Content Include="Docs\Wtml\Sample_Blank Collection.html" />
+    <Content Include="Docs\Wtml\Sample_Community Payload.html" />
+    <Content Include="Docs\Wtml\Sample_CommunityPayload.html" />
+    <Content Include="Docs\Wtml\sample_panoramasurvey.html" />
+    <Content Include="Docs\Wtml\Sample_Signup.html" />
+    <Content Include="Docs\Wtml\sample_study.html" />
+    <Content Include="Docs\Wtml\sample_tourcollection.html" />
+    <Content Include="Docs\Wtml\Thumb1.jpg" />
+    <Content Include="Docs\Wtml\Thumb2.jpg" />
+    <Content Include="Docs\YesNo.bmp" />
+    <Content Include="embedded-webcontrol.js" />
+    <Content Include="Gruntfile.js" />
+    <Content Include="Home.aspx" />
+    <Content Include="Error404.aspx" />
+    <Content Include="Global.asax" />
+    <Content Include="html5sdk\1.0.0\wwtsdk.js" />
+    <Content Include="html5sdk\1.0.0\wwtsdk.min.js" />
+    <Content Include="html5sdk\ss.js" />
+    <Content Include="html5sdk\ss.min.js" />
+    <Content Include="html5sdk\wwtlib.js" />
+    <Content Include="html5sdk\wwtsdk.js" />
+    <Content Include="html5sdk\wwtsdk.min.js" />
+    <Content Include="HTML5TourPlayer.aspx" />
+    <Content Include="Models\images.xml" />
+    <Content Include="Models\wwtmusic.xml" />
+    <Content Include="References\msshrtmi.dll" />
+    <Content Include="robots.txt" />
+    <Content Include="Scripts\controllers\communitydetail.js" />
+    <Content Include="Scripts\controllers\contentdetail.js" />
+    <Content Include="Scripts\controllers\communitycontent.js" />
+    <Content Include="Scripts\controllers\editcommunity.js" />
+    <Content Include="Scripts\controllers\editcontent.js" />
+    <Content Include="Scripts\controllers\myprofile.js" />
+    <Content Include="Scripts\controllers\addcontent.js" />
+    <Content Include="Scripts\controllers\testresources.js" />
+    <Content Include="Scripts\controls\move.js" />
+    <Content Include="Scripts\controls\pinch.js" />
+    <Content Include="Scripts\controls\sdk.js" />
+    <Content Include="Scripts\controls\TourPlayer.js" />
+    <Content Include="Scripts\controls\tweener.js" />
+    <Content Include="Scripts\controls\user.js" />
+    <Content Include="Scripts\controls\util.js" />
+    <Content Include="Scripts\controls\WCSService.js" />
+    <Content Include="Scripts\controls\WebControl.js" />
+    <Content Include="Scripts\factory\dataproxy.js" />
+    <Content Include="Scripts\ext\angular-file-upload.min.js" />
+    <Content Include="Scripts\ext\angular.js" />
+    <Content Include="Scripts\ext\bootbox.min.js" />
+    <Content Include="Scripts\ext\bootstrap-datepicker.js" />
+    <Content Include="Scripts\ext\bootstrap.js" />
+    <Content Include="Scripts\ext\bootstrap.min.js" />
+    <Content Include="Scripts\ext\bootstrapValidator.js" />
+    <Content Include="Scripts\ext\jquery.js" />
+    <Content Include="Scripts\ext\modernizr-2.7.1.js" />
+    <Content Include="Content\CSS\sprites.less" />
+    <Content Include="Content\CSS\multiselect.less" />
+    <Content Include="Scripts\ext\angular-file-upload.min.map" />
+    <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Localization\lang_en.tdf" />
+    <Content Include="Content\OpenWWT\OpenWWT_Development.pdf" />
+    <Content Include="App_Readme\WURFL-v1.6.0.1.chm" />
+    <Content Include="App_Data\wurfl-latest.zip" />
+    <Content Include="Scripts\ext\multiselect.js" />
+    <Content Include="Scripts\ext\ui-bootstrap-tpls-0.12.1.js" />
+    <Content Include="Scripts\factory\uihelper.js" />
+    <Content Include="Scripts\main.js" />
+    <Content Include="Scripts\pages\home.js" />
+    <Content Include="Scripts\pages\ImportImage.js" />
+    <Content Include="Scripts\pages\Observatories.js" />
+    <Content Include="Scripts\pages\PlanetExplorer.js" />
+    <Content Include="Scripts\pages\Spectroscopy.js" />
+    <Content Include="sitemap.staging.xml" />
+    <Content Include="sitemap.xml" />
+    <Content Include="TourPlayer.js" />
+    <Content Include="Views\Shared\Footer.cshtml" />
+    <Content Include="Views\Shared\TopNav.cshtml" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Support\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="WebControl.aspx" />
+    <Content Include="WebServices\AdministrationService.svc" />
+    <Content Include="WebServices\LiveIdAuth.svc" />
+    <Content Include="WebServices\ResourceService.svc" />
+    <Content Include="Views\Interact\Index.cshtml" />
+    <Content Include="Views\OpenWWT\Contributing.cshtml" />
+    <Content Include="Views\Community\Index.cshtml" />
+    <Content Include="Views\Community\Profile.cshtml" />
+    <Content Include="Views\Shared\_CommunityLayout.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Docs\sdk\" />
+    <Folder Include="Views\Home\" />
+    <Folder Include="Views\Resources\" />
+    <Folder Include="Views\WCF\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+    <Content Include="Docs\WorldWideTelescopeAdd-inforExcelUserGuide.chm" />
+    <Content Include="Docs\WorldWideTelescopeSDKUserGuide.chm" />
+    <Content Include="Docs\Wtml\Callisto surface.wtml" />
+    <Content Include="Docs\Wtml\Europa surface.wtml" />
+    <Content Include="Docs\Wtml\Ganymede surface.wtml" />
+    <Content Include="Docs\Wtml\Io surface.wtml" />
+    <Content Include="Docs\Wtml\Mars surface.wtml" />
+    <Content Include="Docs\Wtml\Mercury surface.wtml" />
+    <Content Include="Docs\Wtml\Moon surface.wtml" />
+    <Content Include="Docs\Wtml\MyPlaces.wtml" />
+    <Content Include="Docs\Wtml\planettourcollection.wtml" />
+    <Content Include="Docs\Wtml\TourOne.wtt" />
+    <Content Include="Docs\Wtml\TourTwo.wtt" />
+    <Content Include="Docs\Wtml\Venus surface.wtml" />
+    <Content Include="Docs\WWTSDKFactSheet.pdf" />
+    <Content Include="Ashx\IssuesAndBugs.ashx" />
+    <Content Include="Bootstrap\less\alerts.less" />
+    <Content Include="Bootstrap\less\badges.less" />
+    <Content Include="Bootstrap\less\bootstrap.less" />
+    <Content Include="Bootstrap\less\breadcrumbs.less" />
+    <Content Include="Bootstrap\less\button-groups.less" />
+    <Content Include="Bootstrap\less\buttons.less" />
+    <Content Include="Bootstrap\less\carousel.less" />
+    <Content Include="Bootstrap\less\close.less" />
+    <Content Include="Bootstrap\less\code.less" />
+    <Content Include="Bootstrap\less\component-animations.less" />
+    <Content Include="Bootstrap\less\dropdowns.less" />
+    <Content Include="Bootstrap\less\forms.less" />
+    <Content Include="Bootstrap\less\glyphicons.less" />
+    <Content Include="Bootstrap\less\grid.less" />
+    <Content Include="Bootstrap\less\input-groups.less" />
+    <Content Include="Bootstrap\less\jumbotron.less" />
+    <Content Include="Bootstrap\less\labels.less" />
+    <Content Include="Bootstrap\less\list-group.less" />
+    <Content Include="Bootstrap\less\media.less" />
+    <Content Include="Bootstrap\less\mixins.less" />
+    <Content Include="Bootstrap\less\modals.less" />
+    <Content Include="Bootstrap\less\navbar.less" />
+    <Content Include="Bootstrap\less\navs.less" />
+    <Content Include="Bootstrap\less\normalize.less" />
+    <Content Include="Bootstrap\less\pager.less" />
+    <Content Include="Bootstrap\less\pagination.less" />
+    <Content Include="Bootstrap\less\panels.less" />
+    <Content Include="Bootstrap\less\popovers.less" />
+    <Content Include="Bootstrap\less\print.less" />
+    <Content Include="Bootstrap\less\progress-bars.less" />
+    <Content Include="Bootstrap\less\responsive-utilities.less" />
+    <Content Include="Bootstrap\less\scaffolding.less" />
+    <Content Include="Bootstrap\less\tables.less" />
+    <Content Include="Bootstrap\less\theme.less" />
+    <Content Include="Bootstrap\less\thumbnails.less" />
+    <Content Include="Bootstrap\less\tooltip.less" />
+    <Content Include="Bootstrap\less\type.less" />
+    <Content Include="Bootstrap\less\utilities.less" />
+    <Content Include="Bootstrap\less\variables.less" />
+    <Content Include="Bootstrap\less\wells.less" />
+    <Content Include="adsass.wtml" />
+    <Content Include="Content\CSS\bootswatch.less" />
+    <Content Include="Content\CSS\datepicker.less" />
+    <Content Include="Content\CSS\legacy.less" />
+    <Content Include="Content\CSS\wwt.less" />
+    <Content Include="Content\CSS\tourplayer.less" />
+    <Content Include="Content\CSS\variables.less" />
+    <Content Include="Content\CSS\bootstrap_overrides.less" />
+    <Content Include="bower.json" />
+    <Content Include="package.json" />
+    <Content Include="Content\CSS\wwt.css.map" />
+    <Content Include="Bootstrap\less\responsive-embed.less" />
+    <Content Include="Bootstrap\less\mixins\alerts.less" />
+    <Content Include="Bootstrap\less\mixins\background-variant.less" />
+    <Content Include="Bootstrap\less\mixins\border-radius.less" />
+    <Content Include="Bootstrap\less\mixins\buttons.less" />
+    <Content Include="Bootstrap\less\mixins\center-block.less" />
+    <Content Include="Bootstrap\less\mixins\clearfix.less" />
+    <Content Include="Bootstrap\less\mixins\forms.less" />
+    <Content Include="Bootstrap\less\mixins\gradients.less" />
+    <Content Include="Bootstrap\less\mixins\grid-framework.less" />
+    <Content Include="Bootstrap\less\mixins\grid.less" />
+    <Content Include="Bootstrap\less\mixins\hide-text.less" />
+    <Content Include="Bootstrap\less\mixins\image.less" />
+    <Content Include="Bootstrap\less\mixins\labels.less" />
+    <Content Include="Bootstrap\less\mixins\list-group.less" />
+    <Content Include="Bootstrap\less\mixins\nav-divider.less" />
+    <Content Include="Bootstrap\less\mixins\nav-vertical-align.less" />
+    <Content Include="Bootstrap\less\mixins\opacity.less" />
+    <Content Include="Bootstrap\less\mixins\pagination.less" />
+    <Content Include="Bootstrap\less\mixins\panels.less" />
+    <Content Include="Bootstrap\less\mixins\progress-bar.less" />
+    <Content Include="Bootstrap\less\mixins\reset-filter.less" />
+    <Content Include="Bootstrap\less\mixins\resize.less" />
+    <Content Include="Bootstrap\less\mixins\responsive-visibility.less" />
+    <Content Include="Bootstrap\less\mixins\size.less" />
+    <Content Include="Bootstrap\less\mixins\tab-focus.less" />
+    <Content Include="Bootstrap\less\mixins\table-row.less" />
+    <Content Include="Bootstrap\less\mixins\text-emphasis.less" />
+    <Content Include="Bootstrap\less\mixins\text-overflow.less" />
+    <Content Include="Bootstrap\less\mixins\vendor-prefixes.less" />
+    <Content Include="Models\EarthOnline.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>EarthOnline.Context1.cs</LastGenOutput>
+    </Content>
+    <EntityDeploy Include="Models\EarthOnline.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>EarthOnline1.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\EarthOnline.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>EarthOnline1.cs</LastGenOutput>
+    </Content>
+    <None Include="Project_Readme.html" />
+    <Content Include="Views\Shared\_ContentPage.cshtml" />
+    <Content Include="Views\About\Index.cshtml" />
+    <Content Include="Views\About\Acknowledgments.cshtml" />
+    <Content Include="Views\About\FAQ.cshtml" />
+    <Content Include="Views\About\FurtherDetails.cshtml" />
+    <Content Include="Views\About\WebClient.cshtml" />
+    <Content Include="Views\Contact\Index.cshtml" />
+    <Content Include="Views\Developers\DataFilesReference.cshtml" />
+    <Content Include="Views\Developers\DataToolsGuide.cshtml" />
+    <Content Include="Views\Developers\Index.cshtml" />
+    <Content Include="Views\Developers\HTML5SDK.cshtml" />
+    <Content Include="Views\Developers\ImportImage.cshtml" />
+    <Content Include="Views\Developers\LayerControlAPI.cshtml" />
+    <Content Include="Views\Developers\ProjectionReference.cshtml" />
+    <Content Include="Views\Developers\WWTSDK.cshtml" />
+    <Content Include="Views\Download\Index.cshtml" />
+    <Content Include="Views\Download\Features.cshtml" />
+    <Content Include="Views\Download\Legacy.cshtml" />
+    <Content Include="Views\Download\Tools.cshtml" />
+    <Content Include="Views\Download\TourAssets.cshtml" />
+    <Content Include="Views\Educators\Index.cshtml" />
+    <Content Include="Views\Educators\WWTA.cshtml" />
+    <Content Include="Views\Explorers\Index.cshtml" />
+    <Content Include="Views\Explorers\WWTA.cshtml" />
+    <Content Include="Views\Eyewire\Index.cshtml" />
+    <Content Include="Views\Interact\Debug.cshtml" />
+    <Content Include="Views\Interact\GreatObservatories.cshtml" />
+    <Content Include="Views\Interact\MilkyWay.cshtml" />
+    <Content Include="Views\Interact\MoreNessies.cshtml" />
+    <Content Include="Views\Interact\PlanetExplorer.cshtml" />
+    <Content Include="Views\Interact\Spectrum.cshtml" />
+    <Content Include="Views\Layerscape\Index.cshtml" />
+    <Content Include="Views\Learn\Authoring.cshtml" />
+    <Content Include="Views\Learn\Exploring.cshtml" />
+    <Content Include="Views\Learn\Index.cshtml" />
+    <Content Include="Views\Learn\SettingUp.cshtml" />
+    <Content Include="Views\Learn\WhatsNew.cshtml" />
+    <Content Include="Views\Museums\Index.cshtml" />
+    <Content Include="Views\Planetariums\DomeProject.cshtml" />
+    <Content Include="Views\Planetariums\Index.cshtml" />
+    <Content Include="Views\Planetariums\Impacts.cshtml" />
+    <Content Include="Views\Planetariums\Resources.cshtml" />
+    <Content Include="Views\Planetariums\WWTPlanetarium.cshtml" />
+    <Content Include="Views\Researchers\Index.cshtml" />
+    <Content Include="Views\Researchers\Resources.cshtml" />
+    <Content Include="Views\About\LeftNav.cshtml" />
+    <Content Include="Views\Learn\LeftNav.cshtml" />
+    <Content Include="Views\Developers\LeftNav.cshtml" />
+    <Content Include="Views\Download\LeftNav.cshtml" />
+    <Content Include="Views\Educators\LeftNav.cshtml" />
+    <Content Include="Views\Explorers\LeftNav.cshtml" />
+    <Content Include="Views\Interact\LeftNav.cshtml" />
+    <Content Include="Views\Planetariums\LeftNav.cshtml" />
+    <Content Include="Views\Researchers\LeftNav.cshtml" />
+    <Content Include="Views\Support\IssuesAndBugs.cshtml" />
+    <Content Include="Views\Support\Index.cshtml" />
+    <Content Include="Views\Support\LeftNav.cshtml" />
+    <Content Include="Views\Shared\webclient\IndexNYI.cshtml" />
+    <Content Include="Views\Search\Index.cshtml" />
+    <Content Include="Views\Download\Beta.cshtml" />
+    <Content Include="Views\Index.cshtml" />
+    <Content Include="Views\Support\Localization.cshtml" />
+    <Content Include="Views\Learn\MobileTest.cshtml" />
+    <Content Include="Views\Shared\webclient\debughead.cshtml" />
+    <Content Include="Views\Support\Error500.cshtml" />
+    <Content Include="Views\WWTinAction\Index.cshtml" />
+    <Content Include="Views\WWTinAction\LeftNav.cshtml" />
+    <Content Include="Views\WWTinAction\WWTinEducation.cshtml" />
+    <Content Include="Views\WWTinAction\WWTinResearch.cshtml" />
+    <Content Include="Views\Interact\Embed.cshtml" />
+    <Content Include="Views\Interact\WCSService.cshtml" />
+    <Content Include="Views\OpenWWT\Index.cshtml" />
+    <Content Include="Views\OpenWWT\LeftNav.cshtml" />
+    <Content Include="Views\OpenWWT\WWTStories.cshtml" />
+    <Content Include="Views\OpenWWT\WWTatAAS.cshtml" />
+    <Content Include="Views\Interact\Planck.cshtml" />
+    <Content Include="Views\Profile\Index.cshtml" />
+    <Content Include="Views\Profile\LeftNav.cshtml" />
+    <Content Include="Views\Profile\Communities.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>4675</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Import Project="..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets')" />
+  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <PropertyGroup>
+    <PostBuildEvent>
+      cd $(TargetDir)
+      del msshrtmi.dll
+    </PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>cd $(TargetDir)  
+xcopy ..\References\msshrtmi.dll $(TargetDir)</PreBuildEvent>
+  </PropertyGroup>
+  <!--<UsingTask TaskName="TransformXml" AssemblyFile="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Web\Microsoft.Web.Publishing.Tasks.dll" />
+  <Target Name="Transform">
+    <MakeDir Directories="obj\$(Configuration)" Condition="!Exists('obj\$(Configuration)')" />
+    <TransformXml Source="Web.Config" Transform="Web.$(Configuration).config" Destination="obj\$(Configuration)\Web.config" StackTrace="true" />
+  </Target>
+  PostBuildEvent "$(MSBUILDBINPATH)\msbuild" "$(ProjectPath)" /t:Transform /p:Configuration=$(ConfigurationName);Platform=AnyCPU
+      xcopy "$(ProjectDir)obj\$(ConfigurationName)\Web.Config" "$(ProjectDir)". /F /R /Y
+  -->
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

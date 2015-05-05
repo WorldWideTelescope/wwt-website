@@ -1,0 +1,315 @@
+﻿@using WWTMVC5.Models
+@{
+	Layout = "~/Views/Shared/_ContentPage.cshtml";
+	ViewBag.AckImgDir = Model.ContentDir + "/images/acknowledgements";
+	ViewBag.HideTranslateWidget = 1;  
+}
+@section leftnav{
+	@Html.Partial("~/Views/About/LeftNav.cshtml")
+}
+
+<h1 class="text-info">Acknowledgments</h1>
+<div class=title5>
+	"If I have seen further, it is by standing on the shoulders of giants."
+</div>
+<div class=title6> &nbsp;&nbsp;-Isaac Newton in a letter to Robert Hooke in 1675 or 1676.</div>
+
+<div>&nbsp;</div>
+<div class="ack_container">
+	<div class="ack_img">
+		<img src="@ViewBag.AckImgDir/jim.png" class="ack" />
+	</div>
+	<div class="ack_content">
+		<div class="title5">Jim Gray</div>
+		<div style="float:left;width:500px;color:White">
+			WWT is dedicated to the vision and efforts of Jim Gray who inspired us to bring the stars within the reach of everyone.
+			<br /><br /><a href="http://research.microsoft.com/~Gray/">Jim Gray's Research site</a>
+		</div>
+	</div>
+</div>
+
+<div class="ack_container">
+	<div class="ack_img">
+		<img src="@ViewBag.AckImgDir/SDSS.png" />
+	</div>
+	<div class="ack_content">
+		<div class="title5">Sloan Digital Sky Survey (SDSS)</div>
+	</div>
+</div>
+
+<div class="ack_container">
+	<div class="ack_img">
+		<img src="@ViewBag.AckImgDir/NOAO.png" />
+	</div>
+	<div class="ack_content">
+		<div class="title5">National Optical Astronomy Observatory (NOAO)</div>
+	</div>
+</div>
+
+<div class="ack_container">
+	<div class="ack_img">
+		<img src="@ViewBag.AckImgDir/STSci.png" />
+	</div>
+	<div class="ack_content">
+<div class="title5">Space Telescope Science Institute (STSci) (DSS data set)</div>
+		<ul>
+			<li>Frank Summers</li>
+			<li>Brian McLean</li>
+		</ul>
+		<a href="http://www.stsci.edu/resources">http://www.stsci.edu/resources</a> 
+	</div>
+</div>
+
+<div class="ack_container" style="border:none;margin-bottom:0px">
+	<div class="ack_img">
+		<img src="@ViewBag.AckImgDir/IPAC.png" />
+	</div>
+	<div class="ack_content">
+		<div class="title5">Infrared Processing and Analysis Center (IPAC) 
+</div>
+		<a href="http://www.ipac.caltech.edu/">http://www.ipac.caltech.edu/</a>
+	</div>
+</div>
+
+<div class="ack_container" style="border: none; margin-bottom: 0px">
+	<div class="ack_img">
+		<img src="@ViewBag.AckImgDir/IRSA.png" />
+	</div>
+	<div class="ack_content">
+		<div class="title5">Infrared Science Archive (IRSA) at Caltech (2MASS and IRAS data sets)
+</div>
+		<a href="http://www.caltech.edu/">http://www.caltech.edu/</a>
+	</div>
+</div>
+
+<div class="ack_container">
+	<div class="ack_img">
+		<img src="@ViewBag.AckImgDir/JPL.png" />
+	</div>
+	<div class="ack_content">
+		<div class="title5">Jet Propulsion Laboratory</div>
+		<ul>
+			<li>Robert Hurt</li>
+			<li>John Good</li>
+		</ul>
+		<a href="http://www.jpl.nasa.gov/index.cfm">http://www.jpl.nasa.gov/index.cfm</a>
+	</div>
+</div>
+
+<div class="ack_container">
+	<div class="ack_img">
+		<img src="@ViewBag.AckImgDir/CfA.png" />
+	</div>
+	<div class="ack_content">
+		<div class="title5">Harvard-Smithsonian Center for Astrophysics</div>
+		<ul>
+			<li>Alyssa Goodman</li>
+			<li>August (Gus) Muench</li>
+			<li>Doug Finkbeiner</li>
+			<li>Roy Gould</li>
+		</ul>
+		<a href="http://cfa-www.harvard.edu">http://cfa-www.harvard.edu</a>
+	</div>
+</div>
+<div class="ack_container">
+	<div class="ack_img">
+		<img src="@ViewBag.AckImgDir/NASA.png" />
+	</div>
+	<div class="ack_content">
+		<div class="title5">National Aeronautics and Space Administration (NASA)</div>
+		<a href="http://www.nasa.gov/home/index.html">http://www.nasa.gov/home/index.html</a>
+	</div>
+</div>
+
+<div class="ack_container">
+	<div class="ack_img">
+		<img src="@ViewBag.AckImgDir/skyview.png" />
+	</div>
+	<div class="ack_content">
+		<div class="title5">NASA SkyView</div>
+		Tom McGlynn<br />
+		<a href="http://skyview.gsfc.nasa.gov/">http://skyview.gsfc.nasa.gov/</a> 
+	</div>
+</div>
+
+<div class="ack_container">
+	<div class="ack_img">
+		<img src="@ViewBag.AckImgDir/USNO.png" />
+	</div>
+	<div class="ack_content">
+		<div class="title5">U.S. Naval Observatory</div>
+		<a href=http://aa.usno.navy.mil/index.php>http://aa.usno.navy.mil/index.php</a>
+	</div>
+</div>
+
+<div class="ack_container">
+	<div class="ack_img">
+		<img src="@ViewBag.AckImgDir/WMAP.png" />
+	</div>
+	<div class="ack_content">
+		<div class="title5">Wilkinson Microwave Anisotrophy Probe (WMAP)</div>
+		<a href="http://map.gsfc.nasa.gov/index.html">http://map.gsfc.nasa.gov/index.html</a>
+	</div>
+</div>
+
+<div class="ack_container">
+	<div class="ack_img">
+		<img src="@ViewBag.AckImgDir/USGS.png" />
+	</div>
+	<div class="ack_content">
+		<div class="title5">U.S. Geological Survey (USGS) Digital Elevation Model (DEM)</div>
+		<a href="http://www.usgs.gov">http://www.usgs.gov</a>
+	</div>
+</div>
+<div class="ack_container">
+	<div class="ack_img">
+		<img src="@ViewBag.AckImgDir/BingMapsLogo.png" />
+	</div>
+	<div class="ack_content">
+		<div class="title5">Bing Maps</div>
+		<a href="http://www.bing.com/maps/">http://www.bing.com/maps/</a>
+	</div>
+</div>
+
+<div class="ack_container" style="border: none; margin-bottom: 0px">
+	<div class="ack_img">
+		<img src="@ViewBag.AckImgDir/Princeton-HALPHA.png" />
+	</div>
+	<div class="ack_content">
+		<div class="title5">Douglas Finkbeiner at Princeton University</div>
+		For compositing the Virginia Tech Spectral line Survey (VTSS) 
+		in the northern hemisphere, the Southern H-Alpha Sky Survey Atlas (SHASSA) in the southern hemisphere, 
+		Hydrogen alpha (HA) filters, and the Wisconsin H-Alpha Mapper (WHAM) survey (H-A data set)
+		<a href="http://www.astro.princeton.edu/~dfink/halpha/">http://www.astro.princeton.edu/~dfink/halpha/</a>
+	</div>
+</div>
+<div class="ack_container" style="border: none; margin-bottom: 0px">
+	<div class="ack_img">
+		<img src="@ViewBag.AckImgDir/WHAM-Wisconsin.png" />
+	</div>
+	<div class="ack_content">
+		<div class="title5">University of Wisconsin</div>
+		<a href="http://www.astro.wisc.edu/wham/">http://www.astro.wisc.edu/wham/</a> 
+	</div>
+</div>
+<div class="ack_container" style="border: none; margin-bottom: 0px">
+	<div class="ack_img">
+		<img src="@ViewBag.AckImgDir/VSST.png" />
+	</div>
+	<div class="ack_content">
+		<div class="title5">Virginia Tech</div>
+		<a href="http://www.phys.vt.edu/~halpha">http://www.phys.vt.edu/~halpha</a>
+	</div>
+</div>
+<div class="ack_container">
+	<div class="ack_img">
+		<img src="@ViewBag.AckImgDir/SHASSA.png" />
+	</div>
+	<div class="ack_content">
+		<div class="title5"></div>
+		<a href="http://amundsen.swarthmore.edu/SHASSA/">http://amundsen.swarthmore.edu/SHASSA/</a>
+	</div>
+</div>
+<div class="ack_container">
+	<div class="ack_img">
+		<img src="@ViewBag.AckImgDir/CUO-USNO.png" />
+	</div>
+	<div class="ack_content">
+		<div class="title5">Copenhagen University Observatory (CUO) and the U.S. Naval Observatory (USNO)</div>
+		<a href="http://www.nbi.ku.dk">http://www.nbi.ku.dk</a>
+	</div>
+</div>
+
+<div class="ack_container">
+	<div class="ack_img">
+		<img src="@ViewBag.AckImgDir/ASCOM.png" />
+	</div>
+	<div class="ack_content">
+		<div class="title5">Astronomy Common Object Model (ASCOM)</div>
+		<a href="http://ascom-standards.org/index.html">http://ascom-standards.org/index.html</a>
+	</div>
+</div>
+
+<div class="ack_container" style="border: none; margin-bottom: 0px">
+	<div class="ack_img">
+		<img src="@ViewBag.AckImgDir/IVOA.png" />
+	</div>
+	<div class="ack_content">
+		<div class="title5">International Virtual Observatory Alliance’s (IVOA))</div>
+		<a href="http://www.ivoa.net/">http://www.ivoa.net/</a>
+	</div>
+</div>
+<div class="ack_container">
+	<div class="ack_img">
+		<img src="@ViewBag.AckImgDir/VAMP.png" />
+	</div>
+	<div class="ack_content">
+		<div class="title5">VAMP project (classification)</div>
+		<a href="http://virtualastronomy.org/">http://virtualastronomy.org/</a>
+	</div>
+</div>
+
+<div class="ack_container">
+	<div class="ack_img">
+		<img src="@ViewBag.AckImgDir/ESA-NASA.png" />
+	</div>
+	<div class="ack_content">
+		<div class="title5">ESA/NASA Hubble</div>
+		<a href="http://www.spacetelescope.org/">http://www.spacetelescope.org/</a>
+	</div>
+</div>
+
+<div class="ack_container">
+	<div class="ack_img">
+		<img src="@ViewBag.AckImgDir/JohnHopkins.png" />
+	</div>
+	<div class="ack_content">
+		<div class="title5">Johns Hopkins University</div>
+		Alex Szalay<br />
+		<a href=http://www.jhu.edu>http://www.jhu.edu</a>
+	</div>
+</div>
+
+<div class="ack_container">
+	<div class="ack_img">
+		<img src="@ViewBag.AckImgDir/NVO.png" />
+	</div>
+	<div class="ack_content">
+		<div class="title5">National Virtual Observatory(NVO)</div>
+		<a href="http://chart.stsci.edu/twiki/bin/view/Main/WebHome">http://chart.stsci.edu/twiki/bin/view/Main/WebHome</a>
+	</div>
+</div>
+
+<div class="ack_container">
+	<div class="ack_img">
+		<img src="http://www.wilmslowastro.com/software/images/th_lyra.gif" />
+	</div>
+	<div class="ack_content">
+		<div class="title5">Mark Crossley - Wilmslow Astro for proccessing of Hevelius artwork</div>
+	</div>
+</div>
+
+<div class="ack_container">
+	<div class="ack_img">
+		<img src="@ViewBag.AckImgDir/Sky-Telescope.png" />
+	</div>
+	<div class="ack_content">
+		<div class="title5">Sky and Telescope</div>
+		<a href="http://www.skyandtelescope.com/community/organizations">http://www.skyandtelescope.com/community/organizations</a>
+	</div>
+</div>
+<div class="ack_container solar">
+	<a name="solarsystemmode"></a>
+	<div class=title5>Image Credits for WorldWide Telescope Solar System Mode</div>
+	<ul>
+		<li><strong>Milky Way Galaxy Model</strong>&nbsp;&mdash;&nbsp;Dr. Robert Hurt, <a href="http://ssc.spitzer.caltech.edu/">Spitzer Science Center, CalTech</a></li>
+		<li><strong>Hiparcos Catalogs</strong>&nbsp;&mdash;&nbsp;<a href="http://www.rssd.esa.int/index.php?project=HIPPARCOS">European Space Agency</a></li>
+		<li><strong>Planetary Images</strong>&nbsp;&mdash;&nbsp;<a href="http://www.jpl.nasa.gov/">NASA Jet Propulsion Laboratory</a></li>
+		<li><strong>Cosmos Mode</strong>&nbsp;&mdash;&nbsp;</li>
+		<ul>
+			<li><a href="http://www.sdss.org/">Sloane Digital Sky Survey</a></li>
+			<li>Miguel  Angel Aragon Calvo, <a href="http://physics-astronomy.jhu.edu/">Department of Physics and Astronomy, Johns Hopkins University</a></li>
+			<li>Mark SubbaRao, <a href="http://www.adlerplanetarium.org/">Adler Planetarium, <a href="http://astro.uchicago.edu/index.shtml">Department of Astronomy and Astrophysics at the University of Chicago</a></li>
+		</ul>
+	</ul>
+</div>

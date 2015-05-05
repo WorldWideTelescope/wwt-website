@@ -1,0 +1,245 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" content="chrome=1, IE=edge" http-equiv="X-UA-Compatible" />
+  
+    <title>WWT Web Client Earth City Search</title>
+    <script src="http://www.worldwidetelescope.org/scripts/wwtsdk.aspx"></script>
+    <script>
+
+    // Create the WorldWide telescope object variable
+
+    var wwt;
+
+    // Create variables to hold the changeable settings
+
+    var bShowCrosshairs = true;
+    var bShowUI = true;
+
+    // This function initializes the wwt object and registers the wwtReady event
+    // once the initialization is done the wwtReady event will be fired
+    function initialize() {
+        wwt = wwtlib.WWTControl.initControl("WWTCanvas");
+        wwt.add_ready(wwtReady);
+    }
+
+    // A simple function to toggle the settings
+    // This function is called from the checkbox entries setup in the html table
+
+    function toggleSetting(text) {
+        switch (text) {
+            case 'ShowUI':
+                bShowUI = !bShowUI;
+                wwt.hideUI(!bShowUI);
+                break;
+
+            case 'ShowCrosshairs':
+                bShowCrosshairs = !bShowCrosshairs;
+                wwt.settings.set_showCrosshairs(bShowCrosshairs);
+                break;
+
+        }
+    }
+
+    // A function to convert longitude to RA.
+    
+    function convertLongRA(degrees, minutes, east) {
+        var longitude = degrees + (minutes / 60);
+        var x;
+        if (east)
+            x = 360 - longitude; else
+            x = longitude;
+        return x;
+    }
+
+    // A function to convert latitude to Dec
+    
+    function convertLatDec(degrees, minutes, north) {
+    
+        var latitude = degrees + (minutes/60);
+        if (north)
+            return latitude; else
+            return -1 * latitude;   
+    }
+
+    // Go find a lat long
+    
+    function GotoLatLong() {
+        var lat = 1.0 * document.getElementById("Latitude").value;
+        var lon = 1.0 * document.getElementById("Longitude").value;
+        var latM = 1.0 * document.getElementById("LatMinutes").value;
+        var lonM = 1.0 * document.getElementById("LonMinutes").value;
+        var north = document.getElementById('North').checked;
+        var east = document.getElementById('East').checked;
+
+        if (lat < 0 || lat > 90) {
+            document.getElementById('Latitude').value = "Out of range (0-90)";
+        } else
+            if (lon < 0 || lon > 180) {
+            document.getElementById('Longitude').value = "Out of range (0-180)";
+        } else
+            if (lonM < 0 || lonM > 60) {
+            document.getElementById('LonMinutes').value = "Out of range (0-60)";
+        } else
+            if (latM < 0 || latM > 60) {
+            document.getElementById('LatMinutes').value = "Out of range (0-60)";
+        } else
+            wwt.gotoRaDecZoom(convertLongRA(lon, lonM, east), convertLatDec(lat, latM, north), 0.1, false);
+    }
+   
+    // Go find a city
+    
+    function GotoCity(text) {
+
+        switch (text) {
+            case 'London':
+                wwt.gotoRaDecZoom(convertLongRA(0,5,false), convertLatDec(51,32,true),   0.05, false);
+                break;
+
+            case 'Reykjavik':
+                wwt.gotoRaDecZoom(convertLongRA(21,58,false), convertLatDec(64,4,true),  0.05, false);
+                break;
+
+            case 'Sydney':
+                wwt.gotoRaDecZoom(convertLongRA(151,5,true), convertLatDec(33,51,false),  0.05, false);
+                break;
+                
+            case 'Santiago':
+                wwt.gotoRaDecZoom(convertLongRA(70,45,false), convertLatDec(33,28,false),   0.05, false);
+                break;
+
+            case 'St Petersburg':
+                wwt.gotoRaDecZoom(convertLongRA(30,18,true), convertLatDec(59,50,true),  0.05, false);
+                break;
+
+            case 'Cape Town':
+                wwt.gotoRaDecZoom(convertLongRA(18,23,true), convertLatDec(33,55,false),  0.05, false);
+                break;
+                            
+            case 'San Francisco':
+                wwt.gotoRaDecZoom(convertLongRA(122,26,false), convertLatDec(37,47,true),  0.05, false);
+                break;
+                
+            case 'Zero Zero':
+                wwt.gotoRaDecZoom(0, 0, 10, false);
+                break;
+        }
+    }
+
+    // The wwtReady function is called by the WWT Web Control software
+    // This function sets up the wwt object, and the initial defaults
+
+    function wwtReady() {
+        wwt.settings.set_showCrosshairs(bShowCrosshairs);
+        wwt.hideUI(!bShowUI);
+        wwt.setBackgroundImageByName("bing maps aerial");
+    }
+
+    </script>
+
+</head>
+
+<body onload="initialize()" >
+
+<!-- The body section creates a table with two columns. The first contains the -->
+<!-- WWTControl object that is the WWT web client. And the second a table within-->
+<!-- the table, containing some buttons and checkboxes.-->
+
+<table border="2" bgcolor="lightgrey">
+	<tr><td>
+        <div id="WorldWideTelescopeControlHost">
+            <div id="WWTCanvas" style="width: 750px; height: 750px; border-style: none; border-width: 0px;">
+            </div>
+    </div>
+	</td><td>
+
+	<table border="2" cellspacing="4" cellpadding="4" bgcolor="gold">
+	
+	<tr>
+	<th colspan="2"><h2>WWT Web Client Earth City Search</h2></th>
+	</tr>
+    <tr>
+	<th colspan = "2">City</th>
+	</tr>
+	<tr><th colspan="2">
+	<input type="button" id="London" value="Goto London, UK" onclick="GotoCity('London');"/>
+	</th></tr>
+	<tr><th colspan="2">
+	<input type="button" id="Reykjavik" value="Goto Reykjavik, Iceland" onclick="GotoCity('Reykjavik');"/>	
+	</th></tr>
+	<tr><th colspan="2">
+	<input type="button" id="Sydney" value="Goto Sydney, Australia" onclick="GotoCity('Sydney');"/>
+	</th></tr>
+	<tr><th colspan="2">
+	<input type="button" id="Button2" value="Goto Santiago, Chile" onclick="GotoCity('Santiago');"/>	
+	</th></tr>
+	<tr><th colspan="2">
+	<input type="button" id="Petersburg" value="Goto St Petersburg, Russia" onclick="GotoCity('St Petersburg');"/>
+	</th></tr>
+	<tr><th colspan="2">
+	<input type="button" id="Cape Town" value="Goto Cape Town, South Africa" onclick="GotoCity('Cape Town')"/>
+	</th></tr>
+	<tr><th colspan="2">
+	<input type="button" id="San Francisco" value="Goto San Francisco, USA" onclick="GotoCity('San Francisco');"/>
+	</th></tr>
+	<tr><th colspan="2">
+	<input type="button" id="Zero Zero" value="Goto Zero Zero" onclick="GotoCity('Zero Zero')"/>
+	</th></tr>
+	
+	<tr>
+	<th colspan = "2">Goto Latitude</th>
+	</tr>
+	<tr>
+	<td>degrees</td>
+	<td> <input id="Latitude" type="text" value="16"/></td>
+	</tr>
+	<tr>
+    <td>minutes</td>
+	<td> <input id="LatMinutes" type="text" value="46"/></td>
+	</tr>
+	<tr>
+	<td>North</td>
+	<td> <input id ="North" type="checkbox" checked="checked" /></td>
+	</tr>
+    <tr>
+	<th colspan = "2">Goto Longitude</th>
+	</tr>
+	<tr>
+	<td>degrees</td>
+	<td> <input id="Longitude" type="text" value="3"/></td>
+	</tr>
+	<tr>
+	<td>minutes</td>
+	<td> <input id="LonMinutes" type="text" value="0"/></td>
+	</tr>
+	<tr>
+	<td>East</td>
+	<td> <input id ="East" type="checkbox" /></td>
+	</tr>
+	<tr><th colspan="2">
+	<input type="button" id="goto" value="Goto" onclick="GotoLatLong();"/>
+	</th></tr>
+	
+	<tr>
+	<th colspan = "2">Settings</th>
+	</tr>
+	
+<!--	<tr>
+		<td> Show UI </td>
+		<td> <input id="UI" type="checkbox" checked="checked" onclick="toggleSetting('ShowUI');"/></td>
+
+	</tr>-->
+	
+	<tr>
+		<td> Show Crosshairs</td>
+		<td> <input id="Crosshairs" type="checkbox" checked="checked" onclick="toggleSetting('ShowCrosshairs');"/></td>
+
+	</tr>
+
+</table>
+</td>
+</tr>
+</table>
+
+</body>
+</html>

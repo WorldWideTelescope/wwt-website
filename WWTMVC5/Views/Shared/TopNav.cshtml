@@ -1,0 +1,149 @@
+﻿@using System.Configuration
+<div class="navbar navbar-inverse navbar-fixed-top">
+	<div class="container">
+		<div class="navbar-header">
+			<button data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggle" type="button">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+
+			<a class="navbar-brand" href="/">
+				World<span class=text-info>Wide Telescope</span>
+			</a>
+		</div>
+		<div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav pull-right social">
+                <li class="sign-in">
+                    @if (Model.User != null)
+                    {
+                        <div id="signinContainer">
+                            <label>&nbsp;</label>
+                            <a class="small" href="/Community/#/MyProfile" id="username"
+                               title="View My WWT Profile">@(Model.User.FirstName + " " + Model.User.LastName)</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div id="signinContainer">
+                            <label title="WWT will automatically attempt to sign you in when you visit this page next time">
+                                Remember me
+                                <input type="checkbox" id="chkRemember"/>
+
+                            </label>
+                            <a class="small" href="javascript:void(0)" id="signin" title="Sign in to WWT">Sign in</a>
+                        </div>
+                    }
+
+                </li>
+                @if(ConfigurationManager.AppSettings["twitterId"] != "xxx")
+                { // need a valid twitter id
+                <li class="social" style="width: 40px">
+                    <a class="social dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)">
+                        <i class="fa fa-twitter text-info"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+
+                        <li>
+                            <a target="social" href="https://twitter.com/intent/follow?original_referer=http%3A%2F%2Fwww.worldwidetelescope.org%2FHome.aspx&region=follow_link&screen_name=WWTelescope&tw_p=followbutton&variant=2.0" title="Follow WWTelescope on Twitter">
+                                <i class="fa fa-twitter text-info"></i>
+                                Follow WWTelescope on Twitter
+                            </a>
+                        </li>
+                        <li>
+
+                            <a target="social" href="https://twitter.com/intent/tweet?original_referer=http%3A%2F%2Fwww.worldwidetelescope.org&text=Check%20out%20WorldWide%20Telescope%20-%20the%203D%20universe&tw_p=tweetbutton&url=http%3A%2F%2Fwww.worldwidetelescope.org&via=WWTelescope
+" title="Tweet WorldWide Telescope">
+                                <i class="fa fa-twitter text-info"></i>
+                                Tweet WorldWide Telescope
+                            </a>
+                        </li>
+                    </ul>
+                    <span class="sep"></span>
+                </li>
+                    <li class="social">
+
+                        <a class="social" target="social" href="https://www.facebook.com/pages/Microsoft-WorldWide-Telescope/17601134446" title="Like us on Facebook">
+                            <i class="fa fa-facebook text-info"></i>
+                        </a>
+                    </li>
+                }
+                <li class="search">
+                    <div class="input-group input-group-sm">
+                        <input type="text" class="form-control" placeholder="bing search">
+                        <span class="input-group-btn">
+                            <button class="btn btn-info" type="button">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span>
+                    </div><!-- /input-group -->
+                </li>
+            </ul>
+			<ul class="nav navbar-nav">
+				<li class="dropdown" runat="server" id="topNav_Learn">
+					<a href="javascript:void(0)" title="Learn" class="dropdown-toggle" data-toggle="dropdown">
+						Learn <i class="fa fa-angle-down"></i>
+					</a>
+					<ul class="dropdown-menu">
+						<li><a href="/Learn/">Getting Started</a></li>
+						<li><a href="/Learn/WhatsNew">What's New</a></li>
+						<li><a href="/Learn/Exploring">Exploring</a></li>
+						<li><a href="/Learn/Authoring">Authoring</a></li>
+						<li><a href="/Learn/SettingUp">Setting Up</a></li>
+					</ul>
+
+				</li>
+				<li class="dropdown" runat="server" id="topNav_Interact">
+					<a href="javascript:void(0)" title="Interact" class="dropdown-toggle" data-toggle="dropdown">
+						Interact <i class="fa fa-angle-down"></i>
+					</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/Interact/MilkyWay">View the Milky Way</a></li>
+                        <li><a href="/Interact/Spectrum">Spectroscopy in Astronomy</a></li>
+                        <li><a href="/Interact/GreatObservatories">Great Observatories</a></li>
+                        <li><a href="/Interact/PlanetExplorer">Planet Explorer</a></li>
+                        <li class="divider"></li>
+                        <li><a href="/Download/">Install WWT</a></li>
+                        <li><a href="javascript:location.href = wwt.wcLink">HTML5 Web Client</a></li>
+                    </ul>
+
+				</li>
+
+				<li class="dropdown" runat="server" id="topNav_Develop">
+					<a href="javascript:void(0)" title="Develop" class="dropdown-toggle" data-toggle="dropdown">
+						Develop <i class="fa fa-angle-down"></i>
+					</a>
+					<ul class="dropdown-menu">
+						<li><a href="/Developers/">Developers Overview</a></li>
+						<li><a href="/Developers/WWTSDK">WWT SDK</a></li>
+						<li><a href="/Developers/HTML5SDK">HTML5 Control SDK</a></li>
+						<li><a href="/Developers/LayerControlAPI">Layer Control API</a></li>
+						<li><a href="/Developers/DataFilesReference">Data Files Reference</a></li>
+						<li><a href="/Developers/ProjectionReference">Projection Reference</a></li>
+						<li><a href="/Developers/ImportImage">Import Image</a></li>
+					</ul>
+
+				</li>
+
+				<li class="dropdown" runat="server" id="topNav_Community">
+					<a href="javascript:void(0)" title="Communities" class="dropdown-toggle" data-toggle="dropdown">
+						Communities <i class="fa fa-angle-down"></i>
+					</a>
+				    <ul class="dropdown-menu">
+                        <li><a href="/Community/">Community Content</a></li>
+                        <li id="profileMenuItem" class="@(Model.User == null ? "hide" : "")"><a href="/Community/Profile">My Profile</a></li>
+                        
+                        <li class="divider"></li>
+				        <li><a href="/OpenWWT/" title="OpenWWT">OpenWWT</a></li>
+				        <li><a href="/Explorers/" title="Explorers">Explorers</a></li>
+				        <li><a href="/Researchers/" title="Researchers">Researchers</a></li>
+				        <li><a href="/Educators/" title="Educators">Educators</a></li>
+				        <li><a href="/Planetariums/" title="Planetariums">Planetariums</a></li>
+				        <li><a href="/Museums/" title="Museums">Museums</a></li>
+				    </ul>
+					 
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>

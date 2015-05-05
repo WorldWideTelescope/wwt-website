@@ -1,0 +1,3277 @@
+﻿<!doctype html>
+<html>
+
+<head>
+<title>WorldWide Telescope Web Control Script Reference</title>
+
+ <meta charset="utf-8" content="" />
+ <!-- <link rel="stylesheet" href="SDK_style.css" media="screen" /> -->
+ <link rel="stylesheet" href="../docs/scripts/jqueryCodeView.css" media="screen" />
+ <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.2.min.js" type="text/javascript"></script>
+ <script src="../docs/scripts/jqueryCodeView.js" type="text/javascript"></script>
+
+ <style type="text/css">
+    /* general settings */
+    p.urgentLine{color:red;}
+    .standout{font-weight:bold;}
+    table.WT1
+    {
+         background-color:transparent; 
+    } 
+    
+    /* script reference block */
+    div.ScriptRefBlock{color:Black;}
+    div b{font-weight:bold;}  
+    
+    /* Silverlight div formatting */
+    div.Silverlight
+    {
+      border-width:thin;
+      border-style:solid;
+      background-color: Silver;
+      margin: 1em;
+      padding: .5em;
+    }
+ </style>
+
+</head>
+
+<body>
+<a name="WorldWideTelescopeWebControlScriptReference"><h1>WorldWide Telescope Web Control Script Reference for HTML5</h1></a>
+<p class="urgentLine">Note: This documentation is preliminary and subject to change.</p>
+
+<p>Web Control scripts are used to customize the WorldWide Telescope web client.  This document describes the setup, development process, API set and samples to aid
+developers in building their own applications.  The customization scripts are written in JScript and embedded in an html file, and along with custom
+data files, can be used to do one or more of the following tasks:</p>
+<ul>
+<li>Create custom viewing interfaces</li>
+	<li>Add images to the view, with their own annotations</li>
+	<li>Add annotations to existing images</li>
+	<li>Load in and interact with a VO (Virtual Observatory) table</li>
+	<li>Load and play tours</li>
+	<li>Change the settings for a view</li>
+</ul>
+<p>Note that currently the SDK only applies to the <span class="standout">Sky</span> view of WorldWide Telescope, and not the <span class="standout">Earth</span>,
+<span class="standout">Planet</span>, <span class="standout">Panorama</span> or <span class="standout">SolarSystem</span> views.</p>
+
+<div class="Silverlight">
+<h2>Attention Silverlight users</h2>
+<p>The Silverlight implementation of the Worldwide Telescope has been deprecated.  
+ <br />
+Please see this <a href="../docs/conversionTutorial.htm" >conversion tutorial</a> to help you convert any Silverlight code to the new HTML5 implementation.
+</p>
+</div>
+
+<div class="toc">
+    <h2>Table of Contents</h2>
+    <ul>
+    <li><a href="#WorldWideTelescopeWebControlScriptReference">top</a></li>
+    <li><a href="#WebControlSetup">Web Control Setup</a></li>
+    <li><a href="#WebControlDevelopment">Web Control Development</a></li>
+    <li><a href="#WebControlObjects">Web Control Objects</a></li>
+    <ul>
+        <li><a href="#AnnotationObject">Annotation</a></li>
+        <ul>
+            <li><a href="#AnnotationID">ID</a></li>
+            <li><a href="#AnnotationLabel">Label</a></li>
+            <li><a href="#AnnotationOpacity">Opacity</a></li>
+            <li><a href="#AnnotationShowHoverLabel">ShowHoverLabel</a></li>
+            <li><a href="#AnnotationCenter">Center</a></li>
+            <li><a href="#AnnotationTag">Tag</a></li>
+        </ul>
+        <li><a href="#CircleObject">Circle</a></li>
+        <ul>
+            <li>properties</li>
+            <ul>
+                <li><a href="#CircleFill">Fill</a></li>
+                <li><a href="#CircleFillColor">FillColor</a></li>
+                <li><a href="#CircleLineColor">LineColor</a></li>
+                <li><a href="#CircleLineWidth">LineWidth</a></li>
+                <li><a href="#CircleRadius">Radius</a></li>
+                <li><a href="#CircleSkyRelative">SkyRelative</a></li>
+            </ul>
+            <li>methods</li>
+            <ul>
+                <li><a href="#CircleSetCenter">SetCenter</a></li>
+            </ul>
+        </ul>
+        <li><a href="#PolyObject">Poly</a></li>
+        <ul>
+            <li>properties</li>
+            <ul>
+                <li><a href="#PolyFill">Fill</a></li>
+                <li><a href="#PolyFillColor">FillColor</a></li>
+                <li><a href="#PolyLineColor">LineColor</a></li>
+                <li><a href="#PolyLineWidth">LineWidth</a></li>
+            </ul>
+            <li>methods</li>
+            <ul>
+                <li><a href="#PolyAddPoint">AddPoint</a></li>
+            </ul>
+        </ul>
+        <li><a href="#PolyLineObject">PolyLine</a></li>
+        <ul>
+            <li>properties</li>
+            <ul>
+                <li><a href="#PolyLineLineColor">LineColor</a></li>
+                <li><a href="#PolyLineLineWidth">LineWidth</a></li>
+            </ul>
+            <li>methods</li>
+            <ul>
+                <li><a href="#PolyLineAddPoint">AddPoint</a></li>
+            </ul>
+        </ul>
+        <li><a href="#SettingsObject">Settings</a></li>
+        <ul>
+            <li><a href="#SettingsConstellationBoundryColor">ConstellationBoundryColor</a></li>
+            <li><a href="#SettingsConstellationFigureColor">ConstellationFigureColor</a></li>
+            <li><a href="#SettingsConstellationSelectionColor">ConstellationSelectionColor</a></li>
+            <li><a href="#SettingsEclipticColor">EclipticColor</a></li>
+            <li><a href="#SettingsGridColor">GridColor</a></li>
+            <li><a href="#SettingsLocalHorizonMode">LocalHorizonMode</a></li>
+            <li><a href="#SettingsLocationAltitude">LocationAltitude</a></li>
+            <li><a href="#SettingsLocationLat">LocationLat</a></li>
+            <li><a href="#SettingsLocationLng">LocationLng</a></li>
+            <li><a href="#SettingsShowClouds">ShowClouds</a></li>
+            <li><a href="#SettingsShowConstellationBoundries">ShowConstellationBoundries</a></li>
+            <li><a href="#SettingsShowConstellationFigures">ShowConstellationFigures</a></li>
+            <li><a href="#SettingsShowConstellationSelection">ShowConstellationSelection</a></li>
+            <li><a href="#SettingsShowCrosshairs">ShowCrosshairs</a></li>
+            <li><a href="#SettingsShowEcliptic">ShowEcliptic</a></li>
+            <li><a href="#SettingsShowElevationModel">ShowElevationModel</a></li>
+            <li><a href="#SettingsShowFieldOfView">ShowFieldOfView</a></li>
+            <li><a href="#SettingsShowGrid">ShowGrid</a></li>
+            <li><a href="#SettingsShowHorizon">ShowHorizon</a></li>
+            <li><a href="#SettingsShowHorizonPanorama">ShowHorizonPanorama</a></li>
+            <li><a href="#SettingsShowMoonsAsPointSource">ShowMoonsAsPointSource</a></li>
+            <li><a href="#SettingsShowSolarSystem">ShowSolarSystem</a></li>
+            <li><a href="#SettingsShowUTCTime">ShowUTCTime</a></li>
+            <li><a href="#SettingsSolarSystemCosmos">SolarSystemCosmos</a></li>
+            <li><a href="#SettingsSolarSystemLighting">SolarSystemLighting</a></li>
+            <li><a href="#SettingsSolarSystemMilkyWay">SolarSystemMilkyWay</a></li>
+            <li><a href="#SettingsSolarSystemMultiRes">SolarSystemMultiRes</a></li>
+            <li><a href="#SettingsSolarSystemOrbitColor">SolarSystemOrbitColor</a></li>
+            <li><a href="#SettingsSolarSystemOrbits">SolarSystemOrbits</a></li>
+            <li><a href="#SettingsSolarSystemOverlays">SolarSystemOverlays</a></li>
+            <li><a href="#SettingsSolarSystemScale">SolarSystemScale</a></li>
+            <li><a href="#SettingsSolarSystemStars">SolarSystemStars</a></li>
+            <li><a href="#SettingsUserID">UserID</a></li>
+
+        </ul>
+        <li><a href="#WWTControl">WWTControl</a></li>
+        <ul>
+            <li>properties</li>
+            <ul>
+                <li><a href="#ViewFov">Fov</a></li>
+                <li><a href="#ViewSettings">Settings</a></li>
+                <li><a href="#ViewSmoothAnimation">SmoothAnimation</a></li>
+            </ul>
+            <li>methods</li>
+            <ul>
+                <li><a href="#ViewAddAnnotation">AddAnnotation</a></li>
+                <li><a href="#ViewClearAnnotations">ClearAnnotations</a></li>
+                <li><a href="#ViewCreateCircle">CreateCircle</a></li>
+                <li><a href="#ViewCreatePolygon">CreatePolygon</a></li>
+                <li><a href="#ViewCreatePolyLine">CreatePolyLine</a></li>
+                <li><a href="#ViewGetDec">GetDec</a></li>
+                <li><a href="#ViewGetRA">GetRA</a></li>
+                <li><a href="#ViewGoto">GotoRaDecZoom</a></li>
+                <li><a href="#ViewHideUI">HideUI</a></li>
+                <li><a href="#ViewLoadImageCollection">LoadImageCollection</a></li>
+                <li><a href="#ViewLoadTour">LoadTour</a></li>
+                <li><a href="#ViewLoadVOTable">LoadVOTable</a></li>
+                <li><a href="#ViewPlayTour">PlayTour</a></li>
+                <li><a href="#ViewRemoveAnnotation">RemoveAnnotation</a></li>
+                <li><a href="#ViewSetBackgroundImageByName">SetBackgroundImageByName</a></li>
+                <li><a href="#ViewSetForegroundImageByName">SetForegroundImageByName</a></li>
+                <li><a href="#ViewSetForegroundOpacity">SetForegroundOpacity</a></li>
+                <li><a href="#ViewStopTour">StopTour</a></li>
+            </ul>
+            <li>events</li>
+            <ul>
+                <li><a href="#AnnotationClicked">AnnotationClicked</a></li>
+                <li><a href="#wwtArrived">wwtArrived</a></li>
+                <li><a href="#wwtClick">wwtClick</a></li>
+                <li><a href="#wwtReady">wwtReady</a></li>
+            </ul>
+        </ul>
+    </ul>
+    <li><a href="#WebControlSamples">Web Control Samples</a></li>
+    <li><a href="#WebControlDemos">Web Control Demos</a></li>
+    </ul>
+</div>
+<h4>See Also</h4>
+
+<ul type="disc">
+<li><a href="http://www.worldwidetelescope.org/authoring/Authoring.aspx">WorldWide Telescope Authoring</a></li>
+<li><a href="../docs/WorldWideTelescopeDataFilesReference.html">WorldWide Telescope Data Files Reference</a></li>
+<li><a href="../docs/WorldWideTelescopeDataToolsGuide.html">WorldWide Telescope Data Tools Guide</a></li>
+<li><a href="../docs/WorldWideTelescopeProjectionReference.html">WorldWide Telescope Projection Reference</a></li>
+</ul>
+
+<hr>
+<h2><a name="WebControlSetup">Web Control Setup</a></h2>
+This section shows you how to set up your computer to develop applications using the WorldWide Telescope web control.<p></p>
+<h3 id="system-requirements">System Requirements</h3>
+<ul>
+<li>Windows 7 or Windows 8 (older versions of Windows are not supported).</li>
+<li>Discrete graphics card with at least 512MB VRAM (1GB VRAM recommended), DirectX 10 or DirectX 11 compatibility. GTX 480 class or better is recommended.</li>
+<li>HTML editing software of your choice.</li>
+</ul>
+<p>To ensure that the WorldWide Telescope web control works on your system, run the <a href="http://www.worldwidetelescope.org/docs/Samples/wwtwebclientsimpleUIHtml5.html">WWT Web Client Simple</a> sample.</p>
+<h3 id="data-preparation-tools">Data Preparation Tools</h3>
+<p>Data tools are included with the <a href="http://research.microsoft.com/en-us/collaboration/wwt-ap/resources.aspx">WorldWide Telescope May 2009 ADK</a>. Once installed these tools are available in the Programs menu under <strong>Microsoft Research</strong>.</p>
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#WebControlDevelopment">Web Control Development</a></li>
+<li><a href="#WebControlObjects">Web Control Objects</a></li>
+<li><a href="#WebControlSamples">Web Control Samples</a></li>
+<li><a href="#WorldWideTelescopeWebControlScriptReference">WorldWide Telescope Web Control Script Reference</a></li>
+</ul>
+
+<hr>
+
+<h2><a name="WebControlDevelopment">Web Control Development</a></h2>
+<p>This section explains the basic elements of a WorldWide Telescope web client application.</p>
+
+<p><a href="http://wwt.thewebkid.com/docs/Samples/displaycode.htm?codeExample=WWTWebClientSimpleHtml5.html">View the source code.</a></p>
+
+<h3 id="simple-web-control-walkthrough">Simple Web Control Walkthrough</h3>
+<p>Setting up a web page to host the WorldWide Telescope web control is simple. There are four key things that need to happen.</p>
+<ol>
+<li><p>Link to the WorldWide Telescope script in the document <strong>head</strong>:</p>
+<div class="codeExample">
+<pre><code class="codeExample">&lt;script src="http://www.worldwidetelescope.org/scripts/wwtsdk.aspx" type="text/javascript"&gt;
+&lt;/script&gt;</code></pre> 
+</div></li>
+<li><p>Declare a variable for the web control, and add a function to initialize the control and call the ready event function:</p>
+<div class="codeExample">
+<pre><code class="codeExample">var wwt;
+
+function initialize() {
+	wwt = wwtlib.WWTControl.initControl("WWTCanvas");
+	wwtControl.add_ready(wwtReady;)
+}</code></pre> 
+</div></li>
+<li><p>Add a ready event function. This is where you can place your own custom initialization code. Note that a call to <code style="font-family: Consolas;">wwtControl.loadImageCollection</code> is already there. This call loads the default complete image collection when the control loads.</p>
+<div class="codeExample">
+<pre><code class="codeExample">function wwtReady() {
+	wwtControl.loadImageCollection("http://www.worldwidetelescope.org/COMPLETE/wwtcomplete.wtml");
+	// Put your custom initialization code here.
+}</code></pre> 
+</div></li>
+<li><p>Set up the body of the HTML document to call <code style="font-family: Consolas;">initialize()</code> on load, and add a <strong>div</strong> to contain the control. The WorldWide Telescope object uses the HTML5 Canvas element to display the control. Note that div tag should be sized at a minimum of 750px x 750px to accommodate the web client. This will prevent the view from being cropped.</p>
+<div class="codeExample">
+<pre><code class="codeExample">&lt;body onload="initialize()" &gt;
+	&lt;div id="WWTCanvas" style="width:750px; height:750px; border-style: none; border-width: 0px;"&gt;&lt;/div&gt;
+&lt;/body&gt;</code></pre> 
+</div></li>
+</ol>
+
+<p>Now that you have the basics, take a look at other run-able samples in the <a href="#WebControlSamples">Web Control Samples</a> section. Start out with the <a href="http://www.worldwidetelescope.org/docs/worldwidetelescopewebcontrolscriptreference.html#WWTWebClientSimple">WWT Web Client Simple sample</a>, which takes our basic example a step further and adds a simple user interface to the mix.</p>
+
+<hr>
+<h2><a name="WebControlObjects">Web Control Objects</a></h2>
+<p>The <a href="#WWTControl"><b>WWTControl</b></a> object is the principal object, the other objects are created
+on initialization of the object, or can be created by the methods provided by this object.</p>
+<p>Note that the <span class="standout">Example Code</span> listed for each property or method is
+<em>not</em> code
+that will run on its own, just an example of how to use the property or method within a
+script. Run-able samples are listed and linked to in the <a href="#WebControlSamples">Web Control Samples</a> section.</p>
+<table class="WT1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+<tr class="H"><td><h5>
+Object</h5></td><td><h5>Description</h5></td></tr>
+<tr><td><a href="#AnnotationObject"><b>Annotation</b></a></td><td>Used to describe the annotation for a Circle, Poly or PolyLine object.</td></tr>
+<tr><td><a href="#CircleObject"><b>Circle</b></a></td><td>Used to render a circle on the screen.</td></tr>
+<tr><td><a href="#PolyObject"><b>Poly</b></a></td><td>Used to render a polygon on the screen.</td></tr>
+<tr><td><a href="#PolyLineObject"><b>PolyLine</b></a></td><td>Used to render a polyline on the screen.</td></tr>
+<tr><td><a href="#SettingsObject"><b>Settings</b></a></td><td>Used to specify a range of settings for a View
+	object.</td></tr>
+<tr><td><a href="#WWTControl"><b>WWTControl</b></a></td><td>Used to manage the canvas
+	view of WorldWide Telescope images.</td></tr>
+</table>
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#WebControlDevelopment">Web Control Development</a></li>
+<li><a href="#WebControlObjects">Web Control Objects</a></li>
+<li><a href="#WebControlSamples">Web Control Samples</a></li>
+<li><a href="#WorldWideTelescopeWebControlScriptReference">WorldWide Telescope Web Control Script Reference</a></li>
+</ul>
+
+
+<hr>
+<div class="ScriptRefBlock">
+<a name="AnnotationObject"><h2>Annotation Object</h2></a>
+<p>The Annotation Object is inherited by the <a href="#CircleObject"><b>Circle</b></a> object,
+the <a href="#PolyObject"><b>Poly</b></a> object, and the <a href="#PolyLineObject"><b>PolyLine
+</b></a> object, and
+is used to describe the annotation for these objects. An Annotation object is not used independently of these other objects,
+so this object should not be instantiated on its own.</p>
+
+
+<table class="WT1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+<tr class="H"><td><h5>
+Property</h5></td><td><h5>Description</h5></td></tr>
+<tr><td><a href="#AnnotationID"><b>ID</b></a></td><td>Contains a string for use
+		by the web client.</td></tr>
+<tr><td><a href="#AnnotationLabel"><b>Label</b></a></td><td>Contains descriptive
+	text for the annotation.</td></tr>
+<tr><td><a href="#AnnotationOpacity"><b>Opacity</b></a></td><td>Specifies the opacity to be applied to the complete annotation.</td></tr>
+<tr><td><a href="#AnnotationShowHoverLabel"><b>ShowHoverLabel</b></a></td><td>
+	Specifies whether to render the label if the mouse is hovering over the
+	annotation.</td></tr>
+<tr><td><a href="#AnnotationCenter"><b>Center</b></a></td><td>
+	Specifies the center of the	annotation.</td></tr>
+<tr><td><a href="#AnnotationTag"><b>Tag</b></a></td><td>Contains a string for
+		use by the web client.</td></tr>
+</table>
+
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#ViewCreateCircle"><b>CreateCircle</b></a></li>
+<li><a href="#ViewCreatePolygon"><b>CreatePolygon</b></a></li>
+<li><a href="#ViewCreatePolyLine"><b>CreatePolyLine</b></a></li>
+<li><a href="#WWTControl"><b>WWTControl</b></a></li>
+<li><a href="#WorldWideTelescopeWebControlScriptReference">WorldWide Telescope Web Control Script Reference</a></li>
+</ul>
+
+
+<hr>
+
+<a name="AnnotationID"><h3>Annotation id property</h3></a>
+<p>The <b>ID</b> property contains a string for use by the web client.</p>
+<h4>Syntax</h4>
+<code>
+    <i>Annotation</i><b>.set_id</b>([string])<br>
+    [string] <i>Annotation</i><b>.get_id</b>()<br>
+</code>
+
+<h4>Remarks</h4>
+<p>This string can be used to hold information (perhaps a URL or link to related
+information, reference string or number, credits, date, times, and so on) that
+is of use to the web client. The ID string is returned with a
+<a href="#AnnotationClicked"><b>AnnotationClicked</b></a> event.</p>
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">// Draw a circle at the center of the constellation Sagittarius
+circle.set_center(286.485, -27.5231666666667);
+circle.set_id("Center of the Constellation Sagittarius");</code></pre> 
+</div>
+<br />
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#AnnotationObject"><b>Annotation Object</b></a></li>
+</ul>
+
+
+</div>
+
+<hr>
+<a name="AnnotationLabel"><h3>Annotation label property</h3></a>
+<p>The <b>Label</b> property contains descriptive text for the annotation.</p>
+<h4>Syntax</h4>
+<code>
+    <i>Annotation</i><b>.set_label</b>([string])<br>
+    [string] <i>Annotation</i><b>.get_label</b>()<br>
+</code>
+
+<h4>Remarks</h4>
+<p>The label text will be rendered if the <a href="#AnnotationShowHoverLabel"><b>ShowHoverLabel</b></a> property is set to true.</p>
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">// Draw a circle at the center of the constellation Sagittarius
+circle.set_center(286.485, -27.5231666666667);
+circle.set_id("Center of the Constellation Sagittarius");
+circle.set_label("RA: 286.485, Dec: -27.5231666666667");</code></pre>
+</div>
+<br />
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#AnnotationObject"><b>Annotation Object</b></a></li>
+</ul>
+
+<hr>
+<a name="AnnotationOpacity"><h3>Annotation opacity property</h3></a>
+<p>The <b>Opacity</b> property specifies the opacity to be applied to the complete annotation.</p>
+<h4>Syntax</h4>
+<code>
+    <i>Annotation</i><b>.set_opacity</b>([double])<br>
+    [double] <i>Annotation</i><b>.get_opacity</b>()<br>
+</code>
+
+<h4>Remarks</h4>
+<p>The default opacity setting is 1.0, which means that no transparency blending will be applied to the complete annotation.
+A value of 0.5, for example, will result in a 50% transparency blending being applied. Note that the color values for
+individual lines and fill color (which can include an alpha transparency value) are applied
+to the specific lines and shapes before the opacity value here is applied to the
+entire annotation. </p>
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">// Set a solid fill color
+circle.set_fillColor("red");
+circle.set_fill(true);
+// Apply a 50% transparency to the entire annotation
+circle.set_opacity(0.5);</code></pre>
+</div>
+<br />
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#AnnotationObject"><b>Annotation Object</b></a></li>
+</ul>
+
+<hr>
+<a name="AnnotationShowHoverLabel"><h3>Annotation showHoverLabel property</h3></a>
+<p>The <b>ShowHoverLabel</b> property specifies whether to render the label if
+the mouse is hovering over the annotation.</p>
+<h4>Syntax</h4>
+<code>
+    <i>Annotation</i><b>.set_showHoverLabel</b>([Bool])<br>
+    [Bool] <i>Annotation</i><b>.get_showHoverLabel</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>The default setting is false.</p>
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">// Draw a circle at the center of the constellation Sagittarius
+circle.set_center(286.485, -27.5231666666667);
+circle.set_id("Center of the Constellation Sagittarius");
+circle.set_label("RA: 286.485, Dec: -27.5231666666667");
+circle.set_showHoverLabel(true);</code></pre>
+</div>
+<br />
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#AnnotationObject"><b>Annotation Object</b></a></li>
+<li><a href="#AnnotationLabel"><b>Label</b></a></li>
+</ul>
+
+<hr>
+<a name="AnnotationCenter"><h3>Annotation center property</h3></a>
+<p>The <b>Center</b> property contains a Vector3d object for use by the web client.</p>
+<h4>Syntax</h4>
+<code>
+    <i>Annotation</i><b>.set_center</b>([Vector3d])<br>
+    [Vector3d] <i>Annotation</i><b>.get_center</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>This Vector3d object is used to hold the center position of the annotation object used by the web client.</p>
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">var vector3d = new wwtlib.Vector3d(x, y, z);
+circle.set_center(vector3d);</code>
+</pre>
+</div>
+<br />
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#AnnotationObject"><b>Annotation Object</b></a></li>
+</ul>
+
+<hr>
+<a name="AnnotationTag"><h3>Annotation tag property</h3></a>
+<p>The <b>Tag</b> property contains a string for use by the web client.</p>
+<h4>Syntax</h4>
+<code>
+    <i>Annotation</i><b>.set_tag</b>([string])<br>
+    [string] <i>Annotation</i><b>.get_tag</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>This string can be used to hold information that is of use to
+the web client. The string is not used internally by WorldWide Telescope.</p>
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">circle.set_tag("001");</code>
+</pre>
+</div>
+<br />
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#AnnotationObject"><b>Annotation Object</b></a></li>
+</ul>
+
+
+<hr>
+<div class="ScriptRefBlock">
+<a name="CircleObject"><h2>Circle Object</h2></a>
+<p>The Circle object is used to render a circle on the screen. It is created by
+the <a href="#ViewCreateCircle"><b>CreateCircle</b></a> method.</p>
+<p>The Circle object inherits the properties of the <a href="#AnnotationObject"><b>Annotation</b></a> object.</p>
+<table class="WT1" style="z-index: 99" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+
+<tr><td>
+	<img alt="Polys" height="300" src="Images/Polys.bmp" width="700"><br>
+	The image shows a purple circle with a 2 pixel line, a green polygon and a light blue polyline. Note that the order in
+	which the elements are drawn is significant in how they appear, if there is any overlap or transparency.</td></tr>
+</table>
+
+
+<table class="WT1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+<tr class="H"><td><h5>
+Property</h5></td><td><h5>Description</h5></td></tr>
+<tr><td><a href="#CircleFill"><b>Fill</b></a></td><td>Specifies whether the circle should be filled or not.</td></tr>
+<tr><td><a href="#CircleFillColor"><b>FillColor</b></a></td><td>Specifies the fill color as an ARGB value.</td></tr>
+<tr><td><a href="#CircleLineColor"><b>LineColor</b></a></td><td>Specifies the line color as an ARGB value.</td></tr>
+<tr><td><a href="#CircleLineWidth"><b>LineWidth</b></a></td><td>Specifies the line width in pixels.</td></tr>
+<tr><td><a href="#CircleRadius"><b>Radius</b></a></td><td>Specifies the circle radius.</td></tr>
+<tr><td><a href="#CircleSkyRelative"><b>SkyRelative</b></a></td><td>Specifies whether the circle
+	size is absolute
+or relative.</td></tr>
+</table>
+
+<table class="WT1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+<tr class="H"><td><h5>
+Method</h5></td><td><h5>Description</h5></td></tr>
+<tr><td><a href="#CircleSetCenter"><b>SetCenter</b></a></td><td>Specifies the center coordinates of the circle.</td></tr>
+</table>
+
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#PolyObject"><b>Poly Object</b></a></li>
+<li><a href="#PolyLineObject"><b>PolyLine Object</b></a></li>
+<li><a href="#WWTControl"><b>WWTControl</b></a></li>
+<li><a href="#WorldWideTelescopeWebControlScriptReference">WorldWide Telescope Web Control Script Reference</a></li>
+</ul>
+
+
+<hr>
+<a name="CircleFill"><h3>Circle Fill property</h3></a>
+<p>The <b>Fill</b> property specifies whether the circle should be filled or not.</p>
+<h4>Syntax</h4>
+<code><i>Circle</i><b>.set_fill(</b>[Bool])<br />
+    [Bool] Circle.get_fill();<br>
+</code>
+<h4>Remarks</h4>
+<p>The default is false.</p>
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">// Fill a circle with a transparent red
+circle.set_fill(true);
+circle.set_fillColor("0x55AA0000");</code></pre>
+</div>
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#CircleObject"><b>Circle Object</b></a></li>
+<li><a href="#CircleFillColor"><b>FillColor</b></a></li>
+</ul>
+
+<hr>
+<a name="CircleFillColor"><h3>Circle FillColor Property</h3></a>
+<p>The <b>FillColor</b> property specifies the fill color as an ARGB value.</p>
+<h4>Syntax</h4>
+<code><i>Circle</i><b>.set_fillColor(</b>[string])<br />
+    [string] Circle.get_fillColor()<br>
+</code>
+<h4>Remarks</h4>
+<p>The default fill color is white. The four bytes of the unsigned integer are the
+alpha, red, green and blue values respectively.</p>
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">// Fill a circle with opaque green
+circle.set_fill(true);
+circle.set_fillColor("green");</code></pre>
+</div>
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#CircleObject"><b>Circle Object</b></a></li>
+<li><a href="#CircleFill"><b>Fill</b></a></li>
+<li><a href="#CircleLineColor"><b>LineColor</b></a></li>
+</ul>
+
+<hr>
+<a name="CircleLineColor"><h3>Circle LineColor Property</h3></a>
+<p>The <b>LineColor</b> property specifies the line color as an ARGB value.</p>
+<h4>Syntax</h4>
+<code><i>Circle</i><b>.set_lineColor</b>([string])<br />
+    [string] Circle.get_lineColor()<br>
+</code>
+<h4>Remarks</h4>
+<p>The default line color is white. The four bytes of the unsigned integer are the
+alpha, red, green and blue values respectively.</p>
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">// Draw a circle in opaque dark gray
+circle.set_lineColor("0xFF555555");</code></pre>
+</div>
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#CircleObject"><b>Circle Object</b></a></li>
+<li><a href="#CircleFillColor"><b>FillColor</b></a></li>
+</ul>
+
+<hr>
+<a name="CircleLineWidth"><h3>Circle LineWidth Property</h3></a>
+<p>The <b>LineWidth</b> property specifies the line width in pixels.</p>
+<h4>Syntax</h4>
+<code><i>Circle</i><b>.set_lineWidth(</b>[double])<br />
+    [double] Circle.get_lineWidth()<br>
+</code>
+<h4>Remarks</h4>
+<p>The default line width is 1 pixel.</p>
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">// Double the default line width
+circle.set_lineWidth(2);</code></pre>
+</div>
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#CircleObject"><b>Circle Object</b></a></li>
+</ul>
+
+<hr>
+<a name="CircleRadius"><h3>Circle Radius Property</h3></a>
+<p>The <b>Radius</b> property specifies the circle radius.</p>
+<h4>Syntax</h4>
+<code><i>Circle</i><b>.set_radius(</b>[double])<br />
+    [double] Circle.get_radius()<br>
+
+</code>
+<h4>Remarks</h4>
+<p>If the <a href="#CircleSkyRelative"><b>SkyRelative</b></a> property is true, then the radius units are degrees of arc,
+if not then the units are pixels. The default radius is 10.</p>
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">// Draw a fixed circle with a radius of 25 pixels
+circle.set_skyRelative(false);
+circle.set_radius(25);</code></pre>
+</div>
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#CircleObject"><b>Circle Object</b></a></li>
+</ul>
+
+<hr>
+<a name="CircleSkyRelative"><h3>Circle SkyRelative Property</h3></a>
+<p>The <b>SkyRelative</b> property specifies whether the circle size is absolute or relative.</p>
+<h4>Syntax</h4>
+<code><i>Circle</i><b>.set_skyRelative(</b>[Bool])<br />
+    [Bool] Circle.get_skyRelative()<br>
+</code>
+<h4>Remarks</h4>
+<p>The default is false. If this property is true, then the radius of the circle
+is in degrees of arc, and the circle will resize with zooming. If it is false,
+then the circle radius is in pixels, and the circle will not change size as the
+view is zoomed.</p>
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">// Draw a SkyRelative circle with a radius of 0.2 degrees of arc
+circle.set_skyRelative(true);
+circle.set_radius(0.2);</code></pre>
+</div>
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#CircleObject"><b>Circle Object</b></a></li>
+</ul>
+
+<hr>
+<a name="CircleSetCenter"><h3>Circle SetCenter Method</h3></a>
+<p>The <b>SetCenter</b> method specifies the center coordinates of the circle.</p>
+<h4>Syntax</h4>
+<code><i>Circle</i><b>.setCenter(</b><br>
+&nbsp;&nbsp;<i>ra</i>&nbsp;&nbsp;[Double]<b>,</b><br>
+&nbsp;&nbsp;<i>dec</i>&nbsp;&nbsp;[Double]<br>
+<b>)</b><br>
+</code>
+<h4>Parameters</h4>
+<i>ra</i><br>
+&nbsp;&nbsp;Specifies the right ascension in decimal degrees.<br>
+<i>dec</i><br>
+&nbsp;&nbsp;Specifies the declination in decimal degrees.<br>
+<h4>Return Values</h4>
+<p>This method does not return a value.</p>
+<h4>Remarks</h4>
+<p>The default value for right ascension and declination is zero.</p>
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">// Draw a circle at the center of the constellation Sagittarius
+circle.setCenter(286.485, -27.5231666666667);</code></pre>
+</div>
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#CircleObject"><b>Circle Object</b></a></li>
+</ul>
+</div>
+
+
+<hr>
+<a name="PolyObject"><h2>Poly Object</h2></a>
+<p>The Poly object is used to render a polygon on the screen. The polygon can be
+filled with color, or unfilled, but is always a closed shape -- the last point
+entered for the polygon is connected to the first. It is created by
+the <a href="#ViewCreatePolygon"><b>CreatePolygon</b></a> method.</p>
+<p>The Poly object inherits the properties of the <a href="#AnnotationObject"><b>Annotation</b></a> object.</p>
+
+<table class="WT1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+<tr class="H"><td><h5>
+Property</h5></td><td><h5>Description</h5></td></tr>
+<tr><td><a href="#PolyFill"><b>Fill</b></a></td><td>Specifies whether the polygon is filled or not.</td></tr>
+<tr><td><a href="#PolyFillColor"><b>FillColor</b></a></td><td>Specifies the fill color as an ARGB value.</td></tr>
+<tr><td><a href="#PolyLineColor"><b>LineColor</b></a></td><td>Specifies the line color as an ARGB value.</td></tr>
+<tr><td><a href="#PolyLineWidth"><b>LineWidth</b></a></td><td>Specifies the line width in pixels.</td></tr>
+</table>
+
+<table class="WT1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+<tr class="H"><td><h5>
+Method</h5></td><td><h5>Description</h5></td></tr>
+<tr><td><a href="#PolyAddPoint"><b>AddPoint</b></a></td><td>Adds a point to a polygon.</td></tr>
+</table>
+
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#CircleObject"><b>Circle Object</b></a></li>
+<li><a href="#PolyLineObject"><b>PolyLine Object</b></a></li>
+<li><a href="#WWTControl"><b>WWTControl</b></a></li>
+<li><a href="#WorldWideTelescopeWebControlScriptReference">WorldWide Telescope Web Control Script Reference</a></li>
+</ul>
+
+<hr>
+<a name="PolyFill"><h3>Poly Fill Property</h3></a>
+<p>The <b>Fill</b> property specifies whether the polygon is filled or not.</p>
+<h4>Syntax</h4>
+<code>
+<i>Poly</i>.<b>set_fill</b>([Bool])<br />
+[Bool] <i>Poly</i>.<b>get_fill</b>()<br />
+</code>
+<h4>Remarks</h4>
+<p>The default fill setting is false.</p>
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">// Fill a polygon with a slightly transparent blue
+poly.set_fill(true);
+poly.set_fillColor("0xBB0000AA");</code></pre>
+    </div>
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#PolyFillColor"><b>FillColor</b></a></li>
+<li><a href="#PolyObject"><b>Poly Object</b></a></li>
+
+</ul>
+
+<hr>
+<a name="PolyFillColor"><h3>Poly FillColor Property</h3></a>
+<p>The <b>FillColor</b> property specifies the fill color as an ARGB value.</p>
+<h4>Syntax</h4>
+<code>
+<i>Poly</i>.<b>set_fillColor</b>([uint])<br>
+[uint] <i>Poly</i>.<b>get_fillColor</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>The default fill color is white. The four bytes of the unsigned integer are the
+alpha, red, green and blue values respectively.</p>
+
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">// Set a solid red fill color
+poly.set_fill(true);
+poly.set_fillColor("red");</code></pre> 
+</div>
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#PolyFill"><b>Fill</b></a></li>
+<li><a href="#PolyLineColor"><b>LineColor</b></a></li>
+<li><a href="#PolyObject"><b>Poly Object</b></a></li>
+
+</ul>
+
+<hr>
+<a name="PolyLineColor"><h3>Poly LineColor Property</h3></a>
+<p>The <b>LineColor</b> property specifies the line color as an ARGB value.</p>
+<h4>Syntax</h4>
+<code>
+<i>Poly</i>.<b>set_lineColor</b>([uint])<br>
+[uint] <i>Poly</i>.<b>get_lineColor</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>The default color is white. The four bytes of the unsigned integer are the
+alpha, red, green and blue values respectively.</p>
+
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">// Set a solid black line color
+poly.set_lineColor("0xFF000000");</code></pre>
+</div>
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#PolyFillColor"><b>FillColor</b></a></li>
+
+<li><a href="#PolyObject"><b>Poly Object</b></a></li>
+</ul>
+
+<hr>
+<a name="PolyLineWidth"><h3>Poly LineWidth Property</h3></a>
+<p>The <b>LineWidth</b> property specifies the line width in pixels.</p>
+<h4>Syntax</h4>
+<code>
+<i>Poly</i>.<b>set_lineWidth</b>([double])<br>
+[double] <i>Poly</i>.<b>get_lineWidth</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>The default line width is 1 pixel.</p>
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">// Double the line width
+poly.set_lineWidth(2 * poly.get_lineWidth());</code></pre>
+    </div>
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#PolyObject"><b>Poly Object</b></a></li>
+</ul>
+
+<hr>
+<a name="PolyAddPoint"><h3>Poly AddPoint Method</h3></a>
+<p>The <b>AddPoint</b> method adds a point to a polygon.</p>
+<h4>Syntax</h4>
+<code>
+<i>Poly</i>.<b>addPoint(</b><br>
+&nbsp;&nbsp;<i>x</i>&nbsp;&nbsp;[Double],<br>
+&nbsp;&nbsp;<i>y</i>&nbsp;&nbsp;[Double]<br>
+<b>)</b><br>
+</code>
+<h4>Parameters</h4>
+<i>x</i><br>
+&nbsp;&nbsp;Specifies the x coordinate, right ascension if in space, longitude if on a planet surface.<br>
+<i>y</i><br>
+&nbsp;&nbsp;Specifies the y coordinate, declination if in space, latitude if on a planet surface.<br>
+<h4>Return Values</h4>
+<p>This method does not return a value.</p>
+<h4>Remarks</h4>
+<p>There is no theoretical limit to the number of points that can be added to a Poly object, however the number of points
+does affect performance -- so complex geometry should be simplified.</p>
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">// The following function will add any number of points [ra, dec] to a polygon.
+
+function expandPolygon(poly, newPoints){
+    for(var i in newPoints){
+        poly.addPoint(newPoints[i][0], newPoints[i][1]);
+    }
+}
+
+var poly1 = wwtView.createPolygon(true);
+
+var points = [[20,-20], [20,-21], [21,-21], [21,-20]];
+
+expandPolygon(poly1, points);</code></pre>
+</div>
+
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#PolyObject"><b>Poly Object</b></a></li>
+</ul>
+
+<hr>
+<a name="PolyLineObject"><h2>PolyLine Object</h2></a>
+<p>The PolyLine object is used to render a polyline on the screen. A polyline
+cannot be filled, and is not a closed shape -- the last point is not connected
+back to the first. It is created by the <a href="#ViewCreatePolyLine"><b>CreatePolyLine</b></a> method.</p>
+<p>The PolyLine object inherits the properties of the <a href="#AnnotationObject"><b>Annotation</b></a> object.</p>
+
+<table class="WT1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+<tr class="H"><td><h5>
+Property</h5></td><td><h5>Description</h5></td></tr>
+<tr><td><a href="#PolyLineLineColor"><b>LineColor</b></a></td><td>Specifies the line color as an ARGB value.</td></tr>
+<tr><td><a href="#PolyLineLineWidth"><b>LineWidth</b></a></td><td>Specifies the line width in pixels.</td></tr>
+</table>
+
+<table class="WT1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+<tr class="H"><td><h5>
+Method</h5></td><td><h5>Description</h5></td></tr>
+<tr><td><a href="#PolyLineAddPoint"><b>AddPoint</b></a></td><td>Adds a point to the polyline.</td></tr>
+</table>
+
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#CircleObject"><b>Circle Object</b></a></li>
+<li><a href="#PolyObject"><b>Poly Object</b></a></li>
+<li><a href="#WWTControl"><b>WWTControl</b></a></li>
+<li><a href="#WorldWideTelescopeWebControlScriptReference">WorldWide Telescope Web Control Script Reference</a></li>
+</ul>
+
+<hr>
+<a name="PolyLineLineColor"><h3>PolyLine LineColor Property</h3></a>
+<p>The <b>LineColor</b> property specifies the line color as an ARGB value.</p>
+<h4>Syntax</h4>
+<code>
+<i>PolyLine</i>.<b>set_lineColor</b>([uint])<br>
+[uint] <i>PolyLine</i>.<b>get_lineColor</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>The default color is white. The four bytes of the unsigned integer are the
+alpha, red, green and blue values respectively.</p>
+
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">// Set a solid blue color
+poly.set_fillColor("blue");</code></pre> 
+</div>
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#PolyLineObject"><b>PolyLine Object</b></a></li>
+</ul>
+
+<hr>
+<a name="PolyLineLineWidth"><h3>PolyLine LineWidth Property</h3></a>
+<p>The <b>LineWidth</b> property specifies the line width in pixels.</p>
+<h4>Syntax</h4>
+<code>
+<i>PolyLine</i>.<b>set_lineWidth</b>([double])<br>
+[double] <i>PolyLine</i>.<b>get_lineWidth</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>The default line width is 1 pixel.</p>
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">poly.set_lineWidth(3);</code></pre>
+</div>
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#PolyLineObject"><b>PolyLine Object</b></a></li>
+</ul>
+
+<hr>
+<a name="PolyLineAddPoint"><h3>PolyLine AddPoint Method</h3></a>
+<p>The <b>AddPoint</b> method adds a point to a polyline.</p>
+<h4>Syntax</h4>
+<code>
+<i>PolyLine</i>.<b>addPoint</b>(<br>
+&nbsp;&nbsp;<i>x</i>&nbsp;&nbsp;[Double]<b>,</b><br>
+&nbsp;&nbsp;<i>y</i>&nbsp;&nbsp;[Double]<br>
+)<br>
+</code>
+<h4>Parameters</h4>
+<i>x</i><br>
+&nbsp;&nbsp;Specifies the x coordinate, right ascension if in space, longitude if on a planet surface.<br>
+<i>y</i><br>
+&nbsp;&nbsp;Specifies the y coordinate, declination if in space, latitude if on a planet surface.<br>
+<h4>Return Values</h4>
+<p>This method does not return a value.</p>
+<h4>Remarks</h4>
+<p>There is no theoretical limit to the number of points that can be added to a PolyLine object, however the number of points
+does affect performance -- so complex geometry should be simplified.</p>
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">// The following function will add any number of points [ra, dec] to a polyline.
+
+function expandPolyLine(polyline, newPoints){
+    for (var i in newPoints){
+        polyline.addPoint(newPoints[i][0], newPoints[i][1]);
+    }
+}
+
+var polyline1 = wwtView.createPolyLine();
+
+var points = [[20,-20], [21,-21]];
+
+expandPolyLine(polyline1, points);</code></pre> </div>
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#PolyLineObject"><b>PolyLine Object</b></a></li>
+</ul>
+
+<hr>
+<a name="SettingsObject"><h2>Settings Object</h2></a>
+<p>The Settings object is used to specify a range of settings for a <a href="#WWTControl"><b>WWTControl</b></a> object.
+The Settings object is created as part of the initialization of a WWTControl object.</p>
+<p>The Settings object is referenced from the <a href="#ViewSettings"><b>Settings</b></a> property of the WWTControl object.</p>
+
+
+<table class="WT1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+<tr class="H"><td><h5>
+Property</h5></td><td><h5>Description</h5></td></tr>
+<tr><td><a href="#SettingsConstellationBoundryColor"><b>ConstellationBoundryColor</b></a></td><td>Specifies the constellation boundary color as an ARGB value.</td></tr>
+<tr><td><a href="#SettingsConstellationFigureColor"><b>ConstellationFigureColor</b></a></td><td>Specifies the constellation figure color as an ARGB value.</td></tr>
+<tr><td><a href="#SettingsConstellationSelectionColor"><b>ConstellationSelectionColor</b></a></td><td>Specifies the constellation selection color as an ARGB value.</td></tr>
+<tr><td><a href="#SettingsEclipticColor"><b>EclipticColor</b></a></td><td>Specifies the ecliptic color as an ARGB value.</td></tr>
+<tr><td><a href="#SettingsGridColor"><b>GridColor</b></a></td><td>Specifies the grid color as an ARGB value.</td></tr>
+<tr><td><a href="#SettingsLocalHorizonMode"><b>LocalHorizonMode</b></a></td><td>
+		Specifies that the view should be from a local lat/long/alt position (for example, a city, or landmark).</td></tr>
+<tr><td><a href="#SettingsLocationAltitude"><b>LocationAltitude</b></a></td><td>
+	Specifies the view location altitude in meters.</td></tr>
+<tr><td><a href="#SettingsLocationLat"><b>LocationLat</b></a></td><td>Specifies the view location latitude.</td></tr>
+<tr><td><a href="#SettingsLocationLng"><b>LocationLng</b></a></td><td>Specifies the view location longitude.</td></tr>
+<tr><td><a href="#SettingsShowClouds"><b>ShowClouds</b></a></td><td>Specifies whether to show
+		the Earth's cloud layer.</td></tr>
+<tr><td><a href="#SettingsShowConstellationBoundries"><b>ShowConstellationBoundries</b></a></td><td>Specifies whether to show constellation boundaries.</td></tr>
+<tr><td><a href="#SettingsShowConstellationFigures"><b>ShowConstellationFigures</b></a></td><td>Specifies whether to show constellation figures.</td></tr>
+<tr><td><a href="#SettingsShowConstellationSelection"><b>ShowConstellationSelection</b></a></td><td>Specifies
+		whether to show only the selected constellation.</td></tr>
+<tr><td><a href="#SettingsShowCrosshairs"><b>ShowCrosshairs</b></a></td><td>Specifies whether to show cross-hairs.</td></tr>
+<tr><td><a href="#SettingsShowEcliptic"><b>ShowEcliptic</b></a></td><td>Specifies whether to show the path of the Sun.</td></tr>
+
+<tr><td><a href="#SettingsShowElevationModel"><b>ShowElevationModel</b></a></td><td>Specifies whether to show the elevation model.</td></tr>
+
+<tr><td><a href="#SettingsShowFieldOfView"><b>ShowFieldOfView</b></a></td><td>Specifies whether to show the field of view
+	box.</td></tr>
+<tr><td><a href="#SettingsShowGrid"><b>ShowGrid</b></a></td><td>Specifies whether to show the equatorial grid.</td></tr>
+<tr><td><a href="#SettingsShowHorizon"><b>ShowHorizon</b></a></td><td>Specifies whether to show the horizon.</td></tr>
+
+<tr><td><a href="#SettingsShowHorizonPanorama"><b>ShowHorizonPanorama</b></a></td><td>Specifies whether to show the panorama horizon.</td></tr>
+
+<tr><td><a href="#SettingsShowMoonsAsPointSource"><b>ShowMoonsAsPointSource</b></a></td><td>Specifies whether to show the moon as a point source.</td></tr>
+
+<tr><td><a href="#SettingsShowSolarSystem"><b>ShowSolarSystem</b></a></td><td>
+		Specifies whether to show the 3-D solar system view.</td></tr>
+		
+<tr><td><a href="#SettingsShowUTCTime"><b>ShowUTCTime</b></a></td><td>Specifies whether to show the time as a UTC value.</td></tr>
+
+
+<tr><td><a href="#SettingsSolarSystemCosmos"><b>SolarSystemCosmos</b></a></td><td>Specifies whether to show the solar system cosmos.</td></tr>
+<tr><td><a href="#SettingsSolarSystemLighting"><b>SolarSystemLighting</b></a></td><td>
+		Specifies whether to show the lighting effect of the Sun on the solar
+		system.</td></tr>
+<tr><td><a href="#SettingsSolarSystemMilkyWay"><b>SolarSystemMilkyWay</b></a></td><td>Specifies whether to show the Milky Way when showing the solar system.</td></tr>
+<tr><td><a href="#SettingsSolarSystemMultiRes"><b>SolarSystemMultiRes</b></a></td><td>Specifies whether to show the multi-resolution textures for the planets.</td></tr>
+
+<tr><td><a href="#SettingsSolarSystemOrbitColor"><b>SolarSystemOrbitColor</b></a></td><td>Specifies the solar system orbit color as an ARGB value.</td></tr>
+<tr><td><a href="#SettingsSolarSystemOrbits"><b>SolarSystemOrbits</b></a></td><td>Specifies whether to show the solar system orbits.</td></tr>
+<tr><td><a href="#SettingsSolarSystemOverlays"><b>SolarSystemOverlays</b></a></td><td>Specifies whether to show the solar system overlays.</td></tr>
+<tr><td><a href="#SettingsSolarSystemScale"><b>SolarSystemScale</b></a></td><td>Specifies how to scale the size of the Sun and the planets.</td></tr>
+<tr><td><a href="#SettingsSolarSystemStars"><b>SolarSystemStars</b></a></td><td>Specifies whether to render stars when showing the solar system.</td></tr>
+<tr><td><a href="#SettingsUserID"><b>UserID</b></a></td><td>Specifies the user ID as a Guid.</td></tr>
+
+</table>
+
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#WorldWideTelescopeWebControlScriptReference">WorldWide Telescope Web Control Script Reference</a></li>
+</ul>
+
+
+<hr>
+<a name="SettingsConstellationBoundryColor"><h3>Settings ConstellationBoundryColor 
+        Property</h3></a>
+<p>The <b>ConstellationBoundryColor</b> property specifies the constellation boundary color as an ARGB value.</p>
+<h4>Syntax</h4>
+<code>
+<i>wwtControl.settings</i>.<b>set_constellationBoundryColor</b>([uint])<br>
+<i>[uint] wwtControl.settings</i>.<b>get_constellationBoundryColor</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>The default boundary color is blue.</p>
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">// set the constellation boundary color to green
+wwtControl.settings.set_constellationBoundryColor("green");</code></pre> 
+</div>
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#SettingsObject"><b>Settings Object</b></a></li>
+<li><a href="#SettingsShowConstellationBoundries"><b>ShowConstellationBoundries</b></a></li>
+</ul>
+
+<hr>
+<a name="SettingsConstellationFigureColor"><h3>Settings ConstellationFigureColor 
+        Property</h3></a>
+<p>The <b>ConstellationFigureColor</b> property specifies the constellation figure color as an ARGB value.</p>
+<h4>Syntax</h4>
+<code>
+<i>wwtControl.settings</i>.<b>set_constellationFigureColor</b>([uint])<br>
+[uint] <i>wwtControl.settings</i>.<b>get_constellationFigureColor</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>The default figure color is red.</p>
+<h4>Example Code</h4>
+    <div class="codeExample">
+        <pre><code class="codeExample">// set the constellation figures color to blue
+wwtControl.settings.set_constellationFigureColor("blue");</code></pre> 
+</div>
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#SettingsObject"><b>Settings Object</b></a></li>
+<li><a href="#SettingsShowConstellationFigures"><b>ShowConstellationFigures</b></a></li>
+</ul>
+
+<hr>
+<a name="SettingsConstellationSelectionColor"><h3>Settings ConstellationSelectionColor Property</h3></a>
+<p>The <b>ConstellationSelectionColor</b> property specifies the constellation selection color as an ARGB value.</p>
+<h4>Syntax</h4>
+<code>
+<i>wwtControl.settings</i>.<b>set_constellationSelectionColor</b>([uint])<br>
+[uint] <i>wwtControl.settings</i>.<b>get_constellationSelectionColor</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>The default selection color is yellow.</p>
+<h4>Example Code</h4>
+    <div class="codeExample">
+        <pre><code class="codeExample">// set the constellation selection color to red
+wwtControl.settings.set_constellationSelectionColor("red");</code></pre> </div>
+
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#SettingsObject"><b>Settings Object</b></a></li>
+<li><a href="#SettingsShowConstellationSelection"><b>ShowConstellationSelection</b></a></li>
+</ul>
+
+<hr>
+<a name="SettingsEclipticColor"><h3>Settings EclipticColor Property</h3></a>
+<p class="urgentLine">Note: This feature is not implemented.</p>
+<p>The <b>EclipticColor</b> property specifies the ecliptic color as an ARGB value.</p>
+<h4>Syntax</h4>
+<code>
+<i>wwtControl.settings</i>.<b>set_eclipticColor</b>([uint])<br>
+[uint] <i>wwtControl.settings</i>.<b>get_eclipticColor</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>The default ecliptic color is green.</p>
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">// set the ecliptic color to transparent green
+wwtControl.settings.set_eclipticColor("0xAA00FF00");</code></pre> </div>
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#SettingsObject"><b>Settings Object</b></a></li>
+<li><a href="#SettingsShowEcliptic"><b>ShowEcliptic</b></a></li>
+</ul>
+
+<hr>
+<a name="SettingsGridColor"><h3>Settings GridColor Property</h3></a>
+<p class="urgentLine">Note: This feature is not implemented.</p>
+<p>The <b>GridColor</b> property specifies the grid color as an ARGB value.</p>
+<h4>Syntax</h4>
+<code>
+<i>wwtControl.settings</i>.<b>set_gridColor</b>([uint])<br>
+[uint]<i>wwtControl.settings</i>.<b>get_gridColor</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>The default equatorial grid color is gray.</p>
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">// set the grid color to green
+wwtControl.settings.set_gridColor("green");</code></pre> </div>
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#SettingsObject"><b>Settings Object</b></a></li>
+<li><a href="#SettingsShowGrid"><b>ShowGrid</b></a></li>
+</ul>
+
+<hr>
+<a name="SettingsLocalHorizonMode"><h3>Settings LocalHorizonMode Property</h3></a>
+<p>The <b>LocalHorizonMode</b> property specifies that the view should be from a local lat/long/alt position (for example, a city, or landmark).</p>
+<h4>Syntax</h4>
+<code>
+<i>wwtControl.settings</i>.<b>set_localHorizonMode</b>([Bool])<br>
+[Bool]<i>wwtControl.settings</i>.<b>get_localHorizonMode</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>This setting is equivalent to the <strong>View &gt; View from this location</strong> checkbox, and must follow all calls to set the lat/long/alt position. To toggle the local horizon, use the <a href="#SettingsShowHorizon">ShowHorizon Property</a>.</p>
+<h4>Example Code</h4>
+    <div class="codeExample">
+<pre><code class="codeExample">wwtControl.settings.set_locationLat(37.455);
+wwtControl.settings.set_locationLng(-122.262);
+wwtControl.settings.set_locationAltitude(72);
+wwtControl.settings.set_localHorizonMode(true);</code></pre> </div>
+<table class="WT1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+
+<tr><td>
+	<img alt="Andromeda from NY" height="428" src="Images/NYAndromeda.jpg" width="782"><br>
+	The view from New York of the Andromeda Constellation. Note the horizon and compass directions.</td></tr>
+	<tr><td>
+		<img alt="Andromeda no horizon" height="516" src="Images/NYAndromedaNoHorizon.jpg" width="782"><br>
+		The view of Andromeda from the default viewing position, without any local horizon.</td></tr>
+
+</table>
+
+
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#SettingsObject"><b>Settings Object</b></a></li>
+<li><a href="#SettingsShowHorizon"><b>ShowHorizon</b></a></li>
+<li><a href="#SettingsShowHorizonPanorama"><b>ShowHorizonPanorama</b></a></li>
+</ul>
+
+<hr>
+<a name="SettingsLocationAltitude"><h3>Settings LocationAltitude Property</h3></a>
+<p>The <b>LocationAltitude</b> property specifies the view location altitude in meters.</p>
+<h4>Syntax</h4>
+<code>
+<i>wwtControl.settings</i>.<b>set_locationAltitude</b>([double])<br>
+[double]<i>wwtControl.settings</i>.<b>get_locationAltitude</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>None.</p>
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">// Set the view from London, UK
+wwtControl.settings.set_locationLat(51.31);
+wwtControl.settings.set_locationLng(-0.06);
+wwtControl.settings.set_locationAltitude(21);
+wwtControl.settings.set_localHorizonMode(true);</code></pre> </div>
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#SettingsLocationLat"><b>LocationLat</b></a></li>
+<li><a href="#SettingsLocationLng"><b>LocationLng</b></a></li>
+<li><a href="#SettingsObject"><b>Settings Object</b></a></li>
+</ul>
+
+
+<hr>
+<a name="SettingsLocationLat"><h3>Settings LocationLat Property</h3></a>
+<p>The <b>LocationLat</b> property specifies the view location latitude.</p>
+<h4>Syntax</h4>
+<code>
+<i>wwtControl.settings</i>.<b>set_locationLat</b>([double])<br>
+[double] <i>wwtControl.settings</i>.<b>get_locationLat</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>The default location latitude is 47.633.</p>
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">// Set the view from Sydney, Australia
+wwtControl.settings.set_locationLat(-33.52);
+wwtControl.settings.set_locationLng(151.125);
+wwtControl.settings.set_locationAltitude(34);
+wwtControl.settings.set_localHorizonMode(true);</code></pre> </div>
+<table class="WT1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+
+<tr><td><img alt="" height="332" src="Images/LocalSydney.jpg" width="713"></td></tr>
+</table>
+
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#SettingsLocationAltitude"><b>LocationAltitude</b></a></li>
+<li><a href="#SettingsLocationLng"><b>LocationLng</b></a></li>
+<li><a href="#SettingsObject"><b>Settings Object</b></a></li>
+</ul>
+
+<hr>
+<a name="SettingsLocationLng"><h3>Settings LocationLng Property</h3></a>
+<p>The <b>LocationLng</b> property specifies the view location longitude.</p>
+<h4>Syntax</h4>
+<code>
+<i>wwtControl.settings</i>.<b>set_locationLng</b>([double])<br>
+[double] <i>wwtControl.settings</i>.<b>get_locationLng</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>The default location longitude is 122.133333.</p>
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">// Set the view from San Francisco, USA
+wwtControl.settings.set_locationLat(37.455);
+wwtControl.settings.set_locationLng(-122.262);
+wwtControl.settings.set_locationAltitude(72);
+wwtControl.settings.set_localHorizonMode(true);</code></pre> </div>
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#SettingsLocationAltitude"><b>LocationAltitude</b></a></li>
+<li><a href="#SettingsLocationLat"><b>LocationLat</b></a></li>
+<li><a href="#SettingsObject"><b>Settings Object</b></a></li>
+</ul>
+
+<hr>
+<a name="SettingsShowClouds"><h3>Settings ShowClouds Property</h3></a>
+<p class="urgentLine">Note: This feature is not implemented.</p>
+<p>The <b>ShowClouds</b> property specifies whether to show the Earth's cloud
+layer.</p>
+<h4>Syntax</h4>
+<code>
+<i>wwtControl.settings</i>.<b>set_showClouds</b>([Bool])<br>
+[Bool] <i>wwtControl.settings</i>.<b>get_showClouds</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>This setting is equivalent to the <strong>Settings &gt; Show Earth Cloud Layer</strong> checkbox.
+The viewer has to be a sufficient distance away from the surface of the Earth
+for the cloud cover to appear.</p>
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">wwtControl.settings.set_showClouds(true);</code></pre> </div>
+<table class="WT1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+
+<tr><td>
+	<img alt="No clouds" height="371" src="Images/EarthNoClouds.jpg" width="465"></td><td>
+	The Earth without its cloud layer.</td></tr>
+	<tr><td>
+		<img alt="Clouds" height="370" src="Images/EarthClouds.jpg" width="465"></td><td>
+		The Earth with its cloud layer.</td></tr>
+
+</table>
+
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#SettingsObject"><b>Settings Object</b></a></li>
+</ul>
+
+<hr>
+<a name="SettingsShowConstellationBoundries"><h3>Settings ShowConstellationBoundries Property</h3></a>
+<p>The <b>ShowConstellationBoundries</b> property specifies whether to show constellation boundaries.</p>
+<h4>Syntax</h4>
+<code>
+<i>wwtControl.settings</i>.<b>set_showConstellationBoundries</b>([Bool])<br>
+[Bool]<i>wwtControl.settings</i>.<b>get_showConstellationBoundries</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>This setting is equivalent to the <strong>View &gt; Boundaries</strong> checkbox.</p>
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">wwtControl.settings.set_showConstellationBoundries(true);</code></pre> </div>
+<table class="WT1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+
+<tr><td>
+	<img alt="Boundaries" height="448" src="Images/Boundarys.jpg" width="852"><br />
+	The constellation boundaries are shown in blue, except for the selected
+	constellation, with its boundary in yellow.</td></tr>
+</table>
+
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#SettingsObject"><b>Settings Object</b></a></li>
+<li><a href="#SettingsConstellationBoundryColor"><b>ConstellationBoundryColor</b></a></li>
+</ul>
+
+<hr>
+<a name="SettingsShowConstellationFigures"><h3>Settings ShowConstellationFigures Property</h3></a>
+<p>The <b>ShowConstellationFigures</b> property specifies whether to show constellation figures.</p>
+<h4>Syntax</h4>
+<code>
+<i>wwtControl.settings</i>.<b>set_showConstellationFigures</b>([Bool])<br>
+[Bool] <i>wwtControl.settings</i>.<b>get_showConstellationFigures</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>This setting is equivalent to the <strong>View &gt; Figures </strong>checkbox.</p>
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">wwtControl.settings.set_showConstellationFigures(true);</code></pre> </div>
+<table class="WT1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+
+<tr><td>
+	<img alt="Figures" height="434" src="Images/Figures.jpg" width="911"><br />
+	The constellation figures.</td></tr>
+	</table>
+
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#SettingsObject"><b>Settings Object</b></a></li>
+<li><a href="#SettingsConstellationFigureColor"><b>ConstellationFigureColor</b></a></li>
+</ul>
+
+<hr>
+<a name="SettingsShowConstellationSelection"><h3>Settings ShowConstellationSelection Property</h3></a>
+<p>The <b>ShowConstellationSelection</b> property specifies whether to show only
+the selected constellation.</p>
+<h4>Syntax</h4>
+<code>
+<i>wwtControl.settings</i>.<b>set_showConstellationSelection</b>([Bool])<br>
+[Bool] <i>wwtControl.settings</i>.<b>get_showConstellationSelection</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>This setting is equivalent to the <strong>View &gt; Focused Only</strong> checkbox.</p>
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">wwtControl.settings.set_showConstellationSelection(true);</code></pre> </div>
+<table class="WT1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+
+<tr><td>
+	<img alt="Selection" height="365" src="Images/Selection.jpg" width="648"><br />
+	The selected constellation.</td></tr>
+	</table>
+
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#SettingsObject"><b>Settings Object</b></a></li>
+<li><a href="#SettingsConstellationSelectionColor"><b>ConstellationSelectionColor</b></a></li>
+</ul>
+
+<hr>
+<a name="SettingsShowCrosshairs"><h3>Settings ShowCrosshairs Property</h3></a>
+<p>The <b>ShowCrosshairs</b> property specifies whether to show cross-hairs.</p>
+<h4>Syntax</h4>
+<code>
+<i>wwtControl.settings</i>.<b>set_showCrosshairs</b>([Bool])<br>
+[Bool] <i>wwtControl.settings</i>.<b>set_showCrosshairs</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>This setting is equivalent to the <strong>View &gt; Reticle/Crosshairs
+</strong>checkbox.</p>
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">wwtControl.settings.set_showCrosshairs(true);</code></pre> </div>
+<table class="WT1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+
+<tr><td>
+	<img alt="Crosshairs" height="144" src="Images/CrossHairs.jpg" width="162"></td><td>The crosshairs, or reticle, shown
+	with Mars in view.</td></tr>
+</table>
+
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#SettingsObject"><b>Settings Object</b></a></li>
+</ul>
+
+<hr>
+<a name="SettingsShowEcliptic"><h3>Settings ShowEcliptic Property</h3></a>
+<p>The <b>ShowEcliptic</b> property specifies whether to show the ecliptic grid. </p>
+<h4>Syntax</h4>
+<code>
+<i>wwtControl.settings</i>.<b>set_showEcliptic</b>([Bool])<br>
+[Bool] <i>wwtControl.settings</i>.<b>get_showEcliptic</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>This setting is equivalent to the <strong>Grids &gt; Ecliptic Grid</strong> checkbox in the layer manager.</p>
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">wwtControl.settings.set_showEcliptic(true);</code></pre> </div>
+<table class="WT1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+
+<tr><td>
+	<img alt="Ecliptic" height="363" src="Images/Ecliptic.jpg" width="656"></td><td>
+	</td></tr>
+</table>
+
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#SettingsObject"><b>Settings Object</b></a></li>
+<li><a href="#SettingsEclipticColor"><b>EclipticColor</b></a></li>
+</ul>
+
+<hr>
+<a name="SettingsShowElevationModel"><h3>Settings ShowElevationModel Property</h3></a>
+<p class="urgentLine">Note: This feature is not implemented.</p><br />
+<p>The <b>ShowElevationModel</b> property specifies whether to show the elevation model. </p>
+<h4>Syntax</h4>
+<code>
+<i>wwtControl.settings</i>.<b>set_showElevation</b>([Bool])<br>
+[Bool] <i>wwtControl.settings</i>.<b>get_showElevation</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>This setting is equivalent to the <b>Settings &gt; Show Elevation Model</b> checkbox.</p>
+<h4>Example Code</h4>
+    <div class="codeExample">
+        <pre><code class="codeExample">wwtControl.settings.set_showElevationModel(true);
+</code></pre> </div>
+<table class="WT1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+
+<tr><td>
+	<img alt="Himalayas flat" height="300" src="Images/ElevationFlat.jpg" width="700"></td><td>
+	The Himalayan mountains, shown without elevation data.</td></tr>
+	<tr><td>
+		<img alt="Himalayas model" height="300" src="Images/ElevationModel.jpg" width="700"></td><td>
+	The Himalayan mountains, with elevation data.</td></tr>
+
+</table>
+
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#SettingsObject"><b>Settings Object</b></a></li>
+</ul>
+
+<hr>
+<a name="SettingsShowFieldOfView"><h3>Settings ShowFieldOfView Property</h3></a>
+<p class="urgentLine">Note: This feature is not implemented.</p>
+<p>The <b>ShowFieldOfView</b> property specifies whether to show the field of view
+box.</p>
+<h4>Syntax</h4>
+<code>
+<i>wwtControl.settings</i>.<b>set_showFieldOfView</b>([Bool])<br>
+[Bool] <i>wwtControl.settings</i>.<b>get_showFieldOfView</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>This setting is equivalent to the <strong>View &gt; Field of View</strong>
+Indicator checkbox. The field of view box may not be visible in a view until the
+field of view is changed.</p>
+<h4>Example Code</h4>
+    <div class="codeExample">
+        <pre><code class="codeExample">wwtControl.settings.set_showFieldOfView(true);
+</code></pre> </div>
+<table class="WT1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+
+<tr><td>
+	<img alt="FOV" height="300" src="Images/FOV.jpg" width="700"><br />
+	Gamma Pegasi shown with the Field of View Indicator box.</td></tr>
+
+</table>
+
+
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#SettingsObject"><b>Settings Object</b></a></li>
+</ul>
+
+<hr>
+<a name="SettingsShowGrid"><h3>Settings ShowGrid Property</h3></a>
+<p>The <b>ShowGrid</b> property specifies whether to show the equatorial grid.</p>
+<h4>Syntax</h4>
+<code><i>wwtcontrol.settings</i>.<b>set_showGrid</b>([Bool])<br>
+[Bool] <i>wwtcontrol.settings</i>.<b>get_showGrid</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>This setting is equivalent to the <strong>View &gt; Equatorial Grid</strong> check box.</p>
+<h4>Example Code</h4>
+    <div class="codeExample">
+        <pre><code class="codeExample">wwtControl.settings.set_showGrid(true);
+</code></pre> </div>
+<table class="WT1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+
+<tr><td>
+	<img alt="Equatorial Grid" height="218" src="Images/EGrid.jpg" width="786"><br />The Equatorial grid shown,
+	looking North, with the Hydrogen Alpha Full Sky Map as the data source.</td></tr>
+</table>
+
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#SettingsObject"><b>Settings Object</b></a></li>
+<li><a href="#SettingsGridColor"><b>GridColor</b></a></li>
+</ul>
+
+<hr>
+<a name="SettingsShowHorizon"><h3>Settings ShowHorizon Property</h3></a>
+<p class="urgentLine">Note: This feature is not implemented.</p>
+<p>The <b>ShowHorizon</b> property specifies whether to show the horizon.</p>
+<h4>Syntax</h4>
+<code><i>wwtControl.settings</i>.<b>set_showHorizon</b>([Bool])<br>
+[Bool] <i>wwtControl.settings</i>.<b>get_showHorizon</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>None.</p>
+<h4>Example Code</h4>
+    <div class="codeExample">
+        <pre><code class="codeExample">wwtControl.settings.set_showHorizon(true);
+</code></pre> </div>
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#SettingsLocalHorizonMode"><b>LocalHorizonMode</b></a></li>
+<li><a href="#SettingsObject"><b>Settings Object</b></a></li>
+<li><a href="#SettingsShowHorizonPanorama"><b>ShowHorizonPanorama</b></a></li>
+</ul>
+
+<hr>
+<a name="SettingsShowHorizonPanorama"><h3>Settings ShowHorizonPanorama Property</h3></a>
+<p class="urgentLine">Note: This feature is not implemented.</p>
+<p>The <b>ShowHorizonPanorama</b> property specifies whether to show the horizon in panoramas.</p>
+<h4>Syntax</h4>
+<code><i>wwtControl.settings</i>.<b>set_showHorizonPanorama</b>([Bool])<br>
+[Bool] <i>wwtControl.settings</i>.<b>get_showHorizonPanorama</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>None.</p>
+<h4>Example Code</h4>
+    <div class="codeExample">
+        <pre><code class="codeExample">wwtControl.settings.set_showHorizonPanorama(true);
+</code></pre>
+    </div>
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#SettingsLocalHorizonMode"><b>LocalHorizonMode</b></a></li>
+
+<li><a href="#SettingsObject"><b>Settings Object</b></a></li>
+<li><a href="#SettingsShowHorizon"><b>ShowHorizon</b></a></li>
+</ul>
+
+<hr>
+<a name="SettingsShowMoonsAsPointSource"><h3>Settings ShowMoonsAsPointSource Property</h3></a>
+<p class="urgentLine">Note: This feature is not implemented.</p>
+<p>The <b>ShowMoonsAsPointSource</b> property specifies whether to show the moon as a point source.</p>
+<h4>Syntax</h4>
+<code><i>wwtControl.settings</i>.<b>set_showMoonsAsPointSource</b>([Bool])<br>
+[Bool] <i>wwtControl.settings</i>.<b>get_showMoonsAsPointSource</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>None.</p>
+<h4>Example Code</h4>
+    <div class="codeExample">
+<pre><code class="codeExample">wwtControl.settings.set_showMoonsAsPointSource(true);
+</code></pre>
+    </div>
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#SettingsObject"><b>Settings Object</b></a></li>
+</ul>
+
+<hr>
+<a name="SettingsShowSolarSystem"><h3>Settings ShowSolarSystem Property</h3></a>
+<p class="urgentLine">Note: This feature is not implemented.</p>
+<p>The <b>ShowSolarSystem</b> property specifies whether to show the 3-D solar system
+view.</p>
+<h4>Syntax</h4>
+<code><i>wwtControl.settings</i>.<b>set_showSolarSystem</b>([Bool])<br>
+[Bool] <i>wwtControl.settings</i>.<b>get_showSolarSystem</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>This setting can also be changed from within Tours, enabling a tour to switch
+from a view of a distant object to a 3-D view of one of the objects in the Solar
+System.</p>
+<h4>Example Code</h4>
+    <div class="codeExample">
+        <pre><code class="codeExample">wwtControl.settings.set_showSolarSystem(true);
+</code></pre> </div>
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#SettingsObject"><b>Settings Object</b></a></li>
+</ul>
+
+<hr>
+<a name="SettingsShowUTCTime"><h3>Settings ShowUTCTime Property</h3></a>
+<p class="urgentLine">Note: This feature is not implemented.</p>
+<p>The <b>ShowUTCTime</b> property specifies whether to show the time as a UTC value.</p>
+<h4>Syntax</h4>
+<code><i>wwtControl.settings</i>.<b>set_showUTCTime</b>([Bool])<br>
+[Bool] <i>wwtControl.settings</i>.<b>get_showUTCTime</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>If this value is true, the time shown will be Universal Coordinated Time (or
+Greenwich Mean Time), and if it is false the time displayed will be local time.</p>
+<h4>Example Code</h4>
+    <div class="codeExample">
+        <pre><code class="codeExample">wwtControl.settings.set_showUTCTime(true);
+</code></pre> </div>
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#SettingsObject"><b>Settings Object</b></a></li>
+</ul>
+
+<hr>
+<a name="SettingsSolarSystemCosmos"><h3>Settings SolarSystemCosmos Property</h3></a>
+<p class="urgentLine">Note: This feature is not implemented.</p>
+<p>The <b>SolarSystemCosmos</b> property specifies whether to show the solar system cosmos.</p>
+<h4>Syntax</h4>
+<code><i>wwtControl.settings</i>.<b>set_solarSystemCosmos</b>([Bool])<br>
+[Bool] <i>wwtControl.settings</i>.<b>get_solarSystemCosmos</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>None.</p>
+<h4>Example Code</h4>
+    <div class="codeExample">
+        <pre><code class="codeExample">wwtControl.settings.set_solarSystemCosmos(true);
+</code></pre> </div>
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#SettingsObject"><b>Settings Object</b></a></li>
+</ul>
+
+
+<hr>
+<a name="SettingsSolarSystemLighting"><h3>Settings SolarSystemLighting Property</h3></a>
+<p class="urgentLine">Note: This feature is not implemented.</p>
+<p>The <b>SolarSystemLighting</b> property specifies whether to show the lighting effect of the Sun on the solar system.</p>
+<h4>Syntax</h4>
+<code><i>wwtControl.settings</i>.<b>set_solarSystemLighting</b>([Bool])<br>
+[Bool] <i>wwtControl.settings</i>.<b>get_solarSystemLighting</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>This setting is equivalent to the <strong>View &gt; Lighting</strong> checkbox.</p>
+<h4>Example Code</h4>
+    <div class="codeExample">
+        <pre><code class="codeExample">wwtControl.settings.set_solarSystemLighting(true);
+</code></pre>
+    </div>
+<table class="WT1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+
+<tr><td>
+	<img alt="Saturn lighting" height="282" src="Images/SaturnLighting.jpg" width="743"></td><td>
+	The lighting of the Sun on
+	Saturn.</td></tr>
+</table>
+
+
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#SettingsObject"><b>Settings Object</b></a></li>
+</ul>
+
+
+<hr>
+<a name="SettingsSolarSystemMilkyWay"><h3>Settings SolarSystemMilkyWay Property</h3></a>
+<p class="urgentLine">Note: This feature is not implemented.</p>
+<p>The <b>SolarSystemMilkyWay</b> property specifies whether to show the Milky Way when showing the solar system.</p>
+<h4>Syntax</h4>
+<code><i>wwtControl.settings</i>.<b>set_solarSystemMilkyWay</b>([Bool])<br>
+[Bool] <i>wwtControl.settings</i>.<b>get_solarSystemMilkyWay</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>This setting is equivalent to the <strong>View &gt; Milky Way</strong> checkbox.</p>
+<h4>Example Code</h4>
+    <div class="codeExample">
+        <pre><code class="codeExample">wwtControl.settings.set_solarSystemMilkyWay(true);
+</code></pre>
+    </div>
+<table class="WT1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+
+<tr><td>
+	<img alt="Saturn Milky Way" height="315" src="Images/SaturnMilkyWay.jpg" width="741"></td><td>
+	The Milky Way appears to the left of Saturn.</td></tr>
+</table>
+
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#SettingsObject"><b>Settings Object</b></a></li>
+</ul>
+
+
+<hr>
+<a name="SettingsSolarSystemMultiRes"><h3>Settings SolarSystemMultiRes Property</h3></a>
+<p class="urgentLine">Note: This feature is not implemented.</p>
+<p>The <b>SolarSystemMultiRes</b> property specifies whether to show the multi-resolution textures for the planets.</p>
+<h4>Syntax</h4>
+<code><i>wwtControl.settings</i>.<b>set_solarSystemMultiRes</b>([Bool])<br>
+[Bool] <i>wwtControl.settings</i>.<b>get_solarSystemMultiRes</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>Multi-resolution textures are very detailed images of a planet surface. If these are not enabled then it does not make
+sense to zoom close to the surface. If they are enabled then individual buildings, for example, can be located.</p>
+<p>This setting is equivalent to the <strong>Settings &gt; Multi-Res Solar System Bodies</strong>
+checkbox.</p>
+<h4>Example Code</h4>
+    <div class="codeExample">
+        <pre><code class="codeExample">wwtControl.settings.set_solarSystemMultiRes(true);
+</code></pre>
+    </div>
+<table class="WT1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+
+<tr><td>
+	<img alt="Carribean lowres" height="350" src="Images/CarribeanLowRes.jpg" width="700"></td><td>
+	The Caribbean in standard textures.</td></tr>
+	<tr><td>
+		<img alt="Carribean hires" height="350" src="Images/CarribeanHiRes.jpg" width="700"></td><td>
+	The Caribbean with multi-resolution textures.</td></tr>
+
+</table>
+
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#SettingsObject"><b>Settings Object</b></a></li>
+</ul>
+
+
+<hr>
+<a name="SettingsSolarSystemOrbitColor"><h3>Settings SolarSystemOrbitColor Property</h3></a>
+<p class="urgentLine">Note: This feature is not implemented.</p>
+<p>The <b>SolarSystemOrbitColor</b> property specifies the solar system orbit colors as an ARGB value.</p>
+<h4>Syntax</h4>
+<code><i>wwtControl.settings</i>.<b>set_solarSystemOrbitColor</b>([uint])<br>
+[uint] <i>wwtControl.settings</i>.<b>get_solarSystemOrbitColor</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>The default orbit color is dark gray.</p>
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">// set the solar system orbit color to red
+wwtControl.settings.set_solarSystemOrbitColor("red");</code></pre>
+</div>
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#SettingsObject"><b>Settings Object</b></a></li>
+<li><a href="#SettingsSolarSystemOrbits"><b>SolarSystemOrbits</b></a></li>
+</ul>
+
+<hr>
+<a name="SettingsSolarSystemOrbits"><h3>Settings SolarSystemOrbits Property</h3></a>
+<p class="urgentLine">Note: This feature is not implemented.</p>
+<p>The <b>SolarSystemOrbits</b> property specifies whether to show the orbits when showing the solar system.</p>
+<h4>Syntax</h4>
+<code><i>wwtControl.settings</i>.<b>set_solarSystemOrbits</b>([Bool])<br>
+[Bool] <i>wwtControl.settings</i>.<b>get_solarSystemOrbits</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>This setting is equivalent to the <strong>View &gt; Orbits</strong> checkbox.</p>
+<h4>Example Code</h4>
+    <div class="codeExample">
+        <pre><code class="codeExample">wwtControl.settings.set_solarSystemOrbits(true);
+</code></pre>
+    </div>
+<table class="WT1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+
+<tr><td>
+	<img alt="Saturn Orbits" height="240" src="Images/SaturnOrbits.jpg" width="822"></td><td>
+	The orbits of all the solar system planets are shown in the
+	SolarSystemOrbitColor.</td></tr>
+</table>
+
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#SettingsObject"><b>Settings Object</b></a></li>
+<li><a href="#SettingsSolarSystemOrbitColor"><b>SolarSystemOrbitColor</b></a></li>
+</ul>
+
+<hr>
+<a name="SettingsSolarSystemOverlays"><h3>Settings SolarSystemOverlays Property</h3></a>
+<p class="urgentLine">Note: This feature is not implemented.</p>
+<p>The <b>SolarSystemOverlays</b> property specifies whether to show the solar system overlays.</p>
+<h4>Syntax</h4>
+<code><i>wwtControl.settings</i>.<b>set_solarSystemOverlays</b>([Bool])<br>
+[Bool] <i>wwtControl.settings</i>.<b>get_solarSystemOverlays</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>None.</p>
+<h4>Example Code</h4>
+    <div class="codeExample">
+        <pre><code class="codeExample">wwtControl.settings.set_solarSystemOverlays(true);</code></pre>
+    </div>
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#SettingsObject"><b>Settings Object</b></a></li>
+</ul>
+
+
+<hr>
+<a name="SettingsSolarSystemScale"><h3>Settings SolarSystemScale Property</h3></a>
+<p class="urgentLine">Note: This feature is not implemented.</p>
+<p>The <b>SolarSystemScale</b> property specifies how to scale the size of the
+Sun and the planets.</p>
+<h4>Syntax</h4>
+<code><i>wwtControl.settings</i>.<b>set_solarSystemScale</b>([int])<br>
+[int] <i>wwtControl.settings</i>.<b>get_solarSystemScale</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>If this value is set to 1, then the Sun and planets will appear actual size in the
+Solar System view. To increase the scale, this value can be set to a number
+between 1 and 100. This setting is equivalent to the <strong>Planet Size
+</strong>slider.</p>
+<h4>Example Code</h4>
+    <div class="codeExample">
+        <pre><code class="codeExample">wwtControl.settings.set_solarSystemScale(50);
+</code></pre> </div>
+<table class="WT1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+
+<tr><td>
+	<img alt="Sun actual" height="58" src="Images/SunActual.jpg" width="74"></td><td>
+	The Sun shown actual size.</td></tr>
+	<tr><td>
+		<img alt="Sun full" height="605" src="Images/SunFull.jpg" width="736"></td><td>
+	The Sun with maximum scaling.</td></tr>
+
+</table>
+
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#SettingsObject"><b>Settings Object</b></a></li>
+<li><a href="#SettingsSolarSystemStars"><b>SolarSystemStars</b></a></li>
+</ul>
+
+
+<hr>
+<a name="SettingsSolarSystemStars"><h3>Settings SolarSystemStars Property</h3></a>
+<p class="urgentLine">Note: This feature is not implemented.</p>
+<p>The <b>SolarSystemStars</b> property specifies whether to render stars when showing the solar system.</p>
+<h4>Syntax</h4>
+<code><i>wwtControl.settings</i>.<b>set_solarSystemStars</b>([Bool])<br>
+[Bool] <i>wwtControl.settings</i>.<b>get_solarSystemStars</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>This setting is equivalent to the <strong>View &gt; Show Stars</strong> checkbox.</p>
+<h4>Example Code</h4>
+    <div class="codeExample">
+        <pre><code class="codeExample">wwtControl.settings.set_solarSystemStars(true);</code></pre> </div>
+<table class="WT1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+
+<tr><td>
+	<img alt="Saturn Stars" height="315" src="Images/SaturnStars.jpg" width="751"></td><td>
+	Saturn and the stars.</td></tr>
+</table>
+
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#SettingsObject"><b>Settings Object</b></a></li>
+<li><a href="#SettingsSolarSystemScale"><b>SolarSystemScale</b></a></li>
+</ul>
+
+<hr>
+<a name="SettingsUserID"><h3>Settings UserID Property</h3></a>
+<p class="urgentLine">Note: This feature is not implemented.</p>
+<p>The <b>UserID</b> property is used to retrieve the user ID as a Guid.</p>
+<h4>Syntax</h4>
+<code><i>wwtControl.settings</i>.<b>set_userID</b>([Guid])<br>
+[Guid] <i>wwtControl.settings</i>.<b>get_userID</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>The Guid is in registry format, without the accompanying &quot;{}&quot; braces. When a
+user runs the client, a unique Guid is generated for them. The Guid is not
+persistent and will be different each time the same user runs the client. It can
+be used to identify a particular user during one session.</p>
+<h4>Example Code</h4>
+    <div class="codeExample">
+        <pre><code class="codeExample">// Assume an input tag has been set up in the html code
+// Display the user ID in the "user" text box 
+document.getElementById("user").value = wwtControl.settings.get_userID();
+</code></pre> </div>
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#SettingsObject"><b>Settings Object</b></a></li>
+</ul>
+
+<hr>
+<a name="WWTControl"><h2>WWTControl Object</h2></a>
+<p>The WWTControl object is used to manage the current view of WorldWide Telescope
+images. It is the principal object in the object model, and handles the creation
+of the other objects.</p>
+<p>The WWTControl object does not inherit any classes that have exposed properties or methods.</p>
+
+<table class="WT1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+<tr class="H"><td><h5>
+Property</h5></td><td><h5>Description</h5></td></tr>
+<tr><td><a href="#ViewFov"><b>Fov</b></a></td><td>Contains the field of view in degrees.</td></tr>
+<tr><td><a href="#ViewSettings"><b>Settings</b></a></td><td>Reference to the <a href="#SettingsObject"><b>Settings</b></a>  object for the WWTControl.
+	Note this object is created when the WWTControl object is created, so there is no
+	specific call to create a Settings object.</td></tr>
+<tr><td><a href="#ViewSmoothAnimation"><b>SmoothAnimation</b></a></td><td>
+		Specifies whether to pan smoothly or quickly to the new location.</td></tr>
+</table>
+
+<table class="WT1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+<tr class="H"><td><h5>
+Method</h5></td><td><h5>Description</h5></td></tr>
+<tr><td><a href="#ViewAddAnnotation"><b>AddAnnotation</b></a></td><td>Adds an <a href="#AnnotationObject"><b>Annotation</b></a> object to the view.</td></tr>
+<tr><td><a href="#ViewClearAnnotations"><b>ClearAnnotations</b></a></td><td>
+	Removes all annotations from the view.</td></tr>
+<tr><td><a href="#ViewCreateCircle"><b>CreateCircle</b></a></td><td>Creates a <a href="#CircleObject"><b>Circle</b></a> object, and returns
+a reference to the created object.</td></tr>
+<tr><td><a href="#ViewCreatePolygon"><b>CreatePolygon</b></a></td><td>Creates a <a href="#PolyObject"><b>Poly</b></a> object (a polygon), and returns
+a reference to the created object.</td></tr>
+<tr><td><a href="#ViewCreatePolyLine"><b>CreatePolyLine</b></a></td><td>Creates a <a href="#PolyLineObject"><b>PolyLine</b></a> object, and returns
+a reference to the created object.</td></tr>
+<tr><td><a href="#ViewGetDec"><b>GetDec</b></a></td><td>Retrieves the declination for
+	the view.</td></tr>
+<tr><td><a href="#ViewGetRA"><b>GetRA</b></a></td><td>Retrieves the right ascension for
+	the view.</td></tr>
+<tr><td><a href="#ViewGoto"><b>GotoRaDecZoom</b></a></td><td>Used to go to a new viewing position.</td></tr>
+<tr><td><a href="#ViewHideUI"><b>HideUI</b></a></td><td>Specifies whether to hide the UI for the view.</td></tr>
+<tr><td><a href="#ViewLoadImageCollection"><b>LoadImageCollection</b></a></td><td>
+	Used to load a WTML<br>&nbsp;collection file, containing links to foreground and
+	background images.</td></tr>
+<tr><td><a href="#ViewLoadTour"><b>LoadTour</b></a></td><td>Used to load and start a tour.</td></tr>
+<tr><td><a href="#ViewLoadVOTable"><b>LoadVOTable</b></a></td><td>Used to load a VO (Virtual Observatory) table.</td></tr>
+<tr><td><a href="#ViewPlayTour"><b>PlayTour</b></a></td><td>Used to restart a tour
+	from the beginning.</td></tr>
+<tr><td><a href="#ViewRemoveAnnotation"><b>RemoveAnnotation</b></a></td><td>Removes the specified annotation from the view.</td></tr>
+<tr><td><a href="#ViewSetBackgroundImageByName"><b>SetBackgroundImageByName</b></a></td><td>Loads an image to use as the view background.</td></tr>
+<tr><td><a href="#ViewSetForegroundImageByName"><b>SetForegroundImageByName</b></a></td><td>Loads an image to use as the view foreground.</td></tr>
+<tr><td><a href="#ViewSetForegroundOpacity"><b>SetForegroundOpacity</b></a></td><td>
+	Specifies the opacity of the entire foreground image, which can be useful
+	when visually comparing the foreground and background images.</td></tr>
+<tr><td><a href="#ViewStopTour"><b>StopTour</b></a></td><td>Used to stop and
+	exit a tour.</td></tr>
+</table>
+
+<table class="WT1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+<tr class="H"><td><h5>
+Event</h5></td><td><h5>Description</h5></td></tr>
+<tr><td><a href="#AnnotationClicked"><b>AnnotationClicked</b></a></td><td>Fired when an Annotation object is clicked on. Note the spelling error!</td></tr>
+<tr><td><a href="#wwtArrived"><b>wwtArrived</b></a></td><td>Fired when a change to the view from a drag, zoom, or goto comes to a halt.</td></tr>
+<tr><td><a href="#wwtClick"><b>wwtClick</b></a></td><td>Fired when the left mouse button is clicked.</td></tr>
+<tr><td><a href="#wwtReady"><b>wwtReady</b></a></td><td>Fired when the web client is initialized.</td></tr>
+</table>
+
+
+
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#AnnotationObject"><b>Annotation</b></a></li>
+<li><a href="#CircleObject"><b>Circle</b></a></li>
+<li><a href="#PolyObject"><b>Poly</b></a></li>
+<li><a href="#PolyLineObject"><b>PolyLine</b></a></li>
+<li><a href="#SettingsObject"><b>Settings</b></a></li>
+<li><a href="#WorldWideTelescopeWebControlScriptReference">WorldWide Telescope Web Control Script Reference</a></li>
+</ul>
+
+<hr>
+<a name="ViewFov"><h3>WWTControl Fov Property</h3></a>
+<p class="urgentLine">Note: This feature is not implemented.</p>
+<p>The <b>Fov</b> property contains the field of view in degrees.</p>
+<h4>Syntax</h4>
+<code>[double] <i>wwtControl</i>.<b>get_fov</b>()<br>
+</code>
+
+<h4>Remarks</h4>
+<p>This property is read-only. The maximum field of view is 60 degrees, the
+minimum is close to zero, at 0.00022910934437488727 degrees. Field of view can be
+considered to be the inverse of the zoom factor -- the smaller the field of view
+the greater the zoom factor.</p>
+<h4>Example Code</h4>
+    <div class="codeExample">
+        <pre><code class="codeExample">// Function to increase the field of view (zoom out)
+function FovInc() {
+    var newFov = 1.1 * wwtControl.get_fov(); 
+    if(newFov <= 60) {
+        wwtControl.gotoRaDecZoom(wwtControl.getRA(), wwtControl.getDec(), newFov, false);
+    }
+}
+
+// Function to decrease the field of view (zoom in)
+function FovDec() { 
+    var newFov = wwtControl.get_fov() / 1.1; 
+    if(wwtControl.get_fov() >= 0.00022910934437488727) { 
+        wwtControl.gotoRaDecZoom(wwtControl.getRA(), wwtControl.getDec(), newFov, false);
+    } 
+}
+
+</code></pre> </div>
+<h4>Samples</h4>
+<ul type="square"><li><a href="#WWTWebClientFov">WWT Web Client Fov</a>
+</li></ul>
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#ViewGoto"><b>GotoRaDecZoom</b></a></li>
+
+<li><a href="#WWTControl"><b>WWTControl Object</b></a></li>
+</ul>
+
+<hr>
+<a name="ViewSettings"><h3>WWTControl Settings Property</h3></a>
+<p>The <b>Settings</b> property references the <a href="#SettingsObject"><b>Settings</b></a> object for the WWTControl.</p>
+<h4>Syntax</h4>
+<code><i>wwtControl</i>.<b>settings</b> [Settings]<br>
+</code>
+
+<h4>Remarks</h4>
+<p>This property is read-only, though individual settings can have their values set (refer to
+the <a href="#SettingsObject"><b>Settings</b></a> object).</p>
+<h4>Example Code</h4>
+    <div class="codeExample">
+        <pre><code class="codeExample">// show cross hairs and display a semi-transparent grid
+wwtControl.settings.set_showCrosshairs(true);
+wwtControl.settings.set_gridColor("0x88880000");   // Transparent red
+wwtControl.settings.set_showGrid(true);
+</code></pre> </div>
+<h4>Samples</h4>
+<ul type="square"><li><a href="#WWTWebClientSimple">WWT Web Client Simple</a>
+</li></ul><h4>See Also</h4>
+
+<ul type="disc">
+<li><a href="#WWTControl"><b>WWTControl Object</b></a></li>
+</ul>
+
+<hr>
+<a name="ViewSmoothAnimation"><h3>WWTControl SmoothAnimation Property</h3></a>
+<p class="urgentLine">Note: This feature is not implemented.</p>
+<p>The <b>SmoothAnimation</b> property specifies whether to pan smoothly or
+quickly to the new location.</p>
+<h4>Syntax</h4>
+<code><i>wwtControl</i>.<b>set_smoothAnimation</b>([Bool])<br>
+[Bool] <i>wwtControl</i>.<b>get_smoothAnimation</b>()<br>
+</code>
+<h4>Remarks</h4>
+<p>If this property is set to true the panning will be smoother but slower than
+if the property is false. This property is equivalent to the <strong>
+Settings/Smooth Panning</strong> checkbox in the
+UI, and the purpose of setting it to false is to improve CPU performance.</p>
+<h4>Example Code</h4>
+    <div class="codeExample">
+        <pre><code class="codeExample">wwtControl.set_smoothAnimation(true);</code></pre> 
+     </div>
+
+<h4>Samples</h4>
+<ul type="square"><li><a href="#WWTWebClientImages">WWT Web Client Images</a>
+</li></ul>
+<h4>See Also</h4>
+
+<ul type="disc">
+<li><a href="#WWTControl"><b>WWTControl Object</b></a></li>
+</ul>
+
+
+
+<hr>
+<a name="ViewAddAnnotation"><h3>WWTControl AddAnnotation Method</h3></a>
+<p>The <b>AddAnnotation</b> method adds an <a href="#AnnotationObject"><b>Annotation</b></a> object to the view.</p>
+<h4>Syntax</h4>
+<code><i>wwtControl</i>.<b>addAnnotation</b>(<br>
+&nbsp;&nbsp;<i>annotation</i>&nbsp;&nbsp;[Annotation]<br>
+<b>)</b><br>
+</code>
+<h4>Parameters</h4>
+<i>annotation</i><br>
+&nbsp;&nbsp;Specifies the <a href="#AnnotationObject"><b>Annotation </b></a> object.<br>
+<h4>Return Values</h4>
+<p>This method does not return a value.</p>
+<h4>Remarks</h4>
+<p>An Annotation Object is inherited by the <a href="#CircleObject"><b>Circle</b></a> object,
+the <a href="#PolyObject"><b>Poly</b></a> object, and the <a href="#PolyLineObject"><b>PolyLine</b></a> object,
+so adding an annotation will add one of these graphics to the view, in addition
+to providing the annotation text.</p>
+<p>Typically one or more annotations are added to a view when a user clicks on a
+custom UI element such as a checkbox, and then those annotations are removed
+when the user deselects that UI element.</p>
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">// Global settings
+var bShowCircle = false;
+var bShowPolygon = false;
+// Function to toggle the display of annotations
+function toggleSetting(text) {
+    switch (text) {
+        case 'ShowCircle':
+            bShowCircle = !bShowCircle;
+            if(bShowCircle) {
+                wwtView.AddAnnotation(circle1);
+            } else {
+                wwtView.RemoveAnnotation(circle1);
+            }
+            break;
+
+        case 'ShowPolygon':
+            bShowPolygon = !bShowPolygon;
+            if(bShowPolygon) {
+                wwtView.AddAnnotation(polygon1);
+            } else {
+                wwtView.RemoveAnnotation(polygon1);
+            }
+            break;
+    }
+}</code></pre> </div>
+<h4>Samples</h4>
+<ul type="square"><li><a href="#WWTWebClientPoly">WWT Web Client Poly</a>
+</li></ul>
+
+<h4>See Also</h4>
+
+<ul type="disc">
+<li><a href="#ViewClearAnnotations"><b>ClearAnnotations</b></a></li>
+<li><a href="#ViewRemoveAnnotation"><b>RemoveAnnotation</b></a></li>
+<li><a href="#WWTControl"><b>WWTControl Object</b></a></li>
+</ul>
+
+<hr>
+<a name="ViewClearAnnotations"><h3>WWTControl ClearAnnotations Method</h3></a>
+<p>The <b>ClearAnnotations</b> method removes all annotations from the view.</p>
+<h4>Syntax</h4>
+<code><i>wwtControl</i><b>.clearAnnotations()</b><br>
+</code><h4>Parameters</h4>
+<p>This method takes no parameters.</p>
+<h4>Return Values</h4>
+<p>This method does not return a value.</p>
+<h4>Remarks</h4>
+<p>None.</p>
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">wwtControl.clearAnnotations();</code></pre> 
+</div>
+<h4>Samples</h4>
+<ul type="square"><li><a href="#WWTWebClientClickEvent">WWT Web Client Click Event</a>
+</li></ul>
+
+
+<h4>See Also</h4>
+
+<ul type="disc">
+<li><a href="#ViewAddAnnotation"><b>AddAnnotation</b></a></li>
+<li><a href="#ViewRemoveAnnotation"><b>RemoveAnnotation</b></a></li>
+
+<li><a href="#WWTControl"><b>WWTControl Object</b></a></li>
+</ul>
+
+<hr>
+<a name="ViewCreateCircle"><h3>WWTControl CreateCircle Method</h3></a>
+<p>The <b>CreateCircle</b> method creates a <a href="#CircleObject"><b>Circle</b></a> object,
+and returns a reference to the created object.</p>
+<h4>Syntax</h4>
+<code><i>wwtControl</i>.<b>createCircle(</b><br>
+&nbsp;&nbsp;<i>fill</i>&nbsp;&nbsp;[Bool]<br>
+<b>)</b><br>
+
+</code><h4>Parameters</h4>
+<i>fill</i><br>
+&nbsp;&nbsp;True indicates the circle should be filled.<br>
+<h4>Return Values</h4>
+<p>This method returns a reference to a <a href="#CircleObject"><b>Circle</b></a> object.</p>
+<h4>Remarks</h4>
+<p>In addition to creating the circle an <a href="#AnnotationObject"><b>Annotation</b></a> object
+(which is inherited by the Circle object) will be created to provide supporting
+text.</p>
+<h4>Example Code</h4>
+    <div class="codeExample">
+        <pre><code class="codeExample">
+// Assume that a WWTControl object has been created, and named wwtControl
+// The following function will add a circle to the view object, and
+// return a reference to the created object.
+function createWWTCircle(fill, lineColor, fillColor, lineWidth, opacity, radius, skyRelative, ra, dec)
+{
+    var circle = wwtControl.createCircle(fill);
+    circle.set_lineColor(lineColor);
+    circle.set_fillColor(fillColor);
+    circle.set_lineWidth(lineWidth);
+    circle.set_opacity(opacity);
+    circle.set_radius(radius);
+    circle.set_skyRelative(skyRelative);
+    circle.setCenter(ra, dec);
+    return circle;
+}
+</code></pre> </div>
+<table class="WT1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+
+<tr><td>
+	<img alt="Circles" height="225" src="Images/Circles.jpg" width="601"><br />
+	In this image,&nbsp; circle objects filled with a transparent color
+	have been used to identify point sources of light.</td></tr>
+</table>
+
+<h4>Samples</h4>
+<ul type="square">
+<li><a href="#WWTWebClientArrived">WWT Web Client Arrived</a></li>
+<li><a href="#WWTWebClientPoly">WWT Web Client Poly</a></li>
+</ul>
+<h4>See Also</h4>
+
+<ul type="disc">
+<li><a href="#ViewCreatePolygon"><b>CreatePolygon</b></a></li>
+<li><a href="#ViewCreatePolyLine"><b>CreatePolyLine</b></a></li>
+<li><a href="#WWTControl"><b>WWTControl Object</b></a></li>
+</ul>
+
+<hr>
+<a name="ViewCreatePolygon"><h3>WWTControl CreatePolygon Method</h3></a>
+<p>The <b>CreatePolygon</b> method creates a <a href="#PolyObject"><b>Poly</b></a> object (a polygon), and returns
+a reference to the created object.</p>
+<h4>Syntax</h4>
+<code><i>wwtControl</i>.<b>CreatePolygon(</b><br>
+&nbsp;&nbsp;<i>fill</i>&nbsp;&nbsp;[Bool]<br>
+<b>)</b><br>
+
+</code><h4>Parameters</h4>
+<i>fill</i><br>
+&nbsp;&nbsp;True specifies the polygon should be filled.<br>
+<h4>Return Values</h4>
+<p>This method returns a reference to the created <a href="#PolyObject"><b>Poly</b></a> object.</p>
+<h4>Remarks</h4>
+<p>In addition to creating the polygon an <a href="#AnnotationObject"><b>Annotation</b></a> object
+(which is inherited by the poly object) will be created to provide supporting
+text.</p>
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">
+// Assume that a WWTControl object has been created, and named wwtControl
+// The following function will add a polygon to the view object, and
+// return a reference to the created polygon.
+
+function createWWTPolygon(fill, lineColor, fillColor, lineWidth, opacity, points) {
+    var poly = wwtControl.createPolygon(fill);
+    poly.set_lineColor(lineColor);
+    poly.set_fillColor(fillColor);
+    poly.set_lineWidth(lineWidth);
+    poly.set_opacity(opacity);
+    for(var i in points) {
+        poly.addPoint(polyPoints[i][0], polyPoints[i][1]);
+    }
+    return poly;
+}
+
+// Define a 2-D array of [ra,dec] points, and then create the polygon
+var myPoints = [[25, -35], [15, -25], [25, -30], [30, -25]];
+myPolygon = createWWTPolygon(true, "0x880000ff", "0x8800ff00", 2, 1.0, myPoints);</code></pre>
+</div>
+<table class="WT1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+
+<tr><td>
+	<img alt="Polygons" height="400" src="Images/Polygons.jpg" width="599"><br />
+	This image shows the use of Polygon objects to identify a hierarchy of areas.
+	If these areas are annotated, then increasingly detailed descriptions of the
+	stellar sources can be given.</td></tr>
+</table>
+
+<h4>Samples</h4>
+<ul type="square"><li><a href="#WWTWebClientPoly">WWT Web Client Poly</a>
+</li></ul>
+<h4>See Also</h4>
+
+<ul type="disc">
+<li><a href="#ViewCreateCircle"><b>CreateCircle</b></a></li>
+<li><a href="#ViewCreatePolyLine"><b>CreatePolyLine</b></a></li>
+<li><a href="#WWTControl"><b>WWTControl Object</b></a></li>
+
+</ul>
+
+<hr>
+<a name="ViewCreatePolyLine"><h3>WWTControl CreatePolyLine Method</h3></a>
+<p>The <b>CreatePolyLine</b> method creates a <a href="#PolyLineObject"><b>PolyLine</b></a> object,
+and returns a reference to the created object.</p>
+<h4>Syntax</h4>
+<code><i>wwtControl</i><b>.createPolyLine(</b><br>
+&nbsp;&nbsp;<i>fill</i>&nbsp;&nbsp;[Bool]<br>
+<b>)</b><br>
+
+</code><h4>Parameters</h4>
+<i>fill</i><br>
+&nbsp;&nbsp;This parameter should be removed, has no effect.<br>
+<h4>Return Values</h4>
+<p>This method returns a reference to a <a href="#PolyLineObject"><b>PolyLine</b></a> object.</p>
+<h4>Remarks</h4>
+<p>In addition to creating the polyline, an <a href="#AnnotationObject"><b>Annotation</b></a> object
+(which is inherited by the polyline object) will be created to provide
+supporting text.</p>
+<p>The rendering of a polyline will simply take each point in the list and draw
+a line to the next. In order to have a more complex polyline, for example with
+forks with two or more lines coming from a single point, then there are two main
+options, either create several polyline objects sharing a single point, or
+backtrack over points after reaching the end of one fork, and then continuing to
+add points along the second fork, and so on.</p>
+<h4>Example Code</h4>
+    <div class="codeExample">
+        <pre><code class="codeExample">
+// Assume that a WWTControl object has been created, named wwtControl
+// The following function will add a polyline to the view object, and
+// return a reference to the created object.
+
+function createWWTPolyLine(lineColor, lineWidth, opacity, points) {
+    var polyLine = wwtControl.createPolyLine();
+    polyLine.set_lineColor(lineColor);
+    polyLine.set_lineWidth(lineWidth);
+    polyLine.set_opacity(opacity);
+    for(var i in points) {
+        polyline.addPoint(points[i][0], points[i][1]);
+    }
+    return polyLine;
+}
+//
+// Then to use this function create a two-dimensional array of [ra,dec] points
+//
+var points = [[20, -29], [22, -22], [16, -11], [12, -10], [15,-25]];
+//
+// ....and call the function appropriately
+//
+var myPolyline = createWWTPolyLine("0x8800FFFF", 2, 1.0, points);
+	
+</code></pre> </div>
+<table class="WT1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+
+<tr><td>
+	<img alt="Polylines" height="400" src="Images/Polylines.jpg" width="600"><br />
+	This image shows some common variations of Polyline objects.</td></tr>
+</table>
+
+<h4>Samples</h4>
+<ul type="square"><li><a href="#WWTWebClientPoly">WWT Web Client Poly</a>
+</li></ul>
+<h4>See Also</h4>
+
+<ul type="disc">
+<li><a href="#ViewCreateCircle"><b>CreateCircle</b></a></li>
+<li><a href="#ViewCreatePolygon"><b>CreatePolygon</b></a></li>
+<li><a href="#WWTControl"><b>WWTControl Object</b></a></li>
+
+</ul>
+
+
+<hr>
+<a name="ViewGetDec"><h3>WWTControl GetDec Method</h3></a>
+<p>The <b>GetDec</b> method retrieves the declination for the view.</p>
+<h4>Syntax</h4>
+<code><i>wwtControl</i>.<b>getDec()</b><br>
+</code>
+<h4>Parameters</h4>
+<p>This method takes no parameters.</p>
+<h4>Return Values</h4>
+<p>This method returns a double containing the declination in decimal degrees.</p>
+<h4>Remarks</h4>
+<p>The declination of an object is how many degrees it is north or south of the celestial equator.
+It is used in conjunction with right ascension, which is measured eastward from a prime meridian on the sky.
+The prime meridian passes through the position of the Sun at the time of the vernal equinox, so its position changes
+slowly over the years, due to the precession of the equinoxes.
+The position of the celestial poles also changes with precession, so to locate an object from its right
+ascension and declination, you must also know the date for which those coordinates are valid;
+that date is called the epoch of the coordinates. WorldWide Telescope requires
+the epoch to be J2000.</p>
+
+<h4>Example Code</h4>
+    <div class="codeExample">
+<pre><code class="codeExample">
+// Save off the current view...
+var savedRA = wwtControl.getRA();
+var savedDec = wwtControl.getDec();
+var savedFov = wwtControl.get_fov();
+// Goto a new view...
+wwtControl.gotoRaDecZoom(newRA, newDec, newFov, false);
+// If the user selects a custom control to go back to the previous view...
+wwtControl.gotoRaDecZoom(savedRA, savedDec, savedFov, false);
+</code></pre> </div>
+<h4>Samples</h4>
+<ul type="square"><li><a href="#WWTWebClientFov">WWT Web Client Fov</a>
+</li></ul>
+<h4>See Also</h4>
+
+<ul type="disc">
+<li><a href="#ViewGetRA"><b>GetRA</b></a></li>
+<li><a href="#ViewGoto"><b>GotoRaDecZoom</b></a></li>
+<li><a href="#WWTControl"><b>WWTControl Object</b></a></li>
+
+</ul>
+
+<hr>
+<a name="ViewGetRA"><h3>WWTControl GetRA Method</h3></a>
+<p>The <b>GetRA</b> method retrieves the right ascension for the view.</p>
+<h4>Syntax</h4>
+<code><i>wwtControl</i><b>.getRA()</b><br>
+</code>
+<h4>Parameters</h4>
+<p>This method takes no parameters.</p>
+<h4>Return Values</h4>
+<p>This method returns a double containing the right ascension in decimal degrees.</p>
+<h4>Remarks</h4>
+<p>Refer to the remarks for <a href="#ViewGetDec"><b>GetDec</b></a>.</p>
+<h4>Example Code</h4>
+    <div class="codeExample">
+        <pre><code class="codeExample">// Assume that a WWTControl object has been created, named wwtControl
+// Function to zoom in....
+function FovDec() { 
+    var newFov = wwtControl.get_fov() / 1.1; 
+    if(wwtControl.get_fov() >= 0.00022910934437488727) { 
+        wwtControl.gotoRaDecZoom(wwtControl.getRA(), wwtControl.getDec(), newFov, false); 
+    } 
+}
+</code></pre> </div>
+<h4>Samples</h4>
+<ul type="square"><li><a href="#WWTWebClientFov">WWT Web Client Fov</a>
+</li></ul>
+<h4>See Also</h4>
+
+<ul type="disc">
+<li><a href="#ViewGoto"><b>GotoRaDecZoom</b></a></li>
+<li><a href="#WWTControl"><b>WWTControl Object</b></a></li>
+</ul>
+
+<hr>
+<a name="ViewGoto"><h3>WWTControl GotoRaDecZoom Method</h3></a>
+<p>The <b>GotoRaDecZoom</b> method is used to go to a new viewing position.</p>
+<h4>Syntax</h4>
+<code><i>wwtControl</i><b>.gotoRaDecZoom(</b><br>
+&nbsp;&nbsp;<i>ra</i>&nbsp;&nbsp;[Double]<b>,</b><br>
+&nbsp;&nbsp;<i>dec</i>&nbsp;&nbsp;[Double]<b>,</b><br>
+&nbsp;&nbsp;<i>fov</i>&nbsp;&nbsp;[Double]<b>,</b><br>
+&nbsp;&nbsp;<i>instant</i>&nbsp;&nbsp;[Bool]<br>
+<b>)</b><br>
+
+</code><h4>Parameters</h4>
+<i>ra</i><br>
+&nbsp;&nbsp;Specifies the right ascension in decimal degrees.<br>
+<i>dec</i><br>
+&nbsp;&nbsp;Specifies the declination in decimal degrees.<br>
+<i>fov</i><br>
+&nbsp;&nbsp;Specifies the field of view. Maximum is 60 degrees, minimum is
+0.00022910934437488727 of a degree.<br>
+<i>instant</i><br>
+&nbsp;&nbsp;True indicates that the view should change instantly, false that the view should slew through space to
+the new location. Currently the <b>wwtArrived</b> event is not being sent if this value is set to True.<br>
+<h4>Return Values</h4>
+<p>This method does not return a value.</p>
+<h4>Remarks</h4>
+<p>This method is one of the most used of the API set, controlling the changing
+of the views.</p>
+<h4>Example Code</h4>
+    <div class="codeExample">
+<pre><code class="codeExample">
+// The following code shows how to convert from hours, minutes and seconds
+// to a right ascension and degrees, minutes and seconds to a declination.
+
+function HMS(h, m, s) {
+    h = h + (m/60) + (s/3600);
+    var d = h * 15; // Convert from hours to degrees (360/24 = 15)
+    return d;
+}
+function DMS(d, m, s) {
+    if(d < 0) { 
+        m = -m; 
+        s = -s; 
+    }
+    d = d + (m/60) + (s/3600);
+    return d;
+}
+wwtControl.gotoRaDecZoom(HMS(06, 25, 30), DMS(45, 00, 00), 30, false);
+</code></pre> </div>
+<h4>Samples</h4>
+<ul type="square">
+<li><a href="#WWTWebClientSimple">WWT Web Client Simple</a></li>
+<li><a href="#WWTWebClientFov">WWT Web Client Fov</a></li>
+</ul>
+
+<h4>See Also</h4>
+
+<ul type="disc">
+<li><a href="#ViewFov"><b>Fov</b></a></li>
+<li><a href="#ViewGetRA"><b>GetRA</b></a></li>
+
+<li><a href="#WWTControl"><b>WWTControl Object</b></a></li>
+</ul>
+
+<hr>
+<a name="ViewHideUI"><h3>WWTControl HideUI Method</h3></a>
+<p class="urgentLine">Note: This feature is not implemented.</p>
+<p>The <b>HideUI</b> method specifies whether to hide the UI for the view.</p>
+<h4>Syntax</h4>
+<code><i>wwtControl</i><b>.hideUI(</b><br>
+&nbsp;&nbsp;<i>hide</i>&nbsp;&nbsp;[Bool]<br>
+<b>)</b><br>
+
+</code><h4>Parameters</h4>
+<i>hide</i><br>
+&nbsp;&nbsp;True indicates the UI should be hidden.<br>
+<h4>Return Values</h4>
+<p>This method does not return a value.</p>
+<h4>Remarks</h4>
+<p>If the UI is hidden, the main menu, thumbnails, collections, tours and so on
+will not be visible, giving an uninterrupted view. This can be helpful when
+control of the view is being handled by a custom client UI.</p>
+<h4>Example Code</h4>
+    <div class="codeExample">
+<pre><code class="codeExample">
+var bShowUI = true;
+
+function toggleSetting(text) {
+    switch (text) {
+        case 'ShowUI':
+            bShowUI = !bShowUI;
+            wwtControl.hideUI(!bShowUI);
+            break;
+            ....
+    }
+}
+            
+// The toggleSetting function should be used along with the following html input control
+&lt;input id="UI" type="checkbox" checked="checked" onclick="toggleSetting('ShowUI');"\&gt; 
+</code></pre> </div>
+<h4>Samples</h4>
+<ul type="square">
+<li><a href="#WWTWebClientSimple">WWT Web Client Simple</a></li>
+</ul>
+<h4>See Also</h4>
+
+<ul type="disc">
+<li><a href="#WWTControl"><b>WWTControl Object</b></a></li>
+</ul>
+
+<hr>
+<a name="ViewLoadImageCollection"><h3>WWTControl LoadImageCollection Method</h3></a>
+<p>The <b>LoadImageCollection</b> method is used to load a WTML<br>&nbsp;collection file,
+containing links to foreground and background images.</p>
+<h4>Syntax</h4>
+<code><i>wwtControl</i><b>.loadImageCollection(</b><br>
+&nbsp;&nbsp;<i>url</i>&nbsp;&nbsp;[String]<br>
+<b>)</b><br>
+
+</code><h4>Parameters</h4>
+<i>url</i><br>
+&nbsp;&nbsp;Specifies the URL of the image collection file (a .WTML<br>&nbsp;file).<br>
+<h4>Return Values</h4>
+<p>This method does not return a value.</p>
+<h4>Remarks</h4>
+<p>For a description of the content of image collection files, refer to the
+<a href="WorldWideTelescopeDataFilesReference.html">WorldWide Telescope Data Files Reference</a> document.</p>
+<p>After the collection is loaded, the images can be referenced by their string name using the
+<a href="#ViewSetBackgroundImageByName"><b>SetBackgroundImageByName</b></a> and
+<a href="#ViewSetForegroundImageByName"><b>SetForegroundImageByName</b></a> methods.</p>
+<h4>Example Code</h4>
+    <div class="codeExample">
+<pre><code class="codeExample">
+// If the data file is in the same folder as the JScript Web Control.
+wwtControl.loadImageCollection("imageFile.wtml");
+// If the data file requires a full path
+wwtControl.loadImageCollection("[path]//imageFile.wtml");
+</code></pre> </div>
+<h4>Samples</h4>
+<ul type="square">
+<li><a href="#WWTWebClientImages">WWT Web Client Images</a></li>
+</ul>
+<h4>See Also</h4>
+
+<ul type="disc">
+<li><a href="#WWTControl"><b>WWTControl Object</b></a></li>
+</ul>
+
+<hr>
+<a name="ViewLoadTour"><h3>WWTControl LoadTour Method</h3></a>
+<p>The <b>LoadTour</b> method is used to load and start a tour.</p>
+<h4>Syntax</h4>
+<code><i>wwtControl</i><b>.loadTour(</b><br>
+&nbsp;&nbsp;<i>url</i>&nbsp;&nbsp;[String]<br>
+<b>)</b><br>
+
+</code><h4>Parameters</h4>
+<i>url</i><br>
+&nbsp;&nbsp;Specifies the complete URL for the tour (a .wtt file).<br>
+<h4>Return Values</h4>
+<p>This method does not return a value.</p>
+<h4>Remarks</h4>
+<p>Tours are a sequence of tour stops. Each tour stop describes a viewing
+position, with accompanying audio (music or speech), and graphics (text, shapes
+or images). The amount of time a tour should spend at each stop is specified,
+along with how the transition should be made (instant or slewing) to the next
+stop. Obviously when the last tour stop has been visited, the tour is
+completed. On completion the end tour dialog will appear.</p>
+<table class="WT1">
+<tr><td><img alt="" height="374" src="Images/EndTourDialog.jpg" width="485"></td></tr>
+</table>
+
+<p>Tours can be stand-alone, or part of collections. For more information on
+tours refer to the WorldWide Telescope User Guide, and also to the
+<a href="WorldWideTelescopeDataFilesReference.html">WorldWide Telescope Data Files Reference</a> document.</p>
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">wwtControl.loadTour("http://www.worldwidetelescope.org/docs/wtml/tourone.wtt");</code></pre>
+</div>
+
+<h4>Samples</h4>
+<ul type="square">
+<li><a href="#WWTWebClientTours">WWT Web Client Tours</a></li>
+</ul>
+
+<h4>See Also</h4>
+
+<ul type="disc">
+<li><a href="#ViewPlayTour"><b>PlayTour</b></a></li>
+<li><a href="#ViewStopTour"><b>StopTour</b></a></li>
+<li><a href="#WWTControl"><b>WWTControl Object</b></a></li>
+
+</ul>
+
+<hr>
+<a name="ViewLoadVOTable"><h3>WWTControl LoadVOTable Method</h3></a>
+<p class="urgentLine">Note: This feature is not implemented.</p>
+<p>The <b>LoadVOTable</b> method is used to load a VO (Virtual Observatory) table.</p>
+<h4>Syntax</h4>
+<code><i>wwtControl</i><b>.loadVOTable(</b><br>
+&nbsp;&nbsp;<i>url</i>&nbsp;&nbsp;[String]<b>,</b><br>
+&nbsp;&nbsp;<i>useCurrentView</i>&nbsp;&nbsp;[Bool]<br>
+<b>)</b><br>
+
+</code><h4>Parameters</h4>
+<i>url</i><br>
+&nbsp;&nbsp;Specifies the URL of the VO table file (usually a .xml file).<br>
+<i>useCurrentView</i><br>
+&nbsp;&nbsp;True indicates that a new right ascension, declination and radius are not included as parameters of the
+URL -- so a cone search
+calculating these values will be carried out. False indicates that the right ascension, declination and radius are included as parameters
+within the URL.<br>
+<h4>Return Values</h4>
+<p>This method does not return a value.</p>
+<h4>Remarks</h4>
+<p>The VO data will appear as a spreadsheet in its own window. For details on the VO standard for storing data, refer to <a href="http://www.us-vo.org/">us-vo.org</a>. </p>
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">wwtControl.loadVOTable("path.xml", true);</code></pre> 
+</div>
+
+<h4>See Also</h4>
+
+<ul type="disc">
+<li><a href="#WWTControl"><b>WWTControl Object</b></a></li>
+</ul>
+
+<hr>
+<a name="ViewPlayTour"><h3>WWTControl PlayTour Method</h3></a>
+<p>The <b>PlayTour</b> method is used to restart a tour from the beginning.</p>
+<h4>Syntax</h4>
+<code><i>wwtControl</i><b>.playTour()</b><br>
+
+</code><h4>Parameters</h4>
+<p>This method takes no parameters.</p>
+<h4>Return Values</h4>
+<p>This method does not return a value.</p>
+<h4>Remarks</h4>
+<p>Refer to the remarks for the <a href="#ViewLoadTour"><b>LoadTour</b></a> method.</p>
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">
+function restartTour(){
+    wwtControl.playTour();
+}</code></pre> </div>
+<h4>Samples</h4>
+<ul type="square">
+<li><a href="#WWTWebClientTours">WWT Web Client Tours</a></li>
+</ul>
+<h4>See Also</h4>
+
+<ul type="disc">
+<li><a href="#ViewStopTour"><b>StopTour</b></a></li>
+<li><a href="#WWTControl"><b>WWTControl Object</b></a></li>
+</ul>
+
+<hr>
+<a name="ViewRemoveAnnotation"><h3>WWTControl RemoveAnnotation Method</h3></a>
+<p>The <b>RemoveAnnotation</b> method removes the specified annotation from the view.</p>
+<h4>Syntax</h4>
+<code><i>wwtControl</i><b>.removeAnnotation(</b><br>
+&nbsp;&nbsp;<i>annotation</i>&nbsp;&nbsp;[Annotation]<br>
+<b>)</b><br>
+
+</code><h4>Parameters</h4>
+<i>annotation</i><br>
+&nbsp;&nbsp;The <a href="#AnnotationObject"><b>Annotation</b></a> object to be removed.<br>
+<h4>Return Values</h4>
+<p>This method does not return a value.</p>
+<h4>Remarks</h4>
+<p>None.</p>
+<h4>Example Code</h4>
+<div class="codeExample">
+<pre><code class="codeExample">
+// Global settings
+var bShowCircle = false;
+var bShowPolygon = false;
+// Function to toggle the display of annotations
+function toggleSetting(text) {
+    switch (text) {
+        case 'ShowCircle':
+	        bShowCircle = !bShowCircle;
+		    if(bShowCircle) {
+	            wwtControl.addAnnotation(circle1);
+	        } else {
+	            wwtControl.removeAnnotation(circle1);
+	        }
+	        break;
+
+	    case 'ShowPolygon':
+	        bShowPolygon = !bShowPolygon;
+		    if(bShowPolygon) {
+	            wwtControl.addAnnotation(polygon1);
+	        } else {
+	            wwtControl.removeAnnotation(polygon1);
+	        }
+	        break;
+    }
+}</code></pre> </div>
+
+<h4>Samples</h4>
+<ul type="square">
+<li><a href="#WWTWebClientPoly">WWT Web Client Poly</a></li>
+</ul>
+<h4>See Also</h4>
+
+<ul type="disc">
+<li><a href="#ViewAddAnnotation"><b>AddAnnotation</b></a></li>
+
+<li><a href="#ViewClearAnnotations"><b>ClearAnnotations</b></a></li>
+<li><a href="#WWTControl"><b>WWTControl Object</b></a></li>
+</ul>
+
+<hr>
+<a name="ViewSetBackgroundImageByName"><h3>WWTControl SetBackgroundImageByName Method</h3></a>
+<p>The <b>SetBackgroundImageByName</b> method loads an image to use as the view background.</p>
+<h4>Syntax</h4>
+<code><i>wwtControl</i><b>.setBackgroundImageByName(</b><br>
+&nbsp;&nbsp;<i>name</i>&nbsp;&nbsp;[String]<br>
+<b>)</b><br>
+
+</code><h4>Parameters</h4>
+<i>name</i><br>
+&nbsp;&nbsp;Specifies the name of the image.<br>
+<h4>Return Values</h4>
+<p>This method does not return a value.</p>
+<h4>Remarks</h4>
+<p>The string used as the name parameter for this method should be present as a
+<strong>Place</strong> name in the .WTML<br>&nbsp;file loaded by the
+<a href="#ViewLoadImageCollection"><b>LoadImageCollection</b></a> method. Typically background images come from <i>Survey</i> data, such as
+visible light, x-ray, infrared, ultraviolet, gamma, and
+so on. In the UI of WorldWide Telescope, the background image is selected with
+the <strong>Imagery</strong> entry, and if there is a foreground image, the
+<strong>Image Crossfade</strong> slider will appear.</p>
+<p>A background image need not cover the whole sky, and can in fact be a simple
+study of one object in space. In this case the rest of the sky will be dark and
+empty, except for the solar system which is not considered foreground or
+background.</p>
+<table class="WT1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+
+<tr><td>
+
+	<img alt="" height="120" src="Images/BackgroundImage.jpg" width="450"></td></tr>
+</table>
+
+<h4>Example Code</h4>
+    <div class="codeExample">
+        <pre><code class="codeExample">wwtControl.loadImageCollection("MyImageCollection.wtml");
+wwtControl.setBackgroundImageByName("The Big Picture");
+wwtControl.gotoRaDecZoom(45.5, 122.0, 2, false);
+</code></pre> </div>
+<h4>Samples</h4>
+<ul type="square">
+<li><a href="#WWTWebClientImages">WWT Web Client Images</a></li>
+</ul>
+<h4>See Also</h4>
+
+<ul type="disc">
+<li><a href="#ViewSetForegroundImageByName"><b>SetForegroundImageByName</b></a></li>
+<li><a href="#WWTControl"><b>WWTControl Object</b></a></li>
+</ul>
+
+<hr>
+<a name="ViewSetForegroundImageByName"><h3>WWTControl SetForegroundImageByName Method</h3></a>
+<p>The <b>SetForegroundImageByName</b> method loads an image to use as the view foreground.</p>
+<h4>Syntax</h4>
+<code><i>wwtControl</i><b>.setForegroundImageByName(</b><br>
+&nbsp;&nbsp;<i>name</i>&nbsp;&nbsp;[String]<br>
+<b>)</b><br>
+
+</code><h4>Parameters</h4>
+<i>name</i><br>
+&nbsp;&nbsp;Specifies the name of the image.<br>
+<h4>Return Values</h4>
+<p>This method does not return a value.</p>
+<h4>Remarks</h4>
+<p>The string used as the name parameter for this method should be present as a
+<strong>Place</strong> name in the .WTML<br>&nbsp;file loaded by the
+<a href="#ViewLoadImageCollection"><b>LoadImageCollection</b></a> method.
+There can be only one foreground image and only one
+background image rendered at any one time. The <em>typical</em> use is to render
+studies as foreground images on top of a survey as a background image.</p>
+<p>If the opacity of the foreground image is solid, the background image will not be
+visible underneath. However if the <a href="#ViewSetForegroundOpacity"><b>SetForegroundOpacity</b></a>
+method is used to add some transparency, then both foreground and background
+images will be visible, and can be compared. Typical use of these two layers is
+to load a visual survey as either foreground or background, and then to compare
+it with an x-ray, heat or image of another non-visible wavelength, enabling a visual
+comparison between the two. </p>
+<p>In the UI of WorldWide Telescope the <strong>Explore
+&gt; Open &gt; Collection</strong> menu selection is typically used to load
+foreground images. If the WTML collection file explicitly defines a study as a
+background, or a survey as foreground, then this menu selection can be used to
+reverse the normal process.
+However, by default, studies loaded this way are treated as foreground, surveys
+as background.</p>
+<p>To load a survey as a foreground image, or a study as a background image, use
+<strong>Folder</strong> entries with the following structures. Note all the extra
+information needed in the <strong>Place</strong> entry for a study image.</p>
+
+	<table class="WT1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+<tr><td><span style='font-size:10.0pt;font-family:"Courier New";'>
+&lt;?xml&nbsp;version=<span style="color:#A31515;">&quot;1.0&quot;</span>?&gt; <br />
+&lt;<span style="color:#2B91AF;">Folder</span>&gt; <br />
+&lt;<span style="color:#2B91AF;">Folder</span>&nbsp;Name=<span style="color:#A31515;">&quot;Background&nbsp;Studies&quot;</span>&nbsp;Group=<span style="color:#A31515;">&quot;View&quot;</span>&nbsp;Searchable=<span style="color:#A31515;">&quot;True&quot;</span>&nbsp;Type=<span style="color:#A31515;">&quot;Sky&quot;</span>&gt; <br />
+&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&lt;<span style="color:#2B91AF;">Place</span>&nbsp;Name=<span style="color:#A31515;">&quot;Study&nbsp;One&quot;</span>&nbsp;DataSetType=<span style="color:#A31515;">&quot;Sky&quot;</span>&nbsp;RA=<span style="color:#A31515;">&quot;0&quot;</span>&nbsp;Dec=<span style="color:#A31515;">&quot;0&quot;</span>&nbsp;Constellation=<span style="color:#A31515;">&quot;0&quot;</span>&nbsp;Classification=<span style="color:#A31515;">&quot;0&quot;</span>&nbsp;Magnitude=<span style="color:#A31515;">&quot;0&quot;</span>&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Distance=<span style="color:#A31515;">&quot;0&quot;</span>&nbsp;ZoomLevel=<span style="color:#A31515;">&quot;0&quot;</span>&nbsp;Rotation=<span style="color:#A31515;">&quot;0&quot;</span>&nbsp;Angle=<span style="color:#A31515;">&quot;0&quot;</span>&nbsp;Opacity=<span style="color:#A31515;">&quot;100&quot;</span>&nbsp;AngularSize=<span style="color:#A31515;">&quot;1&quot;</span>&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span style="color:#2B91AF;">Target</span>&gt;Undefined&lt;/<span style="color:#2B91AF;">Target</span>&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span style="color:#2B91AF;">BackgroundImageSet</span>&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;!--&nbsp;Enter&nbsp;the&nbsp;study&nbsp;image set&nbsp;here <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span style="color:#2B91AF;">ImageSet</span>&nbsp; <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/<span style="color:#2B91AF;">ImageSet</span>&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;--&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/<span style="color:#2B91AF;">BackgroundImageSet</span>&gt; <br />
+&nbsp;&nbsp;&lt;/<span style="color:#2B91AF;">Place</span>&gt; <br />
+&lt;/<span style="color:#2B91AF;">Folder</span>&gt; <br />
+&lt;!-- <br />
+--&gt; <br />
+ <br />
+&lt;<span style="color:#2B91AF;">Folder</span>&nbsp;Name=<span style="color:#A31515;">&quot;Foreground&nbsp;Surveys&quot;</span>&nbsp;Group=<span style="color:#A31515;">&quot;Explorer&quot;</span>&gt; <br />
+&nbsp;&nbsp;&lt;<span style="color:#2B91AF;">Place</span>&nbsp;Name=<span style="color:#A31515;">&quot;Survey&nbsp;One&quot;</span>&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span style="color:#2B91AF;">ForegroundImageSet</span>&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!--&nbsp;Enter&nbsp;the&nbsp;survey&nbsp;image set&nbsp;here <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span style="color:#2B91AF;">ImageSet</span>&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp; <br />
+ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/<span style="color:#2B91AF;">ImageSet</span>&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/<span style="color:#2B91AF;">ForegroundImageSet</span>&gt; <br />
+&nbsp;&nbsp;&lt;/<span style="color:#2B91AF;">Place</span>&gt; <br />
+&lt;/<span style="color:#2B91AF;">Folder</span>&gt; <br />
+&lt;/<span style="color:#2B91AF;">Folder</span>&gt; <br />
+</span></td></tr></table>
+
+
+<p>The Sun and solar system planets and moons are not considered either
+foreground or background, and will be present in any sky view. </p>
+
+
+<p>Note that the <i>images</i> used for both foreground and background are tiled image pyramids. Refer to the tools documentation
+<a href="WorldWideTelescopeDataToolsGuide.html">WorldWide Telescope Data Tools Guide</a> for details on how to
+create these image pyramids, and to the <a href="WorldWideTelescopeDataFilesReference.html">WorldWide Telescope Data Files Reference</a>
+for details on the data file formats.</p>
+<h4>Example Code</h4>
+    <div class="codeExample">
+        <pre><code class="codeExample">wwtControl.loadImageCollection("Serpens.wtml");
+wwtControl.setForegroundImageByName("The Serpens Dark Cloud");
+wwtControl.gotoRaDecZoom(277.274985, 0.545000, 1, false);
+</code></pre> </div>
+
+<p>The "Serpens.wtml" file contains the following:</p>
+<table class="WT1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+
+<tr><td>
+    <div class="codeExample">
+        <pre><code class="codeExample">
+&ltFolder 
+	Name="My Places" 
+	Group="Explorer" 
+	Searchable="True" 
+	Type="Sky"
+	Thumbnail="C:\~\Images\T_Earth.jpg"&gt
+
+  	&ltVersionDependent&gtfalse&lt/VersionDependent&gt
+
+  &ltPlace 
+    Name="Serpens Dark Cloud" 
+    DataSetType="Sky" 
+    RA="16.5496517733333" 
+    Dec="-23.25002666" 
+    Constellation="AND" 
+    Classification="Unfiltered" 
+    Magnitude="0" 
+    Distance="0" 
+    ZoomLevel="61.76666816142" 
+    Rotation="0" 
+    Angle="0" 
+    Opacity="100" 
+    AngularSize="1"&gt
+
+    &ltTarget&gtUndefined&lt/Target&gt
+    &ltForegroundImageSet&gt
+      &ltImageSet 
+        Generic="False" 
+        DataSetType="Sky" 
+        BandPass="Visible" 
+        Url="http://www.cfa.harvard.edu/~gmuench/wwtimages/161419573/{1}/{3}/{3}_{2}.png" 
+        TileLevels="4" 
+        WidthFactor="2" 
+        Sparse="True" 
+        Rotation="0" 
+        QuadTreeMap="" 
+        Projection="Tangent" 
+        Name="1120 micron  image of the Serpens Dark Cloud;Serpens;Serpens Dark Cloud" 
+        FileType=".png" 
+        CenterY="-23.25002666" 
+        CenterX="248.2447766" 
+        BottomsUp="False" 
+        OffsetX="-0.0013888889225" 
+        OffsetY="-0.0013888889225" 
+        BaseTileLevel="0" 
+        BaseDegreesPerTile="11.37777805312"&gt
+
+        &ltCredits&gtEnoch/COMPLETE/CSO1120 micron  image of the Serpens Dark Cloud.  Data were taken May-June 2003 and 2005. Flux units are in mJy per 31 arcsecond beam. 
+
+Reference:  Melissa Enoch et al., Comparing Star Formation on Large Scales in the c2d Legacy Clouds: Bolocam 1.1 mm Dust Continuum Surveys of Serpens, Perseus, and Ophiuchus, ApJ, 2007, 666, 982 
+        &lt/Credits&gt
+        &ltCreditsUrl&gthttp://www.cfa.harvard.edu/COMPLETE/data_html_pages/SerA_1120uBolo_F.html&lt/CreditsUrl&gt
+        &ltThumbnailUrl&gthttp://www.cfa.harvard.edu/~gmuench/wwtimages/161419573.jpg&lt/ThumbnailUrl&gt
+      &lt/ImageSet&gt
+    &lt/ForegroundImageSet&gt
+  &lt/Place&gt
+&lt/Folder&gt
+</code></pre></div>
+<!--<img src="Images/serpens_wtml.bmp">-->
+</td></tr>
+</table>
+
+<h4>Samples</h4>
+<ul type="square">
+<li><a href="#WWTWebClientImages">WWT Web Client Images</a></li>
+</ul>
+<h4>See Also</h4>
+
+<ul type="disc">
+<li><a href="#ViewSetBackgroundImageByName"><b>SetBackgroundImageByName</b></a></li>
+<li><a href="#ViewSetForegroundOpacity"><b>SetForegroundOpacity</b></a></li>
+<li><a href="#WWTControl"><b>WWTControl Object</b></a></li>
+</ul>
+
+<hr>
+<a name="ViewSetForegroundOpacity"><h3>WWTControl SetForegroundOpacity Method</h3></a>
+<p class="urgentLine">Note: This feature is not implemented.</p>
+<p>The <b>SetForegroundOpacity</b> method specifies the opacity of the foreground image, which can be useful when visually comparing the foreground and
+background images.</p>
+<p>This method is not currently implemented.</p>
+<h4>Syntax</h4>
+<code><i>wwtControl</i><b>.setForegroundOpacity(</b><br>
+&nbsp;&nbsp;<i>opacity</i>&nbsp;&nbsp;[Double]<br>
+<b>)</b><br>
+
+</code><h4>Parameters</h4>
+<i>opacity</i><br>
+&nbsp;&nbsp;Specifies opacity, in the range 0.0 to 1.0.<br>
+<h4>Return Values</h4>
+<p>This method does not return a value.</p>
+<h4>Remarks</h4>
+<p>This setting enables some see-through in the foreground image, to enable a
+comparison with the background image. Note that if the foreground image is a
+.png file, then some transparency information is usually held within the file.
+The <a href="#ViewSetForegroundImageByName"><b>SetForegroundImageByName</b></a> method sets the foreground
+opacity to 1.0 each time a new image is loaded.</p>
+<h4>Example Code</h4>
+<div class="codeExample">
+        <pre><code class="codeExample">wwtControl.setForegroundOpacity(0.8);</code></pre> 
+</div>
+<h4>Samples</h4>
+<ul type="square">
+<li><a href="#WWTWebClientImages">WWT Web Client Images</a></li>
+</ul>
+<h4>See Also</h4>
+
+<ul type="disc">
+<li><a href="#ViewSetBackgroundImageByName"><b>SetBackgroundImageByName</b></a></li>
+<li><a href="#WWTControl"><b>WWTControl Object</b></a></li>
+</ul>
+
+
+<hr>
+<a name="ViewStopTour"><h3>WWTControl StopTour Method</h3></a>
+<p>The <b>StopTour</b> method is used to stop and exit a tour.</p>
+<h4>Syntax</h4>
+<code><i>wwtControl</i><b>.stopTour()</b><br>
+
+</code><h4>Parameters</h4>
+<p>This method takes no parameters.</p>
+<h4>Return Values</h4>
+<p>This method does not return a value.</p>
+<h4>Remarks</h4>
+<p>After a tour has been stopped with this call, it cannot be restarted from the
+position it was stopped at. <a href="#ViewPlayTour"><b>PlayTour</b></a> (which
+restarts a tour) will not work after a tour has been stopped.
+Also refer to the remarks for <a href="#ViewLoadTour"><b>LoadTour</b></a>. </p>
+<h4>Example Code</h4>
+    <div class="codeExample">
+        <pre><code class="codeExample">
+function loadTour(tourURL) {
+    wwtControl.loadTour(tourURL);
+}
+
+function stopTour() {
+    wwtControl.stopTour();
+}</code></pre> </div>
+<h4>Samples</h4>
+<ul type="square">
+<li><a href="#WWTWebClientTours">WWT Web Client Tours</a></li>
+</ul>
+<h4>See Also</h4>
+
+<ul type="disc">
+<li><a href="#WWTControl"><b>WWTControl Object</b></a></li>
+</ul>
+<hr>
+<a name="AnnotationClicked"><h3>WWTControl AnnotationClicked Event</h3></a>
+<p>The <b>AnnotationClicked</b> event is fired when an Annotation object is clicked.</p>
+<h4>Syntax</h4>
+<code><b>function annotationClicked(obj, eventArgs){}</b><br>
+</code>
+<h4>Remarks</h4>
+<p>The obj parameter is the wwt object that originated the click event and the eventArgs object contains the click event arguments accessed 
+  by the methods get_id(), get_RA(), and get_dec().</p>
+<h4>Example Code</h4>
+    <div class="codeExample">
+        <pre><code class="codeExample">
+function annotationClicked(obj, eventArgs) {
+    alert("Annotation ID:" + eventArgs.get_id().toString());
+}
+</code></pre> </div>
+<h4>Samples</h4>
+<ul type="square"><li><a href="#WWTWebClientImages">WWT Web Client Images</a>
+</li></ul>
+
+<h4>See Also</h4>
+
+<ul type="disc">
+<li><a href="#AnnotationObject"><b>Annotation</b></a></li>
+<li><a href="#WWTControl"><b>WWTControl Object</b></a></li>
+</ul>
+
+<hr>
+<a name="wwtArrived"><h3>WWTControl Arrived Event</h3></a>
+<p>The <b>wwtArrived</b> event is fired when a change to the view from a drag,
+zoom, or gotoRaDecZoom comes to a halt.</p>
+<h4>Syntax</h4>
+<code><b>function arrived(){}</b><br>
+</code>
+<h4>Remarks</h4>
+<p>When the view is to change following a drag, zoom, or gotoRaDecZoom, normally there
+will be an animated slew across space until the new view comes to rest. It is on
+the completion of the slew that this event is fired.</p>
+<p>Currently this event is not being sent if the <i>instant</i> parameter of the <b>gotoRaDecZoom</b> method is set to True.</p>
+<h4>Example Code</h4>
+    <div class="codeExample">
+<pre><code class="codeExample">// Register the event to your arrived function
+wwtControl.add_arrived(myArrivedEvent);
+
+// create a function that will handle the arrived event
+function myArrivedEvent(obj, eventArgs) {
+    // Show that we have arrived by drawing a red circle at the new ra, dec
+
+    // Create the circle.
+    var circle = wwtControl.createCircle(true);        
+    circle.set_fillColor("red");       
+    circle.set_opacity(3);    
+    circle.set_radius(1.0);    
+    circle.set_skyRelative(15);    
+    circle.setCenter(eventArgs.get_RA(), eventArgs.get_dec()); 
+
+    wwtControl.addAnnotation(circle);
+}
+</code></pre> </div>
+<h4>Samples</h4>
+<ul type="square">
+<li><a href="#WWTWebClientArrived">WWT Web Client Arrived</a></li>
+</ul>
+<h4>See Also</h4>
+
+<ul type="disc">
+<li><a href="#ViewGoto"><b>GotoRaDecZoom</b></a></li>
+<li><a href="#WWTControl"><b>WWTControl Object</b></a></li>
+</ul>
+
+<hr>
+<a name="wwtClick"><h3>WWTControl Click Event</h3></a>
+<p>The <b>wwtClick</b> event is fired when the left mouse button is clicked.</p>
+<h4>Syntax</h4>
+<code><b>function click(obj, eventArgs){}</b><br>
+</code>
+<h4>Remarks</h4>
+<p>This event is not fired for all mouse clicks, only those when the view is
+stationary and the mouse click is not
+part of a zoom or drag procedure. In other words, it is evident that the user is clicking on an object. The RA and Dec
+provided in the eventArgs object are the location of the click, which will not usually be the same as the RA and Dec for the current view.
+  The obj parameter is the wwt object that originated the click event and the eventArgs object contains the click event arguments accessed 
+  by the methods get_ra() and get_dec().</p>
+<h4>Example Code</h4>
+    <div class="codeExample">
+<pre><code class="codeExample">// Register the event to your clicked function
+wwtControl.add_click(clicked);
+
+function clicked(obj, eventArgs) {
+    alert("Clicked on: " + eventArgs.get_RA().toString() + ", " + eventArgs.get_dec().toString());
+}
+</code></pre> </div>
+
+<h4>Samples</h4>
+<ul type="square">
+<li><a href="#WWTWebClientClickEvent">WWT Web Client Click Event</a></li>
+</ul>
+<h4>See Also</h4>
+
+<ul type="disc">
+<li><a href="#WWTControl"><b>WWTControl Object</b></a></li>
+</ul>
+
+<hr>
+<a name="wwtReady"><h3>WWTControl Ready Event</h3></a>
+<p>The <b>wwtClick</b> event is fired when the web client is initialized.</p>
+<h4>Syntax</h4>
+<code><b>function ready(){}</b><br>
+</code>
+<h4>Remarks</h4>
+<p>This event is fired only once, and should be responded to by all clients. Use it to initialize internal variables
+appropriately, in particular the reference to the View object, shown in the example code.</p>
+<h4>Example Code</h4>
+    <div class="codeExample">
+<pre><code class="codeExample">var wwt; 
+
+// Register the event to your wwtReady function
+function initialize() {
+    wwt = wwtlib.WWTControl.initControl();
+    wwtControl.add_ready(wwtReady);
+}
+
+// here is where you can put custom code that runs when the 
+// WWTControl is ready
+function wwtReady() {
+    wwtControl.settings.set_showCrosshairs(true);
+    wwtControl.settings.set_showConstellationFigures(false);
+}
+</code></pre> </div>
+
+<h4>Samples</h4>
+<ul type="square">
+<li><a href="#WWTWebClientSimple">WWT Web Client Simple</a></li>
+</ul>
+<h4>See Also</h4>
+
+<ul type="disc">
+<li><a href="#WWTControl"><b>WWTControl Object</b></a></li>
+</ul>
+
+<hr>
+<h2><a name="WebControlSamples">Web Control Samples</a></h2>
+<p>The following table lists the samples that can be used as a starting point
+for WorldWide Telescope web client development. </p>
+
+<p>Click on the <strong>Sample Name</strong> to view
+the source. Note that paths may need to be changed for the samples to work,
+these paths are highlighted by comments in the sample code.</p>
+<table class="WT1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+
+<tr class="H"><td><h5>
+Sample Name</h5></td><td><h5>Description</h5></td><td><h5>Link</h5></td></tr>
+	<tr><td><h6>Sky samples</h6></td><td></td><td></td></tr>
+<tr><td><a name="WWTWebClientSimple"></a><a href="../docs/Samples/displaycode.htm?codeExample=wwtwebclientsimpleUIHtml5.html" target="_SampleCode"><b>WWT Web Client Simple</b></a></td><td>
+	Performs the basic steps of opening up a client, and provides a few UI controls to select one of two constellations, and change a few settings.
+	<br>
+	</td><td><b><a href="../docs/Samples/wwtwebclientsimpleUIHtml5.html">Run</a></b></td></tr>
+
+	<tr><td><a name="WWTWebClientPoly"></a><a href="../docs/Samples/displaycode.htm?codeExample=WWTWebClientPolyHtml5.html" target="_SampleCode"><b>WWT Web Client Poly</b></a></td><td>
+	Adds the creation of two circle, one polygon and one polyline annotation objects to the simple client.
+		<br>
+	</td><td><b><a href="../docs/Samples/WWTWebClientPolyHtml5.html">Run</a></b></td></tr>
+
+	<tr><td><a name="WWTWebClientArrived"></a><a href="../docs/Samples/displaycode.htm?codeExample=WWTWebClientArrivedHtml5.html" target="_SampleCode"><b>WWT Web Client Arrived</b></a></td><td>
+	Shows the use of the Arrived event, drawing a red circle on the new view when the event is received.
+		<br>
+	</td><td><b><a href="../docs/Samples/WWTWebClientArrivedHtml5.html">Run</a></b></td></tr>
+
+	<tr><td><a name="WWTWebClientClickEvent"></a><a href="../docs/Samples/displaycode.htm?codeExample=WWTWebClientClickEventHtml5.html" target="_SampleCode"><b>WWT Web Client Click Event</b></a></td><td>
+	Shows the use of the Click event, drawing a circle or an alert box giving the location of the click.
+		<br>
+	</td><td><b><a href="../docs/Samples/wwtwebclientclickeventHtml5.html">Run</a></b></td></tr>
+
+	<tr><td><a name="WWTWebClientFov"></a><a href="../docs/Samples/displaycode.htm?codeExample=WWTWebClientFovHtml5.html" target="_SampleCode"><b>WWT Web Client Fov</b></a></td><td>
+	Shows the current Field of View, with buttons to zoom in and out.
+		<br>
+	</td><td><b><a href="../docs/Samples/wwtwebclientfovHtml5.html">Run</a></b></td></tr>
+
+		<tr><td><a name="WWTWebClientLocalView"></a><a href="../docs/Samples/displaycode.htm?codeExample=WWTWebClientLocalViewHtml5.html" target="_SampleCode"><b>WWT Web Client Local View</b></a></td><td>
+	Shows the view from a number of cities around the world.
+		<br>
+	</td><td><b><a href="../docs/Samples/wwtwebclientlocalviewHtml5.html">Run</a></b></td></tr>
+
+	<tr><td><a name="WWTWebClientImages"></a><a href="../docs/Samples/displaycode.htm?codeExample=WWTWebClientImagesHtml5.html" target="_SampleCode"><b>WWT Web Client Images</b></td><td>
+	Loads a sample image collection, enabling the selection of one of three foreground images.
+		<br>
+	</td><td><b><a href="../docs/Samples/wwtwebclientimagesHtml5.html">Run</a></b></td></tr>
+	<tr><td><a name="WWTWebClientTours"></a><a href="../docs/Samples/displaycode.htm?codeExample=WWTWebClientToursHtml5.html" target="_SampleCode"><b>WWT Web Client Tours</b></td><td>
+	Loads and runs one of two simple tours of the Solar System.
+		<br>
+	</td><td><b><a href="../docs/Samples/wwtwebclienttoursHtml5.html">Run</a></b></td></tr>
+	<tr><td><h6>Earth samples</h6></td><td></td><td></td></tr>
+		<tr><td><a name="WWTWebClientEarthCitySearch"></a><a href="../docs/Samples/displaycode.htm?codeExample=WWTWebClientEarthCitySearchHtml5.html" target="_SampleCode"><b>WWT Web Client Earth City Search</b></td><td>
+	Change the view to the Earth, then locate cities and lat/long locations.
+		<br>
+	</td><td><b><a href="../docs/Samples/wwtwebclientearthcitysearchHtml5.html">Run</a></b></td></tr>
+<tr><td><h6>Planet samples</h6></td><td></td><td></td></tr>
+		<tr><td><a name="WWTWebClientMarsExplorer"></a><a href="../docs/Samples/displaycode.htm?codeExample=WWTWebClientMarsExplorerHtml5.html" target="_SampleCode"><b>WWT Web Client Mars Explorer</b></td><td>
+	Change the view to Planets and the Imagery to Mars, then scroll through a range of surface features from the
+			<em>Valles Marineris</em> canyon to the <em>Happy Face</em> crater.
+		<br>
+	</td><td><b><a href="../docs/Samples/WWTWebClientMarsExplorerHtml5.html">Run</a></b></td></tr>
+
+</table>
+<!--
+<p>Note that for samples to run correctly they must be located from a web address (http://...) and not from a local
+file address.</p> -->
+
+<h4>See Also</h4>
+
+<ul type="disc">
+<li><a href="#WebControlDemos">Web Control Demos</a></li>
+<li><a href="#WebControlDevelopment">Web Control Development</a></li>
+<li><a href="#WebControlObjects">Web Control Objects</a></li>
+<li><a href="#WebControlSetup">Web Control Setup</a></li>
+<li><a href="#WorldWideTelescopeWebControlScriptReference">WorldWide Telescope Web Control Script Reference</a></li>
+</ul>
+
+<hr>
+<h2><a name="WebControlDemos">Web Control Demos</a></h2>
+<p>The following table lists some demonstration programs that have been created using the SDK. </p>
+<table class="WT1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+
+<tr class="H"><td><h5>
+Demo Name</h5></td><td><h5>Description</h5></td><td><h5>Link</h5></td></tr>
+
+<tr><td><b>WWT Web Client Hi-Def Planet Explorer</b></td><td>
+	Provides a range of options for exploring the surfaces of our Moon and Mars. Thousands of surface features, including craters, mountains, valleys, seas, plains, ridges and depressions,
+	are available to step through, sort, search and view.
+	<br><br>Make sure to select the correct planet or moon in the <strong>Look
+	At</strong> and <strong>Imagery</strong> drop down lists, after starting the
+	program.<br>
+	</td><td><b><a href="../docs/Samples/wwtwebclientplanetexplorerHtml5.html" target="_SampleCode">Run</a></b></td></tr>
+
+	<tr><td><b>WWT Web Client Distant Planet Explorer</b></td><td>
+	Provides a range of options for exploring the surfaces of Mercury, Venus, and the four main moons of Jupiter: IO, Ganymede, Europa and Callisto. Hundreds of surface features,
+	are available to step through, sort, search and view.
+	<br><br>Make sure to select the correct planet or moon in the <strong>Look
+	At</strong> and <strong>Imagery</strong> drop down lists, after starting the
+	program.<br>
+	</td><td><b><a href="../docs/Samples/wwtwebclientdistantplanetexplorerHtml5.html" target="_SampleCode">Run</a></b></td></tr>
+
+<tr><td><b>WWT Web Client Messier Catalog</b></td><td>
+	All 110 objects in this famous catalog can be viewed, displayed as a slide show, sorted and searched.
+	<br>
+	</td><td><b><a href="../docs/Samples/wwtwebclientmessiercatalogHtml5.html" target="_SampleCode">Run</a></b></td></tr>
+
+</table>
+
+
+<h4>See Also</h4>
+<ul type="disc">
+<li><a href="#WebControlDevelopment">Web Control Development</a></li>
+<li><a href="#WebControlObjects">Web Control Objects</a></li>
+<li><a href="#WebControlSetup">Web Control Setup</a></li>
+<li><a href="#WorldWideTelescopeWebControlScriptReference">WorldWide Telescope Web Control Script Reference</a></li>
+</ul>
+</body>
+</html>

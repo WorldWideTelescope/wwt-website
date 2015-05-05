@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Html5 samples code display</title>
+
+     <meta charset="utf-8"/>
+     <link rel="stylesheet" href="../SDK_style.css" media="screen">
+     <link rel="stylesheet" href="../scripts/jqueryCodeView.css" media="screen">
+     <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.2.min.js"></script>
+     <script src="../scripts/jqueryCodeView.js"></script>
+
+     <script>
+
+         function initialize() {
+             $('a.codeExample').click();
+             $('a.codeExample').html = "";
+         }
+     
+     </script>
+
+</head>
+<body onload="initialize();">
+<a href="" class="codeExample">click to see code</a>
+
+</body>
+</html>

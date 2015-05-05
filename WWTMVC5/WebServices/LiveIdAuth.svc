@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="WWTMVC5.WebServices.LiveIdAuth" CodeBehind="LiveIdAuth.svc.cs" %>

@@ -1,0 +1,256 @@
+﻿<!DOCTYPE html "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  
+<title>WWT Web Client Earth City Search</title>
+	
+<script type="text/jscript" language="javascript">
+
+    // Create the WorldWide telescope object
+
+    var wwtView;
+
+    // Create variables to hold the changeable settings
+
+    var bShowCrosshairs = true;
+    var bShowUI = true;
+
+    // A simple function to toggle the settings
+    // This function is called from the checkbox entries setup in the html table
+
+    function toggleSetting(text) {
+        switch (text) {
+            case 'ShowUI':
+                bShowUI = !bShowUI;
+                wwtView.HideUI(!bShowUI);
+                break;
+
+            case 'ShowCrosshairs':
+                bShowCrosshairs = !bShowCrosshairs;
+                wwtView.Settings.ShowCrosshairs = bShowCrosshairs;
+                break;
+
+        }
+    }
+
+    // A function to convert longitude to RA.
+    
+    function convertLongRA(degrees, minutes, east) {
+        var longitude = degrees + (minutes / 60);
+        var x;
+        if (east)
+            x = 360 - longitude; else
+            x = longitude;
+        return x;
+    }
+
+    // A function to convert latitude to Dec
+    
+    function convertLatDec(degrees, minutes, north) {
+    
+        var latitude = degrees + (minutes/60);
+        if (north)
+            return latitude; else
+            return -1 * latitude;   
+    }
+
+    // Go find a lat long
+    
+    function GotoLatLong() {
+        var lat = 1.0 * document.getElementById("Latitude").value;
+        var lon = 1.0 * document.getElementById("Longitude").value;
+        var latM = 1.0 * document.getElementById("LatMinutes").value;
+        var lonM = 1.0 * document.getElementById("LonMinutes").value;
+        var north = document.getElementById('North').checked;
+        var east = document.getElementById('East').checked;
+
+        if (lat < 0 || lat > 90) {
+            document.getElementById('Latitude').value = "Out of range (0-90)";
+        } else
+            if (lon < 0 || lon > 180) {
+            document.getElementById('Longitude').value = "Out of range (0-180)";
+        } else
+            if (lonM < 0 || lonM > 60) {
+            document.getElementById('LonMinutes').value = "Out of range (0-60)";
+        } else
+            if (latM < 0 || latM > 60) {
+            document.getElementById('LatMinutes').value = "Out of range (0-60)";
+        } else
+            wwtView.Goto(convertLongRA(lon, lonM, east), convertLatDec(lat, latM, north), 0.1, false);
+    }
+   
+    // Go find a city
+    
+    function GotoCity(text) {
+
+        switch (text) {
+            case 'London':
+                wwtView.Goto(convertLongRA(0,5,false), convertLatDec(51,32,true),   0.05, false);
+                break;
+
+            case 'Reykjavik':
+                wwtView.Goto(convertLongRA(21,58,false), convertLatDec(64,4,true),  0.05, false);
+                break;
+
+            case 'Sydney':
+                wwtView.Goto(convertLongRA(151,5,true), convertLatDec(33,51,false),  0.05, false);
+                break;
+                
+            case 'Santiago':
+                wwtView.Goto(convertLongRA(70,45,false), convertLatDec(33,28,false),   0.05, false);
+                break;
+
+            case 'St Petersburg':
+                wwtView.Goto(convertLongRA(30,18,true), convertLatDec(59,50,true),  0.05, false);
+                break;
+
+            case 'Cape Town':
+                wwtView.Goto(convertLongRA(18,23,true), convertLatDec(33,55,false),  0.05, false);
+                break;
+                            
+            case 'San Francisco':
+                wwtView.Goto(convertLongRA(122,26,false), convertLatDec(37,47,true),  0.05, false);
+                break;
+                
+            case 'Zero Zero':
+                wwtView.Goto(0, 0, 10, false);
+                break;
+        }
+    }
+
+    // The wwtReady function is called by the WWT Web Control software
+    // This function sets up the wwt object, and the initial defaults
+
+    function wwtReady() {
+        wwtView = document.getElementById("WWTView").content.WWT;
+
+        wwtView.Settings.ShowCrosshairs = bShowCrosshairs;
+        wwtView.Settings.ShowConstellationFigures = bShowFigures;
+        wwtView.HideUI(!bShowUI);
+    }
+
+</script>
+
+</head>
+
+<body>
+
+<!-- The body section creates a table with two columns. The first contains the -->
+<!-- silverlight object that is the WWT web client. And the second a table within-->
+<!-- the table, containing some buttons and checkboxes.-->
+
+<table border="2" bgcolor="lightgrey">
+	<tr><td>
+        <div id="WorldWideTelescopeControlHost">
+        
+        <object id="WWTView" 
+			data="data:application/x-silverlight," 
+			type="application/x-silverlight-2" 			
+			width="1600" height="1000">
+
+<!-- Ensure the source parameter links correctly to the wwtsl.xap file -->
+
+			<param name="source" value="http://www.worldwidetelescope.org/webclient/clientbin/WWTSL.xap"/>
+			<param name="background" value="black" />
+			<param name="minRuntimeVersion" value="3.0.40624.0" />
+			<param name="autoUpgrade" value="true" />
+			<param name="initParams" value="NoUI=false,wtml=,webkey=AX2011Gqqu" />
+		    <param name="enableHtmlAccess" value="true" />
+			<a href="http://go.microsoft.com/fwlink/?LinkID=149156&v=3.0.40624.0">
+     			<img src="http://go.microsoft.com/fwlink/?LinkId=108181" alt="Install Microsoft Silverlight" /></a>
+		</object>
+    </div>
+	</td><td>
+
+	<table border="2" cellspacing="4" cellpadding="4" bgcolor="gold">
+	
+	<tr>
+	<th colspan="2"><h2>WWT Web Client Earth City Search</h2></th>
+	</tr>
+    <tr>
+	<th colspan = "2">City</th>
+	</tr>
+	<tr><th colspan="2">
+	<input type="button" id="London" value="Goto London, UK" onclick="GotoCity('London');"/>
+	</th></tr>
+	<tr><th colspan="2">
+	<input type="button" id="Reykjavik" value="Goto Reykjavik, Iceland" onclick="GotoCity('Reykjavik');"/>	
+	</th></tr>
+	<tr><th colspan="2">
+	<input type="button" id="Sydney" value="Goto Sydney, Australia" onclick="GotoCity('Sydney');"/>
+	</th></tr>
+	<tr><th colspan="2">
+	<input type="button" id="Button2" value="Goto Santiago, Chile" onclick="GotoCity('Santiago');"/>	
+	</th></tr>
+	<tr><th colspan="2">
+	<input type="button" id="Petersburg" value="Goto St Petersburg, Russia" onclick="GotoCity('St Petersburg');"/>
+	</th></tr>
+	<tr><th colspan="2">
+	<input type="button" id="Cape Town" value="Goto Cape Town, South Africa" onclick="GotoCity('Cape Town')"/>
+	</th></tr>
+	<tr><th colspan="2">
+	<input type="button" id="San Francisco" value="Goto San Francisco, USA" onclick="GotoCity('San Francisco');"/>
+	</th></tr>
+	<tr><th colspan="2">
+	<input type="button" id="Zero Zero" value="Goto Zero Zero" onclick="GotoCity('Zero Zero')"/>
+	</th></tr>
+	
+	<tr>
+	<th colspan = "2">Goto Latitude</th>
+	</tr>
+	<tr>
+	<td>degrees</td>
+	<td> <input id="Latitude" type="text" value="16"/></td>
+	</tr>
+	<tr>
+    <td>minutes</td>
+	<td> <input id="LatMinutes" type="text" value="46"/></td>
+	</tr>
+	<tr>
+	<td>North</td>
+	<td> <input id ="North" type="checkbox" checked="checked" /></td>
+	</tr>
+    <tr>
+	<th colspan = "2">Goto Longitude</th>
+	</tr>
+	<tr>
+	<td>degrees</td>
+	<td> <input id="Longitude" type="text" value="3"/></td>
+	</tr>
+	<tr>
+	<td>minutes</td>
+	<td> <input id="LonMinutes" type="text" value="0"/></td>
+	</tr>
+	<tr>
+	<td>East</td>
+	<td> <input id ="East" type="checkbox" /></td>
+	</tr>
+	<tr><th colspan="2">
+	<input type="button" id="goto" value="Goto" onclick="GotoLatLong();"/>
+	</th></tr>
+	
+	<tr>
+	<th colspan = "2">Settings</th>
+	</tr>
+	
+	<tr>
+		<td> Show UI </td>
+		<td> <input id="UI" type="checkbox" checked="checked" onclick="toggleSetting('ShowUI');"/></td>
+
+	</tr>
+	
+	<tr>
+		<td> Show Crosshairs</td>
+		<td> <input id="Crosshairs" type="checkbox" checked="checked" onclick="toggleSetting('ShowCrosshairs');"/></td>
+
+	</tr>
+
+</table>
+</td>
+</tr>
+</table>
+
+</body>
+</html>

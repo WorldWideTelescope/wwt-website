@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="Web.Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="1" osVersion="*" schemaVersion="2015-04.2.6">
+  <Role name="Web">
+    <Instances count="4" />
+    <ConfigurationSettings>
+      <Setting name="EarthOnlineEntities" value="metadata=res://*/Models.EarthOnline.csdl|res://*/Models.EarthOnline.ssdl|res://*/Models.EarthOnline.msl;provider=System.Data.SqlClient;provider connection string=&quot;Data Source=xxx;Initial Catalog=LayerscapeDev;Integrated Security=False;User ID=xxx;Password=xxx;multipleactiveresultsets=True;App=EntityFramework&quot;" />
+      
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="true" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="wwtprod" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" value="xxx" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration" value="2012-12-31T00:00:00.0000000" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteForwarder.Enabled" value="true" />
+      <Setting name="EarthOnlineStorage" value="DefaultEndpointsProtocol=https;AccountName=layerscapedev;AccountKey=xxx" />
+      <Setting name="HighlightEntitiesToBeFetched" value="20" />
+      <Setting name="HighlightEntitiesPerPage" value="4" />
+      <Setting name="CommentsToBeFetched" value="10" />
+      <Setting name="PivotResultsCount" value="150" />
+      <Setting name="LatestTourFileDays" value="30" />
+      <Setting name="EntitiesPerUser" value="8" />
+      <Setting name="PermissionsPerPage" value="8" />
+      <Setting name="MinRatedPeopleCount" value="2" />
+      <Setting name="TotalPagesShown" value="5" />
+      <Setting name="ContactUsUrl" value="mailto:laysup1@microsoft.com" />
+      <Setting name="ThumbnailFileExtensions" value=".png, .jpg, .jpeg" />
+      <Setting name="VideoFileExtensions" value=".wmv, .mp4" />
+      <Setting name="WebAnalyticUrl" value="http://webanalytics/Pages/Dashboard.aspx?SiteScope=148" />
+      <!--Containers-->
+      <Setting name="PrimaryContainer" value="contentcontainer" />
+      <Setting name="ThumbnailContainer" value="thumbnailcontainer" />
+      <Setting name="TemporaryContainer" value="temporarycontainer" />
+      <Setting name="NotificationContainer" value="notificationcontainer" />
+      <Setting name="AssetContainer" value="assets" />
+      <!--Notification -->
+      <Setting name="QueueName" value="notificationqueue" />
+      <Setting name="SendMultipleMails" value="false" />
+      <Setting name="SitemapCount" value="1000" />
+      <Setting name="SendNewEntityMail" value="true" />
+    </ConfigurationSettings>
+    <Certificates>
+      <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="xxx" thumbprintAlgorithm="sha1" />
+      <!--<Certificate name="Microsoft.SolutionAccelerators.RPS.Communities" thumbprint="5BC5580664DBB3AC32A6FB2352238B5A910E5C27" thumbprintAlgorithm="sha1" />-->
+    </Certificates>
+  </Role>
+</ServiceConfiguration>

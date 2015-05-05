@@ -1,0 +1,1177 @@
+<HTML>
+
+<head>
+<title>WorldWide Telescope Tile Pyramid SDK</title>
+
+ <link rel=stylesheet href="SDK_style.css" type="text/css" media=screen>
+
+<style type="text/css">
+.style1 {
+	background-color: #F5F3F5;
+}
+</style>
+
+</head>
+
+<body>
+
+<h1><a name="WorldWide_Telescope_Tile_Pyramid_SDK">WorldWide Telescope Tile Pyramid SDK</a></h1>
+<p><font color="red">Note: This documentation is preliminary and subject to change.</font></p>
+<p><img alt="" height="27" src="uiimages/YesNo.bmp" width="220"></p>
+<p>This document describes a process that can be used to create tiled image 
+pyramids to be used with WorldWide Telescope. A sample implementation of the 
+interfaces and methods is included, and if your source data matches this closely 
+then the sample code provided should work in full or in part for the task. If 
+there are significant differences between the source data used in the samples 
+and the source data you have, then this document should be used to describe a 
+template for implementing the appropriate interfaces and methods.</p>
+<h2><a name="Table_of_Contents">Table of Contents</a></h2>
+<ul>
+	<li><a href="#Setup">Setup</a></li>
+	<li><a href="#Process_Overview">Process Overview</a></li>
+	<li><a href="#Tile_Pyramid_SDK_Reference">Tile Pyramid SDK Reference</a></li>
+	<li><a href="#Appendix">Appendix I: DEM Tile Data</a></li>
+</ul>
+<h4>See Also</h4>
+<ul>
+	<li><a href="WorldWideTelescopeTilePyramidSDKSamples.html">
+	WorldWide Telescope Tile Pyramid SDK Samples</a></li>
+</ul>
+<hr>
+<h2><a name="Setup">Setup</a></h2>
+<p>To run the SDK ensure your system meets the hardware requirements and the 
+necessary software is installed, described in the
+<a href="worldwidetelescopesdkgettingstarted.html">Getting Started</a> section.</p>
+<h3><a name="Installation">Installation</a></h3>
+<p>To install the SDK run the MSI package. This will install the source code, 
+samples, documentation, and the SDK libraries, by default to the following 
+location:</p>
+<p><strong>%Program Files%\Microsoft Research\WorldWide Telescope 
+SDK\Tile Pyramid SDK</strong></p>
+
+<p>Note that under <strong>Source Code</strong> there are three folders; <strong>
+Core</strong> containing the interfaces and classes described below, <strong>
+Samples</strong> containing the sample projects, and <strong>TileGenerator</strong> 
+containing the Visual Studio project for the tile generator tool.</p>
+<H4>See Also</H4>
+<ul>
+	<li><a href="#WorldWide_Telescope_Tile_Pyramid_SDK">WorldWide Telescope 
+	Tile Pyramid SDK</a></li>
+</ul>
+<hr>
+
+<h2><a name="Process_Overview">Process Overview</a></h2>
+<p>The input for visualization is a dataset (typically in the form of an image, 
+but could for example be a list of X,Y,Z values) that contains a specific value 
+(depth, elevation or any other magnitude value) for different pairs of latitude 
+and longitude. </p>
+<p>The output is a WorldWide Telescope Collection which is a pyramid of images. 
+The lowest level of this pyramid is the one at the maximum supported level of 
+zoom. The upper levels correspond to the lower levels of zoom. The process of 
+converting the input into a collection requires the following 
+steps:</p>
+<ol>
+	<li>Process the Input<br>Input data should be read into a data structure 
+	that is capable of efficiently looking up a value given a pair of latitude 
+	and longitude values. For most datasets, a two-dimensional array indexed by 
+	latitude and longitude values will suffice.<br>The SDK requires that the 
+	input be regularly gridded – which means that the data should be read into a 
+	two dimensional array indexed by latitude and longitude, where each pair of 
+	neighboring latitudes has the same delta. Similarly, for longitudes.</li>
+	<li>Build the Base Image<br>The base image is the lowest level of the 
+	pyramid. At this level there are (2^ Level) * (2^Level) images. Each of these 
+	images is 256 * 256 pixels in size. This image can be built at any desired 
+	level of zoom.</li>
+	<li>Fill the Tile Pyramid.<br>Filling the pyramid is the process of 
+	building upper levels of the pyramid. This is accomplished independent of 
+	the data by using the base image. Every four neighboring images at the base 
+	level are aggregated to form one image at the current level. This is 
+	recursively done for all the levels.</li>
+	<li>Generate a Plate File<br>A Plate file contains every tile of the 
+	pyramid, and a header section encodes the format of the pyramid. The purpose 
+	of this single file is that it enables much easier copying of the pyramid, 
+	to send to a colleague, make a backup, or any similar purpose.</li>
+	<li>Generate a Thumbnail Image<br>The thumbnail image that appears in the 
+	upper panel of WorldWide Telescope should be created now.</li>
+	<li>Generate a Collection File.<br>A collection file (*.wtml) is the 
+	XML metadata file that WorldWide Telescope uses to load the images generated.&nbsp; For more 
+	details refer to WorldWide Telescope Data Reference Guide.<br></li>
+</ol>
+<H4>See Also</H4>
+<ul>
+	<li><a href="#WorldWide_Telescope_Tile_Pyramid_SDK">WorldWide Telescope 
+	Tile Pyramid SDK</a></li>
+</ul>
+<hr>
+
+<h2><a name="Tile_Pyramid_SDK_Reference">Tile Pyramid SDK Reference</a></h2>
+<p>The Tile Pyramid SDK requires that the following interfaces are implemented.</p>
+
+<table class="T1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+<tr class="H"><td><h5>
+Interface</h5></td><td><h5>Description</h5></td></tr>
+<tr><td>
+
+
+
+<A HREF="#IColorMapInterface"><B>IColorMap</B></A></td><td>Used to retrieve 
+	color data.</td></tr>
+<tr><td>
+	<strong><a href="#IDemPlateFileGeneratorInterface">IDemPlateFileGenerator</a></strong></td><td>
+	Used to generate plate files for DEM tiles (plate files are single files 
+	containing all or part of a tile pyramid for easy copying, sharing and backup). </td></tr>
+<tr><td>
+<A HREF="#IDemTileSerializerInterface"><B>IDemTileSerializer</B></A></td><td>Used to serialize and deserialize (save and load) DEM 
+	data.</td></tr>
+<tr><td>
+<A HREF="#IElevationMapInterface"><B>IElevationMap</B></A></td><td>Used to 
+	retrieve elevation data.</td></tr>
+<tr><td>
+<A HREF="#IGridInterface"><B>IGrid</B></A></td><td>Used to read source data into 
+	a source grid which can be accessed using UV or XY co-ordinates.</td></tr>
+<tr><td>
+	<strong><a href="#IImageTileSerializerInterface">IImageTileSerializer</a></strong></td><td>Used to serialize and deserialize (save and 
+		load) image data.</td></tr>
+<tr><td>
+	<strong><a href="#IPlateFileGeneratorInterface">IPlateFileGenerator</a></strong></td><td>
+		
+	Used to generate plate files for image tiles (plate files are single files 
+	containing all or part of a tile pyramid for easy copying, sharing and backup). </td></tr>
+<tr><td>
+	<a href="#IProjectionGridMapInterface"><strong>IProjectionGridMap</strong></a></td><td>
+		
+	Used to query the data grid based on the projection.</td></tr>
+<tr><td>
+<A HREF="#ITileCreatorInterface"><B>ITileCreator</B></A></td><td>Used to build 
+	the tile pyramids.</td></tr>
+</table>
+
+<p>The following are the core classes of the SDK, and source code is provided 
+for all of them. They are encapsulated in the<strong> Sdk.Core</strong> project.</p>
+
+<table class="T1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+<tr class="H"><td><h5>
+Class</h5></td><td><h5>Description</h5></td></tr>
+
+<tr><td>
+	<strong>Boundary</strong></td><td>
+	Defines a bounding rectangle.</td></tr>
+
+<tr><td>
+	<strong>Constants</strong></td><td>
+	Defines a range of global constants.</td></tr>
+
+<tr><td>
+	<strong><a name="DataColorMap">DataColorMap</a></strong></td><td>
+	Implements 
+
+
+<A HREF="#IColorMapInterface"><B>IColorMap</B></A>, to generate color pixels 
+	corresponding to latitude and longitude from the source grid.</td></tr>
+
+<tr><td>
+	<strong><a name="DataGrid">DataGrid</a></strong></td><td>Implements
+		<a href="#IGridInterface"><strong>IGrid</strong></a>, providing a two 
+		dimensional array of data.</td></tr>
+
+<tr><td>
+	<strong><a name="DemPlateFileGenerator">DemPlateFileGenerator</a></strong></td><td>
+	Implements 
+	<strong><a href="#IDemPlateFileGeneratorInterface">IDemPlateFileGenerator</a></strong>, to produce a single file 
+	containing all the DEM data tiles.</td></tr>
+
+<tr><td>
+	<strong><a name="DemTileSerializer">DemTileSerializer</a></strong></td><td>Implements<a href="#IDemTileSerializerInterface">
+	<strong>IDemTileSerializer</strong></A>  
+	to save and load DEM tiles on the file system.</td></tr>
+<tr><td>
+	<strong>Enums</strong></td><td>
+	Defines the global enumerations.</td></tr>
+<tr><td>
+	<strong><a name="EquirectangularGridMap">EquirectangularGridMap</a></strong></td><td>
+	Implements 	<a href="#IProjectionGridMapInterface"><strong>IProjectionGridMap</strong></a>, 
+	using equirectangular projection.</td></tr>
+<tr><td>
+	<strong>Helper</strong></td><td>
+	Defines a few utility methods related to unit conversions.</td></tr>
+<tr><td>
+	<strong><a name="ImageColorMap">ImageColorMap</a></strong></td><td>
+	Implements 
+
+
+<A HREF="#IColorMapInterface"><B>IColorMap</B></A>, and references
+	<a href="#IProjectionGridMapInterface"><strong>IProjectionGridMap</strong></a>..</td></tr>
+<tr><td>
+	<strong><a name="ImageGrid">ImageGrid</a></strong></td><td>Implements
+		<a href="#IGridInterface"><strong>IGrid</strong></a>, providing a two 
+		dimensional array of image data.</td></tr>
+<tr><td>
+	<strong><a name="ImageTileSerializer">ImageTileSerializer</a></strong></td><td>Implements<a href="#IImageTileSerializerInterface">
+	<strong>IImageTileSerializer</strong></A>  to save and load image tiles on file system.</td></tr>
+<tr><td>
+	<strong><a name="MercatorDemTileCreator">MercatorDemTileCreator</a></strong></td><td>Implements<a href="#ITileCreatorInterface">
+	<strong>ITileCreator</strong></A>  to create Mercator 
+	DEM tiles. Refer also to <a href="#Appendix">Appendix I: DEM 
+	Tile Data</a>.</td></tr>
+<tr><td>
+	<strong><a name="MercatorTileCreator">MercatorTileCreator</a></strong></td><td>Implements<a href="#ITileCreatorInterface">
+	<strong>ITileCreator</strong></A>  to create Mercator 
+	image tiles.</td></tr>
+<tr><td style="height: 31px">
+	<strong>
+	<a name="MultipleDemPlateFileGenerator">MultipleDemPlateFileGenerator</a></strong></td><td style="height: 31px">
+	Implements 
+	<strong><a href="#IDemPlateFileGeneratorInterface">IDemPlateFileGenerator</a></strong>, to produce 
+	multiple DEM plate files 
+	containing DEM data tiles.</td></tr>
+<tr><td style="height: 31px">
+	<strong>
+	MercatorPlateFileDetails</strong></td><td style="height: 31px">Used to 
+	calculate and store the details of multiple plate files.</td></tr>
+<tr><td style="height: 31px">
+	<strong>
+	<a name="MultiplePlateFileGenerator">MultiplePlateFileGenerator</a></strong></td><td style="height: 31px">
+	Implements 
+	<strong><a href="#IPlateFileGeneratorInterface">IPlateFileGenerator</a> </strong>
+	to produce multiple plate files containing image tiles.</td></tr>
+<tr><td style="height: 31px">
+	<strong><a name="MultiTileCreator">MultiTileCreator</a></strong></td><td style="height: 31px">
+	Implements <a href="#ITileCreatorInterface"><strong>ITileCreator</strong></a> 
+	for different tile creator instances.</td></tr>
+<tr><td style="height: 31px">
+	<strong>OctTileMap</strong></td><td style="height: 31px">
+	Defines an octahedral tile map.</td></tr>
+<tr><td style="height: 31px">
+	<strong>PlateFile</strong></td><td style="height: 31px">
+	Defines utility methods for plate file operations.</td></tr>
+<tr><td style="height: 31px">
+	<strong><a name="PlateFileGenerator">PlateFileGenerator</a></strong></td><td style="height: 31px">
+	Implements <a href="#IPlateFileGeneratorInterface"><strong>
+	IPlateFileGenerator</strong></a>, used to create plate files.</td></tr>
+<tr><td>
+	<strong>PlateFileHelper</strong></td><td>
+	Defines a range of utility methods for plate files.</td></tr>
+<tr><td>
+	<strong>Tile</strong></td><td>Simple class 
+	holding tile coordinates.</td></tr>
+<tr><td>
+	<strong><a name="TileChopper">TileChopper</a></strong></td><td>Implements<a href="#ITileCreatorInterface">
+	<strong>ITileCreator</strong></A>  
+	to create image tiles without changing the projection.</td></tr>
+<tr><td>
+	<strong>TileCreatorFactory</strong></td><td>
+	Creates an image or DEM tile creator instance for the specified projection 
+	type. </td></tr>
+<tr><td>
+	<strong>TileGenerator</strong></td><td>This class contains the main control/workflow code for the tile generation 
+	process.</td></tr>
+<tr><td>
+	<strong>TileHelper</strong></td><td>
+	Defines a range of utility methods for tiles and bitmaps.</td></tr>
+<tr><td>
+	<strong><a name="ToastDemTileCreator">ToastDemTileCreator</a></strong></td><td>Implements<a href="#ITileCreatorInterface">
+	<strong>ITileCreator</strong></A>  to create 
+	Toast DEM tiles. Refer also to <a href="#Appendix">Appendix I: DEM 
+	Tile Data</a>.</td></tr>
+<tr><td>
+	<strong>ToastHelper</strong></td><td>
+	Helper class, in particular working with Toast coordinates.</td></tr>
+<tr><td>
+	<strong><a name="ToastTileCreator">ToastTileCreator</a></strong></td><td>Implements<a href="#ITileCreatorInterface">
+	<strong>ITileCreator</strong></A> to create 
+	Toast image tiles.</td></tr>
+<tr><td>
+	<strong>WtmlCollection</strong></td><td>
+	Defines a new Wtml collection, a WorldWide Telescope data file.</td></tr>
+</table>
+
+
+
+	<H4>See Also</H4>
+<ul>
+	<li><a href="#WorldWide_Telescope_Tile_Pyramid_SDK">WorldWide Telescope 
+	Tile Pyramid SDK</a></li>
+</ul>
+
+
+<hr>
+	<A NAME="IColorMapInterface"><H2>IColorMap Interface</H2></A>
+<p>The <B>IColorMap</B> interface is used to retrieve color data, and exposes the following methods. It does not inherit from another interface.</p>
+
+<table class="T1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+<tr class="H"><td><h5>
+Method</h5></td><td><h5>Description</h5></td></tr>
+<tr><td><A HREF="#IColorMapGetColor"><B>GetColor</B></A></td><td>Retrieves the color corresponding to 
+	a longitude and latitude.</td></tr>
+</table>
+
+
+
+	<H4>Implemented in Classes</H4>
+<ul>
+	<li><a href="#DataColorMap"><strong>DataColorMap</strong></a></li>
+	<li><a href="#ImageColorMap"><strong>ImageColorMap</strong></a></li>
+</ul>
+<H4>See Also</H4>
+<ul>
+	<li><a href="#Tile_Pyramid_SDK_Reference">Tile Pyramid SDK Reference</a></li>
+	<li><a href="#WorldWide_Telescope_Tile_Pyramid_SDK">WorldWide Telescope 
+	Tile Pyramid SDK<a></li>
+</ul>
+
+
+
+	<hr><A NAME="IColorMapGetColor"><H3>IColorMap.GetColor</H3></A>
+<p>The <B>GetColor</B> method retrieves the color corresponding to a longitude and latitude.
+</p>
+<H4>Syntax</H4>
+	<CODE><B>Color GetColor(</B><BR>
+&nbsp;&nbsp;<B>double</B>&nbsp;&nbsp;<I>longitude</I><B>,</B><BR>
+&nbsp;&nbsp;<B>double</B>&nbsp;&nbsp;<I>latitude</I><BR>
+<B>);</B></CODE><H4>Parameters</H4>
+<I>longitude</I><BR>
+&nbsp;&nbsp;Specifies longitude in decimal degrees.<BR>
+<I>latitude</I><BR>
+&nbsp;&nbsp;Specifies latitude in decimal degrees.<BR>
+<H4>Return Values</H4>
+	<p>The method returns a <B>Color</B> object, containing the color of the pixel at 
+the given latitude and longitude.
+</p>
+<H4>Remarks</H4>
+	<p>Typically the color returned comes from the source image. Note the order 
+	of the parameters, longitude first.</p>
+<H4>See Also</H4>
+<UL type="disc">
+<LI><A HREF="#IColorMapInterface"><B>IColorMap Interface</B></A><BR>
+</UL>
+
+
+<hr>
+
+	<A NAME="IDemPlateFileGeneratorInterface"><H2>IDemPlateFileGenerator Interface</H2></A>
+<p>The <B>IDemPlateFileGenerator</B> interface is used to generate plate files for DEM tiles (plate files are single files 
+	containing all or part of a tile pyramid for easy copying, sharing and backup). 
+It does not inherit from another interface.</p>
+
+<table class="T1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+<tr class="H"><td><h5>
+Method</h5></td><td><h5>Description</h5></td></tr>
+<tr><td><A HREF="#IDemPlateFileGeneratorCreateFromDemTileSerializer"><B>
+	CreateFromDemTile</B></A></td><td>
+	Used to create a plate file from a DEM tile pyramid.</td></tr>
+</table>
+
+
+
+	<H4>Properties</H4>
+
+<table class="T1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+<tr class="H"><td><h5>
+Property</h5></td><td>
+		<h5>Type</h5>
+		</td><td>
+		<h5>Get/Set</h5>
+	</td><td><h5>Description</h5></td></tr>
+<tr><td>
+	<strong>TilesProcessed</strong></td><td>
+		<strong>long</strong></td><td>
+		Get only.</td><td>	
+		Number of tiles for the level that have been processed.</td></tr>
+</table>
+
+
+
+	<H4>&nbsp;</H4>
+<H4>Implemented in Classes</H4>
+<ul>
+	<li><a href="#DemPlateFileGenerator"><strong>DemPlateFileGenerator</strong></a></li>
+	<li><a href="#MultipleDemPlateFileGenerator"><strong>
+	MultipleDemPlateFileGenerator</strong></a></li>
+</ul>
+<H4>See Also</H4>
+<ul>
+	<li><a href="#Tile_Pyramid_SDK_Reference">Tile Pyramid SDK Reference</a></li>
+	<li><a href="#WorldWide_Telescope_Tile_Pyramid_SDK">WorldWide Telescope Tile Pyramid SDK<a></li>
+</ul>
+
+
+	<hr><A NAME="IDemPlateFileGeneratorCreateFromDemTileSerializer"><H3>
+IDemPlateFileGenerator.CreateFromDemTile</H3></A>
+<p>The <B>CreateFromDemTile</B> method is used to create a plate file 
+from a DEM tile pyramid.</p>
+<H4>Syntax</H4>
+	<CODE><B>void CreateFromDemTile(</B><BR>
+&nbsp;&nbsp;<B>IDemTileSerializer</B>&nbsp;&nbsp;<I>serializer</I><BR>
+<B>);</B></CODE><H4>Parameters</H4>
+<I>serializer</I><BR>
+&nbsp;&nbsp;Specifies the <a href="#IDemTileSerializerInterface"><strong>
+IDemTileSerializer</strong></a> object.<BR>
+<H4>Return Values</H4>
+	<p>The method does not returns a value.
+</p>
+<H4>Remarks</H4>
+	<p>None.</p>
+<H4>See Also</H4>
+<UL type="disc">
+<LI><A HREF="#IDemPlateFileGeneratorInterface"><B>IDemPlateFileGenerator Interface</B></A><BR>
+</UL>
+
+
+<hr>
+<H2><a name="IDemTileSerializerInterface">IDemTileSerializer Interface</a></H2>
+<p>
+The <B>IDemTileSerializer</B> interface is used to serialize and deserialize (save 
+and load) DEM data, and exposes the following methods. It does not inherit from 
+another interface.</p>
+
+<table class="T1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+<tr class="H"><td><h5>
+Method</h5></td><td><h5>Description</h5></td></tr>
+<tr><td>
+<A HREF="#IDemTileSerializerDeserialize"><B>Deserialize</B></A></td><td>Deserializes a binary object from 
+	the file system.</td></tr>
+<tr><td>
+<A HREF="#IDemTileSerializerSerialize"><B>Serialize</B></A></td><td>Serializes the binary file to 
+	the file system.</td></tr>
+</table>
+
+
+
+	<H4>Implemented in Class</H4>
+<ul>
+	<li><a href="#DemTileSerializer"><strong>DemTileSerializer</strong></a></li>
+</ul>
+<H4>See Also</H4>
+<ul>
+	<li><a href="#Tile_Pyramid_SDK_Reference">Tile Pyramid SDK Reference</a></li>
+	<li><a href="#WorldWide_Telescope_Tile_Pyramid_SDK">WorldWide Telescope 
+	Tile Pyramid SDK</a></li>
+</ul>
+<HR><A NAME="IDemTileSerializerDeserialize"><H3>IDemTileSerializer.Deserialize</H3></A>
+<p>The <B>Deserialize</B> method deserializes (loads) a DEM tile from the file system.</p>
+<H4>Syntax</H4>
+	<CODE><B>short[] Deserialize(</B><BR>
+&nbsp;&nbsp;<B>int</B>&nbsp;&nbsp;<I>level</I><B>,</B><BR>
+&nbsp;&nbsp;<B>int</B>&nbsp;&nbsp;<I>tileX</I><B>,</B><BR>
+&nbsp;&nbsp;<B>int</B>&nbsp;&nbsp;<I>tileY</I><BR>
+<B>);</B></CODE><H4>Parameters</H4>
+<I>level</I><BR>
+&nbsp;&nbsp;Specifies the tile level, from zero to the maximum level for the 
+data.<BR>
+<I>tileX</I><BR>
+&nbsp;&nbsp;Specifies the X index of the tile in the tile pyramid.<BR>
+<I>tileY</I><BR>
+&nbsp;&nbsp;Specifies the Y index of the tile in the tile pyramid.
+<h4>Return Values</H4>
+<p>The method returns an array of <strong>short </strong>values, containing the binary 
+data.
+</p>
+<H4>Remarks</H4>
+	<p>The size of a DEM tile is fixed depending on the projection, refer to the 
+	remarks for
+<A HREF="#IDemTileSerializerSerialize"><B>Serialize</B></A>.</p>
+<H4>See Also</H4>
+<UL type="disc">
+<LI><A HREF="#IDemTileSerializerInterface"><B>IDemTileSerializer Interface</B></A></UL>
+<HR><A NAME="IDemTileSerializerSerialize"><H3>IDemTileSerializer.Serialize</H3></A>
+	<p>The <B>Serialize</B> method serializes (saves) the DEM tile to the file system.
+	</p>
+<H4>Syntax</H4>
+	<CODE><B>void Serialize(</B><BR>
+&nbsp;&nbsp;short[]&nbsp;&nbsp;<I>tile</I><B>,</B><BR>
+&nbsp;&nbsp;<B>int</B>&nbsp;&nbsp;<I>level</I><B>,</B><BR>
+&nbsp;&nbsp;<B>int</B>&nbsp;&nbsp;<I>tileX</I><B>,</B><BR>
+&nbsp;&nbsp;<B>int</B>&nbsp;&nbsp;<I>tileY</I><BR>
+<B>);</B></CODE><H4>Parameters</H4>
+<I>tile</I><BR>
+&nbsp;&nbsp;Specifies the array of values that make up the DEM tile.<BR>
+<I>level</I><BR>
+&nbsp;&nbsp;Specifies the tile level, from zero to the maximum level for the 
+data.<BR>
+<I>tileX</I><BR>
+&nbsp;&nbsp;Specifies the X index of the tile in the tile pyramid.<BR>
+<I>tileY</I><BR>
+&nbsp;&nbsp;Specifies the Y index of the tile in the tile pyramid.4
+<h4>Return Values</h4>
+	<p>The method does not return a value.</p>
+<H4>Remarks</H4>
+	<p>The size of a DEM tile is fixed depending on the projection, for Mercator 
+	it is 1089 values (33 rows of 33), organized by rows. Refer to the
+	<strong>MercatorDemTileCreator</strong> 
+	class.</p>
+<p>&nbsp;For Toast it is 513 
+	values, these values are not in a perfect grid. Refer to the static tables 
+listed first in the <strong>
+ToastDemTileCreator</strong> class.</p>
+<H4>See Also</H4>
+<UL type="disc">
+<LI><A HREF="#IDemTileSerializerInterface"><B>IDemTileSerializer Interface</B></A></UL>
+
+
+
+
+
+<hr><A NAME="IElevationMapInterface"><H2>IElevationMap Interface</H2></A>
+<p>The <B>IElevationMap</B> interface is used to retrieve elevation data, and exposes the following methods. It does not inherit from another interface.</p>
+
+<table class="T1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+<tr class="H"><td><h5>
+Method</h5></td><td><h5>Description</h5></td></tr>
+<tr><td>
+<A HREF="#IElevationMapGetElevation"><B>GetElevation</B></A></td><td>Retrieves the elevation corresponding to the longitude and latitude.</td></tr>
+</table>
+
+
+
+	<H4>Implemented in Class</H4>
+<p>This interface is implemented in the <strong>ShadedReliefColorMap</strong> 
+class in the <strong><a href="worldwidetelescopetilepyramidsdksamples.html">
+SpecificRegionDataSet</a></strong> sample. </p>
+<H4>See Also</H4>
+<ul>
+	<li><a href="#Tile_Pyramid_SDK_Reference">Tile Pyramid SDK Reference</a></li>
+	<li><a href="#WorldWide_Telescope_Tile_Pyramid_SDK">WorldWide Telescope 
+	Tile Pyramid SDK</a></li>
+</ul>
+<BR><hr><A NAME="IElevationMapGetElevation">
+<H3>IElevationMap.GetElevation</H3></A>
+<p>The <B>GetElevation</B> method retrieves the elevation corresponding to the longitude and latitude.
+</p>
+<H4>Syntax</H4>
+	<CODE><B>short GetElevation(</B><BR>
+&nbsp;&nbsp;<B>double</B>&nbsp;&nbsp;<I>longitude</I><B>,</B><BR>
+&nbsp;&nbsp;<B>double</B>&nbsp;&nbsp;<I>latitude</I><BR>
+<B>);</B></CODE><H4>Parameters</H4>
+<I>longitude</I><BR>
+&nbsp;&nbsp;Specifies longitude in decimal degrees.<BR>
+<I>latitude</I><BR>
+&nbsp;&nbsp;Specifies latitude in decimal degrees.<BR>
+<H4>Return Values</H4>
+<p>The method returns a s<B>hort</B>, containing the elevation value.
+</p>
+<H4>Remarks</H4>
+	<p>Note the order of the parameters, longitude first.</p>
+<H4>See Also</H4>
+<UL type="disc">
+<LI><A HREF="#IElevationMapInterface"><B>IElevationMap Interface</B></A><BR>
+</UL>
+
+
+<hr><A NAME="IGridInterface"><H2>IGrid Interface</H2></A>
+<p>The <B>IGrid</B> interface is used to read source data into 
+	a source grid which can be accessed using UV or XY co-ordinates. It does not inherit from another interface.
+</p>
+
+<table class="T1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+<tr class="H"><td><h5>
+Method</h5></td><td><h5>Description</h5></td></tr>
+<tr><td>
+<A HREF="#IGridGetValue"><B>GetValue</B></A></td><td>
+	Retrieves the value contained at the specified coordinate.</td></tr>
+<tr><td>
+<A HREF="#IGridGetValueAt"><B>GetValueAt</B></A></td><td>
+	Retrieves the value contained at the specified pixel location.</td></tr>
+<tr><td>
+	<a href="#IGridGetXIndex"><strong>GetXIndex</strong></a></td><td>
+	Retrieves the X pixel index for the given coordinate.</td></tr>
+<tr><td>
+	<strong><a href="#IGridGetYIndex">GetYIndex</a></strong></td><td>
+	Retrieves the Y pixel index for the given coordinate.</td></tr>
+</table>
+
+
+
+	<H4>Properties</H4>
+
+<table class="T1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+<tr class="H"><td><h5>
+Property</h5></td><td>
+		<h5>Type</h5>
+		</td><td>
+		<h5>Get/Set</h5>
+	</td><td><h5>Description</h5></td></tr>
+<tr><td>
+	<strong>Height</strong></td><td>
+	<strong>int</strong></td><td>
+	Get/Set</td><td>	
+	Height of the grid.</td></tr>
+<tr><td>
+	<strong>Width</strong></td><td>
+	i<strong>nt</strong></td><td>
+		Get only</td><td>
+		Width of the grid.</td></tr>
+</table>
+
+
+
+	<H4>Implemented in Classes</H4>
+<ul>
+	<li><a href="#DataGrid"><strong>DataGrid</strong></a></li>
+	<li><a href="#ImageGrid"><strong>ImageGrid</strong></a></li>
+</ul>
+<H4>See Also</H4>
+<ul>
+	<li><a href="#Tile_Pyramid_SDK_Reference">Tile Pyramid SDK Reference</a></li>
+	<li><a href="#WorldWide_Telescope_Tile_Pyramid_SDK">WorldWide Telescope 
+	Tile Pyramid SDK</a></li>
+</ul>
+
+<hr>
+<A NAME="IGridGetValue"><H3>IGrid.GetValue</H3></A>
+<p>The <B>GetValue</B> method retrieves the value contained at the specified 
+coordinate.</p>
+<H4>SySyntax</H4>
+	<CODE><B>double GetValue(</B><BR>
+&nbsp;&nbsp;<B>double</B>&nbsp;&nbsp;u<B>,</B><BR>
+&nbsp;&nbsp;<B>double</B>&nbsp;&nbsp;v<BR>
+<B>);</B></CODE><H4>Parameters</H4>
+	u<BR>
+&nbsp;&nbsp;Specifies u coordinate.<BR>
+	v<BR>
+&nbsp;&nbsp;Specifies v coordinate.<BR>
+<H4>Return Values</H4>
+<p>The method returns a <strong>double</strong>, containing the value for the 
+given coordinate.</p>
+<H4>Remarks</H4>
+<p>UV coordinates are floating point in the range 0 to 1. The top left hand 
+corner of the map is 0,0.</p>
+<H4>See Also</H4>
+<UL type="disc">
+<LI><A HREF="#IGridInterface"><B>IGrid Interface</B></A><BR>
+</UL>
+
+
+<hr><A NAME="IGridGetValueAt"><H3>IGrid.GetValueAt</H3></A>
+<p>The <B>GetValueAt</B> method retrieves the value contained at the specified 
+pixel location.
+</p>
+<H4>Syntax</H4>
+	<CODE><B>double GetValueAt(</B><BR>
+&nbsp;&nbsp;<b>int</b>&nbsp;&nbsp;i<B>,</B><BR>
+&nbsp;&nbsp;<B>int</B>&nbsp;&nbsp;j<BR>
+<B>);</B></CODE><H4>Parameters</H4>
+	<I>i</I><BR>
+&nbsp;&nbsp;Specifies X index.<BR>
+	<I>j</I><BR>
+&nbsp;&nbsp;Specifies Y i<span class="style1">ndex</span>.<BR>
+<H4>Return Values</H4>
+	<p>The method returns a <B>double,</B> containing the value.
+</p>
+<H4>Remarks</H4>
+<p>These coordinates are in pixels, from 0 to the full width or height of the 
+map. The top left hand corner of the map is 0,0.</p>
+<H4>See Also</H4>
+<UL type="disc">
+<LI><A HREF="#IGridInterface"><B>IGrid Interface</B></A><BR>
+</UL>
+
+<hr>
+<A NAME="IGridGetXIndex"><H3>IGrid.GetXIndex</H3></A>
+<p>The <B>GetXIndex</B> method retrieves the X pixel index for the given 
+u coordinate.</p>
+<H4>Syntax</H4>
+	<CODE><B>int GetXIndex(</B><BR>
+&nbsp;&nbsp;<B>double</B>&nbsp;&nbsp;u<BR>
+<B>);</B></CODE><H4>Parameters</H4>
+	u<BR>
+&nbsp;&nbsp;Specifies u coordinate &nbsp;in decimal degrees.<BR>
+<H4>Return Values</H4>
+<p>The method returns an <strong>int</strong>, containing the X pixel value for 
+the given&nbsp;coordinate.</p>
+<H4>Remarks</H4>
+<p>The U coordinate is in the range 0 to 1.</p>
+<H4>See Also</H4>
+<UL type="disc">
+<LI><A HREF="#IGridInterface"><B>IGrid Interface</B></A><BR>
+</UL>
+
+<hr>
+<A NAME="IGridGetYIndex"><H3>IGrid.GetYIndex</H3></A>
+<p>The <B>GetYIndex</B> method retrieves the Y pixel index for the given&nbsp;V coordinate.</p>
+<H4>Syntax</H4>
+	<CODE><B>int GetYIndex(</B><BR>
+&nbsp;&nbsp;<B>double</B>&nbsp;&nbsp;v<BR>
+<B>);</B></CODE><H4>Parameters</H4>
+	v<BR>
+&nbsp;&nbsp;Specifies v coordinate in decimal degrees.<BR>
+<H4>Return Values</H4>
+<p>The method returns an<strong> int</strong>, containing the Y pixel value for the given coordinate.</p>
+<H4>Remarks</H4>
+<p>The V coordinate is in the range 0 to 1.</p>
+<H4>See Also</H4>
+<UL type="disc">
+<LI><A HREF="#IGridInterface"><B>IGrid Interface</B></A><BR>
+</UL>
+
+
+<hr><A NAME="IImageTileSerializerInterface"><H2>IImageTileSerializer Interface</H2></A>
+<p>
+The <B>IImageTileSerializer</B> interface is used to serialize and deserialize (save 
+and load) image data, and exposes the following methods.</p>
+
+<table class="T1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+<tr class="H"><td><h5>
+Method</h5></td><td><h5>Description</h5></td></tr>
+<tr><td>
+<A HREF="#IImageTileSerializerDeserialize"><B>Deserialize</B></A></td><td>Deserializes 
+	an image from 
+	the file system.</td></tr>
+<tr><td>
+<A HREF="#IImageTileSerializerSerialize"><B>Serialize</B></A></td><td>Serializes the 
+	image to 
+	the file system.</td></tr>
+</table>
+
+
+
+	<H4>Implemented in Class</H4>
+<p><a href="#ImageTileSerializer"><strong>ImageTileSerializer</strong></a></p>
+<H4>See Also</H4>
+<ul>
+	<li><a href="#Tile_Pyramid_SDK_Reference">Tile Pyramid SDK Reference</a></li>
+	<li><a href="#WorldWide_Telescope_Tile_Pyramid_SDK">WorldWide Telescope 
+	Tile Pyramid SDK</a></li>
+</ul>
+<HR><A NAME="IImageTileSerializerDeserialize"><H3>IImageTileSerializer.Deserialize</H3></A>
+<p>The <B>Deserialize</B> method deserializes (loads) an image from the file system.</p>
+<H4>Syntax</H4>
+	<CODE><B>Bitmap Deserialize(</B><BR>
+&nbsp;&nbsp;<B>int</B>&nbsp;&nbsp;<I>level</I><B>,</B><BR>
+&nbsp;&nbsp;<B>int</B>&nbsp;&nbsp;<I>tileX</I><B>,</B><BR>
+&nbsp;&nbsp;<B>int</B>&nbsp;&nbsp;<I>tileY</I><BR>
+<B>);</B></CODE><H4>Parameters</H4>
+<I>level</I><BR>
+&nbsp;&nbsp;Specifies the tile level, from zero to the maximum level for the 
+data.<BR>
+<I>tileX</I><BR>
+&nbsp;&nbsp;Specifies the X index of the tile in the tile pyramid.<BR>
+<I>tileY</I><BR>
+&nbsp;&nbsp;Specifies the Y index of the tile in the tile pyramid.
+<H4>Return Values</H4>
+<p>The method returns a <strong>Bitmap</strong>, containing the binary image.
+</p>
+<H4>Remarks</H4>
+	<p>Indexes of the tile pyramid are zero based. The size of an image tile is 
+	fixed at 256 x 256 pixels.</p>
+<H4>See Also</H4>
+<UL type="disc">
+<LI><A HREF="#IImageTileSerializerInterface"><B>IImageTileSerializer Interface</B></A></UL>
+<HR><A NAME="IImageTileSerializerSerialize"><H3>IImageTileSerializer.Serialize</H3></A>
+	<p>The <B>Serialize</B> method serializes (saves) the tile image to the file system.
+	</p>
+<H4>Syntax</H4>
+	<CODE><B>void Serialize(</B><BR>
+&nbsp;&nbsp;Bitmap&nbsp;&nbsp;<I>tile</I><B>,</B><BR>
+&nbsp;&nbsp;<B>int</B>&nbsp;&nbsp;<I>level</I><B>,</B><BR>
+&nbsp;&nbsp;<B>int</B>&nbsp;&nbsp;<I>tileX</I><B>,</B><BR>
+&nbsp;&nbsp;<B>int</B>&nbsp;&nbsp;<I>tileY</I><BR>
+<B>);</B></CODE><H4>Parameters</H4>
+<I>tile</I><BR>
+&nbsp;&nbsp;Specifies the Bitmap for the tile.<BR>
+<I>level</I><BR>
+&nbsp;&nbsp;Specifies the tile level, from zero to the maximum level for the 
+data.<BR>
+<I>tileX</I><BR>
+&nbsp;&nbsp;Specifies the X index of the tile in the tile pyramid.<BR>
+<I>tileY</I><BR>
+&nbsp;&nbsp;Specifies the Y index of the tile in the tile pyramid.<H4>Return Values</H4>
+	<p>The method does not return a value.</p>
+<H4>Remarks</H4>
+	<p>Indexes of the tile pyramid are zero based. The size of an image tile is 
+	fixed at 256 x 256 pixels.</p>
+<H4>See Also</H4>
+<UL type="disc">
+<LI><A HREF="#IImageTileSerializerInterface"><B>IImageTileSerializer Interface</B></A></UL>
+
+
+	<A NAME="IPlateFileGeneratorInterface"><H2>IPlateFileGenerator Interface</H2>
+<p>The <B>IPlateFileGenerator</B> interface is used to generate plate files for 
+image tiles (plate files are single files 
+	containing all or part of a tile pyramid for easy copying, sharing and backup).&nbsp; 
+It does not inherit from another interface.</p>
+</A>
+
+<table class="T1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+<tr class="H"><td><h5>
+Method</h5></td><td><h5>Description</h5></td></tr>
+<tr><td><A HREF="#IPlateFileGeneratorCreateFromImageTile"><B>CreateFromImageTile</B></A></td><td>
+	Used to create a plate file from an image tile pyramid.</td></tr>
+</table>
+
+
+
+	<H4>Properties</H4>
+
+<table class="T1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+<tr class="H"><td><h5>
+Property</h5></td><td>
+		<h5>Type</h5>
+		</td><td>
+		<h5>Get/Set</h5>
+	</td><td><h5>Description</h5></td></tr>
+<tr><td>
+	<strong>TilesProcessed</strong></td><td>
+		<strong>long</strong></td><td>
+		Get only.</td><td>	
+		Number of tiles for the level that have been processed.</td></tr>
+</table>
+
+
+
+	<H4>Implemented in Classes</H4>
+<ul>
+	<li><a href="#PlateFileGenerator"><strong>PlateFileGenerator</strong></a></li>
+	<li><a href="#MultiplePlateFileGenerator"><strong>MultiplePlateFileGenerator</strong></a></li>
+</ul>
+<H4>See Also</H4>
+<ul>
+	<li><a href="#Tile_Pyramid_SDK_Reference">Tile Pyramid SDK Reference</a></li>
+	<li><a href="#WorldWide_Telescope_Tile_Pyramid_SDK">WorldWide Telescope Tile Pyramid SDK<a></li>
+</ul>
+
+
+	<hr><A NAME="IPlateFileGeneratorCreateFromImageTile"><H3>IPlateFileGenerator.CreateFromImageTile</H3></A>
+<p>The <B>CreateFromImageTile</B> method is used to create a plate file 
+from an image tile pyramid.</p>
+<H4>Syntax</H4>
+	<CODE><B>void CreateFromImageTile(</B><BR>
+&nbsp;&nbsp;<B>IImageTileSerializer</B>&nbsp;&nbsp;<I>serializer</I><BR>
+<B>);</B></CODE><H4>Parameters</H4>
+<I>serializer</I><BR>
+&nbsp;&nbsp;Specifies the <a href="#IImageTileSerializerInterface"><strong>
+IImageTileSerializer</strong></a> object.<BR>
+<H4>Return Values</H4>
+	<p>The method does not returns a value.
+</p>
+<H4>Remarks</H4>
+	<p>The image pyramid must be created before a plate file can be generated. 
+	Plate files are single files that make it easier to send or archive the tile 
+	pyramid.</p>
+<H4>See Also</H4>
+<UL type="disc">
+<LI><A HREF="#IPlateFileGeneratorInterface"><B>IPlateFileGenerator Interface</B></A><BR>
+</UL>
+
+
+<hr><A NAME="IProjectionGridMapInterface"><H2>IProjectionGridMap Interface</H2></A>
+<p>The <B>IProjectionGridMap</B> interface is used to query the data grid based 
+on the projection. It does not inherit from another interface.
+</p>
+
+<table class="T1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+<tr class="H"><td><h5>
+Method</h5></td><td><h5>Description</h5></td></tr>
+<tr><td>
+<A HREF="#IProjectionGridMapGetValue"><B>GetValue</B></A></td><td>
+	Retrieves the value contained at the specified coordinate.</td></tr>
+<tr><td>
+	<a href="#IProjectionGridMapGetXIndex"><strong>GetXIndex</strong></a></td><td>
+	Retrieves the X pixel index for the given coordinate.</td></tr>
+<tr><td>
+	<strong><a href="#IProjectionGridMapGetYIndex">GetYIndex</a></strong></td><td>
+	Retrieves the Y pixel index for the given coordinate.</td></tr>
+<tr><td>
+	<strong><a href="#IProjectionGridMapIsInRange">IsInRange</a></strong></td><td>
+		Retrieves a Boolean indicating whether a given coordinate falls within 
+		the scope of the map.</td></tr>
+</table>
+
+
+
+	<H4>Properties</H4>
+
+<table class="T1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+<tr class="H"><td><h5>
+Property</h5></td><td>
+		<h5>Type</h5>
+		</td><td>
+		<h5>Get/Set</h5>
+	</td><td><h5>Description</h5></td></tr>
+<tr><td>
+	<strong>InputBoundary</strong></td><td>
+	<strong>Boundary</strong></td><td>
+	Get only</td><td>	
+	Bounding box of the map.</td></tr>
+<tr><td>
+	<strong>InputGrid</strong></td><td>
+		<strong><a href="#IGridInterface">IGrid</a></strong></td><td>
+		Get only</td><td>
+		The source grid for the map.</td></tr>
+</table>
+
+
+
+	<H4>Implemented in Class</H4>
+<ul>
+	<li><a href="#EquirectangularGridMap"><strong>EquirectangularGridMap</strong></a></li>
+</ul>
+<H4>See Also</H4>
+<ul>
+	<li><a href="#Tile_Pyramid_SDK_Reference">Tile Pyramid SDK Reference</a></li>
+	<li><a href="#WorldWide_Telescope_Tile_Pyramid_SDK">WorldWide Telescope 
+	Tile Pyramid SDK</a></li>
+</ul>
+
+<hr>
+<A NAME="IProjectionGridMapGetValue"><H3>IProjectionGridMap.GetValue</H3></A>
+<p>The <B>GetValue</B> method retrieves the value contained at the specified 
+coordinate.</p>
+<H4>Syntax</H4>
+	<CODE><B>double GetValue(</B><BR>
+&nbsp;&nbsp;<B>double</B>&nbsp;&nbsp;longitude<B>,</B><BR>
+&nbsp;&nbsp;<B>double</B>&nbsp;&nbsp;latitude<BR>
+<B>);</B></CODE><H4>Parameters</H4>
+	longitude<BR>
+	&nbsp;&nbsp;Specifies longitude &nbsp;in decimal degrees.<BR>
+	latitude<BR>
+	&nbsp;&nbsp;Specifies latitude &nbsp;in decimal degrees.<BR>
+<H4>Return Values</H4>
+<p>The method returns a <strong>double</strong>, containing the value for the 
+given coordinate, depending on the projection.</p>
+<H4>Remarks</H4>
+<p>Note the order of the parameters, longitude first.</p>
+<H4>See Also</H4>
+<UL type="disc">
+<LI><A HREF="#IProjectionGridMapInterface"><B>IProjectionGridMap Interface</B></A><BR>
+</UL>
+
+
+<hr><A NAME="IProjectionGridMapGetXIndex">
+	<H3>IProjectionGridMap.GetXIndex</H3></A>
+<p>The <B>GetXIndex</B> method retrieves the X pixel index for the given 
+longitude.</p>
+<H4>Syntax</H4>
+	<CODE><B>int GetXIndex(</B><BR>
+&nbsp;&nbsp;<B>double</B>&nbsp;&nbsp;longitude<BR>
+<B>);</B></CODE><H4>Parameters</H4>
+	longitude<BR>
+	&nbsp;&nbsp;Specifies longitude in decimal degrees.<BR>
+<H4>Return Values</H4>
+<p>The method returns an <strong>int</strong>, containing the X pixel value for 
+the given longitude, depending on the projection.</p>
+<H4>Remarks</H4>
+<p>None.</p>
+<H4>See Also</H4>
+<UL type="disc">
+<LI><A HREF="#IProjectionGridMapInterface"><B>IProjectionGridMap Interface</B></A><BR>
+</UL>
+
+<hr>
+<A NAME="IProjectionGridMapGetYIndex"><H3>IProjectionGridMap.GetYIndex</H3></A>
+<p>The <B>GetYIndex</B> method retrieves the Y pixel index for the given 
+latitude.</p>
+<H4>Syntax</H4>
+	<CODE><B>int GetYIndex(</B><BR>
+&nbsp;&nbsp;<B>double</B>&nbsp;&nbsp;latitude<BR>
+<B>);</B></CODE><H4>Parameters</H4>
+	latitude<BR>
+	&nbsp;&nbsp;Specifies latitude in decimal degrees.<BR>
+<H4>Return Values</H4>
+<p>The method returns an<strong> int</strong>, containing the Y pixel value for 
+the given latitude, depending on the projection.</p>
+<H4>Remarks</H4>
+<p>None.</p>
+<H4>See Also</H4>
+<UL type="disc">
+<LI><A HREF="#IProjectionGridMapInterface"><B>IProjectionGridMap Interface</B></A><BR>
+</UL>
+
+
+
+
+
+
+
+
+
+
+
+
+<hr>
+
+
+<A NAME="IProjectionGridMapIsInRange"><H3>IProjectionGridMap.IsInRange</H3></A>
+<p>The <B>IsInRange</B> method retrieves a Boolean indicating whether a given coordinate falls within 
+		the scope of the map.</p>
+<H4>SySyntax</H4>
+	<CODE><B>bool IsInRange(</B><BR>
+&nbsp;&nbsp;<B>double</B>&nbsp;&nbsp;longitude<B>,</B><BR>
+&nbsp;&nbsp;<B>double</B>&nbsp;&nbsp;latitude<BR>
+<B>);</B></CODE><H4>Parameters</H4>
+	longitude<BR>
+	&nbsp;&nbsp;Specifies longitude &nbsp;in decimal degrees.<BR>
+	latitude<BR>
+	&nbsp;&nbsp;Specifies latitude &nbsp;in decimal degrees.<BR>
+<H4>Return Values</H4>
+<p>The method returns a <strong>bool</strong>.</p>
+<H4>Remarks</H4>
+<p>Note the order of the parameters, longitude first.</p>
+<H4>See Also</H4>
+<UL type="disc">
+<LI><A HREF="#IProjectionGridMapInterface"><B>IProjectionGridMap Interface</B></A><BR>
+</UL>
+
+
+<hr>
+
+<A NAME="ITileCreatorInterface"><H2>ITileCreator Interface</H2></A>
+<p>The <B>ITileCreator</B> interface is used to build the tile pyramids, and exposes the following methods. It does not inherit from another interface.
+
+</p>
+
+<table class="T1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+<tr class="H"><td><h5>Method</h5></td><td><h5>Description</h5></td></tr>
+<tr><td>
+<A HREF="#ITileCreatorCreate"><B>Create</B></A></td><td>Creates tiles of the 
+	pyramid at the specified level.</td></tr>
+<tr><td>
+<A HREF="#ITileCreatorCreateParent"><B>CreateParent</B></A></td><td>Create tiles 
+	of the pyramid at the parent of the specified level.</td></tr>
+</table>
+
+
+
+	<H4>Properties</H4>
+
+<table class="T1" cellpadding="8" cellspacing="0.5" rules="rows" bordercolorlight="white">
+<tr class="H"><td><h5>
+Property</h5></td><td>
+	<h5>Type</h5>
+	</td><td>
+	<h5>Get/Set</h5>
+	</td><td><h5>Description</h5></td></tr>
+<tr><td>
+	<strong>ProjectionType</strong></td><td>
+	<strong>ProjectionTypes</strong></td><td>
+	Get only.</td><td>Specifies or retrieves the projection type, one of:<br>
+	<strong>Toast</strong><br><strong>Mercator</strong></td></tr>
+</table>
+
+
+
+<H4>Implemented in Classes</H4>
+<ul>
+	<li><a href="#ToastTileCreator"><strong>ToastTileCreator</strong></a></li>
+	<li><a href="#MercatorTileCreator"><strong>MercatorTileCreator</strong></a></li>
+	<li><a href="#ToastDemTileCreator"><strong>ToastDemTileCreator</strong></a></li>
+	<li><a href="#MercatorDemTileCreator"><strong>MercatorDemTileCreator</strong></a></li>
+	<li><a href="#MultiTileCreator"><strong>MultiTileCreator</strong></a></li>
+	<li><a href="#TileChopper"><strong>TileChopper</strong></a></li>
+</ul>
+<H4>See Also</H4>
+<ul>
+	<li><a href="#Tile_Pyramid_SDK_Reference">Tile Pyramid SDK Reference</a></li>
+	<li><a href="#WorldWide_Telescope_Tile_Pyramid_SDK">WorldWide Telescope 
+	Tile Pyramid SDK</a></li>
+</ul>
+<hr><A NAME="ITileCreatorCreate"><H3>ITileCreator.Create</H3></A>
+<p>The <B>Create</B> method creates tiles of the pyramid at the specified level.</p>
+<H4>Syntax</H4>
+<CODE><B>void Create(<br>
+&nbsp;&nbsp;int</B>&nbsp;&nbsp;<I>level</I><B>,</B><BR>
+&nbsp;&nbsp;<B>int</B>&nbsp;&nbsp;<I>tileX</I><B>,</B><BR>
+&nbsp;&nbsp;<B>int</B>&nbsp;&nbsp;<I>tileY</I><BR>
+<B>);</B></CODE><H4>Parameters</H4>
+<I>level</I><BR>
+&nbsp;&nbsp;Specifies the tile level, from zero to the maximum level for the 
+data.<BR>
+<I>tileX</I><BR>
+&nbsp;&nbsp;Specifies the X index of the tile in the tile pyramid.<BR>
+<I>tileY</I><BR>
+&nbsp;&nbsp;Specifies the Y index of the tile in the tile pyramid.<BR>
+<H4>Return Values</H4>
+<p>This method does not return a value.</p>
+<H4>Remarks</H4>
+<p>If the input to this method was <strong>Create</strong>(N,X,Y), the output would be the tile 
+with coordinates (X,Y) at level N.</p>
+<H4>See Also</H4>
+<UL type="disc">
+<LI><A HREF="#ITileCreatorInterface"><B>ITileCreator Interface</B></A><BR>
+</UL>
+<HR><A NAME="ITileCreatorCreateParent"><H3>ITileCreator.CreateParent</H3></A>
+	<p>The <B>CreateParent</B> method creates tiles for the parent of the 
+	specified level.</p>
+<H4>Syntax</H4>
+<CODE><B>void CreateParent(</B><BR>
+&nbsp;&nbsp;<B>int</B>&nbsp;&nbsp;<I>level</I><B>,</B><BR>
+&nbsp;&nbsp;<B>int</B>&nbsp;&nbsp;<I>tileX</I><B>,</B><BR>
+&nbsp;&nbsp;<B>int</B>&nbsp;&nbsp;<I>tileY</I><BR>
+<B>);</B></CODE><H4>Parameters</H4>
+<I>level</I><BR>
+&nbsp;&nbsp;Specifies the tile level, from zero to the maximum level for the 
+data.<BR>
+<I>tileX</I><BR>
+&nbsp;&nbsp;Specifies the X index of the tile in the tile pyramid.<BR>
+<I>tileY</I><BR>
+&nbsp;&nbsp;Specifies the Y index of the tile in the tile pyramid.<BR>
+<H4>Return Values</H4>
+<p>This method does not return a value.</p>
+<H4>Remarks</H4>
+<p>If the input to this method was <strong>CreateParent</strong>(N,X,Y), the output would be the 
+tile with coordinates (X/2,Y/2) at level N-1.</p>
+<H4>See Also</H4>
+<UL type="disc">
+<LI><A HREF="#ITileCreatorInterface"><B>ITileCreator Interface</B></A></UL>
+
+<hr>
+<h2><a name="Appendix">Appendix I: DEM Tile Data</a></h2>
+<p class="MsoNormal"><span lang="EN" style="mso-ansi-language:EN">A digital 
+elevation model is a 3-D representation of a terrain's surface created </span>
+from terrain <a href="http://en.wikipedia.org/wiki/Elevation" title="Elevation">
+<span style="color:windowtext;text-decoration:none;text-underline:none">
+elevation</span></a> data. For each image tile, there can be a corresponding DEM 
+tile which encodes the elevation at a set of pre-specified vertices. The 
+pre-specified vertices are sampled at fixed grid intervals depending on the 
+projection. The tile contains only the elevation value and does not contain the 
+actual location associated with the vertex. There are both short and float 
+formats for DEM tiles.<o:p></o:p></p>
+<p class="MsoNormal">WWT will access the DEM tile through a different URL from 
+that of the image tile URL. The DEM URL needs to be specified in the WTML file 
+by setting the value of<strong> </strong> the<strong> DemUrl</strong> attribute. The <strong>DemUrl</strong> template URL string is 
+parameterized with {0}=zoom level, {1}=x and {2}=y.<span style="color:#1F497D">
+</span>The DEM files are binary files which contain the elevation values at the 
+specific grid point locations. The contents of the DEM tiles will vary depending 
+on the projection.<span style="color:#1F497D"><o:p></o:p></span></p>
+<h4><b>TOAST DEM Tile<o:p></o:p></b></h4>
+<p class="MsoNormal">Each DEM tile consists of 513 16-bit signed values written 
+in Intel byte order. The signed value represents the elevation/depth in meters. 
+The zero elevation point corresponds to the reference for the spheroid surface. The index in the list of 513 signed values indicates where the 
+elevation/depth is sampled. The vertex list is created by subdivision of a tile. The order 
+of the vertices changes depending on the slash/backslash type 
+of tile. Each vertex is a point in 3D space that corresponds to a latitude and longitude for the chosen projection. Each triangle is decomposed into smaller 
+triangles, each point in the triangle is added to the vertex list and then the 
+list is walked and the 3D points are offset by the altitude values in the DEM 
+array. Each tile shares its adjacent edge with its neighbor, so the bottom and 
+right edges have the same values as their neighbor’s top and left edges, but the 
+data is redundant so each tile has its own copy of that edge for performance 
+reasons. The altitude values are sampled from the 2D latitude/longitude array 
+with bi-linear filtering to remove any stair-step effects or sampling artifacts.<o:p></o:p></p>
+<p class="MsoNormal">Refer to <a href="#ToastDemTileCreator"><strong>ToastDemTileCreator</strong></a> class in the SDK for sample 
+implementation.<o:p></o:p></p>
+<h4><b>Mercator DEM Tile<o:p></o:p></b></h4>
+<p class="MsoNormal">Each DEM tile consists of 1089 16-bit signed values written 
+in Intel byte order. Each DEM tile is built using an array of 33x33 values. The 
+U/V values vary from 0.0 to 1.0, and array indexes vary from 0 to 32 for x and y. The 
+U/V values and index array are assuming the top, left of the image is (0,0). The 
+actual distance between elevation data points/vertices for this projection 
+varies depending on the tile location, zoom level and the latitude boundary 
+values. The vertex list is rectangular and is created by subdivision of y values 
+from top to center and then from center to bottom of the tile. For every y 
+value, the x value varies from 0 to 32. The vertex position in latitude and 
+longitude is calculated for each x and y. The elevation value at the given latitude 
+and longitude values is then calculated from the source data and added to the 
+vertex list.<o:p>&nbsp;</o:p></p>
+<p class="MsoNormal">Refer to <a href="#MercatorDemTileCreator"><strong>MercatorDemTileCreator</strong></a> class in the SDK for sample 
+implementation.<o:p></o:p></p>
+<H4>See Also</H4>
+<ul>
+	<li><a href="#Tile_Pyramid_SDK_Reference">Tile Pyramid SDK Reference</a></li>
+	<li><a href="#WorldWide_Telescope_Tile_Pyramid_SDK">WorldWide Telescope 
+	Tile Pyramid SDK</a></li>
+</ul>
+
+<hr>
+
+
+</body>
+</html>
