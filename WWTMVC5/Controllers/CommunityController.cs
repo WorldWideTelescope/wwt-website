@@ -64,16 +64,13 @@ namespace WWTMVC5.Controllers
         /// <param name="id">Community id to be processed</param>
         /// <returns>Returns the View to be used</returns>
         
-        [HttpGet]
-        [Route("Community/Get")]
-        public ActionResult Index(long? id)
+        [HttpPost]
+        [Route("Community/Get/Detail")]
+        public JsonResult Index(long? id)
         {
-            this.CheckNotNull(() => new { id });
-
+            
             CommunityViewModel communityViewModel = null;
             CommunityDetails communityDetails = this.communityService.GetCommunityDetails(id.Value, this.CurrentUserID, true, true);
-
-            this.CheckNotNull(() => new { communityDetails });
 
             communityViewModel = new CommunityViewModel();
 
@@ -89,33 +86,40 @@ namespace WWTMVC5.Controllers
 
             if (communityViewModel.AccessType != AccessType.Private || communityViewModel.UserPermission >= WWTMVC5.Permission.Reader)
             {
-                // Render View for Public or private communities for users who are having access to the community
-                // Get the share URL's.
-                communityViewModel.ShareUrl = new ShareViewModel();
-                communityViewModel.ShareUrl.FacebookUrl = new Uri(
-                        string.Format(CultureInfo.InvariantCulture, Constants.FacebookShareLinkFormat, HttpContext.Request.Url));
-
-                communityViewModel.ShareUrl.TwitterUrl = new Uri(
-                        string.Format(CultureInfo.InvariantCulture, Constants.TwitterShareLinkFormat));
-
-                communityViewModel.ShareUrl.MailToUrl = new Uri(string.Format(
-                    CultureInfo.InvariantCulture,
-                    Constants.MailToLinkFormat,
-                    communityViewModel.Name,
-                    HttpContext.Request.Url,
-                    description));
-
-                // It creates the prefix for id of links
-                SetSiteAnalyticsPrefix(HighlightType.None);
-
-                return View("Index", communityViewModel);
+                return Json(communityViewModel);
             }
             else
             {
-                // Render View for private communities for users who are not having access to the community, but used for joining 
-                // the private community.
-                return View("PrivateIndex", communityViewModel);
+
+                return new JsonResult
+                {
+                    Data = new {communityViewModel.Name, communityViewModel.Id, error = "insufficient permission"}
+                };
             }
+        }
+
+        [HttpPost]
+        [Route("Community/Contents/{communityId}")]
+        public JsonResult GetCommunityContents(long communityId)
+        {
+            var contents = communityService.GetCommunityContents(communityId, CurrentUserID);
+            var entities = new List<EntityViewModel>();
+            foreach (var item in contents)
+            {
+                ContentViewModel contentViewModel = new ContentViewModel();
+                contentViewModel.SetValuesFrom(item);
+                entities.Add(contentViewModel);
+            }
+            var children = communityService.GetChildCommunities(communityId, CurrentUserID);
+            var childCommunities = new List<CommunityViewModel>();
+            foreach (var child in children)
+            {
+                var communityViewModel = new CommunityViewModel();
+                Mapper.Map(child, communityViewModel);
+                childCommunities.Add(communityViewModel);
+            }
+            return Json(new{entities,childCommunities});
+
         }
 
         /// <summary>
@@ -125,7 +129,6 @@ namespace WWTMVC5.Controllers
         /// <param name="isFolder">Whether New action is called for community or folder, will be passed only while creating sub community or sub folder</param>
         /// <returns>View having page which gets details about new community</returns>
         [HttpGet]
-        
         public ActionResult New(long? id, bool? isFolder)
         {
             CommunityInputViewModel communityInputViewModel = new CommunityInputViewModel();
@@ -173,46 +176,45 @@ namespace WWTMVC5.Controllers
         /// <summary>
         /// Controller action which inserts a new community to the Layerscape database.
         /// </summary>
-        /// <param name="communityInputViewModel">ViewModel holding the details about the community</param>
+        /// <param name="communityJson">ViewModel holding the details about the community</param>
         /// <returns>Returns a redirection view</returns>
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        
-        public ActionResult New(CommunityInputViewModel communityInputViewModel)
+        [Route("Community/Create/New")]
+        public ActionResult New(CommunityInputViewModel communityJson)
         {
-            // Make sure communityInputViewModel is not null
-            this.CheckNotNull(() => new { communityInputViewModel });
+            //// Make sure communityJson is not null
+            //this.CheckNotNull(() => new { communityInputViewModel = communityJson });
 
             // Populating the category dropdown list.
-            communityInputViewModel.CategoryList = CategoryType.All.ToSelectList(CategoryType.All);
+            //communityJson.CategoryList = CategoryType.All.ToSelectList(CategoryType.All);
 
             // Populating the parent communities for the current user. Pass -1 as current community while creating new communities
             // since there are not current community which needs to be ignored.
             // TODO: Need to show the parent communities/folders in tree view dropdown.
-            IEnumerable<Community> parentCommunities = this.communityService.GetParentCommunities(-1, CurrentUserID);
-            communityInputViewModel.ParentList = new SelectList(parentCommunities, "CommunityID", "Name");
+            //IEnumerable<Community> parentCommunities = this.communityService.GetParentCommunities(-1, CurrentUserID);
+            //communityJson.ParentList = new SelectList(parentCommunities, "CommunityID", "Name");
 
             if (ModelState.IsValid)
             {
                 CommunityDetails communityDetails = new CommunityDetails();
-                Mapper.Map(communityInputViewModel, communityDetails);
+                Mapper.Map(communityJson, communityDetails);
 
                 // Set thumbnail properties
-                communityDetails.Thumbnail = new FileDetail() { AzureID = communityInputViewModel.ThumbnailID };
+                communityDetails.Thumbnail = new FileDetail() { AzureID = communityJson.ThumbnailID };
 
                 communityDetails.CreatedByID = CurrentUserID;
 
-                communityInputViewModel.ID = communityDetails.ID = this.communityService.CreateCommunity(communityDetails);
+                communityJson.ID = communityDetails.ID = this.communityService.CreateCommunity(communityDetails);
 
                 // Send Notification Mail
                 this.notificationService.NotifyNewEntityRequest(communityDetails, HttpContext.Request.Url.GetServerLink());
 
-                return RedirectToAction("Index", new { id = communityInputViewModel.ID });
+                return new JsonResult { Data = new { ID = communityDetails.ID } };
             }
             else
             {
                 // In case of any validation error stay in the same page.
-                return View("Save", communityInputViewModel);
+                return new JsonResult { Data = false };
             }
         }
 

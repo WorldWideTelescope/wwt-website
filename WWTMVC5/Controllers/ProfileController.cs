@@ -173,8 +173,6 @@ namespace WWTMVC5.Controllers
         /// <returns>Returns the View to be used</returns>
         /// <remarks>DO NOT ADD Live Authorization for this since it will go in an indefinite loop.</remarks>
         [HttpPost]
-        //
-        //[ValidateAntiForgeryToken]
         [Route("Profile/Save/{profileId}")]
         public JsonResult Save(long profileId, string affiliation, string aboutMe, bool isSubscribed, Guid? profileImageId, string profileName)
         {

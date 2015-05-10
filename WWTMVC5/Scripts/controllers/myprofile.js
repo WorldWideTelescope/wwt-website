@@ -44,8 +44,8 @@
     
 
         function setProfile(profile) {
-            if (typeof profile == 'string' && profile.indexOf('error')) {
-                location.href = '/#';
+            if (typeof profile == 'string' && profile.indexOf('error') === 0) {
+                location.href = '#/';
             }
             $scope.profile = profile;
             //string affiliation, string aboutMe, bool isSubscribed, Guid? profileImageId, string profileName

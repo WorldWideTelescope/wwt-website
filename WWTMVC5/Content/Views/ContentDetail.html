@@ -1,41 +1,72 @@
 ﻿
 
-<div ng-cloak ng-show="entity" class="content-detail">
-    <h1>{{entity.Name}}</h1>
-    <a class="thumbnail pull-left" title="{{entity.Name}}" href="/file/Download/{{entity.ContentAzureID}}/{{entity.FileName}}">
-        <span class="typeicon">
-            <i class="spriteicon {{entity.ContentTypeName ? entity.ContentTypeName:''}}" ng-if="entity.ContentTypeName != 'Link'"></i>
-            <i class="spriteicon fa fa-external-link" ng-if="entity.ContentTypeName == 'Link'"></i>
-        </span>
-        <img ng-src="{{entity.ThumbnailUrl}}" class="img-thumbnail" />
+<div ng-cloak ng-show="entity" class="content-detail row">
 
-    </a>
-    <!--<br/>
+    <h1 style="margin-bottom: 28px">{{entity.Name}}</h1>
+    <div class="col-md-6">
+
+        <a class="thumbnail pull-left" title="{{entity.Name}}" href="{{entity.DownloadUrl}}">
+            <span class="typeicon">
+                <i class="spriteicon {{entity.ContentTypeName ? entity.ContentTypeName:''}}" ng-if="entity.ContentTypeName != 'Link'"></i>
+                <i class="spriteicon fa fa-external-link" ng-if="entity.ContentTypeName == 'Link'"></i>
+            </span>
+            <img ng-src="{{entity.ThumbnailUrl}}" class="img-thumbnail" />
+
+        </a>
+        <!--<br/>
         <div class="iblock">
             <rating ng-model="entity.Rating" max="5" readonly="true"></rating>
         </div>
-    </div>-->
-    <ul class="iblock">
-        <li><strong>Author:</strong> {{entity.Producer}}</li>
-        <li><strong>Category:</strong> {{entity.ParentName}}</li>
-        <li><strong>Type:</strong> {{types.contentValues[entity.ContentType].name}}</li>
-        <li><strong>Updated:</strong> {{entity.LastUpdated}}</li>
-    </ul>
-    <hr class="clearfix" />
-    <div style="max-height: 60px; margin-bottom: 10px;overflow: auto" ng-bind-html="entity.Description">
+        </div>-->
+        <ul class="iblock">
+            <li><strong>Uploaded by:</strong> {{entity.Producer}}</li>
+            <li><strong>Author:</strong> {{entity.DistributedBy}}</li>
+            <li><strong>Type:</strong> {{types.contentValues[entity.ContentType].name}}</li>
+            
+        </ul>
 
+        <br />
+        <ul class="iblock" style="padding-left: 28px">
+            <li><strong>Category:</strong> {{entity.ParentName}}</li>
+            <li><strong>Citation:</strong> {{entity.Citation}}</li>
+            
+            <li><strong>Updated:</strong> {{entity.LastUpdated}}</li>
+            <li><strong>Downloads:</strong> {{entity.DownloadCount}}</li>
+            <li><strong>Size:</strong> {{entity.FileSize}}</li>
+        </ul>
+
+        <div>
+            
+        </div>
     </div>
-    <a class="btn btn-primary btn-sm" ng-href="{{entity.DownloadUrl}}" ng-if="entity.DownloadUrl">
-        <i class="fa fa-download"></i>
-        Download
-    </a>
+    <div class="col-md-6">
+        <strong>Description</strong>
+        <div style="margin-bottom: 10px;" ng-bind-html="entity.Description">
 
-    <a class="btn btn-primary btn-sm" ng-href="{{entity.LinkUrl}}" target="link" ng-if="entity.LinkUrl">
-        <i class="fa fa-external-link"></i>
-        Visit Link
-    </a>
+        </div>
+        <div class="clearfix"></div>
+        <div ng-if="entity.AssociatedFiles.length">
+            <strong style="display: block; margin: 12px 0 6px;">Associated Files</strong>
+            <ul style="width:100%">
+                <li ng-repeat="file in entity.AssociatedFiles"><a href="{{file.LinkUrl || file.DownloadUrl}}">{{file.Name}}</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-12" style="padding-bottom: 12px;">
+        <hr class="clearfix" /><br />
+        <a class="btn btn-primary btn-sm" ng-href="{{entity.DownloadUrl}}" ng-if="entity.DownloadUrl">
+            
+            <i class="fa fa-download"></i>
+            Download
+        </a>
 
-    <a class="btn btn-primary btn-sm" ng-href="{{entity.webclientUrl}}" ng-if="entity.webclientUrl" target="webclient">View in WWT Web Client</a>
-    <a class="btn btn-info btn-sm" ng-href="#/EditContent/{{entity.Id}}" ng-if="types.currentUserId == entity.ProducerId || types.isAdmin">Edit</a>
-    <a class="btn btn-warning btn-sm" ng-click="confirmDelete()" ng-if="types.currentUserId == entity.ProducerId || types.isAdmin">Delete</a>
+        <a class="btn btn-primary btn-sm" ng-href="{{entity.LinkUrl}}" target="link" ng-if="entity.LinkUrl">
+            <i class="fa fa-external-link"></i>
+            Visit Link
+        </a>
+
+        <a class="btn btn-primary btn-sm" ng-href="{{entity.webclientUrl}}" ng-if="entity.webclientUrl" target="webclient">View in WWT Web Client</a>
+        <a class="btn btn-info btn-sm" ng-href="#/EditContent/{{entity.Id}}" ng-if="types.currentUserId == entity.ProducerId || types.isAdmin">Edit</a>
+        <a class="btn btn-warning btn-sm" ng-click="confirmDelete()" ng-if="types.currentUserId == entity.ProducerId || types.isAdmin">Delete</a>
+    </div>
 </div>

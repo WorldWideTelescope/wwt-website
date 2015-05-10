@@ -175,6 +175,46 @@ namespace WWTMVC5.Services
             return communityDetails;
         }
 
+        public List<ContentDetails> GetCommunityContents(long communityId, long userId)
+        {
+            Community community = this.communityRepository.GetCommunity(communityId);
+            var contentDetailsList = GetContentDetailsFromContent(community.CommunityContents.Select(item => item.Content).Where(item => item.IsDeleted == false), userId);
+            return contentDetailsList;
+        }
+
+        public List<CommunityDetails> GetChildCommunities(long communityId, long userId)
+        {
+            Community community = this.communityRepository.GetCommunity(communityId);
+            List<CommunityDetails> communityDetailsList = new List<CommunityDetails>();
+            foreach (CommunityRelation child in community.CommunityRelation)
+            {
+                var childCommunity = child.Community1;
+
+                try
+                {
+                    var communityDetails = CreateCommunityDetails(childCommunity, userId, false);
+                    //// TODO : Better way to move IsDeleted Check
+                    if (communityDetails != null && childCommunity.IsDeleted == false)
+                    {
+                        communityDetailsList.Add(communityDetails);
+                    }
+                }
+                catch (HttpException ex)
+                {
+                    if (ex.GetHttpCode() == (int)HttpStatusCode.Unauthorized)
+                    {
+                        // In case if user is not authorized to access the community (private), unauthorized exception
+                        // will be thrown which can be consumed and can continue with next communities.
+                        continue;
+                    }
+
+                    throw;
+                }
+            }
+            return communityDetailsList;
+
+        }
+
         /// <summary>
         /// Creates the new community in Layerscape with the given details passed in CommunitiesView instance.
         /// </summary>

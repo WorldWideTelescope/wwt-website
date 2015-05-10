@@ -129,7 +129,7 @@ namespace WWTMVC5.Controllers
             SetSiteAnalyticsPrefix(HighlightType.None);
             SessionWrapper.Set<string>("SelectedSearchType", "basic");
             var results = GetSearchResults(searchText, "basic", currentPage, searchQuery);
-            return new JsonResult{Data = results};
+            return Json(results);
         }
 
         /// <summary>

@@ -22,12 +22,12 @@
         <div class="form-group form-group-sm">
             <input ng-show="content.IsLink" ng-model="content.ContentUrl"
                    type="url" class="form-control"
-                   placeholder="Link Url"/>
+                   placeholder="Link Url" />
 
             <span class="btn btn-info btn-file btn-sm" ng-show="!content.IsLink && !isEdit">
-                    Choose File...
-                    <input type="file" nv-file-select uploader="contentuploader" />
-                </span>&nbsp;<span ng-if="!isEdit && content.ContentFileName && content.ContentFileName.length">({{content.ContentFileName}})</span>
+                Choose File...
+                <input type="file" nv-file-select uploader="contentuploader" />
+            </span>&nbsp;<span ng-if="!isEdit && content.ContentFileName && content.ContentFileName.length">({{content.ContentFileName}})</span>
             <span ng-if="isEdit">({{content.Name}})</span>
         </div>
     </div>
@@ -35,7 +35,7 @@
         <div>
             <strong>Community</strong>
         </div>
-        <select style="max-width: 100%" ng-model="content.ParentID"  ng-options="c.Value as c.Text for c in communities" id="lstCommunity"></select>
+        <select style="max-width: 100%" ng-model="content.ParentID" ng-options="c.Text for c in communities track by c.val" id="lstCommunity"></select>
     </div>
 </div>
 <div class="row">
@@ -52,12 +52,11 @@
             <div>
                 <strong>Name</strong>
             </div>
-            <input
-                ng-model="content.FileName"
-                class="form-control"
-                placeholder="Friendly File Name"
-                data-toggle="tooltip"
-                data-original-title="Provide a friendly name for the file or link"/>
+            <input ng-model="content.FileName"
+                   class="form-control"
+                   placeholder="Friendly File Name"
+                   data-toggle="tooltip"
+                   data-original-title="Provide a friendly name for the file or link" />
         </div>
     </div>
 </div>
@@ -86,8 +85,8 @@
                 <strong>Description</strong>
             </div>
             <textarea style="height:77px" rows="4" class="form-control" ng-model="content.Description"
-                           placeholder="Describe this content" data-toggle="tooltip"
-                           data-original-title="Enter a description of the content you are publishing..."></textarea>
+                      placeholder="Describe this content" data-toggle="tooltip"
+                      data-original-title="Enter a description of the content you are publishing..."></textarea>
             <div class="form-group form-group-sm">
                 <div>
                     <strong>Tags</strong>
@@ -126,8 +125,8 @@ URL / website"></textarea>
 
 <div class="form-group">
 
-    <img ng-show="!content.ThumbnailID && !isEdit" class="pull-right" ng-src="/content/images/defaultDocthumbnail.png"/>
-    <img ng-show="content.ThumbnailID && !isEdit" class="pull-right" ng-src="/file/TemporaryFile/{{content.ThumbnailID}}"/>
+    <img ng-show="!content.ThumbnailID && !isEdit" class="pull-right" ng-src="/content/images/defaultDocthumbnail.png" />
+    <img ng-show="content.ThumbnailID && !isEdit" class="pull-right" ng-src="/file/TemporaryFile/{{content.ThumbnailID}}" />
     <img ng-show="isEdit" class="pull-right" ng-src="/file/thumbnail/{{content.ThumbnailID}}" />
     <div>
         <strong>Thumbnail</strong>
@@ -140,7 +139,53 @@ URL / website"></textarea>
 
 </div>
 <div class="clearfix"></div>
-<hr/>
+
+<div class="row">
+    <div class="col-md-8">
+        <strong>Related Files/Links</strong><br/>
+        <div class="radio iblock">
+            <label>
+                <input type="radio" name="isRelatedLink" ng-value="false" ng-model="relatedDetailLink"/>
+                File
+            </label>
+        </div>
+        &nbsp;
+        <div class="radio iblock">
+            <label>
+                <input type="radio" name="isRelatedLink" ng-value="true" ng-model="relatedDetailLink"/>
+                Link
+            </label>
+        </div>
+        <br/>
+        <div class="input-group input-group-sm" ng-show="relatedDetailLink">
+            <input type="text" class="form-control" placeholder="Link Url..." ng-model="relatedLink">
+            <span class="input-group-btn">
+                <button class="btn btn-info" type="button" ng-click="addRelatedLink()">Add</button>
+            </span>
+        </div><!-- /input-group -->
+        <div class="form-group form-group-sm" ng-show="relatedDetailLink != true">
+
+
+            <span class="btn btn-info btn-file btn-sm">
+                Choose File...
+                <input type="file" nv-file-select uploader="relatedFileUploader" />
+            </span>&nbsp;
+        </div>
+    </div>
+</div>
+<div style="margin-top: 12px;" ng-if="content.PostedFileName && content.PostedFileName.length">
+    <strong>Files/Links</strong>
+    <ul style="list-style-type: none;padding-left: 16px">
+        <li ng-repeat="file in content.PostedFileName">
+            <a class="btn btn-warning btn-xs" ng-click="removeAssociated($index)" data-toggle="tooltip"
+               title="Remove this file...">
+                <i class="fa fa-trash"></i>
+            </a>
+            {{getFullFileName(file,content.PostedFileDetail[$index])}} {{getBytesFromDetail(content.PostedFileDetail[$index])}}
+        </li>
+    </ul>
+</div>
+<hr />
 <div class="pull-right iblock">
     <a class="btn btn-info btn-sm" ng-click="saveEditedContent()" ng-if="isEdit">Save Changes</a>
     <a class="btn btn-info btn-sm" ng-click="publishContent()" ng-if="!isEdit">Publish</a>

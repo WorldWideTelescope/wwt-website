@@ -37,6 +37,7 @@ namespace WWTMVC5.Services.Interfaces
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = ".net framework 4 way of passing default parameters.")]
         CommunityDetails GetCommunityDetails(long communityID, long? userID, bool considerPrivateCommunity = false, bool updateReadCount = false);
 
+        
         /// <summary>
         /// Creates the new community in Layerscape with the given details passed in CommunitiesView instance.
         /// </summary>
@@ -149,5 +150,8 @@ namespace WWTMVC5.Services.Interfaces
         /// <param name="inviteRequestItem">Invite request with details</param>
         /// <returns>Returns the collection of invite request send along with their tokens.</returns>
         IEnumerable<InviteRequestItem> InvitePeople(InviteRequestItem inviteRequestItem);
+
+        List<ContentDetails> GetCommunityContents(long communityId, long userId);
+        List<CommunityDetails> GetChildCommunities(long communityId, long userId);
     }
 }

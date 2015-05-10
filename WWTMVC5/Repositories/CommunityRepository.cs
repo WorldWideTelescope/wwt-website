@@ -46,14 +46,14 @@ namespace WWTMVC5.Repositories
         /// <returns>Community instance.</returns>
         public Community GetCommunity(long communityID)
         {
-            var community = Queryable.Where<Community>(this.EarthOnlineDbContext.Community, item => item.CommunityID == communityID
+            var community = this.EarthOnlineDbContext.Community.Where<Community>(item => item.CommunityID == communityID
                                                                             && item.IsDeleted == false &&
                                                                             item.CommunityTypeID != (int)CommunityTypes.User)
                 .Include(c => c.AccessType)
                 .Include<Community, Category>(c => c.Category)
                 .Include<Community, ICollection<CommunityRatings>>(c => c.CommunityRatings)
                 .Include<Community, ICollection<CommunityRelation>>(c => c.CommunityRelation1)
-                .Include(c => Enumerable.Select<CommunityTags, Tag>(c.CommunityTags, ct => ct.Tag))
+                .Include(c => c.CommunityTags.Select<CommunityTags, Tag>(ct => ct.Tag))
                 .Include<Community, User>(c => c.User)
                 .FirstOrDefault();
 

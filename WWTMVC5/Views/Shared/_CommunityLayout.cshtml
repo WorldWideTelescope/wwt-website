@@ -43,8 +43,14 @@
                     }).when('/EditContent/:contentId', {
                         templateUrl: '/Content/Views/AddContent.html',
                         controller: 'AddContent'
+                    }).when('/AddCommunity', {
+                        templateUrl: '/Content/Views/AddCommunity.html',
+                        controller: 'EditCommunity'
+                    }).when('/AddCommunity/:parentId', {
+                        templateUrl: '/Content/Views/AddCommunity.html',
+                        controller: 'EditCommunity'
                     }).when('/EditCommunity/:communityId', {
-                        templateUrl: '/Content/Views/EditCommunity.html',
+                        templateUrl: '/Content/Views/AddCommunity.html',
                         controller: 'EditCommunity'
                     }).when('/CommunityDetail/:communityId', {
                         templateUrl: '/Content/Views/CommunityDetail.html',

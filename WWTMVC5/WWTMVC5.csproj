@@ -530,10 +530,9 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Views\AddCommunity.html" />
     <Content Include="Content\Views\CommunityDetail.html" />
     <Content Include="Content\Views\ContentPreview.html" />
-    <Content Include="Content\Views\EditCommunity.html" />
-    <Content Include="Content\Views\EditContent.html" />
     <Content Include="Content\Views\TestResources.html" />
     <Content Include="GetTourFile.aspx" />
     <Content Include="GetTourFile2.aspx" />

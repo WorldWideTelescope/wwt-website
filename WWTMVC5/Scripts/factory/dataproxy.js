@@ -1,5 +1,5 @@
 ﻿wwtng.factory('dataproxy', [
-    '$http', '$q','$timeout', function($http, $q,$timeout) {
+    '$http', '$q','$timeout', 'UIHelper', function($http, $q,$timeout, uiHelper) {
         var api = {
             getEntities: getEntities,
             getEntityDetail: getEntityDetail,
@@ -15,7 +15,10 @@
             getUserCommunityList: getUserCommunityList,
             deleteContent:deleteContent,
             isAdmin: getIsAdmin,
-            currentUserId: getCurrentUserId
+            currentUserId: getCurrentUserId,
+            createCommunity: createCommunity,
+            getCommunityDetail: getCommunityDetail,
+            getCommunityContents: getCommunityContents
         };
 
         //Enum object with friendly names and values
@@ -35,53 +38,45 @@
                 args.contentType + '/' +
                 args.currentPage + '/' +
                 args.pageSize;
-            $http.post(url, {}).
-                success(function (data, status, headers, config) {
-                    data.entities = dataHelper(data.entities);
-
-                    deferred.resolve(data);
-                }).
-                error(function(data, status, headers, config) {
-                    console.log({ data: data, status: status, headers: headers, config: config });
-                    deferred.resolve({ error: true, status: 'error' });
-                });
+            postHelper(url, {}, deferred, true, false, 'entities');
             return deferred.promise;
         }
 
         //ContentController.cs: [Route("Content/RenderDetailJson/{Id}")]
         function getEntityDetail(args) {
             var deferred = $q.defer();
-            getAllTypes().then(function() {
-                $http.post('/Content/RenderDetailJson/' + args.entityId, {}).
-                    success(function(data, status, headers, config) {
-                        console.log(data);
-                        data = dataHelper([data])[0];
-                        deferred.resolve(data);
-                    }).
-                    error(function(data, status, headers, config) {
-                        console.log({ data: data, status: status, headers: headers, config: config });
-                        deferred.resolve({ error: true, status: 'error' });
-                    });
-            });
-            
+            postHelper('/Content/RenderDetailJson/' + args.entityId, {}, deferred, true, true);
             return deferred.promise;
         }
+
+        //CommunityController.cs: [Route("Community/Get/Detail")]
+        function getCommunityDetail(id) {
+            var deferred = $q.defer();
+            postHelper('/Community/Get/Detail', { id: id }, deferred, true, true);
+            return deferred.promise;
+        }
+        //CommunityController.cs: [Route("Community/Contents/{communityId}")]
+        function getCommunityContents(id) {
+            var deferred = $q.defer();
+            //postHelper('/Community/Contents/' + id, {}, deferred, true);
+            $http.post('/Community/Contents/' + id, {}).
+                success(function (data, status, headers, config) {
+                    data.entities = dataHelper(data.entities);
+                    data.childCommunities = dataHelper(data.childCommunities);
+                    deferred.resolve(data);
+                }).
+                error(function (data, status, headers, config) {
+                    handleError(data, status, headers, config, deferred);
+                });
+            return deferred.promise;
+        }
+
         //ContentController.cs: [Route("Content/Edit/{id}")]
         function getEditContent(id) {
             var deferred = $q.defer();
-            getAllTypes().then(function() {
-                $http.post('/Content/Edit/' + id, {}).
-                    success(function(data, status, headers, config) {
-                        console.log(data);
-                        //data = dataHelper([data])[0];
-                        deferred.resolve(data);
-                    }).
-                    error(function(data, status, headers, config) {
-                        console.log({ data: data, status: status, headers: headers, config: config });
-                        deferred.resolve({ error: true, status: 'error' });
-                    });
+            getAllTypes().then(function () {
+                postHelper('/Content/Edit/' + id, {}, deferred);
             });
-            
             return deferred.promise;
         }
         //SearchController.cs: [Route("Search/RenderJson/{query}/{category}/{contentType}/{currentPage}/{pageSize}")]
@@ -93,21 +88,10 @@
                 args.contentTypes + '/' +
                 args.currentPage + '/' +
                 args.pageSize;
-            $http.post(url, {}).
-                success(function (data, status, headers, config) {
-                    console.log(data);
-                    data.Data.searchResults = dataHelper(data.Data.searchResults);
-                    deferred.resolve(data.Data);
-                }).
-                error(function(data, status, headers, config) {
-                    console.log({ data: data, status: status, headers: headers, config: config });
-                    deferred.resolve({ error: true, status: 'error' });
-                });
+            postHelper(url, {}, deferred, true, false, 'searchResults');
             return deferred.promise;
         }
-
         
-
         //EntityController.cs [Route("Entity/Types/GetAll")]
         function getAllTypes() {
             var deferred = $q.defer();
@@ -127,171 +111,80 @@
                         types = data;
                         deferred.resolve(types);
                     }).
-                    error(function(data, status, headers, config) {
-                        console.log({ data: data, status: status, headers: headers, config: config });
-                        deferred.resolve({ error: true, status: 'error' });
+                    error(function (data, status, headers, config) {
+                        handleError(data, status, headers, config, deferred);
                     });
             }
             return deferred.promise;
         }
+
         //ProfileController.cs [Route("/Profile/MyProfile/Get")]
-        function getMyProfile(id) {
+        function getMyProfile() {
             var deferred = $q.defer();
-
-            $http.post('/Profile/MyProfile/Get', {}).
-                success(function (data, status, headers, config) {
-                    console.log(data);
-                    if (typeof data == 'string' && data.indexOf('error') === 0) {
-                        console.log('retrying profile get- server thinks user not logged in');
-                        $timeout(function() {
-                        $http.post('/Profile/MyProfile/Get', {}).
-                            success(function (data, status, headers, config) {
-                                console.log(data);
-                                deferred.resolve(data);
-                            }).
-                            error(function (data, status, headers, config) {
-                                console.log({ data: data, status: status, headers: headers, config: config });
-                                deferred.resolve(data);
-                            });
-                        }, 500);
-                    } else {
-                        deferred.resolve(data);
-                    }
-                }).
-                error(function(data, status, headers, config) {
-                    console.log({ data: data, status: status, headers: headers, config: config });
-                    deferred.resolve(data);
-                });
-            
-            
+            postHelper('/Profile/MyProfile/Get', {}, deferred);
             return deferred.promise;
         }
 
+        //ProfileController.cs [Route("Profile/Save/{profileId}")]
+        //profile obj = (string affiliation, string aboutMe, bool isSubscribed, Guid? profileImageId, string profileName)
         function saveProfile(profile) {
-            //string affiliation, string aboutMe, bool isSubscribed, Guid? profileImageId, string profileName
             var deferred = $q.defer();
-
-            $http.post('/Profile/Save/' + profile.profileId, profile).
-                    success(function (data, status, headers, config) {
-                        console.log(data);
-                        deferred.resolve(data);
-                    }).
-                error(function (data, status, headers, config) {
-                    console.log({ data: data, status: status, headers: headers, config: config });
-                    deferred.resolve({ error: true, status: 'error' });
-                });
-
+            postHelper('/Profile/Save/' + profile.profileId, profile, deferred);
             return deferred.promise;
         }
+
         //ContentController.cs[Route("Content/New/{id}")]
         function publishContent(content) {
             var deferred = $q.defer();
-
-            $http.post('/Content/Create/New', { contentInputViewModel: content }).
-                    success(function (data, status, headers, config) {
-                        console.log(data);
-                        deferred.resolve(data);
-                    }).
-                error(function (data, status, headers, config) {
-                    console.log({ data: data, status: status, headers: headers, config: config });
-                    deferred.resolve({ error: true, status: 'error' });
-                });
-
+            postHelper('/Content/Create/New', { contentInputViewModel: content },deferred);
             return deferred.promise;
         }
+
         //ContentController.cs [Route("Content/Save/Edits")]
         function saveEditedContent(content) {
             var deferred = $q.defer();
-            $http.post('/Content/Save/Edits', { contentInputViewModel: JSON.stringify(content) }).
-                success(function (data, status, headers, config) {
-                    console.log(data);
-                    deferred.resolve(data);
-                }).
-                error(function (data, status, headers, config) {
-                    console.log({ data: data, status: status, headers: headers, config: config });
-                    deferred.resolve({ error: true, status: 'error' });
-                });
-
+            postHelper('/Content/Save/Edits', { contentInputViewModel: JSON.stringify(content) }, deferred);
             return deferred.promise;
         }
+
         //ProfileController.cs:[Route("Profile/Entities/{entityType}")]
         function getUserEntities(type, profileId) {
             var deferred = $q.defer();
-
-            $http.post('/Profile/Entities/' + type + '/'+ 1 + '/' + 999, {profileId:profileId  }).
-                    success(function (data, status, headers, config) {
-                        data.entities = dataHelper(data.entities);
-                        deferred.resolve(data);
-                    }).
-                error(function (data, status, headers, config) {
-                    console.log({ data: data, status: status, headers: headers, config: config });
-                    deferred.resolve({ error: true, status: 'error' });
-                });
-
+            postHelper('/Profile/Entities/' + type + '/' + 1 + '/' + 999, { profileId: profileId }, deferred, true, false, 'entities');
             return deferred.promise;
         }
+
         //CommunityController.cs:[Route("Community/Permission/{permissionsTab}/{currentPage}")]
         function getUserRequests() {
             var deferred = $q.defer();
-
-            $http.post('/Community/Permission/ProfileRequests/1', {}).
-                    success(function (data, status, headers, config) {
-                    console.log(data);
-                        deferred.resolve(data);
-                    }).
-                error(function (data, status, headers, config) {
-                    console.log({ data: data, status: status, headers: headers, config: config });
-                    deferred.resolve({ error: true, status: 'error' });
-                });
-
+            postHelper('/Community/Permission/ProfileRequests/1', {}, deferred);
             return deferred.promise;
         }
+
         //[Route("Content/User/CommunityList")]
         function getUserCommunityList() {
             var deferred = $q.defer();
-
-            $http.post('/Content/User/CommunityList', {}).
-                    success(function (data, status, headers, config) {
-                        console.log(data);
-                        deferred.resolve(data);
-                    }).
-                error(function (data, status, headers, config) {
-                    console.log({ data: data, status: status, headers: headers, config: config });
-                    deferred.resolve({ error: true, status: 'error' });
-                });
-
+            postHelper('/Content/User/CommunityList', {}, deferred);
             return deferred.promise;
         }
+
         //[Route("Content/User/CommunityList")]
         function getUserCommunities() {
             var deferred = $q.defer();
-
-            $http.post('/Content/User/CommunityList', {}).
-                    success(function (data, status, headers, config) {
-                        console.log(data);
-                        deferred.resolve(data);
-                    }).
-                error(function (data, status, headers, config) {
-                    console.log({ data: data, status: status, headers: headers, config: config });
-                    deferred.resolve({ error: true, status: 'error' });
-                });
-
+            postHelper('/Content/User/CommunityList', {}, deferred);
             return deferred.promise;
         }
         //ContentController.cs[Route("Content/Delete/{id}")]
         function deleteContent(contentId) {
             var deferred = $q.defer();
+            postHelper('/Content/Delete/' + contentId, {}, deferred);
+            return deferred.promise;
+        }
 
-            $http.post('/Content/Delete/' + contentId, { }).
-                    success(function (data, status, headers, config) {
-                        console.log(data);
-                        deferred.resolve(data);
-                    }).
-                error(function (data, status, headers, config) {
-                    console.log({ data: data, status: status, headers: headers, config: config });
-                    deferred.resolve({ error: true, status: 'error' });
-                });
-
+        //CommunityController.cs[Route("Community/Create/New")]
+        function createCommunity(community) {
+            var deferred = $q.defer();
+            postHelper('/Community/Create/New', { communityJson: community }, deferred);
             return deferred.promise;
         }
 
@@ -302,12 +195,41 @@
             });
             return deferred.promise;
         }
+
         function getIsAdmin() {
             var deferred = $q.defer();
             getAllTypes().then(function () {
                 deferred.resolve(isAdmin);
             });
             return deferred.promise;
+        }
+        
+        //helper function that actually performs most posts / dataprocessing
+        var postHelper = function (url, data, deferred, processData, processSingle, member) {
+            var httppost = function() {
+                $http.post(url, data).
+                    success(function (data) {
+                        if (processData) {
+                            if (processSingle) {
+                                data = dataHelper([data])[0];
+                            } else if (member) {
+                                    data[member] = dataHelper(data[member]);
+                            } else {
+                                data = dataHelper(data);
+                            }
+                        }
+                        console.log(data);
+                        deferred.resolve(data);
+                    }).
+                    error(function(data, status, headers, config) {
+                        handleError(data, status, headers, config, deferred);
+                    });
+                };
+            if (processData) {
+                getAllTypes().then(httppost);
+            } else {
+                httppost();
+            }
         }
 
         //#region helpers
@@ -318,46 +240,51 @@
         function dataHelper(collection) {
             $.each(collection, function (i, item) {
                 // add webclient url to tours and collections
-                if (item.ContentType === 1) {
-                    item.webclientUrl = 'http://' + location.host + '/webclient?tourUrl=' +
-                        encodeURIComponent('http://' + location.host + '/file/download/' + item.ContentAzureID + '/' + item.FileName);
-                } 
-                else if (item.ContentType === 0) {//TODO: Find out why type can be "all"
-                    item.ContentType = 7;
-                }
+                var isCommunity = item.MemberCount != undefined;
                 if (hasEmptyOrNullGuid(item.ThumbnailID)) {
-                    item.ThumbnailUrl = '/Content/Images/default' + types.contentValues[item.ContentType].val + 'thumbnail.png';
+                    if (isCommunity) {
+                        item.ThumbnailUrl = '/Content/Images/defaultcommunitythumbnail.png';
+                    } else {
+                        item.ThumbnailUrl = '/Content/Images/default' + types.contentValues[item.ContentType].val + 'thumbnail.png';
+                    }
                 } else {
                     item.ThumbnailUrl = '/file/thumbnail/' + item.ThumbnailID;
                 }
+                if (!isCommunity) {
+                    var itemLink = uiHelper.getDownloadUrl(item.FileName, item.ContentAzureID, item.ContentType);
+                    if (itemLink.DownloadUrl) {
+                        item.DownloadUrl = itemLink.DownloadUrl;
+                    } else if (itemLink.LinkUrl) {
+                        item.LinkUrl = itemLink.LinkUrl;
+                    }
 
-                if ($.trim(item.FileName).indexOf('http') === 0) {
-                    item.LinkUrl = item.FileName;
-                } else if (item.FileName) {
-                    var fileSplit = item.FileName.split('.');
-                    if (fileSplit.length === 1) {
-                        console.log(fileSplit);
+                    item.FileSize = !item.Size ? 'n/a' : uiHelper.getFileSizeString(item.Size);
+                    if (item.ContentType === 1) {
+                        item.webclientUrl = 'http://' + location.host + '/webclient?tourUrl=' +
+                            encodeURIComponent('http://' + location.host + '/file/download/' + item.ContentAzureID + '/' + item.FileName);
+                    } else if (item.ContentType === 0) { //TODO: Find out why type can be "all"
+                        item.ContentType = 7;
+                    } else if (item.ContentType === 2) {
+                        item.webclientUrl = 'http://' + location.host + '/webclient?wtml=' +
+                            encodeURIComponent('http://' + location.host + item.DownloadUrl);
                     }
-                    var ext = fileSplit.length > 1 ? fileSplit[fileSplit.length - 1] : null;
-                    var file;
-                    if (fileSplit.length > 2) {
-                        fileSplit.pop();
-                        file = fileSplit.join('_');
-                    } else {
-                        file = fileSplit[0];
+                    item.ContentTypeName = types.contentValues[item.ContentType].val;
+                    if (item.AssociatedFiles && item.AssociatedFiles.length) {
+                        $.each(item.AssociatedFiles, function(i, file) {
+                            var fileLink = uiHelper.getDownloadUrl(file.Name, file.ID);
+                            if (fileLink.DownloadUrl) {
+                                file.DownloadUrl = fileLink.DownloadUrl;
+                            } else if (fileLink.LinkUrl) {
+                                file.LinkUrl = fileLink.LinkUrl;
+                            }
+                        });
                     }
-                    item.DownloadUrl = '/file/Download/' + item.ContentAzureID + '/' + file;
-                    if (ext) {
-                        item.DownloadUrl += '/' + ext;
-                    }
-                } else {
-                    item.DownloadUrl = '/file/Download/' + item.ContentAzureID + '/File.txt';
                 }
-                if (item.ContentType === 2) {
-                    item.webclientUrl = 'http://' + location.host + '/webclient?wtml=' +
-                        encodeURIComponent('http://' + location.host + item.DownloadUrl);
+                if (item.DistributedBy && item.DistributedBy.indexOf('<') === 0) {
+                    item.DistributedBy = $(item.DistributedBy).text();
                 }
-                item.ContentTypeName = types.contentValues[item.ContentType].val;
+                
+                
             });
             return collection;
         }
@@ -404,7 +331,7 @@
             });
             return friendly;
         };
-       
+        
         var convertCamel = function(array) {
             var converted = [];
             $.each(array, function(i, s) {
@@ -416,6 +343,11 @@
             });
             return converted;
         }
+
+        var handleError = function(data, status, headers, config, deferred) {
+            console.log({ data: data, status: status, headers: headers, config: config });
+            deferred.resolve({ error: true, data: data, status: status, headers: headers, config: config });
+        };
         //#endregion
 
         return api;

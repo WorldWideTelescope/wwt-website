@@ -150,7 +150,8 @@ namespace WWTMVC5
             Mapper.CreateMap<CommunityDetails, Community>()
                 .ForMember(target => target.CommunityTypeID, options => options.MapFrom(source => (int)source.CommunityType))
                 .ForMember(target => target.CommunityType, options => options.Ignore())
-                .ForMember(target => target.ThumbnailID, options => options.Ignore());
+                .ForMember(target => target.ThumbnailID, options => options.Ignore())
+                .ForMember(target => target.CommunityID, options => options.Ignore());
 
             // Used by ContentService
             Mapper.CreateMap<ContentDetails, Content>()
@@ -175,7 +176,7 @@ namespace WWTMVC5
                     .ForMember(target => target.Name, options => options.MapFrom(source => source.Title));
 
             Mapper.CreateMap<Community, CommunityDetails>()
-                .ForMember(target => target.ID, options => options.MapFrom(source => (int)source.CommunityID))
+                .ForMember(target => target.ID, options => options.MapFrom(source => source.CommunityID))
                 .ForMember(target => target.CategoryID, options => options.MapFrom(source => (int)source.Category.CategoryID))
                 .ForMember(target => target.AccessTypeID, options => options.MapFrom(source => (int)source.AccessType.AccessTypeID))
                 .ForMember(target => target.AccessTypeName, options => options.MapFrom(source => source.AccessType.Name))

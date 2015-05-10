@@ -112,11 +112,20 @@
             </div>
             <div class="row" ng-if="profile.communities">
                 <div class="col-lg-2 col-sm-3 col-xs-6" ng-repeat="community in profile.communities">
-                    {{community.name}}
+                    <a class="thumbnail"
+                        data-placement="top"
+                        data-auto-close="true"
+                        title="{{community.Name}}"
+                        style="width: 100%"
+                        href="#/CommunityDetail/{{community.Id}}">
+                        <img ng-src="{{community.ThumbnailUrl}}" class="img-thumbnail" />
+                        <label class="small" style="font-weight: 100">{{community.Name}}</label>
+                    </a>
+
                 </div>
             </div>
 
-            <a class="btn btn-info btn-sm" href="javascript:alert('tba')">Create New Community</a>
+            <a class="btn btn-info btn-sm" href="#/AddCommunity">Create New Community</a>
             <div class="clearfix"></div>
             <p>&nbsp;</p>
         </div>
@@ -220,3 +229,4 @@
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
     </div>
+</div>

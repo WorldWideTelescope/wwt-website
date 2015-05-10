@@ -199,8 +199,6 @@ namespace WWTMVC5.Controllers
         /// <param name="contentInputViewModel">ViewModel holding the details about the content</param>
         /// <returns>Returns a redirection view</returns>
         [HttpPost]
-        //
-        //[ValidateAntiForgeryToken]
         [Route("Content/Create/New")]
         public JsonResult New(ContentInputViewModel contentInputViewModel, string id)
         {
@@ -231,7 +229,7 @@ namespace WWTMVC5.Controllers
 
             }
             
-            // In case of any validation error stay in the same page.
+            
             return new JsonResult { Data = contentInputViewModel };
             
         }
@@ -430,23 +428,7 @@ namespace WWTMVC5.Controllers
             return new JsonResult{Data=contentDataViewModel};
         }
 
-        /// <summary>
-        /// Controller action which gets the associated content upload view.
-        /// </summary>
-        [HttpGet]
-        
-        public void AssociatedContent()
-        {
-            try
-            {
-                PartialView("AddAssociatedContentView").ExecuteResult(this.ControllerContext);
-            }
-            catch (Exception)
-            {
-                // Consume the exception and render rest of the views in the page.
-                // TODO: Log the exception?
-            }
-        }
+       
 
         /// <summary>
         /// Controller action which gets the associated content upload view.
@@ -454,42 +436,36 @@ namespace WWTMVC5.Controllers
         /// <param name="associatedFile">HttpPostedFileBase instance</param>
         [HttpPost]
         
-        [ValidateAntiForgeryToken]
-        public void AssociatedContent(HttpPostedFileBase associatedFile)
+        [Route("Content/Add/AssociatedContent")]
+        public JsonResult AssociatedContent(HttpPostedFileBase associatedFile)
         {
-            try
+            
+            if (associatedFile != null)
             {
-                ViewData["PostedFileName"] = string.Empty;
-                ViewData["PostedFileDetail"] = string.Empty;
+                // Get File details.
+                var fileDetail = new FileDetail();
+                fileDetail.SetValuesFrom(associatedFile);
 
-                if (associatedFile != null)
+                string fileName = Path.GetFileNameWithoutExtension(associatedFile.FileName);
+                string fileDetailString = string.Format(
+                    CultureInfo.InvariantCulture,
+                    "{0}~{1}~{2}~{3}~-1",
+                    Path.GetExtension(associatedFile.FileName),
+                    associatedFile.ContentLength,
+                    fileDetail.AzureID,
+                    associatedFile.ContentType);
+
+                // Upload associated file in the temporary container. Once the user publishes the content 
+                //  then we will move the file from temporary container to the actual container.
+                // TODO: Need to have clean up task which will delete all unused file from temporary container.
+                contentService.UploadTemporaryFile(fileDetail);
+                return new JsonResult { Data = new
                 {
-                    // Get File details.
-                    var fileDetail = new FileDetail();
-                    fileDetail.SetValuesFrom(associatedFile);
-
-                    ViewData["PostedFileName"] = Path.GetFileNameWithoutExtension(associatedFile.FileName);
-                    ViewData["PostedFileDetail"] = string.Format(
-                        CultureInfo.InvariantCulture,
-                        "{0}~{1}~{2}~{3}~-1",
-                        Path.GetExtension(associatedFile.FileName),
-                        associatedFile.ContentLength,
-                        fileDetail.AzureID,
-                        associatedFile.ContentType);
-
-                    // Upload associated file in the temporary container. Once the user publishes the content 
-                    //  then we will move the file from temporary container to the actual container.
-                    // TODO: Need to have clean up task which will delete all unused file from temporary container.
-                    this.contentService.UploadTemporaryFile(fileDetail);
-                }
-
-                PartialView("AddAssociatedContentView").ExecuteResult(this.ControllerContext);
+                    fileName,fileDetailString
+                } };
             }
-            catch (Exception)
-            {
-                // Consume the exception and render rest of the views in the page.
-                // TODO: Log the exception?
-            }
+
+            return new JsonResult{Data="error: no file"};
         }
 
         /// <summary>
