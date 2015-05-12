@@ -401,6 +401,7 @@ namespace WWTMVC5.Services
         /// <param name="communityID">Community for which permissions are fetched</param>
         /// <param name="pageDetails">Page for which permissions are fetched</param>
         /// <returns>List of permissions/user roles</returns>
+        
         public PermissionDetails GetUserPemissions(long userID, long communityID, PageDetails pageDetails)
         {
             this.CheckNotNull(() => new { pageDetails });

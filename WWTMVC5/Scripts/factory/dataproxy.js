@@ -18,7 +18,10 @@
             currentUserId: getCurrentUserId,
             createCommunity: createCommunity,
             getCommunityDetail: getCommunityDetail,
-            getCommunityContents: getCommunityContents
+            getCommunityContents: getCommunityContents,
+            saveEditedCommunity: saveEditedCommunity,
+            joinCommunity: joinCommunity,
+            requestResponse: requestResponse
         };
 
         //Enum object with friendly names and values
@@ -26,6 +29,32 @@
         var types,
             currentUserId,
             isAdmin;
+
+        //EntityController.cs [Route("Entity/Types/GetAll")]
+        function getAllTypes() {
+            var deferred = $q.defer();
+            if (types) {
+                $timeout(function () {
+                    deferred.resolve(types);
+                });
+            } else {
+                var url = '/Entity/Types/GetAll';
+                $http.post(url, {}).
+                    success(function (data, status, headers, config) {
+                        data.highlightValues = convertCamel(data.highlightValues);
+                        data.categoryValues = convertCamel(data.categoryValues);
+                        data.contentValues = getFriendlyTypes(data.contentValues);
+                        currentUserId = data.currentUserId;
+                        isAdmin = data.isAdmin;
+                        types = data;
+                        deferred.resolve(types);
+                    }).
+                    error(function (data, status, headers, config) {
+                        handleError(data, status, headers, config, deferred);
+                    });
+            }
+            return deferred.promise;
+        }
 
         //EntityController.cs
         //[Route("Entity/RenderJson/{highlightType}/{entityType}/{categoryType}/{contentType}/{page}/{pageSize}")]
@@ -50,9 +79,13 @@
         }
 
         //CommunityController.cs: [Route("Community/Get/Detail")]
-        function getCommunityDetail(id) {
+        function getCommunityDetail(id, isEdit) {
             var deferred = $q.defer();
-            postHelper('/Community/Get/Detail', { id: id }, deferred, true, true);
+            var data = { id: id };
+            if (isEdit) {
+                data.edit = true;
+            }
+            postHelper('/Community/Get/Detail', data, deferred, true, true, 'community');
             return deferred.promise;
         }
         //CommunityController.cs: [Route("Community/Contents/{communityId}")]
@@ -68,6 +101,13 @@
                 error(function (data, status, headers, config) {
                     handleError(data, status, headers, config, deferred);
                 });
+            return deferred.promise;
+        }
+        //CommunityController.cs: [Route("Community/Join/{communityId}/{userRole}")]
+        function joinCommunity(id, role) {
+            var deferred = $q.defer();
+            postHelper('/Community/Join/' + id + '/' + role, {comments:" "}, deferred);
+           
             return deferred.promise;
         }
 
@@ -92,32 +132,6 @@
             return deferred.promise;
         }
         
-        //EntityController.cs [Route("Entity/Types/GetAll")]
-        function getAllTypes() {
-            var deferred = $q.defer();
-            if (types) {
-                $timeout(function() {
-                    deferred.resolve(types);
-                });
-            } else {
-                var url = '/Entity/Types/GetAll';
-                $http.post(url, {}).
-                    success(function(data, status, headers, config) {
-                        data.highlightValues = convertCamel(data.highlightValues);
-                        data.categoryValues = convertCamel(data.categoryValues);
-                        data.contentValues = getFriendlyTypes(data.contentValues);
-                        currentUserId = data.currentUserId;
-                        isAdmin = data.isAdmin;
-                        types = data;
-                        deferred.resolve(types);
-                    }).
-                    error(function (data, status, headers, config) {
-                        handleError(data, status, headers, config, deferred);
-                    });
-            }
-            return deferred.promise;
-        }
-
         //ProfileController.cs [Route("/Profile/MyProfile/Get")]
         function getMyProfile() {
             var deferred = $q.defer();
@@ -160,7 +174,12 @@
             postHelper('/Community/Permission/ProfileRequests/1', {}, deferred);
             return deferred.promise;
         }
-
+        //CommunityController.cs:[Route("Community/Request/Reponse")]
+        function requestResponse(args) {//args: long entityId, long requestorId, UserRole userRole, PermissionsTab permissionsTab, bool approve
+            var deferred = $q.defer();
+            postHelper('/Community/Request/Reponse', args, deferred);
+            return deferred.promise;
+        }
         //[Route("Content/User/CommunityList")]
         function getUserCommunityList() {
             var deferred = $q.defer();
@@ -168,10 +187,10 @@
             return deferred.promise;
         }
 
-        //[Route("Content/User/CommunityList")]
-        function getUserCommunities() {
+        //CommunityController.cs:[Route("Community/Edit/Save")]
+        function saveEditedCommunity(community) {
             var deferred = $q.defer();
-            postHelper('/Content/User/CommunityList', {}, deferred);
+            postHelper('/Community/Edit/Save', community, deferred);
             return deferred.promise;
         }
         //ContentController.cs[Route("Content/Delete/{id}")]
@@ -210,10 +229,18 @@
                 $http.post(url, data).
                     success(function (data) {
                         if (processData) {
-                            if (processSingle) {
+                            if (processSingle && !member) {
                                 data = dataHelper([data])[0];
                             } else if (member) {
+                                if ($.isArray(member)) {
+                                    $.each(member, function() {
+                                        data[this] = dataHelper(data[this]);
+                                    });
+                                } else if (processSingle) {
+                                    data[member] = dataHelper([data[member]])[0];
+                                } else {
                                     data[member] = dataHelper(data[member]);
+                                }
                             } else {
                                 data = dataHelper(data);
                             }
@@ -240,7 +267,7 @@
         function dataHelper(collection) {
             $.each(collection, function (i, item) {
                 // add webclient url to tours and collections
-                var isCommunity = item.MemberCount != undefined;
+                var isCommunity = item.MemberCount != undefined || item.CommunityType != undefined;
                 if (hasEmptyOrNullGuid(item.ThumbnailID)) {
                     if (isCommunity) {
                         item.ThumbnailUrl = '/Content/Images/defaultcommunitythumbnail.png';
@@ -349,6 +376,11 @@
             deferred.resolve({ error: true, data: data, status: status, headers: headers, config: config });
         };
         //#endregion
+
+        $(window).on('login', function() {
+            types = null;
+            getAllTypes();// this will update user info
+        });
 
         return api;
     }

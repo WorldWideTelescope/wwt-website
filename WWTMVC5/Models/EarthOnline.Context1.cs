@@ -7,29 +7,30 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
-
 namespace WWTMVC5.Models
 {
-    [global::System.CodeDom.Compiler.GeneratedCode("EdmxTool", "1.0.0.0")]
+    using System;
+    using System.Data.Entity;
+    using System.Data.Entity.Infrastructure;
+    
+    [global::System.CodeDom.Compiler.GeneratedCode("EdmxTool", "1.0.0.0")] 
     public partial class EarthOnlineEntities : DbContext
     {
         public EarthOnlineEntities()
             : base("name=EarthOnlineEntities")
         {
         }
-
+    
         public EarthOnlineEntities(string connectionString)
             : base(connectionString)
         {
         }
-
+    
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();
         }
-
+    
         public DbSet<AccessType> AccessType { get; set; }
         public DbSet<Category> Category { get; set; }
         public DbSet<CommunityComments> CommunityComments { get; set; }

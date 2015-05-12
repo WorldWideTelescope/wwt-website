@@ -792,6 +792,14 @@ select, ul.pagination{
 select:hover {
 	.boxhilite();
 }
+select[disabled]{
+    #gradient > .vertical(rgba(255,255,255,.4), rgba(255,255,255,.3)); 
+    border-color:#666;
+    color:#d3d3d3;
+}
+select[disabled]:hover {
+	box-shadow:none;
+}
 ul.pagination{
     padding:0;
     border-color:transparent;

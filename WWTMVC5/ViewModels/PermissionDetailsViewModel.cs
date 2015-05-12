@@ -5,6 +5,7 @@
 //-----------------------------------------------------------------------
 
 using System;
+using Microsoft.IdentityModel.Protocols.WSTrust;
 using WWTMVC5.Models;
 
 namespace WWTMVC5.ViewModels
@@ -23,6 +24,10 @@ namespace WWTMVC5.ViewModels
         /// Gets or sets the requested date
         /// </summary>
         public DateTime Date { get; set; }
+
+
+        public string Requested { get; set; }
+
 
         /// <summary>
         /// Gets or sets the Community Id

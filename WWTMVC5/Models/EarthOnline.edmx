@@ -1,44 +1,44 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
   <!-- EF Runtime content -->
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="EarthOnlineModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="EarthOnlineModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityContainer Name="EarthOnlineModelStoreContainer">
-          <EntitySet Name="AccessType" EntityType="EarthOnlineModel.Store.AccessType" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Category" EntityType="EarthOnlineModel.Store.Category" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Community" EntityType="EarthOnlineModel.Store.Community" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="CommunityComments" EntityType="EarthOnlineModel.Store.CommunityComments" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="CommunityContents" EntityType="EarthOnlineModel.Store.CommunityContents" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="CommunityRatings" EntityType="EarthOnlineModel.Store.CommunityRatings" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="CommunityRelation" EntityType="EarthOnlineModel.Store.CommunityRelation" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="CommunityTags" EntityType="EarthOnlineModel.Store.CommunityTags" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="CommunityType" EntityType="EarthOnlineModel.Store.CommunityType" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Content" EntityType="EarthOnlineModel.Store.Content" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="ContentComments" EntityType="EarthOnlineModel.Store.ContentComments" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="ContentRatings" EntityType="EarthOnlineModel.Store.ContentRatings" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="ContentRelation" EntityType="EarthOnlineModel.Store.ContentRelation" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="ContentRelationshipType" EntityType="EarthOnlineModel.Store.ContentRelationshipType" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="ContentTags" EntityType="EarthOnlineModel.Store.ContentTags" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="ContentType" EntityType="EarthOnlineModel.Store.ContentType" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="FeaturedCommunities" EntityType="EarthOnlineModel.Store.FeaturedCommunities" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="FeaturedContents" EntityType="EarthOnlineModel.Store.FeaturedContents" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="InviteRequest" EntityType="EarthOnlineModel.Store.InviteRequest" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="InviteRequestContent" EntityType="EarthOnlineModel.Store.InviteRequestContent" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="OffenceType" EntityType="EarthOnlineModel.Store.OffenceType" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="OffensiveCommunities" EntityType="EarthOnlineModel.Store.OffensiveCommunities" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="OffensiveContent" EntityType="EarthOnlineModel.Store.OffensiveContent" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="OffensiveStatus" EntityType="EarthOnlineModel.Store.OffensiveStatus" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="PermissionRequest" EntityType="EarthOnlineModel.Store.PermissionRequest" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Role" EntityType="EarthOnlineModel.Store.Role" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="StaticContent" EntityType="EarthOnlineModel.Store.StaticContent" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="StaticContentType" EntityType="EarthOnlineModel.Store.StaticContentType" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Tag" EntityType="EarthOnlineModel.Store.Tag" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="User" EntityType="EarthOnlineModel.Store.User" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="UserCommunities" EntityType="EarthOnlineModel.Store.UserCommunities" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="UserType" EntityType="EarthOnlineModel.Store.UserType" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="AllCommunitiesView" EntityType="EarthOnlineModel.Store.AllCommunitiesView" store:Type="Views" store:Schema="dbo" store:Name="AllCommunitiesView">
+          <EntitySet Name="AccessType" EntityType="EarthOnlineModel.Store.AccessType" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="Category" EntityType="EarthOnlineModel.Store.Category" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="Community" EntityType="EarthOnlineModel.Store.Community" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="CommunityComments" EntityType="EarthOnlineModel.Store.CommunityComments" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="CommunityContents" EntityType="EarthOnlineModel.Store.CommunityContents" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="CommunityRatings" EntityType="EarthOnlineModel.Store.CommunityRatings" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="CommunityRelation" EntityType="EarthOnlineModel.Store.CommunityRelation" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="CommunityTags" EntityType="EarthOnlineModel.Store.CommunityTags" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="CommunityType" EntityType="EarthOnlineModel.Store.CommunityType" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="Content" EntityType="EarthOnlineModel.Store.Content" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="ContentComments" EntityType="EarthOnlineModel.Store.ContentComments" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="ContentRatings" EntityType="EarthOnlineModel.Store.ContentRatings" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="ContentRelation" EntityType="EarthOnlineModel.Store.ContentRelation" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="ContentRelationshipType" EntityType="EarthOnlineModel.Store.ContentRelationshipType" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="ContentTags" EntityType="EarthOnlineModel.Store.ContentTags" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="ContentType" EntityType="EarthOnlineModel.Store.ContentType" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="FeaturedCommunities" EntityType="EarthOnlineModel.Store.FeaturedCommunities" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="FeaturedContents" EntityType="EarthOnlineModel.Store.FeaturedContents" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="InviteRequest" EntityType="EarthOnlineModel.Store.InviteRequest" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="InviteRequestContent" EntityType="EarthOnlineModel.Store.InviteRequestContent" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="OffenceType" EntityType="EarthOnlineModel.Store.OffenceType" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="OffensiveCommunities" EntityType="EarthOnlineModel.Store.OffensiveCommunities" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="OffensiveContent" EntityType="EarthOnlineModel.Store.OffensiveContent" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="OffensiveStatus" EntityType="EarthOnlineModel.Store.OffensiveStatus" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="PermissionRequest" EntityType="EarthOnlineModel.Store.PermissionRequest" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="Role" EntityType="EarthOnlineModel.Store.Role" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="StaticContent" EntityType="EarthOnlineModel.Store.StaticContent" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="StaticContentType" EntityType="EarthOnlineModel.Store.StaticContentType" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="Tag" EntityType="EarthOnlineModel.Store.Tag" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="User" EntityType="EarthOnlineModel.Store.User" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="UserCommunities" EntityType="EarthOnlineModel.Store.UserCommunities" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="UserType" EntityType="EarthOnlineModel.Store.UserType" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="AllCommunitiesView" EntityType="EarthOnlineModel.Store.AllCommunitiesView" store:Type="Views" store:Schema="dbo" store:Name="AllCommunitiesView" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator">
             <DefiningQuery>SELECT 
       [AllCommunitiesView].[CommunityID] AS [CommunityID], 
       [AllCommunitiesView].[CommunityName] AS [CommunityName], 
@@ -63,7 +63,7 @@
       [AllCommunitiesView].[IsOffensive] AS [IsOffensive]
       FROM [dbo].[AllCommunitiesView] AS [AllCommunitiesView]</DefiningQuery>
           </EntitySet>
-          <EntitySet Name="AllContentsView" EntityType="EarthOnlineModel.Store.AllContentsView" store:Type="Views" store:Schema="dbo" store:Name="AllContentsView">
+          <EntitySet Name="AllContentsView" EntityType="EarthOnlineModel.Store.AllContentsView" store:Type="Views" store:Schema="dbo" store:Name="AllContentsView" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator">
             <DefiningQuery>SELECT 
       [AllContentsView].[ContentID] AS [ContentID], 
       [AllContentsView].[CreatedByID] AS [CreatedByID], 
@@ -94,7 +94,7 @@
       [AllContentsView].[IsOffensive] AS [IsOffensive]
       FROM [dbo].[AllContentsView] AS [AllContentsView]</DefiningQuery>
           </EntitySet>
-          <EntitySet Name="CommunitiesView" EntityType="EarthOnlineModel.Store.CommunitiesView" store:Type="Views" store:Schema="dbo" store:Name="CommunitiesView">
+          <EntitySet Name="CommunitiesView" EntityType="EarthOnlineModel.Store.CommunitiesView" store:Type="Views" store:Schema="dbo" store:Name="CommunitiesView" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator">
             <DefiningQuery>SELECT 
       [CommunitiesView].[CommunityID] AS [CommunityID], 
       [CommunitiesView].[CommunityName] AS [CommunityName], 
@@ -117,7 +117,7 @@
       [CommunitiesView].[Tags] AS [Tags]
       FROM [dbo].[CommunitiesView] AS [CommunitiesView]</DefiningQuery>
           </EntitySet>
-          <EntitySet Name="ContentsView" EntityType="EarthOnlineModel.Store.ContentsView" store:Type="Views" store:Schema="dbo" store:Name="ContentsView">
+          <EntitySet Name="ContentsView" EntityType="EarthOnlineModel.Store.ContentsView" store:Type="Views" store:Schema="dbo" store:Name="ContentsView" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator">
             <DefiningQuery>SELECT 
       [ContentsView].[ContentID] AS [ContentID], 
       [ContentsView].[CreatedByID] AS [CreatedByID], 
@@ -146,7 +146,7 @@
       [ContentsView].[Tags] AS [Tags]
       FROM [dbo].[ContentsView] AS [ContentsView]</DefiningQuery>
           </EntitySet>
-          <EntitySet Name="FeaturedCommunitiesView" EntityType="EarthOnlineModel.Store.FeaturedCommunitiesView" store:Type="Views" store:Schema="dbo" store:Name="FeaturedCommunitiesView">
+          <EntitySet Name="FeaturedCommunitiesView" EntityType="EarthOnlineModel.Store.FeaturedCommunitiesView" store:Type="Views" store:Schema="dbo" store:Name="FeaturedCommunitiesView" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator">
             <DefiningQuery>SELECT 
       [FeaturedCommunitiesView].[CommunityID] AS [CommunityID], 
       [FeaturedCommunitiesView].[CommunityName] AS [CommunityName], 
@@ -171,7 +171,7 @@
       [FeaturedCommunitiesView].[SortOrder] AS [SortOrder]
       FROM [dbo].[FeaturedCommunitiesView] AS [FeaturedCommunitiesView]</DefiningQuery>
           </EntitySet>
-          <EntitySet Name="FeaturedContentsView" EntityType="EarthOnlineModel.Store.FeaturedContentsView" store:Type="Views" store:Schema="dbo" store:Name="FeaturedContentsView">
+          <EntitySet Name="FeaturedContentsView" EntityType="EarthOnlineModel.Store.FeaturedContentsView" store:Type="Views" store:Schema="dbo" store:Name="FeaturedContentsView" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator">
             <DefiningQuery>SELECT 
       [FeaturedContentsView].[ContentID] AS [ContentID], 
       [FeaturedContentsView].[CreatedByID] AS [CreatedByID], 
@@ -202,7 +202,7 @@
       [FeaturedContentsView].[SortOrder] AS [SortOrder]
       FROM [dbo].[FeaturedContentsView] AS [FeaturedContentsView]</DefiningQuery>
           </EntitySet>
-          <EntitySet Name="InviteRequestsView" EntityType="EarthOnlineModel.Store.InviteRequestsView" store:Type="Views" store:Schema="dbo" store:Name="InviteRequestsView">
+          <EntitySet Name="InviteRequestsView" EntityType="EarthOnlineModel.Store.InviteRequestsView" store:Type="Views" store:Schema="dbo" store:Name="InviteRequestsView" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator">
             <DefiningQuery>SELECT 
       [InviteRequestsView].[InviteRequestID] AS [InviteRequestID], 
       [InviteRequestsView].[InviteRequestToken] AS [InviteRequestToken], 
@@ -217,7 +217,7 @@
       [InviteRequestsView].[Used] AS [Used]
       FROM [dbo].[InviteRequestsView] AS [InviteRequestsView]</DefiningQuery>
           </EntitySet>
-          <EntitySet Name="SearchView" EntityType="EarthOnlineModel.Store.SearchView" store:Type="Views" store:Schema="dbo" store:Name="SearchView">
+          <EntitySet Name="SearchView" EntityType="EarthOnlineModel.Store.SearchView" store:Type="Views" store:Schema="dbo" store:Name="SearchView" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator">
             <DefiningQuery>SELECT 
       [SearchView].[ID] AS [ID], 
       [SearchView].[Name] AS [Name], 
@@ -243,7 +243,7 @@
       [SearchView].[Users] AS [Users]
       FROM [dbo].[SearchView] AS [SearchView]</DefiningQuery>
           </EntitySet>
-          <EntitySet Name="TopCategoryEntities" EntityType="EarthOnlineModel.Store.TopCategoryEntities" store:Type="Views" store:Schema="dbo" store:Name="TopCategoryEntities">
+          <EntitySet Name="TopCategoryEntities" EntityType="EarthOnlineModel.Store.TopCategoryEntities" store:Type="Views" store:Schema="dbo" store:Name="TopCategoryEntities" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator">
             <DefiningQuery>SELECT 
       [TopCategoryEntities].[ID] AS [ID], 
       [TopCategoryEntities].[Title] AS [Title], 
@@ -2102,8 +2102,8 @@
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="EarthOnlineModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
-        <EntityContainer Name="EarthOnlineEntities" annotation:LazyLoadingEnabled="true">
+      <Schema Namespace="EarthOnlineModel" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2009/11/edm" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+        <EntityContainer Name="EarthOnlineEntities" annotation:LazyLoadingEnabled="true" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
           <EntitySet Name="AccessType" EntityType="EarthOnlineModel.AccessType" />
           <EntitySet Name="Category" EntityType="EarthOnlineModel.Category" />
           <EntitySet Name="CommunityComments" EntityType="EarthOnlineModel.CommunityComments" />
@@ -2430,7 +2430,7 @@
           <Key>
             <PropertyRef Name="AccessTypeID" />
           </Key>
-          <Property Type="Int32" Name="AccessTypeID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="AccessTypeID" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="String" Name="Name" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Description" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Community" Relationship="EarthOnlineModel.AccessType_Community_FK1" FromRole="AccessType" ToRole="Community" />
@@ -2453,7 +2453,7 @@
           <Key>
             <PropertyRef Name="CommunityCommentsID" />
           </Key>
-          <Property Type="Int64" Name="CommunityCommentsID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int64" Name="CommunityCommentsID" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="Int64" Name="CommunityID" Nullable="false" />
           <Property Type="String" Name="Comment" Nullable="false" MaxLength="1050" FixedLength="false" Unicode="true" />
           <Property Type="Int64" Name="CommentedByID" Nullable="false" />
@@ -2480,7 +2480,7 @@
           <Key>
             <PropertyRef Name="CommunityRatingsID" />
           </Key>
-          <Property Type="Int64" Name="CommunityRatingsID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int64" Name="CommunityRatingsID" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="Int64" Name="CommunityID" Nullable="false" />
           <Property Type="Decimal" Name="Rating" Nullable="false" Precision="18" Scale="0" />
           <Property Type="Int64" Name="RatedByID" />
@@ -2516,7 +2516,7 @@
           <Key>
             <PropertyRef Name="ContentCommentsID" />
           </Key>
-          <Property Type="Int64" Name="ContentCommentsID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int64" Name="ContentCommentsID" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="Int64" Name="ContentID" Nullable="false" />
           <Property Type="String" Name="Comment" Nullable="false" MaxLength="1050" FixedLength="false" Unicode="true" />
           <Property Type="Int64" Name="CommentedByID" />
@@ -2532,7 +2532,7 @@
           <Key>
             <PropertyRef Name="ContentRatingsID" />
           </Key>
-          <Property Type="Int64" Name="ContentRatingsID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int64" Name="ContentRatingsID" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="Int64" Name="ContentID" Nullable="false" />
           <Property Type="Decimal" Name="Rating" Nullable="false" Precision="18" Scale="0" />
           <Property Type="Int64" Name="RatingByID" Nullable="false" />
@@ -2596,7 +2596,7 @@
           <Key>
             <PropertyRef Name="OffensiveCommunitiesID" />
           </Key>
-          <Property Type="Int64" Name="OffensiveCommunitiesID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int64" Name="OffensiveCommunitiesID" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="Int32" Name="OffensiveStatusID" Nullable="false" />
           <Property Type="Int64" Name="CommunityID" Nullable="false" />
           <Property Type="Int64" Name="ReportedByID" Nullable="false" />
@@ -2616,7 +2616,7 @@
           <Key>
             <PropertyRef Name="OffensiveContentID" />
           </Key>
-          <Property Type="Int64" Name="OffensiveContentID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int64" Name="OffensiveContentID" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="Int32" Name="OffensiveStatusID" Nullable="false" />
           <Property Type="Int64" Name="ContentID" Nullable="false" />
           <Property Type="Int64" Name="ReportedByID" Nullable="false" />
@@ -2645,7 +2645,7 @@
           <Key>
             <PropertyRef Name="RoleID" />
           </Key>
-          <Property Type="Int32" Name="RoleID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="RoleID" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="String" Name="Name" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Description" MaxLength="1000" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="UserCommunities" Relationship="EarthOnlineModel.Role_UserCommunities_FK1" FromRole="Role" ToRole="UserCommunities" />
@@ -2656,7 +2656,7 @@
           <Key>
             <PropertyRef Name="TagID" />
           </Key>
-          <Property Type="Int32" Name="TagID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="TagID" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="String" Name="Name" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="CommunityTags" Relationship="EarthOnlineModel.Tag_CommunityTags_FK1" FromRole="Tag" ToRole="CommunityTags" />
           <NavigationProperty Name="ContentTags" Relationship="EarthOnlineModel.Tag_ContentTags_FK1" FromRole="Tag" ToRole="ContentTags" />
@@ -2679,7 +2679,7 @@
           <Key>
             <PropertyRef Name="UserTypeID" />
           </Key>
-          <Property Type="Int32" Name="UserTypeID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="UserTypeID" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="String" Name="Name" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Description" MaxLength="1000" FixedLength="false" Unicode="false" />
           <Property Type="Decimal" Name="MaxAllowedSize" Precision="18" Scale="0" />
@@ -2817,7 +2817,7 @@
           <Key>
             <PropertyRef Name="UserID" />
           </Key>
-          <Property Type="Int64" Name="UserID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int64" Name="UserID" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="String" Name="Email" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="LiveID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="FirstName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -3023,7 +3023,7 @@
           <Key>
             <PropertyRef Name="CommunityID" />
           </Key>
-          <Property Type="Int64" Name="CommunityID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int64" Name="CommunityID" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="String" Name="Name" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Description" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="AccessTypeID" />
@@ -3062,7 +3062,7 @@
           <Key>
             <PropertyRef Name="ContentID" />
           </Key>
-          <Property Type="Int64" Name="ContentID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int64" Name="ContentID" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="Int32" Name="TypeID" Nullable="false" />
           <Property Type="String" Name="Title" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Filename" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
@@ -3500,7 +3500,7 @@
           <Key>
             <PropertyRef Name="PermissionRequestID" />
           </Key>
-          <Property Type="Int32" Name="PermissionRequestID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="PermissionRequestID" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="Int64" Name="UserID" Nullable="false" />
           <Property Type="Int64" Name="CommunityID" Nullable="false" />
           <Property Type="Int32" Name="RoleID" Nullable="false" />
@@ -3566,7 +3566,7 @@
           <Key>
             <PropertyRef Name="InviteRequestContentID" />
           </Key>
-          <Property Type="Int32" Name="InviteRequestContentID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="InviteRequestContentID" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="Int64" Name="CommunityID" Nullable="false" />
           <Property Type="Int32" Name="RoleID" Nullable="false" />
           <Property Type="String" Name="Subject" MaxLength="250" FixedLength="false" Unicode="true" />
@@ -3618,7 +3618,7 @@
           <Key>
             <PropertyRef Name="InviteRequestID" />
           </Key>
-          <Property Type="Int32" Name="InviteRequestID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="InviteRequestID" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="Guid" Name="InviteRequestToken" Nullable="false" />
           <Property Type="String" Name="EmailID" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Type="Boolean" Name="Used" />
@@ -3694,7 +3694,7 @@
           <Key>
             <PropertyRef Name="StaticContentID" />
           </Key>
-          <Property Type="Int64" Name="StaticContentID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int64" Name="StaticContentID" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="Int32" Name="TypeID" Nullable="false" />
           <Property Type="String" Name="Content" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Type="Boolean" Name="IsDeleted" />
@@ -3713,7 +3713,7 @@
           <Key>
             <PropertyRef Name="TypeID" />
           </Key>
-          <Property Type="Int32" Name="TypeID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="TypeID" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="String" Name="Name" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Description" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="StaticContent" Relationship="EarthOnlineModel.StaticContentType_StaticContent_FK1" FromRole="StaticContentType" ToRole="StaticContent" />
@@ -3770,7 +3770,7 @@
           <Key>
             <PropertyRef Name="FeaturedCommunitiesID" />
           </Key>
-          <Property Type="Int64" Name="FeaturedCommunitiesID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int64" Name="FeaturedCommunitiesID" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="Int64" Name="CommunityID" Nullable="false" />
           <Property Type="Int32" Name="CategoryID" />
           <Property Type="Int32" Name="SortOrder" />
@@ -3784,7 +3784,7 @@
           <Key>
             <PropertyRef Name="FeaturedContentsID" />
           </Key>
-          <Property Type="Int64" Name="FeaturedContentsID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int64" Name="FeaturedContentsID" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="Int64" Name="ContentID" Nullable="false" />
           <Property Type="Int32" Name="CategoryID" />
           <Property Type="Int32" Name="SortOrder" />
@@ -4074,7 +4074,7 @@
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
-      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="EarthOnlineModelStoreContainer" CdmEntityContainer="EarthOnlineEntities">
           <EntitySetMapping Name="AccessType">
             <EntityTypeMapping TypeName="EarthOnlineModel.AccessType">
@@ -4714,7 +4714,7 @@
     </edmx:Mappings>
   </edmx:Runtime>
   <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
-  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <Connection>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
@@ -4752,13 +4752,13 @@
         <EntityTypeShape EntityType="EarthOnlineModel.Tag" Width="1.5" PointX="13.5" PointY="29.25" Height="1.7879850260416674" />
         <EntityTypeShape EntityType="EarthOnlineModel.UserCommunities" Width="1.5" PointX="5.25" PointY="25.875" Height="2.3648893229166674" />
         <EntityTypeShape EntityType="EarthOnlineModel.UserType" Width="1.5" PointX="9" PointY="28.125" Height="1.980286458333353" />
-        <AssociationConnector Association="EarthOnlineModel.CommunityComments_CommunityComments_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.CommunityComments_CommunityComments_FK1">
           <ConnectorPoint PointX="5.7819230769230767" PointY="24.634095052083335" />
           <ConnectorPoint PointX="5.7819230769230767" PointY="24.884095052083339" />
           <ConnectorPoint PointX="6.2284615384615378" PointY="24.884095052083339" />
           <ConnectorPoint PointX="6.2284615384615378" PointY="24.634095052083335" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.Tag_CommunityTags_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.Tag_CommunityTags_FK1">
           <ConnectorPoint PointX="13.5" PointY="30.315403750026263" />
           <ConnectorPoint PointX="13.333333333333334" PointY="30.315403750026263" />
           <ConnectorPoint PointX="13.104166666666666" PointY="30.315403750026263" />
@@ -4777,18 +4777,18 @@
           <ConnectorPoint PointX="9" PointY="27.875" />
           <ConnectorPoint PointX="9" PointY="27.17258789062501" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.ContentComments_ContentComments_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.ContentComments_ContentComments_FK1">
           <ConnectorPoint PointX="16.5" PointY="24.634095052083325" />
           <ConnectorPoint PointX="16.5" PointY="24.884095052083339" />
           <ConnectorPoint PointX="16.832307692307694" PointY="24.884095052083339" />
           <ConnectorPoint PointX="16.832307692307694" PointY="24.634095052083325" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.FK_ContentRelation_ContentRelationshipType" >
+        <AssociationConnector Association="EarthOnlineModel.FK_ContentRelation_ContentRelationshipType">
           <ConnectorPoint PointX="15" PointY="17.047841796875005" />
           <ConnectorPoint PointX="16.5" PointY="17.047841796875005" />
           <ConnectorPoint PointX="16.5" PointY="17.875" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.Tag_ContentTags_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.Tag_ContentTags_FK1">
           <ConnectorPoint PointX="15" PointY="29.25" />
           <ConnectorPoint PointX="15.375" PointY="28.875" />
           <ConnectorPoint PointX="15.375" PointY="26.715938622119637" />
@@ -4796,7 +4796,7 @@
           <ConnectorPoint PointX="15.583333333333334" PointY="26.715938622119637" />
           <ConnectorPoint PointX="15.75" PointY="26.715938622119637" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.OffensiveType_OffensiveCommunities_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.OffensiveType_OffensiveCommunities_FK1">
           <ConnectorPoint PointX="4.5" PointY="16.893992513020834" />
           <ConnectorPoint PointX="4.56718859415893" PointY="16.893992513020834" />
           <ConnectorPoint PointX="4.7338552608255959" PointY="16.893992513020834" />
@@ -4804,7 +4804,7 @@
           <ConnectorPoint PointX="4.958333333333333" PointY="16.893992513020834" />
           <ConnectorPoint PointX="5.25" PointY="16.893992513020834" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.OffensiveType_OffensiveContent_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.OffensiveType_OffensiveContent_FK1">
           <ConnectorPoint PointX="4.5" PointY="15.96875" />
           <ConnectorPoint PointX="4.56718859415893" PointY="15.96875" />
           <ConnectorPoint PointX="4.7338552608255959" PointY="15.96875" />
@@ -4831,7 +4831,7 @@
           <ConnectorPoint PointX="19.5" PointY="15.96875" />
           <ConnectorPoint PointX="19.5" PointY="17.125" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.OffensiveStatus_OffensiveCommunities_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.OffensiveStatus_OffensiveCommunities_FK1">
           <ConnectorPoint PointX="4.5" PointY="13.129394931891026" />
           <ConnectorPoint PointX="4.6270771614137036" PointY="13.562840589275245" />
           <ConnectorPoint PointX="4.6739666935708222" PointY="13.722775418352166" />
@@ -4841,7 +4841,7 @@
           <ConnectorPoint PointX="4.875" PointY="18.076650390624991" />
           <ConnectorPoint PointX="5.25" PointY="18.076650390624991" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.OffensiveStatus_OffensiveContent_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.OffensiveStatus_OffensiveContent_FK1">
           <ConnectorPoint PointX="4.5" PointY="13.393992513020834" />
           <ConnectorPoint PointX="4.56718859415893" PointY="13.393992513020834" />
           <ConnectorPoint PointX="4.7338552608255959" PointY="13.393992513020834" />
@@ -4866,14 +4866,14 @@
           <ConnectorPoint PointX="19.093747999999998" PointY="15.884095052083332" />
           <ConnectorPoint PointX="19.093747999999998" PointY="17.125" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.Role_UserCommunities_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.Role_UserCommunities_FK1">
           <ConnectorPoint PointX="4.5" PointY="28.961270997330992" />
           <ConnectorPoint PointX="6" PointY="28.961270997330992" />
           <ConnectorPoint PointX="6" PointY="28.432190755208335" />
         </AssociationConnector>
         <EntityTypeShape EntityType="EarthOnlineModel.CommunityType" Width="1.5" PointX="3.375" PointY="7.875" Height="1.595683593749996" />
         <EntityTypeShape EntityType="EarthOnlineModel.User" Width="1.5" PointX="11.25" PointY="25.375" Height="7.9416308593750031" />
-        <AssociationConnector Association="EarthOnlineModel.User_CommunityComments_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.User_CommunityComments_FK1">
           <ConnectorPoint PointX="11.993628720612884" PointY="25.375" />
           <ConnectorPoint PointX="11.993628720612884" PointY="21.6875" />
           <ConnectorPoint PointX="11.733416424409006" PointY="21.6875" />
@@ -4894,7 +4894,7 @@
           <ConnectorPoint PointX="6.7916641666666662" PointY="21.6875" />
           <ConnectorPoint PointX="6.75" PointY="21.6875" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.User_CommunityRatings_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.User_CommunityRatings_FK1">
           <ConnectorPoint PointX="12.371814360306441" PointY="25.375" />
           <ConnectorPoint PointX="12.371814360306441" PointY="20.489963863277069" />
           <ConnectorPoint PointX="11.733416424409006" PointY="20.489963863277069" />
@@ -4905,13 +4905,13 @@
           <ConnectorPoint PointX="9.9166666666666661" PointY="20.489963863277069" />
           <ConnectorPoint PointX="9.75" PointY="20.489963863277069" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.User_CommunityTags_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.User_CommunityTags_FK1">
           <ConnectorPoint PointX="11.25" PointY="26.200578529754768" />
           <ConnectorPoint PointX="10.833333333333334" PointY="26.200578529754768" />
           <ConnectorPoint PointX="10.666666666666666" PointY="26.200578529754768" />
           <ConnectorPoint PointX="9.75" PointY="26.200578529754768" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.User_ContentComments_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.User_ContentComments_FK1">
           <ConnectorPoint PointX="12.75" PointY="26.887693523465391" />
           <ConnectorPoint PointX="12.916666666666666" PointY="26.887693523465391" />
           <ConnectorPoint PointX="13.083333333333334" PointY="26.887693523465391" />
@@ -4924,7 +4924,7 @@
           <ConnectorPoint PointX="16.5" PointY="25.009095052083325" />
           <ConnectorPoint PointX="16.5" PointY="24.634095052083325" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.User_ContentRatings_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.User_ContentRatings_FK1">
           <ConnectorPoint PointX="12.75" PointY="29.592823474010864" />
           <ConnectorPoint PointX="12.916666666666666" PointY="29.592823474010864" />
           <ConnectorPoint PointX="13.083333333333334" PointY="29.592823474010864" />
@@ -4949,7 +4949,7 @@
           <ConnectorPoint PointX="19.767175016612875" PointY="25.125" />
           <ConnectorPoint PointX="19.767175016612875" PointY="24.307190755208339" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.User_ContentTags_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.User_ContentTags_FK1">
           <ConnectorPoint PointX="12.75" PointY="27.494381244239278" />
           <ConnectorPoint PointX="12.916666666666666" PointY="27.494381244239278" />
           <ConnectorPoint PointX="13.083333333333334" PointY="27.494381244239278" />
@@ -4959,7 +4959,7 @@
           <ConnectorPoint PointX="15.583333333333334" PointY="27.494381244239278" />
           <ConnectorPoint PointX="15.75" PointY="27.494381244239278" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.User_OffensiveCommunities_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.User_OffensiveCommunities_FK1">
           <ConnectorPoint PointX="11.25" PointY="25.399230769230769" />
           <ConnectorPoint PointX="10.875" PointY="25.024230769230769" />
           <ConnectorPoint PointX="10.875" PointY="16.656248250000004" />
@@ -4977,7 +4977,7 @@
           <ConnectorPoint PointX="6.7916641666666662" PointY="16.656248250000004" />
           <ConnectorPoint PointX="6.75" PointY="16.656248250000004" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.User_OffensiveCommunities_FK2" >
+        <AssociationConnector Association="EarthOnlineModel.User_OffensiveCommunities_FK2">
           <ConnectorPoint PointX="11.306537461538461" PointY="25.375" />
           <ConnectorPoint PointX="11.03125" PointY="25.099712538461539" />
           <ConnectorPoint PointX="11.03125" PointY="17.11034229687499" />
@@ -4995,7 +4995,7 @@
           <ConnectorPoint PointX="6.7916641666666662" PointY="17.11034229687499" />
           <ConnectorPoint PointX="6.75" PointY="17.11034229687499" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.User_OffensiveContent_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.User_OffensiveContent_FK1">
           <ConnectorPoint PointX="12.75" PointY="32.941270515637825" />
           <ConnectorPoint PointX="13.1875" PointY="32.941270515637825" />
           <ConnectorPoint PointX="13.1875" PointY="28.8828125" />
@@ -5012,7 +5012,7 @@
           <ConnectorPoint PointX="19.791669084980011" PointY="21.403300781249982" />
           <ConnectorPoint PointX="19.791669084980011" PointY="21.028300781249982" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.User_OffensiveContent_FK2" >
+        <AssociationConnector Association="EarthOnlineModel.User_OffensiveContent_FK2">
           <ConnectorPoint PointX="12.75" PointY="30.801694388033965" />
           <ConnectorPoint PointX="13.25" PointY="30.801694388033965" />
           <ConnectorPoint PointX="13.25" PointY="28.875" />
@@ -5027,13 +5027,13 @@
           <ConnectorPoint PointX="19.270834542490007" PointY="21.528300781249982" />
           <ConnectorPoint PointX="19.270834542490007" PointY="21.028300781249982" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.User_User_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.User_User_FK1">
           <ConnectorPoint PointX="11.781923076923077" PointY="35.04734375" />
           <ConnectorPoint PointX="11.781923076923077" PointY="35.29734375" />
           <ConnectorPoint PointX="12.228461538461538" PointY="35.29734375" />
           <ConnectorPoint PointX="12.228461538461538" PointY="35.04734375" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.User_UserCommunities_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.User_UserCommunities_FK1">
           <ConnectorPoint PointX="11.25" PointY="27.492543945312505" />
           <ConnectorPoint PointX="10.833333333333334" PointY="27.492543945312505" />
           <ConnectorPoint PointX="10.666666666666666" PointY="27.492543945312505" />
@@ -5045,13 +5045,13 @@
           <ConnectorPoint PointX="6.7916641666666662" PointY="27.492543945312505" />
           <ConnectorPoint PointX="6.75" PointY="27.492543945312505" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.UserType_User_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.UserType_User_FK1">
           <ConnectorPoint PointX="10.5" PointY="29.115143229166677" />
           <ConnectorPoint PointX="11.25" PointY="29.115143229166677" />
         </AssociationConnector>
         <EntityTypeShape EntityType="EarthOnlineModel.Community" Width="1.5" PointX="13.5" PointY="18.75" Height="7.5570279947916674" />
         <EntityTypeShape EntityType="EarthOnlineModel.Content" Width="1.5" PointX="18.5" PointY="25.375" Height="8.5185351562500031" />
-        <AssociationConnector Association="EarthOnlineModel.AccessType_Community_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.AccessType_Community_FK1">
           <ConnectorPoint PointX="1.5" PointY="24.105286458333339" />
           <ConnectorPoint PointX="1.5" PointY="24.814667083469171" />
           <ConnectorPoint PointX="6.7916641666666671" PointY="24.814667083469171" />
@@ -5072,7 +5072,7 @@
           <ConnectorPoint PointX="13.083333333333334" PointY="24.814667083469171" />
           <ConnectorPoint PointX="13.5" PointY="24.814667083469171" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.AccessType_Content_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.AccessType_Content_FK1">
           <ConnectorPoint PointX="2.25" PointY="23.115143229166669" />
           <ConnectorPoint PointX="2.5625" PointY="23.115143229166669" />
           <ConnectorPoint PointX="2.5625" PointY="24.696595052083325" />
@@ -5109,7 +5109,7 @@
           <ConnectorPoint PointX="19.5229505625" PointY="25.3125" />
           <ConnectorPoint PointX="19.5229505625" PointY="25.375" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.Category_Community_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.Category_Community_FK1">
           <ConnectorPoint PointX="1.5" PointY="18.25" />
           <ConnectorPoint PointX="1.5" PointY="18" />
           <ConnectorPoint PointX="2.4178195128205098" PointY="18" />
@@ -5142,7 +5142,7 @@
           <ConnectorPoint PointX="13.125" PointY="20.595560590503403" />
           <ConnectorPoint PointX="13.5" PointY="20.595560590503403" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.Category_Content_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.Category_Content_FK1">
           <ConnectorPoint PointX="2.25" PointY="18.875578923076922" />
           <ConnectorPoint PointX="2.578125" PointY="18.875578923076922" />
           <ConnectorPoint PointX="2.578125" PointY="24.696595052083325" />
@@ -5179,7 +5179,7 @@
           <ConnectorPoint PointX="19.253173843749998" PointY="25.3125" />
           <ConnectorPoint PointX="19.253173843749998" PointY="25.375" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.Community_CommunityComments_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.Community_CommunityComments_FK1">
           <ConnectorPoint PointX="13.5" PointY="24.557190755208332" />
           <ConnectorPoint PointX="12.455147693639775" PointY="24.557190755208332" />
           <ConnectorPoint PointX="12.288481026973107" PointY="24.557190755208332" />
@@ -5197,7 +5197,7 @@
           <ConnectorPoint PointX="6.7916641666666662" PointY="24.557190755208332" />
           <ConnectorPoint PointX="6.75" PointY="24.557190755208332" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.Community_CommunityRatings_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.Community_CommunityRatings_FK1">
           <ConnectorPoint PointX="13.5" PointY="19.217445073892176" />
           <ConnectorPoint PointX="11.733416424409006" PointY="19.217445073892176" />
           <ConnectorPoint PointX="11.566749757742338" PointY="19.217445073892176" />
@@ -5205,7 +5205,7 @@
           <ConnectorPoint PointX="10.791666666666666" PointY="19.217445073892176" />
           <ConnectorPoint PointX="9.75" PointY="19.217445073892176" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.Community_CommunityRelation_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.Community_CommunityRelation_FK1">
           <ConnectorPoint PointX="13.5" PointY="23.738558329757804" />
           <ConnectorPoint PointX="12.455147693639775" PointY="23.738558329757804" />
           <ConnectorPoint PointX="12.288481026973107" PointY="23.738558329757804" />
@@ -5234,7 +5234,7 @@
           <ConnectorPoint PointX="5.7968740000000007" PointY="31.625" />
           <ConnectorPoint PointX="5.7968740000000007" PointY="32" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.Community_CommunityRelation_FK2" >
+        <AssociationConnector Association="EarthOnlineModel.Community_CommunityRelation_FK2">
           <ConnectorPoint PointX="13.5" PointY="19.884956968584618" />
           <ConnectorPoint PointX="11.733416424409006" PointY="19.884956968584618" />
           <ConnectorPoint PointX="11.566749757742338" PointY="19.884956968584618" />
@@ -5255,7 +5255,7 @@
           <ConnectorPoint PointX="6.304689" PointY="31.5" />
           <ConnectorPoint PointX="6.304689" PointY="32" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.Community_CommunityTags_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.Community_CommunityTags_FK1">
           <ConnectorPoint PointX="13.5" PointY="25.28125" />
           <ConnectorPoint PointX="13.083333333333334" PointY="25.28125" />
           <ConnectorPoint PointX="12.916666666666666" PointY="25.28125" />
@@ -5271,7 +5271,7 @@
           <ConnectorPoint PointX="10.666666666666666" PointY="25.28125" />
           <ConnectorPoint PointX="9.75" PointY="25.28125" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.Community_CommunityToContentRelation_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.Community_CommunityToContentRelation_FK1">
           <ConnectorPoint PointX="13.5" PointY="22.869279164878904" />
           <ConnectorPoint PointX="12.455147693639775" PointY="22.869279164878904" />
           <ConnectorPoint PointX="12.288481026973107" PointY="22.869279164878904" />
@@ -5285,7 +5285,7 @@
           <ConnectorPoint PointX="9.9166666666666661" PointY="22.869279164878904" />
           <ConnectorPoint PointX="9.75" PointY="22.869279164878904" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.Community_OffensiveCommunities_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.Community_OffensiveCommunities_FK1">
           <ConnectorPoint PointX="14.25" PointY="18.75" />
           <ConnectorPoint PointX="14.25" PointY="16.1874995" />
           <ConnectorPoint PointX="10.833333333333334" PointY="16.1874995" />
@@ -5302,7 +5302,7 @@
           <ConnectorPoint PointX="6.7916641666666662" PointY="16.1874995" />
           <ConnectorPoint PointX="6.75" PointY="16.1874995" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.Community_UserCommunities_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.Community_UserCommunities_FK1">
           <ConnectorPoint PointX="13.5" PointY="18.75" />
           <ConnectorPoint PointX="13.125" PointY="18.375" />
           <ConnectorPoint PointX="11.733416424409006" PointY="18.375" />
@@ -5319,7 +5319,7 @@
           <ConnectorPoint PointX="6.81607193490112" PointY="25.810080911252722" />
           <ConnectorPoint PointX="6.75" PointY="25.876152846153843" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.CommunityType_Community_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.CommunityType_Community_FK1">
           <ConnectorPoint PointX="4.6505219274922629" PointY="9.470683593749996" />
           <ConnectorPoint PointX="4.6505219274922629" PointY="24.783414583469177" />
           <ConnectorPoint PointX="5.6985897435897437" PointY="24.783414583469177" />
@@ -5344,25 +5344,25 @@
           <ConnectorPoint PointX="13.083333333333334" PointY="24.783414583469177" />
           <ConnectorPoint PointX="13.5" PointY="24.783414583469177" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.User_Community_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.User_Community_FK1">
           <ConnectorPoint PointX="12.75" PointY="25.937423445920668" />
           <ConnectorPoint PointX="12.916666666666666" PointY="25.937423445920668" />
           <ConnectorPoint PointX="13.083333333333334" PointY="25.937423445920668" />
           <ConnectorPoint PointX="13.5" PointY="25.937423445920668" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.User_Community_FK2" >
+        <AssociationConnector Association="EarthOnlineModel.User_Community_FK2">
           <ConnectorPoint PointX="12.75" PointY="26.18472572035617" />
           <ConnectorPoint PointX="12.916666666666666" PointY="26.18472572035617" />
           <ConnectorPoint PointX="13.083333333333334" PointY="26.18472572035617" />
           <ConnectorPoint PointX="13.5" PointY="26.18472572035617" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.User_Community_FK4" >
+        <AssociationConnector Association="EarthOnlineModel.User_Community_FK4">
           <ConnectorPoint PointX="12.75" PointY="25.593711722960336" />
           <ConnectorPoint PointX="12.916666666666666" PointY="25.593711722960336" />
           <ConnectorPoint PointX="13.083333333333334" PointY="25.593711722960336" />
           <ConnectorPoint PointX="13.5" PointY="25.593711722960336" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.Content_CommunityToContentRelation_FK2" >
+        <AssociationConnector Association="EarthOnlineModel.Content_CommunityToContentRelation_FK2">
           <ConnectorPoint PointX="18.5" PointY="26.789416945312496" />
           <ConnectorPoint PointX="18.333333333333332" PointY="26.789416945312496" />
           <ConnectorPoint PointX="18.041666666666668" PointY="26.789416945312496" />
@@ -5385,7 +5385,7 @@
           <ConnectorPoint PointX="9" PointY="24.480286458333339" />
           <ConnectorPoint PointX="9" PointY="24.105286458333339" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.Content_ContentComments_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.Content_ContentComments_FK1">
           <ConnectorPoint PointX="18.983397125" PointY="25.375" />
           <ConnectorPoint PointX="18.983397125" PointY="24.501892903645832" />
           <ConnectorPoint PointX="18.657304614583332" PointY="24.501892903645832" />
@@ -5396,25 +5396,25 @@
           <ConnectorPoint PointX="17.729166666666668" PointY="24.501892903645832" />
           <ConnectorPoint PointX="17.25" PointY="24.501892903645832" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.Content_ContentRatings_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.Content_ContentRatings_FK1">
           <ConnectorPoint PointX="19.206950477401143" PointY="25.375" />
           <ConnectorPoint PointX="19.206950477401143" PointY="24.307190755208339" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.Content_ContentRelation_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.Content_ContentRelation_FK1">
           <ConnectorPoint PointX="18.57397128125" PointY="25.375" />
           <ConnectorPoint PointX="18.57397128125" PointY="19.679918992187503" />
           <ConnectorPoint PointX="17.895833333333332" PointY="19.679918992187503" />
           <ConnectorPoint PointX="17.729166666666668" PointY="19.679918992187503" />
           <ConnectorPoint PointX="17.25" PointY="19.679918992187503" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.Content_ContentRelation_FK2" >
+        <AssociationConnector Association="EarthOnlineModel.Content_ContentRelation_FK2">
           <ConnectorPoint PointX="18.57397128125" PointY="25.375" />
           <ConnectorPoint PointX="18.57397128125" PointY="19.057444661458334" />
           <ConnectorPoint PointX="17.895833333333332" PointY="19.057444661458334" />
           <ConnectorPoint PointX="17.729166666666668" PointY="19.057444661458334" />
           <ConnectorPoint PointX="17.25" PointY="19.057444661458334" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.Content_ContentTags_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.Content_ContentTags_FK1">
           <ConnectorPoint PointX="18.5" PointY="27.086293945312491" />
           <ConnectorPoint PointX="18.333333333333332" PointY="27.086293945312491" />
           <ConnectorPoint PointX="18.041666666666668" PointY="27.086293945312491" />
@@ -5424,7 +5424,7 @@
           <ConnectorPoint PointX="17.416666666666668" PointY="27.086293945312491" />
           <ConnectorPoint PointX="17.25" PointY="27.086293945312491" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.Content_OffensiveContent_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.Content_OffensiveContent_FK1">
           <ConnectorPoint PointX="19.478461538461538" PointY="25.375" />
           <ConnectorPoint PointX="19.284351033225754" PointY="25.059297285506975" />
           <ConnectorPoint PointX="19.284351033225754" PointY="24.753535023257207" />
@@ -5438,7 +5438,7 @@
           <ConnectorPoint PointX="18.657304614583332" PointY="21.028300781249982" />
           <ConnectorPoint PointX="18.75" PointY="21.028300781249982" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.ContentType_Content_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.ContentType_Content_FK1">
           <ConnectorPoint PointX="12.75" PointY="17.047841796874991" />
           <ConnectorPoint PointX="13.25" PointY="17.047841796874991" />
           <ConnectorPoint PointX="13.25" PointY="18.09568359375001" />
@@ -5455,7 +5455,7 @@
           <ConnectorPoint PointX="18.778684203125" PointY="24.96875" />
           <ConnectorPoint PointX="18.778684203125" PointY="25.375" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.User_Content_FK2" >
+        <AssociationConnector Association="EarthOnlineModel.User_Content_FK2">
           <ConnectorPoint PointX="12.75" PointY="29.037109375" />
           <ConnectorPoint PointX="12.916666666666666" PointY="29.037109375" />
           <ConnectorPoint PointX="13.083333333333334" PointY="29.037109375" />
@@ -5469,7 +5469,7 @@
           <ConnectorPoint PointX="17.895833333333332" PointY="29.037109375" />
           <ConnectorPoint PointX="18.5" PointY="29.037109375" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.User_Content_FK3" >
+        <AssociationConnector Association="EarthOnlineModel.User_Content_FK3">
           <ConnectorPoint PointX="12.75" PointY="28.648793945312491" />
           <ConnectorPoint PointX="12.916666666666666" PointY="28.648793945312491" />
           <ConnectorPoint PointX="13.083333333333334" PointY="28.648793945312491" />
@@ -5483,7 +5483,7 @@
           <ConnectorPoint PointX="18.333333333333332" PointY="28.648793945312491" />
           <ConnectorPoint PointX="18.5" PointY="28.648793945312491" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.User_Content_FK4" >
+        <AssociationConnector Association="EarthOnlineModel.User_Content_FK4">
           <ConnectorPoint PointX="12.75" PointY="28.266337890624982" />
           <ConnectorPoint PointX="12.916666666666666" PointY="28.266337890624982" />
           <ConnectorPoint PointX="13.083333333333334" PointY="28.266337890624982" />
@@ -5502,13 +5502,13 @@
         <EntityTypeShape EntityType="EarthOnlineModel.CommunitiesView" Width="1.5" PointX="0.75" PointY="0.75" Height="4.6725065104166656" />
         <EntityTypeShape EntityType="EarthOnlineModel.ContentsView" Width="1.5" PointX="2.75" PointY="0.75" Height="5.8263151041666656" />
         <EntityTypeShape EntityType="EarthOnlineModel.PermissionRequest" Width="1.5" PointX="15.75" PointY="29.125" Height="3.5186979166666639" />
-        <AssociationConnector Association="EarthOnlineModel.Community_PermissionRequest_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.Community_PermissionRequest_FK1">
           <ConnectorPoint PointX="15" PointY="26.244719302483976" />
           <ConnectorPoint PointX="15.4375" PointY="26.682219302483976" />
           <ConnectorPoint PointX="15.4375" PointY="29.693967825680957" />
           <ConnectorPoint PointX="15.75" PointY="29.693967825680957" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.Role_PermissionRequest_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.Role_PermissionRequest_FK1">
           <ConnectorPoint PointX="3.75" PointY="30.422587890625003" />
           <ConnectorPoint PointX="3.75" PointY="35.103089192708339" />
           <ConnectorPoint PointX="13.25" PointY="35.103089192708339" />
@@ -5517,20 +5517,20 @@
           <ConnectorPoint PointX="15.125" PointY="30.329639291581998" />
           <ConnectorPoint PointX="15.75" PointY="30.329639291581998" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.User_PermissionRequest_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.User_PermissionRequest_FK1">
           <ConnectorPoint PointX="12.75" PointY="31.588383302723791" />
           <ConnectorPoint PointX="13.041666666666666" PointY="31.588383302723791" />
           <ConnectorPoint PointX="13.333333333333334" PointY="31.588383302723791" />
           <ConnectorPoint PointX="15.75" PointY="31.588383302723791" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.User_PermissionRequest_FK2" >
+        <AssociationConnector Association="EarthOnlineModel.User_PermissionRequest_FK2">
           <ConnectorPoint PointX="12.75" PointY="31.887941651361896" />
           <ConnectorPoint PointX="13.041666666666666" PointY="31.887941651361896" />
           <ConnectorPoint PointX="13.333333333333334" PointY="31.887941651361896" />
           <ConnectorPoint PointX="15.75" PointY="31.887941651361896" />
         </AssociationConnector>
         <EntityTypeShape EntityType="EarthOnlineModel.InviteRequestContent" Width="1.5" PointX="6.0353920133949215" PointY="12.49476522789093" />
-        <AssociationConnector Association="EarthOnlineModel.InviteRequestContent_Community_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.InviteRequestContent_Community_FK1">
           <ConnectorPoint PointX="13.5" PointY="21.403595377604169" />
           <ConnectorPoint PointX="13.208333333333334" PointY="21.403595377604169" />
           <ConnectorPoint PointX="13.041666666666666" PointY="21.403595377604169" />
@@ -5551,26 +5551,26 @@
           <ConnectorPoint PointX="7.3593775" PointY="21.403595377604169" />
           <ConnectorPoint PointX="7.3593775" PointY="15.634095052083332" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.InviteRequestContent_Role_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.InviteRequestContent_Role_FK1">
           <ConnectorPoint PointX="4.5" PointY="29.80079260317661" />
           <ConnectorPoint PointX="6.90625" PointY="29.80079260317661" />
           <ConnectorPoint PointX="6.90625" PointY="15.634095052083332" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.InviteRequestContent_User_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.InviteRequestContent_User_FK1">
           <ConnectorPoint PointX="11.25" PointY="34.545065104166667" />
           <ConnectorPoint PointX="7.15625" PointY="34.545065104166667" />
           <ConnectorPoint PointX="7.15625" PointY="15.634095052083332" />
         </AssociationConnector>
         <EntityTypeShape EntityType="EarthOnlineModel.InviteRequest" Width="1.5" PointX="1.2214841717954186" PointY="30.382828473291745" />
         <EntityTypeShape EntityType="EarthOnlineModel.InviteRequestsView" Width="1.5" PointX="0.776889849815932" PointY="13.045944085831728" />
-        <AssociationConnector Association="EarthOnlineModel.InviteRequest_InviteRequestContent_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.InviteRequest_InviteRequestContent_FK1">
           <ConnectorPoint PointX="6.8749975" PointY="15.634095052083332" />
           <ConnectorPoint PointX="6.8749975" PointY="30.879818435058596" />
           <ConnectorPoint PointX="3.8333333333333335" PointY="30.879818435058596" />
           <ConnectorPoint PointX="3.6666666666666665" PointY="30.879818435058596" />
           <ConnectorPoint PointX="2.75" PointY="30.879818435058596" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.InviteRequest_User_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.InviteRequest_User_FK1">
           <ConnectorPoint PointX="11.25" PointY="30.6199531628418" />
           <ConnectorPoint PointX="8.1458349996507486" PointY="30.6199531628418" />
           <ConnectorPoint PointX="7.9791683329840817" PointY="30.6199531628418" />
@@ -5580,7 +5580,7 @@
           <ConnectorPoint PointX="3.6666666666666665" PointY="30.6199531628418" />
           <ConnectorPoint PointX="2.75" PointY="30.6199531628418" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.InviteRequest_User_FK2" >
+        <AssociationConnector Association="EarthOnlineModel.InviteRequest_User_FK2">
           <ConnectorPoint PointX="11.25" PointY="31.189909217529298" />
           <ConnectorPoint PointX="8.1458349996507486" PointY="31.189909217529298" />
           <ConnectorPoint PointX="7.9791683329840817" PointY="31.189909217529298" />
@@ -5592,24 +5592,24 @@
         </AssociationConnector>
         <EntityTypeShape EntityType="EarthOnlineModel.StaticContent" Width="1.5" PointX="13.5" PointY="32.125" Height="3.7109993489583246" />
         <EntityTypeShape EntityType="EarthOnlineModel.StaticContentType" Width="1.5" PointX="11.25" PointY="36" Height="1.7879850260416674" />
-        <AssociationConnector Association="EarthOnlineModel.StaticContentType_StaticContent_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.StaticContentType_StaticContent_FK1">
           <ConnectorPoint PointX="12.75" PointY="36.893992513020834" />
           <ConnectorPoint PointX="14.25" PointY="36.893992513020834" />
           <ConnectorPoint PointX="14.25" PointY="35.835999348958325" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.User_StaticContent_FK2" >
+        <AssociationConnector Association="EarthOnlineModel.User_StaticContent_FK2">
           <ConnectorPoint PointX="12.75" PointY="32.616170193022135" />
           <ConnectorPoint PointX="13.041666666666666" PointY="32.616170193022135" />
           <ConnectorPoint PointX="13.333333333333334" PointY="32.616170193022135" />
           <ConnectorPoint PointX="13.5" PointY="32.616170193022135" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.User_StaticContent_FK3" >
+        <AssociationConnector Association="EarthOnlineModel.User_StaticContent_FK3">
           <ConnectorPoint PointX="12.75" PointY="34.47948915875412" />
           <ConnectorPoint PointX="13.166666666666666" PointY="34.47948915875412" />
           <ConnectorPoint PointX="13.333333333333334" PointY="34.47948915875412" />
           <ConnectorPoint PointX="13.5" PointY="34.47948915875412" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.User_StaticContent_FK4" >
+        <AssociationConnector Association="EarthOnlineModel.User_StaticContent_FK4">
           <ConnectorPoint PointX="12.75" PointY="33.855914772399196" />
           <ConnectorPoint PointX="13.166666666666666" PointY="33.855914772399196" />
           <ConnectorPoint PointX="13.333333333333334" PointY="33.855914772399196" />
@@ -5619,7 +5619,7 @@
         <EntityTypeShape EntityType="EarthOnlineModel.FeaturedContents" Width="1.5" PointX="8.375" PointY="1.875" Height="2.7494921874999996" />
         <EntityTypeShape EntityType="EarthOnlineModel.FeaturedCommunitiesView" Width="1.5" PointX="2.6043303118107515" PointY="19.445412331933813" />
         <EntityTypeShape EntityType="EarthOnlineModel.FeaturedContentsView" Width="1.5" PointX="1.125" PointY="36" Height="6.2109179687500031" />
-        <AssociationConnector Association="EarthOnlineModel.Category_FeaturedCommunities_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.Category_FeaturedCommunities_FK1">
           <ConnectorPoint PointX="2.25" PointY="18.251152846153843" />
           <ConnectorPoint PointX="2.625" PointY="17.876152846153843" />
           <ConnectorPoint PointX="2.625" PointY="10.328837390624999" />
@@ -5627,7 +5627,7 @@
           <ConnectorPoint PointX="4.7338552608255959" PointY="10.328837390624999" />
           <ConnectorPoint PointX="7.125" PointY="10.328837390624999" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.Category_FeaturedContents_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.Category_FeaturedContents_FK1">
           <ConnectorPoint PointX="2.25" PointY="19.896654360459817" />
           <ConnectorPoint PointX="2.5625" PointY="19.896654360459817" />
           <ConnectorPoint PointX="2.5625" PointY="19.4375" />
@@ -5650,7 +5650,7 @@
           <ConnectorPoint PointX="9" PointY="16.0625" />
           <ConnectorPoint PointX="9" PointY="4.6244921875" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.Community_FeaturedCommunities_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.Community_FeaturedCommunities_FK1">
           <ConnectorPoint PointX="13.5" PointY="21.576800188802078" />
           <ConnectorPoint PointX="13.208333333333334" PointY="21.576800188802078" />
           <ConnectorPoint PointX="13.041666666666666" PointY="21.576800188802078" />
@@ -5667,7 +5667,7 @@
           <ConnectorPoint PointX="7.8749983331587075" PointY="21.576800188802078" />
           <ConnectorPoint PointX="7.8749983331587075" PointY="11.1244921875" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.Content_FeaturedContents_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.Content_FeaturedContents_FK1">
           <ConnectorPoint PointX="18.5" PointY="31.496574265624997" />
           <ConnectorPoint PointX="17.8125" PointY="31.496574265624997" />
           <ConnectorPoint PointX="17.8125" PointY="11.05710937500001" />
@@ -5676,12 +5676,12 @@
           <ConnectorPoint PointX="8.968751" PointY="11.05710937500001" />
           <ConnectorPoint PointX="8.968751" PointY="4.6244921875" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.User_FeaturedCommunities_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.User_FeaturedCommunities_FK1">
           <ConnectorPoint PointX="11.25" PointY="32.867487160847986" />
           <ConnectorPoint PointX="8.0625016663174147" PointY="32.867487160847986" />
           <ConnectorPoint PointX="8.0625016663174147" PointY="11.1244921875" />
         </AssociationConnector>
-        <AssociationConnector Association="EarthOnlineModel.User_FeaturedContents_FK1" >
+        <AssociationConnector Association="EarthOnlineModel.User_FeaturedContents_FK1">
           <ConnectorPoint PointX="11.650083091075672" PointY="25.375" />
           <ConnectorPoint PointX="11.650083091075672" PointY="18.095683593749982" />
           <ConnectorPoint PointX="11.114583333333334" PointY="18.095683593749982" />

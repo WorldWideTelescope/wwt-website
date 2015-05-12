@@ -5,8 +5,8 @@
     '$routeParams',
     'UIHelper',
     'FileUploader',
-    function ($scope, dataproxy, $timeout, $routeParams, uiHelper, fileUploader) {
-        $scope.isEdit = $routeParams && $routeParams.communityId && parseInt($routeParams.communityId) > 0;
+    '$q',
+    function ($scope, dataproxy, $timeout, $routeParams, uiHelper, fileUploader,$q) {
         
         $scope.thumbuploader = new fileUploader({
             url: "/Entity/AddThumbnail/Community",
@@ -25,74 +25,98 @@
                 $scope.community.ThumbnailID = response.ThumbnailID;
             });
         }
-        
 
         function init() {
             uiHelper.fixLinks('profileLink');
-            
-            dataproxy.getAllTypes().then(function (types) {
-                $scope.types = types;
-                console.log(types);
-                dataproxy.getUserCommunityList().then(function (data) {
-                    
-                    $.each(data, function (i, item) {
-                        item.val = item.Value;
-                    });
-                    $scope.communities = data;
-                    if (!data.length) {
-                        location.href = '#/';
-                        return;
-                    }
-                    if ($scope.isEdit) {
-                        dataproxy.getEditCommunity($routeParams.communityId)
-                            .then(function (community) {
-                                $scope.content = community;
-                                
-                                setTimeout(function () { $('#lstCommunity').val(community.ParentID); }, 100);
+            $scope.isEdit = positiveIntParamExists('communityId');
+            $scope.isChildCommunity = positiveIntParamExists('parentId');
+            $q.all([dataproxy.getAllTypes(), dataproxy.getUserCommunityList()]).then(function(response) {
+                $scope.types = response[0];
+                var communityList = response[1];
+                $.each(communityList, function (i, item) {
+                    item.val = item.Value;
+                });
+                $scope.communities = communityList;
+                if (!communityList.length) {
+                    location.href = '#/';
+                    return;
+                }
+                var setAndDisableParentDropdown = function(parentId) {
+                    $('#lstCommunity').val(parentId);
+                    $('#lstCommunity').prop('disabled', true);
+                }
+                if ($scope.isEdit) {
+                    dataproxy.getCommunityDetail($routeParams.communityId, true)
+                        .then(function(community) {
+                            //community.CategoryID = community.Category;
+                            //community.AccessTypeID = community.AccessType;
+                            delete community.ParentList;
+                            delete community.CategoryList;
+                            $scope.community = community;
 
-                            });
-                    } else {
+                            setTimeout(function() {
+                                setAndDisableParentDropdown(community.ParentID);
+                            }, 100);
 
-                        $timeout(function () {
-                            $scope.community = {
-                                CategoryID: 9,
-                                ParentID: '?',
-                                AccessTypeID: 2,
-                                IsOffensive: false,
-                                IsLink: false,
-                                CommunityType:'Community'
-                            };
-                            $scope.CategoryName = "General Interest";
-                            $timeout(function () {
+                        });
+                } else {
+
+                    $timeout(function() {
+                        $scope.community = {
+                            CategoryID: 9,
+                            ParentID: '?',
+                            AccessTypeID: 2,
+                            IsOffensive: false,
+                            IsLink: false,
+                            CommunityType: 'Community'
+                        };
+                        $scope.CategoryName = "General Interest";
+                        if ($scope.isChildCommunity) {
+                            setAndDisableParentDropdown($scope.parentId);
+                        } else {
+                            $timeout(function() {
                                 var opt = $('#lstCommunity option[label="None"]').first();
                                 opt.prop('selected', true);
                                 $('#lstCommunity').trigger('change');
                             }, 500);
-
-                        }, 100);
-                    }
-
-                });
-
+                        }
+                    }, 100);
+                }
             });
+            
 
         }
 
+
+        var positiveIntParamExists = function (param) {
+            var exists = $routeParams && $routeParams[param] && parseInt($routeParams[param]) > 0;
+            if (exists) {
+                $scope[param] = $routeParams[param];
+            }
+            return exists;
+        }
+
+
         $scope.saveEditedCommunity = function () {
-            $scope.community.ParentID = $scope.community.ParentID.val;
+            if (!$scope.isEdit) {
+                $scope.community.ParentID = positiveIntParamExists('parentId') ? $routeParams.parentId : $scope.community.ParentID.val;
+            }
             console.log($scope.community);
 
             dataproxy.saveEditedCommunity($scope.community)
                 .then(function (response) {
                     console.log(this, arguments);
-                    if (!response.error) {
-                        location.href = '#/CommunityDetail/' + response.ID;
+                    if (!response.error && response.id) {
+                        location.href = '#/CommunityDetail/' + response.id;
+                    }
+                    else {
+                        bootbox.dialog("There was an error saving changes to this community.");
                     }
                 });
         };
 
         $scope.createCommunity = function () {
-            $scope.community.ParentID = $scope.community.ParentID.val;
+            $scope.community.ParentID = $scope.isChildCommunity ? $routeParams.parentId : $scope.community.ParentID.val;
             console.log($scope.community);
             dataproxy.createCommunity($scope.community)
                 .then(function (response) {

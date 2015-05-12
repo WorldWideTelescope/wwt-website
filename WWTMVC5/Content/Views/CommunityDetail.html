@@ -1,18 +1,17 @@
 ﻿
-<div ng-cloak ng-show="community" class="community-detail">
+<div ng-cloak ng-show="community" class="community-detail" ng-show="community">
 
-    <h1 style="margin-bottom: 28px">{{community.Name}} (Community)</h1>
+    <a class="thumbnail pull-left" title="{{community.Name}}" style="margin-right:10px">
+
+        <img ng-src="{{community.ThumbnailUrl}}" class="img-thumbnail"/>
+
+    </a><h1 style="margin-bottom: 28px">{{community.Name}} (Community)</h1>
     <em class="text-muted small rel" style="top:-20px">Updated {{community.LastUpdated}}</em>
     <div class="row">
         <div class="col-md-6">
 
-            <a class="thumbnail pull-left" title="{{community.Name}}">
-
-                <img ng-src="{{community.ThumbnailUrl}}" class="img-thumbnail" />
-
-            </a>
-
-            <ul class="iblock" style="list-style: none">
+            <ul class="iblock" style="list-style: none; padding-left: 0">
+                <li><strong>Members:</strong> {{community.MemberCount + 1}}</li>
                 <li><strong>Created by:</strong> {{community.Producer}}</li>
                 <li><strong>Category:</strong> {{community.ParentName}}</li>
                 <li><strong>Type:</strong> {{community.ContentTypeName}}</li>
@@ -32,63 +31,60 @@
     </div>
 
 
-    <div class="row">
-        <div class="col-md-12">
-            <ul class="nav nav-tabs">
-                <li class="{{options.activeTab == 'contents' ? 'active' : ''}}" ng-click="tabChange('contents')">
-                    <a href="javascript:void(0)" data-toggle="tab">
-                        Contents
-                        <span ng-if="community.contents">({{community.contents.length}})</span>
-                        <span ng-if="!community.contents">(0)</span>
+    
+    <ul class="nav nav-tabs">
+        <li class="{{options.activeTab == 'contents' ? 'active' : ''}}" ng-click="tabChange('contents')">
+            <a href="javascript:void(0)" data-toggle="tab">
+                Contents
+                <span ng-if="community.contents">({{community.contents.length}})</span>
+                <span ng-if="!community.contents">(0)</span>
+            </a>
+        </li>
+        <li class="{{options.activeTab == 'communities' ? 'active' : ''}}" ng-click="tabChange('communities')">
+            <a href="javascript:void(0)" data-toggle="tab">
+                Sub Communities
+                <span ng-if="community.communities">({{community.communities.length}})</span>
+                <span ng-if="!community.communities">(0)</span>
+            </a>
+        </li>
+    </ul>
+        
+    <div class="tab-content">
+        <div class="tab-pane {{options.activeTab == 'contents' ? 'active' : 'hide'}}">
+            <div ng-show="community.contents == null">
+                <p>&nbsp;</p>
+                <p>
+                    <em>You have not added any content yet</em>
+                </p>
+
+            </div>
+            <div class="row">
+                <div class="col-lg-2 col-sm-3 col-xs-6" ng-repeat="entity in community.contents">
+                    <a class="thumbnail"
+                       data-placement="top"
+                       data-auto-close="true"
+                       title="{{entity.Name}}"
+                       style="width: 100%"
+                       content-template="/Content/Views/ContentPreview.html" bs-popover
+                       data-trigger="hover"
+                       href="#/ContentDetail/{{entity.Id}}">
+                        <span class="typeicon" title="{{entity.ContentTypeName}}" bs-tooltip>
+                            <i class="spriteicon {{entity.ContentTypeName}}" ng-if="entity.ContentTypeName != 'Link'"></i>
+                            <i class="spriteicon fa fa-external-link" ng-if="entity.ContentTypeName == 'Link'"></i>
+                        </span>
+                        <img ng-src="{{entity.ThumbnailUrl}}" class="img-thumbnail" />
+                        <label class="small" style="font-weight: 100">{{entity.Name}}</label>
                     </a>
-                </li>
-                <li class="{{options.activeTab == 'communities' ? 'active' : ''}}" ng-click="tabChange('communities')">
-                    <a href="javascript:void(0)" data-toggle="tab">
-                        Sub Communities
-                        <span ng-if="community.communities">({{community.communities.length}})</span>
-                        <span ng-if="!community.communities">(0)</span>
-                    </a>
-                </li>
 
-            </ul>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="tab-content">
-                <div class="tab-pane {{options.activeTab == 'contents' ? 'active' : 'hide'}}">
-                    <div ng-show="community.contents == null">
-                        <p>&nbsp;</p>
-                        <p>
-                            <em>You have not added any content yet</em>
-                        </p>
-
-                    </div>
-                    <div class="col-lg-2 col-sm-3 col-xs-6" ng-repeat="entity in community.contents">
-                        <a class="thumbnail"
-                           data-placement="top"
-                           data-auto-close="true"
-                           title="{{entity.Name}}"
-                           style="width: 100%"
-                           content-template="/Content/Views/ContentPreview.html" bs-popover
-                           data-trigger="hover"
-                           href="#/ContentDetail/{{entity.Id}}">
-                            <span class="typeicon" title="{{entity.ContentTypeName}}" bs-tooltip>
-                                <i class="spriteicon {{entity.ContentTypeName}}" ng-if="entity.ContentTypeName != 'Link'"></i>
-                                <i class="spriteicon fa fa-external-link" ng-if="entity.ContentTypeName == 'Link'"></i>
-                            </span>
-                            <img ng-src="{{entity.ThumbnailUrl}}" class="img-thumbnail" />
-                            <label class="small" style="font-weight: 100">{{entity.Name}}</label>
-                        </a>
-
-                    </div>
-                    <p>&nbsp;</p>
-                    <div class="clearfix"></div>
-                    <a class="btn btn-info btn-sm" href="#/AddContent/{{community.Id}}">Add Content</a>
-                    
-                    <p>&nbsp;</p>
                 </div>
             </div>
+                
+            <a class="btn btn-info btn-sm" href="#/AddContent/{{community.Id}}">Add Content</a>
+            <div class="clearfix"></div>
+            <p>&nbsp;</p>
+            
+        </div>
+    </div>
             <div class="tab-content">
                 <div class="tab-pane {{options.activeTab == 'communities' ? 'active' : 'hide'}}">
                     <div ng-show="community.communities == null">
@@ -119,7 +115,7 @@
                 </div>
             </div>
         </div>
-    </div>
+
 
     <div class="row">
         <div class="col-md-12" style="padding-bottom: 12px;">
@@ -129,6 +125,43 @@
                 <i class="fa fa-trash"></i>
                 Delete Community
             </a>
+            <a class="btn btn-sm btn-info" data-toggle="modal" data-target="#joinCommunityModal" ng-if="permission ==null || permission.CurrentUserPermission < 2">Join</a>
         </div>
     </div>
-</div>
+<div class="modal fade" id="joinCommunityModal" tabindex="-1" role="dialog" aria-labelledby="joinCommunityModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="joinCommunityModalLabel">Join this community</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <div>
+                            <strong>Requested Role</strong>
+                        </div>
+                        <select id="lstRole">
+                            <option value="Reader">Reader</option>
+                            <option value="Contributor">Contributor</option>
+                            <option value="Moderator">Moderator</option>
+                        </select>
+                    </div>
+
+                    <div class="clearfix"></div>
+                </div>
+                
+                
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-info" data-dismiss="modal" ng-click="joinCommunity()">
+                    Send Request
+                    <i class="fa fa-arrow-right"></i>
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

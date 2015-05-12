@@ -139,8 +139,37 @@
                 </p>
             </div>
             <div class="row" ng-if="profile.requests">
-                <div class="col-lg-2 col-sm-3 col-xs-6" ng-repeat="req in profile.requests">
-                    test
+                <div class="col-md-12">
+                    <table class="table table-responsive">
+                        <thead>
+                            <tr>
+
+                                <th>Requestor</th>
+                                <th>Community</th>
+                                <th>Date</th>
+                                <th>Permission</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="request in profile.requests" requestHash="{{request.$$hashKey}}">
+                                <td>{{request.Name}}</td>
+                                <td>{{request.CommunityName}}</td>
+                                <td>{{request.Requested}}</td>
+                                <td>
+                                    <select>
+                                        <option value="1" selected="{{request.Role==1}}">Reader</option>
+                                        <option value="2" selected="{{request.Role==2}}">Contributor</option>
+                                        <option value="3" selected="{{request.Role==3}}">Moderator</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <button class="btn btn-info btn-xs" ng-click="approveRequest(request)">Approve</button>
+                                    <button class="btn btn-warning btn-xs" ng-click="denyRequest(request)">Decline</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 

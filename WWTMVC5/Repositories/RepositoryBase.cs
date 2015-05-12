@@ -276,7 +276,14 @@ namespace WWTMVC5.Repositories
         /// </summary>
         public void SaveChanges()
         {
-            this.EarthOnlineDbContext.SaveChanges();
+            try
+            {
+                this.EarthOnlineDbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                int foo = 1;
+            }
         }
     }
 }

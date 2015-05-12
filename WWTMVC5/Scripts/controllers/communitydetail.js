@@ -8,7 +8,8 @@
                 $scope.types = types;
                 console.log(types);
                 dataproxy.getCommunityDetail($routeParams.communityId).then(function(response) {
-                    $scope.community = response;
+                    $scope.community = response.community;
+                    $scope.permission = response.permission;
                     console.log(response);
                     dataproxy.getCommunityContents($scope.communityId).then(function(response) {
                         $scope.community.contents = response.entities;
@@ -24,6 +25,10 @@
         $scope.tabChange = function (tab) {
             $scope.options.activeTab = tab;
             wwt.triggerResize();
+        }
+
+        $scope.joinCommunity = function() {
+            dataproxy.joinCommunity($routeParams.communityId, $('#lstRole').val());
         }
 
         init();

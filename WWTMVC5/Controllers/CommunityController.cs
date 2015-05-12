@@ -66,27 +66,27 @@ namespace WWTMVC5.Controllers
         
         [HttpPost]
         [Route("Community/Get/Detail")]
-        public JsonResult Index(long? id)
+        public JsonResult Index(long? id, bool? edit)
         {
             
             CommunityViewModel communityViewModel = null;
             CommunityDetails communityDetails = this.communityService.GetCommunityDetails(id.Value, this.CurrentUserID, true, true);
 
             communityViewModel = new CommunityViewModel();
-
+            if (edit == true)
+            {
+                CommunityInputViewModel vm = new CommunityInputViewModel();
+                Mapper.Map(communityDetails, vm);
+                return Json(vm);
+            }
             Mapper.Map(communityDetails, communityViewModel);
 
-            // Extract only the text from the Description HTML which needs to be used in Mail sharing. HTML tags which are meant for
-            // styling the description is not required.
-            string description = communityViewModel.Description.GetTextFromHtmlString();
-            description = string.IsNullOrWhiteSpace(description) ? string.Empty : description.Length > 100 ? description.Substring(0, 97) + "..." : description;
-
-            // This should not be there in the extension method since it is needed only in cases where description is sent as query string.
-            description = description.Replace("&", "%26");
-
+            
+            var permissionDetails = GetUserPermissionDetails(id.Value, PermissionsTab.Users, 0);
+            
             if (communityViewModel.AccessType != AccessType.Private || communityViewModel.UserPermission >= WWTMVC5.Permission.Reader)
             {
-                return Json(communityViewModel);
+                return Json(new { community=communityViewModel, permission=permissionDetails});
             }
             else
             {
@@ -285,48 +285,31 @@ namespace WWTMVC5.Controllers
         /// <summary>
         /// Controller action which updates the details in Layerscape database about the community which is being edited.
         /// </summary>
-        /// <param name="communityInputViewModel">ViewModel holding the details about the community</param>
+        /// <param name="community">ViewModel holding the details about the community</param>
+        
         /// <returns>Returns a redirection view</returns>
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        
-        public ActionResult Edit(CommunityInputViewModel communityInputViewModel)
+        [Route("Community/Edit/Save")]
+        public JsonResult Edit(CommunityInputViewModel community)
         {
-            // Make sure communityInputViewModel is not null
-            this.CheckNotNull(() => new { communityInputViewModel });
-
-            // Populating the category dropdown list.
-            communityInputViewModel.CategoryList = CategoryType.All.ToSelectList(CategoryType.All);
-
-            // Populating the parent communities for the current user.
-            // TODO: Need to show the parent communities/folders in tree view dropdown.
-            IEnumerable<Community> parentCommunities = this.communityService.GetParentCommunities(communityInputViewModel.ID.Value, CurrentUserID);
-            communityInputViewModel.ParentList = new SelectList(parentCommunities, "CommunityID", "Name");
-
             if (ModelState.IsValid)
             {
                 CommunityDetails communityDetails = new CommunityDetails();
-                Mapper.Map(communityInputViewModel, communityDetails);
+                Mapper.Map(community, communityDetails);
 
                 // Set thumbnail properties
-                communityDetails.Thumbnail = new FileDetail() { AzureID = communityInputViewModel.ThumbnailID };
+                communityDetails.Thumbnail = new FileDetail { AzureID = community.ThumbnailID };
 
-                // TODO : Better way to do this. 
-                // Get the ID from Session
-                // Centralize the permission check for entities at one place (ProfileService)
-                var identity = HttpContext.GetIdentityName();
-                if (!string.IsNullOrWhiteSpace(identity) && communityInputViewModel.ID.HasValue)
+                if (CurrentUserID == 0)
                 {
-                    this.communityService.UpdateCommunity(communityDetails, this.CurrentUserID);
+                    return Json("error: user not logged in");
                 }
-
-                return RedirectToAction("Index", new { id = communityInputViewModel.ID });
+                communityService.UpdateCommunity(communityDetails, CurrentUserID);
+                return Json(new { id = community.ID });
             }
-            else
-            {
-                // In case of any validation error stay in the same page.
-                return View("Save", communityInputViewModel);
-            }
+            
+            return Json("error: community not saved");
+            
         }
 
         /// <summary>
@@ -586,39 +569,30 @@ namespace WWTMVC5.Controllers
         /// <param name="requestorId">Requestor Id</param>
         /// <param name="userRole"> Permission Type (Owner, contributor, reader etc.)</param>
         /// <param name="permissionsTab">User / Requestor</param>
-        /// <param name="actionType">Accept / Decline</param>
-        /// <param name="currentPage">Current page from where action performed</param>
+        /// <param name="approve">bool</param>
         [HttpPost]
-        
-        [ValidateAntiForgeryToken]
-        public void UpdateUserPermissionRequest(long entityId, long requestorId, UserRole userRole, PermissionsTab permissionsTab, string actionType, int currentPage)
+        [Route("Community/Request/Reponse")]
+        public JsonResult UpdateUserPermissionRequest(long entityId, long requestorId, UserRole userRole, bool approve)
         {
-            try
+            PermissionItem permission = new PermissionItem
             {
-                PermissionItem permission = new PermissionItem();
-                permission.UserID = requestorId;
-                permission.CommunityID = entityId;
-                permission.Role = userRole;
-                permission.Approved = "approve" == actionType ? true : false;
-
-                OperationStatus operationStatus = this.ProfileService.UpdateUserPermissionRequest(permission, this.CurrentUserID);
-
-                if (operationStatus.Succeeded)
+                UserID = requestorId,
+                CommunityID = entityId,
+                Role = userRole,
+                Approved = approve
+            };
+            OperationStatus operationStatus = this.ProfileService.UpdateUserPermissionRequest(permission, CurrentUserID);
+            if (operationStatus.Succeeded)
+            {
+                try
                 {
                     SendProcessingStatusMail(permission);
-
-                    PartialView("PermissionListView", GetUserPermissionDetails(entityId, permissionsTab, currentPage)).ExecuteResult(this.ControllerContext);
                 }
-                else
+                catch (Exception)
                 {
-                    Json(operationStatus).ExecuteResult(this.ControllerContext);
                 }
             }
-            catch (Exception)
-            {
-                // Consume the exception and render rest of the views in the page.
-                // TODO: Log the exception?
-            }
+            return Json(operationStatus.Succeeded);
         }
 
         /// <summary>
@@ -640,8 +614,7 @@ namespace WWTMVC5.Controllers
         /// <param name="userRole">Permission type</param>
         /// <returns>Inserts the request of join</returns>
         [HttpPost]
-        
-        [ValidateAntiForgeryToken]
+        [Route("Community/Join/{communityId}/{userRole}")]
         public string Join(long communityId, string comments, UserRole userRole)
         {
             string ajaxResponse = "Success";
@@ -803,7 +776,8 @@ namespace WWTMVC5.Controllers
         /// <param name="permissionsTab">Permission tab (Users/Requests) for which data to be fetched</param>
         /// <param name="currentPage">Current page to be rendered</param>
         /// <returns>ViewModel with permission details</returns>
-        private PermissionViewModel GetUserPermissionDetails(long? communityID, PermissionsTab permissionsTab, int currentPage)
+        private PermissionViewModel GetUserPermissionDetails(long? communityID, PermissionsTab permissionsTab,
+            int currentPage)
         {
             PageDetails pageDetails = new PageDetails(currentPage);
             pageDetails.ItemsPerPage = Constants.PermissionsPerPage;
@@ -812,74 +786,83 @@ namespace WWTMVC5.Controllers
 
             if (permissionsTab == PermissionsTab.Users)
             {
-                permissionDetails = this.ProfileService.GetUserPemissions(this.CurrentUserID, communityID.Value, pageDetails);
+                permissionDetails = this.ProfileService.GetUserPemissions(this.CurrentUserID, communityID.Value,
+                    pageDetails);
             }
             else if (permissionsTab == PermissionsTab.Requests)
             {
-                permissionDetails = this.ProfileService.GetUserPemissionRequests(this.CurrentUserID, communityID, pageDetails);
+                permissionDetails = this.ProfileService.GetUserPemissionRequests(this.CurrentUserID, communityID,
+                    pageDetails);
             }
             else
             {
                 permissionDetails = this.ProfileService.GetUserPemissionRequests(this.CurrentUserID, null, pageDetails);
             }
 
-            this.CheckNotNull(() => new { permissionDetails });
-
-            // Check if there is only one owner for the current community.
-            bool singleOwner = permissionDetails.PermissionItemList.Where(p => p.Role == UserRole.Owner).Count() == 1;
-
-            List<PermissionDetailsViewModel> permissionList = new List<PermissionDetailsViewModel>();
-            for (var i = 0; i < permissionDetails.PermissionItemList.Count; i++)
+            if (permissionDetails != null)
             {
-                PermissionDetailsViewModel model = new PermissionDetailsViewModel()
-                {
-                    Id = permissionDetails.PermissionItemList[i].UserID,
-                    Name = permissionDetails.PermissionItemList[i].Name,
-                    CommunityId = permissionDetails.PermissionItemList[i].CommunityID,
-                    CommunityName = permissionDetails.PermissionItemList[i].CommunityName,
-                    Comment = permissionDetails.PermissionItemList[i].Comment,
-                    Date = permissionDetails.PermissionItemList[i].Date,
-                    Role = permissionDetails.PermissionItemList[i].Role,
-                    IsInherited = permissionDetails.PermissionItemList[i].IsInherited,
-                    CurrentUserRole = permissionDetails.PermissionItemList[i].CurrentUserRole
-                };
 
-                model.CanShowEditLink = model.CanShowDeleteLink = true;
 
-                if (model.Role == UserRole.Owner &&
-                        (singleOwner || model.CurrentUserRole < UserRole.Owner))
-                {
-                    // 1. No edit/delete options should be shown if there is only one owner.
-                    // 2. Only owners and site administrators can edit/delete owners permissions.
-                    model.CanShowEditLink = model.CanShowDeleteLink = false;
-                }
-                else if (model.Id == this.CurrentUserID)
-                {
-                    // No edit/delete options should be shown in users permission page for the logged in user
-                    model.CanShowEditLink = model.CanShowDeleteLink = false;
-                }
-                else if (permissionDetails.PermissionItemList[i].IsInherited)
-                {
-                    // If the role of user permission is is inherited, then user should not be allowed to delete.
-                    model.CanShowDeleteLink = false;
+                // Check if there is only one owner for the current community.
+                bool singleOwner = permissionDetails.PermissionItemList.Where(p => p.Role == UserRole.Owner).Count() ==
+                                   1;
 
-                    // If the role of user permission is Owner and is inherited, then user should not be allowed to edit also.
-                    if (model.Role == UserRole.Owner)
+                List<PermissionDetailsViewModel> permissionList = new List<PermissionDetailsViewModel>();
+                for (var i = 0; i < permissionDetails.PermissionItemList.Count; i++)
+                {
+                    PermissionDetailsViewModel model = new PermissionDetailsViewModel()
                     {
-                        model.CanShowEditLink = false;
+                        Id = permissionDetails.PermissionItemList[i].UserID,
+                        Name = permissionDetails.PermissionItemList[i].Name,
+                        CommunityId = permissionDetails.PermissionItemList[i].CommunityID,
+                        CommunityName = permissionDetails.PermissionItemList[i].CommunityName,
+                        Comment = permissionDetails.PermissionItemList[i].Comment,
+                        Date = permissionDetails.PermissionItemList[i].Date,
+                        Role = permissionDetails.PermissionItemList[i].Role,
+                        IsInherited = permissionDetails.PermissionItemList[i].IsInherited,
+                        CurrentUserRole = permissionDetails.PermissionItemList[i].CurrentUserRole
+                    };
+                    model.Requested = model.Date.GetFormattedDifference(DateTime.UtcNow);
+
+                    model.CanShowEditLink = model.CanShowDeleteLink = true;
+
+                    if (model.Role == UserRole.Owner &&
+                        (singleOwner || model.CurrentUserRole < UserRole.Owner))
+                    {
+                        // 1. No edit/delete options should be shown if there is only one owner.
+                        // 2. Only owners and site administrators can edit/delete owners permissions.
+                        model.CanShowEditLink = model.CanShowDeleteLink = false;
                     }
+                    else if (model.Id == this.CurrentUserID)
+                    {
+                        // No edit/delete options should be shown in users permission page for the logged in user
+                        model.CanShowEditLink = model.CanShowDeleteLink = false;
+                    }
+                    else if (permissionDetails.PermissionItemList[i].IsInherited)
+                    {
+                        // If the role of user permission is is inherited, then user should not be allowed to delete.
+                        model.CanShowDeleteLink = false;
+
+                        // If the role of user permission is Owner and is inherited, then user should not be allowed to edit also.
+                        if (model.Role == UserRole.Owner)
+                        {
+                            model.CanShowEditLink = false;
+                        }
+                    }
+
+                    permissionList.Add(model);
                 }
 
-                permissionList.Add(model);
-            }
-            
-            PermissionViewModel permissionViewModel = new PermissionViewModel(
-                permissionDetails.CurrentUserPermission, 
-                permissionList, 
-                pageDetails, 
-                permissionsTab);
+                PermissionViewModel permissionViewModel = new PermissionViewModel(
+                    permissionDetails.CurrentUserPermission,
+                    permissionList,
+                    pageDetails,
+                    permissionsTab);
 
-            return permissionViewModel;
+                return permissionViewModel;
+            }
+            else return null;
+
         }
 
         /// <summary>

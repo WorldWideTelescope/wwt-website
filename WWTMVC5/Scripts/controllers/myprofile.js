@@ -11,6 +11,7 @@
 
             if ($('#signin').length && !$('#signin').prop('authenticated')) {
                 location.href = '#/';
+                return;
             }
             $scope.options = {
                 activeTab: 'uploads'
@@ -63,6 +64,10 @@
                 $scope.profile.communities = response.entities && response.entities.length ? response.entities : null;
                 wwt.triggerResize();
             });
+            getRequests();
+        }
+
+        var getRequests = function() {
             dataproxy.getUserRequests().then(function (response) {
                 $scope.profile.requests = response.PermissionItemList && response.PermissionItemList.length ? response.PermissionItemList : null;
                 wwt.triggerResize();
@@ -88,5 +93,37 @@
             wwt.user.set('rememberMe', false);
             location.href = '/Logout';
         }
+
+        $scope.approveRequest = function(r) {
+            //args: long entityId, long requestorId, UserRole userRole, bool approve
+            var row = $('tr[requestHash="' + r.$$hashKey + '"]');
+            var roles = ['', 'Reader', 'Contributor', 'Moderator'];
+            var role = roles[parseInt(row.find('select').val())];
+            var requestArgs = {
+                entityId: r.CommunityId,
+                requestorId: r.Id,
+                userRole: role,
+                approve: true
+            }
+            dataproxy.requestResponse(requestArgs).then(function (response) {
+                console.log({ update: response });
+                getRequests();
+            });
+        }
+        $scope.denyRequest = function (r) {
+            //args: long entityId, long requestorId, UserRole userRole, bool approve
+            var roles = ['','Reader','Contributor','Moderator'];
+            var requestArgs = {
+                entityId: r.CommunityId,
+                requestorId: r.Id,
+                userRole: roles[r.Role],
+                approve: false
+            }
+            dataproxy.requestResponse(requestArgs).then(function (response) {
+                console.log({ update: response });
+                getRequests();
+            });
+        }
+
         init();
 }]);
