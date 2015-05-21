@@ -1,0 +1,158 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1CF4D986-51AD-43F8-A84A-38B6ECBA2172}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WWTWebservices</RootNamespace>
+    <AssemblyName>WWTWebservices</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Global.cs" />
+    <Content Include="ISearchProvider.cs" />
+    <Content Include="SearchResults.cs" />
+    <Compile Include="FastBitmap.cs" />
+    <Compile Include="PlateHelper.cs" />
+    <Compile Include="PlateTilePyramid.cs" />
+    <Compile Include="StoredProc.cs" />
+    <Compile Include="ToastTileMap.cs" />
+    <Content Include="TourRatingDataset.Designer.cs">
+      <DependentUpon>TourRatingDataset.xsd</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Content>
+    <Content Include="TourVersionDataset.Designer.cs">
+      <DependentUpon>TourVersionDataset.xsd</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Content>
+    <Compile Include="Tour.cs" />
+    <Compile Include="triangle.cs" />
+    <Compile Include="Vector2d.cs" />
+    <Compile Include="Vector3d.cs" />
+    <Compile Include="WMSImage.cs" />
+    <Compile Include="WWTToursDataset.cs">
+      <DependentUpon>WWTToursDataset.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="WWTUtil.cs" />
+    <Content Include="WebContent.cs" />
+    <Content Include="WWTToursDataset.Designer.cs">
+      <DependentUpon>WWTToursDataset.xsd</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Content>
+    <Content Include="TourServices.cs" />
+    <Content Include="WWTWebService.cs">
+      <SubType>Component</SubType>
+    </Content>
+    <Content Include="AstroObjectsDataset.Designer.cs">
+      <DependentUpon>AstroObjectsDataset.xsd</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Content>
+    <Content Include="AstroObjectServices.cs" />
+    <Content Include="Database.cs" />
+    <Content Include="ContentHomePage.cs" />
+    <Compile Include="DirectoryEntry.cs" />
+    <Compile Include="FileCabinet.cs" />
+    <Compile Include="PlateFile2.cs" />
+    <Compile Include="PlateHeader.cs" />
+    <Compile Include="PositionTexture.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="AstroObjectsDataset.xsc">
+      <DependentUpon>AstroObjectsDataset.xsd</DependentUpon>
+    </Content>
+    <None Include="AstroObjectsDataset.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>AstroObjectsDataset.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="AstroObjectsDataset.xss">
+      <DependentUpon>AstroObjectsDataset.xsd</DependentUpon>
+    </Content>
+    <Content Include="WWTToursDataset.xsc">
+      <DependentUpon>WWTToursDataset.xsd</DependentUpon>
+    </Content>
+    <Content Include="DataSet1.xss" />
+    <Content Include="TourRatingDataset.xsc">
+      <DependentUpon>TourRatingDataset.xsd</DependentUpon>
+    </Content>
+    <None Include="TourRatingDataset.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>TourRatingDataset.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="TourRatingDataset.xss">
+      <DependentUpon>TourRatingDataset.xsd</DependentUpon>
+    </Content>
+    <Content Include="TourVersionDataset.xsc">
+      <DependentUpon>TourVersionDataset.xsd</DependentUpon>
+    </Content>
+    <None Include="TourVersionDataset.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>TourVersionDataset.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="TourVersionDataset.xss">
+      <DependentUpon>TourVersionDataset.xsd</DependentUpon>
+    </Content>
+    <None Include="WWTToursDataset.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>WWTToursDataset.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="WWTToursDataset.xss">
+      <DependentUpon>WWTToursDataset.xsd</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

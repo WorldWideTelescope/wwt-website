@@ -46,6 +46,7 @@ namespace WWTMVC5.Controllers
             "profile",
             "researchers",
             "support",
+            "terms",
             "wwtinaction",
             "wwtstories"
         };

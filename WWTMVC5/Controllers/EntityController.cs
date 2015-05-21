@@ -74,10 +74,7 @@ namespace WWTMVC5.Controllers
             EntityHighlightFilter entityHighlightFilter = new EntityHighlightFilter(highlightType, categoryType, entityId, contentType);
             List<EntityViewModel> highlightEntities = GetHighlightEntities(entityType, entityHighlightFilter, pageDetails);
 
-            //// TODO: Model should be used here instead of so many parameters
-            //ViewData["CurrentPage"] = page;
-            //ViewData["TotalPage"] = pageDetails.TotalPages;
-
+            
 
             // It creates the prefix for id of links
             SetSiteAnalyticsPrefix(highlightType);

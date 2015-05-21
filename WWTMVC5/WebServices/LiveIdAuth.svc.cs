@@ -6,7 +6,6 @@ using System.ServiceModel.Activation;
 using System.ServiceModel.Web;
 using System.Threading.Tasks;
 using System.Web;
-using System.Web.Mvc;
 using Microsoft.Live;
 using Newtonsoft.Json;
 
@@ -16,7 +15,7 @@ namespace WWTMVC5.WebServices
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     public class LiveIdAuth
     {
-        private readonly LiveAuthClient _liveAuthClient = new LiveAuthClient(ConfigurationManager.AppSettings["LiveClientId"], ConfigurationManager.AppSettings["LiveClientSecret"], null);
+        private LiveAuthClient _liveAuthClient = new LiveAuthClient(ConfigReader<string>.GetSetting("LiveClientId"), ConfigReader<string>.GetSetting("LiveClientSecret"), null);
         private LiveConnectSession _session = null;
 
         [WebGet]
@@ -57,13 +56,11 @@ namespace WWTMVC5.WebServices
         [OperationContract]
         public async Task<dynamic> GetMeInfo(string accessToken)
         {
-            var meUri = new Uri(string.Format("https://apis.live.net/v5.0/me/?access_token={0}", accessToken));
-
+            var meUri = new Uri(string.Format("https://apis.live.net/v5.0/me/?access_token={0}",accessToken));
             var httpClient = new HttpClient();
             var response = await httpClient.GetAsync(meUri);
             var responseString = await response.Content.ReadAsStringAsync();
             return (dynamic)JsonConvert.DeserializeObject(responseString);
-            
         }
 
         public string GetLogoutUrl(string returnUrl)

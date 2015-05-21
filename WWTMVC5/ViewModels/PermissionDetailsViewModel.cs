@@ -5,7 +5,6 @@
 //-----------------------------------------------------------------------
 
 using System;
-using Microsoft.IdentityModel.Protocols.WSTrust;
 using WWTMVC5.Models;
 
 namespace WWTMVC5.ViewModels

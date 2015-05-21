@@ -71,9 +71,10 @@ namespace WWTMVC5
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Need to ignore any exception.")]
         public static T GetSetting(string settingKey, T defaultValue)
         {
-            //try
-            //{
-                string settingValue = string.Empty;
+            string settingValue = string.Empty;
+            try
+            {
+                
                 if (RoleEnvironment.IsAvailable)
                 {
                     settingValue = RoleEnvironment.GetConfigurationSettingValue(settingKey);
@@ -83,18 +84,16 @@ namespace WWTMVC5
                     settingValue = ConfigurationManager.AppSettings[settingKey];
                 }
 
-                if (!string.IsNullOrEmpty(settingValue))
-                {
-                    return (T)Convert.ChangeType(settingValue, typeof(T), CultureInfo.InvariantCulture);
-                }
-            //}
-            //catch
-            //{
-                // -
-                // Swallow the exception to return a default value
-                // -
-            //}
-
+                
+            }
+            catch
+            {
+                settingValue = ConfigurationManager.AppSettings[settingKey];
+            }
+            if (!string.IsNullOrEmpty(settingValue))
+            {
+                return (T)Convert.ChangeType(settingValue, typeof(T), CultureInfo.InvariantCulture);
+            }
             return defaultValue;
         }
     }

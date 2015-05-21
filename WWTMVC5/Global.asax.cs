@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Security.Cryptography;
 using System.Web;
 using System.Web.Mvc;
@@ -31,11 +32,13 @@ namespace WWTMVC5
             }
         }
 
-
 		public const String WurflDataFilePath = "./App_Data/wurfl-latest.zip";
-		protected void Application_Start()
+		
+        protected void Application_Start()
 		{
-            RegisterUnityContainer();
+           
+            RegisterUnityContainer(); 
+
             AutoMapperSettings.RegisterControllerAutoMappers();
             AutoMapperSettings.RegisterServiceAutoMappers();
 			AreaRegistration.RegisterAllAreas();

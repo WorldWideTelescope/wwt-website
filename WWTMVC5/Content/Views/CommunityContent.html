@@ -26,6 +26,7 @@
 <ul class="nav nav-tabs">
     <li class="{{options.activeTab == 'browse' ? 'active' : ''}}" ng-click="tabChange('browse')"><a href="javascript:void(0)" data-toggle="tab">Browse</a></li>
     <li class="{{options.activeTab == 'search' ? 'active' : ''}}" ng-click="tabChange('search')"><a href="javascript:void(0)" data-toggle="tab">Search</a></li>
+    
 </ul>
 
 <!-- Tab panes -->
@@ -36,7 +37,7 @@
                 <label>Sort</label>
                 <select ng-change="getEntities()" ng-model="options.highlightType" ng-options="h.val as h.name for h in types.highlightValues"></select>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2"  ng-if="options.entityType == 'Content'">
                 <label>Content Type</label>
                 <select ng-change="getEntities()" id="ddContentType" ng-model="options.contentType" ng-options="c.val as c.name for c in types.contentValues"></select>
             </div>
@@ -44,7 +45,19 @@
                 <label>Category</label>
                 <select ng-change="getEntities()" ng-model="options.categoryType" ng-options="c.val as c.name for c in types.categoryValues"></select>
             </div>
-
+            <div class="col-md-4">
+                <label>Show</label>
+                <div>
+                    <label class="radio">
+                        <input name="entityType" value="Content" ng-model="options.entityType" type="radio"  ng-change="getEntities()"/>
+                        Content
+                    </label>
+                    <label class="radio">
+                        <input name="entityType" value="Community" ng-model="options.entityType" type="radio"  ng-change="getEntities()"/>
+                        Communities
+                    </label>
+                </div>
+            </div>
 
         </div>
     </div>
@@ -76,7 +89,7 @@
     </div>
 </div>
 <div class="row" ng-show="!loadingContent">
-    <div ng-repeat="entity in entityList" class="col-lg-2 col-sm-3 col-xs-6">
+    <div ng-repeat="entity in entityList" class="col-lg-2 col-sm-3 col-xs-6" ng-if="options.entityType == 'Content'">
         <a class="thumbnail"
            data-placement="top"
            data-auto-close="true"
@@ -89,10 +102,24 @@
                 <i class="spriteicon {{entity.ContentTypeName}}" ng-if="entity.ContentTypeName != 'Link'"></i>
                 <i class="spriteicon fa fa-external-link" ng-if="entity.ContentTypeName == 'Link'"></i>
             </span>
-            <img ng-src="{{entity.ThumbnailUrl}}" class="img-thumbnail" />
+            <img ng-src="{{entity.ThumbnailUrl}}" class="img-thumbnail"/>
             <label class="small" style="font-weight: 100">{{entity.Name}}</label>
         </a>
     </div>
+   
+        <div class="col-lg-2 col-sm-3 col-xs-6" ng-repeat="community in entityList" ng-if="options.entityType == 'Community'">
+            <a class="thumbnail"
+               data-placement="top"
+               data-auto-close="true"
+               title="{{community.Name}}"
+               style="width: 100%"
+               href="#/CommunityDetail/{{community.Id}}">
+                <img ng-src="{{community.ThumbnailUrl}}" class="img-thumbnail" />
+                <label class="small" style="font-weight: 100">{{community.Name}}</label>
+            </a>
+
+        </div>
+    
 </div>
 <div class="row" ng-show="loadingContent" style="padding: 25px 0">
     <div class="col-md-6 col-md-offset-3">

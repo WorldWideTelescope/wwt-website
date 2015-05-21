@@ -3191,8 +3191,8 @@ fieldset[disabled] .btn-info.active {
 }
 .btn-warning {
   color: #ffffff;
-  background-color: #d40000;
-  border-color: #d40000;
+  background-color: #990000;
+  border-color: #990000;
 }
 .btn-warning:hover,
 .btn-warning:focus,
@@ -3201,8 +3201,8 @@ fieldset[disabled] .btn-info.active {
 .btn-warning.active,
 .open > .dropdown-toggle.btn-warning {
   color: #ffffff;
-  background-color: #a10000;
-  border-color: #970000;
+  background-color: #660000;
+  border-color: #5c0000;
 }
 .btn-warning:active,
 .btn-warning.active,
@@ -3227,11 +3227,11 @@ fieldset[disabled] .btn-warning:active,
 .btn-warning.disabled.active,
 .btn-warning[disabled].active,
 fieldset[disabled] .btn-warning.active {
-  background-color: #d40000;
-  border-color: #d40000;
+  background-color: #990000;
+  border-color: #990000;
 }
 .btn-warning .badge {
-  color: #d40000;
+  color: #990000;
   background-color: #ffffff;
 }
 .btn-danger {
@@ -4770,11 +4770,11 @@ a.label:focus {
   background-color: #007dcc;
 }
 .label-warning {
-  background-color: #d40000;
+  background-color: #990000;
 }
 .label-warning[href]:hover,
 .label-warning[href]:focus {
-  background-color: #a10000;
+  background-color: #660000;
 }
 .label-danger {
   background-color: #f6ff00;
@@ -5047,7 +5047,7 @@ a.thumbnail.active {
   background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
 }
 .progress-bar-warning {
-  background-color: #d40000;
+  background-color: #990000;
 }
 .progress-striped .progress-bar-warning {
   background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
@@ -6643,13 +6643,13 @@ button.close {
 }
 .btn-warning,
 .btn-warning:hover {
-  background-image: -webkit-linear-gradient(#ff2121, #d40000 50%, #c00000);
-  background-image: -o-linear-gradient(#ff2121, #d40000 50%, #c00000);
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#ff2121), color-stop(50%, #d40000), to(#c00000));
-  background-image: linear-gradient(#ff2121, #d40000 50%, #c00000);
+  background-image: -webkit-linear-gradient(#e50000, #990000 50%, #850000);
+  background-image: -o-linear-gradient(#e50000, #990000 50%, #850000);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#e50000), color-stop(50%, #990000), to(#850000));
+  background-image: linear-gradient(#e50000, #990000 50%, #850000);
   background-repeat: no-repeat;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffff2121', endColorstr='#ffc00000', GradientType=0);
-  border: 1px solid #a10000;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffe50000', endColorstr='#ff850000', GradientType=0);
+  border: 1px solid #660000;
 }
 .btn-danger,
 .btn-danger:hover {
@@ -8384,7 +8384,7 @@ i.spriteicon {
   height: 16px;
   width: 16px;
   background-color: transparent;
-  background-image: url(/Content/Images/iconsprite.png);
+  background-image: url(https://wwtweb.blob.core.windows.net/content/images/iconsprite.png);
   overflow: hidden;
   display: block;
 }
@@ -8716,6 +8716,7 @@ div.bg-gradient {
 }
 hr {
   border-color: #ffffff;
+  opacity: .6;
 }
 footer.footer {
   padding: 18px 0;
@@ -9344,6 +9345,10 @@ ul.pagination li:last-child a {
   font-weight: 100;
   display: block;
 }
+.community-content label.radio {
+  display: inline-block;
+  padding: 0 11px 0 20px;
+}
 .community-content .page-size {
   display: inline-block;
   margin: 0 5px;
@@ -9438,6 +9443,24 @@ ul.pagination li:last-child a {
 }
 .community-content .tab-content {
   padding-top: 10px;
+}
+.community-content .entity-detail a.thumbnail {
+  float: left;
+  margin-right: 10px;
+}
+.community-content .entity-detail h1 {
+  margin-bottom: 28px;
+}
+.community-content .entity-detail em.last-updated {
+  color: #777777;
+  font-size: 85%;
+  position: relative;
+  top: -20px;
+}
+.community-content .entity-detail ul.entity-details {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 30px;
 }
 .btn-file {
   position: relative;

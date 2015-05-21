@@ -103,11 +103,10 @@
             uiHelper.fixLinks('profileLink');
             $scope.relatedDetailLink = false;
             
-            dataproxy.getAllTypes().then(function(types) {
+            dataproxy.requireAuth().then(function(types) {
                 $scope.types = types;
                 console.log(types);
                 dataproxy.getUserCommunityList().then(function(data) {
-                    //$scope.content.ParentID = $('#lstCommunity option[label=None]').val();
                     $.each(data, function(i, item) {
                         item.val = item.Value;
                     });
@@ -120,12 +119,8 @@
                         dataproxy.getEditContent($routeParams.contentId)
                             .then(function(content) {
                                 $scope.content = content;
-                                //var opt = $('#lstCommunity option[value="'+$scope.content.ParentID+'"]').first();
-                                //opt.prop('selected', true);
                                 setTimeout(function() { $('#lstCommunity').val(content.ParentID); }, 100);
 
-                                //content.ParentID = content.ParentID.toString();
-                                //$('#lstCommunity').val(content.ParentID);
                             });
                     } else {
                         
@@ -149,6 +144,8 @@
                         }, 100);
                     }
 
+                }, function(reason) {
+                    location.href = '#/';
                 });
 
             });

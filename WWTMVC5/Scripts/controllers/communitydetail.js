@@ -4,18 +4,30 @@
         $scope.communityId = $routeParams.communityId;
         wwt.triggerResize();
         var init = function() {
-            dataproxy.getAllTypes().then(function(types) {
+            dataproxy.requireAuth().then(function(types) {
                 $scope.types = types;
                 console.log(types);
-                dataproxy.getCommunityDetail($routeParams.communityId).then(function(response) {
-                    $scope.community = response.community;
-                    $scope.permission = response.permission;
-                    console.log(response);
-                    dataproxy.getCommunityContents($scope.communityId).then(function(response) {
-                        $scope.community.contents = response.entities;
-                        $scope.community.communities = response.childCommunities;
-                        wwt.triggerResize();
-                    });
+                getCommunityDetail();
+            }, function(reason) {
+                dataproxy.getAllTypes().then(function(types) {
+                    $scope.types = types;
+                    console.log(types);
+                    getCommunityDetail();
+                });
+            });
+        }
+
+        function getCommunityDetail() {
+            dataproxy.getCommunityDetail($routeParams.communityId).then(function (response) {
+                $scope.community = response.community;
+                $scope.permission = response.permission;
+                $scope.userCanEdit = (response.permission && response.permission.CurrentUserPermission === 63) || $scope.types.currentUserId === response.community.ProducerId || $scope.types.isAdmin;
+                $scope.loadingContent = true;
+                dataproxy.getCommunityContents($scope.communityId).then(function (response) {
+                    $scope.loadingContent = false;
+                    $scope.community.contents = response.entities;
+                    $scope.community.communities = response.childCommunities;
+                    wwt.triggerResize();
                 });
             });
         }

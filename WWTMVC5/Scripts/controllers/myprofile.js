@@ -8,19 +8,15 @@
     function ($scope, dataproxy, $timeout, $routeParams, uiHelper, fileUploader) {
 
         function init() {
-
-            if ($('#signin').length && !$('#signin').prop('authenticated')) {
-                location.href = '#/';
-                return;
-            }
             $scope.options = {
                 activeTab: 'uploads'
             };
             uiHelper.fixLinks('profileLink');
-            dataproxy.getAllTypes().then(function (types) {
-            $scope.types = types;
-            dataproxy.getMyProfile(0)
-                .then(setProfile);
+            dataproxy.requireAuth().then(function (types) {
+                $scope.types = types;
+                dataproxy.getMyProfile(0).then(setProfile);
+            }, function(reason) {
+                location.href = '#/';
             });
         }
 
@@ -41,8 +37,6 @@
         function log() {
             console.log({ uploader: arguments });
         }
-
-    
 
         function setProfile(profile) {
             if (typeof profile == 'string' && profile.indexOf('error') === 0) {

@@ -24,7 +24,7 @@
 					(i < 9 ? '0' + (i + 1) : i + 1) + ' - ' + track.find('Title').text():
 						track.find('Title').text();
 					row.find('a.music-link').attr('href',
-						'@Model.ResLoc/WWTMusic/' +
+						'@Model.ContentDir/WWTMusic/' +
 						track.find('Folder').text() + '/' +
 						title + '.' +
 						track.find('Type').text());

@@ -100,6 +100,7 @@ if (top == self) {
 	        //WL.Event.subscribe('auth.sessionChange', logWL);
 	        //WL.Event.subscribe('auth.statusChange', logWL);
 	        //WL.Event.subscribe('wl.log', logWL);
+
 	        var autoSignin = false;
 	        var signedIn = $('#signinContainer input').length !== 1;
 	        if (wwt.user.get('rememberMe') === false) {
@@ -117,7 +118,7 @@ if (top == self) {
 	        });
 	        if (!signedIn) {
 	            WL.init({
-	                client_id: '000000004813DA7C',
+	                client_id: _liveClientId,
 	                redirect_uri: 'http://' + location.host + '/Community',
 	                response_type: "token",
                     logging:true
@@ -133,11 +134,10 @@ if (top == self) {
 	        });
 
 	        var signIn = function () {
-	            
+	            wwt.signingIn = true;
                 WL.login({
 	                scope: ['wl.signin', 'wl.emails']//, "wl.offline_access"
-                }).then(
-                function (session) {
+                }).then(function (session) {
                     if (!session.error) {
                         $('#signinContainer label').html('&nbsp;');
                         WL.api({
@@ -153,15 +153,16 @@ if (top == self) {
                                     //$('#signinContainer label').remove();
                                     $('#profileMenuItem, #profileLink').removeClass('hide');
                                     $(window).trigger('login');
+                                    wwt.signingIn = false;
                                     $('#signin').html(response.first_name + ' ' + response.last_name).on('click', function (e) {
                                         e.stopImmediatePropagation();
                                         location.href = '/Community/Profile';
                                     }).attr('title', '(Signed in) View your WWT Profile').prop('authenticated', true);
                                 });
-
                             },
                             function (responseFailed) {
                                 console.log(responseFailed);
+                                wwt.signingIn = false;
                                 $('#signin').html("Login failed");
                             }
                         );

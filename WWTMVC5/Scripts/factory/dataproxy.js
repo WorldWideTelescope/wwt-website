@@ -21,14 +21,16 @@
             getCommunityContents: getCommunityContents,
             saveEditedCommunity: saveEditedCommunity,
             joinCommunity: joinCommunity,
-            requestResponse: requestResponse
+            requestResponse: requestResponse,
+            requireAuth:requireAuth
         };
 
         //Enum object with friendly names and values
         // from getAllTypes - includes userid and isAdmin
         var types,
             currentUserId,
-            isAdmin;
+            isAdmin,
+            sessionStart;
 
         //EntityController.cs [Route("Entity/Types/GetAll")]
         function getAllTypes() {
@@ -207,6 +209,40 @@
             return deferred.promise;
         }
 
+        function requireAuth() {
+            var deferred = $q.defer();
+            var refreshTypes = function() {
+                types = null;// this will update user info
+                getAllTypes().then(function() {
+                    if (currentUserId > 0) {
+                        deferred.resolve(types);
+                    } else {
+                        deferred.reject('unknown');
+                    }
+                });
+            };
+            if (currentUserId && currentUserId > 0) {
+                $timeout(function() {
+                    deferred.resolve(types);
+                });
+            } else {
+                getAllTypes().then(function() {
+                    if (currentUserId && currentUserId > 0) {
+                        deferred.resolve(types);
+                    } else if (wwt.signingIn) {
+                        $(window).on('login', refreshTypes); 
+                    } else if ($('#signin').length && $('#signin').prop('authenticated')) {
+                        refreshTypes();
+                    }else {
+                        deferred.reject('login not initiated');
+                    }
+                });
+            }
+            return deferred.promise;
+        }
+
+        
+
         function getCurrentUserId() {
             var deferred = $q.defer();
             getAllTypes().then(function () {
@@ -225,6 +261,10 @@
         
         //helper function that actually performs most posts / dataprocessing
         var postHelper = function (url, data, deferred, processData, processSingle, member) {
+            if (new Date().valueOf() - sessionStart.valueOf() > 3600000) {//session expiry after an hour
+                location.reload();
+                return;
+            }
             var httppost = function() {
                 $http.post(url, data).
                     success(function (data) {
@@ -377,10 +417,7 @@
         };
         //#endregion
 
-        $(window).on('login', function() {
-            types = null;
-            getAllTypes();// this will update user info
-        });
+        sessionStart = new Date();
 
         return api;
     }

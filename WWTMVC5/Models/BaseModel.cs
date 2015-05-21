@@ -6,50 +6,80 @@ namespace WWTMVC5.Models
 {
 	public class BaseModel
 	{
-		private readonly string _resLoc = WebConfigurationManager.AppSettings["ResourcesLocation"];
-		private readonly bool _staging = WebConfigurationManager.AppSettings["Staging"] == "true";
+	    private readonly string _contentDir;
+	    private readonly string _imgDir;
+	    private readonly string _jsDir;
+	    private readonly string _cssDir;
+	    private readonly string _resLoc;
+	    private readonly bool _staging;
+	    private readonly string _toursDir;
+	    private readonly string _resVer;
+	    private readonly string _downloadUrl;
+	    private readonly string _legacyUrl;
 
-       
-		public string ResLoc
-		{
-			get { return _resLoc; }
-		}
+	    public BaseModel()
+	    {
+	        _resLoc = ConfigReader<string>.GetSetting("ResourcesLocation");//CDN
+	        _staging = ConfigReader<bool>.GetSetting("Staging");
+            _cssDir = ResLoc + "/Content/CSS"; 
+            _jsDir = ResLoc + "/Scripts";
+            _contentDir= "//wwtweb.blob.core.windows.net";//azure blob storage
+	        _imgDir = ContentDir + "/images";
+            _toursDir = ContentDir + "/WebControlTours";
+            _resVer = ConfigReader<string>.GetSetting("ResourcesVersion");
+            _downloadUrl = ConfigReader<string>.GetSetting("WWTDownloadUrl");
+            _legacyUrl = ConfigReader<string>.GetSetting("WWTLegacyDownloadUrl");
+	    }
 
-		public string CssDir
-		{
-			get { return _resLoc + "/Content/CSS"; }
-		}
+	    public string ResLoc
+	    {
+	        get { return _resLoc; }
+	    }
 
-		public string JsDir
-		{
-			get { return _resLoc + "/Scripts"; }
-		}
+	    public string CssDir
+	    {
+	        get { return _cssDir; }
+	    }
 
-		public string ImgDir
-		{
-			get { return _resLoc + "/Content/Images"; }
-		}
-		public string ContentDir
-		{
-			get { return _resLoc + "/Content"; }
-		}
+	    public string JsDir
+	    {
+	        get { return _jsDir; }
+	    }
 
-		public bool Staging
-		{
-			get { return _staging; }
-		}
+	    public string ContentDir
+	    {
+	        get { return _contentDir; }
+	    }
 
-		public string ToursDir
-		{
-			get { return _staging ? "http://thewebkid.com/WebControlTours" : _resLoc + "/Content/WebControlTours"; }
-		}
+	    public string ImgDir
+	    {
+	        get { return _imgDir; }
+	    }
 
+	    public bool Staging
+	    {
+	        get { return _staging; }
+	    }
 
-		public string ResVer { get { return WebConfigurationManager.AppSettings["ResourcesVersion"]; } }
+	    public string ToursDir
+	    {
+	        get { return _toursDir; }
+	    }
 
-		public string DownloadUrl { get { return WebConfigurationManager.AppSettings["WWTDownloadUrl"]; } }
+	    public string ResVer
+	    {
+	        get { return _resVer; }
+	    }
 
-		public string LegacyUrl { get { return WebConfigurationManager.AppSettings["WWTLegacyDownloadUrl"]; } }
+	    public string DownloadUrl
+	    {
+	        get { return _downloadUrl; }
+	    }
+
+	    public string LegacyUrl
+	    {
+	        get { return _legacyUrl; }
+	    }
 
 	    public ProfileDetails User
 	    {

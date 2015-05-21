@@ -1,0 +1,7 @@
+ClientVersion:5.1.9.1
+DataVersion:329
+Message:
+WarnVersion:5.1.8.1
+MinVersion:2.2.32.1
+UpdateUrl:http://cdn.worldwidetelescope.org/drops/wwtsetup.5.1.09.msi
+

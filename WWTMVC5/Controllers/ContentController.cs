@@ -202,36 +202,14 @@ namespace WWTMVC5.Controllers
         [Route("Content/Create/New")]
         public JsonResult New(ContentInputViewModel contentInputViewModel, string id)
         {
-            // Make sure contentInputViewModel is not null
-            this.CheckNotNull(() => new { contentInputViewModel });
-
-            //contentInputViewModel.CreatedByID = CurrentUserID;
-
-            // Populating the parent communities for the current user.
-            // TODO: Need to show the parent communities/folders in tree view dropdown.
-            //IEnumerable<Community> parentCommunities = this.contentService.GetParentCommunities(CurrentUserID);
-            
-
             if (ModelState.IsValid)
             {
                 ContentDetails contentDetails = new ContentDetails();
                 contentDetails.SetValuesFrom(contentInputViewModel);
-
                 contentDetails.CreatedByID = CurrentUserID;
-
                 contentInputViewModel.ID = contentDetails.ID = this.contentService.CreateContent(contentDetails);
-
-                // Send New Content Request.
-                //this.notificationService.NotifyNewEntityRequest(contentDetails, HttpContext.Request.Url.GetServerLink());
-                //TODO: Wire up approvals
-                var adminsvc = new AdministrationService();
-                adminsvc.MarkAsPublicContent(contentDetails.ID.ToString());
-
             }
-            
-            
             return new JsonResult { Data = contentInputViewModel };
-            
         }
 
         /// <summary>

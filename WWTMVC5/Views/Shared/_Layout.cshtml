@@ -1,18 +1,19 @@
 ﻿@using System.Configuration
 @{
-        var title = "WorldWide Telescope (OpenWWT)";
-        try
+    var title = "WorldWide Telescope (OpenWWT)";
+    try
+    {
+        if (ViewBag.Title != null && ViewBag.Title != "")
         {
-            if (ViewBag.Title != null && ViewBag.Title != "")
-            {
-                title = ViewBag.Title;
-            }
-        }
-        catch (Exception)
-        {
-            // ignored
+            title = ViewBag.Title;
         }
     }
+    catch (Exception)
+    {
+        // ignored
+    }
+    var liveId = ConfigReader<string>.GetSetting("LiveClientId");
+}
 <!DOCTYPE html>
 <html>
 	<head>
@@ -23,7 +24,9 @@
         <meta property="twitter:account_id" content="@(ConfigurationManager.AppSettings["twitterId"])" />
 		<meta name="ROBOTS" content="INDEX, FOLLOW">
 	    <script src="@Model.JsDir/ext/jquery.js?v=@Model.ResVer" type="text/javascript"></script>
-
+	    <script>
+            var _liveClientId = '@(liveId)';//@(ConfigurationManager.AppSettings["Staging"])
+    	</script>
 	    <script src="//js.live.net/v5.0/wl.js"></script>
 	    
 		<link href="@Model.CssDir/wwt.min.css?v=@Model.ResVer" rel="stylesheet" />

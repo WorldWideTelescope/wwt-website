@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WWTMVC5</RootNamespace>
     <AssemblyName>WWTMVC5</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
@@ -64,10 +64,6 @@
     <Reference Include="Microsoft.CSharp">
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.IdentityModel, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\Microsoft.IdentityModel.6.1.7600.16394\lib\net35\Microsoft.IdentityModel.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Live.Web">
       <HintPath>..\packages\LiveSDKServer.5.6\lib\net45\Microsoft.Live.Web.dll</HintPath>
     </Reference>
@@ -78,11 +74,14 @@
       <HintPath>..\packages\Unity.Mvc.3.5.1404.0\lib\net45\Microsoft.Practices.Unity.Mvc.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.WindowsAzure.ServiceRuntime, Version=2.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.WindowsAzure.Diagnostics, Version=2.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.ServiceRuntime, Version=2.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.WindowsAzure.StorageClient">
-      <HintPath>..\EarthOnline\Packages\WindowsAzure.StorageClient.1.0.0.0\lib\Microsoft.WindowsAzure.StorageClient.dll</HintPath>
+      <HintPath>..\..\OpenWWT-Website\WWTMVC5\bin\Microsoft.WindowsAzure.StorageClient.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -98,7 +97,6 @@
     <Reference Include="System.Data">
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing">
       <Private>True</Private>
     </Reference>
@@ -111,7 +109,9 @@
     <Reference Include="System.Net">
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Runtime.Serialization">
       <Private>True</Private>
     </Reference>
@@ -130,17 +130,13 @@
     <Reference Include="System.Web.Abstractions">
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Web.ApplicationServices" />
-    <Reference Include="System.Web.DynamicData" />
-    <Reference Include="System.Web.Entity" />
-    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+      <HintPath>..\..\OpenWWT-Website\WWTMVC5\bin\System.Web.Razor.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Routing">
       <Private>True</Private>
@@ -166,7 +162,9 @@
     <Reference Include="System.Web.Optimization">
       <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
     </Reference>
-    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml.Linq">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\WebActivatorEx.2.0.6\lib\net40\WebActivatorEx.dll</HintPath>
@@ -516,7 +514,6 @@
     <Compile Include="ViewModels\TopCategoryViewModel.cs" />
     <Compile Include="ViewModels\UploadAssetViewModel.cs" />
     <Compile Include="ViewModels\VideoDataViewModel.cs" />
-    <Compile Include="WebRole.cs" />
     <Compile Include="WebServices\AdministrationService.svc.cs">
       <DependentUpon>AdministrationService.svc</DependentUpon>
     </Compile>
@@ -529,307 +526,90 @@
       <DependentUpon>ResourceService.svc</DependentUpon>
     </Compile>
     <Compile Include="WebServices\ServiceBase.cs" />
+    <Compile Include="WWTWeb\demmars.aspx.cs">
+      <DependentUpon>demmars.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WWTWeb\g360.aspx.cs">
+      <DependentUpon>g360.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WWTWeb\GetTourList.aspx.cs">
+      <DependentUpon>GetTourList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WWTWeb\GetTours.aspx.cs">
+      <DependentUpon>GetTours.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WWTWeb\Hirise.aspx.cs">
+      <DependentUpon>Hirise.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WWTWeb\HiriseDem2.aspx.cs">
+      <DependentUpon>HiriseDem2.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WWTWeb\isstle.aspx.cs">
+      <DependentUpon>isstle.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WWTWeb\login.aspx.cs">
+      <DependentUpon>login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WWTWeb\MarsHirise.aspx.cs">
+      <DependentUpon>MarsHirise.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WWTWeb\MarsMoc.aspx.cs">
+      <DependentUpon>MarsMoc.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WWTWeb\PostRatingFeedback.aspx.cs">
+      <DependentUpon>PostRatingFeedback.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WWTWeb\StarChart.aspx.cs">
+      <DependentUpon>StarChart.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WWTWeb\TileImage.aspx.cs">
+      <DependentUpon>TileImage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WWTWeb\weblogin.aspx.cs">
+      <DependentUpon>weblogin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WWTWeb\WMSEarthToday.aspx.cs">
+      <DependentUpon>WMSEarthToday.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WWTWeb\WMSMoon.aspx.cs">
+      <DependentUpon>WMSMoon.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WWTWeb\WMSToast.aspx.cs">
+      <DependentUpon>WMSToast.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WWTWeb\XML2WTT.aspx.cs">
+      <DependentUpon>XML2WTT.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Content Include="Content\CSS\sprites.css">
+      <DependentUpon>sprites.less</DependentUpon>
+    </Content>
+    <Content Include="Content\CSS\sprites.min.css">
+      <DependentUpon>sprites.css</DependentUpon>
+    </Content>
     <Content Include="Content\Views\AddCommunity.html" />
     <Content Include="Content\Views\CommunityDetail.html" />
     <Content Include="Content\Views\ContentPreview.html" />
     <Content Include="Content\Views\TestResources.html" />
-    <Content Include="GetTourFile.aspx" />
-    <Content Include="GetTourFile2.aspx" />
-    <Content Include="hello.aspx" />
-    <Content Include="hello2.aspx" />
-    <Content Include="msshrtmi.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="BingSiteAuth.xml" />
-    <Content Include="Content\CSS\angular-motion.css" />
-    <Content Include="Content\CSS\bootstrapValidator.css" />
-    <Content Include="Content\CSS\SDK_style.css" />
-    <Content Include="Content\CSS\wwt.css" />
-    <Content Include="Content\CSS\wwt.min.css" />
-    <Content Include="Content\print.htm" />
-    <Content Include="Content\Views\AddContent.html" />
-    <Content Include="Content\Views\CommunityContent.html" />
-    <Content Include="Content\Views\ContentDetail.html" />
-    <Content Include="Content\Views\MyProfile.html" />
-    <Content Include="Docs\archive\WorldWideTelescopeDataFilesReference.html" />
-    <Content Include="Docs\archive\WorldWideTelescopeDataToolsGuide.html" />
-    <Content Include="Docs\archive\worldwidetelescopelocalizationtool.html" />
-    <Content Include="Docs\archive\worldwidetelescopeplanetarium.html" />
-    <Content Include="Docs\archive\WorldWideTelescopeProjectionReference.html" />
-    <Content Include="Docs\archive\worldwidetelescopeuserguide.html" />
-    <Content Include="Docs\archive\WorldWideTelescopeWebControlScriptReference.html" />
     <Content Include="Docs\conversionTutorial.htm" />
     <Content Include="Docs\domespecs.html" />
-    <Content Include="Docs\ExcelAddinImages\EACaptureViewpoint.png" />
-    <Content Include="Docs\ExcelAddinImages\EAEarthquake.png" />
-    <Content Include="Docs\ExcelAddinImages\EAEarthquakeDisplay.png" />
-    <Content Include="Docs\ExcelAddinImages\EAGeometry.png" />
-    <Content Include="Docs\ExcelAddinImages\EAGeometryDisplay.png" />
-    <Content Include="Docs\ExcelAddinImages\EALayer.png" />
-    <Content Include="Docs\ExcelAddinImages\EAManageViewpoints.png" />
-    <Content Include="Docs\ExcelAddinImages\eamapcolumns.png" />
-    <Content Include="Docs\ExcelAddinImages\EAMarker.png" />
-    <Content Include="Docs\ExcelAddinImages\eaquickselect.png" />
-    <Content Include="Docs\ExcelAddinImages\eaquickselect2.png" />
-    <Content Include="Docs\ExcelAddinImages\earemote.png" />
-    <Content Include="Docs\ExcelAddinImages\EARibbon.png" />
-    <Content Include="Docs\ExcelAddinImages\markers.png" />
-    <Content Include="Docs\Images\AcademicKit.jpg" />
-    <Content Include="Docs\Images\ASPEnabled.bmp" />
-    <Content Include="Docs\Images\BackgroundImage.jpg" />
-    <Content Include="Docs\Images\BlankCollection.bmp" />
-    <Content Include="Docs\Images\BlankVO.jpg" />
-    <Content Include="Docs\Images\Boundarys.jpg" />
-    <Content Include="Docs\Images\CarribeanHiRes.jpg" />
-    <Content Include="Docs\Images\CarribeanLowRes.jpg" />
-    <Content Include="Docs\Images\Circles.jpg" />
-    <Content Include="Docs\Images\CommunityThumbnail.bmp" />
-    <Content Include="Docs\Images\ConversionTutorial\html tags.png" />
-    <Content Include="Docs\Images\ConversionTutorial\initialize function.png" />
-    <Content Include="Docs\Images\ConversionTutorial\object property access.png" />
-    <Content Include="Docs\Images\ConversionTutorial\script top.png" />
-    <Content Include="Docs\Images\ConversionTutorial\wwt tutorial doc header.png" />
-    <Content Include="Docs\Images\CrossHairs.jpg" />
-    <Content Include="Docs\Images\CT_OurCommunity.jpg" />
-    <Content Include="Docs\Images\EarthClouds.jpg" />
-    <Content Include="Docs\Images\EarthNoClouds.jpg" />
-    <Content Include="Docs\Images\Ecliptic.jpg" />
-    <Content Include="Docs\Images\EGrid.jpg" />
-    <Content Include="Docs\Images\Elevation Flat.jpg" />
-    <Content Include="Docs\Images\Elevation Model.jpg" />
-    <Content Include="Docs\Images\ElevationFlat.jpg" />
-    <Content Include="Docs\Images\ElevationModel.jpg" />
-    <Content Include="Docs\Images\endtourdialog.jpg" />
-    <Content Include="Docs\Images\Figures.jpg" />
-    <Content Include="Docs\Images\FillOption.bmp" />
-    <Content Include="Docs\Images\ForegroundSurveys.bmp" />
-    <Content Include="Docs\Images\FOV.jpg" />
-    <Content Include="Docs\Images\GotoNGC117.jpg" />
-    <Content Include="Docs\Images\Horsehead1.jpg" />
-    <Content Include="Docs\Images\Horsehead2.bmp" />
-    <Content Include="Docs\Images\horseheadinwindows.jpg" />
-    <Content Include="Docs\Images\IISpath.bmp" />
-    <Content Include="Docs\Images\ImageOffsetpp1pp2.jpg" />
-    <Content Include="Docs\Images\InnerPlanets.jpg" />
-    <Content Include="Docs\Images\keplervotable.jpg" />
-    <Content Include="Docs\Images\lcapi_quakes.jpg" />
-    <Content Include="Docs\Images\lcapi_sample.jpg" />
-    <Content Include="Docs\Images\LocalSydney.jpg" />
-    <Content Include="Docs\Images\LocTool\createnewlang.jpg" />
-    <Content Include="Docs\Images\LocTool\loadlangpack.jpg" />
-    <Content Include="Docs\Images\LocTool\newwwtlang.jpg" />
-    <Content Include="Docs\Images\LocTool\savenewlang.jpg" />
-    <Content Include="Docs\Images\LocTool\saveTDFfile.jpg" />
-    <Content Include="Docs\Images\LocTool\selectlang.jpg" />
-    <Content Include="Docs\Images\LocTool\UILocalization.jpg" />
-    <Content Include="Docs\Images\LocTool\WWTwelcome.jpg" />
-    <Content Include="Docs\Images\MapOfEarth.jpg" />
-    <Content Include="Docs\Images\MinimalTour.bmp" />
-    <Content Include="Docs\Images\NoChange.jpg" />
-    <Content Include="Docs\Images\NYAndromeda.jpg" />
-    <Content Include="Docs\Images\NYAndromedaNoHorizon.jpg" />
-    <Content Include="Docs\Images\PanoramaAverageOfTopRow.bmp" />
-    <Content Include="Docs\Images\PanoramaExtendTopRow.bmp" />
-    <Content Include="Docs\Images\PanoramaInput.bmp" />
-    <Content Include="Docs\Images\PanoramaNoFill.bmp" />
-    <Content Include="Docs\Images\PanoramaZoneGrey.bmp" />
-    <Content Include="Docs\Images\PlaceFomalhaut.bmp" />
-    <Content Include="Docs\Images\PlaceOpactity25.jpg" />
-    <Content Include="Docs\Images\PlaceRotation45.jpg" />
-    <Content Include="Docs\Images\Planet_Callisto.jpg" />
-    <Content Include="Docs\Images\Planet_Earth.jpg" />
-    <Content Include="Docs\Images\Planet_EarthCrescent1.jpg" />
-    <Content Include="Docs\Images\Planet_EarthCrescent2.jpg" />
-    <Content Include="Docs\Images\Planet_EarthMoon1.jpg" />
-    <Content Include="Docs\Images\Planet_EarthMoon2.jpg" />
-    <Content Include="Docs\Images\Planet_Europa.jpg" />
-    <Content Include="Docs\Images\Planet_Ganymede.jpg" />
-    <Content Include="Docs\Images\Planet_Io.jpg" />
-    <Content Include="Docs\Images\Planet_Io2.jpg" />
-    <Content Include="Docs\Images\Planet_Jupiter.jpg" />
-    <Content Include="Docs\Images\Planet_Jupiter2.jpg" />
-    <Content Include="Docs\Images\Planet_JupiterCrescent1.jpg" />
-    <Content Include="Docs\Images\Planet_Mars.jpg" />
-    <Content Include="Docs\Images\Planet_Mars2.jpg" />
-    <Content Include="Docs\Images\Planet_MarsCrescent1.jpg" />
-    <Content Include="Docs\Images\Planet_MarsCrescent2.jpg" />
-    <Content Include="Docs\Images\Planet_MarsCrescent3.jpg" />
-    <Content Include="Docs\Images\Planet_MarsH_1.jpg" />
-    <Content Include="Docs\Images\Planet_MarsH_2.jpg" />
-    <Content Include="Docs\Images\Planet_MarsH_3.jpg" />
-    <Content Include="Docs\Images\Planet_MarsH_4.jpg" />
-    <Content Include="Docs\Images\Planet_MarsH_5.jpg" />
-    <Content Include="Docs\Images\Planet_MarsH_6.jpg" />
-    <Content Include="Docs\Images\Planet_Mercury.jpg" />
-    <Content Include="Docs\Images\Planet_Moon.jpg" />
-    <Content Include="Docs\Images\Planet_Moon2.jpg" />
-    <Content Include="Docs\Images\Planet_Neptune.jpg" />
-    <Content Include="Docs\Images\Planet_Pluto.jpg" />
-    <Content Include="Docs\Images\Planet_Saturn.jpg" />
-    <Content Include="Docs\Images\Planet_Sun1.jpg" />
-    <Content Include="Docs\Images\Planet_Uranus.jpg" />
-    <Content Include="Docs\Images\Planet_Venus.jpg" />
-    <Content Include="Docs\Images\Polygons.jpg" />
-    <Content Include="Docs\Images\Polylines.jpg" />
-    <Content Include="Docs\Images\Polys.bmp" />
-    <Content Include="Docs\Images\Rotation0.jpg" />
-    <Content Include="Docs\Images\Rotation45.jpg" />
-    <Content Include="Docs\Images\RotationN45.jpg" />
-    <Content Include="Docs\Images\RunningASample.jpg" />
-    <Content Include="Docs\Images\RunningASample2.jpg" />
-    <Content Include="Docs\Images\SamplePoly.bmp" />
-    <Content Include="Docs\Images\Saturn.png" />
-    <Content Include="Docs\Images\SaturnChopped.jpg" />
-    <Content Include="Docs\Images\SaturnLighting.jpg" />
-    <Content Include="Docs\Images\SaturnMilkyWay.jpg" />
-    <Content Include="Docs\Images\SaturnOrbits.jpg" />
-    <Content Include="Docs\Images\SaturnStars.jpg" />
-    <Content Include="Docs\Images\Selection.jpg" />
-    <Content Include="Docs\Images\Serpens_wtml.bmp" />
-    <Content Include="Docs\Images\Serpens_wtml.png" />
-    <Content Include="Docs\Images\Spitzer1.jpg" />
-    <Content Include="Docs\Images\Spitzer2.jpg" />
-    <Content Include="Docs\Images\Spitzer3.jpg" />
-    <Content Include="Docs\Images\Spitzer4.jpg" />
-    <Content Include="Docs\Images\StudyChoppedDialog.jpg" />
-    <Content Include="Docs\Images\SunActual.jpg" />
-    <Content Include="Docs\Images\SunFull.jpg" />
-    <Content Include="Docs\Images\sunset_earth.jpg" />
-    <Content Include="Docs\Images\Toast16.jpg" />
-    <Content Include="Docs\Images\Toast16Flat.jpg" />
-    <Content Include="Docs\Images\Toast4.jpg" />
-    <Content Include="Docs\Images\Toast45.bmp" />
-    <Content Include="Docs\Images\Toast45degrees.jpg" />
-    <Content Include="Docs\Images\Toast4Flat.jpg" />
-    <Content Include="Docs\Images\Toast4FlatInside.jpg" />
-    <Content Include="Docs\Images\Toast4FlatMap.jpg" />
-    <Content Include="Docs\Images\Toast4FlatOutside.jpg" />
-    <Content Include="Docs\Images\Toast64.jpg" />
-    <Content Include="Docs\Images\Toast64Flat.jpg" />
-    <Content Include="Docs\Images\toastedredplanet.jpg" />
-    <Content Include="Docs\Images\ToastEQ1.jpg" />
-    <Content Include="Docs\Images\ToastEQ2.jpg" />
-    <Content Include="Docs\Images\ToastGalactic.bmp" />
-    <Content Include="Docs\Images\ToastInput1.bmp" />
-    <Content Include="Docs\Images\ToastInput1.jpg" />
-    <Content Include="Docs\Images\ToastLinks.jpg" />
-    <Content Include="Docs\Images\ToastLR.bmp" />
-    <Content Include="Docs\Images\ToastMapOfEarth.jpg" />
-    <Content Include="Docs\Images\ToastMulti1.bmp" />
-    <Content Include="Docs\Images\ToastMulti2.bmp" />
-    <Content Include="Docs\Images\ToastMulti3.bmp" />
-    <Content Include="Docs\Images\ToastMulti4.bmp" />
-    <Content Include="Docs\Images\ToastMulti5.bmp" />
-    <Content Include="Docs\Images\ToastMulti6.bmp" />
-    <Content Include="Docs\Images\ToastOffset1.jpg" />
-    <Content Include="Docs\Images\ToastOffset2.jpg" />
-    <Content Include="Docs\Images\ToastOffset3.bmp" />
-    <Content Include="Docs\Images\ToastOutput1.bmp" />
-    <Content Include="Docs\Images\ToastPanorama.bmp" />
-    <Content Include="Docs\Images\ToastPanorama2.bmp" />
-    <Content Include="Docs\Images\ToastPaths.jpg" />
-    <Content Include="Docs\Images\ToastRL.bmp" />
-    <Content Include="Docs\Images\ToastTest.bmp" />
-    <Content Include="Docs\Images\ToastWtml.jpg" />
-    <Content Include="Docs\Images\Toast_Input.bmp" />
-    <Content Include="Docs\Images\Toast_Output.bmp" />
-    <Content Include="Docs\Images\T_BlackHole.jpg" />
-    <Content Include="Docs\Images\T_Blue.jpg" />
-    <Content Include="Docs\Images\T_Comet.jpg" />
-    <Content Include="Docs\Images\T_DistantPlanet.jpg" />
-    <Content Include="Docs\Images\T_Earth.jpg" />
-    <Content Include="Docs\Images\T_FomalHaut.jpg" />
-    <Content Include="Docs\Images\T_Hot.jpg" />
-    <Content Include="Docs\Images\T_HotPole.jpg" />
-    <Content Include="Docs\Images\T_Ice.jpg" />
-    <Content Include="Docs\Images\T_Mars.jpg" />
-    <Content Include="Docs\Images\T_MilkyWay.jpg" />
-    <Content Include="Docs\Images\T_Nebula.jpg" />
-    <Content Include="Docs\Images\T_Red.jpg" />
-    <Content Include="Docs\Images\T_Saturn.jpg" />
-    <Content Include="Docs\Images\T_Saucer.jpg" />
-    <Content Include="Docs\Images\T_Spiral.jpg" />
-    <Content Include="Docs\Images\T_Star.jpg" />
-    <Content Include="Docs\Images\T_Sun.jpg" />
-    <Content Include="Docs\Images\T_Sunspot.jpg" />
-    <Content Include="Docs\Images\T_Tail.jpg" />
-    <Content Include="Docs\Images\T_Tours.jpg" />
-    <Content Include="Docs\Images\View North from Sydney.jpg" />
-    <Content Include="Docs\Images\ZoomLevel0p1233.jpg" />
-    <Content Include="Docs\Images\ZoomLevel0p2466.jpg" />
-    <Content Include="Docs\Images\ZoomLevel10.jpg" />
-    <Content Include="Docs\PlanetariumImages\blackpaint.jpg" />
-    <Content Include="Docs\PlanetariumImages\BlockAJig.JPG" />
-    <Content Include="Docs\PlanetariumImages\BlockBJig.JPG" />
-    <Content Include="Docs\PlanetariumImages\BlockBJig2.JPG" />
-    <Content Include="Docs\PlanetariumImages\BlockCJig.JPG" />
-    <Content Include="Docs\PlanetariumImages\BlockCJig2.JPG" />
-    <Content Include="Docs\PlanetariumImages\BlockConnector.bmp" />
-    <Content Include="Docs\PlanetariumImages\BlockConnectorA.bmp" />
-    <Content Include="Docs\PlanetariumImages\BlockConnectorA.jpg" />
-    <Content Include="Docs\PlanetariumImages\BlockConnectorB.bmp" />
-    <Content Include="Docs\PlanetariumImages\BlockConnectorB.jpg" />
-    <Content Include="Docs\PlanetariumImages\BlockConnectorC.bmp" />
-    <Content Include="Docs\PlanetariumImages\BlockConnectorC.jpg" />
-    <Content Include="Docs\PlanetariumImages\blockprogression.jpg" />
-    <Content Include="Docs\PlanetariumImages\blocksdone.jpg" />
-    <Content Include="Docs\PlanetariumImages\CompletedDome.bmp" />
-    <Content Include="Docs\PlanetariumImages\CompletedDome.jpg" />
-    <Content Include="Docs\PlanetariumImages\Decagon.bmp" />
-    <Content Include="Docs\PlanetariumImages\DecagonAfter.bmp" />
-    <Content Include="Docs\PlanetariumImages\DecagonAfter.jpg" />
-    <Content Include="Docs\PlanetariumImages\DecagonBefore.bmp" />
-    <Content Include="Docs\PlanetariumImages\DecagonBefore.jpg" />
-    <Content Include="Docs\PlanetariumImages\DecagonBlocks.bmp" />
-    <Content Include="Docs\PlanetariumImages\DecagonBlocks.jpg" />
-    <Content Include="Docs\PlanetariumImages\DecagonOrder.bmp" />
-    <Content Include="Docs\PlanetariumImages\DecagonOrder.jpg" />
-    <Content Include="Docs\PlanetariumImages\DecagonTriangles2.bmp" />
-    <Content Include="Docs\PlanetariumImages\decagontriangles3.bmp" />
-    <Content Include="Docs\PlanetariumImages\directprojection.jpg" />
-    <Content Include="Docs\PlanetariumImages\Dome heights.bmp" />
-    <Content Include="Docs\PlanetariumImages\Dome profile.bmp" />
-    <Content Include="Docs\PlanetariumImages\Dome profile.jpg" />
-    <Content Include="Docs\PlanetariumImages\Dome support plan.bmp" />
-    <Content Include="Docs\PlanetariumImages\DomeInTriangles.bmp" />
-    <Content Include="Docs\PlanetariumImages\domesetupdialog.jpg" />
-    <Content Include="Docs\PlanetariumImages\DomeShape.bmp" />
-    <Content Include="Docs\PlanetariumImages\DomeShape.jpg" />
-    <Content Include="Docs\PlanetariumImages\Door.bmp" />
-    <Content Include="Docs\PlanetariumImages\Door.jpg" />
-    <Content Include="Docs\PlanetariumImages\dvicable.jpg" />
-    <Content Include="Docs\PlanetariumImages\finishedfour.jpg" />
-    <Content Include="Docs\PlanetariumImages\finishedone.jpg" />
-    <Content Include="Docs\PlanetariumImages\finishedthree.jpg" />
-    <Content Include="Docs\PlanetariumImages\firstblock.jpg" />
-    <Content Include="Docs\PlanetariumImages\grill.jpg" />
-    <Content Include="Docs\PlanetariumImages\HoldingUptheDome.jpg" />
-    <Content Include="Docs\PlanetariumImages\ImprovedDoor.jpg" />
-    <Content Include="Docs\PlanetariumImages\ImprovedDoorInside.jpg" />
-    <Content Include="Docs\PlanetariumImages\mirrorinplace.jpg" />
-    <Content Include="Docs\PlanetariumImages\mirrors.jpg" />
-    <Content Include="Docs\PlanetariumImages\paintingblackandgrey.jpg" />
-    <Content Include="Docs\PlanetariumImages\paintingisfun.jpg" />
-    <Content Include="Docs\PlanetariumImages\paperfolder.jpg" />
-    <Content Include="Docs\PlanetariumImages\Pentagon.bmp" />
-    <Content Include="Docs\PlanetariumImages\Pentagon.jpg" />
-    <Content Include="Docs\PlanetariumImages\pentagonsclippedtogether.jpg" />
-    <Content Include="Docs\PlanetariumImages\pentagonshades.jpg" />
-    <Content Include="Docs\PlanetariumImages\Pentagon_tight.bmp" />
-    <Content Include="Docs\PlanetariumImages\planetarium34.jpg" />
-    <Content Include="Docs\PlanetariumImages\planetarium345.jpg" />
-    <Content Include="Docs\PlanetariumImages\planetariuma.jpg" />
-    <Content Include="Docs\PlanetariumImages\projectorstand.jpg" />
-    <Content Include="Docs\PlanetariumImages\seating4.jpg" />
-    <Content Include="Docs\PlanetariumImages\SecondaryMirror.jpg" />
-    <Content Include="Docs\PlanetariumImages\secondaryprojection.jpg" />
-    <Content Include="Docs\PlanetariumImages\SecondaryShelf.jpg" />
-    <Content Include="Docs\PlanetariumImages\shades.jpg" />
-    <Content Include="Docs\PlanetariumImages\Triangle41.bmp" />
-    <Content Include="Docs\PlanetariumImages\Triangle41.jpg" />
-    <Content Include="Docs\PlanetariumImages\Triangle48.bmp" />
-    <Content Include="Docs\PlanetariumImages\Triangle48.jpg" />
-    <Content Include="Docs\PlanetariumImages\wiring.jpg" />
     <Content Include="Docs\Samples\displaycode.htm" />
     <Content Include="Docs\Samples\Sample_WWT Web Client Arrived.html" />
     <Content Include="Docs\Samples\Sample_WWT Web Client Click Event.html" />
@@ -886,238 +666,6 @@
     <Content Include="Docs\Scripts\jqueryCodeView.css" />
     <Content Include="Docs\Scripts\jqueryCodeView.js" />
     <Content Include="Docs\SDK_style.css" />
-    <Content Include="Docs\uiimages\3Dsolarsystem.jpg" />
-    <Content Include="Docs\uiimages\3Dsolarsystem2.jpg" />
-    <Content Include="Docs\uiimages\andromeda.jpg" />
-    <Content Include="Docs\uiimages\APlanet.jpg" />
-    <Content Include="Docs\uiimages\ASCOMDownload.jpg" />
-    <Content Include="Docs\uiimages\ASCOMInstalled.jpg" />
-    <Content Include="Docs\uiimages\ASCOMNotInstalled.jpg" />
-    <Content Include="Docs\uiimages\ASCOMSetup.jpg" />
-    <Content Include="Docs\uiimages\ASCOMTelescopeChooser.jpg" />
-    <Content Include="Docs\uiimages\ASCOMTraffic.jpg" />
-    <Content Include="Docs\uiimages\Asterism.jpg" />
-    <Content Include="Docs\uiimages\azimuthaltitude.jpg" />
-    <Content Include="Docs\uiimages\BlackHole1.jpg" />
-    <Content Include="Docs\uiimages\BlackHole2.jpg" />
-    <Content Include="Docs\uiimages\brightness.jpg" />
-    <Content Include="Docs\uiimages\CelestialSphere.jpg" />
-    <Content Include="Docs\uiimages\CenterOfMilkyWay.png" />
-    <Content Include="Docs\uiimages\circumpolar.jpg" />
-    <Content Include="Docs\uiimages\ClassificationOtherL1014.jpg" />
-    <Content Include="Docs\uiimages\cluster1.jpg" />
-    <Content Include="Docs\uiimages\cluster2.jpg" />
-    <Content Include="Docs\uiimages\ClusterOfGalaxies.jpg" />
-    <Content Include="Docs\uiimages\CommunityWebPage.jpg" />
-    <Content Include="Docs\uiimages\conesearch.jpg" />
-    <Content Include="Docs\uiimages\ConeSearchPulsar.jpg" />
-    <Content Include="Docs\uiimages\ConjunctionMoonVenusJupiter.jpg" />
-    <Content Include="Docs\uiimages\ConstellationYoungAndOld.jpg" />
-    <Content Include="Docs\uiimages\contextproperties.jpg" />
-    <Content Include="Docs\uiimages\ContextSearch.jpg" />
-    <Content Include="Docs\uiimages\ContextSearchFilter.jpg" />
-    <Content Include="Docs\uiimages\copernicuscrater.jpg" />
-    <Content Include="Docs\uiimages\cosmos.jpg" />
-    <Content Include="Docs\uiimages\deimos.jpg" />
-    <Content Include="Docs\uiimages\desktopicons.jpg" />
-    <Content Include="Docs\uiimages\domesetup.jpg" />
-    <Content Include="Docs\uiimages\domesetupoptions.jpg" />
-    <Content Include="Docs\uiimages\DoubleStars.jpg" />
-    <Content Include="Docs\uiimages\EarthMoonSun.jpg" />
-    <Content Include="Docs\uiimages\earthresearch_quakes.jpg" />
-    <Content Include="Docs\uiimages\earthresearch_quakesLayers.jpg" />
-    <Content Include="Docs\uiimages\EarthResearch_spreadsheetproperties.jpg" />
-    <Content Include="Docs\uiimages\eclipse.jpg" />
-    <Content Include="Docs\uiimages\Edinburgh.jpg" />
-    <Content Include="Docs\uiimages\EditObjectInformation.jpg" />
-    <Content Include="Docs\uiimages\EllipticalGalaxy.jpg" />
-    <Content Include="Docs\uiimages\ExploreMenuEntries2.jpg" />
-    <Content Include="Docs\uiimages\ex_3d-model-properties.png" />
-    <Content Include="Docs\uiimages\ex_3d-model-xyz.png" />
-    <Content Include="Docs\uiimages\ex_Earth-OzDay.png" />
-    <Content Include="Docs\uiimages\ex_Earth-OzNight.png" />
-    <Content Include="Docs\uiimages\ex_Sandbox-add.png" />
-    <Content Include="Docs\uiimages\FieldOfViewIndicator.jpg" />
-    <Content Include="Docs\uiimages\FinderScope.jpg" />
-    <Content Include="Docs\uiimages\FinderScopeExpandedMenu.jpg" />
-    <Content Include="Docs\uiimages\FinderScopeImagery.jpg" />
-    <Content Include="Docs\uiimages\FinderScopeInformation.jpg" />
-    <Content Include="Docs\uiimages\FinderScopeMenu1.jpg" />
-    <Content Include="Docs\uiimages\FinderScopeMenu2.jpg" />
-    <Content Include="Docs\uiimages\finderscopesampmenu.jpg" />
-    <Content Include="Docs\uiimages\FinderScopeVO.jpg" />
-    <Content Include="Docs\uiimages\finishedfour.jpg" />
-    <Content Include="Docs\uiimages\firstpointofaries.jpg" />
-    <Content Include="Docs\uiimages\FITSHistogram.jpg" />
-    <Content Include="Docs\uiimages\FITSScale.jpg" />
-    <Content Include="Docs\uiimages\FlamingStarNebula.jpg" />
-    <Content Include="Docs\uiimages\fulldome.jpg" />
-    <Content Include="Docs\uiimages\Galaxy.jpg" />
-    <Content Include="Docs\uiimages\GanymedeJupiter.jpg" />
-    <Content Include="Docs\uiimages\ganymedesurface.jpg" />
-    <Content Include="Docs\uiimages\GiantMolecularCloud.jpg" />
-    <Content Include="Docs\uiimages\GlobularCluster.jpg" />
-    <Content Include="Docs\uiimages\GuidedTourMenuEntries.jpg" />
-    <Content Include="Docs\uiimages\GuidedTourMenuEntries2.jpg" />
-    <Content Include="Docs\uiimages\HubbleStudies.jpg" />
-    <Content Include="Docs\uiimages\ImageAlignment.jpg" />
-    <Content Include="Docs\uiimages\ImageCrossfade.jpg" />
-    <Content Include="Docs\uiimages\InteractiveTourCorrect.jpg" />
-    <Content Include="Docs\uiimages\InteractiveTourMenu.jpg" />
-    <Content Include="Docs\uiimages\InteractiveTourSelectLink.jpg" />
-    <Content Include="Docs\uiimages\InteractiveTourWrong.jpg" />
-    <Content Include="Docs\uiimages\Io.jpg" />
-    <Content Include="Docs\uiimages\IoJupiterMilkyWay.jpg" />
-    <Content Include="Docs\uiimages\IrregularGalaxyM82.jpg" />
-    <Content Include="Docs\uiimages\Kepler.jpg" />
-    <Content Include="Docs\uiimages\Knot.jpg" />
-    <Content Include="Docs\uiimages\largemagellaniccloud.jpg" />
-    <Content Include="Docs\uiimages\LookAt.jpg" />
-    <Content Include="Docs\uiimages\LowerPanelFOV.jpg" />
-    <Content Include="Docs\uiimages\m33.jpg" />
-    <Content Include="Docs\uiimages\M51PlotName.jpg" />
-    <Content Include="Docs\uiimages\MainViewHeartNebula.jpg" />
-    <Content Include="Docs\uiimages\ManageDataCache.jpg" />
-    <Content Include="Docs\uiimages\MaxContext.jpg" />
-    <Content Include="Docs\uiimages\milkyway.jpg" />
-    <Content Include="Docs\uiimages\mimas.jpg" />
-    <Content Include="Docs\uiimages\mirandaovoid.jpg" />
-    <Content Include="Docs\uiimages\mirrorwarping.jpg" />
-    <Content Include="Docs\uiimages\moonrise.jpg" />
-    <Content Include="Docs\uiimages\moonset.jpg" />
-    <Content Include="Docs\uiimages\MultipleStars.jpg" />
-    <Content Include="Docs\uiimages\NearbyDustClouds.jpg" />
-    <Content Include="Docs\uiimages\Nebula.jpg" />
-    <Content Include="Docs\uiimages\NebulousCluster.jpg" />
-    <Content Include="Docs\uiimages\NEDSearch.jpg" />
-    <Content Include="Docs\uiimages\NEDSearchM51.jpg" />
-    <Content Include="Docs\uiimages\NEDSearchVOTable.jpg" />
-    <Content Include="Docs\uiimages\NeptuneMilkyWay.jpg" />
-    <Content Include="Docs\uiimages\NeptuneStars.jpg" />
-    <Content Include="Docs\uiimages\NeutronStar.jpg" />
-    <Content Include="Docs\uiimages\OlympusMons1.jpg" />
-    <Content Include="Docs\uiimages\OlympusMons2.jpg" />
-    <Content Include="Docs\uiimages\OlympusMons3.jpg" />
-    <Content Include="Docs\uiimages\OpenCluster.jpg" />
-    <Content Include="Docs\uiimages\OtherNGC.jpg" />
-    <Content Include="Docs\uiimages\Panorama.jpg" />
-    <Content Include="Docs\uiimages\Panorama_Cliff.jpg" />
-    <Content Include="Docs\uiimages\Panorama_Erebus.jpg" />
-    <Content Include="Docs\uiimages\Panorama_FalseColor.jpg" />
-    <Content Include="Docs\uiimages\Panorama_Lyell.jpg" />
-    <Content Include="Docs\uiimages\Panorama_ManyRovers.jpg" />
-    <Content Include="Docs\uiimages\partialeclipse.jpg" />
-    <Content Include="Docs\uiimages\PictureIcon.jpg" />
-    <Content Include="Docs\uiimages\Pinwheel.jpg" />
-    <Content Include="Docs\uiimages\PinwheelRADec.jpg" />
-    <Content Include="Docs\uiimages\piscesdwarf.jpg" />
-    <Content Include="Docs\uiimages\PlanetaryNebula.jpg" />
-    <Content Include="Docs\uiimages\PlotResults.jpg" />
-    <Content Include="Docs\uiimages\PlutoLighting.jpg" />
-    <Content Include="Docs\uiimages\PlutoNoLighting.jpg" />
-    <Content Include="Docs\uiimages\projectionsixa.jpg" />
-    <Content Include="Docs\uiimages\proximacentauri.jpg" />
-    <Content Include="Docs\uiimages\ReflectionNebula.jpg" />
-    <Content Include="Docs\uiimages\sagittariusdwarfgalaxy.jpg" />
-    <Content Include="Docs\uiimages\ScopeSimulator.jpg" />
-    <Content Include="Docs\uiimages\scopesimulatorblank.jpg" />
-    <Content Include="Docs\uiimages\ScopeSimulatorOnPolaris.jpg" />
-    <Content Include="Docs\uiimages\SDK_8.png" />
-    <Content Include="Docs\uiimages\SDK_9.png" />
-    <Content Include="Docs\uiimages\SearchAndPlot.jpg" />
-    <Content Include="Docs\uiimages\SearchMenuEntries.png" />
-    <Content Include="Docs\uiimages\SearchPanel1.jpg" />
-    <Content Include="Docs\uiimages\SearchPanel1.png" />
-    <Content Include="Docs\uiimages\shareddatacache.jpg" />
-    <Content Include="Docs\uiimages\sirius.jpg" />
-    <Content Include="Docs\uiimages\SkyContext.jpg" />
-    <Content Include="Docs\uiimages\skytonight_Canopus.jpg" />
-    <Content Include="Docs\uiimages\skytonight_jupiterfinder.jpg" />
-    <Content Include="Docs\uiimages\skytonight_Polaris.jpg" />
-    <Content Include="Docs\uiimages\skytonight_SouthernCross.jpg" />
-    <Content Include="Docs\uiimages\skytonight_summertriangle.jpg" />
-    <Content Include="Docs\uiimages\skytonight_wintertriangle.jpg" />
-    <Content Include="Docs\uiimages\SolarSystemIo.jpg" />
-    <Content Include="Docs\uiimages\SolarSystemJupiter.jpg" />
-    <Content Include="Docs\uiimages\SolarSystemSaturn.jpg" />
-    <Content Include="Docs\uiimages\SomeSome.bmp" />
-    <Content Include="Docs\uiimages\SomeYes.bmp" />
-    <Content Include="Docs\uiimages\SpiralGalaxy.jpg" />
-    <Content Include="Docs\uiimages\Star.jpg" />
-    <Content Include="Docs\uiimages\Supernova.jpg" />
-    <Content Include="Docs\uiimages\supernova2003.jpg" />
-    <Content Include="Docs\uiimages\supernova2004.jpg" />
-    <Content Include="Docs\uiimages\SupernovaRemnant.jpg" />
-    <Content Include="Docs\uiimages\survey_2mass.jpg" />
-    <Content Include="Docs\uiimages\survey_blacksky.jpg" />
-    <Content Include="Docs\uiimages\survey_dustmap.jpg" />
-    <Content Include="Docs\uiimages\survey_femmi.jpg" />
-    <Content Include="Docs\uiimages\survey_galex.jpg" />
-    <Content Include="Docs\uiimages\survey_hipparcos.jpg" />
-    <Content Include="Docs\uiimages\survey_hydrogen.jpg" />
-    <Content Include="Docs\uiimages\survey_iris.jpg" />
-    <Content Include="Docs\uiimages\survey_rass.jpg" />
-    <Content Include="Docs\uiimages\survey_sky.jpg" />
-    <Content Include="Docs\uiimages\survey_sloan.jpg" />
-    <Content Include="Docs\uiimages\survey_tycho.jpg" />
-    <Content Include="Docs\uiimages\survey_USNaval.jpg" />
-    <Content Include="Docs\uiimages\survey_vlss.jpg" />
-    <Content Include="Docs\uiimages\survey_wmap.jpg" />
-    <Content Include="Docs\uiimages\TelescopeMenuEntries.jpg" />
-    <Content Include="Docs\uiimages\TelescopePanel1.jpg" />
-    <Content Include="Docs\uiimages\TheEarth.jpg" />
-    <Content Include="Docs\uiimages\TheNightSky.jpg" />
-    <Content Include="Docs\uiimages\TopPanelNext.jpg" />
-    <Content Include="Docs\uiimages\totaleclipse.jpg" />
-    <Content Include="Docs\uiimages\tourrating.jpg" />
-    <Content Include="Docs\uiimages\Tours_closing.jpg" />
-    <Content Include="Docs\uiimages\Tours_Navigation.jpg" />
-    <Content Include="Docs\uiimages\Tours_New_Closing.jpg" />
-    <Content Include="Docs\uiimages\Tours_New_Colors.jpg" />
-    <Content Include="Docs\uiimages\Tours_New_Edit.jpg" />
-    <Content Include="Docs\uiimages\Tours_New_Properites.jpg" />
-    <Content Include="Docs\uiimages\Tours_New_Secs.jpg" />
-    <Content Include="Docs\uiimages\Tours_New_ShapesMenu.jpg" />
-    <Content Include="Docs\uiimages\Tours_New_SlideMenu.jpg" />
-    <Content Include="Docs\uiimages\Tours_New_SlideTitle.jpg" />
-    <Content Include="Docs\uiimages\Tours_New_Text.jpg" />
-    <Content Include="Docs\uiimages\Tours_Playing.jpg" />
-    <Content Include="Docs\uiimages\Tours_Properties.jpg" />
-    <Content Include="Docs\uiimages\Tours_Running.jpg" />
-    <Content Include="Docs\uiimages\ui_Manage-Data-Cache.png" />
-    <Content Include="Docs\uiimages\ui_Network-Cache.png" />
-    <Content Include="Docs\uiimages\ui_Quito-View.png" />
-    <Content Include="Docs\uiimages\ui_win_Advanced-Settings-Menu.png" />
-    <Content Include="Docs\uiimages\ui_win_Constellation-Lines.png" />
-    <Content Include="Docs\uiimages\ui_win_Date-Time-Selection.png" />
-    <Content Include="Docs\uiimages\ui_win_Explore-Menu-Submenu-Open.png" />
-    <Content Include="Docs\uiimages\ui_win_Explore-Menu.png" />
-    <Content Include="Docs\uiimages\ui_win_Export-STL-for-3D-Printing.png" />
-    <Content Include="Docs\uiimages\ui_win_Frame-Rate.png" />
-    <Content Include="Docs\uiimages\ui_win_Full-Dome.png" />
-    <Content Include="Docs\uiimages\ui_win_Image-Stack.png" />
-    <Content Include="Docs\uiimages\ui_win_Layer-Manager-Toggle.png" />
-    <Content Include="Docs\uiimages\ui_win_Layer-Manager.png" />
-    <Content Include="Docs\uiimages\ui_win_Main-Menu-Down-Arrow.png" />
-    <Content Include="Docs\uiimages\ui_win_Multi-Sample-Antialiasing.png" />
-    <Content Include="Docs\uiimages\ui_win_Observing-Location-Options.png" />
-    <Content Include="Docs\uiimages\ui_win_Observing-Location.png" />
-    <Content Include="Docs\uiimages\ui_win_Observing-Time.png" />
-    <Content Include="Docs\uiimages\ui_win_Opening-View.png" />
-    <Content Include="Docs\uiimages\ui_win_Screen-Broadcast.png" />
-    <Content Include="Docs\uiimages\ui_win_Settings-Experience.png" />
-    <Content Include="Docs\uiimages\ui_win_Settings-Menu-Items.png" />
-    <Content Include="Docs\uiimages\ui_win_Settings-Panel.png" />
-    <Content Include="Docs\uiimages\ui_win_Startup-Look-At.jpg" />
-    <Content Include="Docs\uiimages\ui_win_Stereo.png" />
-    <Content Include="Docs\uiimages\ui_win_Top-Panel.png" />
-    <Content Include="Docs\uiimages\ui_win_View-Menu-Entries.png" />
-    <Content Include="Docs\uiimages\Unidentified.jpg" />
-    <Content Include="Docs\uiimages\ViewMenu1.jpg" />
-    <Content Include="Docs\uiimages\ViewMenu2.jpg" />
-    <Content Include="Docs\uiimages\virgocluster.jpg" />
-    <Content Include="Docs\uiimages\visiblelight.jpg" />
-    <Content Include="Docs\uiimages\xboxcontroller.jpg" />
     <Content Include="Docs\user_style.css" />
     <Content Include="Docs\WorldWideTelescopeDataFilesReference.html" />
     <Content Include="Docs\WorldWideTelescopeDataToolsGuide.html" />
@@ -1134,6 +682,15 @@
     <Content Include="Docs\WorldWideTelescopeWebControlScriptReference.html" />
     <Content Include="Docs\WorldWideTelescope_lcapi.html" />
     <Content Include="Docs\Wtml\an_author.jpg" />
+    <Content Include="Docs\Wtml\Callisto surface.wtml" />
+    <Content Include="Docs\Wtml\Europa surface.wtml" />
+    <Content Include="Docs\Wtml\Ganymede surface.wtml" />
+    <Content Include="Docs\Wtml\Io surface.wtml" />
+    <Content Include="Docs\Wtml\Mars surface.wtml" />
+    <Content Include="Docs\Wtml\Mercury surface.wtml" />
+    <Content Include="Docs\Wtml\Moon surface.wtml" />
+    <Content Include="Docs\Wtml\MyPlaces.wtml" />
+    <Content Include="Docs\Wtml\planettourcollection.wtml" />
     <Content Include="Docs\Wtml\Sample_Blank Collection.html" />
     <Content Include="Docs\Wtml\Sample_Community Payload.html" />
     <Content Include="Docs\Wtml\Sample_CommunityPayload.html" />
@@ -1143,7 +700,393 @@
     <Content Include="Docs\Wtml\sample_tourcollection.html" />
     <Content Include="Docs\Wtml\Thumb1.jpg" />
     <Content Include="Docs\Wtml\Thumb2.jpg" />
-    <Content Include="Docs\YesNo.bmp" />
+    <Content Include="Docs\Wtml\TourOne.wtt" />
+    <Content Include="Docs\Wtml\TourTwo.wtt" />
+    <Content Include="Docs\Wtml\Venus surface.wtml" />
+    <Content Include="GetTourFile.aspx" />
+    <Content Include="GetTourFile2.aspx" />
+    <Content Include="hello.aspx" />
+    <Content Include="hello2.aspx" />
+    <Content Include="msshrtmi.dll" />
+    <Content Include="WWT2\ClientVersion.txt" />
+    <Content Include="WWT2\Copy of updateurl.txt" />
+    <Content Include="WWT2\dataversion.txt" />
+    <Content Include="WWT2\EqClientVersion.txt" />
+    <Content Include="WWT2\Eqdataversion.txt" />
+    <Content Include="WWT2\ExcelAddinUpdateUrl.txt" />
+    <Content Include="WWT2\ExcelAddinVersion.txt" />
+    <Content Include="WWT2\Message.txt" />
+    <Content Include="WWT2\minver.txt" />
+    <Content Include="WWT2\updateurl.txt" />
+    <Content Include="WWT2\version.txt" />
+    <Content Include="WWT2\warnver.txt" />
+    <Content Include="WWTWeb\2MASSOct.aspx" />
+    <Content Include="WWTWeb\512\mag-0.1.png" />
+    <Content Include="WWTWeb\512\mag-0.2.png" />
+    <Content Include="WWTWeb\512\mag-0.3.png" />
+    <Content Include="WWTWeb\512\mag-0.4.png" />
+    <Content Include="WWTWeb\512\mag-0.5.png" />
+    <Content Include="WWTWeb\512\mag-0.6.png" />
+    <Content Include="WWTWeb\512\mag-0.7.png" />
+    <Content Include="WWTWeb\512\mag-0.8.png" />
+    <Content Include="WWTWeb\512\mag-0.9.png" />
+    <Content Include="WWTWeb\512\mag-1.0.png" />
+    <Content Include="WWTWeb\512\mag-1.1.png" />
+    <Content Include="WWTWeb\512\mag-1.2.png" />
+    <Content Include="WWTWeb\512\mag-1.3.png" />
+    <Content Include="WWTWeb\512\mag-1.4.png" />
+    <Content Include="WWTWeb\512\mag-1.5.png" />
+    <Content Include="WWTWeb\512\mag0.0.png" />
+    <Content Include="WWTWeb\512\mag0.1.png" />
+    <Content Include="WWTWeb\512\mag0.2.png" />
+    <Content Include="WWTWeb\512\mag0.3.png" />
+    <Content Include="WWTWeb\512\mag0.4.png" />
+    <Content Include="WWTWeb\512\mag0.5.png" />
+    <Content Include="WWTWeb\512\mag0.6.png" />
+    <Content Include="WWTWeb\512\mag0.7.png" />
+    <Content Include="WWTWeb\512\mag0.8.png" />
+    <Content Include="WWTWeb\512\mag0.9.png" />
+    <Content Include="WWTWeb\512\mag1.0.png" />
+    <Content Include="WWTWeb\512\mag1.1.png" />
+    <Content Include="WWTWeb\512\mag1.2.png" />
+    <Content Include="WWTWeb\512\mag1.3.png" />
+    <Content Include="WWTWeb\512\mag1.4.png" />
+    <Content Include="WWTWeb\512\mag1.5.png" />
+    <Content Include="WWTWeb\512\mag1.6.png" />
+    <Content Include="WWTWeb\512\mag1.7.png" />
+    <Content Include="WWTWeb\512\mag1.8.png" />
+    <Content Include="WWTWeb\512\mag1.9.png" />
+    <Content Include="WWTWeb\512\mag10.0.png" />
+    <Content Include="WWTWeb\512\mag10.1.png" />
+    <Content Include="WWTWeb\512\mag10.2.png" />
+    <Content Include="WWTWeb\512\mag10.3.png" />
+    <Content Include="WWTWeb\512\mag10.4.png" />
+    <Content Include="WWTWeb\512\mag10.5.png" />
+    <Content Include="WWTWeb\512\mag10.6.png" />
+    <Content Include="WWTWeb\512\mag10.7.png" />
+    <Content Include="WWTWeb\512\mag10.8.png" />
+    <Content Include="WWTWeb\512\mag10.9.png" />
+    <Content Include="WWTWeb\512\mag11.0.png" />
+    <Content Include="WWTWeb\512\mag11.1.png" />
+    <Content Include="WWTWeb\512\mag11.2.png" />
+    <Content Include="WWTWeb\512\mag11.3.png" />
+    <Content Include="WWTWeb\512\mag11.4.png" />
+    <Content Include="WWTWeb\512\mag11.5.png" />
+    <Content Include="WWTWeb\512\mag11.6.png" />
+    <Content Include="WWTWeb\512\mag11.7.png" />
+    <Content Include="WWTWeb\512\mag11.8.png" />
+    <Content Include="WWTWeb\512\mag11.9.png" />
+    <Content Include="WWTWeb\512\mag12.0.png" />
+    <Content Include="WWTWeb\512\mag12.1.png" />
+    <Content Include="WWTWeb\512\mag12.2.png" />
+    <Content Include="WWTWeb\512\mag12.3.png" />
+    <Content Include="WWTWeb\512\mag12.4.png" />
+    <Content Include="WWTWeb\512\mag12.5.png" />
+    <Content Include="WWTWeb\512\mag12.6.png" />
+    <Content Include="WWTWeb\512\mag12.7.png" />
+    <Content Include="WWTWeb\512\mag12.8.png" />
+    <Content Include="WWTWeb\512\mag12.9.png" />
+    <Content Include="WWTWeb\512\mag13.0.png" />
+    <Content Include="WWTWeb\512\mag13.1.png" />
+    <Content Include="WWTWeb\512\mag13.2.png" />
+    <Content Include="WWTWeb\512\mag13.3.png" />
+    <Content Include="WWTWeb\512\mag13.4.png" />
+    <Content Include="WWTWeb\512\mag13.5.png" />
+    <Content Include="WWTWeb\512\mag13.6.png" />
+    <Content Include="WWTWeb\512\mag13.7.png" />
+    <Content Include="WWTWeb\512\mag13.8.png" />
+    <Content Include="WWTWeb\512\mag13.9.png" />
+    <Content Include="WWTWeb\512\mag14.0.png" />
+    <Content Include="WWTWeb\512\mag14.1.png" />
+    <Content Include="WWTWeb\512\mag14.2.png" />
+    <Content Include="WWTWeb\512\mag14.3.png" />
+    <Content Include="WWTWeb\512\mag14.4.png" />
+    <Content Include="WWTWeb\512\mag14.5.png" />
+    <Content Include="WWTWeb\512\mag14.6.png" />
+    <Content Include="WWTWeb\512\mag14.7.png" />
+    <Content Include="WWTWeb\512\mag14.8.png" />
+    <Content Include="WWTWeb\512\mag14.9.png" />
+    <Content Include="WWTWeb\512\mag15.0.png" />
+    <Content Include="WWTWeb\512\mag15.1.png" />
+    <Content Include="WWTWeb\512\mag15.2.png" />
+    <Content Include="WWTWeb\512\mag15.3.png" />
+    <Content Include="WWTWeb\512\mag15.4.png" />
+    <Content Include="WWTWeb\512\mag15.5.png" />
+    <Content Include="WWTWeb\512\mag15.6.png" />
+    <Content Include="WWTWeb\512\mag15.7.png" />
+    <Content Include="WWTWeb\512\mag15.8.png" />
+    <Content Include="WWTWeb\512\mag15.9.png" />
+    <Content Include="WWTWeb\512\mag16.0.png" />
+    <Content Include="WWTWeb\512\mag16.1.png" />
+    <Content Include="WWTWeb\512\mag16.2.png" />
+    <Content Include="WWTWeb\512\mag16.3.png" />
+    <Content Include="WWTWeb\512\mag16.4.png" />
+    <Content Include="WWTWeb\512\mag16.5.png" />
+    <Content Include="WWTWeb\512\mag16.6.png" />
+    <Content Include="WWTWeb\512\mag16.7.png" />
+    <Content Include="WWTWeb\512\mag16.8.png" />
+    <Content Include="WWTWeb\512\mag16.9.png" />
+    <Content Include="WWTWeb\512\mag17.0.png" />
+    <Content Include="WWTWeb\512\mag17.1.png" />
+    <Content Include="WWTWeb\512\mag17.2.png" />
+    <Content Include="WWTWeb\512\mag17.3.png" />
+    <Content Include="WWTWeb\512\mag17.4.png" />
+    <Content Include="WWTWeb\512\mag17.5.png" />
+    <Content Include="WWTWeb\512\mag17.6.png" />
+    <Content Include="WWTWeb\512\mag17.7.png" />
+    <Content Include="WWTWeb\512\mag17.8.png" />
+    <Content Include="WWTWeb\512\mag17.9.png" />
+    <Content Include="WWTWeb\512\mag18.0.png" />
+    <Content Include="WWTWeb\512\mag18.1.png" />
+    <Content Include="WWTWeb\512\mag18.2.png" />
+    <Content Include="WWTWeb\512\mag18.3.png" />
+    <Content Include="WWTWeb\512\mag18.4.png" />
+    <Content Include="WWTWeb\512\mag18.5.png" />
+    <Content Include="WWTWeb\512\mag18.6.png" />
+    <Content Include="WWTWeb\512\mag18.7.png" />
+    <Content Include="WWTWeb\512\mag18.8.png" />
+    <Content Include="WWTWeb\512\mag18.9.png" />
+    <Content Include="WWTWeb\512\mag19.0.png" />
+    <Content Include="WWTWeb\512\mag19.1.png" />
+    <Content Include="WWTWeb\512\mag19.2.png" />
+    <Content Include="WWTWeb\512\mag19.3.png" />
+    <Content Include="WWTWeb\512\mag19.4.png" />
+    <Content Include="WWTWeb\512\mag19.5.png" />
+    <Content Include="WWTWeb\512\mag19.6.png" />
+    <Content Include="WWTWeb\512\mag19.7.png" />
+    <Content Include="WWTWeb\512\mag19.8.png" />
+    <Content Include="WWTWeb\512\mag19.9.png" />
+    <Content Include="WWTWeb\512\mag2.0.png" />
+    <Content Include="WWTWeb\512\mag2.1.png" />
+    <Content Include="WWTWeb\512\mag2.2.png" />
+    <Content Include="WWTWeb\512\mag2.3.png" />
+    <Content Include="WWTWeb\512\mag2.4.png" />
+    <Content Include="WWTWeb\512\mag2.5.png" />
+    <Content Include="WWTWeb\512\mag2.6.png" />
+    <Content Include="WWTWeb\512\mag2.7.png" />
+    <Content Include="WWTWeb\512\mag2.8.png" />
+    <Content Include="WWTWeb\512\mag2.9.png" />
+    <Content Include="WWTWeb\512\mag20.0.png" />
+    <Content Include="WWTWeb\512\mag20.1.png" />
+    <Content Include="WWTWeb\512\mag20.2.png" />
+    <Content Include="WWTWeb\512\mag20.3.png" />
+    <Content Include="WWTWeb\512\mag20.4.png" />
+    <Content Include="WWTWeb\512\mag20.5.png" />
+    <Content Include="WWTWeb\512\mag20.6.png" />
+    <Content Include="WWTWeb\512\mag20.7.png" />
+    <Content Include="WWTWeb\512\mag20.8.png" />
+    <Content Include="WWTWeb\512\mag20.9.png" />
+    <Content Include="WWTWeb\512\mag21.0.png" />
+    <Content Include="WWTWeb\512\mag21.1.png" />
+    <Content Include="WWTWeb\512\mag21.2.png" />
+    <Content Include="WWTWeb\512\mag21.3.png" />
+    <Content Include="WWTWeb\512\mag21.4.png" />
+    <Content Include="WWTWeb\512\mag21.5.png" />
+    <Content Include="WWTWeb\512\mag21.6.png" />
+    <Content Include="WWTWeb\512\mag21.7.png" />
+    <Content Include="WWTWeb\512\mag21.8.png" />
+    <Content Include="WWTWeb\512\mag21.9.png" />
+    <Content Include="WWTWeb\512\mag22.0.png" />
+    <Content Include="WWTWeb\512\mag22.1.png" />
+    <Content Include="WWTWeb\512\mag22.2.png" />
+    <Content Include="WWTWeb\512\mag22.3.png" />
+    <Content Include="WWTWeb\512\mag22.4.png" />
+    <Content Include="WWTWeb\512\mag22.5.png" />
+    <Content Include="WWTWeb\512\mag22.6.png" />
+    <Content Include="WWTWeb\512\mag22.7.png" />
+    <Content Include="WWTWeb\512\mag22.8.png" />
+    <Content Include="WWTWeb\512\mag22.9.png" />
+    <Content Include="WWTWeb\512\mag23.0.png" />
+    <Content Include="WWTWeb\512\mag23.1.png" />
+    <Content Include="WWTWeb\512\mag23.2.png" />
+    <Content Include="WWTWeb\512\mag23.3.png" />
+    <Content Include="WWTWeb\512\mag23.4.png" />
+    <Content Include="WWTWeb\512\mag23.5.png" />
+    <Content Include="WWTWeb\512\mag23.6.png" />
+    <Content Include="WWTWeb\512\mag23.7.png" />
+    <Content Include="WWTWeb\512\mag23.8.png" />
+    <Content Include="WWTWeb\512\mag23.9.png" />
+    <Content Include="WWTWeb\512\mag24.0.png" />
+    <Content Include="WWTWeb\512\mag24.1.png" />
+    <Content Include="WWTWeb\512\mag24.2.png" />
+    <Content Include="WWTWeb\512\mag24.3.png" />
+    <Content Include="WWTWeb\512\mag24.4.png" />
+    <Content Include="WWTWeb\512\mag24.5.png" />
+    <Content Include="WWTWeb\512\mag24.6.png" />
+    <Content Include="WWTWeb\512\mag24.7.png" />
+    <Content Include="WWTWeb\512\mag24.8.png" />
+    <Content Include="WWTWeb\512\mag24.9.png" />
+    <Content Include="WWTWeb\512\mag25.0.png" />
+    <Content Include="WWTWeb\512\mag3.0.png" />
+    <Content Include="WWTWeb\512\mag3.1.png" />
+    <Content Include="WWTWeb\512\mag3.2.png" />
+    <Content Include="WWTWeb\512\mag3.3.png" />
+    <Content Include="WWTWeb\512\mag3.4.png" />
+    <Content Include="WWTWeb\512\mag3.5.png" />
+    <Content Include="WWTWeb\512\mag3.6.png" />
+    <Content Include="WWTWeb\512\mag3.7.png" />
+    <Content Include="WWTWeb\512\mag3.8.png" />
+    <Content Include="WWTWeb\512\mag3.9.png" />
+    <Content Include="WWTWeb\512\mag4.0.png" />
+    <Content Include="WWTWeb\512\mag4.1.png" />
+    <Content Include="WWTWeb\512\mag4.2.png" />
+    <Content Include="WWTWeb\512\mag4.3.png" />
+    <Content Include="WWTWeb\512\mag4.4.png" />
+    <Content Include="WWTWeb\512\mag4.5.png" />
+    <Content Include="WWTWeb\512\mag4.6.png" />
+    <Content Include="WWTWeb\512\mag4.7.png" />
+    <Content Include="WWTWeb\512\mag4.8.png" />
+    <Content Include="WWTWeb\512\mag4.9.png" />
+    <Content Include="WWTWeb\512\mag5.0.png" />
+    <Content Include="WWTWeb\512\mag5.1.png" />
+    <Content Include="WWTWeb\512\mag5.2.png" />
+    <Content Include="WWTWeb\512\mag5.3.png" />
+    <Content Include="WWTWeb\512\mag5.4.png" />
+    <Content Include="WWTWeb\512\mag5.5.png" />
+    <Content Include="WWTWeb\512\mag5.6.png" />
+    <Content Include="WWTWeb\512\mag5.7.png" />
+    <Content Include="WWTWeb\512\mag5.8.png" />
+    <Content Include="WWTWeb\512\mag5.9.png" />
+    <Content Include="WWTWeb\512\mag6.0.png" />
+    <Content Include="WWTWeb\512\mag6.1.png" />
+    <Content Include="WWTWeb\512\mag6.2.png" />
+    <Content Include="WWTWeb\512\mag6.3.png" />
+    <Content Include="WWTWeb\512\mag6.4.png" />
+    <Content Include="WWTWeb\512\mag6.5.png" />
+    <Content Include="WWTWeb\512\mag6.6.png" />
+    <Content Include="WWTWeb\512\mag6.7.png" />
+    <Content Include="WWTWeb\512\mag6.8.png" />
+    <Content Include="WWTWeb\512\mag6.9.png" />
+    <Content Include="WWTWeb\512\mag7.0.png" />
+    <Content Include="WWTWeb\512\mag7.1.png" />
+    <Content Include="WWTWeb\512\mag7.2.png" />
+    <Content Include="WWTWeb\512\mag7.3.png" />
+    <Content Include="WWTWeb\512\mag7.4.png" />
+    <Content Include="WWTWeb\512\mag7.5.png" />
+    <Content Include="WWTWeb\512\mag7.6.png" />
+    <Content Include="WWTWeb\512\mag7.7.png" />
+    <Content Include="WWTWeb\512\mag7.8.png" />
+    <Content Include="WWTWeb\512\mag7.9.png" />
+    <Content Include="WWTWeb\512\mag8.0.png" />
+    <Content Include="WWTWeb\512\mag8.1.png" />
+    <Content Include="WWTWeb\512\mag8.2.png" />
+    <Content Include="WWTWeb\512\mag8.3.png" />
+    <Content Include="WWTWeb\512\mag8.4.png" />
+    <Content Include="WWTWeb\512\mag8.5.png" />
+    <Content Include="WWTWeb\512\mag8.6.png" />
+    <Content Include="WWTWeb\512\mag8.7.png" />
+    <Content Include="WWTWeb\512\mag8.8.png" />
+    <Content Include="WWTWeb\512\mag8.9.png" />
+    <Content Include="WWTWeb\512\mag9.0.png" />
+    <Content Include="WWTWeb\512\mag9.1.png" />
+    <Content Include="WWTWeb\512\mag9.2.png" />
+    <Content Include="WWTWeb\512\mag9.3.png" />
+    <Content Include="WWTWeb\512\mag9.4.png" />
+    <Content Include="WWTWeb\512\mag9.5.png" />
+    <Content Include="WWTWeb\512\mag9.6.png" />
+    <Content Include="WWTWeb\512\mag9.7.png" />
+    <Content Include="WWTWeb\512\mag9.8.png" />
+    <Content Include="WWTWeb\512\mag9.9.png" />
+    <Content Include="WWTWeb\BingDemTile.aspx" />
+    <Content Include="WWTWeb\BingDemTile2.aspx" />
+    <Content Include="WWTWeb\Catalog.aspx" />
+    <Content Include="WWTWeb\Catalog2.aspx" />
+    <Content Include="WWTWeb\dem.aspx" />
+    <Content Include="WWTWeb\dembath.aspx" />
+    <Content Include="WWTWeb\demmars.aspx" />
+    <Content Include="WWTWeb\demmarsEmpty.aspx" />
+    <Content Include="WWTWeb\demmars_new.aspx" />
+    <Content Include="WWTWeb\demTile.aspx" />
+    <Content Include="WWTWeb\DSS.aspx" />
+    <Content Include="WWTWeb\DSSToast.aspx" />
+    <Content Include="WWTWeb\DustToast.aspx" />
+    <Content Include="WWTWeb\EarthBlend.aspx" />
+    <Content Include="WWTWeb\EarthMerBath.aspx" />
+    <Content Include="WWTWeb\ExcelAddinUpdate.aspx" />
+    <Content Include="WWTWeb\FixedAltitudeDemTile.aspx" />
+    <Content Include="WWTWeb\g360.aspx" />
+    <Content Include="WWTWeb\Galex4Far.aspx" />
+    <Content Include="WWTWeb\Galex4Near.aspx" />
+    <Content Include="WWTWeb\GalexToast.aspx" />
+    <Content Include="WWTWeb\GetAuthorThumbnail.aspx" />
+    <Content Include="WWTWeb\GetHostName.aspx" />
+    <Content Include="WWTWeb\GetTile.aspx" />
+    <Content Include="WWTWeb\GetTour.aspx" />
+    <Content Include="WWTWeb\GetTourFile.aspx" />
+    <Content Include="WWTWeb\GetTourList.aspx" />
+    <Content Include="WWTWeb\GetTours.aspx" />
+    <Content Include="WWTWeb\GetTourThumbnail.aspx" />
+    <Content Include="WWTWeb\Glimpse.aspx" />
+    <Content Include="WWTWeb\Goto.aspx" />
+    <Content Include="WWTWeb\Goto2.aspx" />
+    <Content Include="WWTWeb\hAlphaToast.aspx" />
+    <Content Include="WWTWeb\Hirise.aspx" />
+    <Content Include="WWTWeb\HiriseDem.aspx" />
+    <Content Include="WWTWeb\HiriseDem2.aspx" />
+    <Content Include="WWTWeb\HiriseDem3.aspx" />
+    <Content Include="WWTWeb\isstle.aspx" />
+    <Content Include="WWTWeb\isstle2.aspx" />
+    <Content Include="WWTWeb\jupiter.aspx" />
+    <Content Include="WWTWeb\login.aspx" />
+    <Content Include="WWTWeb\Mandel.aspx" />
+    <Content Include="WWTWeb\mandel1.aspx" />
+    <Content Include="WWTWeb\mars.aspx" />
+    <Content Include="WWTWeb\marsdem.aspx" />
+    <Content Include="WWTWeb\MarsHirise.aspx" />
+    <Content Include="WWTWeb\MarsMoc.aspx" />
+    <Content Include="WWTWeb\MartianTile.aspx" />
+    <Content Include="WWTWeb\MartianTile2.aspx" />
+    <Content Include="WWTWeb\MartianTileEmpty.aspx" />
+    <Content Include="WWTWeb\MartianTileNew.aspx" />
+    <Content Include="WWTWeb\Mipsgal.aspx" />
+    <Content Include="WWTWeb\moondem.aspx" />
+    <Content Include="WWTWeb\moonOct.aspx" />
+    <Content Include="WWTWeb\moontoast.aspx" />
+    <Content Include="WWTWeb\moontoastdem.aspx" />
+    <Content Include="WWTWeb\postmars.aspx" />
+    <Content Include="WWTWeb\postmarsdem.aspx" />
+    <Content Include="WWTWeb\postmarsdem2.aspx" />
+    <Content Include="WWTWeb\PostRatingFeedback.aspx" />
+    <Content Include="WWTWeb\RassToast.aspx" />
+    <Content Include="WWTWeb\SDSSToast.aspx" />
+    <Content Include="WWTWeb\SDSSToast.offline.aspx" />
+    <Content Include="WWTWeb\SDSSToast2.aspx" />
+    <Content Include="WWTWeb\ShowImage.aspx" />
+    <Content Include="WWTWeb\ShowImage2.aspx" />
+    <Content Include="WWTWeb\StarChart.aspx" />
+    <Content Include="WWTWeb\test.aspx" />
+    <Content Include="WWTWeb\testfailover.aspx" />
+    <Content Include="WWTWeb\thumbnail.aspx" />
+    <Content Include="WWTWeb\TileImage.aspx" />
+    <Content Include="WWTWeb\tiles.aspx" />
+    <Content Include="WWTWeb\tiles2.aspx" />
+    <Content Include="WWTWeb\tilethumb.aspx" />
+    <Content Include="WWTWeb\TwoMassToast.aspx" />
+    <Content Include="WWTWeb\TychoOct.aspx" />
+    <Content Include="WWTWeb\veblend.aspx" />
+    <Content Include="WWTWeb\version.aspx" />
+    <Content Include="WWTWeb\versions.aspx" />
+    <Content Include="WWTWeb\vlssToast.aspx" />
+    <Content Include="WWTWeb\weblogin.aspx" />
+    <Content Include="WWTWeb\WebServiceProxy.aspx" />
+    <Content Include="WWTWeb\wmap.aspx" />
+    <Content Include="WWTWeb\WMSEarthToday.aspx" />
+    <Content Include="WWTWeb\WMSMoon.aspx" />
+    <Content Include="WWTWeb\WMSToast.aspx" />
+    <Content Include="WWTWeb\XML2WTT.aspx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="BingSiteAuth.xml" />
+    <Content Include="Content\CSS\angular-motion.css" />
+    <Content Include="Content\CSS\bootstrapValidator.css" />
+    <Content Include="Content\CSS\SDK_style.css" />
+    <Content Include="Content\CSS\wwt.css" />
+    <Content Include="Content\CSS\wwt.min.css" />
+    <Content Include="Content\print.htm" />
+    <Content Include="Content\Views\AddContent.html" />
+    <Content Include="Content\Views\CommunityContent.html" />
+    <Content Include="Content\Views\ContentDetail.html" />
+    <Content Include="Content\Views\MyProfile.html" />
     <Content Include="embedded-webcontrol.js" />
     <Content Include="Gruntfile.js" />
     <Content Include="Home.aspx" />
@@ -1191,10 +1134,88 @@
     <Content Include="Content\CSS\sprites.less" />
     <Content Include="Content\CSS\multiselect.less" />
     <Content Include="Scripts\ext\angular-file-upload.min.map" />
-    <Content Include="Localization\lang_en.tdf" />
     <Content Include="Content\OpenWWT\OpenWWT_Development.pdf" />
-    <Content Include="App_Readme\WURFL-v1.6.0.1.chm" />
     <Content Include="App_Data\wurfl-latest.zip" />
+    <Content Include="favicon.ico" />
+    <Content Include="Docs\WorldWideTelescopeAdd-inforExcelUserGuide.chm" />
+    <Content Include="Docs\WorldWideTelescopeSDKUserGuide.chm" />
+    <Content Include="Docs\WWTSDKFactSheet.pdf" />
+    <Content Include="Content\CSS\sprites.css.map">
+      <DependentUpon>sprites.css</DependentUpon>
+    </Content>
+    <Content Include="Bootstrap\less\alerts.less" />
+    <Content Include="Bootstrap\less\badges.less" />
+    <Content Include="Bootstrap\less\bootstrap.less" />
+    <Content Include="Bootstrap\less\breadcrumbs.less" />
+    <Content Include="Bootstrap\less\button-groups.less" />
+    <Content Include="Bootstrap\less\buttons.less" />
+    <Content Include="Bootstrap\less\carousel.less" />
+    <Content Include="Bootstrap\less\close.less" />
+    <Content Include="Bootstrap\less\code.less" />
+    <Content Include="Bootstrap\less\component-animations.less" />
+    <Content Include="Bootstrap\less\dropdowns.less" />
+    <Content Include="Bootstrap\less\forms.less" />
+    <Content Include="Bootstrap\less\glyphicons.less" />
+    <Content Include="Bootstrap\less\grid.less" />
+    <Content Include="Bootstrap\less\input-groups.less" />
+    <Content Include="Bootstrap\less\jumbotron.less" />
+    <Content Include="Bootstrap\less\labels.less" />
+    <Content Include="Bootstrap\less\list-group.less" />
+    <Content Include="Bootstrap\less\media.less" />
+    <Content Include="Bootstrap\less\mixins.less" />
+    <Content Include="Bootstrap\less\mixins\alerts.less" />
+    <Content Include="Bootstrap\less\mixins\background-variant.less" />
+    <Content Include="Bootstrap\less\mixins\border-radius.less" />
+    <Content Include="Bootstrap\less\mixins\buttons.less" />
+    <Content Include="Bootstrap\less\mixins\center-block.less" />
+    <Content Include="Bootstrap\less\mixins\clearfix.less" />
+    <Content Include="Bootstrap\less\mixins\forms.less" />
+    <Content Include="Bootstrap\less\mixins\gradients.less" />
+    <Content Include="Bootstrap\less\mixins\grid-framework.less" />
+    <Content Include="Bootstrap\less\mixins\grid.less" />
+    <Content Include="Bootstrap\less\mixins\hide-text.less" />
+    <Content Include="Bootstrap\less\mixins\image.less" />
+    <Content Include="Bootstrap\less\mixins\labels.less" />
+    <Content Include="Bootstrap\less\mixins\list-group.less" />
+    <Content Include="Bootstrap\less\mixins\nav-divider.less" />
+    <Content Include="Bootstrap\less\mixins\nav-vertical-align.less" />
+    <Content Include="Bootstrap\less\mixins\opacity.less" />
+    <Content Include="Bootstrap\less\mixins\pagination.less" />
+    <Content Include="Bootstrap\less\mixins\panels.less" />
+    <Content Include="Bootstrap\less\mixins\progress-bar.less" />
+    <Content Include="Bootstrap\less\mixins\reset-filter.less" />
+    <Content Include="Bootstrap\less\mixins\resize.less" />
+    <Content Include="Bootstrap\less\mixins\responsive-visibility.less" />
+    <Content Include="Bootstrap\less\mixins\size.less" />
+    <Content Include="Bootstrap\less\mixins\tab-focus.less" />
+    <Content Include="Bootstrap\less\mixins\table-row.less" />
+    <Content Include="Bootstrap\less\mixins\text-emphasis.less" />
+    <Content Include="Bootstrap\less\mixins\text-overflow.less" />
+    <Content Include="Bootstrap\less\mixins\vendor-prefixes.less" />
+    <Content Include="Bootstrap\less\modals.less" />
+    <Content Include="Bootstrap\less\navbar.less" />
+    <Content Include="Bootstrap\less\navs.less" />
+    <Content Include="Bootstrap\less\normalize.less" />
+    <Content Include="Bootstrap\less\pager.less" />
+    <Content Include="Bootstrap\less\pagination.less" />
+    <Content Include="Bootstrap\less\panels.less" />
+    <Content Include="Bootstrap\less\popovers.less" />
+    <Content Include="Bootstrap\less\print.less" />
+    <Content Include="Bootstrap\less\progress-bars.less" />
+    <Content Include="Bootstrap\less\responsive-embed.less" />
+    <Content Include="Bootstrap\less\responsive-utilities.less" />
+    <Content Include="Bootstrap\less\scaffolding.less" />
+    <Content Include="Bootstrap\less\tables.less" />
+    <Content Include="Bootstrap\less\theme.less" />
+    <Content Include="Bootstrap\less\thumbnails.less" />
+    <Content Include="Bootstrap\less\tooltip.less" />
+    <Content Include="Bootstrap\less\type.less" />
+    <Content Include="Bootstrap\less\utilities.less" />
+    <Content Include="Bootstrap\less\variables.less" />
+    <Content Include="Bootstrap\less\wells.less" />
+    <None Include="Properties\PublishProfiles\wwt.thewebkid.com.pubxml" />
+    <None Include="Properties\PublishProfiles\wwtstaging - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy.pubxml" />
     <Content Include="Scripts\ext\multiselect.js" />
     <Content Include="Scripts\ext\ui-bootstrap-tpls-0.12.1.js" />
     <Content Include="Scripts\factory\uihelper.js" />
@@ -1235,6 +1256,7 @@
     <Content Include="Views\Community\Index.cshtml" />
     <Content Include="Views\Community\Profile.cshtml" />
     <Content Include="Views\Shared\_CommunityLayout.cshtml" />
+    <Content Include="WWTWeb\colors.map" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Docs\sdk\" />
@@ -1244,62 +1266,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <Content Include="Docs\WorldWideTelescopeAdd-inforExcelUserGuide.chm" />
-    <Content Include="Docs\WorldWideTelescopeSDKUserGuide.chm" />
-    <Content Include="Docs\Wtml\Callisto surface.wtml" />
-    <Content Include="Docs\Wtml\Europa surface.wtml" />
-    <Content Include="Docs\Wtml\Ganymede surface.wtml" />
-    <Content Include="Docs\Wtml\Io surface.wtml" />
-    <Content Include="Docs\Wtml\Mars surface.wtml" />
-    <Content Include="Docs\Wtml\Mercury surface.wtml" />
-    <Content Include="Docs\Wtml\Moon surface.wtml" />
-    <Content Include="Docs\Wtml\MyPlaces.wtml" />
-    <Content Include="Docs\Wtml\planettourcollection.wtml" />
-    <Content Include="Docs\Wtml\TourOne.wtt" />
-    <Content Include="Docs\Wtml\TourTwo.wtt" />
-    <Content Include="Docs\Wtml\Venus surface.wtml" />
-    <Content Include="Docs\WWTSDKFactSheet.pdf" />
     <Content Include="Ashx\IssuesAndBugs.ashx" />
-    <Content Include="Bootstrap\less\alerts.less" />
-    <Content Include="Bootstrap\less\badges.less" />
-    <Content Include="Bootstrap\less\bootstrap.less" />
-    <Content Include="Bootstrap\less\breadcrumbs.less" />
-    <Content Include="Bootstrap\less\button-groups.less" />
-    <Content Include="Bootstrap\less\buttons.less" />
-    <Content Include="Bootstrap\less\carousel.less" />
-    <Content Include="Bootstrap\less\close.less" />
-    <Content Include="Bootstrap\less\code.less" />
-    <Content Include="Bootstrap\less\component-animations.less" />
-    <Content Include="Bootstrap\less\dropdowns.less" />
-    <Content Include="Bootstrap\less\forms.less" />
-    <Content Include="Bootstrap\less\glyphicons.less" />
-    <Content Include="Bootstrap\less\grid.less" />
-    <Content Include="Bootstrap\less\input-groups.less" />
-    <Content Include="Bootstrap\less\jumbotron.less" />
-    <Content Include="Bootstrap\less\labels.less" />
-    <Content Include="Bootstrap\less\list-group.less" />
-    <Content Include="Bootstrap\less\media.less" />
-    <Content Include="Bootstrap\less\mixins.less" />
-    <Content Include="Bootstrap\less\modals.less" />
-    <Content Include="Bootstrap\less\navbar.less" />
-    <Content Include="Bootstrap\less\navs.less" />
-    <Content Include="Bootstrap\less\normalize.less" />
-    <Content Include="Bootstrap\less\pager.less" />
-    <Content Include="Bootstrap\less\pagination.less" />
-    <Content Include="Bootstrap\less\panels.less" />
-    <Content Include="Bootstrap\less\popovers.less" />
-    <Content Include="Bootstrap\less\print.less" />
-    <Content Include="Bootstrap\less\progress-bars.less" />
-    <Content Include="Bootstrap\less\responsive-utilities.less" />
-    <Content Include="Bootstrap\less\scaffolding.less" />
-    <Content Include="Bootstrap\less\tables.less" />
-    <Content Include="Bootstrap\less\theme.less" />
-    <Content Include="Bootstrap\less\thumbnails.less" />
-    <Content Include="Bootstrap\less\tooltip.less" />
-    <Content Include="Bootstrap\less\type.less" />
-    <Content Include="Bootstrap\less\utilities.less" />
-    <Content Include="Bootstrap\less\variables.less" />
-    <Content Include="Bootstrap\less\wells.less" />
     <Content Include="adsass.wtml" />
     <Content Include="Content\CSS\bootswatch.less" />
     <Content Include="Content\CSS\datepicker.less" />
@@ -1311,36 +1278,6 @@
     <Content Include="bower.json" />
     <Content Include="package.json" />
     <Content Include="Content\CSS\wwt.css.map" />
-    <Content Include="Bootstrap\less\responsive-embed.less" />
-    <Content Include="Bootstrap\less\mixins\alerts.less" />
-    <Content Include="Bootstrap\less\mixins\background-variant.less" />
-    <Content Include="Bootstrap\less\mixins\border-radius.less" />
-    <Content Include="Bootstrap\less\mixins\buttons.less" />
-    <Content Include="Bootstrap\less\mixins\center-block.less" />
-    <Content Include="Bootstrap\less\mixins\clearfix.less" />
-    <Content Include="Bootstrap\less\mixins\forms.less" />
-    <Content Include="Bootstrap\less\mixins\gradients.less" />
-    <Content Include="Bootstrap\less\mixins\grid-framework.less" />
-    <Content Include="Bootstrap\less\mixins\grid.less" />
-    <Content Include="Bootstrap\less\mixins\hide-text.less" />
-    <Content Include="Bootstrap\less\mixins\image.less" />
-    <Content Include="Bootstrap\less\mixins\labels.less" />
-    <Content Include="Bootstrap\less\mixins\list-group.less" />
-    <Content Include="Bootstrap\less\mixins\nav-divider.less" />
-    <Content Include="Bootstrap\less\mixins\nav-vertical-align.less" />
-    <Content Include="Bootstrap\less\mixins\opacity.less" />
-    <Content Include="Bootstrap\less\mixins\pagination.less" />
-    <Content Include="Bootstrap\less\mixins\panels.less" />
-    <Content Include="Bootstrap\less\mixins\progress-bar.less" />
-    <Content Include="Bootstrap\less\mixins\reset-filter.less" />
-    <Content Include="Bootstrap\less\mixins\resize.less" />
-    <Content Include="Bootstrap\less\mixins\responsive-visibility.less" />
-    <Content Include="Bootstrap\less\mixins\size.less" />
-    <Content Include="Bootstrap\less\mixins\tab-focus.less" />
-    <Content Include="Bootstrap\less\mixins\table-row.less" />
-    <Content Include="Bootstrap\less\mixins\text-emphasis.less" />
-    <Content Include="Bootstrap\less\mixins\text-overflow.less" />
-    <Content Include="Bootstrap\less\mixins\vendor-prefixes.less" />
     <Content Include="Models\EarthOnline.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>EarthOnline.Context1.cs</LastGenOutput>
@@ -1353,7 +1290,6 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>EarthOnline1.cs</LastGenOutput>
     </Content>
-    <None Include="Project_Readme.html" />
     <Content Include="Views\Shared\_ContentPage.cshtml" />
     <Content Include="Views\About\Index.cshtml" />
     <Content Include="Views\About\Acknowledgments.cshtml" />
@@ -1441,6 +1377,20 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MapDataUtil\MapDataUtil.csproj">
+      <Project>{31dc6dc8-af43-41ac-b9b7-7e77e6cd8950}</Project>
+      <Name>MapDataUtil</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WWTLib\WWTLib.csproj">
+      <Project>{ca87d083-4651-446c-a1e3-c5f8c78a1726}</Project>
+      <Name>WWTLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WWTWebservices\WWTWebservices.csproj">
+      <Project>{1cf4d986-51ad-43f8-a84a-38b6ecba2172}</Project>
+      <Name>WWTWebservices</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

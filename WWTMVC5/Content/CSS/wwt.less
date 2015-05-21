@@ -204,6 +204,7 @@ div.bg-gradient {
 
 hr {
     border-color:@text-color;
+    opacity:.6;
 } 
 
 footer.footer {
@@ -848,6 +849,10 @@ ul.pagination{
         font-weight:100;
         display:block;
     }
+    label.radio{
+        display:inline-block;
+        padding:0 11px 0 20px;
+    }
     .page-size{
         display:inline-block;
         margin:0 5px;
@@ -905,6 +910,26 @@ ul.pagination{
     }
      .tab-content{
          padding-top:10px;
+     }
+     .entity-detail{
+         a.thumbnail{
+             float:left;
+             margin-right:10px;
+         }
+         h1{
+             margin-bottom: 28px
+         }
+         em.last-updated{
+             color:@text-muted;
+             .small(); 
+             position:relative;
+             top:-20px;
+         }
+         ul.entity-details{
+             list-style: none; 
+             padding-left: 0; 
+             margin-bottom: 30px;
+         }
      }
 }
 .btn-file {

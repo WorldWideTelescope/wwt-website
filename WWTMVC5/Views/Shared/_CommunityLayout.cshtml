@@ -23,37 +23,37 @@
             '$routeProvider', function($routeProvider) {
                 $routeProvider.
                     when('/', {
-                        templateUrl: '/Content/Views/CommunityContent.html',
+                        templateUrl: '/Content/Views/CommunityContent.html?v=@Model.ResVer',
                         controller: 'CommunityContent'
                     }).when('/ContentDetail/:contentId', {
-                        templateUrl: '/Content/Views/contentdetail.html',
+                        templateUrl: '/Content/Views/contentdetail.html?v=@Model.ResVer',
                         controller: 'ContentDetail'
                     }).when('/MyProfile/:profileId', {
-                        templateUrl: '/Content/Views/MyProfile.html',
+                        templateUrl: '/Content/Views/MyProfile.html?v=@Model.ResVer',
                         controller: 'MyProfile'
                     }).when('/MyProfile', {
-                        templateUrl: '/Content/Views/MyProfile.html',
+                        templateUrl: '/Content/Views/MyProfile.html?v=@Model.ResVer',
                         controller: 'MyProfile'
                     }).when('/AddContent', {
-                        templateUrl: '/Content/Views/AddContent.html',
+                        templateUrl: '/Content/Views/AddContent.html?v=@Model.ResVer',
                         controller: 'AddContent'
                     }).when('/TestResources', {
-                        templateUrl: '/Content/Views/TestResources.html',
+                        templateUrl: '/Content/Views/TestResources.html?v=@Model.ResVer',
                         controller: 'TestResources'
                     }).when('/EditContent/:contentId', {
-                        templateUrl: '/Content/Views/AddContent.html',
+                        templateUrl: '/Content/Views/AddContent.html?v=@Model.ResVer',
                         controller: 'AddContent'
                     }).when('/AddCommunity', {
-                        templateUrl: '/Content/Views/AddCommunity.html',
+                        templateUrl: '/Content/Views/AddCommunity.html?v=@Model.ResVer',
                         controller: 'EditCommunity'
                     }).when('/AddCommunity/:parentId', {
-                        templateUrl: '/Content/Views/AddCommunity.html',
+                        templateUrl: '/Content/Views/AddCommunity.html?v=@Model.ResVer',
                         controller: 'EditCommunity'
                     }).when('/EditCommunity/:communityId', {
-                        templateUrl: '/Content/Views/AddCommunity.html',
+                        templateUrl: '/Content/Views/AddCommunity.html?v=@Model.ResVer',
                         controller: 'EditCommunity'
                     }).when('/CommunityDetail/:communityId', {
-                        templateUrl: '/Content/Views/CommunityDetail.html',
+                        templateUrl: '/Content/Views/CommunityDetail.html?v=@Model.ResVer',
                         controller: 'CommunityDetail'
                     }).otherwise({
                         redirectTo: '/'

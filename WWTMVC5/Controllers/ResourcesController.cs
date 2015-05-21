@@ -384,7 +384,8 @@ namespace WWTMVC5.Controllers
 
             payloadDetails.Links.Add(helpLink);
 
-            return new FileStreamResult(GetOutputStream(payloadDetails), Response.ContentType); 
+            var payload = new FileStreamResult(GetOutputStream(payloadDetails), Response.ContentType);
+            return payload;
         }
 
         [AllowAnonymous]
@@ -753,7 +754,7 @@ namespace WWTMVC5.Controllers
                     if (hasChildCommunities)
                     {
                         childCommunity.Thumbnail = RewriteThumbnailUrl(childCommunity.Thumbnail, "defaultcommunitywwtthumbnail");
-                        childCommunity.Url = string.Format(CultureInfo.InvariantCulture, "{0}/Community/{1}", baseUri, childCommunity.Id);
+                        childCommunity.Url = string.Format(CultureInfo.InvariantCulture, "{0}/Community/{1}", ServiceBaseUri(), childCommunity.Id);
                     }
                     else
                     {
@@ -766,7 +767,7 @@ namespace WWTMVC5.Controllers
                             childCommunity.Thumbnail = RewriteThumbnailUrl(childCommunity.Thumbnail, "defaultfolderwwtthumbnail");
                         }
 
-                        childCommunity.Url = string.Format(CultureInfo.InvariantCulture, "{0}/Folder/{1}", baseUri, childCommunity.Id);
+                        childCommunity.Url = string.Format(CultureInfo.InvariantCulture, "{0}/Folder/{1}", ServiceBaseUri(), childCommunity.Id);
                     }
                 }
             }
@@ -835,7 +836,7 @@ namespace WWTMVC5.Controllers
         /// <param name="payloadDetails">PayloadDetails object</param>
         private void AddTourFolders(PayloadDetails payloadDetails)
         {
-            string baseUri = BaseUri();
+            string baseUri = ServiceBaseUri();
             var allTours = PayloadDetailsExtensions.InitializePayload();
             allTours.Name = "All Tours";
             allTours.Url = string.Format(CultureInfo.InvariantCulture, "{0}/Community/{1}/Tours", baseUri, payloadDetails.Id);
