@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using AutoMapper;
@@ -32,7 +33,11 @@ namespace WWTMVC5.Controllers
         /// <summary>
         /// Instance of Entity Service
         /// </summary>
-        private IEntityService entityService;
+        private IEntityService _entityService;
+
+        private INotificationService _notificationService;
+
+        private ICommunityService _communityService;
 
         #endregion
 
@@ -43,10 +48,12 @@ namespace WWTMVC5.Controllers
         /// </summary>
         /// <param name="entityService">Instance of Entity Service</param>
         /// <param name="profileService">Instance of profile Service</param>
-        public EntityController(IEntityService entityService, IProfileService profileService)
+        public EntityController(IEntityService entityService, IProfileService profileService, ICommunityService communityService,INotificationService notificationService)
             : base(profileService)
         {
-            this.entityService = entityService;
+            _entityService = entityService;
+            _notificationService = notificationService;
+            _communityService = communityService;
         }
 
         
@@ -119,15 +126,19 @@ namespace WWTMVC5.Controllers
         
         [HttpPost]
         [Route("Entity/Types/GetAll")]
-        public JsonResult GetAllTypes()
+        public async Task<JsonResult> GetAllTypes()
         {
+            if (CurrentUserId == 0)
+            {
+                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+            }
             var highlightTypes = (from HighlightType t in Enum.GetValues(typeof (HighlightType)) select t.ToString()).ToList();
             var entityTypes = (from EntityType t in Enum.GetValues(typeof (EntityType)) select t.ToString()).ToList();
             var categoryTypes = (from CategoryType t in Enum.GetValues(typeof(CategoryType)) select t.ToString()).ToList();
             var contentTypes = (from ContentTypes t in Enum.GetValues(typeof(ContentTypes)) select t.ToString()).ToList();
             var searchTypes = (from SearchSortBy t in Enum.GetValues(typeof(SearchSortBy)) select t.ToString()).ToList();
             var admin = false;
-            if (CurrentUserID != 0)
+            if (CurrentUserId != 0)
             {
                 var profileDetails = SessionWrapper.Get<ProfileDetails>("ProfileDetails");
                 admin = profileDetails.UserType == UserTypes.SiteAdmin;
@@ -139,7 +150,7 @@ namespace WWTMVC5.Controllers
                     categoryValues=categoryTypes,
                     contentValues=contentTypes,
                     searchValues=searchTypes,
-                    currentUserId=this.CurrentUserID,
+                    currentUserId=CurrentUserId,
                     isAdmin=admin
                 }
             };
@@ -250,7 +261,7 @@ namespace WWTMVC5.Controllers
         {
             try
             {
-                IEnumerable<EntityDetails> topCategories = this.entityService.GetTopCategories();
+                IEnumerable<EntityDetails> topCategories = this._entityService.GetTopCategories();
                 List<TopCategoryViewModel> topCategoryViewModel = new List<TopCategoryViewModel>();
 
                 for (int i = 0; i < topCategories.Count() / 3; i++)
@@ -329,14 +340,17 @@ namespace WWTMVC5.Controllers
         //
         //[ValidateAntiForgeryToken]
         [Route("Entity/AddThumbnail/{entity}")]
-        public JsonResult AddThumbnail(HttpPostedFileBase thumbnail, EntityType entity)
+        public async Task<JsonResult> AddThumbnail(HttpPostedFileBase thumbnail, EntityType entity)
         {
             try
             {
-                this.CheckNotNull(() => new {CurrentUserID});
+                if (CurrentUserId == 0)
+                {
+                    await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+                }
 
-                Guid thumbnailID = Guid.Empty;
-                string thumnailURL = Url.Content("~/content/images/" +
+                Guid thumbnailId = Guid.Empty;
+                string thumnailUrl = Url.Content("~/content/images/" +
                                                  (entity == EntityType.User
                                                      ? "profile.png"
                                                      : entity == EntityType.Content
@@ -367,21 +381,21 @@ namespace WWTMVC5.Controllers
 
                     // Once the user publishes the content then we will move the file from temporary container to the actual container.
                     // TODO: Need to have clean up task which will delete all unused file from temporary container.
-                    this.entityService.UploadTemporaryFile(fileDetail);
+                    this._entityService.UploadTemporaryFile(fileDetail);
 
-                    thumbnailID = fileDetail.AzureID;
-                    thumnailURL = "/file/thumbnail/" + thumbnailID;
+                    thumbnailId = fileDetail.AzureID;
+                    thumnailUrl = "/file/thumbnail/" + thumbnailId;
                 }
 
-                DefaultThumbnailViewModel viewModel = new DefaultThumbnailViewModel(thumbnailID, entity, string.Empty,
+                DefaultThumbnailViewModel viewModel = new DefaultThumbnailViewModel(thumbnailId, entity, string.Empty,
                     ContentTypes.Generic);
-                viewModel.ThumbnailLink = thumnailURL;
+                viewModel.ThumbnailLink = thumnailUrl;
 
                 return new JsonResult {Data = viewModel};
             }
             catch
             {
-                return new JsonResult {Data = "User not logged in"};
+                return new JsonResult {Data = "error: user not logged in"};
             }
 
         }
@@ -402,7 +416,7 @@ namespace WWTMVC5.Controllers
             List<EntityViewModel> highlightEntities = new List<EntityViewModel>();
 
             // Set the user who is getting the highlight entities.
-            entityHighlightFilter.UserID = this.CurrentUserID;
+            entityHighlightFilter.UserID = this.CurrentUserId;
 
             // Total pages will be set by the service.
             if (pageDetails.ItemsPerPage == 0)
@@ -411,7 +425,7 @@ namespace WWTMVC5.Controllers
             }
             if (entityType == EntityType.Community)
             {
-                IEnumerable<CommunityDetails> communities = this.entityService.GetCommunities(entityHighlightFilter, pageDetails);
+                IEnumerable<CommunityDetails> communities = this._entityService.GetCommunities(entityHighlightFilter, pageDetails);
                 foreach (var community in communities)
                 {
                     CommunityViewModel communityViewModel = new CommunityViewModel();
@@ -421,7 +435,7 @@ namespace WWTMVC5.Controllers
             }
             else if (entityType == EntityType.Content)
             {
-                IEnumerable<ContentDetails> contents = this.entityService.GetContents(entityHighlightFilter, pageDetails);
+                IEnumerable<ContentDetails> contents = this._entityService.GetContents(entityHighlightFilter, pageDetails);
                 foreach (var content in contents)
                 {
                     ContentViewModel contentViewModel = new ContentViewModel();
@@ -455,7 +469,7 @@ namespace WWTMVC5.Controllers
             {
                 if (entityType == EntityType.Community || entityType == EntityType.Folder)
                 {
-                    var subCommunities = this.entityService.GetSubCommunities(entityId, this.CurrentUserID, pageDetails, onlyItemCount);
+                    var subCommunities = this._entityService.GetSubCommunities(entityId, this.CurrentUserId, pageDetails, onlyItemCount);
                     foreach (var item in subCommunities)
                     {
                         CommunityViewModel subCommunityViewModel = new CommunityViewModel();
@@ -465,7 +479,7 @@ namespace WWTMVC5.Controllers
                 }
                 else
                 {
-                    var contents = this.entityService.GetContents(entityId, this.CurrentUserID, pageDetails);
+                    var contents = this._entityService.GetContents(entityId, this.CurrentUserId, pageDetails);
                     foreach (var item in contents)
                     {
                         ContentViewModel contentViewModel = new ContentViewModel();

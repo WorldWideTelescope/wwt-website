@@ -129,7 +129,25 @@ namespace WWTMVC5
         /// <summary>
         /// Earth Surface category
         /// </summary>
-        EarthSurface = 12
+        EarthSurface = 12,
+
+        //New Categories (June 2015)
+        LearningWWT = 13,
+        Nebula=14,
+        Galaxies=15,
+        Surveys = 16,
+        BlackHoles=17,
+        Supernova=18,
+        StarClusters=19,
+        Kiosk=20,
+        Mars=21,
+        Other=22,
+        WWT=23,
+        CosmicEvents=24,
+        WWTAmbassadors=25,
+        Educators=26,
+        NewTours=27
+
     }
 
     /// <summary>

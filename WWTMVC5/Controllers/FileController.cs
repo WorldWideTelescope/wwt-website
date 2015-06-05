@@ -18,7 +18,7 @@ namespace WWTMVC5.Controllers
     /// </summary>
     public class FileController : Controller
     {
-        private IBlobService blobService;
+        private IBlobService _blobService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileController"/> class.
@@ -26,7 +26,7 @@ namespace WWTMVC5.Controllers
         /// <param name="blobService">Instance of a blob service</param>
         public FileController(IBlobService blobService)
         {
-            this.blobService = blobService;
+            this._blobService = blobService;
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace WWTMVC5.Controllers
             if (id.HasValue)
             {
                 // Get the thumbnail from Azure.
-                var blobDetails = this.blobService.GetThumbnail(id.Value);
+                var blobDetails = this._blobService.GetThumbnail(id.Value);
 
                 if (blobDetails != null && blobDetails.Data != null)
                 {
@@ -81,7 +81,7 @@ namespace WWTMVC5.Controllers
             if (id.HasValue)
             {
                 // Get the thumbnail from Azure.
-                var blobDetails = this.blobService.GetTemporaryFile(id.Value);
+                var blobDetails = this._blobService.GetTemporaryFile(id.Value);
 
                 if (blobDetails != null && blobDetails.Data != null)
                 {
@@ -108,7 +108,7 @@ namespace WWTMVC5.Controllers
             if (id.HasValue)
             {
                 // Get the thumbnail from Azure.
-                var blobDetails = this.blobService.GetThumbnail(id.Value);
+                var blobDetails = this._blobService.GetThumbnail(id.Value);
 
                 if (blobDetails != null && blobDetails.Data != null)
                 {
@@ -143,7 +143,7 @@ namespace WWTMVC5.Controllers
             if (id.HasValue)
             {
                 // Get the file from Azure.
-                var blobDetails = this.blobService.GetFile(id.Value);
+                var blobDetails = this._blobService.GetFile(id.Value);
 
                 if (blobDetails != null && blobDetails.Data != null)
                 {

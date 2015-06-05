@@ -191,6 +191,4 @@ ModelManifest.xml
 
 
 # Config files with private settings
-web.debug.config
-web.release.config
-
+webclient/

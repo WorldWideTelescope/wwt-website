@@ -65,7 +65,10 @@
 		@RenderBody()
 	</div>
 
-	@Html.Partial("Footer")
+    @if (!Model.IsOpenWwtKiosk)
+    {
+        Html.Partial("Footer");
+    }
 
 
 </body>

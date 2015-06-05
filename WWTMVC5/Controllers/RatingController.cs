@@ -24,7 +24,7 @@ namespace WWTMVC5.Controllers
         /// <summary>
         /// Instance of Rating Service
         /// </summary>
-        private IRatingService ratingService;
+        private IRatingService _ratingService;
 
         #endregion
 
@@ -38,7 +38,7 @@ namespace WWTMVC5.Controllers
         public RatingController(IRatingService ratingService, IProfileService profileService)
             : base(profileService)
         {
-            this.ratingService = ratingService;
+            this._ratingService = ratingService;
         }
         
         #endregion
@@ -62,7 +62,7 @@ namespace WWTMVC5.Controllers
             RatingDetails rating = new RatingDetails()
             {
                 Rating = ratingData.RatingValue,
-                RatedByID = CurrentUserID,
+                RatedByID = CurrentUserId,
                 ParentID = ratingData.EntityId
             };
 
@@ -73,10 +73,10 @@ namespace WWTMVC5.Controllers
                     break;
                 case EntityType.Community:
                 case EntityType.Folder:
-                    status = this.ratingService.UpdateCommunityRating(rating);
+                    status = this._ratingService.UpdateCommunityRating(rating);
                     break;
                 case EntityType.Content:
-                    status = this.ratingService.UpdateContentRating(rating);
+                    status = this._ratingService.UpdateContentRating(rating);
                     break;
                 default:
                     break;

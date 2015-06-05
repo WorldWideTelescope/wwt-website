@@ -12,6 +12,7 @@ using System.ServiceModel.Web;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI.WebControls;
 using Microsoft.Live;
 using Newtonsoft.Json;
 using WWTMVC5.Extensions;
@@ -46,33 +47,11 @@ namespace WWTMVC5.Controllers
         /// <summary>
         /// Gets the current user ID
         /// </summary>
-        public long CurrentUserID
+        public long CurrentUserId
         {
             get
             {
-                long? userID = SessionWrapper.Get<long?>("CurrentUserID");
-
-                //if (!userID.HasValue)
-                //{
-                //    var identity = HttpContext.GetIdentityName();
-                //    if (!string.IsNullOrWhiteSpace(identity))
-                //    {
-                //        var profile = ProfileService.GetProfile(identity);
-                //        if (profile != null)
-                //        {
-                //            userID = profile.ID;
-                //            profile.SetProfileSessionValues();
-                //        }
-                //        else
-                //        {
-                //            // If the user is signed but not accepted TOC, profile will not be created. In that case, repeated call
-                //            // to the DB to be avoided.
-                //            SessionWrapper.Set<long>("CurrentUserID", 0);
-                //        }
-                //    }
-                //}
-
-                return (userID ?? 0);
+                return SessionWrapper.Get<long?>("CurrentUserID") ?? 0;
             }
         }
 
@@ -150,6 +129,60 @@ namespace WWTMVC5.Controllers
 
         #region Protected Methods
 
+        protected async Task<LiveLoginResult> TryAuthenticateFromHttpContext(ICommunityService communityService, INotificationService notificationService)
+        {
+            var svc = new LiveIdAuth();
+            LiveLoginResult result = await svc.Authenticate();
+            if (result.Status == LiveConnectSessionStatus.Connected)
+            {
+                var client = new LiveConnectClient(result.Session);
+                SessionWrapper.Set("LiveConnectClient", client);
+                SessionWrapper.Set("LiveConnectResult", result);
+                SessionWrapper.Set("LiveAuthSvc", svc);
+
+                var getResult = await client.GetAsync("me");
+                var jsonResult = getResult.Result as dynamic;
+                var profileDetails = ProfileService.GetProfile(jsonResult.id);
+                if (profileDetails == null)
+                {
+                    profileDetails = new ProfileDetails(jsonResult);
+                    // While creating the user, IsSubscribed to be true always.
+                    profileDetails.IsSubscribed = true;
+
+                    // When creating the user, by default the user type will be of regular. 
+                    profileDetails.UserType = UserTypes.Regular;
+                    profileDetails.ID = this.ProfileService.CreateProfile(profileDetails);
+
+                    // This will used as the default community when user is uploading a new content.
+                    // This community will need to have the following details:
+                    CommunityDetails communityDetails = new CommunityDetails
+                    {
+                        CommunityType = CommunityTypes.User, // 1. This community type should be User
+                        CreatedByID = profileDetails.ID, // 2. CreatedBy will be the new USER.
+                        IsFeatured = false, // 3. This community is not featured.
+                        Name = Resources.UserCommunityName, // 4. Name should be NONE.
+                        AccessTypeID = (int) AccessType.Private, // 5. Access type should be private.
+                        CategoryID = (int) CategoryType.GeneralInterest
+                        // 6. Set the category ID of general interest. We need to set the Category ID as it is a foreign key and cannot be null.
+                    };
+
+                    // 7. Create the community
+                    communityService.CreateCommunity(communityDetails);
+
+                    // Send New user notification.
+                    notificationService.NotifyNewEntityRequest(profileDetails,
+                        HttpContext.Request.Url.GetServerLink());
+                }
+
+                SessionWrapper.Set<long>("CurrentUserID", profileDetails.ID);
+                SessionWrapper.Set<string>("CurrentUserProfileName",
+                    profileDetails.FirstName + " " + profileDetails.LastName);
+                SessionWrapper.Set("ProfileDetails", profileDetails);
+                SessionWrapper.Set("AuthenticationToken", result.Session.AuthenticationToken);
+            }
+            return result;
+        }
+
         /// <summary>
         /// Checks if the user is site admin or not
         /// No DB check as Most of the users are not site admins and will have session value as false
@@ -204,6 +237,10 @@ namespace WWTMVC5.Controllers
         {
             var svc = new LiveIdAuth();
             var token = System.Web.HttpContext.Current.Request.Headers["LiveUserToken"];
+            if (token == null)
+            {
+                token = System.Web.HttpContext.Current.Request.QueryString["LiveUserToken"];
+            }
             var cachedProfile = ProfileCacheManager.GetProfileDetails(token);
             if (cachedProfile!=null)
             {

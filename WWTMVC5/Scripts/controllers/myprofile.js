@@ -1,11 +1,12 @@
 ﻿wwtng.controller('MyProfile', [
+    '$rootScope',
     '$scope',
     'dataproxy',
     '$timeout',
     '$routeParams',
     'UIHelper',
     'FileUploader',
-    function ($scope, dataproxy, $timeout, $routeParams, uiHelper, fileUploader) {
+    function ($rootScope, $scope, dataproxy, $timeout, $routeParams, uiHelper, fileUploader) {
 
         function init() {
             $scope.options = {
@@ -40,7 +41,14 @@
 
         function setProfile(profile) {
             if (typeof profile == 'string' && profile.indexOf('error') === 0) {
-                location.href = '#/';
+                location.reload();
+            }
+            if (profile.ProfilePhotoLink) {
+                if (profile.ProfilePhotoLink.indexOf("~/Content") === 0) {
+                    profile.ProfilePhotoLink = profile.ProfilePhotoLink.replace("~/Content/Images", ($rootScope.contentRoot + '/images'));
+                } else {
+                    profile.ProfilePhotoLink = profile.ProfilePhotoLink + '/true';
+                }
             }
             $scope.profile = profile;
             //string affiliation, string aboutMe, bool isSubscribed, Guid? profileImageId, string profileName
@@ -91,7 +99,7 @@
         $scope.approveRequest = function(r) {
             //args: long entityId, long requestorId, UserRole userRole, bool approve
             var row = $('tr[requestHash="' + r.$$hashKey + '"]');
-            var roles = ['', 'Reader', 'Contributor', 'Moderator'];
+            var roles = ['', 'Reader', 'Contributor', 'Moderator','Owner'];
             var role = roles[parseInt(row.find('select').val())];
             var requestArgs = {
                 entityId: r.CommunityId,
@@ -106,7 +114,7 @@
         }
         $scope.denyRequest = function (r) {
             //args: long entityId, long requestorId, UserRole userRole, bool approve
-            var roles = ['','Reader','Contributor','Moderator'];
+            var roles = ['', 'Reader', 'Contributor', 'Moderator', 'Owner'];
             var requestArgs = {
                 entityId: r.CommunityId,
                 requestorId: r.Id,

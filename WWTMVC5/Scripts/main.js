@@ -1,7 +1,7 @@
 ﻿
 var wwt = {
 	triggerResize: function() {
-		setTimeout(function() { $(window).trigger('contentchange'); }, 1);
+		setTimeout(function() { $(window).trigger('contentchange'); }, 100);
 	},
 	accordianClick: function (e) {
 		//return;
@@ -20,12 +20,13 @@ var wwt = {
 	}//,
 	//resLoc:location.href.indexOf('worldwidetelescope.org') != -1 ? 'http://cdn.worldwidetelescope.org' : ''
 };
-if (top == self) {
+if (top === self) {
 	wwt.viewMaster = (function() {
 		var api = {
 			init: init,
 			loaded: loaded,
-            fullScreenImage:fullScreenImage
+			fullScreenImage: fullScreenImage,
+            signIn:signIn
 		};
 
 		var isLoaded = false;
@@ -112,10 +113,11 @@ if (top == self) {
 	        } else {
 	            wwt.user.set('rememberMe', false);
 	        }
-	        
-	        $('#signinContainer label').slideUp(function() {
-	            $('.sign-in').show();
-	        });
+	        if (wwt.currentResolution === 'md' || wwt.currentResolution === 'lg') {
+	            $('#signinContainer label').slideUp(function() {
+	                $('.sign-in').show();
+	            });
+	        }
 	        if (!signedIn) {
 	            WL.init({
 	                client_id: _liveClientId,
@@ -125,62 +127,66 @@ if (top == self) {
 	            });
 	        }
 	        $('#signinContainer').on('mouseenter', function () {
-	            $(this).find('label').slideDown();
+	            if (wwt.currentResolution === 'md' || wwt.currentResolution === 'lg') {
+	                $(this).find('label').slideDown();
+	            }
 	        }).on('mouseleave', function () {
-	            $(this).find('label').slideUp();
+	            if (wwt.currentResolution === 'md' || wwt.currentResolution === 'lg') {
+	                $(this).find('label').slideUp();
+	            }
 	        }).find('#signin').on('click', function () {
 	            signinScope = $('#chkRemember').prop('checked') ? 'wl.signin' : 'wl.basic';
 	            signIn();
 	        });
 
-	        var signIn = function () {
-	            wwt.signingIn = true;
-                WL.login({
-	                scope: ['wl.signin', 'wl.emails']//, "wl.offline_access"
-                }).then(function (session) {
-                    if (!session.error) {
-                        $('#signinContainer label').html('&nbsp;');
-                        WL.api({
-                            path: "me",
-                            method: "GET"
-                        }).then(
-                            function (response) {
-                                console.log(response);
-                                $.get("/LiveId/Authenticate").success(function (data) {
-                                    wwt.user.set('authToken', data.Session.AuthenticationToken);
-                                    wwt.user.set('accessToken', data.Session.AccessToken);
-                                    console.log(arguments);
-                                    //$('#signinContainer label').remove();
-                                    $('#profileMenuItem, #profileLink').removeClass('hide');
-                                    $(window).trigger('login');
-                                    wwt.signingIn = false;
-                                    $('#signin').html(response.first_name + ' ' + response.last_name).on('click', function (e) {
-                                        e.stopImmediatePropagation();
-                                        location.href = '/Community/Profile';
-                                    }).attr('title', '(Signed in) View your WWT Profile').prop('authenticated', true);
-                                });
-                            },
-                            function (responseFailed) {
-                                console.log(responseFailed);
-                                wwt.signingIn = false;
-                                $('#signin').html("Login failed");
-                            }
-                        );
-                    }
-                },
-                function (responseFailed) {
-                    $('#signin').html("Login failed").title('Retry Login');
-                });
-	            if ($('#signin').attr('title').indexOf('(Sign') === -1) {
-	                $('#signin').html('Signing in...').attr('title', 'Please wait while we sign you in to WorldWide Telescope');
-	            }
-	        }
+	        
             if (autoSignin && !signedIn) {
 	            signIn();
 	        }
 	    }
 
-	    
+	    function signIn() {
+	        wwt.signingIn = true;
+	        WL.login({
+	            scope: ['wl.signin', 'wl.emails']//, "wl.offline_access"
+	        }).then(function (session) {
+	            if (!session.error) {
+	                $('#signinContainer label').html('&nbsp;');
+	                WL.api({
+	                    path: "me",
+	                    method: "GET"
+	                }).then(
+                        function (response) {
+                            console.log(response);
+                            $.get("/LiveId/Authenticate").success(function (data) {
+                                wwt.user.set('authToken', '');//data.Session.AuthenticationToken);
+                                wwt.user.set('accessToken', '');//data.Session.AccessToken);
+                                console.log(arguments);
+                                //$('#signinContainer label').remove();
+                                $('#profileMenuItem, #profileLink').removeClass('hide');
+                                $(window).trigger('login');
+                                wwt.signingIn = false;
+                                $('#signin').html(response.first_name + ' ' + response.last_name).on('click', function (e) {
+                                    e.stopImmediatePropagation();
+                                    location.href = '/Community/Profile';
+                                }).attr('title', '(Signed in) View your WWT Profile').prop('authenticated', true);
+                            });
+                        },
+                        function (responseFailed) {
+                            console.log(responseFailed);
+                            wwt.signingIn = false;
+                            $('#signin').html("Login failed");
+                        }
+                    );
+	            }
+	        },
+            function (responseFailed) {
+                $('#signin').html("Login failed").title('Retry Login');
+            });
+	        if ($('#signin').attr('title').indexOf('(Sign') === -1) {
+	            $('#signin').html('Signing in...').attr('title', 'Please wait while we sign you in to WorldWide Telescope');
+	        }
+	    }
 
 		function hashChange() {
 			if (wwt.scriptHashChange) {

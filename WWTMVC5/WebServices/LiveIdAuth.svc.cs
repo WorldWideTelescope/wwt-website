@@ -27,7 +27,10 @@ namespace WWTMVC5.WebServices
             {
                 //string url = _liveAuthClient.GetLoginUrl(new string[] { "wl.signin", "wl.basic", "wl.emails"});
                 result = await _liveAuthClient.InitializeWebSessionAsync(new HttpContextWrapper(HttpContext.Current));
-                //result = await _liveAuthClient.ExchangeAuthCodeAsync(new HttpContextWrapper(HttpContext.Current));
+                if (false)
+                {
+                    result = await _liveAuthClient.ExchangeAuthCodeAsync(new HttpContextWrapper(HttpContext.Current));
+                }
                 _session = result.Session;
             }
             catch (LiveAuthException){}
@@ -56,7 +59,7 @@ namespace WWTMVC5.WebServices
         [OperationContract]
         public async Task<dynamic> GetMeInfo(string accessToken)
         {
-            var meUri = new Uri(string.Format("https://apis.live.net/v5.0/me/?access_token={0}",accessToken));
+            var meUri = new Uri(string.Format("https://apis.live.net/v5.0/me/?access_token={0}", accessToken));
             var httpClient = new HttpClient();
             var response = await httpClient.GetAsync(meUri);
             var responseString = await response.Content.ReadAsStringAsync();

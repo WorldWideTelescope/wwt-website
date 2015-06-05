@@ -4,9 +4,14 @@
         get: getKey
     };
     var data;
-    function setKey(k,v) {
-        data[k] = v;
-        localStorage.setItem('userSettings', JSON.stringify(data));
+    function setKey(k, v) {
+        try {
+            data[k] = v;
+            localStorage.setItem('userSettings', JSON.stringify(data));
+        } catch (ex) {
+            data['accessToken'] = '';
+            data['authToken'] = '';
+        }
     }
     function getKey(k) {
         return data[k];

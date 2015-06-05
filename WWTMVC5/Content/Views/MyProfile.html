@@ -10,7 +10,7 @@
     <div class="small">{{profile.UsedStorage}} of {{profile.TotalStorage}} available</div>
 </div>
 <div style="margin-top: 20px">
-    <img ng-src="{{profile && profile.ProfilePhotoLink.indexOf('~') != -1 ? profile.ProfilePhotoLink.split('~')[1] : profile.ProfilePhotoLink ? profile.ProfilePhotoLink + '/true' : ''}}" class="pull-left" style="margin: 0 12px 12px 0" alt="Profile Picture"/>
+    <img ng-src="{{profile.ProfilePhotoLink}}" class="pull-left" style="margin: 0 12px 12px 0" alt="Profile Picture"/>
     <p style="margin-bottom: 6px">
         <strong>{{profile.ProfileName}}</strong>
     </p>
@@ -161,6 +161,7 @@
                                 <option value="1" selected="{{request.Role==1}}">Reader</option>
                                 <option value="2" selected="{{request.Role==2}}">Contributor</option>
                                 <option value="3" selected="{{request.Role==3}}">Moderator</option>
+                                <option value="4" selected="{{request.Role==4}}">Owner</option>
                             </select>
                         </td>
                         <td>

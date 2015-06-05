@@ -26,7 +26,7 @@ namespace WWTMVC5.Controllers
         /// <summary>
         /// Instance of Search Service
         /// </summary>
-        private ISearchService searchService;
+        private ISearchService _searchService;
 
         /// <summary>
         /// Initializes a new instance of the SearchController class.
@@ -36,7 +36,7 @@ namespace WWTMVC5.Controllers
         public SearchController(ISearchService searchService, IProfileService profileService)
             : base(profileService)
         {
-            this.searchService = searchService;
+            this._searchService = searchService;
         }
 
         /// <summary>
@@ -170,7 +170,7 @@ namespace WWTMVC5.Controllers
 
                     searchQueryDetails.SortBy = searchQuery.SortBy.ToEnum<string, SearchSortBy>(sortBy);
 
-                    results = this.searchService.SimpleSearch(searchText.Replace("'", "''"), this.CurrentUserID, pageDetails, searchQueryDetails);
+                    results = this._searchService.SimpleSearch(searchText.Replace("'", "''"), this.CurrentUserId, pageDetails, searchQueryDetails);
 
                     // If the total count of items are less than the selected per page items, select previous per page items
                     //ViewData["CurrentPage"] = currentPage;

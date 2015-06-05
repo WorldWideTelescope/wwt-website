@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
 using Microsoft.Live;
@@ -25,12 +26,12 @@ namespace WWTMVC5.Controllers
         /// <summary>
         /// Instance of community Service
         /// </summary>
-        private ICommunityService communityService;
+        private ICommunityService _communityService;
 
         /// <summary>
         /// Instance of Queue Service
         /// </summary>
-        private INotificationService notificationService;
+        private INotificationService _notificationService;
 
         #region Constructor
 
@@ -42,8 +43,8 @@ namespace WWTMVC5.Controllers
         public ProfileController(IProfileService profileService, ICommunityService communityService, INotificationService queueService)
             : base(profileService)
         {
-            this.communityService = communityService;
-            notificationService = queueService;
+            this._communityService = communityService;
+            _notificationService = queueService;
         }
 
         #endregion Constructor
@@ -56,13 +57,13 @@ namespace WWTMVC5.Controllers
         /// <returns>It returns the profile detail</returns>
         [HttpPost]
         [Route("Profile/MyProfile/Get")]
-        public JsonResult MyProfile()
+        public async Task<JsonResult> MyProfile()
         {
-            if (CurrentUserID == 0)
+            if (CurrentUserId == 0)
             {
-                return Json("error: User not logged in");
+                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
             }
-            ProfileViewModel userDetail = GetProfile(CurrentUserID);
+            var userDetail = GetProfile(CurrentUserId);
             return new JsonResult { Data = userDetail };
         }
 
@@ -90,11 +91,11 @@ namespace WWTMVC5.Controllers
         {
             
             // Initialize the page details object with current page as parameter. First time when page loads, current page is always 1.
-            PageDetails pageDetails = GetPageDetails(CurrentUserID, entityType, 1);
+            PageDetails pageDetails = GetPageDetails(CurrentUserId, entityType, 1);
             pageDetails.CurrentPage = currentPage;
             pageDetails.ItemsPerPage = pageSize;
 
-            List<EntityViewModel> entities = GetEntities(CurrentUserID, entityType, pageDetails);
+            List<EntityViewModel> entities = GetEntities(CurrentUserId, entityType, pageDetails);
 
             SetSiteAnalyticsPrefix(HighlightType.None);
 
@@ -141,8 +142,12 @@ namespace WWTMVC5.Controllers
         [HttpPost]
         //[ValidateAntiForgeryToken]
         [Route("Profile/New/Create")]
-        public JsonResult New()
+        public async Task<JsonResult> New()
         {
+            if (CurrentUserId == 0)
+            {
+                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+            }
             LiveLoginResult result = SessionWrapper.Get<LiveLoginResult>("LiveConnectResult");
             if (result != null && result.Status == LiveConnectSessionStatus.Connected)
             {
@@ -159,7 +164,7 @@ namespace WWTMVC5.Controllers
                 CreateDefaultUserCommunity(profileDetails.ID);
 
                 // Send New user notification.
-                notificationService.NotifyNewEntityRequest(profileDetails, HttpContext.Request.Url.GetServerLink());
+                _notificationService.NotifyNewEntityRequest(profileDetails, HttpContext.Request.Url.GetServerLink());
                 return new JsonResult{Data = profileDetails};
             }
             return Json("error: User not logged in");
@@ -176,7 +181,7 @@ namespace WWTMVC5.Controllers
         [Route("Profile/Save/{profileId}")]
         public JsonResult Save(long profileId, string affiliation, string aboutMe, bool isSubscribed, Guid? profileImageId, string profileName)
         {
-            if (profileId == CurrentUserID)
+            if (profileId == CurrentUserId)
             {
                 ProfileDetails profileDetails = new ProfileDetails()
                 {
@@ -207,7 +212,7 @@ namespace WWTMVC5.Controllers
                 // This will make sure that the latest name from DB will be fetched again.
                 SessionWrapper.Set<string>("CurrentUserProfileName", null);
 
-                return new JsonResult { Data = GetProfile(CurrentUserID) };
+                return new JsonResult { Data = GetProfile(CurrentUserId) };
             }
 
             return new JsonResult { Data = "UserId does not match current user" };
@@ -229,7 +234,7 @@ namespace WWTMVC5.Controllers
             if (profileDetails != null)
             {
                 Mapper.Map(profileDetails, userDetail);
-                userDetail.IsCurrentUser = CurrentUserID == profileDetails.ID;
+                userDetail.IsCurrentUser = CurrentUserId == profileDetails.ID;
                 userDetail.ProfileName = profileDetails.GetProfileName();
                 userDetail.ProfilePhotoLink = string.IsNullOrWhiteSpace(userDetail.ProfilePhotoLink) ? "~/Content/Images/profile.png" : Url.Action("Thumbnail", "File", new { id = userDetail.ProfilePhotoLink });
             }
@@ -252,10 +257,10 @@ namespace WWTMVC5.Controllers
             switch (entityType)
             {
                 case EntityType.Community:
-                    totalItemsForCondition = this.ProfileService.GetCommunitiesCount(userId, userId != CurrentUserID);
+                    totalItemsForCondition = this.ProfileService.GetCommunitiesCount(userId, userId != CurrentUserId);
                     break;
                 case EntityType.Content:
-                    totalItemsForCondition = this.ProfileService.GetContentsCount(userId, userId != CurrentUserID);
+                    totalItemsForCondition = this.ProfileService.GetContentsCount(userId, userId != CurrentUserId);
                     break;
                 default:
                     break;
@@ -282,7 +287,7 @@ namespace WWTMVC5.Controllers
 
             if (entityType == EntityType.Community)
             {
-                IEnumerable<CommunityDetails> communities = this.ProfileService.GetCommunities(userId, pageDetails, userId != CurrentUserID);
+                IEnumerable<CommunityDetails> communities = this.ProfileService.GetCommunities(userId, pageDetails, userId != CurrentUserId);
                 foreach (CommunityDetails community in communities)
                 {
                     CommunityViewModel communityViewModel = new CommunityViewModel();
@@ -292,7 +297,7 @@ namespace WWTMVC5.Controllers
             }
             else if (entityType == EntityType.Content)
             {
-                IEnumerable<ContentDetails> contents = this.ProfileService.GetContents(userId, pageDetails, userId != CurrentUserID);
+                IEnumerable<ContentDetails> contents = this.ProfileService.GetContents(userId, pageDetails, userId != CurrentUserId);
                 foreach (ContentDetails content in contents)
                 {
                     ContentViewModel contentViewModel = new ContentViewModel();
@@ -307,8 +312,8 @@ namespace WWTMVC5.Controllers
         /// <summary>
         /// Creates default user community.
         /// </summary>
-        /// <param name="userID">User identity.</param>
-        private void CreateDefaultUserCommunity(long userID)
+        /// <param name="userId">User identity.</param>
+        private void CreateDefaultUserCommunity(long userId)
         {
             // This will used as the default community when user is uploading a new content.
             // This community will need to have the following details:
@@ -318,7 +323,7 @@ namespace WWTMVC5.Controllers
             communityDetails.CommunityType = CommunityTypes.User;
 
             // 2. CreatedBy will be the new USER.
-            communityDetails.CreatedByID = userID;
+            communityDetails.CreatedByID = userId;
 
             // 3. This community is not featured.
             communityDetails.IsFeatured = false;
@@ -333,7 +338,7 @@ namespace WWTMVC5.Controllers
             communityDetails.CategoryID = (int)CategoryType.GeneralInterest;
 
             // 7. Create the community
-            this.communityService.CreateCommunity(communityDetails);
+            this._communityService.CreateCommunity(communityDetails);
         }
 
         #endregion Private Methods

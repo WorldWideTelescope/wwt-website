@@ -4,76 +4,87 @@
 }
 @section head
 {
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-route.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-sanitize.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-route.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-sanitize.min.js"></script>
     <script src="/Scripts/ext/ui-bootstrap-tpls-0.12.1.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular-strap/2.1.6/angular-strap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular-strap/2.1.6/angular-strap.tpl.min.js"></script>
     <script src="/Scripts/ext/multiselect.js"></script>
     <script src="/Scripts/ext/angular-file-upload.min.js"></script>
     <script>
-        var wwtng = angular.module('wwt', [
-            'ui.bootstrap',
-            'mgcrea.ngStrap',
-            'ngSanitize',
-            'ngRoute',
-            'angularFileUpload'
-        ]).config([
-            '$routeProvider', function($routeProvider) {
-                $routeProvider.
-                    when('/', {
-                        templateUrl: '/Content/Views/CommunityContent.html?v=@Model.ResVer',
-                        controller: 'CommunityContent'
-                    }).when('/ContentDetail/:contentId', {
-                        templateUrl: '/Content/Views/contentdetail.html?v=@Model.ResVer',
-                        controller: 'ContentDetail'
-                    }).when('/MyProfile/:profileId', {
-                        templateUrl: '/Content/Views/MyProfile.html?v=@Model.ResVer',
-                        controller: 'MyProfile'
-                    }).when('/MyProfile', {
-                        templateUrl: '/Content/Views/MyProfile.html?v=@Model.ResVer',
-                        controller: 'MyProfile'
-                    }).when('/AddContent', {
-                        templateUrl: '/Content/Views/AddContent.html?v=@Model.ResVer',
-                        controller: 'AddContent'
-                    }).when('/TestResources', {
-                        templateUrl: '/Content/Views/TestResources.html?v=@Model.ResVer',
-                        controller: 'TestResources'
-                    }).when('/EditContent/:contentId', {
-                        templateUrl: '/Content/Views/AddContent.html?v=@Model.ResVer',
-                        controller: 'AddContent'
-                    }).when('/AddCommunity', {
-                        templateUrl: '/Content/Views/AddCommunity.html?v=@Model.ResVer',
-                        controller: 'EditCommunity'
-                    }).when('/AddCommunity/:parentId', {
-                        templateUrl: '/Content/Views/AddCommunity.html?v=@Model.ResVer',
-                        controller: 'EditCommunity'
-                    }).when('/EditCommunity/:communityId', {
-                        templateUrl: '/Content/Views/AddCommunity.html?v=@Model.ResVer',
-                        controller: 'EditCommunity'
-                    }).when('/CommunityDetail/:communityId', {
-                        templateUrl: '/Content/Views/CommunityDetail.html?v=@Model.ResVer',
-                        controller: 'CommunityDetail'
-                    }).otherwise({
-                        redirectTo: '/'
-                    });
-                }
-            ]);
-    </script>
+    var wwtng = angular.module('wwt', [
+        'ui.bootstrap',
+        'mgcrea.ngStrap',
+        'ngSanitize',
+        'ngRoute',
+        'angularFileUpload'
+    ]).config([
+        '$routeProvider', function ($routeProvider) {
+            $routeProvider.
+                when('/', {
+                    templateUrl: '/Content/Views/CommunityContent.html?v=@Model.ResVer',
+                    controller: 'CommunityContent'
+                }).when('/ContentDetail/:contentId', {
+                    templateUrl: '/Content/Views/ContentDetail.html?v=@Model.ResVer',
+                    controller: 'ContentDetail'
+                }).when('/MyProfile/:profileId', {
+                    templateUrl: '/Content/Views/MyProfile.html?v=@Model.ResVer',
+                    controller: 'MyProfile'
+                }).when('/MyProfile', {
+                    templateUrl: '/Content/Views/MyProfile.html?v=@Model.ResVer',
+                    controller: 'MyProfile'
+                }).when('/AddContent', {
+                    templateUrl: '/Content/Views/EditContent.html?v=@Model.ResVer',
+                    controller: 'EditContent'
+                }).when('/AddContent/:parentId', {
+                    templateUrl: '/Content/Views/EditContent.html?v=@Model.ResVer',
+                    controller: 'EditContent'
+                }).when('/EditContent/:contentId', {
+                    templateUrl: '/Content/Views/EditContent.html?v=@Model.ResVer',
+                    controller: 'EditContent'
+                }).when('/AddCommunity', {
+                    templateUrl: '/Content/Views/EditCommunity.html?v=@Model.ResVer',
+                    controller: 'EditCommunity'
+                }).when('/AddCommunity/:parentId', {
+                    templateUrl: '/Content/Views/EditCommunity.html?v=@Model.ResVer',
+                    controller: 'EditCommunity'
+                }).when('/EditCommunity/:communityId', {
+                    templateUrl: '/Content/Views/EditCommunity.html?v=@Model.ResVer',
+                    controller: 'EditCommunity'
+                }).when('/EditCommunity/:communityId/:parentId', {
+                    templateUrl: '/Content/Views/EditCommunity.html?v=@Model.ResVer',
+                    controller: 'EditCommunity'
+                }).when('/CommunityDetail/:communityId', {
+                    templateUrl: '/Content/Views/CommunityDetail.html?v=@Model.ResVer',
+                    controller: 'CommunityDetail'
+                }).when('/TestResources', {
+                    templateUrl: '/Content/Views/TestResources.html?v=@Model.ResVer',
+                    controller: 'TestResources'
+                }).when('/TourAdmin', {
+                    templateUrl: '/Content/Views/TourAdmin.html?v=@Model.ResVer',
+                    controller: 'TourAdmin'
+                }).otherwise({
+                    redirectTo: '/'
+                });
+        }
+    ]);
+</script>
     <script src="@Model.JsDir/controllers/myprofile.js?v=@Model.ResVer"></script>
     <script src="@Model.JsDir/controllers/communitycontent.js?v=@Model.ResVer"></script>
     <script src="@Model.JsDir/controllers/contentdetail.js?v=@Model.ResVer"></script>
-    <script src="@Model.JsDir/controllers/addcontent.js?v=@Model.ResVer"></script>
     <script src="@Model.JsDir/controllers/communitydetail.js?v=@Model.ResVer"></script>
     <script src="@Model.JsDir/controllers/editcommunity.js?v=@Model.ResVer"></script>
     <script src="@Model.JsDir/controllers/editcontent.js?v=@Model.ResVer"></script>
+    <script src="@Model.JsDir/controllers/testresources.js?v=@Model.ResVer"></script>
+    <script src="@Model.JsDir/controllers/touradmin.js?v=@Model.ResVer"></script>
+    <script src="@Model.JsDir/controllers/modals/edittour.js?v=@Model.ResVer"></script>
     <script src="@Model.JsDir/factory/uihelper.js?v=@Model.ResVer"></script>
     <script src="@Model.JsDir/factory/dataproxy.js?v=@Model.ResVer"></script>
     <script src="@Model.JsDir/ext/bootbox.min.js?v=@Model.ResVer"></script>
-    <script src="@Model.JsDir/controllers/testresources.js?v=@Model.ResVer"></script>
+    
     }
-<div class="row" data-ng-app="wwt" class="">
+<div class="row" data-ng-app="wwt">
     <div class="col-md-3">
         <div class="bs-sidebar" id="cellLeftNav">
             <ul class="nav bs-sidenav">
@@ -83,11 +94,14 @@
                 <li class="@(Model.User == null ? "hide" : "")" id="profileLink">
                     <a href="/Community/Profile/">My Profile</a>
                 </li>
+                <li class="@(Model.User == null || Model.User.UserType != UserTypes.SiteAdmin ? "hide" : "")" id="tourAdmin">
+                    <a href="/Community#/TourAdmin">Tour Admin</a>
+                </li>
             </ul>
         </div>
     </div>
     <div class="col-md-9">
-        <section class="content community-content">
+        <section class="content community-content" content-location="@Model.ContentDir">
             @if (ViewBag.HideTranslateWidget == null)
             {
                 <div id='MicrosoftTranslatorWidget' class='Light pull-right'></div>

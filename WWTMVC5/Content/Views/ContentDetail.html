@@ -1,7 +1,13 @@
-﻿
+﻿<div class="row" ng-show="!entity" style="padding: 25px 0">
+    <div class="col-md-6 col-md-offset-3">
+        <label>Content details loading. Please wait...</label>
+        <div class="progress">
+            <div class="progress-bar progress-bar-striped active progress-bar-info" style="width: 100%" role="progressbar"></div>
+        </div>
+    </div>
+</div>
 
 <div ng-cloak ng-show="entity" class="entity-detail">
-
     <a class="thumbnail" title="{{entity.Name}}" href="{{entity.DownloadUrl}}">
         <span class="typeicon">
             <i class="spriteicon {{entity.ContentTypeName ? entity.ContentTypeName:''}}" ng-if="entity.ContentTypeName != 'Link'"></i>
@@ -16,11 +22,14 @@
             <ul class="entity-details">
                 <li><strong>Uploaded by:</strong> {{entity.Producer}}</li>
                 <li><strong>Author:</strong> {{entity.DistributedBy}}</li>
-                <li><strong>Type:</strong> {{types.contentValues[entity.ContentType].name}}</li>
+                <li><strong>Type:</strong> {{types.contentValues.getName(entity.ContentType)}}</li>
+                <li><strong>Category:</strong> {{types.categoryValues.getName(entity.Category)}}</li>
                 <li><strong>Community:</strong> {{entity.ParentName}}</li>
-                <li><strong>Citation:</strong> {{entity.Citation}}</li>
+                <li ng-if="entity.Citation"><strong>Citation:</strong> {{entity.Citation}}</li>
+                <li ng-if="entity.Tags"><strong>Tags:</strong> {{entity.Tags}}</li>
                 <li><strong>Downloads:</strong> {{entity.DownloadCount}}</li>
                 <li><strong>Size:</strong> {{entity.FileSize}}</li>
+
             </ul>
         </div>
         <div class="col-md-6">

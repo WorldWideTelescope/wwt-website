@@ -25,12 +25,12 @@ namespace WWTMVC5.Controllers
         /// <summary>
         /// Instance of ReportEntity Service
         /// </summary>
-        private IReportEntityService reportEntityService;
+        private IReportEntityService _reportEntityService;
 
         /// <summary>
         /// Instance of Queue Service
         /// </summary>
-        private INotificationService notificationService;
+        private INotificationService _notificationService;
 
         #endregion
 
@@ -44,8 +44,8 @@ namespace WWTMVC5.Controllers
         public OffensiveController(IReportEntityService reportEntityService, IProfileService profileService, INotificationService notificationService)
             : base(profileService)
         {
-            this.reportEntityService = reportEntityService;
-            this.notificationService = notificationService;
+            this._reportEntityService = reportEntityService;
+            this._notificationService = notificationService;
         }
 
         #endregion
@@ -70,7 +70,7 @@ namespace WWTMVC5.Controllers
                     ReportEntityID = entityId,
                     ParentID = entityId,
                     Status = OffensiveStatusType.Flagged,
-                    ReportedByID = CurrentUserID,
+                    ReportedByID = CurrentUserId,
                     ReportEntityType = offenceType
                 };
 
@@ -78,10 +78,10 @@ namespace WWTMVC5.Controllers
                 {
                     case EntityType.Community:
                     case EntityType.Folder:
-                        this.reportEntityService.ReportOffensiveCommunity(report);
+                        this._reportEntityService.ReportOffensiveCommunity(report);
                         break;
                     case EntityType.Content:
-                        this.reportEntityService.ReportOffensiveContent(report);
+                        this._reportEntityService.ReportOffensiveContent(report);
                         break;
                     default:
                         break;
@@ -130,7 +130,7 @@ namespace WWTMVC5.Controllers
                         break;
                 }
 
-                this.notificationService.NotifyFlagged(request);
+                this._notificationService.NotifyFlagged(request);
             }
             catch (Exception)
             {

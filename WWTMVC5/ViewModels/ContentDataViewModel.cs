@@ -34,6 +34,8 @@ namespace WWTMVC5.ViewModels
         /// </summary>
         public string ContentFileDetail { get; set; }
 
+        
+
         /// <summary>
         /// Gets or sets the title of the tour
         /// </summary>

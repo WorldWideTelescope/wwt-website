@@ -11,7 +11,7 @@
 <ul class="iblock">
     <li><strong>Author:</strong> {{entity.Producer}}</li>
     <li><strong>Category:</strong> {{entity.ParentName}}</li>
-    <li><strong>Type:</strong> {{types.contentValues[entity.ContentType].name}}</li>
+    <li><strong>Type:</strong> {{types.contentValues.getName(entity.ContentType)}}</li>
     <li><strong>Updated:</strong> {{entity.LastUpdated}}</li>
 </ul>
 <hr class="clearfix" />

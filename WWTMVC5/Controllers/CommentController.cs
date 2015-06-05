@@ -28,12 +28,12 @@ namespace WWTMVC5.Controllers
         /// <summary>
         /// Instance of Comment Service
         /// </summary>
-        private ICommentService commentService;
+        private ICommentService _commentService;
 
         /// <summary>
         /// Instance of Queue Service
         /// </summary>
-        private INotificationService notificationService;
+        private INotificationService _notificationService;
 
         #endregion
 
@@ -48,8 +48,8 @@ namespace WWTMVC5.Controllers
         public CommentController(ICommentService commentService, IProfileService profileService, INotificationService notificationService)
             : base(profileService)
         {
-            this.commentService = commentService;
-            this.notificationService = notificationService;
+            this._commentService = commentService;
+            this._notificationService = notificationService;
         }
 
         #endregion
@@ -73,7 +73,7 @@ namespace WWTMVC5.Controllers
                 {
                     Comment = Server.UrlDecode(commentText),
                     ParentID = entityId,
-                    CommentedByID = CurrentUserID
+                    CommentedByID = CurrentUserId
                 };
 
                 switch (entityType)
@@ -82,10 +82,10 @@ namespace WWTMVC5.Controllers
                         break;
                     case EntityType.Community:
                     case EntityType.Folder:
-                        this.commentService.CreateCommunityComment(comment);
+                        this._commentService.CreateCommunityComment(comment);
                         break;
                     case EntityType.Content:
-                        this.commentService.CreateContentComment(comment);
+                        this._commentService.CreateContentComment(comment);
                         break;
                     default:
                         break;
@@ -114,10 +114,10 @@ namespace WWTMVC5.Controllers
                         break;
                     case EntityType.Community:
                     case EntityType.Folder:
-                        this.commentService.DeleteCommunityComment(commentId);
+                        this._commentService.DeleteCommunityComment(commentId);
                         break;
                     case EntityType.Content:
-                        this.commentService.DeleteContentComment(commentId);
+                        this._commentService.DeleteContentComment(commentId);
                         break;
                     default:
                         break;
@@ -213,11 +213,11 @@ namespace WWTMVC5.Controllers
                 {
                     case EntityType.Community:
                     case EntityType.Folder:
-                        comments = this.commentService.GetCommunityComments(filter, pageDetails);
+                        comments = this._commentService.GetCommunityComments(filter, pageDetails);
                         break;
 
                     case EntityType.Content:
-                        comments = this.commentService.GetContentComments(filter, pageDetails);
+                        comments = this._commentService.GetContentComments(filter, pageDetails);
                         break;
 
                     default:
@@ -234,7 +234,7 @@ namespace WWTMVC5.Controllers
                         commentItemViewModel.UserImageLink = item.CommentedByPictureID.HasValue ?
                                 Url.Action("Thumbnail", "File", new { id = item.CommentedByPictureID }) : "~/Content/Images/profile.png";
 
-                        commentItemViewModel.CanDelete = (userPermission.CanWrite() || CurrentUserID == item.CommentedByID);
+                        commentItemViewModel.CanDelete = (userPermission.CanWrite() || CurrentUserId == item.CommentedByID);
                         commentModel.Comments.Add(commentItemViewModel);
                     }
                 }
@@ -263,10 +263,10 @@ namespace WWTMVC5.Controllers
             {
                 case EntityType.Community:
                 case EntityType.Folder:
-                    totalItemsForCondition = this.commentService.GetTotalCommunityComments(filter);
+                    totalItemsForCondition = this._commentService.GetTotalCommunityComments(filter);
                     break;
                 case EntityType.Content:
-                    totalItemsForCondition = this.commentService.GetTotalContentComments(filter);
+                    totalItemsForCondition = this._commentService.GetTotalContentComments(filter);
                     break;
                 default:
                     break;
@@ -309,7 +309,7 @@ namespace WWTMVC5.Controllers
                         break;
                 }
 
-                this.notificationService.NotifyEntityComment(request);
+                this._notificationService.NotifyEntityComment(request);
             }
             catch (Exception)
             {

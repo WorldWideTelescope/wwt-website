@@ -8384,7 +8384,7 @@ i.spriteicon {
   height: 16px;
   width: 16px;
   background-color: transparent;
-  background-image: url(https://wwtweb.blob.core.windows.net/content/images/iconsprite.png);
+  background-image: url(//wwtweb.blob.core.windows.net/images/iconsprite.png);
   overflow: hidden;
   display: block;
 }
@@ -8400,7 +8400,9 @@ i.spriteicon {
   background-position: -38px 0;
 }
 .spriteicon.Tours,
-.spriteicon.tours {
+.spriteicon.tours,
+.spriteicon.Tour,
+.spriteicon.tour {
   background-position: -57px 0;
 }
 .spriteicon.Wtml,
@@ -8789,17 +8791,18 @@ footer.footer hr {
   display: block;
   width: 100%;
 }
-.navbar ul.social .sign-in {
-  position: absolute;
-  top: -19px;
-  right: -1px;
-  display: none;
+.navbar ul.social {
+  float: none;
 }
-.navbar ul.social .sign-in #signinContainer {
-  text-align: right;
-  width: 200px;
+.navbar ul.social li {
+  vertical-align: text-top;
+  padding-left: 16px;
+}
+.navbar ul.social .sign-in {
+  display: block;
 }
 .navbar ul.social .sign-in #signinContainer label {
+  float: right;
   display: inline-block;
   font-size: 85%;
   font-weight: 100;
@@ -8813,6 +8816,9 @@ footer.footer hr {
 .navbar ul.social .sign-in #signinContainer a.small {
   font-weight: 100;
   vertical-align: text-top;
+}
+.navbar ul.social li.social {
+  display: inline-block;
 }
 .navbar ul.social li.social a.social,
 .navbar ul.social li.social a.social:hover,
@@ -8854,6 +8860,26 @@ footer.footer hr {
                 left:5px;
             }
         }*/
+}
+@media (min-width: 992px) {
+  .navbar ul.social {
+    float: right;
+  }
+  .navbar ul.social .sign-in {
+    position: absolute;
+    top: -19px;
+    right: -1px;
+  }
+  .navbar ul.social .sign-in #signinContainer {
+    text-align: right;
+    width: 200px;
+  }
+  .navbar ul.social .sign-in #signinContainer label {
+    float: none;
+  }
+  li.social {
+    display: inline-block;
+  }
 }
 .bs-sidebar {
   padding: 9px 0 0 0;
@@ -9402,45 +9428,6 @@ ul.pagination li:last-child a {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#999b9b9b', endColorstr='#cc000000', GradientType=0);
   display: inline-block;
 }
-.community-content button.multiselect.dropdown-toggle {
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
-  border-radius: 3px;
-  border: solid 1px #566783;
-  background: transparent;
-  display: inline-block;
-  -webkit-box-shadow: inset 0 1px 4px #4d5d77;
-          box-shadow: inset 0 1px 4px #4d5d77;
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgba(255, 255, 255, 0.6)), color-stop(55%, rgba(155, 155, 155, 0.3)), color-stop(55.1%, rgba(0, 0, 0, 0.3)), to(rgba(0, 0, 0, 0.6)));
-  background-image: -webkit-linear-gradient(rgba(255, 255, 255, 0.6), rgba(155, 155, 155, 0.3) 55%, rgba(0, 0, 0, 0.3) 55.1%, rgba(0, 0, 0, 0.6));
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0.6)), color-stop(55%, rgba(155, 155, 155, 0.3)), color-stop(55.1%, rgba(0, 0, 0, 0.3)), to(rgba(0, 0, 0, 0.6)));
-  background-image: -o-linear-gradient(rgba(255, 255, 255, 0.6), rgba(155, 155, 155, 0.3) 55%, rgba(0, 0, 0, 0.3) 55.1%, rgba(0, 0, 0, 0.6));
-  background-image: linear-gradient(rgba(255, 255, 255, 0.6), rgba(155, 155, 155, 0.3) 55%, rgba(0, 0, 0, 0.3) 55.1%, rgba(0, 0, 0, 0.6));
-  background-repeat: no-repeat;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#4d9b9b9b', endColorstr='#99000000', GradientType=0);
-  /*padding:2px 4px;
-        font-size:12px;*/
-}
-.community-content a.input-group-addon {
-  background-color: transparent;
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgba(255, 255, 255, 0.8)), color-stop(55%, rgba(155, 155, 155, 0.6)), color-stop(55.1%, rgba(0, 0, 0, 0.6)), to(rgba(0, 0, 0, 0.8)));
-  background-image: -webkit-linear-gradient(rgba(255, 255, 255, 0.8), rgba(155, 155, 155, 0.6) 55%, rgba(0, 0, 0, 0.6) 55.1%, rgba(0, 0, 0, 0.8));
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0.8)), color-stop(55%, rgba(155, 155, 155, 0.6)), color-stop(55.1%, rgba(0, 0, 0, 0.6)), to(rgba(0, 0, 0, 0.8)));
-  background-image: -o-linear-gradient(rgba(255, 255, 255, 0.8), rgba(155, 155, 155, 0.6) 55%, rgba(0, 0, 0, 0.6) 55.1%, rgba(0, 0, 0, 0.8));
-  background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(155, 155, 155, 0.6) 55%, rgba(0, 0, 0, 0.6) 55.1%, rgba(0, 0, 0, 0.8));
-  background-repeat: no-repeat;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#999b9b9b', endColorstr='#cc000000', GradientType=0);
-  color: white;
-  border-color: #566783;
-}
-.community-content input.form-control,
-.community-content textarea.form-control {
-  color: #ffffff;
-  background: rgba(123, 123, 123, 0.5);
-  border-color: #566783;
-}
-.community-content .btn.btn-info {
-  border-color: rgba(0, 0, 0, 0.7);
-}
 .community-content .tab-content {
   padding-top: 10px;
 }
@@ -9467,6 +9454,231 @@ ul.pagination li:last-child a {
   overflow: hidden;
 }
 .btn-file input[type=file] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 100%;
+  min-height: 100%;
+  font-size: 100px;
+  text-align: right;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  outline: none;
+  background: white;
+  cursor: inherit;
+  display: block;
+}
+.uploaded-file-text {
+  margin: 8px 0;
+}
+button.multiselect.dropdown-toggle {
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+  border: solid 1px #566783;
+  background: transparent;
+  display: inline-block;
+  -webkit-box-shadow: inset 0 1px 4px #4d5d77;
+          box-shadow: inset 0 1px 4px #4d5d77;
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgba(255, 255, 255, 0.6)), color-stop(55%, rgba(155, 155, 155, 0.3)), color-stop(55.1%, rgba(0, 0, 0, 0.3)), to(rgba(0, 0, 0, 0.6)));
+  background-image: -webkit-linear-gradient(rgba(255, 255, 255, 0.6), rgba(155, 155, 155, 0.3) 55%, rgba(0, 0, 0, 0.3) 55.1%, rgba(0, 0, 0, 0.6));
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0.6)), color-stop(55%, rgba(155, 155, 155, 0.3)), color-stop(55.1%, rgba(0, 0, 0, 0.3)), to(rgba(0, 0, 0, 0.6)));
+  background-image: -o-linear-gradient(rgba(255, 255, 255, 0.6), rgba(155, 155, 155, 0.3) 55%, rgba(0, 0, 0, 0.3) 55.1%, rgba(0, 0, 0, 0.6));
+  background-image: linear-gradient(rgba(255, 255, 255, 0.6), rgba(155, 155, 155, 0.3) 55%, rgba(0, 0, 0, 0.3) 55.1%, rgba(0, 0, 0, 0.6));
+  background-repeat: no-repeat;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#4d9b9b9b', endColorstr='#99000000', GradientType=0);
+  /*padding:2px 4px;
+        font-size:12px;*/
+}
+a.input-group-addon {
+  background-color: transparent;
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgba(255, 255, 255, 0.8)), color-stop(55%, rgba(155, 155, 155, 0.6)), color-stop(55.1%, rgba(0, 0, 0, 0.6)), to(rgba(0, 0, 0, 0.8)));
+  background-image: -webkit-linear-gradient(rgba(255, 255, 255, 0.8), rgba(155, 155, 155, 0.6) 55%, rgba(0, 0, 0, 0.6) 55.1%, rgba(0, 0, 0, 0.8));
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0.8)), color-stop(55%, rgba(155, 155, 155, 0.6)), color-stop(55.1%, rgba(0, 0, 0, 0.6)), to(rgba(0, 0, 0, 0.8)));
+  background-image: -o-linear-gradient(rgba(255, 255, 255, 0.8), rgba(155, 155, 155, 0.6) 55%, rgba(0, 0, 0, 0.6) 55.1%, rgba(0, 0, 0, 0.8));
+  background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(155, 155, 155, 0.6) 55%, rgba(0, 0, 0, 0.6) 55.1%, rgba(0, 0, 0, 0.8));
+  background-repeat: no-repeat;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#999b9b9b', endColorstr='#cc000000', GradientType=0);
+  color: white;
+  border-color: #566783;
+}
+input.form-control,
+textarea.form-control {
+  color: #ffffff;
+  background: rgba(123, 123, 123, 0.5);
+  border-color: #566783;
+}
+.btn.btn-info {
+  border-color: rgba(0, 0, 0, 0.7);
+}
+.tour-thumb div.thumb {
+  width: 102px;
+  height: 52px;
+  border: solid 1px #566783;
+  text-align: center;
+  padding: 1px;
+  border-radius: 2px;
+  overflow: hidden;
+  margin: 5px 0;
+}
+.tour-thumb div.thumb img {
+  max-height: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+}
+.modal-body .thumbpicker {
+  display: inline-block;
+  margin-bottom: 0;
+  font-weight: normal;
+  text-align: center;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+      touch-action: manipulation;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  padding: 8px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  border-radius: 4px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
+  background-image: -webkit-linear-gradient(#4dbaff, #009cff 50%, #0090eb);
+  background-image: -o-linear-gradient(#4dbaff, #009cff 50%, #0090eb);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#4dbaff), color-stop(50%, #009cff), to(#0090eb));
+  background-image: linear-gradient(#4dbaff, #009cff 50%, #0090eb);
+  background-repeat: no-repeat;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff4dbaff', endColorstr='#ff0090eb', GradientType=0);
+  border: 1px solid #007dcc;
+  color: #ffffff;
+  background-color: #009cff;
+  border-color: #009cff;
+  position: relative;
+  overflow: hidden;
+  padding: 5px 10px;
+  font-size: 12px;
+  line-height: 1.5;
+  border-radius: 3px;
+  float: right !important;
+  margin-top: 8px;
+}
+.modal-body .thumbpicker:focus,
+.modal-body .thumbpicker:active:focus,
+.modal-body .thumbpicker.active:focus,
+.modal-body .thumbpicker.focus,
+.modal-body .thumbpicker:active.focus,
+.modal-body .thumbpicker.active.focus {
+  outline: thin dotted;
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+.modal-body .thumbpicker:hover,
+.modal-body .thumbpicker:focus,
+.modal-body .thumbpicker.focus {
+  color: #ffffff;
+  text-decoration: none;
+}
+.modal-body .thumbpicker:active,
+.modal-body .thumbpicker.active {
+  outline: 0;
+  background-image: none;
+  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+}
+.modal-body .thumbpicker.disabled,
+.modal-body .thumbpicker[disabled],
+fieldset[disabled] .modal-body .thumbpicker {
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.65;
+  filter: alpha(opacity=65);
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.modal-body .thumbpicker:hover,
+.modal-body .thumbpicker:focus,
+.modal-body .thumbpicker.focus,
+.modal-body .thumbpicker:active,
+.modal-body .thumbpicker.active,
+.open > .dropdown-toggle.modal-body .thumbpicker {
+  color: #ffffff;
+  background-color: #007dcc;
+  border-color: #0077c2;
+}
+.modal-body .thumbpicker:active,
+.modal-body .thumbpicker.active,
+.open > .dropdown-toggle.modal-body .thumbpicker {
+  background-image: none;
+}
+.modal-body .thumbpicker.disabled,
+.modal-body .thumbpicker[disabled],
+fieldset[disabled] .modal-body .thumbpicker,
+.modal-body .thumbpicker.disabled:hover,
+.modal-body .thumbpicker[disabled]:hover,
+fieldset[disabled] .modal-body .thumbpicker:hover,
+.modal-body .thumbpicker.disabled:focus,
+.modal-body .thumbpicker[disabled]:focus,
+fieldset[disabled] .modal-body .thumbpicker:focus,
+.modal-body .thumbpicker.disabled.focus,
+.modal-body .thumbpicker[disabled].focus,
+fieldset[disabled] .modal-body .thumbpicker.focus,
+.modal-body .thumbpicker.disabled:active,
+.modal-body .thumbpicker[disabled]:active,
+fieldset[disabled] .modal-body .thumbpicker:active,
+.modal-body .thumbpicker.disabled.active,
+.modal-body .thumbpicker[disabled].active,
+fieldset[disabled] .modal-body .thumbpicker.active {
+  background-color: #009cff;
+  border-color: #009cff;
+}
+.modal-body .thumbpicker .badge {
+  color: #009cff;
+  background-color: #ffffff;
+}
+.modal-body .thumbpicker:hover,
+.modal-body .thumbpicker:focus,
+.modal-body .thumbpicker.focus,
+.modal-body .thumbpicker:active,
+.modal-body .thumbpicker.active,
+.open > .dropdown-toggle.modal-body .thumbpicker {
+  color: #ffffff;
+  background-color: #007dcc;
+  border-color: #0077c2;
+}
+.modal-body .thumbpicker:active,
+.modal-body .thumbpicker.active,
+.open > .dropdown-toggle.modal-body .thumbpicker {
+  background-image: none;
+}
+.modal-body .thumbpicker.disabled,
+.modal-body .thumbpicker[disabled],
+fieldset[disabled] .modal-body .thumbpicker,
+.modal-body .thumbpicker.disabled:hover,
+.modal-body .thumbpicker[disabled]:hover,
+fieldset[disabled] .modal-body .thumbpicker:hover,
+.modal-body .thumbpicker.disabled:focus,
+.modal-body .thumbpicker[disabled]:focus,
+fieldset[disabled] .modal-body .thumbpicker:focus,
+.modal-body .thumbpicker.disabled.focus,
+.modal-body .thumbpicker[disabled].focus,
+fieldset[disabled] .modal-body .thumbpicker.focus,
+.modal-body .thumbpicker.disabled:active,
+.modal-body .thumbpicker[disabled]:active,
+fieldset[disabled] .modal-body .thumbpicker:active,
+.modal-body .thumbpicker.disabled.active,
+.modal-body .thumbpicker[disabled].active,
+fieldset[disabled] .modal-body .thumbpicker.active {
+  background-color: #009cff;
+  border-color: #009cff;
+}
+.modal-body .thumbpicker .badge {
+  color: #009cff;
+  background-color: #ffffff;
+}
+.modal-body .thumbpicker input[type=file] {
   position: absolute;
   top: 0;
   right: 0;

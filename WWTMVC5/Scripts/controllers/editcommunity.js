@@ -6,7 +6,7 @@
     'UIHelper',
     'FileUploader',
     '$q',
-    function ($scope, dataproxy, $timeout, $routeParams, uiHelper, fileUploader,$q) {
+    function ($scope, dataproxy, $timeout, $routeParams, uiHelper, fileUploader, $q) {
         
         $scope.thumbuploader = new fileUploader({
             url: "/Entity/AddThumbnail/Community",
@@ -21,6 +21,7 @@
         }
 
         function successThumb(xhr, response) {
+            $scope.editedThumb = true;
             $timeout(function () {
                 $scope.community.ThumbnailID = response.ThumbnailID;
             });
@@ -28,13 +29,17 @@
 
         function init() {
             uiHelper.fixLinks('profileLink');
-            $scope.isEdit = positiveIntParamExists('communityId');
-            $scope.isChildCommunity = positiveIntParamExists('parentId');
+            $scope.isEdit = uiHelper.positiveIntParamExists('communityId', $routeParams, $scope);
+            $scope.isChildCommunity = uiHelper.positiveIntParamExists('parentId', $routeParams, $scope);
+            $scope.cancelHref = $scope.isEdit ? '#/CommunityDetail/' + $scope.communityId : '#/MyProfile';
             dataproxy.requireAuth().then(function(types) {
                 $scope.types = types;
                 dataproxy.getUserCommunityList().then(function (response) {
                     var communityList = response;
                     $.each(communityList, function (i, item) {
+                        if ($scope.isChildCommunity && item.Value === $scope.parentId) {
+                            $scope.ParentCommunity = item.Text;
+                        }
                         item.val = item.Value;
                     });
                     $scope.communities = communityList;
@@ -43,8 +48,9 @@
                         return;
                     }
                     var setAndDisableParentDropdown = function (parentId) {
+                        $scope.parentId = parentId;
                         $('#lstCommunity').val(parentId);
-                        $('#lstCommunity').prop('disabled', true);
+                        //$('#lstCommunity').prop('disabled', true);
                     }
                     if ($scope.isEdit) {
                         dataproxy.getCommunityDetail($routeParams.communityId, true)
@@ -93,23 +99,19 @@
 
         };
 
-        var positiveIntParamExists = function(param) {
-            var exists = $routeParams && $routeParams[param] && parseInt($routeParams[param]) > 0;
-            if (exists) {
-                $scope[param] = $routeParams[param];
-            }
-            return exists;
-        };
+        
 
         $scope.saveEditedCommunity = function () {
             if (!$scope.isEdit) {
-                $scope.community.ParentID = positiveIntParamExists('parentId') ? $routeParams.parentId : $scope.community.ParentID.val;
+                $scope.community.ParentID = uiHelper.positiveIntParamExists('parentId', $routeParams, $scope) ?
+                    $routeParams.parentId : isNaN($scope.community.ParentID) ? $scope.community.ParentID.val : $scope.community.ParentID;
             }
-            console.log($scope.community);
+            
             dataproxy.saveEditedCommunity($scope.community)
                 .then(function (response) {
-                    console.log(this, arguments);
+                    console.log("savecommunityresponse", arguments);
                     if (!response.error && response.id) {
+                        $scope.community = null;
                         location.href = '#/CommunityDetail/' + response.id;
                     }
                     else {
@@ -120,11 +122,12 @@
 
         $scope.createCommunity = function () {
             $scope.community.ParentID = $scope.isChildCommunity ? $routeParams.parentId : $scope.community.ParentID.val;
-            console.log($scope.community);
+            
             dataproxy.createCommunity($scope.community)
                 .then(function (response) {
-                    console.log(arguments);
-                    if (response.ID) {
+                    console.log("createcommunityresponse",arguments);
+                    if (!response.error && response.ID) {
+                        $scope.community = null;
                         location.href = '#/CommunityDetail/' + response.ID;
                     } else {
                         bootbox.dialog("There was an error creating this community.");

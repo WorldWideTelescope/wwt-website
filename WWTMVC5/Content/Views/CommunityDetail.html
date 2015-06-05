@@ -1,4 +1,11 @@
-﻿
+﻿<div class="row" ng-show="!community" style="padding: 25px 0">
+    <div class="col-md-6 col-md-offset-3">
+        <label>Community details loading. Please wait...</label>
+        <div class="progress">
+            <div class="progress-bar progress-bar-striped active progress-bar-info" style="width: 100%" role="progressbar"></div>
+        </div>
+    </div>
+</div>
 <div ng-cloak ng-show="community" class="community-detail entity-detail" ng-show="community">
 
     <a class="thumbnail" title="{{community.Name}}">
@@ -12,7 +19,7 @@
             <ul class="entity-details">
                 <li><strong>Members:</strong> {{community.MemberCount + 1}}</li>
                 <li><strong>Created by:</strong> {{community.Producer}}</li>
-                <li><strong>Category:</strong> {{types.categoryValues[community.Category].name}}</li>
+                <li><strong>Category:</strong> {{types.categoryValues.getName(community.Category)}}</li>
                 <li><strong>Tags:</strong> {{community.Tags}}</li>
             </ul>
             <br />
@@ -71,7 +78,7 @@
                             <i class="spriteicon {{entity.ContentTypeName}}" ng-if="entity.ContentTypeName != 'Link'"></i>
                             <i class="spriteicon fa fa-external-link" ng-if="entity.ContentTypeName == 'Link'"></i>
                         </span>
-                        <img ng-src="{{entity.ThumbnailUrl}}" class="img-thumbnail"/>
+                        <img ng-src="{{entity.ThumbnailUrl}}" class="img-thumbnail" />
                         <label class="small" style="font-weight: 100">{{entity.Name}}</label>
                     </a>
 
@@ -108,7 +115,7 @@
                 </div>
             </div>
 
-            <a class="btn btn-info btn-sm" href="#/AddCommunity">Create New Child Community</a>
+            <a class="btn btn-info btn-sm" href="#/AddCommunity/{{community.Id}}">Create New Child Community</a>
             <div class="clearfix"></div>
             <p>&nbsp;</p>
         </div>
@@ -117,12 +124,25 @@
     <div class="row">
         <div class="col-md-12" style="padding-bottom: 12px;" ng-show="types">
             <hr class="clearfix" /><br />
-            <a class="btn btn-info btn-sm" ng-href="#/EditCommunity/{{community.Id}}" ng-if="userCanEdit">Edit Community</a>
+
+            <a class="btn btn-info btn-sm" ng-href="#/EditCommunity/{{community.Id}}/{{community.ParentId}}" ng-if="userCanEdit && community.ParentName != 'None'">
+                <i class="fa fa-edit"></i>
+                Edit Community
+            </a>
+            <a class="btn btn-info btn-sm" ng-href="#/EditCommunity/{{community.Id}}" ng-if="userCanEdit && community.ParentName == 'None'">
+                <i class="fa fa-edit"></i>
+                Edit Community
+            </a>
+
             <a class="btn btn-warning btn-sm" ng-click="confirmDelete()" ng-if="userCanEdit">
                 <i class="fa fa-trash"></i>
                 Delete Community
             </a>
-            <a class="btn btn-sm btn-info" data-toggle="modal" data-target="#joinCommunityModal" ng-if="permission ==null || permission.CurrentUserPermission < 2">Join</a>
+            <a class="btn btn-sm btn-info" data-toggle="modal" data-target="#joinCommunityModal" ng-if="permission == null || permission.CurrentUserPermission < 2">Join</a>
+            <a class="btn btn-primary btn-sm" ng-href="#/CommunityDetail/{{community.ParentId}}" ng-if="community.ParentName != 'None'">
+                <i class="fa fa-level-up"></i>
+                View Parent Community
+            </a>
         </div>
     </div>
 </div>
@@ -144,13 +164,14 @@
                             <option value="Reader">Reader</option>
                             <option value="Contributor">Contributor</option>
                             <option value="Moderator">Moderator</option>
+                            <option value="Owner">Owner</option>
                         </select>
                     </div>
 
                     <div class="clearfix"></div>
                 </div>
-                
-                
+
+
             </div>
 
             <div class="modal-footer">

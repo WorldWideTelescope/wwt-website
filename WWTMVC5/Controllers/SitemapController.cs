@@ -27,12 +27,12 @@ namespace WWTMVC5.Controllers
         /// <summary>
         /// Instance of Community Service
         /// </summary>
-        private ICommunityService communityService;
+        private ICommunityService _communityService;
 
         /// <summary>
         /// Instance of Content Service
         /// </summary>
-        private IContentService contentService;
+        private IContentService _contentService;
 
         #endregion
 
@@ -47,8 +47,8 @@ namespace WWTMVC5.Controllers
         public SitemapController(ICommunityService communityService, IContentService contentService, IProfileService profileService)
             : base(profileService)
         {
-            this.communityService = communityService;
-            this.contentService = contentService;
+            this._communityService = communityService;
+            this._contentService = contentService;
         }
 
         #endregion
@@ -72,13 +72,13 @@ namespace WWTMVC5.Controllers
             weeklyUrl.Add(GetUrl(new { controller = "Home", action = "InstallWWT" }));
             weeklyUrl.Add(GetUrl(new { controller = "Home", action = "ExcelAddInWelcome" }));
 
-            var communityList = this.communityService.GetLatestCommunityIDs(Constants.SitemapCount);
+            var communityList = this._communityService.GetLatestCommunityIDs(Constants.SitemapCount);
             foreach (var item in communityList)
             {
                 weeklyUrl.Add(string.Format(CultureInfo.InvariantCulture, "{0}/{1}", GetUrl(new { controller = "Community", action = "Index" }), item));
             }
 
-            var contentList = this.contentService.GetLatestContentIDs(Constants.SitemapCount);
+            var contentList = this._contentService.GetLatestContentIDs(Constants.SitemapCount);
             foreach (var item in contentList)
             {
                 weeklyUrl.Add(string.Format(CultureInfo.InvariantCulture, "{0}/{1}", GetUrl(new { controller = "Content", action = "Index" }), item));

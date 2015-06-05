@@ -6,8 +6,8 @@
         console.log(types);
         dataproxy.getEntityDetail({ entityId: $routeParams.contentId })
             .then(function (entity) {
-                
                 $scope.entity = entity;
+                uiHelper.imageHelper('.img-thumbnail');
             });
     });
 
@@ -15,7 +15,7 @@
         bootbox.confirm("Delete this content?", function(result) {
             if (result) {
                 dataproxy.deleteContent($scope.entity.Id).then(function() {
-                    window.history.back();
+                    location.href = '#/MyProfile';
                 });
             }
         });

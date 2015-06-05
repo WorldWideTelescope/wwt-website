@@ -28,7 +28,7 @@ namespace WWTMVC5.Controllers
         /// <summary>
         /// Instance of Static Content Service
         /// </summary>
-        private IStaticContentService staticContentService;
+        private IStaticContentService _staticContentService;
 
         #endregion
 
@@ -42,7 +42,7 @@ namespace WWTMVC5.Controllers
         public StaticContentController(IStaticContentService staticContentService, IProfileService profileService)
             : base(profileService)
         {
-            this.staticContentService = staticContentService;
+            this._staticContentService = staticContentService;
         }
 
         #endregion
@@ -71,7 +71,7 @@ namespace WWTMVC5.Controllers
             CheckIfSiteAdmin();
 
             var staticContentViewModel = new StaticContentViewModel();
-            var staticContent = this.staticContentService.GetStaticContent(contentType);
+            var staticContent = this._staticContentService.GetStaticContent(contentType);
             staticContentViewModel.Content = staticContent.Content;
 
             try
@@ -117,10 +117,10 @@ namespace WWTMVC5.Controllers
                 {
                     TypeID = staticContentViewModel.ContentType,
                     Content = staticContentViewModel.Content,
-                    ModifiedByID = this.CurrentUserID
+                    ModifiedByID = this.CurrentUserId
                 };
 
-                OperationStatus status = this.staticContentService.UpdateStaticContent(staticContent);
+                OperationStatus status = this._staticContentService.UpdateStaticContent(staticContent);
                 if (!status.Succeeded)
                 {
                     throw new Exception(status.ErrorMessage, status.Exception);
@@ -171,7 +171,7 @@ namespace WWTMVC5.Controllers
         {
             try
             {
-                var staticContent = this.staticContentService.GetStaticContent(staticContentType);
+                var staticContent = this._staticContentService.GetStaticContent(staticContentType);
                 PartialView("StaticContentView", staticContent).ExecuteResult(this.ControllerContext);
             }
             catch (Exception)

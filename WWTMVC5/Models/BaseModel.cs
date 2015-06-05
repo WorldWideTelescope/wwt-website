@@ -16,6 +16,8 @@ namespace WWTMVC5.Models
 	    private readonly string _resVer;
 	    private readonly string _downloadUrl;
 	    private readonly string _legacyUrl;
+	    private bool _isOpenWwtKiosk = false;
+
 
 	    public BaseModel()
 	    {
@@ -79,6 +81,12 @@ namespace WWTMVC5.Models
 	    public string LegacyUrl
 	    {
 	        get { return _legacyUrl; }
+	    }
+
+	    public bool IsOpenWwtKiosk
+	    {
+	        get { return _isOpenWwtKiosk; }
+	        set { _isOpenWwtKiosk = value; }
 	    }
 
 	    public ProfileDetails User

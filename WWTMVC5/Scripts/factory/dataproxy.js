@@ -1,5 +1,5 @@
 ﻿wwtng.factory('dataproxy', [
-    '$http', '$q','$timeout', 'UIHelper', function($http, $q,$timeout, uiHelper) {
+    '$http', '$q', '$timeout', 'UIHelper', '$rootScope', function($http, $q, $timeout, uiHelper, $rootScope) {
         var api = {
             getEntities: getEntities,
             getEntityDetail: getEntityDetail,
@@ -11,9 +11,9 @@
             publishContent: publishContent,
             saveEditedContent: saveEditedContent,
             getUserEntities: getUserEntities,
-            getUserRequests:getUserRequests,
+            getUserRequests: getUserRequests,
             getUserCommunityList: getUserCommunityList,
-            deleteContent:deleteContent,
+            deleteContent: deleteContent,
             isAdmin: getIsAdmin,
             currentUserId: getCurrentUserId,
             createCommunity: createCommunity,
@@ -21,6 +21,7 @@
             getCommunityContents: getCommunityContents,
             saveEditedCommunity: saveEditedCommunity,
             joinCommunity: joinCommunity,
+            deleteCommunity: deleteCommunity,
             requestResponse: requestResponse,
             requireAuth:requireAuth
         };
@@ -108,8 +109,14 @@
         //CommunityController.cs: [Route("Community/Join/{communityId}/{userRole}")]
         function joinCommunity(id, role) {
             var deferred = $q.defer();
-            postHelper('/Community/Join/' + id + '/' + role, {comments:" "}, deferred);
-           
+            postHelper('/Community/Join/' + id + '/' + role, { comments: " " }, deferred);
+
+            return deferred.promise;
+        }
+        //CommunityController.cs: [Route("Community/Delete/{Id}/{parentId}")]
+        function deleteCommunity(id, parentId) {
+            var deferred = $q.defer();
+            postHelper('/Community/Delete/' + id + '/' + parentId, {}, deferred);
             return deferred.promise;
         }
 
@@ -234,7 +241,8 @@
                     } else if ($('#signin').length && $('#signin').prop('authenticated')) {
                         refreshTypes();
                     }else {
-                        deferred.reject('login not initiated');
+                        wwt.viewMaster.signIn();
+                        $(window).on('login', refreshTypes);
                     }
                 });
             }
@@ -268,6 +276,10 @@
             var httppost = function() {
                 $http.post(url, data).
                     success(function (data) {
+                        if (typeof data === 'string' && data.indexOf('error:') === 0 && data.indexOf('user not logged in') !== -1) {
+                            location.reload();
+                            return;
+                        }
                         if (processData) {
                             if (processSingle && !member) {
                                 data = dataHelper([data])[0];
@@ -286,10 +298,16 @@
                             }
                         }
                         console.log(data);
-                        deferred.resolve(data);
+                        if (typeof data == 'string' && data.indexOf('error') === 0) {
+                            handleError(data, status, headers, config, deferred);
+                        } else {
+                            deferred.resolve(data);
+                        }
+                        wwt.triggerResize();
                     }).
                     error(function(data, status, headers, config) {
                         handleError(data, status, headers, config, deferred);
+                        wwt.triggerResize();
                     });
                 };
             if (processData) {
@@ -310,13 +328,16 @@
                 var isCommunity = item.MemberCount != undefined || item.CommunityType != undefined;
                 if (hasEmptyOrNullGuid(item.ThumbnailID)) {
                     if (isCommunity) {
-                        item.ThumbnailUrl = '/Content/Images/defaultcommunitythumbnail.png';
+                        item.ThumbnailUrl = $rootScope.contentRoot + '/images/defaultcommunitythumbnail.png';
                     } else {
-                        item.ThumbnailUrl = '/Content/Images/default' + types.contentValues[item.ContentType].val + 'thumbnail.png';
+                        item.ThumbnailUrl = $rootScope.contentRoot + '/images/default' + $.trim(types.contentValues.getTypeName(item.ContentType)).toLowerCase() + 'thumbnail.png';
                     }
+                    item.ThumbnailID = null;
                 } else {
+
                     item.ThumbnailUrl = '/file/thumbnail/' + item.ThumbnailID;
                 }
+                
                 if (!isCommunity) {
                     var itemLink = uiHelper.getDownloadUrl(item.FileName, item.ContentAzureID, item.ContentType);
                     if (itemLink.DownloadUrl) {
@@ -335,7 +356,7 @@
                         item.webclientUrl = 'http://' + location.host + '/webclient?wtml=' +
                             encodeURIComponent('http://' + location.host + item.DownloadUrl);
                     }
-                    item.ContentTypeName = types.contentValues[item.ContentType].val;
+                    item.ContentTypeName = types.contentValues.getName(item.ContentType);
                     if (item.AssociatedFiles && item.AssociatedFiles.length) {
                         $.each(item.AssociatedFiles, function(i, file) {
                             var fileLink = uiHelper.getDownloadUrl(file.Name, file.ID);
@@ -358,57 +379,100 @@
 
         var getFriendlyTypes = function(array) {
             var friendly = [];
-            var pushFriendly = function(v, f) {
-                friendly.push({ val: v, name: f || v });
+            var pushFriendly = function(v, f, i) {
+                friendly.push({ val: v, name: f, index:i });
             }
             $.each(array, function(i, s) {
                 switch (s) {
-                    case 'All':
-                        friendly.splice(0,0, {val:s,name:s});
-                        break;
+                    
                     case 'Tours':
-                        pushFriendly(s, 'Tour');
+                        pushFriendly(s, 'Tour', i);
                         break;
                     case 'Wtml':
-                        pushFriendly(s, 'Collection');
+                        pushFriendly(s, 'Collection', i);
                         break;
                     case 'Excel':
-                        pushFriendly(s, 'Spreadsheet');
+                        pushFriendly(s, 'Spreadsheet', i);
                         break;
                     case 'Doc':
-                        pushFriendly(s, 'Word Doc');
+                        pushFriendly(s, 'Word Doc', i);
                         break;
                     case 'Ppt':
-                        pushFriendly(s, 'PowerPoint');
+                        pushFriendly(s, 'PowerPoint', i);
                         break;
                     case 'Link':
-                        pushFriendly(s);
+                        pushFriendly(s,s,i);
                         break;
                     case 'Generic':
-                        pushFriendly(s);
+                        pushFriendly(s,s,i);
                         break;
                     case 'Wwtl':
-                        pushFriendly(s, '3d Model');
+                        pushFriendly(s, '3d Model',i);
                         break;
                     case 'Video':
-                        pushFriendly(s);
+                        pushFriendly(s,s,i);
                         break;
 
                 }
             });
+            friendly = sortAndExtend(friendly);
+            friendly.splice(0, 0, { val: 'All', name: 'All', index: 0 });
             return friendly;
         };
         
         var convertCamel = function(array) {
             var converted = [];
-            $.each(array, function(i, s) {
+            $.each(array, function (i, s) {
+                var fname = s.indexOf('WWT') !== -1 ? s.replace('WWT', ' WWT ') : s.replace(/([A-Z]+)/g, "$1").replace(/([A-Z][a-z])/g, " $1");
                 converted.push({
                     val: s,
-                    name: $.trim(s.replace(/([A-Z]+)/g, "$1").replace(/([A-Z][a-z])/g, " $1")),
+                    name: $.trim(fname),
                     index:i
                 });
             });
-            return converted;
+            return sortAndExtend(converted);
+
+        }
+
+        var sortAndExtend = function(array) {
+            var sorted = array.sort(function (a, b) {
+                if (a.name > b.name) {
+                    return 1;
+                }
+                if (a.name < b.name) {
+                    return -1;
+                }
+                return 0;
+            });
+
+
+            var special = function () {
+                this.array = sorted;
+                return this.array;
+            };
+
+            special.prototype = Array.prototype;
+
+            var getTypeOrName = function(array, index, getName) {
+                if (index) {
+                    var result;
+                    $.each(array, function (i, item) {
+                        if (item.index === index) {
+                            result = getName?item.name:item.val;
+                        }
+                    });
+                    return result;
+                }
+                return '';
+            }
+
+            special.prototype.getName = function (index) {
+                return getTypeOrName(this, index, true);
+            }
+            special.prototype.getTypeName = function (index) {
+                return getTypeOrName(this, index);
+            }
+            return special();
         }
 
         var handleError = function(data, status, headers, config, deferred) {

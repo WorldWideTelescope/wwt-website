@@ -15,18 +15,18 @@ namespace WWTMVC5.Controllers
     [Route("{action=Index}")]
     public class DefaultController : ControllerBase
     {
-        private ICommunityService communityService;
+        private ICommunityService _communityService;
         /// <summary>
         /// Instance of Queue Service
         /// </summary>
-        private INotificationService notificationService;
+        private INotificationService _notificationService;
         public DefaultController(IProfileService profileService, ICommunityService communityService, INotificationService queueService)
             : base(profileService)
         {
-            this.communityService = communityService;
-            this.notificationService = queueService;
+            _communityService = communityService;
+            _notificationService = queueService;
         }
-        private readonly BaseModel baseModel = new BaseModel();
+        private readonly BaseModel _baseModel = new BaseModel();
 
         private static readonly string[] ViewGroups = new string[]
         {
@@ -50,68 +50,21 @@ namespace WWTMVC5.Controllers
             "wwtinaction",
             "wwtstories"
         };
-        
     
         public ActionResult Index()
         {
-            return GetViewOrRedirect("~/Views/Index.cshtml", baseModel, "");
+            return GetViewOrRedirect(string.Empty,"index", _baseModel);
         }
-
 
         [AllowAnonymous]
         [Route("LiveId/Authenticate")]
         public async Task<JsonResult> Authenticate()
         {
-            var svc = new LiveIdAuth();
-            LiveLoginResult result = await svc.Authenticate();
-            if (result.Status == LiveConnectSessionStatus.Connected)
-            {
-                var client = new LiveConnectClient(result.Session);
-                SessionWrapper.Set("LiveConnectClient", client);
-                SessionWrapper.Set("LiveConnectResult", result);
-                SessionWrapper.Set("LiveAuthSvc", svc);
-                
-                var getResult = await client.GetAsync("me");
-                var jsonResult = getResult.Result as dynamic;
-                var profileDetails = ProfileService.GetProfile(jsonResult.id);
-                if (profileDetails == null)
-                {
-                    profileDetails = new ProfileDetails(jsonResult);
-                    // While creating the user, IsSubscribed to be true always.
-                    profileDetails.IsSubscribed = true;
-
-                    // When creating the user, by default the user type will be of regular. 
-                    profileDetails.UserType = UserTypes.Regular;
-                    profileDetails.ID = this.ProfileService.CreateProfile(profileDetails);
-                    
-                    // This will used as the default community when user is uploading a new content.
-                    // This community will need to have the following details:
-                    CommunityDetails communityDetails = new CommunityDetails
-                    {
-                        CommunityType = CommunityTypes.User,// 1. This community type should be User
-                        CreatedByID = profileDetails.ID,// 2. CreatedBy will be the new USER.
-                        IsFeatured = false,// 3. This community is not featured.
-                        Name = Resources.UserCommunityName,// 4. Name should be NONE.
-                        AccessTypeID = (int) AccessType.Private,// 5. Access type should be private.
-                        CategoryID = (int) CategoryType.GeneralInterest// 6. Set the category ID of general interest. We need to set the Category ID as it is a foreign key and cannot be null.
-                    };
-
-                    // 7. Create the community
-                    communityService.CreateCommunity(communityDetails);
-
-                    // Send New user notification.
-                    this.notificationService.NotifyNewEntityRequest(profileDetails,
-                        HttpContext.Request.Url.GetServerLink());
-                }
-                
-                SessionWrapper.Set<long>("CurrentUserID", profileDetails.ID);
-                SessionWrapper.Set<string>("CurrentUserProfileName", profileDetails.FirstName + " " + profileDetails.LastName);
-                SessionWrapper.Set("ProfileDetails", profileDetails);
-                SessionWrapper.Set("AuthenticationToken", result.Session.AuthenticationToken);
+            LiveLoginResult result = await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+            if (result.Status == LiveConnectSessionStatus.Connected){    
                 return Json(new
                 {
                     Status = result.Status.ToString(), 
-                    //State = result.State != null ? result.State.ToString() : null,
                     Session = new
                     {
                         result.Session.AccessToken,
@@ -120,7 +73,7 @@ namespace WWTMVC5.Controllers
                         result.Session.RefreshToken,
                         result.Session.Scopes
                     },
-                    profile=jsonResult
+                   
                 }, JsonRequestBehavior.AllowGet);
             }
             else
@@ -153,7 +106,7 @@ namespace WWTMVC5.Controllers
             {
                 if (!ViewGroups.Contains(group.ToLower()))
                 {
-                    return GetViewOrRedirect("~/Views/Support/Error.cshtml", baseModel, "Support/Error");
+                    return View("~/Views/Support/Error.cshtml", _baseModel);
                 }
                 if (group.ToLower() == "wwtstories")
                 {
@@ -161,36 +114,43 @@ namespace WWTMVC5.Controllers
                 }
                 if (page.Contains(".msi") || (page.ToLower() == "error" && Request.RawUrl.Contains(".msi")))
                 {
-                    return GetViewOrRedirect("~/Views/Download/Index.cshtml", baseModel, "/Download");
+                    return GetViewOrRedirect("download","index", _baseModel);
                 }
-                if (group.ToLower() == "community" && page == "profile" && baseModel.User == null)
+                if (group.ToLower() == "community" && page == "profile" && _baseModel.User == null)
                 {
-                    return Redirect("/");
+                    return Redirect("/Community");
                 }
                 ViewBag.page = page = GetQsPage(page);
                 ViewBag.group = group;
-                ViewBag.CurrentUserId = CurrentUserID;
+                ViewBag.CurrentUserId = CurrentUserId;
 
-                return GetViewOrRedirect("~/Views/" + group + "/" + page + ".cshtml", baseModel, group + "/" + page);
+                return GetViewOrRedirect(group, page, _baseModel);
             }
             catch (Exception ex)
             {
-                return GetViewOrRedirect("~/Views/Support/Error.cshtml", baseModel, "Support/Error");
+                return View("~/Views/Support/Error.cshtml", _baseModel);
             }
         }
 
-        private ActionResult GetViewOrRedirect(string viewPath, BaseModel model, string redirectPath)
+
+        /// <summary>
+        /// All web page views go through this function - it ensures we are not in openwwt land - which should only display a kiosk
+        /// </summary>
+        /// <param name="group"></param>
+        /// <param name="page"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        private ActionResult GetViewOrRedirect(string group, string page, BaseModel model)
         {
-            if (model.Staging || Request.Headers.Get("host").ToLower().Contains("openwwt"))
-            {
-                return View(viewPath, model);
-            }
-            else
-            {
-                return Redirect("http://openwwt.org/" + redirectPath);
-            }
-        }
+            model.IsOpenWwtKiosk = Request.Headers.Get("host").ToLower().Contains("openwwt.org");
 
+            if (model.IsOpenWwtKiosk && group.ToLower() != "openwwt")
+            {
+                group = "openwwt";
+                page = "index";
+            }
+            return group == string.Empty ? View("~/Views/index.cshtml", model) : View("~/Views/" + group + "/" + page + ".cshtml", model);
+        }
 
         //Ensure old webform routes still return the proper view
         private string GetQsPage(string page)

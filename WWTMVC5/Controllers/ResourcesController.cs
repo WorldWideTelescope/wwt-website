@@ -27,15 +27,15 @@ namespace WWTMVC5.Controllers
         /// <summary>
         /// Instance of Content Service
         /// </summary>
-        private IContentService contentService;
-        private ICommunityService communityService;
+        private IContentService _contentService;
+        private ICommunityService _communityService;
 
         /// <summary>
         /// Instance of Queue Service
         /// </summary>
-        private INotificationService notificationService;
+        private INotificationService _notificationService;
 
-        private IProfileService profileService;
+        private IProfileService _profileService;
         
         #endregion Private Variables
 
@@ -51,10 +51,10 @@ namespace WWTMVC5.Controllers
         public ResourcesController(IContentService contentService, IProfileService profileService, ICommunityService communityService, INotificationService queueService)
             : base(profileService)
         {
-            this.contentService = contentService;
-            this.notificationService = queueService;
-            this.profileService = profileService;
-            this.communityService = communityService;
+            this._contentService = contentService;
+            this._notificationService = queueService;
+            this._profileService = profileService;
+            this._communityService = communityService;
         }
 
         #endregion Constructor
@@ -106,10 +106,10 @@ namespace WWTMVC5.Controllers
                 };
 
                 // 7. Create the community
-                communityService.CreateCommunity(communityDetails);
+                _communityService.CreateCommunity(communityDetails);
 
                 // Send New user notification.
-                this.notificationService.NotifyNewEntityRequest(profileDetails,
+                this._notificationService.NotifyNewEntityRequest(profileDetails,
                     HttpContext.Request.Url.GetServerLink());
             }
             else
@@ -154,7 +154,7 @@ namespace WWTMVC5.Controllers
             {
                 long contentId = ValidateEntityId(id);
                     
-                OperationStatus status = contentService.DeleteContent(contentId, profileDetails.ID);
+                OperationStatus status = _contentService.DeleteContent(contentId, profileDetails.ID);
                 return status != null && status.Succeeded;
             }
             else
@@ -361,16 +361,16 @@ namespace WWTMVC5.Controllers
             payloadDetails.Children.Add(browseDetails);
 
             // TODO: Get Search EO node.
-            var searchEOLink = new Place();
-            searchEOLink.Name = Resources.SearchWWTLabel;
-            searchEOLink.Url = string.Format(CultureInfo.InvariantCulture, "{0}/Community/index{1}", BaseUri(), "?wwtfull=true");
-            searchEOLink.Permission = Permission.Reader;
-            searchEOLink.Thumbnail = RewriteThumbnailUrl(searchEOLink.Thumbnail, "searchwwtthumbnail");
+            var searchEoLink = new Place();
+            searchEoLink.Name = Resources.SearchWWTLabel;
+            searchEoLink.Url = string.Format(CultureInfo.InvariantCulture, "{0}/Community/index{1}", BaseUri(), "?wwtfull=true");
+            searchEoLink.Permission = Permission.Reader;
+            searchEoLink.Thumbnail = RewriteThumbnailUrl(searchEoLink.Thumbnail, "searchwwtthumbnail");
 
             // This will make sure that the additional context menu options specific to folders are not shown in WWT.
-            searchEOLink.MSRComponentId = -1;
+            searchEoLink.MSRComponentId = -1;
 
-            payloadDetails.Links.Add(searchEOLink);
+            payloadDetails.Links.Add(searchEoLink);
 
             // TODO: Get Help node.
             var helpLink = new Place();
@@ -778,7 +778,7 @@ namespace WWTMVC5.Controllers
             {
                 // AuthorImageUrl has the created by ID of the user. This needs to be replaced with the URL for users picture
                 var userList = payloadDetails.Tours.Select(item => item.AuthorImageUrl).ToList().ConvertAll<long>(Convert.ToInt64).AsEnumerable();
-                profileDetails = profileService.GetProfiles(userList.Distinct());
+                profileDetails = _profileService.GetProfiles(userList.Distinct());
             }
 
             // Update Tour Urls including thumbnail, author and author image
@@ -792,10 +792,10 @@ namespace WWTMVC5.Controllers
                 var firstOrDefault = profileDetails.FirstOrDefault(item => item.ID.ToString(CultureInfo.InvariantCulture) == tour.AuthorImageUrl);
                 if (firstOrDefault != null)
                 {
-                    var pictureID = firstOrDefault.PictureID;
-                    if (pictureID.HasValue)
+                    var pictureId = firstOrDefault.PictureID;
+                    if (pictureId.HasValue)
                     {
-                        tour.AuthorImageUrl = string.Format(CultureInfo.InvariantCulture, "{0}/File/Thumbnail/{1}", baseUri, pictureID.Value);
+                        tour.AuthorImageUrl = string.Format(CultureInfo.InvariantCulture, "{0}/File/Thumbnail/{1}", baseUri, pictureId.Value);
                     }
                     else 
                     {
@@ -894,15 +894,15 @@ namespace WWTMVC5.Controllers
             }
 
             IContentService contentService = DependencyResolver.Current.GetService(typeof(IContentService)) as IContentService;
-            long contentID = content.ID = contentService.CreateContent(content);
+            long contentId = content.ID = contentService.CreateContent(content);
 
-            if (contentID > 0)
+            if (contentId > 0)
             {
                 INotificationService notificationService = DependencyResolver.Current.GetService(typeof(INotificationService)) as INotificationService;
                 notificationService.NotifyNewEntityRequest(content, BaseUri() + "/");
             }
 
-            return contentID;
+            return contentId;
         }
 
         private long CreateTour(string filename, Stream fileContent, ProfileDetails profileDetails, CommunityDetails parentCommunity)
@@ -930,15 +930,15 @@ namespace WWTMVC5.Controllers
             }
 
             IContentService contentService = DependencyResolver.Current.GetService(typeof(IContentService)) as IContentService;
-            long contentID = content.ID = contentService.CreateContent(content);
+            long contentId = content.ID = contentService.CreateContent(content);
 
-            if (contentID > 0)
+            if (contentId > 0)
             {
                 INotificationService notificationService = DependencyResolver.Current.GetService(typeof(INotificationService)) as INotificationService;
                 notificationService.NotifyNewEntityRequest(content, BaseUri() + "/");
             }
 
-            return contentID;
+            return contentId;
         }
 
         private long CreateCollection(string filename, Stream fileContent, ProfileDetails profileDetails, CommunityDetails parentCommunity)
@@ -963,15 +963,15 @@ namespace WWTMVC5.Controllers
             }
 
             IContentService contentService = DependencyResolver.Current.GetService(typeof(IContentService)) as IContentService;
-            long contentID = content.ID = contentService.CreateContent(content);
+            long contentId = content.ID = contentService.CreateContent(content);
 
-            if (contentID > 0)
+            if (contentId > 0)
             {
                 INotificationService notificationService = DependencyResolver.Current.GetService(typeof(INotificationService)) as INotificationService;
                 notificationService.NotifyNewEntityRequest(content, BaseUri() + "/");
             }
 
-            return contentID;
+            return contentId;
         }
 
         private ContentDetails GetContentDetail(string filename, Stream fileContent, ProfileDetails profileDetails, CommunityDetails parentCommunity)

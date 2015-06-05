@@ -21,7 +21,7 @@ namespace WWTMVC5.Controllers
     /// </summary>
     public class AssetController : ControllerBase
     {
-        private IBlobService blobService;
+        private IBlobService _blobService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AssetController"/> class.
@@ -31,7 +31,7 @@ namespace WWTMVC5.Controllers
         public AssetController(IBlobService blobService, IProfileService profileService)
             : base(profileService)
         {
-            this.blobService = blobService;
+            this._blobService = blobService;
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace WWTMVC5.Controllers
             if (!string.IsNullOrWhiteSpace(id))
             {
                 // Get the file from Azure.
-                var blobDetails = this.blobService.GetAsset(id);
+                var blobDetails = this._blobService.GetAsset(id);
 
                 if (blobDetails != null && blobDetails.Data != null)
                 {
@@ -131,18 +131,18 @@ namespace WWTMVC5.Controllers
         /// Removes the selected asset.
         /// Return success / failure based on service method call.
         /// </summary>
-        /// <param name="assetID">Asset id which is being deleted</param>
+        /// <param name="assetId">Asset id which is being deleted</param>
         /// <param name="currentPage">Current page from where action performed</param>
         /// <returns>Ajax response string</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public string DeleteAssetRequest(string assetID, int currentPage)
+        public string DeleteAssetRequest(string assetId, int currentPage)
         {
             CheckIfSiteAdmin();
 
             string ajaxResponse = string.Empty;
 
-            var operationStatus = this.blobService.DeleteAsset(assetID);
+            var operationStatus = this._blobService.DeleteAsset(assetId);
 
             if (operationStatus.Succeeded)
             {
@@ -186,7 +186,7 @@ namespace WWTMVC5.Controllers
                 // Get File details.
                 var fileDetail = new FileDetail();
                 fileDetail.AzureID = uploadedHomeVideo.VideoID;
-                this.blobService.MoveTempFile(fileDetail);
+                this._blobService.MoveTempFile(fileDetail);
             }
             return RedirectToAction("index", "Home");
         }
@@ -214,7 +214,7 @@ namespace WWTMVC5.Controllers
 
                     // Upload video file in the temporary container. Once the user publishes the content 
                     // then we will move the file from temporary container to the actual container.
-                    this.blobService.UploadTemporaryFile(fileDetail);
+                    this._blobService.UploadTemporaryFile(fileDetail);
                 }
             }
             catch (Exception)
@@ -235,7 +235,7 @@ namespace WWTMVC5.Controllers
             PageDetails pageDetails = new PageDetails(currentPage);
             pageDetails.ItemsPerPage = Constants.PermissionsPerPage;
 
-            var blobDetails = this.blobService.ListAssets(pageDetails);
+            var blobDetails = this._blobService.ListAssets(pageDetails);
             this.CheckNotNull(() => new { blobDetails });
 
             // Remove the detail of home page video from the blobDetails

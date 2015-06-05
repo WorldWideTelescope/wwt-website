@@ -7,13 +7,17 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Dynamic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Xml;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using RestSharp.Extensions;
 using WWTMVC5.Extensions;
 using WWTMVC5.Models;
 using WWTMVC5.Services.Interfaces;
@@ -33,12 +37,14 @@ namespace WWTMVC5.Controllers
         /// <summary>
         /// Instance of Content Service
         /// </summary>
-        private IContentService contentService;
+        private IContentService _contentService;
 
         /// <summary>
         /// Instance of Queue Service
         /// </summary>
-        private INotificationService notificationService;
+        private INotificationService _notificationService;
+
+        private ICommunityService _communityService;
 
         #endregion Private Variables
 
@@ -49,11 +55,12 @@ namespace WWTMVC5.Controllers
         /// </summary>
         /// <param name="contentService">Instance of Content Service</param>
         /// <param name="profileService">Instance of profile Service</param>
-        public ContentController(IContentService contentService, IProfileService profileService, INotificationService queueService)
+        public ContentController(IContentService contentService, IProfileService profileService, INotificationService queueService, ICommunityService communityService)
             : base(profileService)
         {
-            this.contentService = contentService;
-            this.notificationService = queueService;
+            _contentService = contentService;
+            _notificationService = queueService;
+            _communityService = communityService;
         }
 
         #endregion Constructor
@@ -69,38 +76,11 @@ namespace WWTMVC5.Controllers
         [Route("Content/RenderDetailJson/{Id}")]
         public ActionResult Index(long? id)
         {
-            this.CheckNotNull(() => new { id });
+            var contentDetail = _contentService.GetContentDetails(id.Value, CurrentUserId);
 
-            ContentViewModel contentViewModel = null;
-            ContentDetails contentDetail = this.contentService.GetContentDetails(id.Value, this.CurrentUserID);
-
-            this.CheckNotNull(() => new { contentDetail });
-
-            contentViewModel = new ContentViewModel();
+            var contentViewModel = new ContentViewModel();
             contentViewModel.SetValuesFrom(contentDetail);
 
-            // Extract only the text from the Description HTML which needs to be used in Mail sharing. HTML tags which are meant for
-            // styling the description is not required.
-            string description = contentViewModel.Description.GetTextFromHtmlString();
-            description = string.IsNullOrWhiteSpace(description) ? string.Empty : description.Length > 100 ? description.Substring(0, 97) + "..." : description;
-
-            // This should not be there in the extension method since it is needed only in cases where description is sent as query string.
-            //description = description.Replace("&", "%26");
-
-            // Get the share URL's.
-            //contentViewModel.ShareUrl = new ShareViewModel();
-            //contentViewModel.ShareUrl.FacebookUrl = new Uri(
-            //        string.Format(CultureInfo.InvariantCulture, Constants.FacebookShareLinkFormat, HttpContext.Request.Url));
-
-            //contentViewModel.ShareUrl.TwitterUrl = new Uri(
-            //        string.Format(CultureInfo.InvariantCulture, Constants.TwitterShareLinkFormat));
-
-            //contentViewModel.ShareUrl.MailToUrl = new Uri(string.Format(
-            //    CultureInfo.InvariantCulture,
-            //    Constants.MailToLinkFormat,
-            //    contentViewModel.Name,
-            //    HttpContext.Request.Url,
-            //    description));
 
             // It creates the prefix for id of links
             SetSiteAnalyticsPrefix(HighlightType.None);
@@ -116,15 +96,17 @@ namespace WWTMVC5.Controllers
         
         public ActionResult New(long? id)
         {
-            ContentInputViewModel contentInputViewModel = new ContentInputViewModel();
+            var contentInputViewModel = new ContentInputViewModel
+            {
+                CategoryList = CategoryType.All.ToSelectList(CategoryType.All),
+                CategoryID = (int) CategoryType.GeneralInterest
+            };
 
             // Populating the category dropdown list.
-            contentInputViewModel.CategoryList = CategoryType.All.ToSelectList(CategoryType.All);
-            contentInputViewModel.CategoryID = (int)CategoryType.GeneralInterest;
 
             // Populating the parent communities for the current user.
             // TODO: Need to show the parent communities/folders in tree view dropdown.
-            IEnumerable<Community> parentCommunities = this.contentService.GetParentCommunities(CurrentUserID);
+            IEnumerable<Community> parentCommunities = this._contentService.GetParentCommunities(CurrentUserId);
             contentInputViewModel.ParentList = new SelectList(parentCommunities, "CommunityID", "Name");
 
             // Default access type is public (2).
@@ -161,7 +143,7 @@ namespace WWTMVC5.Controllers
         {
             return new JsonResult
             {
-                Data = new SelectList(this.contentService.GetParentCommunities(CurrentUserID), "CommunityID", "Name").ToList()
+                Data = new SelectList(this._contentService.GetParentCommunities(CurrentUserId), "CommunityID", "Name").ToList()
             };
         }
 
@@ -169,7 +151,7 @@ namespace WWTMVC5.Controllers
         [Route("Content/User/Communities")]
         public JsonResult GetUserCommunities()
         {
-            var communities = this.contentService.GetParentCommunities(CurrentUserID);
+            var communities = this._contentService.GetParentCommunities(CurrentUserId);
             var result = new List<object>();
             foreach (Community c in communities)
             {
@@ -206,8 +188,8 @@ namespace WWTMVC5.Controllers
             {
                 ContentDetails contentDetails = new ContentDetails();
                 contentDetails.SetValuesFrom(contentInputViewModel);
-                contentDetails.CreatedByID = CurrentUserID;
-                contentInputViewModel.ID = contentDetails.ID = this.contentService.CreateContent(contentDetails);
+                contentDetails.CreatedByID = CurrentUserId;
+                contentInputViewModel.ID = contentDetails.ID = this._contentService.CreateContent(contentDetails);
             }
             return new JsonResult { Data = contentInputViewModel };
         }
@@ -230,11 +212,9 @@ namespace WWTMVC5.Controllers
             //IEnumerable<Community> parentCommunities = this.contentService.GetParentCommunities(CurrentUserID);
             //contentInputViewModel.ParentList = new SelectList(parentCommunities, "CommunityID", "Name");
             
-            ContentDetails contentDetails = this.contentService.GetContentDetailsForEdit(id, this.CurrentUserID);
+            ContentDetails contentDetails = this._contentService.GetContentDetailsForEdit(id, this.CurrentUserId);
 
-            // Make sure communitieView is not null
-            this.CheckNotNull(() => new { contentDetails });
-
+            
             // Set value from ContentDetials to ContentInputViewModel.
             contentInputViewModel.SetValuesFrom(contentDetails);
 
@@ -258,8 +238,13 @@ namespace WWTMVC5.Controllers
         /// <returns>Json result</returns>
         [HttpPost]
         [Route("Content/Save/Edits")]
-        public JsonResult SaveEdits(string contentInputViewModel)
+        public async Task<JsonResult> SaveEdits(string contentInputViewModel)
         {
+            if (CurrentUserId == 0)
+            {
+                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+            }
+
             //TODO: understand why can't cast the viewmodel directly  the way we do with new content??
             var viewModel = JsonConvert.DeserializeObject<ContentInputViewModel>(contentInputViewModel);
             
@@ -267,13 +252,13 @@ namespace WWTMVC5.Controllers
             var isValid = ModelState.IsValid;
             if (isValid)
             {
-                if (CurrentUserID != 0 && viewModel.ID.HasValue)
+                if (CurrentUserId != 0 && viewModel.ID.HasValue)
                 {
                     var contentDetails = new ContentDetails();
                     contentDetails.SetValuesFrom(viewModel);
 
                     // Update contents.
-                    contentService.UpdateContent(contentDetails, CurrentUserID);
+                    _contentService.UpdateContent(contentDetails, CurrentUserId);
 
                     return Json(contentDetails);
                 }
@@ -297,9 +282,9 @@ namespace WWTMVC5.Controllers
         public JsonResult Delete(long id)
         {
             OperationStatus status = null;
-            if (CurrentUserID != 0)
+            if (CurrentUserId != 0)
             {
-                status = this.contentService.DeleteContent(id, this.CurrentUserID);
+                status = this._contentService.DeleteContent(id, this.CurrentUserId);
 
                 // TODO: Need to add failure functionality.
                 //if (!status.Succeeded)
@@ -342,71 +327,96 @@ namespace WWTMVC5.Controllers
         [HttpPost]
         //
         //[ValidateAntiForgeryToken]
-        [Route("Content/AddContent/{id}")]
-        public JsonResult AddContent(HttpPostedFileBase contentFile, string id)
+        [Route("Content/AddContent/{id}/{extended=false}")]
+        public JsonResult AddContent(HttpPostedFileBase contentFile, string id, bool extended)
         {
             
-                ContentDataViewModel contentDataViewModel = new ContentDataViewModel();
+            var contentDataViewModel = new ContentDataViewModel();
+            XmlDocument tourDoc = null;
+            if (contentFile != null)
+            {
+                // Get File details.
+                var fileDetail = new FileDetail();
+                fileDetail.SetValuesFrom(contentFile);
 
-                if (contentFile != null)
+                contentDataViewModel.ContentDataID = fileDetail.AzureID;
+                contentDataViewModel.ContentFileName = Path.GetFileName(contentFile.FileName);
+                contentDataViewModel.ContentFileDetail = string.Format(
+                    CultureInfo.InvariantCulture,
+                    "{0}~{1}~{2}~{3}~-1",
+                    Path.GetExtension(contentFile.FileName),
+                    contentFile.ContentLength,
+                    fileDetail.AzureID,
+                    contentFile.ContentType);
+
+                contentDataViewModel.ThumbnailLink = Url.Content("~/content/images/default" + Path.GetExtension(contentDataViewModel.ContentFileName).GetContentTypes().ToString().ToLower() + "thumbnail.png");
+
+                // Upload associated file in the temporary container. Once the user publishes the content 
+                // then we will move the file from temporary container to the actual container.
+                // TODO: Need to have clean up task which will delete all unused file from temporary container.
+                _contentService.UploadTemporaryFile(fileDetail);
+
+                // Only for tour files, properties of the tour like title, description, author and thumbnail should be taken.
+                if (Constants.TourFileExtension.Equals(Path.GetExtension(contentFile.FileName), StringComparison.OrdinalIgnoreCase))
                 {
-                    // Get File details.
-                    var fileDetail = new FileDetail();
-                    fileDetail.SetValuesFrom(contentFile);
+                    tourDoc = new XmlDocument();
+                    contentFile.InputStream.Seek(0, SeekOrigin.Begin);
+                    tourDoc = tourDoc.SetXmlFromTour(contentFile.InputStream);
 
-                    contentDataViewModel.ContentDataID = fileDetail.AzureID;
-                    contentDataViewModel.ContentFileName = Path.GetFileName(contentFile.FileName);
-                    contentDataViewModel.ContentFileDetail = string.Format(
-                        CultureInfo.InvariantCulture,
-                        "{0}~{1}~{2}~{3}~-1",
-                        Path.GetExtension(contentFile.FileName),
-                        contentFile.ContentLength,
-                        fileDetail.AzureID,
-                        contentFile.ContentType);
-
-                    contentDataViewModel.ThumbnailLink = Url.Content("~/content/images/default" + Path.GetExtension(contentDataViewModel.ContentFileName).GetContentTypes().ToString() + "thumbnail.png");
-
-                    // Upload associated file in the temporary container. Once the user publishes the content 
-                    // then we will move the file from temporary container to the actual container.
-                    // TODO: Need to have clean up task which will delete all unused file from temporary container.
-                    this.contentService.UploadTemporaryFile(fileDetail);
-
-                    // Only for tour files, properties of the tour like title, description, author and thumbnail should be taken.
-                    if (Constants.TourFileExtension.Equals(Path.GetExtension(contentFile.FileName), StringComparison.OrdinalIgnoreCase))
+                    if (tourDoc != null)
                     {
-                        XmlDocument tourDoc = new XmlDocument();
-                        contentFile.InputStream.Seek(0, SeekOrigin.Begin);
-                        tourDoc = tourDoc.SetXmlFromTour(contentFile.InputStream);
-
-                        if (tourDoc != null)
-                        {
-                            // Note that the spelling of Description is wrong because that's how WWT generates the WTT file.
-                            contentDataViewModel.TourTitle = tourDoc.GetAttributeValue("Tour", "Title");
-                            contentDataViewModel.TourThumbnail = tourDoc.GetAttributeValue("Tour", "ThumbnailUrl");
-                            contentDataViewModel.TourDescription = tourDoc.GetAttributeValue("Tour", "Descirption");
-                            contentDataViewModel.TourDistributedBy = tourDoc.GetAttributeValue("Tour", "Author");
-                            contentDataViewModel.TourLength = tourDoc.GetAttributeValue("Tour", "RunTime");
-                        }
-                    }
-                    else if (Constants.CollectionFileExtension.Equals(Path.GetExtension(contentFile.FileName), StringComparison.OrdinalIgnoreCase))
-                    {
-                        //// Only for WTML files, properties of the collection like title, thumbnail should be taken.
-                        XmlDocument tourDoc = new XmlDocument();
-                        contentFile.InputStream.Seek(0, SeekOrigin.Begin);
-                        tourDoc = tourDoc.SetXmlFromWtml(contentFile.InputStream);
-
-                        if (tourDoc != null)
-                        {
-                            contentDataViewModel.TourTitle = tourDoc.GetAttributeValue("Folder", "Name");
-                        }
+                        // Note that the spelling of Description is wrong because that's how WWT generates the WTT file.
+                        contentDataViewModel.TourTitle = tourDoc.GetAttributeValue("Tour", "Title");
+                        contentDataViewModel.TourThumbnail = tourDoc.GetAttributeValue("Tour", "ThumbnailUrl");
+                        contentDataViewModel.TourDescription = tourDoc.GetAttributeValue("Tour", "Descirption");
+                        contentDataViewModel.TourDistributedBy = tourDoc.GetAttributeValue("Tour", "Author");
+                        contentDataViewModel.TourLength = tourDoc.GetAttributeValue("Tour", "RunTime");
+                        
                     }
                 }
+                else if (Constants.CollectionFileExtension.Equals(Path.GetExtension(contentFile.FileName), StringComparison.OrdinalIgnoreCase))
+                {
+                    //// Only for WTML files, properties of the collection like title, thumbnail should be taken.
+                    tourDoc = new XmlDocument();
+                    contentFile.InputStream.Seek(0, SeekOrigin.Begin);
+                    tourDoc = tourDoc.SetXmlFromWtml(contentFile.InputStream);
 
-                //PartialView("AddContentView", contentDataViewModel).ExecuteResult(this.ControllerContext);
-            return new JsonResult{Data=contentDataViewModel};
+                    if (tourDoc != null)
+                    {
+                        contentDataViewModel.TourTitle = tourDoc.GetAttributeValue("Folder", "Name");
+                    }
+                }
+            }
+
+            
+            return Json(new
+            {
+                contentData=contentDataViewModel,
+                extendedData = extended ? new {
+                    tags=GetTourAttr(tourDoc,"Keywords"),
+                    taxonomy = GetTourAttr(tourDoc, "Taxonomy"),
+                    tourGuid = GetTourAttr(tourDoc, "ID"),
+                    userLevel = GetTourAttr(tourDoc, "UserLevel"),
+                    author = contentDataViewModel.TourDistributedBy,
+                    authorEmail = GetTourAttr(tourDoc, "AuthorEmail"),
+                    organization = GetTourAttr(tourDoc, "OrganizationName"),
+                    organizationUrl = GetTourAttr(tourDoc, "OrganizationUrl")
+                } : null
+            });
         }
 
-       
+
+        private string GetTourAttr(XmlDocument tourDoc, string attr)
+        {
+            if (tourDoc != null)
+            {
+                return tourDoc.GetAttributeValue("Tour", attr);
+            }
+            return null;
+        }
+
+
+
 
         /// <summary>
         /// Controller action which gets the associated content upload view.
@@ -436,7 +446,7 @@ namespace WWTMVC5.Controllers
                 // Upload associated file in the temporary container. Once the user publishes the content 
                 //  then we will move the file from temporary container to the actual container.
                 // TODO: Need to have clean up task which will delete all unused file from temporary container.
-                contentService.UploadTemporaryFile(fileDetail);
+                _contentService.UploadTemporaryFile(fileDetail);
                 return new JsonResult { Data = new
                 {
                     fileName,fileDetailString
@@ -456,7 +466,7 @@ namespace WWTMVC5.Controllers
         {
             if (id > 0)
             {
-                this.contentService.IncrementDownloadCount(id, this.CurrentUserID);
+                this._contentService.IncrementDownloadCount(id, this.CurrentUserId);
             }
         }
 
@@ -502,7 +512,7 @@ namespace WWTMVC5.Controllers
 
                     // Upload video file in the temporary container. Once the user publishes the content 
                     // then we will move the file from temporary container to the actual container.
-                    this.contentService.UploadTemporaryFile(fileDetail);
+                    this._contentService.UploadTemporaryFile(fileDetail);
                 }
 
                 PartialView("AddVideoView", videoDataViewModel).ExecuteResult(this.ControllerContext);
