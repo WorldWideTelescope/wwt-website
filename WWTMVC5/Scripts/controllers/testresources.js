@@ -281,7 +281,8 @@
                 tourMap += '\n\tpass' + i + ' :[';
                 $.each(col, function(j, item) {
                     if (j > 0)tourMap += ',';
-                    tourMap += '\n\t\t["' + item[0] + '","' + item[1] + '","' + item[2] + '"]';
+                    tourMap += "'" + item[0] + "'";
+                    //tourMap += '\n\t\t["' + item[0] + '","' + item[1] + '","' + item[2] + '"]';
                 });
                 tourMap += '\n]';
             });

@@ -371,7 +371,6 @@ namespace WWTMVC5.Controllers
                         contentDataViewModel.TourDescription = tourDoc.GetAttributeValue("Tour", "Descirption");
                         contentDataViewModel.TourDistributedBy = tourDoc.GetAttributeValue("Tour", "Author");
                         contentDataViewModel.TourLength = tourDoc.GetAttributeValue("Tour", "RunTime");
-                        
                     }
                 }
                 else if (Constants.CollectionFileExtension.Equals(Path.GetExtension(contentFile.FileName), StringComparison.OrdinalIgnoreCase))
@@ -397,14 +396,14 @@ namespace WWTMVC5.Controllers
                     taxonomy = GetTourAttr(tourDoc, "Taxonomy"),
                     tourGuid = GetTourAttr(tourDoc, "ID"),
                     userLevel = GetTourAttr(tourDoc, "UserLevel"),
-                    author = contentDataViewModel.TourDistributedBy,
+                    author = GetTourAttr(tourDoc, "Author"),
                     authorEmail = GetTourAttr(tourDoc, "AuthorEmail"),
                     organization = GetTourAttr(tourDoc, "OrganizationName"),
-                    organizationUrl = GetTourAttr(tourDoc, "OrganizationUrl")
+                    organizationUrl = GetTourAttr(tourDoc, "OrganizationUrl"),
+                    classification = GetTourAttr(tourDoc, "Classification")
                 } : null
             });
         }
-
 
         private string GetTourAttr(XmlDocument tourDoc, string attr)
         {
@@ -414,8 +413,6 @@ namespace WWTMVC5.Controllers
             }
             return null;
         }
-
-
 
 
         /// <summary>

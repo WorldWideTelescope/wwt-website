@@ -10,7 +10,7 @@
 <div ng-cloak ng-show="entity" class="entity-detail">
     <a class="thumbnail" title="{{entity.Name}}" href="{{entity.DownloadUrl}}">
         <span class="typeicon">
-            <i class="spriteicon {{entity.ContentTypeName ? entity.ContentTypeName:''}}" ng-if="entity.ContentTypeName != 'Link'"></i>
+            <i class="spriteicon {{types.contentValues.getTypeName(entity.ContentType)}}" ng-if="entity.ContentTypeName != 'Link'"></i>
             <i class="spriteicon fa fa-external-link" ng-if="entity.ContentTypeName == 'Link'"></i>
         </span>
         <img ng-src="{{entity.ThumbnailUrl}}" class="img-thumbnail" />

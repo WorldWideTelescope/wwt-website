@@ -38,70 +38,69 @@ namespace WWTMVC5.Controllers
         public RatingController(IRatingService ratingService, IProfileService profileService)
             : base(profileService)
         {
-            this._ratingService = ratingService;
+            _ratingService = ratingService;
         }
         
         #endregion
 
         #region Action Methods
 
-        /// <summary>
-        /// Saves the rating
-        /// </summary>
-        /// <param name="ratingData">The model that has some properties</param>
-        /// <returns>JSON with status</returns>
         [HttpPost]
-        
-        [ValidateAntiForgeryToken]// remove salt= http://stackoverflow.com/questions/10851283/antiforgerytoken-deprecated-in-asp-net-mvc-4-rc
-        public string Save([Bind(Exclude = "RatedPeople,AverageRating,ShowRatedCount")]RatingViewModel ratingData)
+        [Route("RatingConversion/{contentId}/{rating}/{userId}")]
+        public JsonResult ConverstRatings(int contentId, int rating, int userId)
         {
-            // Check input
-            this.CheckNotNull(() => new { ratingData });
-
             // Sending data to business logic
-            RatingDetails rating = new RatingDetails()
+            RatingDetails ratingDetails = new RatingDetails()
             {
-                Rating = ratingData.RatingValue,
-                RatedByID = CurrentUserId,
-                ParentID = ratingData.EntityId
+                Rating = rating,
+                RatedByID = userId,
+                ParentID = contentId
             };
 
             bool status = false;
-            switch (ratingData.EntityType)
+            
+            status = _ratingService.UpdateContentRating(ratingDetails);
+            
+
+            return Json(status);
+        }
+
+        /// <summary>
+        /// Saves the rating
+        /// </summary>
+        /// <param name="contentId">The content being rated</param>
+        /// <param name="rating">1-5 rating</param>
+        /// <param name="type">entity type</param>
+        /// <returns>success bool</returns>
+        [HttpPost]
+        [Route("Rating/{contentId}/{rating}/{type=Content}")]
+        public bool Rate(int contentId, int rating, EntityType type)
+        {
+            // Sending data to business logic
+            RatingDetails ratingDetails = new RatingDetails()
+            {
+                Rating = rating,
+                RatedByID = CurrentUserId,
+                ParentID = contentId
+            };
+
+            bool status = false;
+            switch (type)
             {
                 case EntityType.All:
                     break;
                 case EntityType.Community:
                 case EntityType.Folder:
-                    status = this._ratingService.UpdateCommunityRating(rating);
+                    status = _ratingService.UpdateCommunityRating(ratingDetails);
                     break;
                 case EntityType.Content:
-                    status = this._ratingService.UpdateContentRating(rating);
-                    break;
-                default:
+                    status = _ratingService.UpdateContentRating(ratingDetails);
                     break;
             }
 
-            return (status ? "Success" : "Failure");
+            return status;
         }
 
-        /// <summary>
-        /// It renders the rating partial view
-        /// </summary>
-        /// <param name="ratingModel">The model that has some properties</param>
-        [ChildActionOnly]
-        public void Render([Bind(Exclude = "RatingValue")]RatingViewModel ratingModel)
-        {
-            try
-            {
-                PartialView("RatingView", ratingModel).ExecuteResult(this.ControllerContext);
-            }
-            catch (Exception)
-            {
-                // Consume the exception and render rest of the views in the page.
-                // TODO: Log the exception?
-            }
-        }
 
         #endregion
     }

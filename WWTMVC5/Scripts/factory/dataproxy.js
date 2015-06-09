@@ -124,7 +124,7 @@
         function getEditContent(id) {
             var deferred = $q.defer();
             getAllTypes().then(function () {
-                postHelper('/Content/Edit/' + id, {}, deferred);
+                postHelper('/Content/Edit/' + id, {}, deferred, true, true);
             });
             return deferred.promise;
         }
@@ -366,6 +366,13 @@
                                 file.LinkUrl = fileLink.LinkUrl;
                             }
                         });
+                    }
+                    //deserialize extended data from public tours
+                    if (item.Citation && item.Citation.indexOf('json://') === 0) {
+                        var json = item.Citation.split('json://')[1];
+                        item.extData = JSON.parse(json);
+                        item.Citation = item.extData.organization;
+                        item.Tags = item.extData.tags;
                     }
                 }
                 if (item.DistributedBy && item.DistributedBy.indexOf('<') === 0) {

@@ -1,7 +1,7 @@
 ﻿<!--<div class="pull-left iblock">-->
 <a class="thumbnail pull-left" title="{{entity.Name}}" href="/file/Download/{{entity.ContentAzureID}}/{{entity.FileName}}">
     <span class="typeicon">
-        <i class="spriteicon {{entity.ContentTypeName ? entity.ContentTypeName.toLowerCase():''}}" ng-if="entity.ContentTypeName != 'Link'"></i>
+        <i class="spriteicon {{types.contentValues.getTypeName(entity.ContentType)}}" ng-if="entity.ContentTypeName != 'Link'"></i>
         <i class="spriteicon fa fa-external-link" ng-if="entity.ContentTypeName == 'Link'"></i>
     </span>
     <img ng-src="{{entity.ThumbnailUrl}}" class="img-thumbnail" />

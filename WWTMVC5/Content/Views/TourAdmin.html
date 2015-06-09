@@ -22,7 +22,7 @@
 <div class="tab-content">
     <div class="tab-pane {{options.activeTab == 'contents' ? 'active' : 'hide'}}">
         <div class="row" ng-show="!community.contents" style="padding: 25px 0">
-            <div class="col-md-6 col-md-offset-3">
+            <div class="col-md-6 col-md-offset-3" style="text-align: center">
                 <label>Tours loading. Please wait...</label>
                 <div class="progress">
                     <div class="progress-bar progress-bar-striped active progress-bar-info" style="width: 100%" role="progressbar"></div>
@@ -52,7 +52,7 @@
             </div>
         </div>
 
-        <a class="btn btn-info btn-sm" ng-click="showTourModal()" title="">Add Tour</a>
+        <a class="btn btn-info btn-sm" ng-click="showTourModal()" title="" ng-if="community.communities.length">Add Tour</a>
         <div class="clearfix"></div>
         <p>&nbsp;</p>
 
@@ -61,7 +61,7 @@
 <div class="tab-content">
     <div class="tab-pane {{options.activeTab == 'communities' ? 'active' : 'hide'}}">
         <div class="row" ng-show="!community.communities" style="padding: 25px 0">
-            <div class="col-md-6 col-md-offset-3">
+            <div class="col-md-6 col-md-offset-3" style="text-align: center">
                 <label>Folders loading. Please wait...</label>
                 <div class="progress">
                     <div class="progress-bar progress-bar-striped active progress-bar-info" style="width: 100%" role="progressbar"></div>

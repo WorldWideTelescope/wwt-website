@@ -86,7 +86,7 @@
                    data-trigger="hover"
                    href="#/ContentDetail/{{entity.Id}}">
                     <span class="typeicon" title="{{entity.ContentTypeName}}" bs-tooltip>
-                            <i class="spriteicon {{entity.ContentTypeName}}" ng-if="entity.ContentTypeName != 'Link'"></i>
+                        <i class="spriteicon {{types.contentValues.getTypeName(entity.ContentType)}}" ng-if="entity.ContentTypeName != 'Link'"></i>
                             <i class="spriteicon fa fa-external-link" ng-if="entity.ContentTypeName == 'Link'"></i>
                         </span>
                     <img ng-src="{{entity.ThumbnailUrl}}" class="img-thumbnail"/>

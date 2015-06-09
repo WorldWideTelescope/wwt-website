@@ -31,19 +31,37 @@
         function getCommunityDetail() {
             dataproxy.getCommunityDetail(communityId).then(function (response) {
                 $scope.community = response.community;
-                dataproxy.getCommunityContents(communityId).then(function (response) {
-                    $scope.community.contents = response.entities;
-                    $scope.community.communities = response.childCommunities;
-                    wwt.triggerResize();
-                });
+                updateCommunityContents();
             });
         }
+
+        function updateCommunityContents() {
+            var d1 = new Date();
+            dataproxy.getCommunityContents(communityId).then(function (response) {
+                $scope.community.contents = response.entities;
+                $scope.community.communities = response.childCommunities;
+                wwt.triggerResize();
+                console.log('update details took ' + (new Date().valueOf() - d1.valueOf()));
+            });
+        }
+
+        $scope.refreshCommunityDetail = updateCommunityContents;
 
         $scope.options = { activeTab: 'contents' }
 
         $scope.tabChange = function (tab) {
             $scope.options.activeTab = tab;
             wwt.triggerResize();
+        }
+
+        $scope.getTourFromGuid = function (guid) {
+            var tourResult = null;
+            $.each($scope.community.contents, function(i, tour) {
+                if (tour.extData.tourGuid.toLowerCase() === guid.toLowerCase()) {
+                    tourResult = tour;
+                }
+            });
+            return tourResult;
         }
 
         var newTourModal = $modal({
@@ -68,4 +86,6 @@
             }
         };
         init();
+
+        
     }]);

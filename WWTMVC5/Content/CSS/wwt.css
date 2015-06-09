@@ -9469,7 +9469,7 @@ ul.pagination li:last-child a {
   display: block;
 }
 .uploaded-file-text {
-  margin: 8px 0;
+  margin: 0 0 2px 0;
 }
 button.multiselect.dropdown-toggle {
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
@@ -9692,5 +9692,25 @@ fieldset[disabled] .modal-body .thumbpicker.active {
   background: white;
   cursor: inherit;
   display: block;
+}
+.multiselect-item.filter form-group {
+  padding: 3px;
+  margin-bottom: 0;
+}
+.multiselect.dropdown-toggle.btn {
+  text-align: left;
+}
+.multiselect.dropdown-toggle.btn .caret {
+  float: right;
+  margin-top: 8px;
+}
+.multiselect.dropdown-toggle.btn span {
+  max-width: 94%;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.open .dropdown-toggle.btn.btn-default {
+  background-color: rgba(46, 47, 47, 0.07);
 }
 /*# sourceMappingURL=wwt.css.map */
