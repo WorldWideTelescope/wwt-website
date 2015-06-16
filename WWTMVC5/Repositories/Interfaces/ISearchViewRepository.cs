@@ -5,6 +5,7 @@
 //-----------------------------------------------------------------------
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using WWTMVC5.Models;
 
 namespace WWTMVC5.Repositories.Interfaces
@@ -33,5 +34,6 @@ namespace WWTMVC5.Repositories.Interfaces
         /// <param name="searchQueryDetails">Details about search like filters, sorting and pagination</param>
         /// <returns>Items satisfying the given search condition</returns>
         IEnumerable<SearchView> Search(string searchText, long? userId, int skipCount, int takeCount, SearchQueryDetails searchQueryDetails);
+        Task<IEnumerable<SearchView>> SearchAsync(string searchText, long? userId, int skipCount, int takeCount, SearchQueryDetails searchQueryDetails);
     }
 }

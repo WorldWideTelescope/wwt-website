@@ -41,7 +41,7 @@
 
             });
             if (content.TourTitle) {
-                $scope.content.FileName = content.TourTitle;
+                $scope.content.Name = content.TourTitle;
                 $scope.content.Description = content.TourDescription;
                 if (content.TourDistributedBy) {
                     $scope.content.DistributedBy = content.TourDistributedBy;
@@ -55,11 +55,12 @@
                     }
                 }
             } else {
-                var split = response.ContentFileName.split('.');
+                var split = content.ContentFileName.split('.');
                 split.pop();
-                $scope.content.FileName = split.join('.');
+                $scope.content.Name = split.join('.');
             }
-            $scope.content.Name = $scope.content.FileName;
+            $scope.content.FileName = content.ContentFileName;
+            
             //$('#lstCommunity').val($scope.content.ParentID);//wth??
         };
         function successRelated(xhr, response) {
@@ -139,7 +140,6 @@
 
                         $timeout(function () {
                             $scope.content = {
-                                type: 'file',
                                 CategoryID: 9,
                                 ParentID: '?',
                                 AccessTypeID: 2,
@@ -173,17 +173,24 @@
 
         }
 
+
+        var scrubData = function() {
+            var c = $scope.content;
+            delete c.ThumbnailUrl;
+            delete c.DownloadUrl;
+        }
+
         $scope.saveEditedContent = function () {
             if ($scope.content.ParentID.val && isNaN($scope.content.ParentID)) {
                 $scope.content.ParentID = $scope.content.ParentID.val;
             }
-            $scope.content.Name = $scope.content.FileName;
+            //scope.content.Name = $scope.content.FileName;
             console.log($scope.content);
 
             dataproxy.saveEditedContent($scope.content)
                 .then(function (response) {
                     console.log(this, arguments);
-                    if (!response.error) {
+                    if (response && response.ID) {
                         location.href = '#/ContentDetail/' + response.ID;
                     }
                 });
@@ -194,8 +201,10 @@
             console.log($scope.content);
             dataproxy.publishContent($scope.content)
                 .then(function (response) {
-                    console.log(arguments);
-                    location.href = '#/ContentDetail/' + response.ID;
+                    if (response && response.ID) {
+                        console.log(arguments);
+                        location.href = '#/ContentDetail/' + response.ID;
+                    }
                 });
         };
         init();

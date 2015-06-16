@@ -201,8 +201,13 @@ namespace WWTMVC5.Controllers
         /// <returns>View having page which gets details about content getting updated</returns>
         [HttpPost]
         [Route("Content/Edit/{id}")]
-        public ActionResult Edit(long id)
+        public async Task<JsonResult> Edit(long id)
         {
+            if (CurrentUserId == 0)
+            {
+                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+            }
+
             ContentInputViewModel contentInputViewModel = new ContentInputViewModel();
             
             //contentInputViewModel.CategoryList = CategoryType.All.ToSelectList(CategoryType.All);
@@ -247,8 +252,7 @@ namespace WWTMVC5.Controllers
 
             //TODO: understand why can't cast the viewmodel directly  the way we do with new content??
             var viewModel = JsonConvert.DeserializeObject<ContentInputViewModel>(contentInputViewModel);
-            
-            this.CheckNotNull(() => new { viewModel });
+
             var isValid = ModelState.IsValid;
             if (isValid)
             {
@@ -293,32 +297,7 @@ namespace WWTMVC5.Controllers
             return new JsonResult{Data=status};
         }
 
-        /// <summary>
-        /// Controller action which gets the content file upload view.
-        /// </summary>
-        [HttpGet]
         
-        public void AddContent(ContentDataViewModel contentDataViewModel)
-        {
-            try
-            {
-                if (contentDataViewModel != null && !string.IsNullOrWhiteSpace(contentDataViewModel.ContentFileDetail))
-                {
-                    string[] fileDetails = contentDataViewModel.ContentFileDetail.Split('~');
-                    if (fileDetails.Length == 5)
-                    {
-                        contentDataViewModel.ContentID = Convert.ToInt64(fileDetails[4], CultureInfo.InvariantCulture);
-                    }
-                }
-
-                PartialView("AddContentView", contentDataViewModel).ExecuteResult(this.ControllerContext);
-            }
-            catch (Exception)
-            {
-                // Consume the exception and render rest of the views in the page.
-                // TODO: Log the exception?
-            }
-        }
 
         /// <summary>
         /// Controller action which gets the content file upload view.
@@ -398,9 +377,11 @@ namespace WWTMVC5.Controllers
                     userLevel = GetTourAttr(tourDoc, "UserLevel"),
                     author = GetTourAttr(tourDoc, "Author"),
                     authorEmail = GetTourAttr(tourDoc, "AuthorEmail"),
+                    authorUrl = GetTourAttr(tourDoc, "AuthorUrl"),
                     organization = GetTourAttr(tourDoc, "OrganizationName"),
                     organizationUrl = GetTourAttr(tourDoc, "OrganizationUrl"),
-                    classification = GetTourAttr(tourDoc, "Classification")
+                    classification = GetTourAttr(tourDoc, "Classification"),
+                    ithList = GetTourAttr(tourDoc, "ITHList")
                 } : null
             });
         }

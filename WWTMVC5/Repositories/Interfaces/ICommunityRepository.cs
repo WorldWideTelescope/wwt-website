@@ -5,6 +5,7 @@
 //-----------------------------------------------------------------------
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using WWTMVC5.Models;
 
 namespace WWTMVC5.Repositories.Interfaces
@@ -17,9 +18,10 @@ namespace WWTMVC5.Repositories.Interfaces
         /// <summary>
         /// Gets the community specified by the community id. Eager loads the navigation properties to avoid multiple calls to DB.
         /// </summary>
-        /// <param name="communityID">Id of the Community.</param>
+        /// <param name="communityId">Id of the Community.</param>
         /// <returns>Community instance.</returns>
-        Community GetCommunity(long communityID);
+        Community GetCommunity(long communityId);
+        Task<Community> GetCommunityAsync(long communityId);
 
         /// <summary>
         /// Retrieves the IDs of sub communities of a given community. This only retrieves the immediate children.
@@ -45,6 +47,7 @@ namespace WWTMVC5.Repositories.Interfaces
         /// </returns>
         IEnumerable<long> GetContentIDs(long communityID, long userId);
 
+        Task<IEnumerable<ContentsView>> GetContents(long communityID, long userId);
         /// <summary>
         /// Retrieves the payload details of a given community.
         /// </summary>

@@ -26,17 +26,15 @@ namespace WWTMVC5.Extensions
         {
             if (thisObject != null && content != null)
             {
+                var start = DateTime.Now;
                 // Populate the base values using the EntityViewModel's SetValuesFrom method.
                 (thisObject as EntityDetails).SetValuesFrom(content);
-
+                
                 var contentData = new DataDetail();
                 thisObject.ContentData = contentData.SetValuesFrom(content);
                 
-                // Set Content Type.
-                thisObject.ContentData.ContentType = content.TypeID.ToEnum<int, ContentTypes>(ContentTypes.Generic);
-
                 thisObject.Citation = content.Citation;
-                thisObject.DownloadCount = content.DownloadCount.HasValue ? content.DownloadCount.Value : 0;
+                thisObject.DownloadCount = content.DownloadCount ?? 0;
 
                 // Get the distributed by user.
                 thisObject.DistributedBy = content.DistributedBy;
@@ -47,8 +45,7 @@ namespace WWTMVC5.Extensions
                 thisObject.TourLength = content.TourRunLength;
 
                 // Set Thumbnail properties.
-                var thumbnailDetail = new FileDetail();
-                thumbnailDetail.AzureID = content.ThumbnailID.HasValue ? content.ThumbnailID.Value : Guid.Empty;
+                var thumbnailDetail = new FileDetail {AzureID = content.ThumbnailID ?? Guid.Empty};
                 thisObject.Thumbnail = thumbnailDetail;
 
                 // Set video properties.
@@ -61,6 +58,7 @@ namespace WWTMVC5.Extensions
 
                 // Set associated file details.
                 thisObject.AssociatedFiles = GetAssociatedFiles(content);
+                
             }
         }
 

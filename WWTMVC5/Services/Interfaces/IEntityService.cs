@@ -5,6 +5,7 @@
 //-----------------------------------------------------------------------
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using WWTMVC5.Models;
 
 namespace WWTMVC5.Services.Interfaces
@@ -38,7 +39,7 @@ namespace WWTMVC5.Services.Interfaces
         /// <param name="entityHighlightFilter">Filters needed while retrieving collection of entities</param>
         /// <param name="pageDetails">Details about the pagination</param>
         /// <returns>List of all contents</returns>
-        IEnumerable<ContentDetails> GetContents(EntityHighlightFilter entityHighlightFilter, PageDetails pageDetails);
+        Task<IEnumerable<ContentDetails>> GetContents(EntityHighlightFilter entityHighlightFilter, PageDetails pageDetails);
 
         /// <summary>
         /// Gets all the contents from the Layerscape database including the deleted items.

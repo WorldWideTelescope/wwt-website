@@ -33,55 +33,87 @@
     });
 
     var initializeMultiSelect = function (id) {
-        $('#' + id+ ' option').first().remove();
-        $('#'+id).multiselect({
+        $('#' + id + ' option').first().remove();
+        var opts = {
             includeSelectAllOption: true,
             buttonContainer: '<div class="btn-group btn-group-sm"></div>',
-            onChange: function (option) {
+            onChange: function(option) {
                 var selected = [];
                 if ($('#' + id).next().find('input[type=checkbox]').first().prop('checked')) {
                     selected = [0];
                 } else {
-                    $('#' + id).next().find('input[type=checkbox]').each(function () {
+                    $('#' + id).next().find('input[type=checkbox]').each(function() {
                         if ($(this).prop('checked')) {
                             selected.push(parseInt($(this).val()));
                         }
                     });
                 }
+                if (!selected.length) {
+                    selected = [0];
+                }
                 console.log(selected);
                 $scope.options[id] = selected;
                 $timeout($scope.runSearch);
             }
-        });
+        };
+        if (id === 'searchCategories') {
+            opts.maxHeight = 300;
+            opts.enableCaseInsensitiveFiltering = true;
+            opts.filterPlaceholder = 'Filter folders...';
+            opts.templates= {
+                filter: '<li class="multiselect-item filter"><div class="form-group form-group-sm"><input class="form-control multiselect-search" type="text"></div></li>',
+                filterClearBtn: ''
+            }
+        }
+        $('#'+id).multiselect(opts);
     }
 
+    var searchTimer, searchPromise;
+    var searchThen = function(opts) {
+        return function (d) {
+            // closure to prevent multiple results
+            if (opts.query === $scope.options.query &&
+                    opts.categories === $scope.options.searchCategories.join(',') &&
+                    opts.contentTypes === $scope.options.searchContentTypes.join(',') &&
+                    opts.currentPage === $scope.pageInfo.CurrentPage &&
+                    opts.pageSize === $scope.pageInfo.ItemsPerPage
+            )entitiesReturned(d);
+        }
+    }
     $scope.runSearch = function () {
-        $timeout(function () {
-            if ($scope.options.query.length >= -1) {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(function () {
+            if ($scope.options.query.length >= 1) {
                 $scope.loadingContent = true;
                 contentPromise.then(function () {
-                    contentPromise =
-                        dataproxy.search({
-                            query: $scope.options.query,
+                    var searchOpts = {
+                            query:  $scope.options.query,
                             categories: $scope.options.searchCategories.join(','),
-                            contentTypes: 0,
+                            contentTypes: $scope.options.searchContentTypes.join(','),
                             currentPage: $scope.pageInfo.CurrentPage,
                             pageSize: $scope.pageInfo.ItemsPerPage
-                        });
-                    contentPromise.then(entitiesReturned);
+                    }
+                    var thenAble = searchThen(searchOpts);
+                    searchPromise = dataproxy.search(searchOpts);
+                    searchPromise.then(thenAble);
                 });
                 
             }
-        }, 100);
+        }, 300);
         
     }
 
+    
     var entitiesReturned = function (data) {
         $scope.error = data.error;
         if (!data.error){
             $scope.loadingContent = false;
             $scope.noPageChange = true;
-            $scope.entityList = data.entities || data.searchResults;
+            if (data.entities) {
+                $scope.entityList = data.entities;
+            } else {
+                $scope.searchList = data.searchResults;
+            }
 
             data.pageInfo.TotalCount = data.pageInfo.ItemsPerPage * data.pageInfo.TotalPages;
 
@@ -99,7 +131,7 @@
         activeTab: 'browse',
         searchCategories: [0],
         searchContentTypes:[0],
-        query:'wwt'
+        query:''
     }
     $scope.tabChange = function(tab) {
         $scope.options.activeTab = tab;
@@ -139,10 +171,10 @@
         var changed = $scope.currentResolution !== wwt.currentResolution;
         if (changed && (wwt.currentResolution === 'lg' || $scope.currentResolution === 'lg')) {
             var index = $scope.pageSizeOptions[$scope.currentResolution].indexOf($scope.pageInfo.ItemsPerPage);
-            $scope.pageInfo.ItemsPerPage = $scope.pageSizeOptions[wwt.currentResolution][index];
+            $scope.pageInfo.ItemsPerPage = $scope.pageSizeOptions[wwt.currentResolution || $scope.currentResolution][index];
             $scope.getEntities();
         }
-        $scope.currentResolution = wwt.currentResolution;
+        $scope.currentResolution = wwt.currentResolution || $scope.currentResolution;
     }
     $(window).on('resolutionchange', resolutionChange);
     $scope.searchCategoryChange = function() {

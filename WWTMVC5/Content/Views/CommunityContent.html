@@ -67,7 +67,7 @@
             <div class="col-md-4">
                 <label>Query</label>
                 <div class="input-group input-group-sm">
-                    <input type="text" class="form-control" placeholder="Search Community Content" ng-model="options.query" ng-keypress="runSearch()">
+                    <input type="text" class="form-control" placeholder="Search Community Content" ng-model="options.query" ng-keydown="runSearch()">
 
                     <a class="input-group-addon" href="javascript:void(0)" data-toggle="tooltip" data-original-title="Search all community content" ng-click="runSearch()">
                         <i class="fa fa-search"></i>
@@ -75,21 +75,25 @@
 
                 </div>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-8" ng-if="types" ng-show="options.query.length > 0">
                 <div class="iblock">
                     <label>Category</label>
-                    <select ng-change="searchCategories()" id="searchCategories" ng-model="options.searchCategories" multiple="true" ng-options="c.val as c.name for c in types.categoryValues"></select>
+                    <select id="searchCategories" multiple="true">
+                        <option ng-repeat="c in ::types.categoryValues" value="{{c.index}}">{{c.name}}</option>
+                    </select>
                 </div>
                 <div class="iblock">
                     <label>Content Type</label>
-                    <select ng-change="searchContent()" id="searchContentTypes" ng-model="options.searchContentTypes" multiple="true" ng-options="c.val as c.name for c in types.contentValues"></select>
+                    <select id="searchContentTypes" multiple="true">
+                        <option ng-repeat="c in ::types.contentValues" value="{{c.index}}">{{c.name}}</option>
+                    </select>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<div class="row" ng-show="!loadingContent">
-    <div ng-repeat="entity in entityList" class="col-lg-2 col-sm-3 col-xs-6" ng-if="options.entityType == 'Content'">
+<div class="row" ng-show="!loadingContent && options.activeTab == 'search'">
+    <div ng-repeat="entity in searchList" class="col-lg-2 col-sm-3 col-xs-6" ng-if="options.entityType == 'Content'">
         <a class="thumbnail"
            data-placement="top"
            data-auto-close="true"
@@ -106,23 +110,56 @@
             <label class="small" style="font-weight: 100">{{entity.Name}}</label>
         </a>
     </div>
-   
-        <div class="col-lg-2 col-sm-3 col-xs-6" ng-repeat="community in entityList" ng-if="options.entityType == 'Community'">
-            <a class="thumbnail"
-               data-placement="top"
-               data-auto-close="true"
-               title="{{community.Name}}"
-               style="width: 100%"
-               href="#/CommunityDetail/{{community.Id}}">
-                <img ng-src="{{community.ThumbnailUrl}}" class="img-thumbnail" />
-                <label class="small" style="font-weight: 100">{{community.Name}}</label>
-            </a>
 
-        </div>
-    
+    <div class="col-lg-2 col-sm-3 col-xs-6" ng-repeat="community in searchList" ng-if="options.entityType == 'Community'">
+        <a class="thumbnail"
+           data-placement="top"
+           data-auto-close="true"
+           title="{{community.Name}}"
+           style="width: 100%"
+           href="#/CommunityDetail/{{community.Id}}">
+            <img ng-src="{{community.ThumbnailUrl}}" class="img-thumbnail"/>
+            <label class="small" style="font-weight: 100">{{community.Name}}</label>
+        </a>
+
+    </div>
+
+</div>
+<div class="row" ng-show="!loadingContent && options.activeTab == 'browse'">
+    <div ng-repeat="entity in entityList" class="col-lg-2 col-sm-3 col-xs-6" ng-if="options.entityType == 'Content'">
+        <a class="thumbnail"
+           data-placement="top"
+           data-auto-close="true"
+           title="{{entity.Name}}"
+           style="width: 100%"
+           data-trigger="hover"
+           content-template="/Content/Views/ContentPreview.html" bs-popover
+           href="#/ContentDetail/{{entity.Id}}">
+            <span class="typeicon" title="{{entity.ContentTypeName}}" bs-tooltip>
+                <i class="spriteicon {{types.contentValues.getTypeName(entity.ContentType)}}" ng-if="entity.ContentTypeName != 'Link'"></i>
+                <i class="spriteicon fa fa-external-link" ng-if="entity.ContentTypeName == 'Link'"></i>
+            </span>
+            <img ng-src="{{entity.ThumbnailUrl}}" class="img-thumbnail" />
+            <label class="small" style="font-weight: 100">{{entity.Name}}</label>
+        </a>
+    </div>
+
+    <div class="col-lg-2 col-sm-3 col-xs-6" ng-repeat="community in entityList" ng-if="options.entityType == 'Community'">
+        <a class="thumbnail"
+           data-placement="top"
+           data-auto-close="true"
+           title="{{community.Name}}"
+           style="width: 100%"
+           href="#/CommunityDetail/{{community.Id}}">
+            <img ng-src="{{community.ThumbnailUrl}}" class="img-thumbnail" />
+            <label class="small" style="font-weight: 100">{{community.Name}}</label>
+        </a>
+
+    </div>
+
 </div>
 <div class="row" ng-show="loadingContent" style="padding: 25px 0">
-    <div class="col-md-6 col-md-offset-3">
+    <div class="col-md-6 col-md-offset-3" style="text-align:center">
         <label>Content Loading. Please wait...</label>
         <div class="progress">
             <div class="progress-bar progress-bar-striped active progress-bar-info" style="width: 100%" role="progressbar"></div>

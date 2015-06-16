@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using WWTMVC5.Models;
 using WWTMVC5.Repositories.Interfaces;
 
@@ -221,12 +222,11 @@ namespace WWTMVC5.Repositories
                         .ToList();
                 }
             }
-            else if (orderBy == null && condition != null)
+            else if (orderBy == null)
             {
                 // When order by is not passed, only condition is passed, return data for given condition.
                 result = DbSet
                     .Where(condition)
-                    //.Skip(skipCount)
                     .Take(takeCount)
                     .ToList();
             }
@@ -253,6 +253,7 @@ namespace WWTMVC5.Repositories
 
             return result;
         }
+       
 
         /// <summary>
         /// Gets all the Entities from the entities collection.
@@ -276,14 +277,8 @@ namespace WWTMVC5.Repositories
         /// </summary>
         public void SaveChanges()
         {
-            try
-            {
-                this.EarthOnlineDbContext.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                int foo = 1;
-            }
+            this.EarthOnlineDbContext.SaveChanges();
+            
         }
     }
 }

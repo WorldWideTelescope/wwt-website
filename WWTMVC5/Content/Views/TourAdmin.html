@@ -17,6 +17,12 @@
             <span ng-if="!community.communities">(0)</span>
         </a>
     </li>
+    <!--<li class="{{options.activeTab == 'xml' ? 'active' : ''}}" ng-click="tabChange('xml')">
+        <a href="javascript:void(0)" data-toggle="tab">
+            Generated XML
+            
+        </a>
+    </li>-->
 </ul>
 
 <div class="tab-content">
@@ -68,13 +74,7 @@
                 </div>
             </div>
         </div>
-        <div ng-show="community.communities == null">
-            <p>&nbsp;</p>
-            <p>
-                <em>There are no folders.</em>
-            </p>
-            <p>&nbsp;</p>
-        </div>
+        
         <div class="row" ng-if="community.communities">
             <div class="col-lg-2 col-sm-3 col-xs-6" ng-repeat="community in community.communities">
                 <a class="thumbnail"
@@ -82,7 +82,7 @@
                    data-auto-close="true"
                    title="{{community.Name}}"
                    style="width: 100%"
-                   href="#/CommunityDetail/{{community.Id}}">
+                   href="javascript:void(0)">
                     <img ng-src="{{community.ThumbnailUrl}}" class="img-thumbnail"/>
                     <label class="small" style="font-weight: 100">{{community.Name}}</label>
                 </a>
@@ -90,8 +90,31 @@
             </div>
         </div>
 
-        <a class="btn btn-info btn-sm" href="#/AddCommunity/{{community.Id}}">Create New Folder</a>
+        <!--<a class="btn btn-info btn-sm" href="#/AddCommunity/{{community.Id}}">Create New Folder</a>-->
         <div class="clearfix"></div>
         <p>&nbsp;</p>
     </div>
 </div>
+
+<!--<div class="tab-content">
+    <div class="tab-pane {{options.activeTab == 'xml' ? 'active' : 'hide'}}">
+        <div class="row" ng-show="!community.communities" style="padding: 25px 0">
+            <div class="col-md-6 col-md-offset-3" style="text-align: center">
+                <label>Data loading. Please wait...</label>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped active progress-bar-info" style="width: 100%" role="progressbar"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" ng-if="community.communities">
+            <div class="col-md-12">
+                <textarea ng-bind-html="tourXml" rows="50" style="width: 100%;display:block">{{tourXml}}</textarea>
+            </div>
+        </div>
+
+        
+        <div class="clearfix"></div>
+        <p>&nbsp;</p>
+    </div>
+</div>-->

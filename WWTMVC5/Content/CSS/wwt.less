@@ -1,7 +1,7 @@
-@import '../../Bootstrap/less/bootstrap.less';
+@import '../bootstrap/bootstrap.less';
 
 
-// SpaceLab theme
+// SpaceLab colors
 @import "bootswatch.less";
 
 // wwt
@@ -1012,6 +1012,9 @@ button.multiselect.dropdown-toggle{
 .multiselect-item.filter form-group{
     padding:3px;
     margin-bottom:0;
+    input{
+        border:solid 1px green;
+    }
 }
 .multiselect.dropdown-toggle.btn{
     text-align:left;
@@ -1021,9 +1024,9 @@ button.multiselect.dropdown-toggle{
     }
     span{
         max-width: 94%;
-  display: inline-block;
-  overflow: hidden;
-  text-overflow: ellipsis;
+        display: inline-block;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 }
 .open .dropdown-toggle.btn.btn-default{

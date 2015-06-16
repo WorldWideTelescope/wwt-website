@@ -5,6 +5,7 @@
 //-----------------------------------------------------------------------
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using WWTMVC5.Models;
 using WWTMVC5.ViewModels;
 
@@ -23,7 +24,7 @@ namespace WWTMVC5.Services.Interfaces
         /// <param name="pageDetails">Details about the pagination</param>
         /// <param name="searchQueryDetails">Search query details like filters, sorting and items per page</param>
         /// <returns>Communities/Contents which are having the search text</returns>
-        IEnumerable<EntityViewModel> SimpleSearch(string searchText, long userId, PageDetails pageDetails, SearchQueryDetails searchQueryDetails);
+        Task<IEnumerable<EntityViewModel>> SimpleSearch(string searchText, long userId, PageDetails pageDetails, SearchQueryDetails searchQueryDetails);
 
         /// <summary>
         /// Searches the presence of the given text in communities and contents tables (Name, description and tags fields).

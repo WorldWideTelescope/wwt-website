@@ -12,12 +12,15 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using System.Xml;
 using AutoMapper;
+using Newtonsoft.Json;
 using WWTMVC5.Extensions;
 using WWTMVC5.Models;
 using WWTMVC5.Properties;
 using WWTMVC5.Services.Interfaces;
 using WWTMVC5.ViewModels;
+using Formatting = System.Xml.Formatting;
 
 namespace WWTMVC5.Controllers
 {
@@ -73,7 +76,7 @@ namespace WWTMVC5.Controllers
             {
                 await TryAuthenticateFromHttpContext(_communityService, _notificationService);
             }
-            CommunityDetails communityDetails = _communityService.GetCommunityDetails(id.Value, CurrentUserId, true, true);
+            CommunityDetails communityDetails = await _communityService.GetCommunityDetails(id.Value, CurrentUserId, true, true);
             var permissionDetails = GetUserPermissionDetails(id.Value, PermissionsTab.Users, 0);
             
             if (edit == true)
@@ -109,9 +112,13 @@ namespace WWTMVC5.Controllers
 
         [HttpPost]
         [Route("Community/Contents/{communityId}")]
-        public JsonResult GetCommunityContents(long communityId)
+        public async Task<JsonResult> GetCommunityContents(long communityId)
         {
-            var contents = _communityService.GetCommunityContents(communityId, CurrentUserId);
+            if (CurrentUserId == 0)
+            {
+                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+            }
+            var contents = await _communityService.GetCommunityContents(communityId, CurrentUserId);
             var entities = new List<EntityViewModel>();
             foreach (var item in contents)
             {
@@ -119,7 +126,7 @@ namespace WWTMVC5.Controllers
                 contentViewModel.SetValuesFrom(item);
                 entities.Add(contentViewModel);
             }
-            var children = _communityService.GetChildCommunities(communityId, CurrentUserId);
+            var children = await _communityService.GetChildCommunities(communityId, CurrentUserId);
             var childCommunities = new List<CommunityViewModel>();
             foreach (var child in children)
             {
@@ -131,56 +138,83 @@ namespace WWTMVC5.Controllers
 
         }
 
-        /// <summary>
-        /// Controller action which gets the details about the new community.
-        /// </summary>
-        /// <param name="id">Parent Community/Folder ID, will be passed only while creating sub community or folder</param>
-        /// <param name="isFolder">Whether New action is called for community or folder, will be passed only while creating sub community or sub folder</param>
-        /// <returns>View having page which gets details about new community</returns>
         [HttpGet]
-        public ActionResult New(long? id, bool? isFolder)
+        [AllowAnonymous]
+        [Route("WebService/Get/Tours/{webclient=false}")]
+        public async Task<string> BuildPublicTourXml(bool webclient)
         {
-            CommunityInputViewModel communityInputViewModel = new CommunityInputViewModel();
-
-            // Populating the category dropdown list.
-            communityInputViewModel.CategoryList = CategoryType.All.ToSelectList(CategoryType.All);
-            communityInputViewModel.CategoryID = (int)CategoryType.GeneralInterest;
-
-            // Populating the parent communities for the current user. Pass -1 as current community while creating new communities
-            // since there are not current community which needs to be ignored.
-            // TODO: Need to show the parent communities/folders in tree view dropdown.
-            IEnumerable<Community> parentCommunities = this._communityService.GetParentCommunities(-1, CurrentUserId);
-            communityInputViewModel.ParentList = new SelectList(parentCommunities, "CommunityID", "Name");
-
-            // Default creation is community.
-            communityInputViewModel.CommunityType = CommunityTypes.Community;
-
-            // Default access type is public (2).
-            communityInputViewModel.AccessTypeID = 2;
-
-            // Set the thumbnail URL.
-            communityInputViewModel.ThumbnailLink = Url.Content("~/content/images/default" + (isFolder == null || isFolder == false ? "community" : "folder") + "thumbnail.png");
-
-            if (isFolder.HasValue && isFolder.Value)
+            
+            var adminCommunityId = 596915;
+            var adminId = 184331;
+            var tourDetailList = await _communityService.GetCommunityContents(adminCommunityId, adminId);
+            var tourContentList = new List<ContentInputViewModel>();
+            foreach (var item in tourDetailList)
             {
-                communityInputViewModel.CommunityType = CommunityTypes.Folder;
+                var contentInputViewModel = new ContentInputViewModel();
+                contentInputViewModel.SetValuesFrom(item);
+                tourContentList.Add(contentInputViewModel);
             }
-
-            if (id.HasValue)
+            var children = await _communityService.GetChildCommunities(adminCommunityId, adminId);
+            var folders = new List<CommunityViewModel>();
+            foreach (var child in children)
             {
-                communityInputViewModel.ParentID = id.Value;
-
-                // Set the Category, Distributed by and Tags from parent
-                Community parentCommunity = parentCommunities.FirstOrDefault(community => community.CommunityID == id);
-                if (parentCommunity != null)
+                var communityViewModel = new CommunityViewModel();
+                Mapper.Map(child, communityViewModel);
+                folders.Add(communityViewModel);
+            }
+            using (StringWriter sw = new StringWriter())
+            {
+                using (XmlTextWriter xmlWriter = new XmlTextWriter(sw))
                 {
-                    communityInputViewModel.CategoryID = parentCommunity.CategoryID;
-                    communityInputViewModel.DistributedBy = parentCommunity.DistributedBy;
-                }
-            }
+                    xmlWriter.Formatting = Formatting.Indented;
+                    xmlWriter.WriteProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\"");
+                    xmlWriter.WriteStartElement("Folder");
+                    foreach (var folder in folders)
+                    {
+                        xmlWriter.WriteStartElement("Folder");
+                        xmlWriter.WriteAttributeString("Name", folder.Name);
+                        xmlWriter.WriteAttributeString("Group", "Tour");
+                        xmlWriter.WriteAttributeString("Thumbnail", "");
+                        var tourIds = folder.Description.Split(',');
+                        foreach (var tourId in tourIds)
+                        {
+                            var id = Convert.ToInt32(tourId);
+                            var tourDetails = tourDetailList.Find(details => details.ID == id);
+                            var tourContents = tourContentList.Find(model => model.ID == id);
+                            string json = tourDetails.Citation.Replace("json://", "");
+                            var extData = JsonConvert.DeserializeObject<dynamic>(json);
+                            Newtonsoft.Json.Linq.JArray related = extData.related;
+                            var relatedTours = string.Join(";", related);
+                            xmlWriter.WriteStartElement("Tour");
+                            xmlWriter.WriteAttributeString("Title", tourDetails.Name);
+                            xmlWriter.WriteAttributeString("ID", extData.tourGuid.ToString());
+                            xmlWriter.WriteAttributeString("Description", tourDetails.Description);
+                            xmlWriter.WriteAttributeString("Classification", extData["classification"]!= null ? extData["classification"].ToString(): "Other");
+                            xmlWriter.WriteAttributeString("AuthorEmail", extData.authorEmail != null ? extData.authorEmail.ToString() : "");
+                            xmlWriter.WriteAttributeString("Author", extData.author != null ? extData.author.ToString(): "");
+                            xmlWriter.WriteAttributeString("AverageRating", tourDetails.AverageRating.ToString(CultureInfo.InvariantCulture));
+                            xmlWriter.WriteAttributeString("LengthInSecs", tourContents.TourLength);
+                            xmlWriter.WriteAttributeString("OrganizationUrl", extData.organizationUrl != null ? extData.organizationUrl.ToString() : "");
+                            xmlWriter.WriteAttributeString("OrganizationName", extData.organization != null ? extData.organization.ToString():"");
+                            xmlWriter.WriteAttributeString("ITHList", extData.ithList != null ? extData.ithList.ToString() : extData.taxonomy != null ? extData.taxonomy.ToString() : "");
+                            xmlWriter.WriteAttributeString("AstroObjectsList", string.Empty);
+                            xmlWriter.WriteAttributeString("Keywords", tourDetails.Tags.Replace(',', ';').Replace(" ",""));
+                            xmlWriter.WriteAttributeString("RelatedTours", relatedTours);
+                            xmlWriter.WriteEndElement();
+                        }
+                        xmlWriter.WriteEndElement();
+                    }
+                    
+                    xmlWriter.WriteEndElement();
 
-            return View("Save", communityInputViewModel);
+                    xmlWriter.Close();
+                }
+                sw.Close();
+                return sw.ToString();
+            }
         }
+
+        
 
         /// <summary>
         /// Controller action which inserts a new community to the Layerscape database.
@@ -232,13 +266,13 @@ namespace WWTMVC5.Controllers
         /// </summary>
         /// <param name="id">Id of the parent community</param>
         /// <returns>Json community object</returns>
-        [HttpGet]
+        //[HttpGet]
         
-        public JsonResult ParentCommunity(long id)
-        {
-            CommunityDetails parentCommunity = this._communityService.GetCommunityDetails(id, this.CurrentUserId);
-            return Json(parentCommunity, JsonRequestBehavior.AllowGet);
-        }
+        //public JsonResult ParentCommunity(long id)
+        //{
+        //    CommunityDetails parentCommunity = this._communityService.GetCommunityDetails(id, this.CurrentUserId);
+        //    return Json(parentCommunity, JsonRequestBehavior.AllowGet);
+        //}
 
         /// <summary>
         /// Controller action which gets the details about the community which is being edited.
@@ -362,50 +396,50 @@ namespace WWTMVC5.Controllers
         /// </summary>
         /// <param name="id">Community id</param>
         /// <returns>sign up Xml</returns>
-        [HttpGet]
-        public ActionResult Signup(long? id)
-        {
-            if (id.HasValue)
-            {
-                var communityDetails = this._communityService.GetCommunityDetails(id.Value, this.CurrentUserId);
+        //[HttpGet]
+        //public ActionResult Signup(long? id)
+        //{
+        //    if (id.HasValue)
+        //    {
+        //        var communityDetails = this._communityService.GetCommunityDetails(id.Value, this.CurrentUserId);
 
-                // Make sure communityDetails is not null
-                this.CheckNotNull(() => new { communityDetails });
-                if (communityDetails.CommunityType == CommunityTypes.Community || communityDetails.CommunityType == CommunityTypes.Folder)
-                {
-                    var signupDetails = new SignUpDetails();
-                    Mapper.Map(communityDetails, signupDetails);
+        //        // Make sure communityDetails is not null
+        //        this.CheckNotNull(() => new { communityDetails });
+        //        if (communityDetails.CommunityType == CommunityTypes.Community || communityDetails.CommunityType == CommunityTypes.Folder)
+        //        {
+        //            var signupDetails = new SignUpDetails();
+        //            Mapper.Map(communityDetails, signupDetails);
 
-                    if (communityDetails.CommunityType == CommunityTypes.Community)
-                    {
-                        // Check Mock ability of HttpContext and Url while writing unit tests for Signup action
-                        signupDetails.Url = Request.GetRootPath() + "/ResourceService/Community/" + id.Value;
+        //            if (communityDetails.CommunityType == CommunityTypes.Community)
+        //            {
+        //                // Check Mock ability of HttpContext and Url while writing unit tests for Signup action
+        //                signupDetails.Url = Request.GetRootPath() + "/ResourceService/Community/" + id.Value;
 
-                        // Set the thumbnail path. In case if no thumbnail is specified, set the default thumbnail path.
-                        signupDetails.Thumbnail = this.RewriteThumbnailUrl(signupDetails.Thumbnail, "defaultcommunitywwtthumbnail");
-                    }
-                    else
-                    {
-                        // Check Mock ability of HttpContext and Url while writing unit tests for Signup action
-                        signupDetails.Url = Request.GetRootPath() + "/ResourceService/Folder/" + id.Value;
+        //                // Set the thumbnail path. In case if no thumbnail is specified, set the default thumbnail path.
+        //                signupDetails.Thumbnail = this.RewriteThumbnailUrl(signupDetails.Thumbnail, "defaultcommunitywwtthumbnail");
+        //            }
+        //            else
+        //            {
+        //                // Check Mock ability of HttpContext and Url while writing unit tests for Signup action
+        //                signupDetails.Url = Request.GetRootPath() + "/ResourceService/Folder/" + id.Value;
 
-                        // Set the thumbnail path. In case if no thumbnail is specified, set the default thumbnail path.
-                        signupDetails.Thumbnail = this.RewriteThumbnailUrl(signupDetails.Thumbnail, "defaultfolderwwtthumbnail");
-                    }
+        //                // Set the thumbnail path. In case if no thumbnail is specified, set the default thumbnail path.
+        //                signupDetails.Thumbnail = this.RewriteThumbnailUrl(signupDetails.Thumbnail, "defaultfolderwwtthumbnail");
+        //            }
 
-                    signupDetails.MSRCommunityId = id.Value; 
+        //            signupDetails.MSRCommunityId = id.Value; 
 
-                    string signUpFileName = string.Format(CultureInfo.InvariantCulture, Constants.SignUpFileNameFormat, communityDetails.Name);
-                    Response.AddHeader("Content-Encoding", "application/xml");
-                    Response.AddHeader("content-disposition", "attachment;filename=" + signUpFileName);
-                    var stream = signupDetails.GetXmlStream();
-                    stream.Seek(0, SeekOrigin.Begin);
-                    return new FileStreamResult(stream, "application/xml");
-                }
-            }
+        //            string signUpFileName = string.Format(CultureInfo.InvariantCulture, Constants.SignUpFileNameFormat, communityDetails.Name);
+        //            Response.AddHeader("Content-Encoding", "application/xml");
+        //            Response.AddHeader("content-disposition", "attachment;filename=" + signUpFileName);
+        //            var stream = signupDetails.GetXmlStream();
+        //            stream.Seek(0, SeekOrigin.Begin);
+        //            return new FileStreamResult(stream, "application/xml");
+        //        }
+        //    }
 
-            return null;
-        }
+        //    return null;
+        //}
 
         /// <summary>
         /// When user clicks on the edit permission, it returns the permission view

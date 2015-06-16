@@ -10,6 +10,7 @@ using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using AutoMapper;
@@ -142,10 +143,10 @@ namespace WWTMVC5.Services
         /// <returns>
         /// Instance of community details
         /// </returns>
-        public CommunityDetails GetCommunityDetails(long communityID, long? userID, bool considerPrivateCommunity = false, bool updateReadCount = false)
+        public async Task<CommunityDetails> GetCommunityDetails(long communityID, long? userID, bool considerPrivateCommunity = false, bool updateReadCount = false)
         {
             CommunityDetails communityDetails = null;
-            Community community = this.communityRepository.GetCommunity(communityID);
+            Community community = await communityRepository.GetCommunityAsync(communityID);
 
             try
             {
@@ -175,16 +176,28 @@ namespace WWTMVC5.Services
             return communityDetails;
         }
 
-        public List<ContentDetails> GetCommunityContents(long communityId, long userId)
+        public async Task<List<ContentDetails>> GetCommunityContents(long communityId, long userId)
         {
-            Community community = this.communityRepository.GetCommunity(communityId);
-            var contentDetailsList = GetContentDetailsFromContent(community.CommunityContents.Select(item => item.Content).Where(item => item.IsDeleted == false), userId);
+            UserRole userRole = GetCommunityUserRole(communityId, userId);
+            Permission userPermission = userRole.GetPermission();
+            var contents = await communityRepository.GetContents(communityId, userId);
+            var contentDetailsList = new List<ContentDetails>();
+            foreach (var content in contents)
+            {
+                ContentDetails contentDetails = null;
+                contentDetails = new ContentDetails(userPermission);
+                Mapper.Map(content, contentDetails);
+                contentDetailsList.Add(contentDetails);
+            }
+            
+            //var contentDetailsList = GetContentDetailsFromContent(contents, userPermission);
+            
             return contentDetailsList;
         }
 
-        public List<CommunityDetails> GetChildCommunities(long communityId, long userId)
+        public async Task<List<CommunityDetails>> GetChildCommunities(long communityId, long userId)
         {
-            Community community = this.communityRepository.GetCommunity(communityId);
+            Community community = await communityRepository.GetCommunityAsync(communityId);
             List<CommunityDetails> communityDetailsList = new List<CommunityDetails>();
             foreach (CommunityRelation child in community.CommunityRelation)
             {
@@ -1137,6 +1150,24 @@ namespace WWTMVC5.Services
                 if (userRole != UserRole.None)
                 {
                     var contentDetails = new ContentDetails(userRole.GetPermission());
+                    contentDetails.SetValuesFrom(childContent);
+                    contentDetailsList.Add(contentDetails);
+                }
+            }
+            return contentDetailsList;
+        }
+
+        //Creating overload - may replace as we can assume community permission applies to contents as well.
+        private List<ContentDetails> GetContentDetailsFromContent(IEnumerable<Content> contents, Permission userPermission)
+        {
+            // Set Child Content based on user permissions
+            var contentDetailsList = new List<ContentDetails>();
+            if (userPermission != Permission.Visitor && userPermission != Permission.PendingApproval)
+            {
+                foreach (var childContent in contents)
+                {
+
+                    var contentDetails = new ContentDetails(userPermission);
                     contentDetails.SetValuesFrom(childContent);
                     contentDetailsList.Add(contentDetails);
                 }

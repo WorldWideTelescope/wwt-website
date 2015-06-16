@@ -612,27 +612,27 @@ namespace WWTMVC5.Controllers
         [AllowAnonymous]
         [HttpGet]
         [Route("Resource/Service/Browse/MostDownloadedContent")]
-        public FileStreamResult GetTopDownloadedContent()
+        public async Task<FileStreamResult> GetTopDownloadedContent()
         {
-            Stream resultStream = GetTopContent(new EntityHighlightFilter(HighlightType.MostDownloaded, CategoryType.All, null));
+            var resultStream = await GetTopContent(new EntityHighlightFilter(HighlightType.MostDownloaded, CategoryType.All, null));
             return new FileStreamResult(resultStream, Response.ContentType);
         }
 
         [AllowAnonymous]
         [HttpGet]
         [Route("Resource/Service/Browse/TopRatedContent")]
-        public FileStreamResult GetTopRatedContent()
+        public async Task<FileStreamResult> GetTopRatedContent()
         {
-            Stream resultStream = GetTopContent(new EntityHighlightFilter(HighlightType.Popular, CategoryType.All, null));
+            var resultStream = await GetTopContent(new EntityHighlightFilter(HighlightType.Popular, CategoryType.All, null));
             return new FileStreamResult(resultStream, Response.ContentType);
         }
 
         [AllowAnonymous]
         [HttpGet]
         [Route("Resource/Service/Browse/LatestContent")]
-        public FileStreamResult GetLatestContent()
+        public async Task<FileStreamResult> GetLatestContent()
         {
-            Stream resultStream = GetTopContent(new EntityHighlightFilter(HighlightType.Latest, CategoryType.All, null));
+            var resultStream = await GetTopContent(new EntityHighlightFilter(HighlightType.Latest, CategoryType.All, null));
             return new FileStreamResult(resultStream, Response.ContentType);
         }
 
@@ -680,10 +680,10 @@ namespace WWTMVC5.Controllers
         [AllowAnonymous]
         [HttpGet]
         [Route("Resource/Service/Browse/Category/{id}")]
-        public FileStreamResult GetCategory(string id)
+        public async Task<FileStreamResult> GetCategory(string id)
         {
             long categoryId = ValidateEntityId(id);
-            Stream resultStream = GetTopContent(new EntityHighlightFilter(HighlightType.MostDownloaded, ((int)categoryId).ToEnum<int, CategoryType>(CategoryType.All), null));
+            var resultStream = await GetTopContent(new EntityHighlightFilter(HighlightType.MostDownloaded, ((int)categoryId).ToEnum<int, CategoryType>(CategoryType.All), null));
             return new FileStreamResult(resultStream, Response.ContentType);
         }
 
@@ -1011,12 +1011,12 @@ namespace WWTMVC5.Controllers
         }
 
 
-        private Stream GetTopContent(EntityHighlightFilter entityHighlightFilter)
+        private async Task<Stream> GetTopContent(EntityHighlightFilter entityHighlightFilter)
         {
             IEntityService entityService = DependencyResolver.Current.GetService(typeof(IEntityService)) as IEntityService;
             PageDetails pageDetails = new PageDetails(1);
             pageDetails.ItemsPerPage = 20;
-            var contents = entityService.GetContents(entityHighlightFilter, pageDetails);
+            var contents = await entityService.GetContents(entityHighlightFilter, pageDetails);
 
             var payloadDetails = PayloadDetailsExtensions.InitializePayload();
             payloadDetails.SetValuesFrom(contents);

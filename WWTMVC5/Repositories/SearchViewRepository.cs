@@ -8,8 +8,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using WWTMVC5.Models;
 using WWTMVC5.Repositories.Interfaces;
+using System.Data.Entity;
 
 namespace WWTMVC5.Repositories
 {
@@ -65,6 +67,23 @@ namespace WWTMVC5.Repositories
             query = query.Append(GetSearchOrderBy(searchQueryDetails));
 
             return this.EarthOnlineDbContext.Database.SqlQuery<SearchView>(query.ToString()).Skip(skipCount).Take(takeCount).ToList();
+        }
+
+        public async Task<IEnumerable<SearchView>> SearchAsync(string searchText, long? userId, int skipCount, int takeCount, SearchQueryDetails searchQueryDetails)
+        {
+            StringBuilder query = new StringBuilder("SELECT * FROM SearchView WHERE ");
+
+            // Gets the WHERE clause for the search query
+            query = query.Append(GetSearchQueryConditions(searchText, userId, searchQueryDetails));
+
+            // Gets the ORDER BY clause for the search query
+            query = query.Append(GetSearchOrderBy(searchQueryDetails));
+
+            var results =
+                await EarthOnlineDbContext.Database.SqlQuery<SearchView>(query.ToString()).ToListAsync();
+                        
+            return results.Skip(skipCount)
+                        .Take(takeCount);
         }
 
         /// <summary>

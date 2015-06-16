@@ -119,6 +119,22 @@ namespace WWTMVC5.Services
             return contentDetails;
         }
 
+        public ContentDetails GetContentDetails(Guid azureId)
+        {
+            ContentDetails contentDetails = null;
+            var content = contentRepository.GetContent(azureId);
+            if (content != null)
+            {
+                var userRole = UserRole.SiteAdmin;
+                var userPermission = userRole.GetPermission();
+                contentDetails = new ContentDetails(userPermission);
+                contentDetails.SetValuesFrom(content);
+            }
+
+            return contentDetails;
+        }
+
+
         /// <summary>
         /// Gets the contents from the Layerscape database.
         /// </summary>

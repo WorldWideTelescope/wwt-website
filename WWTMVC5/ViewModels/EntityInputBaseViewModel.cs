@@ -99,5 +99,6 @@ namespace WWTMVC5.ViewModels
         /// Gets or sets a value indicating whether the entity is offensive or not.
         /// </summary>
         public bool IsOffensive { get; set; }
+
     }
 }

@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using WWTMVC5.Extensions;
 using WWTMVC5.Models;
@@ -68,7 +69,7 @@ namespace WWTMVC5.Services
         /// <param name="userId">Id of the user who is accessing</param>
         /// <param name="pageDetails">Details about the pagination</param>
         /// <returns>Communities/Contents which are having the search text</returns>
-        public IEnumerable<EntityViewModel> SimpleSearch(string searchText, long userId, PageDetails pageDetails, SearchQueryDetails searchQueryDetails)
+        public async Task<IEnumerable<EntityViewModel>> SimpleSearch(string searchText, long userId, PageDetails pageDetails, SearchQueryDetails searchQueryDetails)
         {
             // Make sure pageDetails is not null
             this.CheckNotNull(() => new { pageDetails });
@@ -93,8 +94,8 @@ namespace WWTMVC5.Services
             // Get the skip count and take count for the given page
             int skipCount = (pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage;
             int takeCount = pageDetails.ItemsPerPage;
-
-            foreach (SearchView entity in this.searchViewRepository.Search(searchText, searchUserId, skipCount, takeCount, searchQueryDetails))
+            var results = await searchViewRepository.SearchAsync(searchText, searchUserId, skipCount, takeCount, searchQueryDetails);
+            foreach (SearchView entity in results)
             {
                 EntityViewModel entityViewModel;
 

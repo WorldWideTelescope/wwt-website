@@ -10,6 +10,7 @@ using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using WWTMVC5.Models;
 using WWTMVC5.Properties;
 using WWTMVC5.Repositories.Interfaces;
@@ -42,21 +43,34 @@ namespace WWTMVC5.Repositories
         /// <summary>
         /// Gets the community specified by the community id. Eager loads the navigation properties to avoid multiple calls to DB.
         /// </summary>
-        /// <param name="communityID">Id of the Community.</param>
+        /// <param name="communityId">Id of the Community.</param>
         /// <returns>Community instance.</returns>
-        public Community GetCommunity(long communityID)
+        public async Task<Community> GetCommunityAsync(long communityId)
         {
-            var community = this.EarthOnlineDbContext.Community.Where<Community>(item => item.CommunityID == communityID
-                                                                            && item.IsDeleted == false &&
-                                                                            item.CommunityTypeID != (int)CommunityTypes.User)
+            var community = EarthOnlineDbContext.Community
+                .Where(item => item.CommunityID == communityId
+                    && item.IsDeleted == false && item.CommunityTypeID != (int) CommunityTypes.User)
                 .Include(c => c.AccessType)
-                .Include<Community, Category>(c => c.Category)
-                .Include<Community, ICollection<CommunityRatings>>(c => c.CommunityRatings)
-                .Include<Community, ICollection<CommunityRelation>>(c => c.CommunityRelation1)
-                .Include(c => c.CommunityTags.Select<CommunityTags, Tag>(ct => ct.Tag))
-                .Include<Community, User>(c => c.User)
-                .FirstOrDefault();
+                .Include(c => c.Category)
+                .Include(c => c.CommunityRatings)
+                .Include(c => c.CommunityRelation1)
+                .Include(c => c.CommunityTags.Select(ct => ct.Tag))
+                .Include(c => c.User).ToListAsync();
 
+            return community.Result.FirstOrDefault();
+        }
+        public Community GetCommunity(long communityId)
+        {
+            var community = EarthOnlineDbContext.Community
+                .Where(item => item.CommunityID == communityId
+                    && item.IsDeleted == false && item.CommunityTypeID != (int)CommunityTypes.User)
+                .Include(c => c.AccessType)
+                .Include(c => c.Category)
+                .Include(c => c.CommunityRatings)
+                .Include(c => c.CommunityRelation1)
+                .Include(c => c.CommunityTags.Select(ct => ct.Tag))
+                .Include(c => c.User)
+                .FirstOrDefault();
             return community;
         }
 
@@ -121,6 +135,44 @@ namespace WWTMVC5.Repositories
                             .Select(content => content.ContentID);
 
             return result.ToList();
+        }
+
+
+        public async Task<IEnumerable<ContentsView>> GetContents(long communityId, long userId)
+        {
+            // TODO: Need to remove this once we have logic for loading objects from DBSet directly.
+            IEnumerable<long> subContentIds = null;
+
+            // Get the child contents for the given community/folder first.
+            DbSet<CommunityContents> communityContents = this.EarthOnlineDbContext.Set<CommunityContents>();
+            subContentIds = Queryable.Select<CommunityContents, long>(Queryable.Where(communityContents, relation => relation.CommunityID == communityId), relation => relation.ContentID);
+
+            DbSet<ContentsView> contentsView = this.EarthOnlineDbContext.Set<ContentsView>();
+
+            // Get the contents which are public. 
+            // Get private contents only if:
+            //      1. If the user is site administrator.
+            //      2. If the user is given explicit permission through roles.
+            var result = await contentsView
+                .Where(
+                    content => subContentIds.Contains(content.ContentID) && (content.AccessType == Resources.Public ||
+                        (Queryable.Where<User>(
+                            this.EarthOnlineDbContext.User,
+                            user =>
+                                user.UserID == userId &&
+                                user.UserTypeID == 1)
+                            .FirstOrDefault() != null ||
+                        Queryable.Where<UserCommunities>(
+                            this.EarthOnlineDbContext
+                                .UserCommunities,
+                            uc =>
+                                uc.UserID == userId &&
+                                uc.CommunityId == communityId &&
+                                uc.RoleID >= (int) UserRole.Reader)
+                            .FirstOrDefault() != null)))
+                .OrderByDescending(content => content.LastUpdatedDatetime).ToListAsync();
+                            
+            return result;
         }
 
         /// <summary>

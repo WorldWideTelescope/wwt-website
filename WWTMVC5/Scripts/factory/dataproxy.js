@@ -94,7 +94,6 @@
         //CommunityController.cs: [Route("Community/Contents/{communityId}")]
         function getCommunityContents(id) {
             var deferred = $q.defer();
-            //postHelper('/Community/Contents/' + id, {}, deferred, true);
             $http.post('/Community/Contents/' + id, {}).
                 success(function (data, status, headers, config) {
                     data.entities = dataHelper(data.entities);
@@ -280,6 +279,9 @@
                             location.reload();
                             return;
                         }
+                        if (data['Data']) {
+                            data = data.Data;
+                        }
                         if (processData) {
                             if (processSingle && !member) {
                                 data = dataHelper([data])[0];
@@ -323,65 +325,75 @@
         };
 
         function dataHelper(collection) {
-            $.each(collection, function (i, item) {
-                // add webclient url to tours and collections
-                var isCommunity = item.MemberCount != undefined || item.CommunityType != undefined;
-                if (hasEmptyOrNullGuid(item.ThumbnailID)) {
-                    if (isCommunity) {
-                        item.ThumbnailUrl = $rootScope.contentRoot + '/images/defaultcommunitythumbnail.png';
+            try {
+                $.each(collection, function(i, item) {
+                    // add webclient url to tours and collections
+                    var isCommunity = item.MemberCount != undefined || item.CommunityType != undefined;
+                    if (hasEmptyOrNullGuid(item.ThumbnailID)) {
+                        if (isCommunity) {
+                            item.ThumbnailUrl = $rootScope.contentRoot + '/images/defaultcommunitythumbnail.png';
+                        } else {
+                            item.ThumbnailUrl = $rootScope.contentRoot + '/images/default' + $.trim(types.contentValues.getTypeName(item.ContentType)).toLowerCase() + 'thumbnail.png';
+                        }
+                        item.ThumbnailID = null;
                     } else {
-                        item.ThumbnailUrl = $rootScope.contentRoot + '/images/default' + $.trim(types.contentValues.getTypeName(item.ContentType)).toLowerCase() + 'thumbnail.png';
-                    }
-                    item.ThumbnailID = null;
-                } else {
 
-                    item.ThumbnailUrl = '/file/thumbnail/' + item.ThumbnailID;
-                }
-                
-                if (!isCommunity) {
-                    var itemLink = uiHelper.getDownloadUrl(item.FileName, item.ContentAzureID, item.ContentType);
-                    if (itemLink.DownloadUrl) {
-                        item.DownloadUrl = itemLink.DownloadUrl;
-                    } else if (itemLink.LinkUrl) {
-                        item.LinkUrl = itemLink.LinkUrl;
+                        item.ThumbnailUrl = '/file/thumbnail/' + item.ThumbnailID;
                     }
 
-                    item.FileSize = !item.Size ? 'n/a' : uiHelper.getFileSizeString(item.Size);
-                    if (item.ContentType === 1) {
-                        item.webclientUrl = 'http://' + location.host + '/webclient?tourUrl=' +
-                            encodeURIComponent('http://' + location.host + '/file/download/' + item.ContentAzureID + '/' + item.FileName);
-                    } else if (item.ContentType === 0) { //TODO: Find out why type can be "all"
-                        item.ContentType = 7;
-                    } else if (item.ContentType === 2) {
-                        item.webclientUrl = 'http://' + location.host + '/webclient?wtml=' +
-                            encodeURIComponent('http://' + location.host + item.DownloadUrl);
-                    }
-                    item.ContentTypeName = types.contentValues.getName(item.ContentType);
-                    if (item.AssociatedFiles && item.AssociatedFiles.length) {
-                        $.each(item.AssociatedFiles, function(i, file) {
-                            var fileLink = uiHelper.getDownloadUrl(file.Name, file.ID);
-                            if (fileLink.DownloadUrl) {
-                                file.DownloadUrl = fileLink.DownloadUrl;
-                            } else if (fileLink.LinkUrl) {
-                                file.LinkUrl = fileLink.LinkUrl;
+                    if (!isCommunity) {
+                        var itemLink = uiHelper.getDownloadUrl(item.FileName, (item.ContentAzureID || item.ContentDataID), item.ContentType);
+                        if (itemLink.DownloadUrl) {
+                            item.DownloadUrl = itemLink.DownloadUrl;
+                        } else if (itemLink.LinkUrl) {
+                            item.LinkUrl = itemLink.LinkUrl;
+                        }
+
+                        item.FileSize = !item.Size ? 'n/a' : uiHelper.getFileSizeString(item.Size);
+                        if (item.ContentType === 1) {
+                            item.webclientUrl = 'http://' + location.host + '/webclient?tourUrl=' +
+                                encodeURIComponent('http://' + location.host + '/file/download/' + item.ContentAzureID + '/' + item.FileName);
+                        } else if (item.ContentType === 0) { //TODO: Find out why type can be "all"
+                            item.ContentType = 7;
+                        } else if (item.ContentType === 2) {
+                            item.webclientUrl = 'http://' + location.host + '/webclient?wtml=' +
+                                encodeURIComponent('http://' + location.host + item.DownloadUrl);
+                        }
+                        item.ContentTypeName = types.contentValues.getName(item.ContentType);
+                        if (item.AssociatedFiles && item.AssociatedFiles.length) {
+                            $.each(item.AssociatedFiles, function(i, file) {
+                                var fileLink = uiHelper.getDownloadUrl(file.Name, file.ID);
+                                if (fileLink.DownloadUrl) {
+                                    file.DownloadUrl = fileLink.DownloadUrl;
+                                } else if (fileLink.LinkUrl) {
+                                    file.LinkUrl = fileLink.LinkUrl;
+                                }
+                            });
+                        }
+                        //deserialize extended data from public tours
+                        if (item.Citation && item.Citation.indexOf('json://') === 0) {
+                            var json = item.Citation.split('json://')[1];
+                            try {
+                                item.extData = JSON.parse(json);
+                                item.Citation = item.extData.organization;
+                                item.Tags = item.extData.tags;
+                            } catch (er) {
+                                console.log('missing ext data', item);
                             }
-                        });
+
+                        }
                     }
-                    //deserialize extended data from public tours
-                    if (item.Citation && item.Citation.indexOf('json://') === 0) {
-                        var json = item.Citation.split('json://')[1];
-                        item.extData = JSON.parse(json);
-                        item.Citation = item.extData.organization;
-                        item.Tags = item.extData.tags;
+                    if (item.DistributedBy && item.DistributedBy.indexOf('<') === 0) {
+                        item.DistributedBy = $(item.DistributedBy).text();
                     }
-                }
-                if (item.DistributedBy && item.DistributedBy.indexOf('<') === 0) {
-                    item.DistributedBy = $(item.DistributedBy).text();
-                }
-                
-                
-            });
-            return collection;
+
+
+                });
+                return collection;
+            } catch (er) {
+                console.log('datahelper: error in collection - ', er, collection);
+                return [];
+            }
         }
 
         var getFriendlyTypes = function(array) {

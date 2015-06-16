@@ -50,6 +50,24 @@ namespace WWTMVC5.Repositories
         }
 
         /// <summary>
+        /// Gets the content specified by the content id. Eager loads the navigation properties to avoid multiple calls to DB.
+        /// </summary>
+        /// <param name="azureId">azure guid of the content.</param>
+        /// <returns>Content instance.</returns>
+        public Content GetContent(Guid azureId)
+        {
+            var content = Queryable.Where<Content>(this.EarthOnlineDbContext.Content, item => item.ContentAzureID == azureId && item.IsDeleted == false)
+                .Include(c => c.AccessType)
+                .Include<Content, ICollection<ContentRatings>>(c => c.ContentRatings)
+                .Include(c => Enumerable.Select<ContentTags, Tag>(c.ContentTags, ct => ct.Tag))
+                .Include<Content, User>(c => c.User)
+                .Include(cr => Enumerable.Select<ContentRelation, Content>(cr.ContentRelation, r => r.Content1))
+                .Include(cc => Enumerable.Select<CommunityContents, Community>(cc.CommunityContents, r => r.Community)).FirstOrDefault();
+
+            return content;
+        }
+
+        /// <summary>
         /// Retrieves the multiple instances of contents for the given IDs. Eager loads the navigation properties to avoid multiple calls to DB.
         /// </summary>
         /// <param name="contentIDs">Content IDs</param>

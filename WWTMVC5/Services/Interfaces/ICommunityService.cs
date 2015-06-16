@@ -5,6 +5,7 @@
 //-----------------------------------------------------------------------
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using WWTMVC5.Models;
 
 namespace WWTMVC5.Services.Interfaces
@@ -35,7 +36,7 @@ namespace WWTMVC5.Services.Interfaces
         /// Instance of community details.
         /// </returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = ".net framework 4 way of passing default parameters.")]
-        CommunityDetails GetCommunityDetails(long communityID, long? userID, bool considerPrivateCommunity = false, bool updateReadCount = false);
+        Task<CommunityDetails> GetCommunityDetails(long communityID, long? userID, bool considerPrivateCommunity = false, bool updateReadCount = false);
 
         
         /// <summary>
@@ -151,7 +152,7 @@ namespace WWTMVC5.Services.Interfaces
         /// <returns>Returns the collection of invite request send along with their tokens.</returns>
         IEnumerable<InviteRequestItem> InvitePeople(InviteRequestItem inviteRequestItem);
 
-        List<ContentDetails> GetCommunityContents(long communityId, long userId);
-        List<CommunityDetails> GetChildCommunities(long communityId, long userId);
+        Task<List<ContentDetails>> GetCommunityContents(long communityId, long userId);
+        Task<List<CommunityDetails>> GetChildCommunities(long communityId, long userId);
     }
 }

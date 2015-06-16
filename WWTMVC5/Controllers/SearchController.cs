@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using WWTMVC5.Extensions;
 using WWTMVC5.Models;
@@ -113,7 +114,7 @@ namespace WWTMVC5.Controllers
         
         [HttpPost]
         [Route("Search/RenderJson/{searchText}/{categories}/{contentTypes}/{currentPage}/{pageSize}")]
-        public JsonResult AjaxRenderResults(string searchText, string categories, string contentTypes, int currentPage, int pageSize)
+        public async Task<JsonResult> AjaxRenderResults(string searchText, string categories, string contentTypes, int currentPage, int pageSize)
         {
 
             if (categories == "0")
@@ -128,7 +129,7 @@ namespace WWTMVC5.Controllers
             // It creates the prefix for id of links
             SetSiteAnalyticsPrefix(HighlightType.None);
             SessionWrapper.Set<string>("SelectedSearchType", "basic");
-            var results = GetSearchResults(searchText, "basic", currentPage, searchQuery);
+            var results = await GetSearchResults(searchText, "basic", currentPage, searchQuery);
             return Json(results);
         }
 
@@ -138,7 +139,7 @@ namespace WWTMVC5.Controllers
         /// <param name="searchText">search Text</param>
         /// <param name="selectedTab">selected Tab Text</param>
         /// <returns>EntityViewModel collection</returns>
-        private JsonResult GetSearchResults(string searchText, string selectedTab, int currentPage, SearchViewModel searchQuery, SearchSortBy sortBy = SearchSortBy.Rating)
+        private async Task<JsonResult> GetSearchResults(string searchText, string selectedTab, int currentPage, SearchViewModel searchQuery, SearchSortBy sortBy = SearchSortBy.Rating)
         {
             ViewData["SearchText"] = searchText = (string.IsNullOrWhiteSpace(searchText) || searchText.ToLower(CultureInfo.CurrentCulture).Equals(Resources.DefaultSearchText.ToLower(CultureInfo.CurrentCulture))) ? string.Empty : searchText;
             ViewData["SearchMessage"] = string.Empty;
@@ -170,7 +171,7 @@ namespace WWTMVC5.Controllers
 
                     searchQueryDetails.SortBy = searchQuery.SortBy.ToEnum<string, SearchSortBy>(sortBy);
 
-                    results = this._searchService.SimpleSearch(searchText.Replace("'", "''"), this.CurrentUserId, pageDetails, searchQueryDetails);
+                    results = await _searchService.SimpleSearch(searchText.Replace("'", "''"), this.CurrentUserId, pageDetails, searchQueryDetails);
 
                     // If the total count of items are less than the selected per page items, select previous per page items
                     //ViewData["CurrentPage"] = currentPage;
@@ -179,11 +180,10 @@ namespace WWTMVC5.Controllers
                 }
                 
 
-            return new JsonResult{Data = new
-            {
+            return Json(new{
                 searchResults=results,
                 pageInfo = pageDetails
-            }};
+            });
         }
     }
 }

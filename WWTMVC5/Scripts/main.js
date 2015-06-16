@@ -17,7 +17,8 @@ var wwt = {
 				wwt.triggerResize();
 			}, 500);
 		}
-	}//,
+	},
+	failedSigninAttempts:0//,
 	//resLoc:location.href.indexOf('worldwidetelescope.org') != -1 ? 'http://cdn.worldwidetelescope.org' : ''
 };
 if (top === self) {
@@ -173,9 +174,16 @@ if (top === self) {
                             });
                         },
                         function (responseFailed) {
-                            console.log(responseFailed);
                             wwt.signingIn = false;
-                            $('#signin').html("Login failed");
+                            wwt.failedSigninAttempts++;
+                            console.log('loginfail, attempts:' + wwt.failedSigninAttempts, responseFailed);
+                            if (wwt.failedSigninAttempts > 3) {
+                                $('#signin').html("Login failed");
+                                $(window).trigger('loginfail');
+                            } else {
+                                signIn();
+                            }
+
                         }
                     );
 	            }

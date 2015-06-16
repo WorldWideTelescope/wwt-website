@@ -37,7 +37,6 @@ namespace WWTMVC5.Extensions
                 }
 
                 thisObject.Name = content.Filename;
-                thisObject.ContentType = content.TypeID.ToEnum<int, ContentTypes>(ContentTypes.Generic);
                 thisObject.ContentType = type;
             }
 

@@ -73,13 +73,13 @@ namespace WWTMVC5.Controllers
         /// <param name="entityId"></param>
         [SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = ".net framework 4 way of passing default parameters."), HttpPost]
         [Route("Entity/RenderJson/{highlightType}/{entityType}/{categoryType}/{contentType}/{page}/{pageSize}")]
-        public JsonResult RenderJson(HighlightType highlightType, EntityType entityType, int page, int pageSize, CategoryType categoryType, ContentTypes contentType, long? entityId)
+        public async Task<JsonResult> RenderJson(HighlightType highlightType, EntityType entityType, int page, int pageSize, CategoryType categoryType, ContentTypes contentType, long? entityId)
         {
 
             PageDetails pageDetails = new PageDetails(page);
             pageDetails.ItemsPerPage = pageSize;
             EntityHighlightFilter entityHighlightFilter = new EntityHighlightFilter(highlightType, categoryType, entityId, contentType);
-            List<EntityViewModel> highlightEntities = GetHighlightEntities(entityType, entityHighlightFilter, pageDetails);
+            var highlightEntities = await GetHighlightEntities(entityType, entityHighlightFilter, pageDetails);
 
             
 
@@ -104,12 +104,12 @@ namespace WWTMVC5.Controllers
         /// <param name="entityType"></param>
         [SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = ".net framework 4 way of passing default parameters."), HttpPost]
         [Route("Entity/RenderDetailJson/{entityId}/{entityType=Content}")]
-        public JsonResult RenderDetailJson(long entityId, EntityType entityType)
+        public async Task<JsonResult> RenderDetailJson(long entityId, EntityType entityType)
         {
 
             PageDetails pageDetails = new PageDetails(1) {ItemsPerPage = 1};
             EntityHighlightFilter entityHighlightFilter = new EntityHighlightFilter(HighlightType.None, CategoryType.All, entityId);
-            List<EntityViewModel> entityResult = GetHighlightEntities(entityType, entityHighlightFilter, pageDetails);
+            var entityResult = await GetHighlightEntities(entityType, entityHighlightFilter, pageDetails);
             
             SetSiteAnalyticsPrefix(HighlightType.None);
             var result = new JsonResult
@@ -157,179 +157,7 @@ namespace WWTMVC5.Controllers
         }
 
 
-        /// <summary>
-        /// It renders the entity list partial view
-        /// </summary>
-        /// <param name="highlightType">Highlight type for the entities (Featured/Latest/Popular/Related)</param>
-        /// <param name="entityType">Entity type (Community/Content)</param>
-        /// <param name="entityId">Entity Id (Community/Content)</param>
-        /// <param name="currentPage">Selected page</param>
-        /// <param name="categoryType">Category type, default value is to get entities from all categories.</param>
-        [SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = ".net framework 4 way of passing default parameters."), HttpPost]
-        public void AjaxRender(HighlightType highlightType, EntityType entityType, long? entityId, int currentPage, CategoryType categoryType = CategoryType.All)
-        {
-            try
-            {
-                // Initialize the page details object with current page as parameter.
-                PageDetails pageDetails = new PageDetails(currentPage);
-                EntityHighlightFilter entityHighlightFilter = new EntityHighlightFilter(highlightType, categoryType, entityId);
-                List<EntityViewModel> highlightEntities = GetHighlightEntities(entityType, entityHighlightFilter, pageDetails);
-                ViewData["CurrentPage"] = currentPage;
-                ViewData["TotalPage"] = pageDetails.TotalPages;
-
-                // It creates the prefix for id of links
-                SetSiteAnalyticsPrefix(highlightType);
-
-                PartialView("EntityView", highlightEntities).ExecuteResult(this.ControllerContext);
-            }
-            catch (Exception)
-            {
-                // Consume the exception and render rest of the views in the page.
-                // TODO: Log the exception?
-            }
-        }
-
-        /// <summary>
-        /// It renders the entity list partial view
-        /// </summary>
-        /// <param name="entityId">Entity Id (Community/Content)</param>
-        /// <param name="entityType">Entity type (Community/Content)</param>
-        [ChildActionOnly]
-        public void RenderList(long entityId, EntityType entityType)
-        {
-            try
-            {
-                // Initialize the page details object with current page as parameter. First time when page loads, current page is always 1.
-                PageDetails pageDetails = new PageDetails(1);
-                List<EntityViewModel> entities = GetCommunityEntities(entityId, entityType, pageDetails, true);
-
-                // TODO: Model should be used here instead of so many parameters
-                ViewData["CurrentPage"] = 1;
-                ViewData["TotalPage"] = pageDetails.TotalPages;
-                ViewData["TotalCount"] = pageDetails.TotalCount;
-
-                // It creates the prefix for id of links
-                SetSiteAnalyticsPrefix(HighlightType.None);
-
-                PartialView("EntityView", entities).ExecuteResult(this.ControllerContext);
-            }
-            catch (Exception)
-            {
-                // Consume the exception and render rest of the views in the page.
-                // TODO: Log the exception?
-            }
-        }
-
-        /// <summary>
-        /// It renders the entity list partial view
-        /// </summary>
-        /// <param name="entityId">Entity Id (Community/Content)</param>
-        /// <param name="entityType">Entity type (Community/Content)</param>
-        /// <param name="currentPage">Selected page</param>
-        [HttpPost]
-        public void AjaxRenderList(long entityId, EntityType entityType, int currentPage)
-        {
-            try
-            {
-                // Initialize the page details object with current page as parameter.
-                PageDetails pageDetails = new PageDetails(currentPage);
-                List<EntityViewModel> entities = GetCommunityEntities(entityId, entityType, pageDetails, false);
-
-                // TODO: Model should be used here instead of so many parameters
-                ViewData["CurrentPage"] = pageDetails.CurrentPage;
-                ViewData["TotalPage"] = pageDetails.TotalPages;
-                ViewData["TotalCount"] = pageDetails.TotalCount;
-
-                // It creates the prefix for id of links
-                SetSiteAnalyticsPrefix(HighlightType.None);
-
-                PartialView("EntityView", entities).ExecuteResult(this.ControllerContext);
-            }
-            catch (Exception)
-            {
-                // Consume the exception and render rest of the views in the page.
-                // TODO: Log the exception?
-            }
-        }
-
-        /// <summary>
-        /// Action for handling the top categories request.
-        /// </summary>
-        [ChildActionOnly]
-        [OutputCache(Duration = 3600)]
-        public void Top()
-        {
-            try
-            {
-                IEnumerable<EntityDetails> topCategories = this._entityService.GetTopCategories();
-                List<TopCategoryViewModel> topCategoryViewModel = new List<TopCategoryViewModel>();
-
-                for (int i = 0; i < topCategories.Count() / 3; i++)
-                {
-                    TopCategoryViewModel topCategory = new TopCategoryViewModel();
-
-                    ContentViewModel content = new ContentViewModel();
-                    topCategory.Content = Mapper.Map((ContentDetails)topCategories.ElementAtOrDefault(i * 3), content);
-                    if (topCategories.ElementAtOrDefault(i * 3) != null)
-                    {
-                        topCategory.Content.ThumbnailID = topCategories.ElementAtOrDefault(i * 3).Thumbnail.AzureID;
-                    }
-                    topCategory.Category = (topCategory.Content != null) ? topCategory.Content.Category : CategoryType.All;
-
-                    EntityViewModel firstCommunity = new EntityViewModel();
-                    firstCommunity = Mapper.Map(topCategories.ElementAtOrDefault(i * 3 + 1), firstCommunity);
-                    if (firstCommunity != null)
-                    {
-                        topCategory.Category = firstCommunity.Category;
-                        topCategory.Communities.Add(firstCommunity);
-                    }
-
-                    EntityViewModel secondCommunity = new EntityViewModel();
-                    secondCommunity = Mapper.Map(topCategories.ElementAtOrDefault(i * 3 + 2), secondCommunity);
-                    if (secondCommunity != null)
-                    {
-                        topCategory.Category = secondCommunity.Category;
-                        topCategory.Communities.Add(secondCommunity);
-                    }
-
-                    // If there are no contents and communities available, do not add it to the top category view model.
-                    if (topCategory.Category != CategoryType.All)
-                    {
-                        topCategoryViewModel.Add(topCategory);
-                    }
-                }
-
-                // It creates the prefix for id of links
-                SetSiteAnalyticsPrefix(HighlightType.None);
-
-                PartialView("TopCategoryView", topCategoryViewModel).ExecuteResult(this.ControllerContext);
-            }
-            catch (Exception)
-            {
-                // Consume the exception and render rest of the views in the page.
-                // TODO: Log the exception?
-            }
-        }
-
-        /// <summary>
-        /// Controller action which gets the add thumbnail partial view.
-        /// </summary>
-        [HttpGet]
         
-        public void AddThumbnail(EntityType entityType)
-        {
-            try
-            {
-                DefaultThumbnailViewModel viewModel = new DefaultThumbnailViewModel(Guid.Empty, entityType, string.Empty, ContentTypes.Generic);
-
-                PartialView("AddThumbnailView", viewModel).ExecuteResult(this.ControllerContext);
-            }
-            catch (Exception)
-            {
-                // Consume the exception and render rest of the views in the page.
-                // TODO: Log the exception?
-            }
-        }
 
         /// <summary>
         /// Controller action which gets the add thumbnail view.
@@ -337,8 +165,6 @@ namespace WWTMVC5.Controllers
         /// <param name="thumbnail">HttpPostedFileBase instance</param>
         /// <param name="entity"></param>
         [HttpPost]
-        //
-        //[ValidateAntiForgeryToken]
         [Route("Entity/AddThumbnail/{entity}")]
         public async Task<JsonResult> AddThumbnail(HttpPostedFileBase thumbnail, EntityType entity)
         {
@@ -410,13 +236,13 @@ namespace WWTMVC5.Controllers
         /// <param name="entityHighlightFilter">Entity Highlight filter for the entities (Featured/Latest/Popular/Related)</param>
         /// <param name="pageDetails">Details about the pagination</param>
         /// <returns>entity object</returns>
-        private List<EntityViewModel> GetHighlightEntities(EntityType entityType, EntityHighlightFilter entityHighlightFilter, PageDetails pageDetails)
+        private async Task<List<EntityViewModel>> GetHighlightEntities(EntityType entityType, EntityHighlightFilter entityHighlightFilter, PageDetails pageDetails)
         {
             // TODO: Need to create a model for passing parameters to this controller
             List<EntityViewModel> highlightEntities = new List<EntityViewModel>();
 
             // Set the user who is getting the highlight entities.
-            entityHighlightFilter.UserID = this.CurrentUserId;
+            entityHighlightFilter.UserID = CurrentUserId;
 
             // Total pages will be set by the service.
             if (pageDetails.ItemsPerPage == 0)
@@ -425,7 +251,7 @@ namespace WWTMVC5.Controllers
             }
             if (entityType == EntityType.Community)
             {
-                IEnumerable<CommunityDetails> communities = this._entityService.GetCommunities(entityHighlightFilter, pageDetails);
+                IEnumerable<CommunityDetails> communities = _entityService.GetCommunities(entityHighlightFilter, pageDetails);
                 foreach (var community in communities)
                 {
                     CommunityViewModel communityViewModel = new CommunityViewModel();
@@ -435,7 +261,7 @@ namespace WWTMVC5.Controllers
             }
             else if (entityType == EntityType.Content)
             {
-                IEnumerable<ContentDetails> contents = this._entityService.GetContents(entityHighlightFilter, pageDetails);
+                var contents = await _entityService.GetContents(entityHighlightFilter, pageDetails);
                 foreach (var content in contents)
                 {
                     ContentViewModel contentViewModel = new ContentViewModel();

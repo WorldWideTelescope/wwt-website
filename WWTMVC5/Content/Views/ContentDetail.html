@@ -21,11 +21,11 @@
         <div class="col-md-6">
             <ul class="entity-details">
                 <li><strong>Uploaded by:</strong> {{entity.Producer}}</li>
-                <li><strong>Author:</strong> {{entity.DistributedBy}}</li>
+                <li><strong>Author:</strong> <span ng-bind-html="entity.DistributedBy"></span></li>
                 <li><strong>Type:</strong> {{types.contentValues.getName(entity.ContentType)}}</li>
                 <li><strong>Category:</strong> {{types.categoryValues.getName(entity.Category)}}</li>
                 <li><strong>Community:</strong> {{entity.ParentName}}</li>
-                <li ng-if="entity.Citation"><strong>Citation:</strong> {{entity.Citation}}</li>
+                <li ng-if="entity.Citation"><strong>Citation:</strong> <span ng-bind-html="entity.Citation"></span></li>
                 <li ng-if="entity.Tags"><strong>Tags:</strong> {{entity.Tags}}</li>
                 <li><strong>Downloads:</strong> {{entity.DownloadCount}}</li>
                 <li><strong>Size:</strong> {{entity.FileSize}}</li>

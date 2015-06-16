@@ -37,7 +37,7 @@
                     Choose File...
                     <input type="file" nv-file-select uploader="contentuploader" />
                 </span>&nbsp;<span ng-if="!isEdit && content.ContentFileName && content.ContentFileName.length">({{content.ContentFileName}})</span>
-                <span ng-if="isEdit">({{content.Name}})</span>
+                <span ng-if="isEdit">({{content.FileName}})</span>
             </div>
         </div>
         <div class="col-md-6">
@@ -61,7 +61,7 @@
                 <div>
                     <strong>Name</strong>
                 </div>
-                <input ng-model="content.FileName"
+                <input ng-model="content.Name"
                        class="form-control"
                        placeholder="Friendly File Name"
                        data-toggle="tooltip"
@@ -134,9 +134,9 @@ URL / website"></textarea>
 
     <div class="form-group">
 
-        <img ng-show="!content.ThumbnailID && !editedThumb" class="pull-right" ng-src="{{contentRoot}}/images/defaultdocthumbnail.png" />
-        <img ng-show="content.ThumbnailID && (!isEdit || editedThumb)" class="pull-right" ng-src="/file/TemporaryFile/{{content.ThumbnailID}}" />
-        <img ng-show="content.ThumbnailID && isEdit && !editedThumb" class="pull-right" ng-src="/file/thumbnail/{{content.ThumbnailID}}" />
+        <img ng-if="!content.ThumbnailID && !editedThumb" class="pull-right" ng-src="{{contentRoot}}/images/defaultdocthumbnail.png" />
+        <img ng-if="content.ThumbnailID && (!isEdit || editedThumb)" class="pull-right" ng-src="/file/TemporaryFile/{{content.ThumbnailID}}" />
+        <img ng-if="content.ThumbnailID && isEdit && !editedThumb" class="pull-right" ng-src="/file/thumbnail/{{content.ThumbnailID}}" />
         <div>
             <strong>Thumbnail</strong>
         </div>

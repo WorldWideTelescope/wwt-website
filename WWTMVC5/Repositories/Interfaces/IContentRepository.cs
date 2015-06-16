@@ -4,6 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using WWTMVC5.Models;
 
@@ -20,6 +21,8 @@ namespace WWTMVC5.Repositories.Interfaces
         /// <param name="contentID">Id of the content.</param>
         /// <returns>Content instance.</returns>
         Content GetContent(long contentID);
+
+        Content GetContent(Guid azureId);
 
         /// <summary>
         /// Retrieves the multiple instances of contents for the given IDs. Eager loads the navigation properties to avoid multiple calls to DB.

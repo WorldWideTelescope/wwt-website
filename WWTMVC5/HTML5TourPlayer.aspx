@@ -9,12 +9,13 @@
 <html>
 <head runat="server">
     <title>Title</title>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript"></script>
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
+	<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
     <link href="<%= ConfigurationManager.AppSettings["ResourcesLocation"] %>/includes/CSS/wwt.min.css?v=<%= ConfigurationManager.AppSettings["ResourcesVersion"] %>" rel="stylesheet" />
     
-    <link href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
-    <script src="<%= ConfigurationManager.AppSettings["ResourcesLocation"] %>/Script/ext/bootstrap.js"></script>
-    <script type="text/javascript" src="http://www.worldwidetelescope.org/scripts/wwtsdk.aspx"></script>
+    <script src="/html5sdk/1.0.0/wwtsdk.min.js"></script>
     <script>
         wwt = { triggerResize: function() {} };
     </script>

@@ -23,7 +23,8 @@
 		<meta name="description" content="@(ViewBag.MetaDescription ?? "Worldwide Telescope enables your computer to function as a virtual telescope, bringing together imagery from the best telescopes in the world.")" />
         <meta property="twitter:account_id" content="@(ConfigurationManager.AppSettings["twitterId"])" />
 		<meta name="ROBOTS" content="INDEX, FOLLOW">
-	    <script src="@Model.JsDir/ext/jquery.js?v=@Model.ResVer" type="text/javascript"></script>
+        <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 	    <script>
             var _liveClientId = '@(liveId)';//@(ConfigurationManager.AppSettings["Staging"])
     	</script>
@@ -31,7 +32,7 @@
 	    
 		<link href="@Model.CssDir/wwt.min.css?v=@Model.ResVer" rel="stylesheet" />
 		<link href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
-		<script src="@Model.JsDir/ext/bootstrap.js"></script>
+		
 		<script src="@Model.JsDir/main.js?v=@Model.ResVer"></script>
 	    <script src="@Model.JsDir/controls/user.js?v=@Model.ResVer"></script>
 

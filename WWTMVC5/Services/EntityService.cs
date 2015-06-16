@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using AutoMapper;
 using WWTMVC5.Extensions;
 using WWTMVC5.Models;
@@ -158,14 +159,12 @@ namespace WWTMVC5.Services
             {
                 return GetFeaturedCommunityDetails(entityHighlightFilter, pageDetails);
             }
-            else if (entityHighlightFilter.HighlightType == HighlightType.Related)
+            if (entityHighlightFilter.HighlightType == HighlightType.Related)
             {
                 return GetRelatedCommunityDetails(entityHighlightFilter, pageDetails);
             }
-            else
-            {
-                return GetCommunityDetails(entityHighlightFilter, pageDetails);
-            }
+            return GetCommunityDetails(entityHighlightFilter, pageDetails);
+            
         }
 
         /// <summary>
@@ -209,7 +208,7 @@ namespace WWTMVC5.Services
         /// <param name="entityHighlightFilter">Filters needed while retrieving collection of entities</param>
         /// <param name="pageDetails">Details about the pagination</param>
         /// <returns>List of all contents</returns>
-        public IEnumerable<ContentDetails> GetContents(EntityHighlightFilter entityHighlightFilter, PageDetails pageDetails)
+        public async Task<IEnumerable<ContentDetails>> GetContents(EntityHighlightFilter entityHighlightFilter, PageDetails pageDetails)
         {
             this.CheckNotNull(() => new { entityHighlightFilter, pageDetails });
 

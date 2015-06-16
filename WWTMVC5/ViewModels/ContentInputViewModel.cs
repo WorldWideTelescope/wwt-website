@@ -58,6 +58,8 @@ namespace WWTMVC5.ViewModels
         /// </summary>
         public string TourLength { get; set; }
 
+        
+
         /// <summary>
         /// Gets or sets the content data
         /// </summary>

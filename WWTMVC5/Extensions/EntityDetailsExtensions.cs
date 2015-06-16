@@ -34,7 +34,7 @@ namespace WWTMVC5.Extensions
                 thisObject.Name = content.Title;
                 thisObject.ID = content.ContentID;
                 thisObject.Description = content.Description;
-                thisObject.IsOffensive = content.IsOffensive.HasValue ? content.IsOffensive.Value : false;
+                thisObject.IsOffensive = content.IsOffensive ?? false;
 
                 // Set parent details.
                 var parent = content.CommunityContents.FirstOrDefault();
@@ -42,36 +42,38 @@ namespace WWTMVC5.Extensions
                 {
                     thisObject.ParentName = parent.Community.Name;
                     thisObject.ParentID = parent.Community.CommunityID;
-                    thisObject.ParentType = parent.Community.CommunityTypeID.ToEnum<int, CommunityTypes>(CommunityTypes.None);
+                    thisObject.ParentType = parent.Community.CommunityTypeID.ToEnum(CommunityTypes.None);
                 }
 
                 thisObject.CategoryID = content.CategoryID;
                 thisObject.CreatedByID = content.CreatedByID;
                 thisObject.TypeID = content.TypeID;
-                thisObject.Thumbnail = new FileDetail() { AzureID = content.ThumbnailID.HasValue ? content.ThumbnailID.Value : Guid.Empty };
+                thisObject.Thumbnail = new FileDetail() { AzureID = content.ThumbnailID ?? Guid.Empty };
 
                 if (content.AccessType != null)
                 {
                     thisObject.AccessTypeName = content.AccessType.Name;
                 }
-
+                
+                
                 thisObject.CreatedDatetime = content.CreatedDatetime;
                 thisObject.LastUpdatedDatetime = content.ModifiedDatetime;
 
-                if (content.ContentRatings.Count() > 0)
+                if (content.ContentRatings.Any())
                 {
                     thisObject.AverageRating = content.ContentRatings.Average(rating => rating.Rating);
                     thisObject.RatedPeople = content.ContentRatings.Count();
                 }
-
+                
                 var tags = content.ContentTags.Select(tag => tag.Tag.Name);
 
-                if (tags.Count() > 0)
+                if (tags.Any())
                 {
                     thisObject.Tags = string.Join(", ", tags.ToList());
                 }
 
-                thisObject.AccessTypeID = content.AccessTypeID.HasValue ? content.AccessTypeID.Value : 0;
+                thisObject.AccessTypeID = content.AccessTypeID ?? 0;
+                
             }
         }
 
