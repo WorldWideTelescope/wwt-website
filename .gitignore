@@ -191,4 +191,12 @@ ModelManifest.xml
 
 
 # Config files with private settings
+
+
 webclient/
+
+#wurfl
+App_Data/
+App_Readme/
+Introspector/
+Bootstrap/
