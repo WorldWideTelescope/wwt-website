@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using AutoMapper;
 using WWTMVC5.Extensions;
 using WWTMVC5.Models;
@@ -26,12 +27,12 @@ namespace WWTMVC5.Services
         /// <summary>
         /// Instance of ContentCommentRepository repository
         /// </summary>
-        private IContentCommentsRepository contentCommentsRepository;
+        private IContentCommentsRepository _contentCommentsRepository;
 
         /// <summary>
         /// Instance of CommunityCommentRepository repository
         /// </summary>
-        private ICommunityCommentRepository communityCommentRepository;
+        private ICommunityCommentRepository _communityCommentRepository;
         
         #endregion
 
@@ -43,8 +44,8 @@ namespace WWTMVC5.Services
         /// <param name="contentCommentsRepository">Instance of ContentComments repository</param>
         public CommentService(IContentCommentsRepository contentCommentsRepository, ICommunityCommentRepository communityCommentRepository)
         {
-            this.contentCommentsRepository = contentCommentsRepository;
-            this.communityCommentRepository = communityCommentRepository;
+            this._contentCommentsRepository = contentCommentsRepository;
+            this._communityCommentRepository = communityCommentRepository;
         }
       
         #endregion
@@ -57,17 +58,17 @@ namespace WWTMVC5.Services
         /// <param name="filter">Filter which comments to be fetched</param>
         /// <param name="pageDetails">Details about the pagination</param>
         /// <returns>List of all comments of the Content</returns>
-        public IEnumerable<CommentDetails> GetContentComments(CommentFilter filter, PageDetails pageDetails)
+        public async Task<IEnumerable<CommentDetails>> GetContentComments(CommentFilter filter, PageDetails pageDetails)
         {
             this.CheckNotNull(() => new { filter, pageDetails });
 
             Func<ContentComments, object> orderBy = (contentComments) => contentComments.CommentDatetime;
             Expression<Func<ContentComments, bool>> condition = (contentComments) => contentComments.ContentID == filter.EntityId && contentComments.IsDeleted == false;
 
-            IEnumerable<ContentComments> comments = this.contentCommentsRepository
+            IEnumerable<ContentComments> comments =  _contentCommentsRepository
                 .GetItems(condition, orderBy, filter.OrderType == OrderType.NewestFirst, (pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage, pageDetails.ItemsPerPage);
 
-            List<CommentDetails> commentDetails = new List<CommentDetails>();
+            var commentDetails = new List<CommentDetails>();
             if (comments != null)
             {
                 foreach (var item in comments)
@@ -87,7 +88,7 @@ namespace WWTMVC5.Services
         /// <param name="filter">Filter which comments to be fetched</param>
         /// <param name="pageDetails">Details about the pagination</param>
         /// <returns>List of all comments of the Community</returns>
-        public IEnumerable<CommentDetails> GetCommunityComments(CommentFilter filter, PageDetails pageDetails)
+        public async Task<IEnumerable<CommentDetails>> GetCommunityComments(CommentFilter filter, PageDetails pageDetails)
         {
             this.CheckNotNull(() => new { filter, pageDetails });
 
@@ -95,13 +96,13 @@ namespace WWTMVC5.Services
             Expression<Func<CommunityComments, bool>> condition = (communityComments) => communityComments.CommunityID == filter.EntityId && communityComments.IsDeleted == false;
 
             // Gets the total items satisfying the
-            int totalItemsForCondition = this.communityCommentRepository.GetItemsCount(condition);
+            var totalItemsForCondition = _communityCommentRepository.GetItemsCount(condition);
             pageDetails.TotalPages = (totalItemsForCondition / pageDetails.ItemsPerPage) + ((totalItemsForCondition % pageDetails.ItemsPerPage == 0) ? 0 : 1);
 
-            IEnumerable<CommunityComments> comments = this.communityCommentRepository
+            IEnumerable<CommunityComments> comments =  _communityCommentRepository
                 .GetItems(condition, orderBy, filter.OrderType == OrderType.NewestFirst, (pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage, pageDetails.ItemsPerPage);
 
-            List<CommentDetails> commentDetails = new List<CommentDetails>();
+            var commentDetails = new List<CommentDetails>();
             if (comments != null)
             {
                 foreach (var item in comments)
@@ -125,7 +126,7 @@ namespace WWTMVC5.Services
             this.CheckNotNull(() => new { filter });
 
             Expression<Func<CommunityComments, bool>> condition = (communityComments) => communityComments.CommunityID == filter.EntityId && communityComments.IsDeleted == false;
-            return this.communityCommentRepository.GetItemsCount(condition);
+            return _communityCommentRepository.GetItemsCount(condition);
         }
 
         /// <summary>
@@ -138,7 +139,7 @@ namespace WWTMVC5.Services
             this.CheckNotNull(() => new { filter });
 
             Expression<Func<ContentComments, bool>> condition = (contentComments) => contentComments.ContentID == filter.EntityId && contentComments.IsDeleted == false;
-            return this.contentCommentsRepository.GetItemsCount(condition);
+            return _contentCommentsRepository.GetItemsCount(condition);
         }
 
         /// <summary>
@@ -154,14 +155,14 @@ namespace WWTMVC5.Services
 
             try
             {
-                CommunityComments communityComment = new CommunityComments();
+                var communityComment = new CommunityComments();
                 Mapper.Map(comment, communityComment);
 
                 communityComment.IsDeleted = false;
                 communityComment.CommentedDatetime = DateTime.UtcNow;
 
-                this.communityCommentRepository.Add(communityComment);
-                this.communityCommentRepository.SaveChanges();
+                _communityCommentRepository.Add(communityComment);
+                _communityCommentRepository.SaveChanges();
                 return true;
             }
             catch (Exception)
@@ -185,14 +186,14 @@ namespace WWTMVC5.Services
 
             try
             {
-                ContentComments contentComment = new ContentComments();
+                var contentComment = new ContentComments();
                 Mapper.Map(comment, contentComment);
 
                 contentComment.IsDeleted = false;
                 contentComment.CommentDatetime = DateTime.UtcNow;
 
-                this.contentCommentsRepository.Add(contentComment);
-                this.contentCommentsRepository.SaveChanges();
+                _contentCommentsRepository.Add(contentComment);
+                _contentCommentsRepository.SaveChanges();
                 return true;
             }
             catch (Exception)
@@ -206,24 +207,24 @@ namespace WWTMVC5.Services
         /// <summary>
         /// Deletes the comment on the community.
         /// </summary>
-        /// <param name="communityCommentsID">Id of the comment.</param>
+        /// <param name="communityCommentsId">Id of the comment.</param>
         /// <returns>True if the Comment was deleted successfully; Otherwise false.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "TODO: Error handling")]
-        public bool DeleteCommunityComment(long communityCommentsID)
+        public bool DeleteCommunityComment(long communityCommentsId)
         {
             // Make sure input is not null
-            this.CheckNotNull(() => new { communityCommentsID });
+            this.CheckNotNull(() => new { communityCommentsID = communityCommentsId });
 
             try
             {
-                CommunityComments communityComment = this.communityCommentRepository.GetItem(comment => comment.CommunityCommentsID == communityCommentsID);
+                var communityComment = _communityCommentRepository.GetItem(comment => comment.CommunityCommentsID == communityCommentsId);
                 if (communityComment != null)
                 {
                     // We are doing only soft delete of comments.
                     communityComment.IsDeleted = true;
-                    this.communityCommentRepository.Update(communityComment);
+                    _communityCommentRepository.Update(communityComment);
 
-                    this.communityCommentRepository.SaveChanges();
+                    _communityCommentRepository.SaveChanges();
                 }
                 return true;
             }
@@ -238,24 +239,24 @@ namespace WWTMVC5.Services
         /// <summary>
         /// Deletes the comment on the content.
         /// </summary>
-        /// <param name="contentCommentsID">Id of the comment.</param>
+        /// <param name="contentCommentsId">Id of the comment.</param>
         /// <returns>True if the Comment was deleted successfully; Otherwise false.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "TODO: Error handling")]
-        public bool DeleteContentComment(long contentCommentsID)
+        public bool DeleteContentComment(long contentCommentsId)
         {
             // Make sure input is not null
-            this.CheckNotNull(() => new { communityCommentsID = contentCommentsID });
+            this.CheckNotNull(() => new { communityCommentsID = contentCommentsId });
 
             try
             {
-                ContentComments contentComment = this.contentCommentsRepository.GetItem(comment => comment.ContentCommentsID == contentCommentsID);
+                var contentComment = _contentCommentsRepository.GetItem(comment => comment.ContentCommentsID == contentCommentsId);
                 if (contentComment != null)
                 {
                     // We are doing only soft delete of comments.
                     contentComment.IsDeleted = true;
-                    this.contentCommentsRepository.Update(contentComment);
+                    _contentCommentsRepository.Update(contentComment);
 
-                    this.contentCommentsRepository.SaveChanges();
+                    _contentCommentsRepository.SaveChanges();
                 }
                 return true;
             }

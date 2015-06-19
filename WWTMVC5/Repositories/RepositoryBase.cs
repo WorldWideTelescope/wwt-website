@@ -25,7 +25,7 @@ namespace WWTMVC5.Repositories
         /// <summary>
         /// Layerscape database context
         /// </summary>
-        private EarthOnlineEntities earthOnlineDbContext;
+        private EarthOnlineEntities _earthOnlineDbContext;
 
         /// <summary>
         /// Initializes a new instance of the RepositoryBase class.
@@ -33,7 +33,7 @@ namespace WWTMVC5.Repositories
         /// <param name="earthOnlineDbContext">Database context of Layerscape DB</param>
         public RepositoryBase(EarthOnlineEntities earthOnlineDbContext)
         {
-            this.earthOnlineDbContext = earthOnlineDbContext;
+            _earthOnlineDbContext = earthOnlineDbContext;
         }
 
         /// <summary>
@@ -43,11 +43,11 @@ namespace WWTMVC5.Repositories
         {
             get
             {
-                return earthOnlineDbContext;
+                return _earthOnlineDbContext;
             }
             set
             {
-                earthOnlineDbContext = value;
+                _earthOnlineDbContext = value;
             }
         }
 
@@ -66,6 +66,11 @@ namespace WWTMVC5.Repositories
         /// Adds the given entity to the Layerscape database.
         /// </summary>
         /// <param name="entity">Entity to be added</param>
+        public async void AddAsync(T entity)
+        {
+            await DbSet.LoadAsync();
+            DbSet.Add(entity);
+        }
         public void Add(T entity)
         {
             DbSet.Add(entity);
@@ -81,10 +86,22 @@ namespace WWTMVC5.Repositories
             EarthOnlineDbContext.Entry(entity).State = EntityState.Modified;
         }
 
+        public async void UpdateAsync(T entity)
+        {
+            await DbSet.LoadAsync();
+            DbSet.Attach(entity);
+            EarthOnlineDbContext.Entry(entity).State = EntityState.Modified;
+        }
+
         /// <summary>
         /// Deletes the given entity from the Layerscape database.
         /// </summary>
         /// <param name="entity">Entity to be deleted</param>
+        public async void DeleteAsync(T entity)
+        {
+            await DbSet.LoadAsync();
+            DbSet.Remove(entity);
+        }
         public void Delete(T entity)
         {
             DbSet.Remove(entity);
@@ -95,6 +112,11 @@ namespace WWTMVC5.Repositories
         /// </summary>
         /// <param name="id">Id of the entity</param>
         /// <returns>Entity with the given id</returns>
+        public async Task<T> GetByIdAsync(Guid id)
+        {
+            await DbSet.LoadAsync();
+            return DbSet.Find(id);
+        }
         public T GetById(Guid id)
         {
             return DbSet.Find(id);
@@ -105,9 +127,15 @@ namespace WWTMVC5.Repositories
         /// </summary>
         /// <param name="condition">Condition to be satisfied</param>
         /// <returns>Entity which satisfies the condition</returns>
+        public async Task<T> GetItemAsync(Expression<Func<T, bool>> condition)
+        {
+            await DbSet.LoadAsync();
+            return DbSet.Where(condition).FirstOrDefault();
+        }
+
         public T GetItem(Expression<Func<T, bool>> condition)
         {
-            return DbSet.Where(condition).FirstOrDefault<T>();
+            return DbSet.Where(condition).FirstOrDefault();
         }
 
         /// <summary>
@@ -117,9 +145,14 @@ namespace WWTMVC5.Repositories
         /// <param name="condition">Condition to be satisfied</param>
         /// <param name="include">Navigation property to be included</param>
         /// <returns>Entity which satisfies the condition</returns>
+        public async Task<T> GetItemAsync(Expression<Func<T, bool>> condition, string include)
+        {
+            await DbSet.LoadAsync();
+            return DbSet.Where(condition).Include(include).FirstOrDefault();
+        }
         public T GetItem(Expression<Func<T, bool>> condition, string include)
         {
-            return DbSet.Where(condition).Include(include).FirstOrDefault<T>();
+            return DbSet.Where(condition).Include(include).FirstOrDefault();
         }
 
         /// <summary>
@@ -127,6 +160,11 @@ namespace WWTMVC5.Repositories
         /// </summary>
         /// <param name="condition">Condition to be applied</param>
         /// <returns>Count of items satisfying the condition</returns>
+        public async Task<int> GetItemsCountAsync(Expression<Func<T, bool>> condition)
+        {
+            await DbSet.LoadAsync();
+            return DbSet.Count(condition);
+        }
         public int GetItemsCount(Expression<Func<T, bool>> condition)
         {
             return DbSet.Count(condition);
@@ -139,10 +177,10 @@ namespace WWTMVC5.Repositories
         /// <param name="orderBy">Order by clause</param>
         /// <param name="descending">Order by descending?</param>
         /// <returns>Collection of Entities</returns>
-        public IEnumerable<T> GetItems(Expression<Func<T, bool>> condition, Func<T, object> orderBy, bool descending)
+        public async Task<IEnumerable<T>> GetItemsAsync(Expression<Func<T, bool>> condition, Func<T, object> orderBy, bool descending)
         {
-            IEnumerable<T> result = null;
-
+            IEnumerable<T> result;
+            await DbSet.LoadAsync();
             if (orderBy == null && condition == null)
             {
                 // When condition and order by are not passed, return all the items.
@@ -151,16 +189,9 @@ namespace WWTMVC5.Repositories
             else if (orderBy != null && condition == null)
             {
                 // When condition is not passed, only order by is passed, return data for given order by.
-                if (descending)
-                {
-                    result = DbSet.OrderByDescending(orderBy).ToList();
-                }
-                else
-                {
-                    result = DbSet.OrderBy(orderBy).ToList();
-                }
+                result = @descending ? DbSet.OrderByDescending(orderBy).ToList() : DbSet.OrderBy(orderBy).ToList();
             }
-            else if (orderBy == null && condition != null)
+            else if (orderBy == null)
             {
                 // When order by is not passed, only condition is passed, return data for given condition.
                 result = DbSet.Where(condition).ToList();
@@ -168,14 +199,34 @@ namespace WWTMVC5.Repositories
             else
             {
                 // When both order by and condition are passed, return data for given condition and order by.
-                if (descending)
-                {
-                    result = DbSet.Where(condition).OrderByDescending(orderBy).ToList();
-                }
-                else
-                {
-                    result = DbSet.Where(condition).OrderBy(orderBy).ToList();
-                }
+                result = @descending ? DbSet.Where(condition).OrderByDescending(orderBy).ToList() : DbSet.Where(condition).OrderBy(orderBy).ToList();
+            }
+
+            return result;
+        }
+        public IEnumerable<T> GetItems(Expression<Func<T, bool>> condition, Func<T, object> orderBy, bool descending)
+        {
+            IEnumerable<T> result;
+            
+            if (orderBy == null && condition == null)
+            {
+                // When condition and order by are not passed, return all the items.
+                result = DbSet.ToList();
+            }
+            else if (orderBy != null && condition == null)
+            {
+                // When condition is not passed, only order by is passed, return data for given order by.
+                result = @descending ? DbSet.OrderByDescending(orderBy).ToList() : DbSet.OrderBy(orderBy).ToList();
+            }
+            else if (orderBy == null)
+            {
+                // When order by is not passed, only condition is passed, return data for given condition.
+                result = DbSet.Where(condition).ToList();
+            }
+            else
+            {
+                // When both order by and condition are passed, return data for given condition and order by.
+                result = @descending ? DbSet.Where(condition).OrderByDescending(orderBy).ToList() : DbSet.Where(condition).OrderBy(orderBy).ToList();
             }
 
             return result;
@@ -190,10 +241,73 @@ namespace WWTMVC5.Repositories
         /// <param name="skipCount">Number of items to be skipped.</param>
         /// <param name="takeCount">Number of items to be picked up.</param>
         /// <returns>Collection of Entities</returns>
+        public async Task<IEnumerable<T>> GetItemsAsync(Expression<Func<T, bool>> condition, Func<T, object> orderBy, bool descending, int skipCount, int takeCount)
+        {
+            IEnumerable<T> result;
+            await DbSet.LoadAsync();
+            if (orderBy == null && condition == null)
+            {
+                // When condition and order by are not passed, return all the items.
+                result = DbSet
+                    .Skip(skipCount)
+                    .Take(takeCount)
+                    .ToList();
+            }
+            else if (orderBy != null && condition == null)
+            {
+                // When condition is not passed, only order by is passed, return data for given order by.
+                if (descending)
+                {
+                    result = DbSet
+                        .OrderByDescending(orderBy)
+                        .Skip(skipCount)
+                        .Take(takeCount)
+                        .ToList();
+                }
+                else
+                {
+                    result = DbSet
+                        .OrderBy(orderBy)
+                        .Skip(skipCount)
+                        .Take(takeCount)
+                        .ToList();
+                }
+            }
+            else if (orderBy == null)
+            {
+                // When order by is not passed, only condition is passed, return data for given condition.
+                result = DbSet
+                    .Where(condition)
+                    .Take(takeCount)
+                    .ToList();
+            }
+            else
+            {
+                // When both order by and condition are passed, return data for given condition and order by.
+                if (descending)
+                {
+                    result = DbSet.Where(condition)
+                        .OrderByDescending(orderBy)
+                        .Skip(skipCount)
+                        .Take(takeCount)
+                        .ToList();
+                }
+                else
+                {
+                    result = DbSet
+                        .Where(condition).OrderBy(orderBy)
+                        .Skip(skipCount)
+                        .Take(takeCount)
+                        .ToList();
+                }
+            }
+
+            return result;
+        }
         public IEnumerable<T> GetItems(Expression<Func<T, bool>> condition, Func<T, object> orderBy, bool descending, int skipCount, int takeCount)
         {
-            IEnumerable<T> result = null;
-
+            IEnumerable<T> result;
+            
             if (orderBy == null && condition == null)
             {
                 // When condition and order by are not passed, return all the items.
@@ -260,25 +374,35 @@ namespace WWTMVC5.Repositories
         /// </summary>
         /// <param name="orderBy">Order by clause</param>
         /// <returns>Collection of Entities</returns>
-        public IEnumerable<T> GetAll(Func<T, object> orderBy)
+        public async Task<IEnumerable<T>> GetAllAsync(Func<T, object> orderBy)
         {
+            await DbSet.LoadAsync();
             if (orderBy == null)
             {
                 return DbSet.ToList();
             }
-            else
+            return DbSet.OrderBy(orderBy).ToList();
+        }
+        public IEnumerable<T> GetAll(Func<T, object> orderBy)
+        {   
+            if (orderBy == null)
             {
-                return DbSet.OrderBy(orderBy).ToList();
+                return DbSet.ToList();
             }
+            return DbSet.OrderBy(orderBy).ToList();
         }
 
         /// <summary>
         /// Saves the changes made in the data models to the Layerscape database.
         /// </summary>
+        public async void SaveChangesAsync()
+        {
+            await EarthOnlineDbContext.SaveChangesAsync();
+
+        }
         public void SaveChanges()
         {
-            this.EarthOnlineDbContext.SaveChanges();
-            
+            EarthOnlineDbContext.SaveChanges();
         }
     }
 }

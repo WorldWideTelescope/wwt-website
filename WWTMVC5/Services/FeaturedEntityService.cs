@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using WWTMVC5.Models;
 using WWTMVC5.Properties;
 using WWTMVC5.Repositories.Interfaces;
@@ -24,17 +25,17 @@ namespace WWTMVC5.Services
         /// <summary>
         /// Instance of User repository
         /// </summary>
-        private IUserRepository userRepository;
+        private IUserRepository _userRepository;
 
         /// <summary>
         /// Instance of FeaturedCommunities repository
         /// </summary>
-        private IRepositoryBase<FeaturedCommunities> featuredCommunitiesRepository;
+        private IRepositoryBase<FeaturedCommunities> _featuredCommunitiesRepository;
 
         /// <summary>
         /// Instance of FeaturedCommunities repository
         /// </summary>
-        private IRepositoryBase<FeaturedContents> featuredContentsRepository;
+        private IRepositoryBase<FeaturedContents> _featuredContentsRepository;
 
         #endregion
 
@@ -48,9 +49,9 @@ namespace WWTMVC5.Services
                 IRepositoryBase<FeaturedCommunities> featuredCommunitiesRepository,
                 IRepositoryBase<FeaturedContents> featuredContentsRepository)
         {
-            this.userRepository = userRepository;
-            this.featuredCommunitiesRepository = featuredCommunitiesRepository;
-            this.featuredContentsRepository = featuredContentsRepository;
+            this._userRepository = userRepository;
+            this._featuredCommunitiesRepository = featuredCommunitiesRepository;
+            this._featuredContentsRepository = featuredContentsRepository;
         }
 
         #endregion
@@ -61,54 +62,54 @@ namespace WWTMVC5.Services
         /// This function is used to update the featured communities.
         /// </summary>
         /// <param name="communities">List of all communities.</param>
-        /// <param name="userID">ID of the user who is updating the communities.</param>
-        /// <param name="categoryID">Category Type.</param>
+        /// <param name="userId">ID of the user who is updating the communities.</param>
+        /// <param name="categoryId">Category Type.</param>
         /// <returns>True of the communities are updated. False otherwise.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "We are returning the details of the exceptions as part of the function.")]
-        public OperationStatus UpdateFeaturedCommunities(IEnumerable<AdminEntityDetails> communities, long userID, int? categoryID)
+        public async Task<OperationStatus> UpdateFeaturedCommunities(IEnumerable<AdminEntityDetails> communities, long userId, int? categoryId)
         {
             OperationStatus status = null;
             try
             {
                 // TODO: To find a better way of updating and deleting the featured communities.
-                if (this.userRepository.IsSiteAdmin(userID))
+                if (_userRepository.IsSiteAdmin(userId))
                 {
                     IEnumerable<FeaturedCommunities> results;
-                    if (categoryID.HasValue)
+                    if (categoryId.HasValue)
                     {
-                        results = this.featuredCommunitiesRepository.GetItems(fc => fc.CategoryID == categoryID, null, false);
+                        results = _featuredCommunitiesRepository.GetItems(fc => fc.CategoryID == categoryId, null, false);
                     }
                     else
                     {
-                        results = this.featuredCommunitiesRepository.GetItems(fc => int.Equals(fc.CategoryID, categoryID), null, false);
+                        results = _featuredCommunitiesRepository.GetItems(fc => int.Equals(fc.CategoryID, categoryId), null, false);
                     }
 
-                    if (results != null && results.Count() > 0)
+                    if (results != null && results.Any())
                     {
                         foreach (var item in results)
                         {
-                            this.featuredCommunitiesRepository.Delete(item);
+                            _featuredCommunitiesRepository.Delete(item);
                         }
                     }
 
-                    if (communities != null && communities.Count() > 0)
+                    if (communities != null && communities.Any())
                     {
                         foreach (var item in communities)
                         {
-                            FeaturedCommunities community = new FeaturedCommunities()
+                            var community = new FeaturedCommunities()
                             {
-                                CategoryID = categoryID,
+                                CategoryID = categoryId,
                                 CommunityID = item.EntityID,
                                 SortOrder = item.SortOrder,
-                                UpdatedByID = userID,
+                                UpdatedByID = userId,
                                 UpdatedDatetime = DateTime.UtcNow
                             };
 
-                            this.featuredCommunitiesRepository.Add(community);
+                            _featuredCommunitiesRepository.Add(community);
                         }
                     }
 
-                    this.featuredCommunitiesRepository.SaveChanges();
+                    _featuredCommunitiesRepository.SaveChanges();
                 }
                 else
                 {
@@ -129,54 +130,54 @@ namespace WWTMVC5.Services
         /// This function is used to update the featured contents.
         /// </summary>
         /// <param name="contents">List of all contents.</param>
-        /// <param name="userID">ID of the user who is updating the contents.</param>
-        /// <param name="categoryID">Category Type.</param>
+        /// <param name="userId">ID of the user who is updating the contents.</param>
+        /// <param name="categoryId">Category Type.</param>
         /// <returns>True of the contents are updated. False otherwise.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "We are returning the details of the exceptions as part of the function.")]
-        public OperationStatus UpdateFeaturedContents(IEnumerable<AdminEntityDetails> contents, long userID, int? categoryID)
+        public async Task<OperationStatus> UpdateFeaturedContents(IEnumerable<AdminEntityDetails> contents, long userId, int? categoryId)
         {
             OperationStatus status = null;
             try
             {
                 // TODO: To find a better way of updating and deleting the featured contents.
-                if (this.userRepository.IsSiteAdmin(userID))
+                if (_userRepository.IsSiteAdmin(userId))
                 {
                     IEnumerable<FeaturedContents> results;
-                    if (categoryID.HasValue)
+                    if (categoryId.HasValue)
                     {
-                        results = this.featuredContentsRepository.GetItems(fc => fc.CategoryID == categoryID, null, false);
+                        results =  _featuredContentsRepository.GetItems(fc => fc.CategoryID == categoryId, null, false);
                     }
                     else
                     {
-                        results = this.featuredContentsRepository.GetItems(fc => int.Equals(fc.CategoryID, categoryID), null, false);
+                        results =  _featuredContentsRepository.GetItems(fc => int.Equals(fc.CategoryID, categoryId), null, false);
                     }
 
-                    if (results != null && results.Count() > 0)
+                    if (results != null && results.Any())
                     {
                         foreach (var item in results)
                         {
-                            this.featuredContentsRepository.Delete(item);
+                            _featuredContentsRepository.Delete(item);
                         }
                     }
 
-                    if (contents != null && contents.Count() > 0)
+                    if (contents != null && contents.Any())
                     {
                         foreach (var item in contents)
                         {
-                            FeaturedContents content = new FeaturedContents()
+                            var content = new FeaturedContents()
                             {
-                                CategoryID = categoryID,
+                                CategoryID = categoryId,
                                 ContentID = item.EntityID,
                                 SortOrder = item.SortOrder,
-                                UpdatedByID = userID,
+                                UpdatedByID = userId,
                                 UpdatedDatetime = DateTime.UtcNow
                             };
 
-                            this.featuredContentsRepository.Add(content);
+                            _featuredContentsRepository.Add(content);
                         }
                     }
 
-                    this.featuredContentsRepository.SaveChanges();
+                    _featuredContentsRepository.SaveChanges();
                 }
                 else
                 {

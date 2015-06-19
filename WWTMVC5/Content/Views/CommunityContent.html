@@ -1,6 +1,6 @@
 ﻿<h2>Community Content</h2>
 
-<div class="row" style="position: relative; top: 50px; height: 0;overflow:visible" ng-show="!loadingContent && entityList.length">
+<div class="row hidden-sm hidden-xs" style="position: relative; top: 50px; height: 0;overflow:visible" ng-show="!loadingContent && entityList.length">
     <div class="col-md-6 col-md-offset-6" style="margin-top:-30px">
         <div class="pull-right">
             <div style="margin: -8px 0 -10px; text-align: right">
@@ -33,30 +33,31 @@
 <div class="tab-content">
     <div class="tab-pane {{options.activeTab == 'browse' ? 'active' : 'hide'}}" id="browse">
         <div class="row" style="margin-bottom: 8px">
-            <div class="col-md-2">
+            <div class="col-lg-2 col-sm-3">
                 <label>Sort</label>
                 <select ng-change="getEntities()" ng-model="options.highlightType" ng-options="h.val as h.name for h in types.highlightValues"></select>
             </div>
-            <div class="col-md-2"  ng-if="options.entityType == 'Content'">
+            <div class="col-lg-2 col-sm-3" ng-if="options.entityType == 'Content'">
                 <label>Content Type</label>
                 <select ng-change="getEntities()" id="ddContentType" ng-model="options.contentType" ng-options="c.val as c.name for c in types.contentValues"></select>
             </div>
-            <div class="col-md-2">
+            <div class="col-lg-8 col-sm-6">
                 <label>Category</label>
                 <select ng-change="getEntities()" ng-model="options.categoryType" ng-options="c.val as c.name for c in types.categoryValues"></select>
             </div>
-            <div class="col-md-4">
-                <label>Show</label>
-                <div>
-                    <label class="radio">
-                        <input name="entityType" value="Content" ng-model="options.entityType" type="radio"  ng-change="getEntities()"/>
-                        Content
-                    </label>
-                    <label class="radio">
-                        <input name="entityType" value="Community" ng-model="options.entityType" type="radio"  ng-change="getEntities()"/>
-                        Communities
-                    </label>
-                </div>
+            <div class="col-sm-12">
+
+                
+                <strong class="iblock">Show</strong>&nbsp;&nbsp;
+                <label class="radio">
+                    <input name="entityType" value="Content" ng-model="options.entityType" type="radio" ng-change="getEntities()"/>
+                    Content
+                </label>
+                <label class="radio">
+                    <input name="entityType" value="Community" ng-model="options.entityType" type="radio" ng-change="getEntities()"/>
+                    Communities
+                </label>
+                
             </div>
 
         </div>
@@ -64,7 +65,7 @@
 
     <div class="tab-pane {{options.activeTab == 'search' ? 'active' : 'hide'}}" id="search" style="margin-bottom: 16px">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <label>Query</label>
                 <div class="input-group input-group-sm">
                     <input type="text" class="form-control" placeholder="Search Community Content" ng-model="options.query" ng-keydown="runSearch()">
@@ -75,7 +76,7 @@
 
                 </div>
             </div>
-            <div class="col-md-8" ng-if="types" ng-show="options.query.length > 0">
+            <div class="col-md-6" ng-if="types" ng-show="options.query.length > 0">
                 <div class="iblock">
                     <label>Category</label>
                     <select id="searchCategories" multiple="true">

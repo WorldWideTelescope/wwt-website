@@ -191,11 +191,8 @@
     <Compile Include="AutoMapperSettings.cs" />
     <Compile Include="ConfigReader.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="Controllers\AdminController.cs" />
-    <Compile Include="Controllers\AssetController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
-    <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\CommunityController.cs" />
     <Compile Include="Controllers\ContentController.cs" />
     <Compile Include="Controllers\ControllerBase.cs" />
@@ -521,10 +518,6 @@
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WebServices\AdministrationService.svc.cs">
-      <DependentUpon>AdministrationService.svc</DependentUpon>
-    </Compile>
-    <Compile Include="WebServices\IAdministrationService.cs" />
     <Compile Include="WebServices\IResourceService.cs" />
     <Compile Include="WebServices\LiveIdAuth.svc.cs">
       <DependentUpon>LiveIdAuth.svc</DependentUpon>
@@ -543,6 +536,7 @@
     <Content Include="Content\Views\EditCommunity.html" />
     <Content Include="Content\Views\CommunityDetail.html" />
     <Content Include="Content\Views\ContentPreview.html" />
+    <Content Include="Content\Views\generatedtours.xml" />
     <Content Include="Content\Views\modals\EditTour.html" />
     <Content Include="Content\Views\TestResources.html" />
     <Content Include="Content\Views\TourAdmin.html" />
@@ -723,6 +717,7 @@
     <Content Include="Content\bootstrap\bootstrap.less" />
     <Content Include="Content\bootstrap\badges.less" />
     <Content Include="Content\bootstrap\alerts.less" />
+    <Content Include="Scripts\ext\ui-bootstrap-tpls-0.12.1.modified.js" />
     <Content Include="webclient\app.js" />
     <Content Include="webclient\Bin\Microsoft.QualityTools.Testing.Fakes.dll" />
     <Content Include="webclient\Bin\Wurfl.Aspnet.Extensions.dll" />
@@ -974,7 +969,6 @@
     <Content Include="Views\Support\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="WebControl.aspx" />
-    <Content Include="WebServices\AdministrationService.svc" />
     <Content Include="WebServices\LiveIdAuth.svc" />
     <Content Include="WebServices\ResourceService.svc" />
     <Content Include="Views\Interact\Index.cshtml" />
@@ -1177,7 +1171,13 @@
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>cd $(TargetDir)  
-xcopy ..\References\msshrtmi.dll $(TargetDir)</PreBuildEvent>
+setlocal enableDelayedExpansion
+(
+  xcopy ..\References\msshrtmi.dll $(TargetDir)
+  set "errorlevel="
+  if !errorlevel! neq 0 (echo error level is non-zero)
+)
+</PreBuildEvent>
   </PropertyGroup>
   <!--<UsingTask TaskName="TransformXml" AssemblyFile="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Web\Microsoft.Web.Publishing.Tasks.dll" />
   <Target Name="Transform">

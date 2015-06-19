@@ -6,8 +6,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using AutoMapper;
 using WWTMVC5.Extensions;
 using WWTMVC5.Models;
@@ -27,47 +29,47 @@ namespace WWTMVC5.Services
         /// <summary>
         /// Instance of User repository
         /// </summary>
-        private IUserRepository userRepository;
+        private IUserRepository _userRepository;
 
         /// <summary>
         /// Instance of Contents repository
         /// </summary>
-        private IContentsViewRepository contentsViewRepository;
+        private IContentsViewRepository _contentsViewRepository;
 
         /// <summary>
         /// Instance of Community repository
         /// </summary>
-        private ICommunitiesViewRepository communitiesViewRepository;
+        private ICommunitiesViewRepository _communitiesViewRepository;
 
         /// <summary>
         /// Instance of UserCommunities repository
         /// </summary>
-        private IUserCommunitiesRepository userCommunitiesRepository;
+        private IUserCommunitiesRepository _userCommunitiesRepository;
 
         /// <summary>
         /// Instance of Permission repository
         /// </summary>
-        private IRepositoryBase<PermissionRequest> permissionRequestRepository;
+        private IRepositoryBase<PermissionRequest> _permissionRequestRepository;
 
         /// <summary>
         /// Instance of Blob data repository
         /// </summary>
-        private IBlobDataRepository blobDataRepository;
+        private IBlobDataRepository _blobDataRepository;
 
         /// <summary>
         /// Instance of InviteRequestsView repository
         /// </summary>
-        private IRepositoryBase<InviteRequestsView> inviteRequestsViewRepository;
+        private IRepositoryBase<InviteRequestsView> _inviteRequestsViewRepository;
 
         /// <summary>
         /// Instance of InviteRequest repository
         /// </summary>
-        private IRepositoryBase<InviteRequest> inviteRequestRepository;
+        private IRepositoryBase<InviteRequest> _inviteRequestRepository;
 
         /// <summary>
         /// Instance of UserType repository
         /// </summary>
-        private IRepositoryBase<UserType> userTypeRepository;
+        private IRepositoryBase<UserType> _userTypeRepository;
 
         #endregion
 
@@ -95,15 +97,15 @@ namespace WWTMVC5.Services
             IRepositoryBase<InviteRequest> inviteRequestRepository,
             IRepositoryBase<UserType> userTypeRepository)
         {
-            this.userRepository = userRepository;
-            this.contentsViewRepository = contentsViewRepository;
-            this.communitiesViewRepository = communitiesViewRepository;
-            this.userCommunitiesRepository = userCommunitiesRepository;
-            this.permissionRequestRepository = permissionRequestRepository;
-            this.blobDataRepository = blobDataRepository;
-            this.inviteRequestsViewRepository = inviteRequestsViewRepository;
-            this.inviteRequestRepository = inviteRequestRepository;
-            this.userTypeRepository = userTypeRepository;
+            _userRepository = userRepository;
+            _contentsViewRepository = contentsViewRepository;
+            _communitiesViewRepository = communitiesViewRepository;
+            _userCommunitiesRepository = userCommunitiesRepository;
+            _permissionRequestRepository = permissionRequestRepository;
+            _blobDataRepository = blobDataRepository;
+            _inviteRequestsViewRepository = inviteRequestsViewRepository;
+            _inviteRequestRepository = inviteRequestRepository;
+            _userTypeRepository = userTypeRepository;
         }
 
         #endregion Constructor
@@ -115,10 +117,10 @@ namespace WWTMVC5.Services
         /// </summary>
         /// <param name="puid">Live user PUID</param>
         /// <returns>ProfileDetails object</returns>
-        public ProfileDetails GetProfile(string puid)
+        public async Task<ProfileDetails> GetProfileAsync(string puid)
         {
             ProfileDetails profileDetails = null;
-            var userDetails = this.userRepository.GetItem(user => user.LiveID == puid);
+            var userDetails = await _userRepository.GetItemAsync(user => user.LiveID == puid);
 
             // Check if the user details is present.
             // DO NOT use CheckNotNull since GetProfile should not throw exception.
@@ -128,7 +130,25 @@ namespace WWTMVC5.Services
                 Mapper.Map(userDetails, profileDetails);
 
                 // Set the consumed size
-                profileDetails.ConsumedSize = this.contentsViewRepository.GetConsumedSize(userDetails.UserID);
+                profileDetails.ConsumedSize = _contentsViewRepository.GetConsumedSize(userDetails.UserID);
+            }
+
+            return profileDetails;
+        }
+        public ProfileDetails GetProfile(string puid)
+        {
+            ProfileDetails profileDetails = null;
+            var userDetails = _userRepository.GetItem(user => user.LiveID == puid);
+
+            // Check if the user details is present.
+            // DO NOT use CheckNotNull since GetProfile should not throw exception.
+            if (userDetails != null)
+            {
+                profileDetails = new ProfileDetails();
+                Mapper.Map(userDetails, profileDetails);
+
+                // Set the consumed size
+                profileDetails.ConsumedSize = _contentsViewRepository.GetConsumedSize(userDetails.UserID);
             }
 
             return profileDetails;
@@ -137,12 +157,12 @@ namespace WWTMVC5.Services
         /// <summary>
         /// Gets the user profile from USER ID
         /// </summary>
-        /// <param name="userID">User profile ID</param>
+        /// <param name="userId">User profile ID</param>
         /// <returns>ProfileDetails object</returns>
-        public ProfileDetails GetProfile(long userID)
+        public ProfileDetails GetProfile(long userId)
         {
             var profileDetails = new ProfileDetails();
-            var userDetails = this.userRepository.GetItem(user => user.UserID == userID, "UserType");
+            var userDetails = _userRepository.GetItem(user => user.UserID == userId, "UserType");
 
             // Check if the user details is present.
             this.CheckNotNull(() => new { userDetails });
@@ -150,7 +170,7 @@ namespace WWTMVC5.Services
             Mapper.Map(userDetails, profileDetails);
 
             // Set the consumed size
-            profileDetails.ConsumedSize = this.contentsViewRepository.GetConsumedSize(userID);
+            profileDetails.ConsumedSize = _contentsViewRepository.GetConsumedSize(userId);
 
             return profileDetails;
         }
@@ -160,11 +180,11 @@ namespace WWTMVC5.Services
         /// </summary>
         /// <param name="users">User profile ID list</param>
         /// <returns>ProfileDetails objects list</returns>
-        public IEnumerable<ProfileDetails> GetProfiles(IEnumerable<long> users)
+        public async Task<IEnumerable<ProfileDetails>> GetProfilesAsync(IEnumerable<long> users)
         {
             var profileDetails = new List<ProfileDetails>();
             Expression<Func<User, bool>> condition = (user) => (users.Contains(user.UserID));
-            var userDetails = this.userRepository.GetItems(condition, null, false);
+            var userDetails = _userRepository.GetItems(condition, null, false);
 
             if (userDetails != null)
             {
@@ -172,7 +192,25 @@ namespace WWTMVC5.Services
                 {
                     var profileDetail = new ProfileDetails();
                     Mapper.Map(userDetail, profileDetail);
-                    profileDetails.Add(profileDetail);  
+                    profileDetails.Add(profileDetail);
+                }
+            }
+
+            return profileDetails;
+        }
+        public IEnumerable<ProfileDetails> GetProfiles(IEnumerable<long> users)
+        {
+            var profileDetails = new List<ProfileDetails>();
+            Expression<Func<User, bool>> condition = (user) => (users.Contains(user.UserID));
+            var userDetails = _userRepository.GetItems(condition, null, false);
+
+            if (userDetails != null)
+            {
+                foreach (var userDetail in userDetails)
+                {
+                    var profileDetail = new ProfileDetails();
+                    Mapper.Map(userDetail, profileDetail);
+                    profileDetails.Add(profileDetail);
                 }
             }
 
@@ -184,10 +222,10 @@ namespace WWTMVC5.Services
         /// </summary>
         /// <param name="profile">Profile information.</param>
         /// <returns>True if the profile has been updated successfully; Otherwise false.</returns>
-        public bool UpdateProfile(ProfileDetails profile)
+        public async Task<bool> UpdateProfileAsync(ProfileDetails profile)
         {
-            bool status = false;
-            var userDetails = this.userRepository.GetItem(user => user.UserID == profile.ID);
+            var status = false;
+            var userDetails = _userRepository.GetItem(user => user.UserID == profile.ID);
             if (userDetails != null)
             {
                 try
@@ -208,10 +246,51 @@ namespace WWTMVC5.Services
                     userDetails.LastLoginDatetime = profile.LastLogOnDatetime;
 
                     // Add the user to the repository
-                    this.userRepository.Update(userDetails);
+                    _userRepository.Update(userDetails);
 
                     // Save all the changes made.
-                    this.userRepository.SaveChanges();
+                    _userRepository.SaveChanges();
+
+                    status = true;
+                }
+                catch (Exception)
+                {
+                    // Delete Uploaded Thumbnail
+                    DeleteThumbnail(profile.PictureID);
+                    throw;
+                }
+            }
+
+            return status;
+        }
+        public bool UpdateProfile(ProfileDetails profile)
+        {
+            var status = false;
+            var userDetails = _userRepository.GetItem(user => user.UserID == profile.ID);
+            if (userDetails != null)
+            {
+                try
+                {
+                    // Only in case if new Picture is uploaded, move it from temporary container.
+                    if (userDetails.PictureID != profile.PictureID)
+                    {
+                        profile.PictureID = MoveThumbnail(profile.PictureID);
+                    }
+
+                    // Set About me and Affiliation details
+                    userDetails.Affiliation = profile.Affiliation;
+                    userDetails.AboutMe = profile.AboutMe;
+                    userDetails.FirstName = profile.FirstName;
+                    userDetails.LastName = profile.LastName;
+                    userDetails.IsSubscribed = profile.IsSubscribed;
+                    userDetails.PictureID = profile.PictureID;
+                    userDetails.LastLoginDatetime = profile.LastLogOnDatetime;
+
+                    // Add the user to the repository
+                    _userRepository.Update(userDetails);
+
+                    // Save all the changes made.
+                    _userRepository.SaveChanges();
 
                     status = true;
                 }
@@ -229,29 +308,29 @@ namespace WWTMVC5.Services
         /// <summary>
         /// Gets the communities from the Layerscape database for the given owner.
         /// </summary>
-        /// <param name="userID">Communities Owner ID.</param>
+        /// <param name="userId">Communities Owner ID.</param>
         /// <param name="pageDetails">Details about the pagination</param>
         /// <param name="onlyPublic">Whether to only retrieve public data</param>
         /// <returns>List of all communities</returns>
-        public IEnumerable<CommunityDetails> GetCommunities(long userID, PageDetails pageDetails, bool onlyPublic)
+        public async Task<IEnumerable<CommunityDetails>> GetCommunitiesAsync(long userId, PageDetails pageDetails, bool onlyPublic)
         {
-            this.CheckNotNull(() => new { userID, pageDetails });
+            this.CheckNotNull(() => new { userID = userId, pageDetails });
 
             IList<CommunityDetails> userCommunities = new List<CommunityDetails>();
 
-            Func<CommunitiesView, object> orderBy = (CommunitiesView c) => c.LastUpdatedDatetime;
+            Func<CommunitiesView, object> orderBy = c => c.LastUpdatedDatetime;
 
             // Get all the community ids to which user is given role of contributor or higher.
-            IEnumerable<long> userCommunityIds = this.userRepository.GetUserCommunitiesForRole(userID, UserRole.Contributor, onlyPublic);
+            var userCommunityIds = _userRepository.GetUserCommunitiesForRole(userId, UserRole.Contributor, onlyPublic);
 
             // Get only the communities for the current page.
             userCommunityIds = userCommunityIds.Skip((pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage).Take(pageDetails.ItemsPerPage);
 
-            Expression<Func<CommunitiesView, bool>> condition = (CommunitiesView c) => userCommunityIds.Contains(c.CommunityID);
+            Expression<Func<CommunitiesView, bool>> condition = c => userCommunityIds.Contains(c.CommunityID);
 
-            foreach (var community in this.communitiesViewRepository.GetItems(condition, orderBy, true))
+            foreach (var community in _communitiesViewRepository.GetItems(condition, orderBy, true))
             {
-                CommunityDetails communityDetails = null;
+                CommunityDetails communityDetails;
                 if (onlyPublic)
                 {
                     // In case of only public, user is looking at somebody else profile and so just send the user role as Visitor.
@@ -259,7 +338,43 @@ namespace WWTMVC5.Services
                 }
                 else
                 {
-                    UserRole userRole = this.userRepository.GetUserRole(userID, community.CommunityID);
+                    var userRole = _userRepository.GetUserRole(userId, community.CommunityID);
+                    communityDetails = new CommunityDetails(userRole.GetPermission());
+                }
+
+                Mapper.Map(community, communityDetails);
+                userCommunities.Add(communityDetails);
+            }
+
+            return userCommunities;
+        }
+        public IEnumerable<CommunityDetails> GetCommunities(long userId, PageDetails pageDetails, bool onlyPublic)
+        {
+            this.CheckNotNull(() => new { userID = userId, pageDetails });
+
+            IList<CommunityDetails> userCommunities = new List<CommunityDetails>();
+
+            Func<CommunitiesView, object> orderBy = c => c.LastUpdatedDatetime;
+
+            // Get all the community ids to which user is given role of contributor or higher.
+            var userCommunityIds = _userRepository.GetUserCommunitiesForRole(userId, UserRole.Contributor, onlyPublic);
+
+            // Get only the communities for the current page.
+            userCommunityIds = userCommunityIds.Skip((pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage).Take(pageDetails.ItemsPerPage);
+
+            Expression<Func<CommunitiesView, bool>> condition = c => userCommunityIds.Contains(c.CommunityID);
+
+            foreach (var community in _communitiesViewRepository.GetItems(condition, orderBy, true))
+            {
+                CommunityDetails communityDetails;
+                if (onlyPublic)
+                {
+                    // In case of only public, user is looking at somebody else profile and so just send the user role as Visitor.
+                    communityDetails = new CommunityDetails(Permission.Visitor);
+                }
+                else
+                {
+                    var userRole = _userRepository.GetUserRole(userId, community.CommunityID);
                     communityDetails = new CommunityDetails(userRole.GetPermission());
                 }
 
@@ -273,42 +388,67 @@ namespace WWTMVC5.Services
         /// <summary>
         /// Gets the content from the Layerscape database for the given user.
         /// </summary>
-        /// <param name="userID">Contents Owner ID.</param>
+        /// <param name="userId">Contents Owner ID.</param>
         /// <param name="pageDetails">Details about the pagination</param>
         /// <param name="onlyPublic">Whether to only retrieve public data</param>
         /// <returns>List of all contents</returns>
-        public IEnumerable<ContentDetails> GetContents(long userID, PageDetails pageDetails, bool onlyPublic)
+        public async Task<IEnumerable<ContentDetails>> GetContentsAsync(long userId, PageDetails pageDetails, bool onlyPublic)
         {
             IList<ContentDetails> contents = new List<ContentDetails>();
-            Func<ContentsView, object> orderBy = null;
-            Expression<Func<ContentsView, bool>> condition = null;
+            Expression<Func<ContentsView, bool>> condition;
 
-            this.CheckNotNull(() => new { userID, pageDetails });
+            this.CheckNotNull(() => new { userID = userId, pageDetails });
 
-            orderBy = (ContentsView c) => c.LastUpdatedDatetime;
+            Func<ContentsView, object> orderBy = c => c.LastUpdatedDatetime;
 
             if (onlyPublic)
             {
-                string accessType = AccessType.Public.ToString();
-                condition = (ContentsView c) => c.CreatedByID == userID && c.AccessType == accessType;
+                var accessType = AccessType.Public.ToString();
+                condition = c => c.CreatedByID == userId && c.AccessType == accessType;
             }
             else
             {
-                condition = (ContentsView c) => c.CreatedByID == userID;
+                condition = c => c.CreatedByID == userId;
             }
 
-            foreach (var content in this.contentsViewRepository.GetItems(
+            foreach (var content in _contentsViewRepository.GetItems(
                                                 condition, orderBy, true, ((pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage), pageDetails.ItemsPerPage))
             {
-                ContentDetails contentDetails = null;
-                if (onlyPublic)
-                {
-                    contentDetails = new ContentDetails(Permission.Visitor);
-                }
-                else
-                {
-                    contentDetails = new ContentDetails(Permission.Contributor);
-                }
+                var contentDetails = onlyPublic ?
+                    new ContentDetails(Permission.Visitor) :
+                    new ContentDetails(Permission.Contributor);
+
+                Mapper.Map(content, contentDetails);
+                contents.Add(contentDetails);
+            }
+
+            return contents;
+        }
+        public IEnumerable<ContentDetails> GetContents(long userId, PageDetails pageDetails, bool onlyPublic)
+        {
+            IList<ContentDetails> contents = new List<ContentDetails>();
+            Expression<Func<ContentsView, bool>> condition;
+
+            this.CheckNotNull(() => new { userID = userId, pageDetails });
+
+            Func<ContentsView, object> orderBy = c => c.LastUpdatedDatetime;
+
+            if (onlyPublic)
+            {
+                var accessType = AccessType.Public.ToString();
+                condition = c => c.CreatedByID == userId && c.AccessType == accessType;
+            }
+            else
+            {
+                condition = c => c.CreatedByID == userId;
+            }
+
+            foreach (var content in _contentsViewRepository.GetItems(
+                                                condition, orderBy, true, ((pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage), pageDetails.ItemsPerPage))
+            {
+                var contentDetails = onlyPublic ?
+                    new ContentDetails(Permission.Visitor) :
+                    new ContentDetails(Permission.Contributor);
 
                 Mapper.Map(content, contentDetails);
                 contents.Add(contentDetails);
@@ -320,38 +460,61 @@ namespace WWTMVC5.Services
         /// <summary>
         /// Gets the total number of communities for the given user.
         /// </summary>
-        /// <param name="userID">Communities owner ID.</param>
+        /// <param name="userId">Communities owner ID.</param>
         /// <param name="onlyPublic">Whether to only retrieve public data</param>
         /// <returns>total number of communities.</returns>
-        public int GetCommunitiesCount(long userID, bool onlyPublic)
+        public async Task<int> GetCommunitiesCountAsync(long userId, bool onlyPublic)
         {
-            this.CheckNotNull(() => new { userID });
+            this.CheckNotNull(() => new { userID = userId });
 
-            return this.userRepository.GetUserCommunitiesForRole(userID, UserRole.Contributor, onlyPublic).Count();
+            return _userRepository.GetUserCommunitiesForRole(userId, UserRole.Contributor, onlyPublic).Count();
+        }
+        public int GetCommunitiesCount(long userId, bool onlyPublic)
+        {
+            this.CheckNotNull(() => new { userID = userId });
+
+            return _userRepository.GetUserCommunitiesForRole(userId, UserRole.Contributor, onlyPublic).Count();
         }
 
         /// <summary>
         /// Gets the total number of contents for the given user.
         /// </summary>
-        /// <param name="userID">Contents Owner ID.</param>
+        /// <param name="userId">Contents Owner ID.</param>
         /// <param name="onlyPublic">Whether to only retrieve public data</param>
         /// <returns>total number of contents.</returns>
-        public int GetContentsCount(long userID, bool onlyPublic)
+        public async Task<int> GetContentsCountAsync(long userId, bool onlyPublic)
         {
-            this.CheckNotNull(() => new { userID });
+            this.CheckNotNull(() => new { userID = userId });
 
             Expression<Func<ContentsView, bool>> condition = null;
             if (onlyPublic)
             {
-                string accessType = AccessType.Public.ToString();
-                condition = (ContentsView c) => c.CreatedByID == userID && c.AccessType == accessType;
+                var accessType = AccessType.Public.ToString();
+                condition = c => c.CreatedByID == userId && c.AccessType == accessType;
             }
             else
             {
-                condition = (ContentsView c) => c.CreatedByID == userID;
+                condition = c => c.CreatedByID == userId;
             }
 
-            return this.contentsViewRepository.GetItemsCount(condition);
+            return _contentsViewRepository.GetItemsCount(condition);
+        }
+        public int GetContentsCount(long userId, bool onlyPublic)
+        {
+            this.CheckNotNull(() => new { userID = userId });
+
+            Expression<Func<ContentsView, bool>> condition = null;
+            if (onlyPublic)
+            {
+                var accessType = AccessType.Public.ToString();
+                condition = c => c.CreatedByID == userId && c.AccessType == accessType;
+            }
+            else
+            {
+                condition = c => c.CreatedByID == userId;
+            }
+
+            return _contentsViewRepository.GetItemsCount(condition);
         }
 
         /// <summary>
@@ -359,13 +522,13 @@ namespace WWTMVC5.Services
         /// </summary>
         /// <param name="profileDetails">ProfileDetails object</param>
         /// <returns>Profile ID</returns>
-        public long CreateProfile(ProfileDetails profileDetails)
+        public async Task<long> CreateProfileAsync(ProfileDetails profileDetails)
         {
             // Make sure communityDetails is not null
             this.CheckNotNull(() => new { profileDetails });
 
             // Check if the user already exists in the Layerscape database.
-            User existingUser = this.userRepository.GetItem(u => u.LiveID == profileDetails.PUID);
+            User existingUser = _userRepository.GetItem(u => u.LiveID == profileDetails.PUID);
 
             if (existingUser != null)
             {
@@ -374,7 +537,7 @@ namespace WWTMVC5.Services
             else
             {
                 // 1. Add Community details to the community object.
-                User user = new User();
+                var user = new User();
                 Mapper.Map(profileDetails, user);
 
                 user.JoinedDateTime = DateTime.UtcNow;
@@ -384,10 +547,43 @@ namespace WWTMVC5.Services
                 user.IsDeleted = false;
 
                 // Add the user to the repository
-                this.userRepository.Add(user);
+                _userRepository.Add(user);
 
                 // Save all the changes made.
-                this.userRepository.SaveChanges();
+                _userRepository.SaveChanges();
+
+                return user.UserID;
+            }
+        }
+        public long CreateProfile(ProfileDetails profileDetails)
+        {
+            // Make sure communityDetails is not null
+            this.CheckNotNull(() => new { profileDetails });
+
+            // Check if the user already exists in the Layerscape database.
+            User existingUser = _userRepository.GetItem(u => u.LiveID == profileDetails.PUID);
+
+            if (existingUser != null)
+            {
+                return existingUser.UserID;
+            }
+            else
+            {
+                // 1. Add Community details to the community object.
+                var user = new User();
+                Mapper.Map(profileDetails, user);
+
+                user.JoinedDateTime = DateTime.UtcNow;
+                user.LastLoginDatetime = DateTime.UtcNow;
+
+                // While creating the user, IsDeleted to be false always.
+                user.IsDeleted = false;
+
+                // Add the user to the repository
+                _userRepository.Add(user);
+
+                // Save all the changes made.
+                _userRepository.SaveChanges();
 
                 return user.UserID;
             }
@@ -397,32 +593,31 @@ namespace WWTMVC5.Services
         /// Gets the user permissions for the given community and for the given page. User should have at least
         /// contributor permission on the community to get user permissions.
         /// </summary>
-        /// <param name="userID">User who is reading the permissions</param>
-        /// <param name="communityID">Community for which permissions are fetched</param>
+        /// <param name="userId">User who is reading the permissions</param>
+        /// <param name="communityId">Community for which permissions are fetched</param>
         /// <param name="pageDetails">Page for which permissions are fetched</param>
         /// <returns>List of permissions/user roles</returns>
         
-        public PermissionDetails GetUserPemissions(long userID, long communityID, PageDetails pageDetails)
+        public async Task<PermissionDetails> GetUserPemissions(long userId, long communityId, PageDetails pageDetails)
         {
             this.CheckNotNull(() => new { pageDetails });
 
-            Expression<Func<UserCommunities, bool>> condition = (UserCommunities c) => c.CommunityId == communityID;
-            Func<UserCommunities, object> orderBy = (UserCommunities c) => c.RoleID;
+            Expression<Func<UserCommunities, bool>> condition = c => c.CommunityId == communityId;
+            Func<UserCommunities, object> orderBy = c => c.RoleID;
 
             // Gets the total items satisfying the condition
-            pageDetails.TotalCount = this.userCommunitiesRepository.GetItemsCount(condition);
+            pageDetails.TotalCount =  _userCommunitiesRepository.GetItemsCount(condition);
             pageDetails.TotalPages = (pageDetails.TotalCount / pageDetails.ItemsPerPage) + ((pageDetails.TotalCount % pageDetails.ItemsPerPage == 0) ? 0 : 1);
 
             // TODO: Passing the condition in a variable doesn't add the WHERE clause in SQL server. Need to work on this later.
-            IEnumerable<UserCommunities> items = null;
+            
+            var items =  _userCommunitiesRepository.GetItems(condition, orderBy, true, (pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage, pageDetails.ItemsPerPage);
 
-            items = this.userCommunitiesRepository.GetItems(condition, orderBy, true, (pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage, pageDetails.ItemsPerPage);
+            var permissionDetails = new PermissionDetails();
 
-            PermissionDetails permissionDetails = new PermissionDetails();
-
-            if (items != null && items.Count() > 0)
+            if (items != null && items.Any())
             {
-                UserRole userRole = this.userRepository.GetUserRole(userID, communityID);
+                var userRole = _userRepository.GetUserRole(userId, communityId);
 
                 // User has to be at least contributor to know the permission details of the community.
                 if (userRole >= UserRole.Contributor)
@@ -431,7 +626,7 @@ namespace WWTMVC5.Services
 
                     foreach (var item in items)
                     {
-                        PermissionItem permissionItem = new PermissionItem();
+                        var permissionItem = new PermissionItem();
                         Mapper.Map(item, permissionItem);
                         permissionItem.CurrentUserRole = userRole;
                         permissionDetails.PermissionItemList.Add(permissionItem);
@@ -451,11 +646,11 @@ namespace WWTMVC5.Services
         /// Gets the user requests for the given community and for the given page. User should have moderator
         /// or owner/site admin permission on the community to get user request.
         /// </summary>
-        /// <param name="userID">User who is reading the requests</param>
-        /// <param name="communityID">Community for which requests are fetched</param>
+        /// <param name="userId">User who is reading the requests</param>
+        /// <param name="communityId">Community for which requests are fetched</param>
         /// <param name="pageDetails">Page for which requests are fetched</param>
         /// <returns>List of user role requests</returns>
-        public PermissionDetails GetUserPemissionRequests(long userID, long? communityID, PageDetails pageDetails)
+        public async Task<PermissionDetails> GetUserPemissionRequests(long userId, long? communityId, PageDetails pageDetails)
         {
             this.CheckNotNull(() => new { pageDetails });
 
@@ -463,42 +658,42 @@ namespace WWTMVC5.Services
             Expression<Func<PermissionRequest, bool>> condition = (PermissionRequest pr) => pr.Approved == null;
             Func<PermissionRequest, object> orderBy = (PermissionRequest c) => c.RoleID;
 
-            if (communityID.HasValue)
+            if (communityId.HasValue)
             {
                 // If community is specified, get all the pending requests of the specified community.
-                condition = (PermissionRequest pr) => pr.Approved == null && pr.CommunityID == communityID.Value;
+                condition = (PermissionRequest pr) => pr.Approved == null && pr.CommunityID == communityId.Value;
             }
             else
             {
                 // If no community id is specified, get all the community ids to which user is given role of moderator or 
                 // higher and get their pending requests.
-                IEnumerable<long> userCommunityIds = this.userRepository.GetUserCommunitiesForRole(userID, UserRole.Moderator, false);
+                var userCommunityIds = _userRepository.GetUserCommunitiesForRole(userId, UserRole.Moderator, false);
 
                 condition = (PermissionRequest pr) => pr.Approved == null && userCommunityIds.Contains(pr.CommunityID);
             }
 
             // Gets the total items satisfying the condition
-            pageDetails.TotalCount = this.permissionRequestRepository.GetItemsCount(condition);
+            pageDetails.TotalCount =  _permissionRequestRepository.GetItemsCount(condition);
             pageDetails.TotalPages = (pageDetails.TotalCount / pageDetails.ItemsPerPage) + ((pageDetails.TotalCount % pageDetails.ItemsPerPage == 0) ? 0 : 1);
 
-            PermissionDetails permissionDetails = new PermissionDetails();
+            var permissionDetails = new PermissionDetails();
 
-            foreach (var item in this.permissionRequestRepository.GetItems(condition, orderBy, true, (pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage, pageDetails.ItemsPerPage))
+            foreach (var item in  _permissionRequestRepository.GetItems(condition, orderBy, true, (pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage, pageDetails.ItemsPerPage))
             {
-                UserRole userRole = this.userRepository.GetUserRole(userID, item.CommunityID);
+                var userRole = _userRepository.GetUserRole(userId, item.CommunityID);
 
                 // 1. User has to be at least Moderator to know the permission request details of the community.
                 // 2. In case of profile page, user might be moderator for few communities and not for others. So, need to send only the requests
                 //    of community to which user is moderator or higher.
                 if (userRole >= UserRole.Moderator)
                 {
-                    PermissionItem permissionItem = new PermissionItem();
+                    var permissionItem = new PermissionItem();
                     Mapper.Map(item, permissionItem);
                     permissionItem.CurrentUserRole = userRole;
                     permissionDetails.PermissionItemList.Add(permissionItem);
                     permissionDetails.CurrentUserPermission = userRole.GetPermission();
                 }
-                else if (communityID.HasValue)
+                else if (communityId.HasValue)
                 {
                     // If user is not having contributor or higher role, he will get item not found or don't have permission exception page.
                     // This message to be shown only in case of permissions page not for profile page.
@@ -512,30 +707,30 @@ namespace WWTMVC5.Services
         /// <summary>
         /// Gets the invite requests which are already sent for the given community and which are not yet used.
         /// </summary>
-        /// <param name="userID">User who is reading the invite requests</param>
-        /// <param name="communityID">Community for which invite requests are fetched</param>
+        /// <param name="userId">User who is reading the invite requests</param>
+        /// <param name="communityId">Community for which invite requests are fetched</param>
         /// <param name="pageDetails">Page for which invite requests are fetched</param>
         /// <returns>List of open invite requests for the community</returns>
-        public IEnumerable<InviteRequestItem> GetInviteRequests(long userID, long communityID, PageDetails pageDetails)
+        public async Task<IEnumerable<InviteRequestItem>> GetInviteRequests(long userId, long communityId, PageDetails pageDetails)
         {
             this.CheckNotNull(() => new { pageDetails });
 
             IList<InviteRequestItem> inviteRequestItemList = new List<InviteRequestItem>();
 
-            UserRole userRole = this.userRepository.GetUserRole(userID, communityID);
+            var userRole = _userRepository.GetUserRole(userId, communityId);
             if (userRole >= UserRole.Moderator)
             {
                 // Condition to get all the pending requests irrespective of community.
-                Expression<Func<InviteRequestsView, bool>> condition = (InviteRequestsView invite) => invite.Used == false && invite.CommunityID == communityID;
+                Expression<Func<InviteRequestsView, bool>> condition = (InviteRequestsView invite) => invite.Used == false && invite.CommunityID == communityId;
                 Func<InviteRequestsView, object> orderBy = (InviteRequestsView invite) => invite.InvitedDate;
 
                 // Gets the total items satisfying the condition
-                pageDetails.TotalCount = this.inviteRequestsViewRepository.GetItemsCount(condition);
+                pageDetails.TotalCount =   _inviteRequestsViewRepository.GetItemsCount(condition);
                 pageDetails.TotalPages = (pageDetails.TotalCount / pageDetails.ItemsPerPage) + ((pageDetails.TotalCount % pageDetails.ItemsPerPage == 0) ? 0 : 1);
 
-                foreach (var item in this.inviteRequestsViewRepository.GetItems(condition, orderBy, true, (pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage, pageDetails.ItemsPerPage))
+                foreach (var item in  _inviteRequestsViewRepository.GetItems(condition, orderBy, true, (pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage, pageDetails.ItemsPerPage))
                 {
-                    InviteRequestItem inviteRequestItem = new InviteRequestItem();
+                    var inviteRequestItem = new InviteRequestItem();
                     Mapper.Map(item, inviteRequestItem);
 
                     inviteRequestItemList.Add(inviteRequestItem);
@@ -548,29 +743,29 @@ namespace WWTMVC5.Services
         /// <summary>
         /// Removes the specified invite request.
         /// </summary>
-        /// <param name="userID">User who is removing the invite request</param>
-        /// <param name="inviteRequestID">Invite request to be removed</param>
+        /// <param name="userId">User who is removing the invite request</param>
+        /// <param name="inviteRequestId">Invite request to be removed</param>
         /// <returns>True if the invite request is removed, false otherwise</returns>
-        public OperationStatus RemoveInviteRequest(long userID, int inviteRequestID)
+        public async Task<OperationStatus> RemoveInviteRequest(long userId, int inviteRequestId)
         {
-            OperationStatus operationStatus = new OperationStatus();
+            var operationStatus = new OperationStatus();
 
             try
             {
                 // Find the invite request entity in database.
-                InviteRequest inviteRequest = this.inviteRequestRepository.GetItem(ir => ir.InviteRequestID == inviteRequestID, "InviteRequestContent");
+                InviteRequest inviteRequest =  _inviteRequestRepository.GetItem(ir => ir.InviteRequestID == inviteRequestId, "InviteRequestContent");
 
                 // Check invite request is not null
                 this.CheckNotNull(() => new { inviteRequest });
 
-                UserRole userRole = this.userRepository.GetUserRole(userID, inviteRequest.InviteRequestContent.CommunityID);
+                var userRole = _userRepository.GetUserRole(userId, inviteRequest.InviteRequestContent.CommunityID);
                 if (userRole >= UserRole.Moderator)
                 {
                     inviteRequest.IsDeleted = true;
-                    inviteRequest.DeletedByID = userID;
+                    inviteRequest.DeletedByID = userId;
                     inviteRequest.DeletedDate = DateTime.UtcNow;
-                    this.inviteRequestRepository.Update(inviteRequest);
-                    this.inviteRequestRepository.SaveChanges();
+                    _inviteRequestRepository.Update(inviteRequest);
+                    _inviteRequestRepository.SaveChanges();
 
                     operationStatus.Succeeded = true;
                 }
@@ -595,23 +790,23 @@ namespace WWTMVC5.Services
         /// </summary>
         /// <param name="permissionItem">Permission item with details about the request</param>
         /// <returns>True if the request is added, false otherwise</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "TODO: Error handling")]
+        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "TODO: Error handling")]
         public OperationStatus JoinCommunity(PermissionItem permissionItem)
         {
             // Make sure input is not null
             this.CheckNotNull(() => new { permissionItem });
 
-            OperationStatus operationStatus = new OperationStatus();
+            var operationStatus = new OperationStatus();
 
             try
             {
-                PermissionRequest permissionRequest = new PermissionRequest();
+                var permissionRequest = new PermissionRequest();
                 Mapper.Map(permissionItem, permissionRequest);
 
                 permissionRequest.RequestedDate = DateTime.UtcNow;
 
-                this.permissionRequestRepository.Add(permissionRequest);
-                this.permissionRequestRepository.SaveChanges();
+                _permissionRequestRepository.Add(permissionRequest);
+                _permissionRequestRepository.SaveChanges();
                 operationStatus.Succeeded = true;
             }
             catch (Exception)
@@ -628,17 +823,17 @@ namespace WWTMVC5.Services
         /// <summary>
         /// Joins the current user to community for which the invite request token was generated.
         /// </summary>
-        /// <param name="userID">User who is making the join request</param>
+        /// <param name="userId">User who is making the join request</param>
         /// <param name="inviteRequestToken">Token to be used for joining the community</param>
         /// <returns>Status of the operation. Success, if succeeded, failure message and exception details in case of exception.</returns>
-        public OperationStatus JoinCommunity(long userID, Guid inviteRequestToken)
+        public async Task<OperationStatus> JoinCommunity(long userId, Guid inviteRequestToken)
         {
-            OperationStatus operationStatus = new OperationStatus();
+            var operationStatus = new OperationStatus();
 
             try
             {
                 // Find the invite request entity in database.
-                InviteRequest inviteRequest = this.inviteRequestRepository.GetItem(invite => invite.InviteRequestToken == inviteRequestToken, "InviteRequestContent");
+                var inviteRequest =  _inviteRequestRepository.GetItem(invite => invite.InviteRequestToken == inviteRequestToken, "InviteRequestContent");
 
                 if (inviteRequest == null || inviteRequest.IsDeleted == true)
                 {
@@ -650,18 +845,20 @@ namespace WWTMVC5.Services
                 }
                 else
                 {
-                    PermissionItem permissionItem = new PermissionItem();
-                    permissionItem.UserID = userID;
-                    permissionItem.CommunityID = inviteRequest.InviteRequestContent.CommunityID;
-                    permissionItem.Role = (UserRole)inviteRequest.InviteRequestContent.RoleID;
+                    var permissionItem = new PermissionItem
+                    {
+                        UserID = userId,
+                        CommunityID = inviteRequest.InviteRequestContent.CommunityID,
+                        Role = (UserRole) inviteRequest.InviteRequestContent.RoleID
+                    };
 
                     // Check if at all the user is already member of the same community.
-                    var existingRole = this.userCommunitiesRepository.GetItem(
-                                                    userCommunity => userCommunity.UserID == userID && userCommunity.CommunityId == inviteRequest.InviteRequestContent.CommunityID);
+                    var existingRole =  _userCommunitiesRepository.GetItem(
+                                                    userCommunity => userCommunity.UserID == userId && userCommunity.CommunityId == inviteRequest.InviteRequestContent.CommunityID);
 
                     if (existingRole == null || inviteRequest.InviteRequestContent.RoleID > existingRole.RoleID)
                     {
-                        operationStatus = this.userCommunitiesRepository.UpdateUserRoles(permissionItem);
+                        operationStatus = _userCommunitiesRepository.UpdateUserRoles(permissionItem);
                     }
                     else
                     {
@@ -672,10 +869,10 @@ namespace WWTMVC5.Services
                     if (operationStatus.Succeeded)
                     {
                         inviteRequest.Used = true;
-                        inviteRequest.UsedByID = userID;
+                        inviteRequest.UsedByID = userId;
                         inviteRequest.UsedDate = DateTime.UtcNow;
-                        this.inviteRequestRepository.Update(inviteRequest);
-                        this.inviteRequestRepository.SaveChanges();
+                        _inviteRequestRepository.Update(inviteRequest);
+                        _inviteRequestRepository.SaveChanges();
                     }
                 }
             }
@@ -694,12 +891,12 @@ namespace WWTMVC5.Services
         /// Approves or declines a permission request of a user for a community.
         /// </summary>
         /// <param name="permissionItem">Permission item with details about the request</param>
-        /// <param name="updatedByID">User who is updating the permission request</param>
+        /// <param name="updatedById">User who is updating the permission request</param>
         /// <returns>True if the request is updated, false otherwise</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "TODO: Error handling")]
-        public OperationStatus UpdateUserPermissionRequest(PermissionItem permissionItem, long updatedByID)
+        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "TODO: Error handling")]
+        public OperationStatus UpdateUserPermissionRequest(PermissionItem permissionItem, long updatedById)
         {
-            OperationStatus operationStatus = new OperationStatus();
+            var operationStatus = new OperationStatus();
 
             // Make sure input is not null
             this.CheckNotNull(() => new { permissionItem });
@@ -707,7 +904,7 @@ namespace WWTMVC5.Services
             try
             {
                 // Need to check the current user role before updating the request.
-                UserRole currentUserRole = this.userRepository.GetUserRole(updatedByID, permissionItem.CommunityID);
+                var currentUserRole = _userRepository.GetUserRole(updatedById, permissionItem.CommunityID);
 
                 // 1. User should be having moderator role or higher.
                 // 2. If the permission being assigned is Owner, then only owners or site administrators can update the permission.
@@ -720,7 +917,7 @@ namespace WWTMVC5.Services
                 }
                 else
                 {
-                    operationStatus = this.userCommunitiesRepository.UpdateUserPermissionRequest(permissionItem, updatedByID);
+                    operationStatus = _userCommunitiesRepository.UpdateUserPermissionRequest(permissionItem, updatedById);
                 }
             }
             catch (Exception)
@@ -738,12 +935,12 @@ namespace WWTMVC5.Services
         /// Updates (changing the role or deleting the role) the permission request for a user for a community.
         /// </summary>
         /// <param name="permissionItem">Permission item with details about the request</param>
-        /// <param name="updatedByID">User who is updating the permission request</param>
+        /// <param name="updatedById">User who is updating the permission request</param>
         /// <returns>True if the permission is updated, false otherwise</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "TODO: Error handling")]
-        public OperationStatus UpdateUserRoles(PermissionItem permissionItem, long updatedByID)
+        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "TODO: Error handling")]
+        public OperationStatus UpdateUserRoles(PermissionItem permissionItem, long updatedById)
         {
-            OperationStatus operationStatus = new OperationStatus();
+            var operationStatus = new OperationStatus();
 
             // Make sure input is not null
             this.CheckNotNull(() => new { permissionItem });
@@ -751,7 +948,7 @@ namespace WWTMVC5.Services
             try
             {
                 // Need to check the current user role before updating the request.
-                UserRole currentUserRole = this.userRepository.GetUserRole(updatedByID, permissionItem.CommunityID);
+                var currentUserRole = _userRepository.GetUserRole(updatedById, permissionItem.CommunityID);
 
                 // 1. Leave community should check for user role.
                 // 2. User should be having moderator role or higher.
@@ -766,7 +963,7 @@ namespace WWTMVC5.Services
                 }
                 else
                 {
-                    operationStatus = this.userCommunitiesRepository.UpdateUserRoles(permissionItem);
+                    operationStatus = _userCommunitiesRepository.UpdateUserRoles(permissionItem);
                 }
             }
             catch (Exception)
@@ -789,20 +986,20 @@ namespace WWTMVC5.Services
         /// </returns>
         public IEnumerable<long> GetLatestProfileIDs(int count)
         {
-            return this.userRepository.GetLatestProfileIDs(count);
+            return _userRepository.GetLatestProfileIDs(count);
         }
 
         /// <summary>
         /// Checks if the user is Site Admin
         /// </summary>
-        /// <param name="userID">ID of the user.</param>
+        /// <param name="userId">ID of the user.</param>
         /// <returns>True if user is site admin;Otherwise false.</returns>
-        public OperationStatus IsSiteAdmin(long userID)
+        public OperationStatus IsSiteAdmin(long userId)
         {
             OperationStatus operationStatus = null;
             try
             {
-                if (this.userRepository.IsSiteAdmin(userID))
+                if (_userRepository.IsSiteAdmin(userId))
                 {
                     operationStatus = OperationStatus.CreateSuccessStatus();
                 }
@@ -823,14 +1020,14 @@ namespace WWTMVC5.Services
         /// This function is used to get all profiles in the database excluding the current user.
         ///     This operation can be only performed by a site admin.
         /// </summary>
-        /// <param name="userID">ID the of the current user.</param>
+        /// <param name="userId">ID the of the current user.</param>
         /// <returns>List of all profile in database.</returns>
-        public IEnumerable<ProfileDetails> GetAllProfiles(long userID)
+        public async Task<IEnumerable<ProfileDetails>> GetAllProfiles(long userId)
         {
-            List<ProfileDetails> profiles = new List<ProfileDetails>();
-            if (this.userRepository.IsSiteAdmin(userID))
+            var profiles = new List<ProfileDetails>();
+            if (_userRepository.IsSiteAdmin(userId))
             {
-                var users = this.userRepository.GetItems(user => user.UserID != userID, user => user.LastName, false);
+                var users = _userRepository.GetItems(user => user.UserID != userId, user => user.LastName, false);
 
                 foreach (var item in users)
                 {
@@ -843,82 +1040,46 @@ namespace WWTMVC5.Services
             return profiles;
         }
 
-        /// <summary>
-        /// This function is used to get all profiles in the database including the current user.
-        ///     This operation can be only performed by a site admin.
-        /// </summary>
-        /// <param name="userID">ID the of the current user.</param>
-        /// <returns>List of all profile in database.</returns>
-        public IEnumerable<AdminReportProfileDetails> GetAllProfilesForReport(long userID)
-        {
-            List<AdminReportProfileDetails> profiles = new List<AdminReportProfileDetails>();
-            if (this.userRepository.IsSiteAdmin(userID))
-            {
-                var users = this.userRepository.GetItems(user => user.IsDeleted != true, user => user.LastName, false);
-
-                var communities = this.communitiesViewRepository.GetItems(c => c.CommunityTypeID != (int)CommunityTypes.User, null, false).Select(c => new { c.CommunityID, c.CreatedByID, c.CreatedDatetime });
-                var contents = this.contentsViewRepository.GetItems(null, null, false).Select(c => new { c.ContentID, c.CreatedByID, c.CreatedDatetime });
-
-                foreach (var item in users)
-                {
-                    var profileDetails = new AdminReportProfileDetails();
-                    Mapper.Map(item, profileDetails);
-
-                    // Update Total contents and communities.
-                    var userContents = contents.Where(c => c.CreatedByID == item.UserID).OrderByDescending(c => c.CreatedDatetime);
-                    if (userContents != null && userContents.LongCount() > 0)
-                    {
-                        profileDetails.TotalContents = userContents.LongCount();
-                        profileDetails.LastUploaded = userContents.FirstOrDefault().CreatedDatetime.Value;
-                        profileDetails.TotalUsedSize = this.contentsViewRepository.GetConsumedSize(item.UserID);
-                    }
-
-                    profileDetails.TotalCommunities = communities.Where(c => c.CreatedByID == item.UserID).LongCount();
-
-                    profiles.Add(profileDetails);
-                }
-            }
-
-            return profiles;
-        }
+        
 
         /// <summary>
         /// This function is used to promote the users with the ID specified as Site administrators.
         ///     This operation can be only performed by a site admin.
         /// </summary>
         /// <param name="adminUsers">Admin user list who has to be promoted to site administrators.</param>
-        /// <param name="updatedByID">ID the of the current user.</param>
+        /// <param name="updatedById">ID the of the current user.</param>
         /// <returns>True if the Users has been promoted.</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "TODO: Error handling")]
-        public OperationStatus PromoteAsSiteAdmin(IEnumerable<long> adminUsers, long updatedByID)
+        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "TODO: Error handling")]
+        public async Task<OperationStatus> PromoteAsSiteAdmin(IEnumerable<long> adminUsers, long updatedById)
         {
             OperationStatus operationStatus = null;
 
             try
             {
-                if (this.userRepository.IsSiteAdmin(updatedByID))
+                if (_userRepository.IsSiteAdmin(updatedById))
                 {
-                    var userTypes = this.userTypeRepository.GetAll(null);
-
+                    var userTypes = _userTypeRepository.GetAll(null);
+                    
                     // Mark the user who have been demoted from the site administrators as Regular user's.
-                    Expression<Func<User, bool>> removedUserCondition = (user) => (user.UserID != updatedByID && user.UserTypeID == (int)UserTypes.SiteAdmin && !adminUsers.Contains(user.UserID));
-                    var removedAdmins = this.userRepository.GetItems(removedUserCondition, null, false);
+                    Expression<Func<User, bool>> removedUserCondition = (user) => (user.UserID != updatedById && user.UserTypeID == (int)UserTypes.SiteAdmin && !adminUsers.Contains(user.UserID));
+                    var removedAdmins = _userRepository.GetItems(removedUserCondition, null, false);
+                    IEnumerable<UserType> userTypesEnumerable = userTypes as UserType[] ?? userTypes.ToArray();
                     foreach (var removedUser in removedAdmins)
                     {
-                        removedUser.UserType = userTypes.Where(type => type.UserTypeID == (int)UserTypes.Regular).FirstOrDefault();
-                        this.userRepository.Update(removedUser);
+                        removedUser.UserType = userTypesEnumerable.FirstOrDefault(type => type.UserTypeID == (int)UserTypes.Regular);
+                        _userRepository.Update(removedUser);
                     }
 
                     // Mark the user who have been promoted as site administrators.
-                    Expression<Func<User, bool>> promotedUserCondition = (user) => (user.UserID != updatedByID && adminUsers.Contains(user.UserID) && user.UserTypeID != (int)UserTypes.SiteAdmin);
-                    var promotedAdmins = this.userRepository.GetItems(promotedUserCondition, null, false);
+                    Expression<Func<User, bool>> promotedUserCondition = (user) => (user.UserID != updatedById && adminUsers.Contains(user.UserID) && user.UserTypeID != (int)UserTypes.SiteAdmin);
+                    var promotedAdmins = _userRepository.GetItems(promotedUserCondition, null, false);
                     foreach (var promotedUser in promotedAdmins)
                     {
-                        promotedUser.UserType = userTypes.Where(type => type.UserTypeID == (int)UserTypes.SiteAdmin).FirstOrDefault();
-                        this.userRepository.Update(promotedUser);
+                        promotedUser.UserType = userTypesEnumerable.FirstOrDefault(type => type.UserTypeID == (int)UserTypes.SiteAdmin);
+                        _userRepository.Update(promotedUser);
                     }
 
-                    this.userRepository.SaveChanges();
+                    _userRepository.SaveChanges();
                 }
                 else
                 {
@@ -947,12 +1108,12 @@ namespace WWTMVC5.Services
             Guid? thumbnailId = null;
             if (profileImageId.HasValue && !profileImageId.Equals(Guid.Empty))
             {
-                BlobDetails thumbnailBlob = new BlobDetails()
+                var thumbnailBlob = new BlobDetails()
                 {
                     BlobID = profileImageId.ToString()
                 };
 
-                thumbnailId = this.blobDataRepository.MoveThumbnail(thumbnailBlob) ? profileImageId.Value : Guid.Empty;
+                thumbnailId = _blobDataRepository.MoveThumbnail(thumbnailBlob) ? profileImageId.Value : Guid.Empty;
             }
 
             return thumbnailId;
@@ -961,18 +1122,18 @@ namespace WWTMVC5.Services
         /// <summary>
         /// Deletes Thumbnail from azure.
         /// </summary>
-        /// <param name="azureID">Id of the thumbnail to be deleted.</param>
-        private void DeleteThumbnail(Guid? azureID)
+        /// <param name="azureId">Id of the thumbnail to be deleted.</param>
+        private void DeleteThumbnail(Guid? azureId)
         {
-            if (azureID.HasValue && !azureID.Equals(Guid.Empty))
+            if (azureId.HasValue && !azureId.Equals(Guid.Empty))
             {
-                BlobDetails fileBlob = new BlobDetails()
+                var fileBlob = new BlobDetails()
                 {
-                    BlobID = azureID.ToString(),
+                    BlobID = azureId.ToString(),
                 };
 
                 // Delete file from azure.
-                this.blobDataRepository.DeleteThumbnail(fileBlob);
+                _blobDataRepository.DeleteThumbnail(fileBlob);
             }
         }
 

@@ -66,17 +66,17 @@ namespace WWTMVC5.Controllers
         /// Index Action which is default action rendering the home page.
         /// </summary>
         /// <param name="id">Community id to be processed</param>
+        /// <param name="edit">gets editable community</param>
         /// <returns>Returns the View to be used</returns>
-        
-        [HttpPost]
-        [Route("Community/Get/Detail")]
-        public async Task<JsonResult> Index(long? id, bool? edit)
+        [HttpGet]
+        [Route("Community/Detail/{id}/{edit=false}")]
+        public async Task<JsonResult> CommunityDetail(long? id, bool? edit)
         {
             if (CurrentUserId == 0)
             {
                 await TryAuthenticateFromHttpContext(_communityService, _notificationService);
             }
-            CommunityDetails communityDetails = await _communityService.GetCommunityDetails(id.Value, CurrentUserId, true, true);
+            var communityDetails = await _communityService.GetCommunityDetails(id.Value, CurrentUserId, true, true);
             var permissionDetails = GetUserPermissionDetails(id.Value, PermissionsTab.Users, 0);
             
             if (edit == true)
@@ -88,29 +88,30 @@ namespace WWTMVC5.Controllers
                     community = communityInputViewModel, 
                     permission = permissionDetails
                 };
-                return Json(json);
+                return Json(json, JsonRequestBehavior.AllowGet);
             }
             var communityViewModel = new CommunityViewModel();
             Mapper.Map(communityDetails, communityViewModel);
             
-            if (communityViewModel.AccessType != AccessType.Private || communityViewModel.UserPermission >= WWTMVC5.Permission.Reader)
+            if (communityViewModel.AccessType != AccessType.Private || communityViewModel.UserPermission >= Permission.Reader)
             {
                 var json = new
                 {
                     community = communityViewModel, 
                     permission = permissionDetails
                 };
-                return Json(json);
+                return Json(json,JsonRequestBehavior.AllowGet);
             }
 
             return new JsonResult
             {
-                Data = new { communityViewModel.Name, communityViewModel.Id, error = "insufficient permission" }
+                Data = new { communityViewModel.Name, communityViewModel.Id, error = "insufficient permission" },
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
             
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("Community/Contents/{communityId}")]
         public async Task<JsonResult> GetCommunityContents(long communityId)
         {
@@ -122,7 +123,7 @@ namespace WWTMVC5.Controllers
             var entities = new List<EntityViewModel>();
             foreach (var item in contents)
             {
-                ContentViewModel contentViewModel = new ContentViewModel();
+                var contentViewModel = new ContentViewModel();
                 contentViewModel.SetValuesFrom(item);
                 entities.Add(contentViewModel);
             }
@@ -134,13 +135,30 @@ namespace WWTMVC5.Controllers
                 Mapper.Map(child, communityViewModel);
                 childCommunities.Add(communityViewModel);
             }
-            return Json(new{entities,childCommunities});
+            return Json(new{entities,childCommunities},JsonRequestBehavior.AllowGet);
 
         }
 
         [HttpGet]
         [AllowAnonymous]
-        [Route("WebService/Get/Tours/{webclient=false}")]
+        [Route("Community/Fetch/Tours/{webclient=false}")]
+        public ActionResult GetTourXml(bool webclient)
+        {
+            var storageAccount =
+                    Microsoft.WindowsAzure.Storage.CloudStorageAccount.Parse(
+                        ConfigReader<string>.GetSetting("WWTWebBlobs"));
+
+            var blobClient = storageAccount.CreateCloudBlobClient();
+            var cloudBlobContainer = blobClient.GetContainerReference("tours");
+            var toursBlob = cloudBlobContainer.GetBlobReferenceFromServer("alltours.wtml");
+
+            toursBlob.DownloadToStream(Response.OutputStream);
+            return new EmptyResult();
+        }
+    
+        [HttpGet]
+        [AllowAnonymous]
+        [Route("Community/Rebuid/Tours/{webclient=false}")]
         public async Task<string> BuildPublicTourXml(bool webclient)
         {
             
@@ -162,9 +180,9 @@ namespace WWTMVC5.Controllers
                 Mapper.Map(child, communityViewModel);
                 folders.Add(communityViewModel);
             }
-            using (StringWriter sw = new StringWriter())
+            using (var sw = new StringWriter())
             {
-                using (XmlTextWriter xmlWriter = new XmlTextWriter(sw))
+                using (var xmlWriter = new XmlTextWriter(sw))
                 {
                     xmlWriter.Formatting = Formatting.Indented;
                     xmlWriter.WriteProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\"");
@@ -181,7 +199,7 @@ namespace WWTMVC5.Controllers
                             var id = Convert.ToInt32(tourId);
                             var tourDetails = tourDetailList.Find(details => details.ID == id);
                             var tourContents = tourContentList.Find(model => model.ID == id);
-                            string json = tourDetails.Citation.Replace("json://", "");
+                            var json = tourDetails.Citation.Replace("json://", "");
                             var extData = JsonConvert.DeserializeObject<dynamic>(json);
                             Newtonsoft.Json.Linq.JArray related = extData.related;
                             var relatedTours = string.Join(";", related);
@@ -210,7 +228,18 @@ namespace WWTMVC5.Controllers
                     xmlWriter.Close();
                 }
                 sw.Close();
-                return sw.ToString();
+                var xml = sw.ToString();
+                var storageAccount =
+                    Microsoft.WindowsAzure.Storage.CloudStorageAccount.Parse(
+                        ConfigReader<string>.GetSetting("WWTWebBlobs"));
+                
+                var blobClient = storageAccount.CreateCloudBlobClient();
+                var cloudBlobContainer = blobClient.GetContainerReference("tours");
+                var toursBlob = cloudBlobContainer.GetBlobReferenceFromServer("alltours.wtml");
+                var bytes = new byte[xml.Length * sizeof(char)];
+                Buffer.BlockCopy(xml.ToCharArray(), 0, bytes, 0, bytes.Length);
+                toursBlob.UploadFromByteArray(bytes,0,bytes.Length);
+                return toursBlob.StorageUri.PrimaryUri.AbsoluteUri;
             }
         }
 
@@ -223,107 +252,34 @@ namespace WWTMVC5.Controllers
         /// <returns>Returns a redirection view</returns>
         [HttpPost]
         [Route("Community/Create/New")]
-        public ActionResult New(CommunityInputViewModel communityJson)
+        public async Task<ActionResult> New(CommunityInputViewModel communityJson)
         {
-            //// Make sure communityJson is not null
-            //this.CheckNotNull(() => new { communityInputViewModel = communityJson });
-
-            // Populating the category dropdown list.
-            //communityJson.CategoryList = CategoryType.All.ToSelectList(CategoryType.All);
-
-            // Populating the parent communities for the current user. Pass -1 as current community while creating new communities
-            // since there are not current community which needs to be ignored.
-            // TODO: Need to show the parent communities/folders in tree view dropdown.
-            //IEnumerable<Community> parentCommunities = this.communityService.GetParentCommunities(-1, CurrentUserID);
-            //communityJson.ParentList = new SelectList(parentCommunities, "CommunityID", "Name");
+            if (CurrentUserId == 0)
+            {
+                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+            }
 
             if (ModelState.IsValid)
             {
-                CommunityDetails communityDetails = new CommunityDetails();
+                var communityDetails = new CommunityDetails();
                 Mapper.Map(communityJson, communityDetails);
 
                 // Set thumbnail properties
                 communityDetails.Thumbnail = new FileDetail() { AzureID = communityJson.ThumbnailID };
-
                 communityDetails.CreatedByID = CurrentUserId;
-
-                communityJson.ID = communityDetails.ID = this._communityService.CreateCommunity(communityDetails);
+                communityJson.ID = communityDetails.ID = _communityService.CreateCommunity(communityDetails);
 
                 // Send Notification Mail
-                this._notificationService.NotifyNewEntityRequest(communityDetails, HttpContext.Request.Url.GetServerLink());
+                _notificationService.NotifyNewEntityRequest(communityDetails, HttpContext.Request.Url.GetServerLink());
 
                 return new JsonResult { Data = new { ID = communityDetails.ID } };
             }
-            else
-            {
-                // In case of any validation error stay in the same page.
-                return new JsonResult { Data = false };
-            }
+            
+            // In case of any validation error stay in the same page.
+            return new JsonResult { Data = false };
         }
 
-        /// <summary>
-        /// Gets the parent community details from EarthOnline database
-        /// </summary>
-        /// <param name="id">Id of the parent community</param>
-        /// <returns>Json community object</returns>
-        //[HttpGet]
         
-        //public JsonResult ParentCommunity(long id)
-        //{
-        //    CommunityDetails parentCommunity = this._communityService.GetCommunityDetails(id, this.CurrentUserId);
-        //    return Json(parentCommunity, JsonRequestBehavior.AllowGet);
-        //}
-
-        /// <summary>
-        /// Controller action which gets the details about the community which is being edited.
-        /// </summary>
-        /// <param name="id">Id of the community getting edited.</param>
-        /// <returns>View having page which gets details about community getting updated</returns>
-        [HttpGet]
-        [AllowAnonymous]
-        [Route("Community/Service/Edit")]
-        public ActionResult Edit(long? id)
-        {
-            CommunityInputViewModel communityInputViewModel = new CommunityInputViewModel();
-
-            // Populating the category dropdown list.
-            communityInputViewModel.CategoryList = CategoryType.All.ToSelectList(CategoryType.All);
-
-            // Populating the parent communities for the current user.
-            // TODO: Need to show the parent communities/folders in tree view dropdown.
-            IEnumerable<Community> parentCommunities = this._communityService.GetParentCommunities(id ?? -1, CurrentUserId);
-
-            communityInputViewModel.ParentList = new SelectList(parentCommunities, "CommunityID", "Name");
-
-            if (id.HasValue)
-            {
-                CommunityDetails communityDetails = this._communityService.GetCommunityDetailsForEdit(id.Value, this.CurrentUserId);
-
-                // Make sure communitieView is not null
-                this.CheckNotNull(() => new { communityDetails });
-
-                if (communityDetails.CommunityType == CommunityTypes.User)
-                {
-                    // Community of type user should not be allowed to edit. Set it to null , so that user will get
-                    // item not found message.
-                    communityDetails = null;
-                }
-                
-                Mapper.Map(communityDetails, communityInputViewModel);
-
-                // Set Thumbnail URL.
-                if (communityInputViewModel.ThumbnailID != Guid.Empty)
-                {
-                    communityInputViewModel.ThumbnailLink = Url.Action("Thumbnail", "File", new { id = communityInputViewModel.ThumbnailID });
-                }
-                else
-                {
-                    communityInputViewModel.ThumbnailLink = Url.Content("~/content/images/default" + (communityDetails.CommunityType == CommunityTypes.Community ? "community" : "folder") + "thumbnail.png");
-                }
-            }
-
-            return View("Save", communityInputViewModel);
-        }
 
         /// <summary>
         /// Controller action which updates the details in Layerscape database about the community which is being edited.
@@ -341,7 +297,7 @@ namespace WWTMVC5.Controllers
             }
             try
             {
-                CommunityDetails communityDetails = new CommunityDetails();
+                var communityDetails = new CommunityDetails();
                 Mapper.Map(community, communityDetails);
 
                 // Set thumbnail properties
@@ -369,16 +325,19 @@ namespace WWTMVC5.Controllers
         /// <param name="id">Id of the community to be deleted.</param>
         /// <param name="parentId">Parent entity to which user to be take after delete</param>
         /// <returns>Returns an action url</returns>
-        [SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes", Justification = "TODO: Custom Exception handling to be added."), HttpPost]
+        [HttpPost]
         [Route("Community/Delete/{id}/{parentId}")]
-
-        public bool Delete(long? id, long? parentId)
+        public async Task<bool> Delete(long? id, long? parentId)
         {
+            if (CurrentUserId == 0)
+            {
+                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+            }
             if (id.HasValue)
             {
                 if (CurrentUserId != 0)
                 {
-                    OperationStatus status = _communityService.DeleteCommunity(id.Value, CurrentUserId);
+                    var status = _communityService.DeleteCommunity(id.Value, CurrentUserId);
 
                     return status.Succeeded;
                     // TODO: Need to add failure functionality.
@@ -386,162 +345,27 @@ namespace WWTMVC5.Controllers
                 }
             }
 
-
             return false;
         }
-
-
-        /// <summary>
-        /// Signup action to get the sign up file for the community id
-        /// </summary>
-        /// <param name="id">Community id</param>
-        /// <returns>sign up Xml</returns>
-        //[HttpGet]
-        //public ActionResult Signup(long? id)
-        //{
-        //    if (id.HasValue)
-        //    {
-        //        var communityDetails = this._communityService.GetCommunityDetails(id.Value, this.CurrentUserId);
-
-        //        // Make sure communityDetails is not null
-        //        this.CheckNotNull(() => new { communityDetails });
-        //        if (communityDetails.CommunityType == CommunityTypes.Community || communityDetails.CommunityType == CommunityTypes.Folder)
-        //        {
-        //            var signupDetails = new SignUpDetails();
-        //            Mapper.Map(communityDetails, signupDetails);
-
-        //            if (communityDetails.CommunityType == CommunityTypes.Community)
-        //            {
-        //                // Check Mock ability of HttpContext and Url while writing unit tests for Signup action
-        //                signupDetails.Url = Request.GetRootPath() + "/ResourceService/Community/" + id.Value;
-
-        //                // Set the thumbnail path. In case if no thumbnail is specified, set the default thumbnail path.
-        //                signupDetails.Thumbnail = this.RewriteThumbnailUrl(signupDetails.Thumbnail, "defaultcommunitywwtthumbnail");
-        //            }
-        //            else
-        //            {
-        //                // Check Mock ability of HttpContext and Url while writing unit tests for Signup action
-        //                signupDetails.Url = Request.GetRootPath() + "/ResourceService/Folder/" + id.Value;
-
-        //                // Set the thumbnail path. In case if no thumbnail is specified, set the default thumbnail path.
-        //                signupDetails.Thumbnail = this.RewriteThumbnailUrl(signupDetails.Thumbnail, "defaultfolderwwtthumbnail");
-        //            }
-
-        //            signupDetails.MSRCommunityId = id.Value; 
-
-        //            string signUpFileName = string.Format(CultureInfo.InvariantCulture, Constants.SignUpFileNameFormat, communityDetails.Name);
-        //            Response.AddHeader("Content-Encoding", "application/xml");
-        //            Response.AddHeader("content-disposition", "attachment;filename=" + signUpFileName);
-        //            var stream = signupDetails.GetXmlStream();
-        //            stream.Seek(0, SeekOrigin.Begin);
-        //            return new FileStreamResult(stream, "application/xml");
-        //        }
-        //    }
-
-        //    return null;
-        //}
-
-        /// <summary>
-        /// When user clicks on the edit permission, it returns the permission view
-        /// </summary>
-        /// <param name="id">Community Id</param>
-        /// <param name="name">Name of the community</param>
-        /// <param name="request">Permission to decide whether requests are needed or not</param>
-        /// <returns>Returns the permission view</returns>
-        [HttpGet]
         
-        public ActionResult Permission(long id, string name, Permission request)
-        {
-            this.CheckNotNull(() => new { request });
-
-            PermissionBaseViewModel permission = new PermissionBaseViewModel();
-            permission.Id = id;
-
-            if (!string.IsNullOrWhiteSpace(name))
-            {
-                // Special case for apostrophe (') because HtmlEncoded string(containing ') gives error.
-                permission.Name = name.Replace("%27", "'");
-            }
-
-            // This is needed only for showing the requests tab.
-            permission.Role = request.CanSetOwnerPermits() ? UserRole.Owner : (request.CanSetPermits() ? UserRole.Moderator : UserRole.Contributor);
-            return View(permission);
-        }
-
-        /// <summary>
-        /// It returns the permission list view on the basis of user type
-        /// </summary>
-        /// <param name="communityId">Community Id</param>
-        /// <param name="permissionsTab">Either user/requestor</param>
-        [ChildActionOnly]
-        
-        public void RenderPermission(long? communityId, PermissionsTab permissionsTab)
-        {
-            try
-            {
-                PartialView("PermissionListView", GetUserPermissionDetails(communityId, permissionsTab, 1)).ExecuteResult(this.ControllerContext);
-            }
-            catch (Exception)
-            {
-                // Consume the exception and render rest of the views in the page.
-                // TODO: Log the exception?
-            }
-        }
-
-
-
         /// <summary>
         /// It returns the permission list view on the basis of user type
         /// </summary>
         /// <param name="entityId">Community Id</param>
         /// <param name="permissionsTab">Either user / requestor</param>
         /// <param name="currentPage">Current page to be rendered</param>
-        [HttpPost]
+        [HttpGet]
         [Route("Community/Permission/{permissionsTab}/{currentPage}")]
-        public JsonResult AjaxRenderPermission(long? entityId, PermissionsTab permissionsTab, int currentPage)
+        public async Task<JsonResult> AjaxRenderPermission(long? entityId, PermissionsTab permissionsTab, int currentPage)
         {
+            if (CurrentUserId == 0)
+            {
+                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+            }
             var details =  GetUserPermissionDetails(entityId, permissionsTab, currentPage);
-            return Json(details);
+            return Json(details,JsonRequestBehavior.AllowGet);
         }
 
-        /// <summary>
-        /// It returns the invite requests list view for the given community
-        /// </summary>
-        /// <param name="communityId">Community Id</param>
-        [ChildActionOnly]
-        
-        public void RenderInviteRequests(long communityId)
-        {
-            try
-            {
-                PartialView("InviteRequestListView", GetInviteRequests(communityId, 1)).ExecuteResult(this.ControllerContext);
-            }
-            catch (Exception)
-            {
-                // Consume the exception and render rest of the views in the page.
-                // TODO: Log the exception?
-            }
-        }
-
-        /// <summary>
-        /// It returns the permission list view on the basis of user type
-        /// </summary>
-        /// <param name="entityId">Community Id</param>
-        /// <param name="currentPage">Current page to be rendered</param>
-        [HttpPost]
-        
-        public void AjaxRenderInviteRequests(long entityId, int currentPage)
-        {
-            try
-            {
-                PartialView("InviteRequestListView", GetInviteRequests(entityId, currentPage)).ExecuteResult(this.ControllerContext);
-            }
-            catch (Exception)
-            {
-                // Consume the exception and render rest of the views in the page.
-                // TODO: Log the exception?
-            }
-        }
 
         /// <summary>
         /// Updates the user permission request for the specified user and community
@@ -549,77 +373,24 @@ namespace WWTMVC5.Controllers
         /// <param name="entityId">Community Id</param>
         /// <param name="requestorId">Requestor Id</param>
         /// <param name="userRole"> Permission Type (Owner, contributor, reader etc.)</param>
-        [HttpPost]
-        
-        [ValidateAntiForgeryToken]
-        public void UpdateUserRoles(long entityId, long requestorId, UserRole userRole, PermissionsTab permissionsTab)
-        {
-            try
-            {
-                PermissionItem permission = new PermissionItem();
-                permission.UserID = requestorId;
-                permission.CommunityID = entityId;
-                permission.Role = userRole;
-
-                OperationStatus operationStatus = this.ProfileService.UpdateUserRoles(permission, this.CurrentUserId);
-
-                if (operationStatus.Succeeded)
-                {
-                    PermissionViewModel permissionViewModel = null;
-
-                    // In case of leave community (PermissionsTab.None), should not get the user permission details.
-                    if (permissionsTab != PermissionsTab.None)
-                    {
-                        permissionViewModel = GetUserPermissionDetails(entityId, PermissionsTab.Users, 1);
-                    }
-
-                    if (requestorId != this.CurrentUserId)
-                    {
-                        if (userRole == UserRole.None)
-                        {
-                            SendRemoveUserMail(permission);
-                        }
-                        else
-                        {
-                            // TODO: Do we need to send mail even if the role is not changed but Save button is clicked?
-                            SendChangedUserRoleMail(permission);
-                        } 
-                    }
-
-                    PartialView("PermissionListView", permissionViewModel).ExecuteResult(this.ControllerContext);
-                }
-                else
-                {
-                    Json(operationStatus).ExecuteResult(this.ControllerContext);
-                }
-            }
-            catch (Exception)
-            {
-                // Consume the exception and render rest of the views in the page.
-                // TODO: Log the exception?
-            }
-        }
-
-        /// <summary>
-        /// Updates the user permission request for the specified user and community
-        /// </summary>
-        /// <param name="entityId">Community Id</param>
-        /// <param name="requestorId">Requestor Id</param>
-        /// <param name="userRole"> Permission Type (Owner, contributor, reader etc.)</param>
-        /// <param name="permissionsTab">User / Requestor</param>
         /// <param name="approve">bool</param>
         [HttpPost]
         [Route("Community/Request/Reponse")]
-        public JsonResult UpdateUserPermissionRequest(long entityId, long requestorId, UserRole userRole, bool approve)
+        public async Task<JsonResult> UpdateUserPermissionRequest(long entityId, long requestorId, UserRole userRole, bool approve)
         {
-            PermissionItem permission = new PermissionItem
+            if (CurrentUserId == 0)
+            {
+                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+            }
+
+            var permission = new PermissionItem
             {
                 UserID = requestorId,
                 CommunityID = entityId,
                 Role = userRole,
                 Approved = approve
             };
-            OperationStatus operationStatus = this.ProfileService.UpdateUserPermissionRequest(permission, CurrentUserId);
+            var operationStatus = ProfileService.UpdateUserPermissionRequest(permission, CurrentUserId);
             if (operationStatus.Succeeded)
             {
                 try
@@ -633,17 +404,7 @@ namespace WWTMVC5.Controllers
             return Json(operationStatus.Succeeded);
         }
 
-        /// <summary>
-        /// Dummy method which checks whether user is authorized to perform the Ajax requests or not. This is 
-        /// used in FlagPage and JoinCommunity Ajax methods.
-        /// </summary>
-        [HttpGet]
         
-        public JsonResult CheckAuthorization()
-        {
-            return Json(string.Empty, JsonRequestBehavior.AllowGet);
-        }
-
         /// <summary>
         /// Return success / failure
         /// </summary>
@@ -653,15 +414,21 @@ namespace WWTMVC5.Controllers
         /// <returns>Inserts the request of join</returns>
         [HttpPost]
         [Route("Community/Join/{communityId}/{userRole}")]
-        public string Join(long communityId, string comments, UserRole userRole)
+        public async Task<string> Join(long communityId, string comments, UserRole userRole)
         {
-            string ajaxResponse = "Success";
-            PermissionItem permission = new PermissionItem();
-            permission.UserID = this.CurrentUserId;
-            permission.CommunityID = communityId;
-            permission.Role = userRole;
-            permission.Comment = Server.UrlDecode(comments);
-            OperationStatus operationStatus = this.ProfileService.JoinCommunity(permission);
+            if (CurrentUserId == 0)
+            {
+                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+            }
+            var ajaxResponse = "Success";
+            var permission = new PermissionItem
+            {
+                UserID = CurrentUserId,
+                CommunityID = communityId,
+                Role = userRole,
+                Comment = Server.UrlDecode(comments)
+            };
+            var operationStatus = ProfileService.JoinCommunity(permission);
 
             if (operationStatus.Succeeded)
             {
@@ -675,110 +442,6 @@ namespace WWTMVC5.Controllers
             return ajaxResponse;
         }
 
-        /// <summary>
-        /// Joins the current user to community for which the invite request token was generated.
-        /// </summary>
-        /// <param name="id">Id of the community to which user is joining</param>
-        /// <param name="inviteRequestToken">Token to be used for joining the community</param>
-        /// <returns>Ajax response string based on operation status</returns>
-        [HttpGet]
-        
-        public ActionResult Join(long id, Guid inviteRequestToken)
-        {
-            OperationStatus operationStatus = this.ProfileService.JoinCommunity(this.CurrentUserId, inviteRequestToken);
-
-            if (operationStatus.Succeeded)
-            {
-                TempData["ShowNotice"] = true;
-                return RedirectToAction("Index", new { id = id });
-            }
-            else if (operationStatus.CustomErrorMessage)
-            {
-                TempData["ErrorMessage"] = operationStatus.ErrorMessage;
-                return RedirectToAction("General", "Error");
-            }
-            else
-            {
-                return RedirectToAction("General", "Error");
-            }
-        }
-
-        /// <summary>
-        /// Invites the people with specified permissions for the current community.
-        /// Return success / failure based on service method call.
-        /// </summary>
-        /// <param name="communityId">Community id for which invite is being sent</param>
-        /// <param name="communityName">Name of the community</param>
-        /// <param name="emailids">Email ids of the users to whom the invite has to be sent</param>
-        /// <param name="subject">Subject of the invite request</param>
-        /// <param name="userRole">Permission type</param>
-        /// <param name="body">Body of the invite request</param>
-        /// <returns>Ajax response string</returns>
-        [HttpPost]
-        
-        [ValidateAntiForgeryToken]
-        public string InvitePeople(long communityId, string communityName, string emailids, string subject, UserRole userRole, string body)
-        {
-            string ajaxResponse = string.Empty;
-
-            try
-            {
-                InviteRequestItem inviteRequestItem = new InviteRequestItem();
-                inviteRequestItem.CommunityID = communityId;
-
-                if (!string.IsNullOrWhiteSpace(emailids))
-                {
-                    emailids.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList().ForEach(emailId => inviteRequestItem.EmailIdList.Add(emailId.Trim()));
-                }
-
-                inviteRequestItem.Subject = Server.UrlDecode(subject);
-                
-                // Since this is Rich Text content, need to replace the line breaks with <br />
-                inviteRequestItem.Body = Server.UrlDecode(body);
-
-                inviteRequestItem.RoleID = (int)userRole;
-                inviteRequestItem.InvitedByID = this.CurrentUserId;
-
-                IEnumerable<InviteRequestItem> invitedPeople = this._communityService.InvitePeople(inviteRequestItem);
-                SendInviteRequestMail(invitedPeople, Server.UrlDecode(communityName));
-                ajaxResponse = Resources.InviteSuccessMessage;
-            }
-            catch (Exception)
-            {
-                ajaxResponse = Resources.UnknownErrorMessage;
-            }
-
-            return ajaxResponse;
-        }
-
-        /// <summary>
-        /// Removes the selected Invite for the current community.
-        /// Return success / failure based on service method call.
-        /// </summary>
-        /// <param name="inviteRequestId">Community id for which invite is being sent</param>
-        /// <param name="communityId">Community id for which invite request is being removed</param>
-        /// <param name="currentPage">Current page from where action performed</param>
-        /// <returns>Ajax response string</returns>
-        [HttpPost]
-        
-        [ValidateAntiForgeryToken]
-        public string RemoveInviteRequest(int inviteRequestId, long communityId, int currentPage)
-        {
-            string ajaxResponse = string.Empty;
-
-            OperationStatus operationStatus = this.ProfileService.RemoveInviteRequest(this.CurrentUserId, inviteRequestId);
-
-            if (operationStatus.Succeeded)
-            {
-                PartialView("InviteRequestListView", GetInviteRequests(communityId, currentPage)).ExecuteResult(this.ControllerContext);
-            }
-            else if (operationStatus.CustomErrorMessage)
-            {
-                ajaxResponse = operationStatus.ErrorMessage;
-            }
-
-            return ajaxResponse;
-        }
 
         #endregion Action Methods
 
@@ -814,27 +477,26 @@ namespace WWTMVC5.Controllers
         /// <param name="permissionsTab">Permission tab (Users/Requests) for which data to be fetched</param>
         /// <param name="currentPage">Current page to be rendered</param>
         /// <returns>ViewModel with permission details</returns>
-        private PermissionViewModel GetUserPermissionDetails(long? communityId, PermissionsTab permissionsTab,
+        private async Task<PermissionViewModel> GetUserPermissionDetails(long? communityId, PermissionsTab permissionsTab,
             int currentPage)
         {
-            PageDetails pageDetails = new PageDetails(currentPage);
-            pageDetails.ItemsPerPage = Constants.PermissionsPerPage;
+            var pageDetails = new PageDetails(currentPage) {ItemsPerPage = Constants.PermissionsPerPage};
 
             PermissionDetails permissionDetails = null;
 
             if (permissionsTab == PermissionsTab.Users)
             {
-                permissionDetails = this.ProfileService.GetUserPemissions(this.CurrentUserId, communityId.Value,
+                permissionDetails = await ProfileService.GetUserPemissions(CurrentUserId, communityId.Value,
                     pageDetails);
             }
             else if (permissionsTab == PermissionsTab.Requests)
             {
-                permissionDetails = this.ProfileService.GetUserPemissionRequests(this.CurrentUserId, communityId,
+                permissionDetails = await ProfileService.GetUserPemissionRequests(CurrentUserId, communityId,
                     pageDetails);
             }
             else
             {
-                permissionDetails = this.ProfileService.GetUserPemissionRequests(this.CurrentUserId, null, pageDetails);
+                permissionDetails = await ProfileService.GetUserPemissionRequests(CurrentUserId, null, pageDetails);
             }
 
             if (permissionDetails != null)
@@ -842,23 +504,22 @@ namespace WWTMVC5.Controllers
 
 
                 // Check if there is only one owner for the current community.
-                bool singleOwner = permissionDetails.PermissionItemList.Where(p => p.Role == UserRole.Owner).Count() ==
-                                   1;
+                var singleOwner = permissionDetails.PermissionItemList.Count(p => p.Role == UserRole.Owner) == 1;
 
-                List<PermissionDetailsViewModel> permissionList = new List<PermissionDetailsViewModel>();
-                for (var i = 0; i < permissionDetails.PermissionItemList.Count; i++)
+                var permissionList = new List<PermissionDetailsViewModel>();
+                foreach (var permissionItem in permissionDetails.PermissionItemList)
                 {
-                    PermissionDetailsViewModel model = new PermissionDetailsViewModel()
+                    var model = new PermissionDetailsViewModel()
                     {
-                        Id = permissionDetails.PermissionItemList[i].UserID,
-                        Name = permissionDetails.PermissionItemList[i].Name,
-                        CommunityId = permissionDetails.PermissionItemList[i].CommunityID,
-                        CommunityName = permissionDetails.PermissionItemList[i].CommunityName,
-                        Comment = permissionDetails.PermissionItemList[i].Comment,
-                        Date = permissionDetails.PermissionItemList[i].Date,
-                        Role = permissionDetails.PermissionItemList[i].Role,
-                        IsInherited = permissionDetails.PermissionItemList[i].IsInherited,
-                        CurrentUserRole = permissionDetails.PermissionItemList[i].CurrentUserRole
+                        Id = permissionItem.UserID,
+                        Name = permissionItem.Name,
+                        CommunityId = permissionItem.CommunityID,
+                        CommunityName = permissionItem.CommunityName,
+                        Comment = permissionItem.Comment,
+                        Date = permissionItem.Date,
+                        Role = permissionItem.Role,
+                        IsInherited = permissionItem.IsInherited,
+                        CurrentUserRole = permissionItem.CurrentUserRole
                     };
                     model.Requested = model.Date.GetFormattedDifference(DateTime.UtcNow);
 
@@ -871,12 +532,12 @@ namespace WWTMVC5.Controllers
                         // 2. Only owners and site administrators can edit/delete owners permissions.
                         model.CanShowEditLink = model.CanShowDeleteLink = false;
                     }
-                    else if (model.Id == this.CurrentUserId)
+                    else if (model.Id == CurrentUserId)
                     {
                         // No edit/delete options should be shown in users permission page for the logged in user
                         model.CanShowEditLink = model.CanShowDeleteLink = false;
                     }
-                    else if (permissionDetails.PermissionItemList[i].IsInherited)
+                    else if (permissionItem.IsInherited)
                     {
                         // If the role of user permission is is inherited, then user should not be allowed to delete.
                         model.CanShowDeleteLink = false;
@@ -891,7 +552,7 @@ namespace WWTMVC5.Controllers
                     permissionList.Add(model);
                 }
 
-                PermissionViewModel permissionViewModel = new PermissionViewModel(
+                var permissionViewModel = new PermissionViewModel(
                     permissionDetails.CurrentUserPermission,
                     permissionList,
                     pageDetails,
@@ -909,20 +570,20 @@ namespace WWTMVC5.Controllers
         /// <param name="communityId">Community for which Invite Request details to be fetched</param>
         /// <param name="currentPage">Current page to be rendered</param>
         /// <returns>ViewModel with invite request details</returns>
-        private InviteRequestViewModel GetInviteRequests(long communityId, int currentPage)
+        private async Task<InviteRequestViewModel> GetInviteRequests(long communityId, int currentPage)
         {
-            PageDetails pageDetails = new PageDetails(currentPage);
+            var pageDetails = new PageDetails(currentPage);
             pageDetails.ItemsPerPage = Constants.PermissionsPerPage;
 
-            IEnumerable<InviteRequestItem> inviteRequestItemList = this.ProfileService.GetInviteRequests(this.CurrentUserId, communityId, pageDetails);
+            var inviteRequestItemList = await ProfileService.GetInviteRequests(CurrentUserId, communityId, pageDetails);
 
             this.CheckNotNull(() => new { inviteRequestItemList });
 
-            List<InviteRequestDetailsViewModel> inviteRequestList = new List<InviteRequestDetailsViewModel>();
+            var inviteRequestList = new List<InviteRequestDetailsViewModel>();
 
             for (var i = 0; i < inviteRequestItemList.Count(); i++)
             {
-                InviteRequestDetailsViewModel model = new InviteRequestDetailsViewModel()
+                var model = new InviteRequestDetailsViewModel()
                 {
                     InviteRequestID = inviteRequestItemList.ElementAt(i).InviteRequestID,
                     CommunityID = inviteRequestItemList.ElementAt(i).CommunityID,
@@ -934,7 +595,7 @@ namespace WWTMVC5.Controllers
                 inviteRequestList.Add(model);
             }
 
-            InviteRequestViewModel inviteRequestViewModel = new InviteRequestViewModel(inviteRequestList, pageDetails);
+            var inviteRequestViewModel = new InviteRequestViewModel(inviteRequestList, pageDetails);
 
             return inviteRequestViewModel;
         }
@@ -949,7 +610,7 @@ namespace WWTMVC5.Controllers
             try
             {
                 // Send Mail.
-                JoinCommunityRequest request = new JoinCommunityRequest();
+                var request = new JoinCommunityRequest();
                 request.CommunityID = permission.CommunityID;
                 request.CommunityName = permission.CommunityName;
                 request.RequestorID = permission.UserID;
@@ -958,7 +619,7 @@ namespace WWTMVC5.Controllers
                 request.RequestorLink = string.Format(CultureInfo.InvariantCulture, "{0}Profile/Index/{1}", HttpContext.Request.Url.GetServerLink(), permission.UserID);
                 request.CommunityLink = string.Format(CultureInfo.InvariantCulture, "{0}Community/Index/{1}", HttpContext.Request.Url.GetServerLink(), permission.CommunityID);
 
-                this._notificationService.NotifyJoinCommunity(request);
+                _notificationService.NotifyJoinCommunity(request);
             }
             catch (Exception)
             {
@@ -976,7 +637,7 @@ namespace WWTMVC5.Controllers
             try
             {
                 // Send Mail for moderators.
-                ModeratorPermissionStatusRequest moderatorPermissionStatusRequest = new ModeratorPermissionStatusRequest();
+                var moderatorPermissionStatusRequest = new ModeratorPermissionStatusRequest();
                 moderatorPermissionStatusRequest.CommunityID = permission.CommunityID;
                 moderatorPermissionStatusRequest.CommunityName = permission.CommunityName;
                 moderatorPermissionStatusRequest.RequestorID = permission.UserID;
@@ -986,10 +647,10 @@ namespace WWTMVC5.Controllers
                 moderatorPermissionStatusRequest.RequestorLink = string.Format(CultureInfo.InvariantCulture, "{0}Profile/Index/{1}", HttpContext.Request.Url.GetServerLink(), permission.UserID);
                 moderatorPermissionStatusRequest.CommunityLink = string.Format(CultureInfo.InvariantCulture, "{0}Community/Index/{1}", HttpContext.Request.Url.GetServerLink(), permission.CommunityID);
 
-                this._notificationService.NotifyModeratorPermissionStatus(moderatorPermissionStatusRequest);
+                _notificationService.NotifyModeratorPermissionStatus(moderatorPermissionStatusRequest);
 
                 // Send Mail for moderators.
-                UserPermissionStatusRequest request = new UserPermissionStatusRequest();
+                var request = new UserPermissionStatusRequest();
                 request.CommunityID = permission.CommunityID;
                 request.CommunityName = permission.CommunityName;
                 request.RequestorID = permission.UserID;
@@ -998,7 +659,7 @@ namespace WWTMVC5.Controllers
                 request.RequestorLink = string.Format(CultureInfo.InvariantCulture, "{0}Profile/Index/{1}", HttpContext.Request.Url.GetServerLink(), permission.UserID);
                 request.CommunityLink = string.Format(CultureInfo.InvariantCulture, "{0}Community/Index/{1}", HttpContext.Request.Url.GetServerLink(), permission.CommunityID);
 
-                this._notificationService.NotifyUserRequestPermissionStatus(request);
+                _notificationService.NotifyUserRequestPermissionStatus(request);
             }
             catch (Exception)
             {
@@ -1016,7 +677,7 @@ namespace WWTMVC5.Controllers
             try
             {
                 // Send Mail.
-                RemoveUserRequest request = new RemoveUserRequest();
+                var request = new RemoveUserRequest();
                 request.CommunityID = permission.CommunityID;
                 request.CommunityName = permission.CommunityName;
                 request.CommunityLink = string.Format(CultureInfo.InvariantCulture, "{0}Community/Index/{1}", HttpContext.Request.Url.GetServerLink(), permission.CommunityID);
@@ -1024,7 +685,7 @@ namespace WWTMVC5.Controllers
                 request.UserLink = string.Format(CultureInfo.InvariantCulture, "{0}Profile/Index/{1}", HttpContext.Request.Url.GetServerLink(), permission.UserID);
                 request.UserName = permission.Name;
 
-                this._notificationService.NotifyRemoveUser(request);
+                _notificationService.NotifyRemoveUser(request);
             }
             catch (Exception)
             {
@@ -1042,7 +703,7 @@ namespace WWTMVC5.Controllers
             try
             {
                 // Send Mail.
-                UserPermissionChangedRequest request = new UserPermissionChangedRequest();
+                var request = new UserPermissionChangedRequest();
                 request.CommunityID = permission.CommunityID;
                 request.CommunityName = permission.CommunityName;
                 request.CommunityLink = string.Format(CultureInfo.InvariantCulture, "{0}Community/Index/{1}", HttpContext.Request.Url.GetServerLink(), permission.CommunityID);
@@ -1050,10 +711,10 @@ namespace WWTMVC5.Controllers
                 request.UserLink = string.Format(CultureInfo.InvariantCulture, "{0}Profile/Index/{1}", HttpContext.Request.Url.GetServerLink(), permission.UserID);
                 request.UserName = permission.Name;
                 request.Role = permission.Role;
-                request.ModeratorID = this.CurrentUserId;
+                request.ModeratorID = CurrentUserId;
                 request.ModeratorLink = string.Format(CultureInfo.InvariantCulture, "{0}Profile/Index/{1}", HttpContext.Request.Url.GetServerLink(), request.ModeratorID);
 
-                this._notificationService.NotifyUserPermissionChangedStatus(request);
+                _notificationService.NotifyUserPermissionChangedStatus(request);
             }
             catch (Exception)
             {
@@ -1073,9 +734,9 @@ namespace WWTMVC5.Controllers
                 foreach (var item in invitedPeople)
                 {
                     // Update the body to include the token.
-                    string joinCommunityLink = string.Format(CultureInfo.InvariantCulture, "{0}Community/Join/{1}/{2}", HttpContext.Request.Url.GetServerLink(), item.CommunityID, item.InviteRequestToken);
+                    var joinCommunityLink = string.Format(CultureInfo.InvariantCulture, "{0}Community/Join/{1}/{2}", HttpContext.Request.Url.GetServerLink(), item.CommunityID, item.InviteRequestToken);
 
-                    NotifyInviteRequest notifyInviteRequest = new NotifyInviteRequest()
+                    var notifyInviteRequest = new NotifyInviteRequest()
                     {
                         EmailId = item.EmailIdList.ElementAt(0),
                         CommunityID = item.CommunityID,
@@ -1087,7 +748,7 @@ namespace WWTMVC5.Controllers
                     };
 
                     // Send Mail for each invited people separately since the token is going to be unique for each user.
-                    this._notificationService.NotifyCommunityInviteRequest(notifyInviteRequest);
+                    _notificationService.NotifyCommunityInviteRequest(notifyInviteRequest);
                 }
             }
             catch (Exception)

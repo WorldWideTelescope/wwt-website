@@ -137,7 +137,7 @@
 
             $q.all([
                 dataproxy.requireAuth(),
-                $http({ method: 'GET', url: '/Content/Views/tours.xml?v=' + Math.random() })
+                $http({ method: 'GET', url: '/community/fetch/tours' })
             ]).then(function (results) {
                 $scope.types = results[0];
                 $scope.tourXml = $(results[1].data);
@@ -220,7 +220,7 @@
         var findFolders = function() {
             var ex = $scope.extData;
 
-            var guid = ($scope.ContentDataID).toLowerCase();
+            var guid = ($scope.tour.ContentDataID).toLowerCase();
             var tours = $scope.tourXml.find('Tour[ID="' + guid + '"]');
 
             if (!tours.length) {
@@ -291,7 +291,21 @@
                         }
                     });
                     goodArray.push(tourId);
-                    community.Description = goodArray.join(',');
+                    function eliminateDuplicates(arr) {
+                        var i,
+                            len = arr.length,
+                            out = [],
+                            obj = {};
+
+                        for (i = 0; i < len; i++) {
+                            obj[arr[i]] = 0;
+                        }
+                        for (i in obj) {
+                            out.push(i);
+                        }
+                        return out;
+                    }
+                    community.Description = eliminateDuplicates(goodArray).join(',');
                     
                     savePromises.push(dataproxy.saveEditedCommunity(community));
 

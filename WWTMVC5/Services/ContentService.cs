@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using System.Web;
 using WWTMVC5.Extensions;
 using WWTMVC5.Models;
@@ -31,32 +32,32 @@ namespace WWTMVC5.Services
         /// <summary>
         /// Instance of Contents repository
         /// </summary>
-        private IContentRepository contentRepository;
+        private IContentRepository _contentRepository;
 
         /// <summary>
         /// Instance of Blob data repository
         /// </summary>
-        private IBlobDataRepository blobDataRepository;
+        private IBlobDataRepository _blobDataRepository;
 
         /// <summary>
         /// Instance of Tag repository
         /// </summary>
-        private IRepositoryBase<Tag> tagRepository;
+        private IRepositoryBase<Tag> _tagRepository;
 
         /// <summary>
         /// Instance of Community repository
         /// </summary>
-        private ICommunityRepository communityRepository;
+        private ICommunityRepository _communityRepository;
 
         /// <summary>
         /// Instance of User repository
         /// </summary>
-        private IUserRepository userRepository;
+        private IUserRepository _userRepository;
 
         /// <summary>
         /// Instance of OffensiveContent repository
         /// </summary>
-        private IRepositoryBase<OffensiveContent> offensiveContentRepository;
+        private IRepositoryBase<OffensiveContent> _offensiveContentRepository;
 
         #endregion
 
@@ -79,12 +80,12 @@ namespace WWTMVC5.Services
             IRepositoryBase<OffensiveContent> offensiveContentRepository)
             : base(communityRepository, userRepository)
         {
-            this.contentRepository = contentRepository;
-            this.blobDataRepository = blobDataRepository;
-            this.tagRepository = tagRepository;
-            this.communityRepository = communityRepository;
-            this.userRepository = userRepository;
-            this.offensiveContentRepository = offensiveContentRepository;
+            this._contentRepository = contentRepository;
+            this._blobDataRepository = blobDataRepository;
+            this._tagRepository = tagRepository;
+            this._communityRepository = communityRepository;
+            this._userRepository = userRepository;
+            this._offensiveContentRepository = offensiveContentRepository;
         }
 
         #endregion
@@ -94,17 +95,17 @@ namespace WWTMVC5.Services
         /// <summary>
         /// Gets the contents from the Layerscape database.
         /// </summary>
-        /// <param name="contentID">Content for which details to be fetched</param>
-        /// <param name="userID">Id of the user who is accessing</param>
+        /// <param name="contentId">Content for which details to be fetched</param>
+        /// <param name="userId">Id of the user who is accessing</param>
         /// <returns>Details about the content</returns>
-        public ContentDetails GetContentDetails(long contentID, long userID)
+        public ContentDetails GetContentDetails(long contentId, long userId)
         {
             ContentDetails contentDetails = null;
-            var content = this.contentRepository.GetContent(contentID);
+            var content = _contentRepository.GetContent(contentId);
             if (content != null)
             {
                 Permission userPermission;
-                UserRole userRole = GetContentUserRole(content, userID);
+                var userRole = GetContentUserRole(content, userId);
 
                 // For private contents, user's who have not assigned explicit permission will not have access.
                 if (CanReadContent(userRole))
@@ -122,7 +123,7 @@ namespace WWTMVC5.Services
         public ContentDetails GetContentDetails(Guid azureId)
         {
             ContentDetails contentDetails = null;
-            var content = contentRepository.GetContent(azureId);
+            var content = _contentRepository.GetContent(azureId);
             if (content != null)
             {
                 var userRole = UserRole.SiteAdmin;
@@ -138,20 +139,20 @@ namespace WWTMVC5.Services
         /// <summary>
         /// Gets the contents from the Layerscape database.
         /// </summary>
-        /// <param name="contentID">Content for which details to be fetched</param>
-        /// <param name="userID">Id of the user who is accessing</param>
+        /// <param name="contentId">Content for which details to be fetched</param>
+        /// <param name="userId">Id of the user who is accessing</param>
         /// <returns>Details about the content</returns>
-        public ContentDetails GetContentDetailsForEdit(long contentID, long userID)
+        public ContentDetails GetContentDetailsForEdit(long contentId, long userId)
         {
             ContentDetails contentDetails = null;
-            var content = this.contentRepository.GetContent(contentID);
+            var content = _contentRepository.GetContent(contentId);
             if (content != null)
             {
                 Permission userPermission;
-                UserRole userRole = GetContentUserRole(content, userID);
+                var userRole = GetContentUserRole(content, userId);
 
                 // In case of Edit, user should have role assigned for editing the content.
-                if (CanEditDeleteContent(content, userID, userRole))
+                if (CanEditDeleteContent(content, userId, userRole))
                 {
                     userPermission = userRole.GetPermission();
 
@@ -166,49 +167,49 @@ namespace WWTMVC5.Services
         /// <summary>
         /// Deletes the specified content from the Earth database.
         /// </summary>
-        /// <param name="contentID">Content Id</param>
-        /// <param name="profileID">User Identity</param>
+        /// <param name="contentId">Content Id</param>
+        /// <param name="profileId">User Identity</param>
         /// <param name="isOffensive">Whether community is offensive or not.</param>
         /// <param name="offensiveDetails">Offensive Details.</param>
         /// <returns>Status of the operation. Success, if succeeded. Failure message and exception details in case of exception.</returns>
-        public OperationStatus DeleteContent(long contentID, long profileID, bool isOffensive, OffensiveEntry offensiveDetails)
+        public OperationStatus DeleteContent(long contentId, long profileId, bool isOffensive, OffensiveEntry offensiveDetails)
         {
-            return DeleteContentRecursively(contentID, profileID, isOffensive, offensiveDetails);
+            return DeleteContentRecursively(contentId, profileId, isOffensive, offensiveDetails);
         }
 
         /// <summary>
         /// Deletes the specified content from the Earth database.
         /// </summary>
-        /// <param name="contentID">Content Id</param>
-        /// <param name="profileID">User Identity</param>
+        /// <param name="contentId">Content Id</param>
+        /// <param name="profileId">User Identity</param>
         /// <returns>Status of the operation. Success, if succeeded. Failure message and exception details in case of exception.</returns>
-        public OperationStatus DeleteContent(long contentID, long profileID)
+        public OperationStatus DeleteContent(long contentId, long profileId)
         {
             var details = new OffensiveEntry()
             {
-                EntityID = contentID,
-                ReviewerID = profileID,
+                EntityID = contentId,
+                ReviewerID = profileId,
                 Status = OffensiveStatusType.Deleted,
                 Justification = "Deleted while deleting the Content."
             };
-            return DeleteContentRecursively(contentID, profileID, false, details);
+            return DeleteContentRecursively(contentId, profileId, false, details);
         }
 
         /// <summary>
         /// Un-deletes the specified content from the Earth database so that it is again accessible in the site.
         /// </summary>
-        /// <param name="contentID">Content Id</param>
-        /// <param name="userID">User Identity</param>
+        /// <param name="contentId">Content Id</param>
+        /// <param name="userId">User Identity</param>
         /// <returns>Status of the operation. Success, if succeeded. Failure message and exception details in case of exception.</returns>
-        public OperationStatus UnDeleteOffensiveContent(long contentID, long userID)
+        public OperationStatus UnDeleteOffensiveContent(long contentId, long userId)
         {
             OperationStatus status = null;
             try
             {
-                if (this.userRepository.IsSiteAdmin(userID))
+                if (_userRepository.IsSiteAdmin(userId))
                 {
                     // Get the current content from DB.
-                    Content content = this.contentRepository.GetItem((c) => c.ContentID == contentID);
+                    var content = _contentRepository.GetItem((c) => c.ContentID == contentId);
 
                     if (content != null)
                     {
@@ -221,22 +222,22 @@ namespace WWTMVC5.Services
                         //  Also DeleteBy filed will be used to check if the user has explicitly deleted the content.
                         content.User2 = null;
 
-                        Community parentCommunity = Enumerable.ElementAt<CommunityContents>(content.CommunityContents, 0).Community;
+                        var parentCommunity = Enumerable.ElementAt(content.CommunityContents, 0).Community;
 
                         if ((parentCommunity.CommunityTypeID == (int)CommunityTypes.Community || parentCommunity.CommunityTypeID == (int)CommunityTypes.Folder)
                                 && parentCommunity.IsDeleted == true)
                         {
                             // Get the "None" (User) community of the user who uploaded the Content.
-                            Community noneCommunity = this.communityRepository.GetItem(
+                            var noneCommunity = _communityRepository.GetItem(
                                                                     c => c.CreatedByID == content.CreatedByID && c.CommunityTypeID == (int)CommunityTypes.User);
 
                             this.CheckNotNull(() => new { noneCommunity });
 
                             // Remove the existing relation
-                            content.CommunityContents.Remove(Enumerable.ElementAt<CommunityContents>(content.CommunityContents, 0));
+                            content.CommunityContents.Remove(Enumerable.ElementAt(content.CommunityContents, 0));
 
                             // Set the None community as parent community.
-                            CommunityContents noneCommunityContent = new CommunityContents()
+                            var noneCommunityContent = new CommunityContents()
                             {
                                 CommunityID = noneCommunity.CommunityID,
                                 Content = content
@@ -251,16 +252,16 @@ namespace WWTMVC5.Services
                             contentRelation.Content1.User2 = null;
                         }
 
-                        this.contentRepository.Update(content);
+                        _contentRepository.Update(content);
 
                         // Save changes to the database
-                        this.contentRepository.SaveChanges();
+                        _contentRepository.SaveChanges();
 
                         status = OperationStatus.CreateSuccessStatus();
                     }
                     else
                     {
-                        status = OperationStatus.CreateFailureStatus(string.Format(CultureInfo.CurrentCulture, "Content with ID '{0}' was not found", contentID));
+                        status = OperationStatus.CreateFailureStatus(string.Format(CultureInfo.CurrentCulture, "Content with ID '{0}' was not found", contentId));
                     }
                 }
                 else
@@ -279,20 +280,20 @@ namespace WWTMVC5.Services
         /// <summary>
         /// Sets the given access type for the specified Content.
         /// </summary>
-        /// <param name="contentID">Content Id</param>
-        /// <param name="userID">User Identity</param>
+        /// <param name="contentId">Content Id</param>
+        /// <param name="userId">User Identity</param>
         /// <param name="accessType">Access type of the Content.</param>
         /// <returns>Status of the operation. Success, if succeeded. Failure message and exception details in case of exception.</returns>
-        public OperationStatus SetContentAccessType(long contentID, long userID, AccessType accessType)
+        public OperationStatus SetContentAccessType(long contentId, long userId, AccessType accessType)
         {
             OperationStatus status = null;
 
             try
             {
-                if (this.userRepository.IsSiteAdmin(userID))
+                if (_userRepository.IsSiteAdmin(userId))
                 {
                     // Get the current content from DB.
-                    Content content = this.contentRepository.GetItem((c) => c.ContentID == contentID);
+                    var content = _contentRepository.GetItem((c) => c.ContentID == contentId);
 
                     // Make sure content exists
                     this.CheckNotNull(() => new { content });
@@ -303,15 +304,15 @@ namespace WWTMVC5.Services
 
                     var offensiveDetails = new OffensiveEntry()
                     {
-                        EntityID = contentID,
-                        ReviewerID = userID,
+                        EntityID = contentId,
+                        ReviewerID = userId,
                         Status = OffensiveStatusType.Offensive
                     };
 
-                    UpdateAllOffensiveContentEntry(contentID, offensiveDetails);
+                    UpdateAllOffensiveContentEntry(contentId, offensiveDetails);
 
-                    this.contentRepository.Update(content);
-                    this.contentRepository.SaveChanges();
+                    _contentRepository.Update(content);
+                    _contentRepository.SaveChanges();
 
                     // Create Success message if set access type is successful.
                     status = OperationStatus.CreateSuccessStatus();
@@ -335,9 +336,9 @@ namespace WWTMVC5.Services
             // Make sure content is not null
             this.CheckNotNull(() => new { contentDetails });
 
-            long contentID = -1;
+            long contentId = -1;
 
-            UserRole userRole = GetCommunityUserRole(contentDetails.ParentID, contentDetails.CreatedByID);
+            var userRole = GetCommunityUserRole(contentDetails.ParentID, contentDetails.CreatedByID);
             if (!CanCreateContent(userRole))
             {
                 // TODO: Throw custom permissions exception which will be shown to user in error page.
@@ -354,7 +355,7 @@ namespace WWTMVC5.Services
                     try
                     {
                         // Create a new instance of content details
-                        Content content = new Content();
+                        var content = new Content();
 
                         // Set values from content details.
                         content.SetValuesFrom(contentDetails);
@@ -375,14 +376,14 @@ namespace WWTMVC5.Services
                         content.IsOffensive = false;
                         content.DownloadCount = 0;
 
-                        Community parentCommunity = this.communityRepository.GetItem(c => c.CommunityID == contentDetails.ParentID);
+                        var parentCommunity = _communityRepository.GetItem(c => c.CommunityID == contentDetails.ParentID);
                         if (parentCommunity != null)
                         {
                             parentCommunity.ModifiedByID = contentDetails.CreatedByID;
                             parentCommunity.ModifiedDatetime = DateTime.UtcNow;
 
                             // Updated Parent child relationship
-                            CommunityContents comCont = new CommunityContents()
+                            var comCont = new CommunityContents()
                             {
                                 Community = parentCommunity,
                                 Content = content
@@ -399,18 +400,18 @@ namespace WWTMVC5.Services
                         CreateAssociateContents(content, contentDetails);
 
                         // Update Tags.
-                        this.SetContentTags(contentDetails.Tags, content);
+                        SetContentTags(contentDetails.Tags, content);
 
                         //// TODO: Update Permissions Details.
                         //// TODO: Update Consumed size of the user. If the size is more than allowed throw error.
 
-                        this.contentRepository.Add(content);
+                        _contentRepository.Add(content);
 
                         // Save changes to the database
-                        this.contentRepository.SaveChanges();
+                        _contentRepository.SaveChanges();
 
                         // Get the content ID from database. We need to retrieve it from the database as it is a identity column.
-                        contentID = content.ContentID;
+                        contentId = content.ContentID;
                     }
                     catch (Exception)
                     {
@@ -429,27 +430,27 @@ namespace WWTMVC5.Services
                     DeleteUploadedFiles(contentDetails);
                 }
             }
-            return contentID;
+            return contentId;
         }
 
         /// <summary>
         /// Updates the content in Layerscape with the given details passed in contentDetails instance.
         /// </summary>
         /// <param name="contentDetails">Details of the content</param>
-        /// <param name="userID">User identification</param>
+        /// <param name="userId">User identification</param>
         /// <returns>True if content is updated; otherwise false.</returns>
-        public bool UpdateContent(ContentDetails contentDetails, long userID)
+        public bool UpdateContent(ContentDetails contentDetails, long userId)
         {
             // Make sure content is not null
             this.CheckNotNull(() => new { contentDetails });
 
             // Get the current content from DB.
-            Content content = this.contentRepository.GetContent(contentDetails.ID);
+            var content = _contentRepository.GetContent(contentDetails.ID);
             if (content != null)
             {
-                UserRole userRole = GetContentUserRole(content, userID);
+                var userRole = GetContentUserRole(content, userId);
 
-                if (!CanEditDeleteContent(content, userID, userRole))
+                if (!CanEditDeleteContent(content, userId, userRole))
                 {
                     // In case if user is reader or visitor, he should not be allowed to edit the content.
                     // TODO: Throw item not exists or no permissions exception which will be shown to user in error page.
@@ -483,7 +484,7 @@ namespace WWTMVC5.Services
                             }
 
                             // Update Modified by and date time.
-                            content.ModifiedByID = userID;
+                            content.ModifiedByID = userId;
                             content.ModifiedDatetime = DateTime.UtcNow;
 
                             // Updated Parent child relationship
@@ -498,12 +499,12 @@ namespace WWTMVC5.Services
                             //// TODO: Update Consumed size of the user. If the size is more than allowed throw error.
 
                             // Update Tags.
-                            this.SetContentTags(contentDetails.Tags, content);
+                            SetContentTags(contentDetails.Tags, content);
 
-                            this.contentRepository.Update(content);
+                            _contentRepository.Update(content);
 
                             // Save changes to the database
-                            this.contentRepository.SaveChanges();
+                            _contentRepository.SaveChanges();
 
                             return true;
                         }
@@ -539,64 +540,64 @@ namespace WWTMVC5.Services
             // Make sure file detail is not null
             this.CheckNotNull(() => new { fileDetail });
 
-            BlobDetails fileBlob = new BlobDetails()
+            var fileBlob = new BlobDetails()
             {
                 BlobID = fileDetail.AzureID.ToString(),
                 Data = fileDetail.DataStream,
                 MimeType = fileDetail.MimeType
             };
 
-            return this.blobDataRepository.UploadTemporaryFile(fileBlob);
+            return _blobDataRepository.UploadTemporaryFile(fileBlob);
         }
 
         /// <summary>
         /// Gets the communities and folders which can be used as parent while creating a new 
         /// community/folder/content by the specified user.
         /// </summary>
-        /// <param name="userID">User for which the parent communities/folders are being fetched</param>
+        /// <param name="userId">User for which the parent communities/folders are being fetched</param>
         /// <returns>List of communities folders</returns>
-        public IEnumerable<Community> GetParentCommunities(long userID)
+        public IEnumerable<Community> GetParentCommunities(long userId)
         {
             // Need to check if the user is site admin or not.
-            UserRole currentUserRole = this.userRepository.GetUserRole(userID, null);
-            return this.communityRepository.GetParentCommunities(userID, -1, CommunityTypes.None, UserRole.Contributor, currentUserRole);
+            var currentUserRole = _userRepository.GetUserRole(userId, null);
+            return _communityRepository.GetParentCommunities(userId, -1, CommunityTypes.None, UserRole.Contributor, currentUserRole);
         }
 
         /// <summary>
         /// Increments the download count of the content identified by the ContentId.
         /// </summary>
-        /// <param name="contentID">Content ID</param>
-        /// <param name="userID">User Identification.</param>
-        public void IncrementDownloadCount(long contentID, long userID)
+        /// <param name="contentId">Content ID</param>
+        /// <param name="userId">User Identification.</param>
+        public void IncrementDownloadCount(long contentId, long userId)
         {
-            Expression<Func<Content, bool>> condition = ((Content c) => c.ContentID == contentID);
+            Expression<Func<Content, bool>> condition = ((Content c) => c.ContentID == contentId);
 
-            this.IncrementDownloadCount(condition, userID);
+            IncrementDownloadCount(condition, userId);
         }
 
         /// <summary>
         /// This function retrieves the contents uploaded by the user.
         /// </summary>
-        /// <param name="userID">User identity.</param>
+        /// <param name="userId">User identity.</param>
         /// <returns>Payload details.</returns>
-        public PayloadDetails GetUserContents(long userID)
+        public async Task<PayloadDetails> GetUserContents(long userId)
         {
             PayloadDetails payloadDetails = null;
 
-            Expression<Func<Content, bool>> condition = (Content c) => c.CreatedByID == userID
+            Expression<Func<Content, bool>> condition = c => c.CreatedByID == userId
                 && c.IsDeleted == false
-                && Enumerable.FirstOrDefault<CommunityContents>(c.CommunityContents) != null
-                && !(bool)Enumerable.FirstOrDefault<CommunityContents>(c.CommunityContents).Community.IsDeleted;
+                && Enumerable.FirstOrDefault(c.CommunityContents) != null
+                && !(bool)Enumerable.FirstOrDefault(c.CommunityContents).Community.IsDeleted;
 
-            Func<Content, object> orderBy = (Content c) => c.ModifiedDatetime;
+            Func<Content, object> orderBy = c => c.ModifiedDatetime;
 
-            var contents = this.contentRepository.GetItems(condition, orderBy, true);
+            var contents =  _contentRepository.GetItems(condition, orderBy, true);
 
             // Get Content Details object from Contents so that it has permission details
-            List<ContentDetails> contentDetailsList = new List<ContentDetails>();
+            var contentDetailsList = new List<ContentDetails>();
             foreach (Content content in contents)
             {
-                UserRole userRole = GetContentUserRole(content, userID);
+                var userRole = GetContentUserRole(content, userId);
 
                 // For private contents, user's who have not assigned explicit permission will not have access.
                 if (userRole != UserRole.None)
@@ -618,27 +619,27 @@ namespace WWTMVC5.Services
         /// Gets the role of the user on the given Content.
         /// </summary>
         /// <param name="content">Content on which user role has to be found</param>
-        /// <param name="userID">Current user id</param>
+        /// <param name="userId">Current user id</param>
         /// <returns>UserRole on the content</returns>
-        public UserRole GetContentUserRole(Content content, long? userID)
+        public UserRole GetContentUserRole(Content content, long? userId)
         {
-            UserRole userRole = UserRole.Visitor;
+            var userRole = UserRole.Visitor;
 
             if (content != null)
             {
-                if (userID.HasValue && content.CreatedByID == userID.Value)
+                if (userId.HasValue && content.CreatedByID == userId.Value)
                 {
                     userRole = UserRole.Owner;
                 }
                 else
                 {
-                    string accessType = this.contentRepository.GetContentAccessType(content.ContentID);
-                    var parent = Enumerable.FirstOrDefault<CommunityContents>(content.CommunityContents);
+                    var accessType = _contentRepository.GetContentAccessType(content.ContentID);
+                    var parent = Enumerable.FirstOrDefault(content.CommunityContents);
                     if (parent != null)
                     {
-                        if (userID.HasValue)
+                        if (userId.HasValue)
                         {
-                            userRole = this.userRepository.GetUserRole(userID.Value, parent.Community.CommunityID);
+                            userRole = _userRepository.GetUserRole(userId.Value, parent.Community.CommunityID);
                         }
 
                         if (userRole == UserRole.Moderator)
@@ -651,7 +652,7 @@ namespace WWTMVC5.Services
                         {
                             // In case of user is Contributor for the parent community, he should be considered as Owner if the content
                             // is created by him. If the content is not created by him, he should be considered as Reader.
-                            if (content.CreatedByID == userID)
+                            if (content.CreatedByID == userId)
                             {
                                 userRole = UserRole.Owner;
                             }
@@ -684,7 +685,7 @@ namespace WWTMVC5.Services
         /// </returns>
         public IEnumerable<long> GetLatestContentIDs(int count)
         {
-            return this.contentRepository.GetLatestContentIDs(count);
+            return _contentRepository.GetLatestContentIDs(count);
         }
 
         #endregion
@@ -701,14 +702,14 @@ namespace WWTMVC5.Services
             // Few things to be noted:
             // a) Obviously the count to be 1 always.
             // b) A content can be child of only once parent community or folder
-            if (Enumerable.ElementAt<CommunityContents>(content.CommunityContents, 0).CommunityID != contentDetails.ParentID)
+            if (Enumerable.ElementAt(content.CommunityContents, 0).CommunityID != contentDetails.ParentID)
             {
                 if (content.CommunityContents.Count > 0)
                 {
                     content.CommunityContents.Clear();
                 }
 
-                CommunityContents comCont = new CommunityContents()
+                var comCont = new CommunityContents()
                 {
                     CommunityID = contentDetails.ParentID,
                     Content = content
@@ -729,16 +730,16 @@ namespace WWTMVC5.Services
             var videoDetail = contentDetails.Video as FileDetail;
             if (videoDetail != null)
             {
-                long deletedByID = content.ModifiedByID.Value;
+                var deletedById = content.ModifiedByID.Value;
 
-                var existingVideo = Enumerable.Where<ContentRelation>(content.ContentRelation, cr => cr.ContentRelationshipTypeID == (int)AssociatedContentRelationshipType.Video
+                var existingVideo = Enumerable.Where(content.ContentRelation, cr => cr.ContentRelationshipTypeID == (int)AssociatedContentRelationshipType.Video
                                     && cr.Content1.IsDeleted == false).FirstOrDefault();
 
                 if (existingVideo != null)
                 {
                     // Remove the previous videos from azure.
                     existingVideo.Content1.IsDeleted = true;
-                    existingVideo.Content1.DeletedByID = deletedByID;
+                    existingVideo.Content1.DeletedByID = deletedById;
                     existingVideo.Content1.DeletedDatetime = DateTime.UtcNow;
 
                     content.ContentRelation.Remove(existingVideo);
@@ -757,7 +758,7 @@ namespace WWTMVC5.Services
         {
             if (contentDetails.Video != null)
             {
-                Content videoContent = new Content();
+                var videoContent = new Content();
                 videoContent.SetValuesFrom(contentDetails, contentDetails.Video);
 
                 // Note that Modifying user is the one who is creating the video.
@@ -781,7 +782,7 @@ namespace WWTMVC5.Services
         /// <param name="content">Content which has to be updated.</param>
         private static void UpdateAssociateContents(ContentDetails contentDetails, Content content)
         {
-            long deletedByID = content.ModifiedByID.Value;
+            var deletedById = content.ModifiedByID.Value;
 
             // Get all Existing files list.
             var newFilesIDs = contentDetails.AssociatedFiles
@@ -794,10 +795,10 @@ namespace WWTMVC5.Services
                                             && !newFilesIDs.Contains(cr.Content1.ContentID)
                                         select cr;
 
-            foreach (var item in Enumerable.ToList<ContentRelation>(removeAssociatedFiles))
+            foreach (var item in Enumerable.ToList(removeAssociatedFiles))
             {
                 item.Content1.IsDeleted = true;
-                item.Content1.DeletedByID = deletedByID;
+                item.Content1.DeletedByID = deletedById;
                 item.Content1.DeletedDatetime = DateTime.UtcNow;
 
                 content.ContentRelation.Remove(item);
@@ -821,7 +822,7 @@ namespace WWTMVC5.Services
                     // Create new associated file only if contentId is not set
                     if (!dataDetails.ContentID.HasValue || dataDetails.ContentID.Value <= 0)
                     {
-                        Content associatedContent = new Content();
+                        var associatedContent = new Content();
                         associatedContent.SetValuesFrom(contentDetails, dataDetails);
 
                         // Note that Modifying user is the one who is creating the associated contents.
@@ -842,29 +843,29 @@ namespace WWTMVC5.Services
         /// <summary>
         /// Deletes the specified content from the Earth database recursively.
         /// </summary>
-        /// <param name="contentID">Content Id</param>
-        /// <param name="profileID">User Identity</param>
+        /// <param name="contentId">Content Id</param>
+        /// <param name="profileId">User Identity</param>
         /// <param name="isOffensive">Whether the Content is offensive or not?</param>
         /// <param name="offensiveDetails">Offensive Details.</param>
         /// <returns>True of the content is deleted. False otherwise.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Need to ignore all exceptions")]
-        private OperationStatus DeleteContentRecursively(long contentID, long profileID, bool isOffensive, OffensiveEntry offensiveDetails)
+        private OperationStatus DeleteContentRecursively(long contentId, long profileId, bool isOffensive, OffensiveEntry offensiveDetails)
         {
             OperationStatus status = null;
             try
             {
                 // Get the current content from DB.
-                Content content = this.contentRepository.GetItem((c) => c.ContentID == contentID && c.IsDeleted == false);
+                var content = _contentRepository.GetItem((c) => c.ContentID == contentId && c.IsDeleted == false);
 
                 if (content != null)
                 {
-                    UserRole userRole = GetContentUserRole(content, profileID);
+                    var userRole = GetContentUserRole(content, profileId);
 
-                    if (CanEditDeleteContent(content, profileID, userRole))
+                    if (CanEditDeleteContent(content, profileId, userRole))
                     {
                         content.IsDeleted = true;
                         content.IsOffensive = isOffensive;
-                        content.DeletedByID = profileID;
+                        content.DeletedByID = profileId;
                         content.DeletedDatetime = DateTime.UtcNow;
 
                         // Update all the offensive entity entries if the content is being deleted.
@@ -874,14 +875,14 @@ namespace WWTMVC5.Services
                         {
                             contentRelation.Content1.IsDeleted = true;
                             contentRelation.Content1.IsOffensive = isOffensive;
-                            contentRelation.Content1.DeletedByID = profileID;
+                            contentRelation.Content1.DeletedByID = profileId;
                             contentRelation.Content1.DeletedDatetime = DateTime.UtcNow;
                         }
 
-                        this.contentRepository.Update(content);
+                        _contentRepository.Update(content);
 
                         // Save changes to the database
-                        this.contentRepository.SaveChanges();
+                        _contentRepository.SaveChanges();
 
                         status = OperationStatus.CreateSuccessStatus();
                     }
@@ -893,7 +894,7 @@ namespace WWTMVC5.Services
                 }
                 else
                 {
-                    status = OperationStatus.CreateFailureStatus(string.Format(CultureInfo.CurrentCulture, "Content with ID '{0}' was not found", contentID));
+                    status = OperationStatus.CreateFailureStatus(string.Format(CultureInfo.CurrentCulture, "Content with ID '{0}' was not found", contentId));
                 }
             }
             catch (Exception exception)
@@ -917,16 +918,16 @@ namespace WWTMVC5.Services
             // Create Tags and relationships.
             if (!string.IsNullOrWhiteSpace(tagsString))
             {
-                IEnumerable<string> tagsArray = tagsString.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(p => p.Trim());
+                var tagsArray = tagsString.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(p => p.Trim());
                 if (tagsArray != null && tagsArray.Count() > 0)
                 {
                     var notExistingTags = from tag in tagsArray
-                                          where Enumerable.FirstOrDefault<ContentTags>(content.ContentTags, t => t.Tag.Name == tag) == null
+                                          where Enumerable.FirstOrDefault(content.ContentTags, t => t.Tag.Name == tag) == null
                                           select tag;
 
-                    foreach (string tag in notExistingTags)
+                    foreach (var tag in notExistingTags)
                     {
-                        Tag objTag = tagRepository.GetItem((Tag t) => t.Name == tag);
+                        var objTag = _tagRepository.GetItem((Tag t) => t.Name == tag);
 
                         if (objTag == null)
                         {
@@ -934,7 +935,7 @@ namespace WWTMVC5.Services
                             objTag.Name = tag;
                         }
 
-                        ContentTags contentTag = new ContentTags();
+                        var contentTag = new ContentTags();
                         contentTag.Content = content;
                         contentTag.Tag = objTag;
 
@@ -950,7 +951,7 @@ namespace WWTMVC5.Services
         /// <param name="contentDetails">Details of the content.</param>
         private bool UploadFilesToAzure(ContentDetails contentDetails)
         {
-            bool uploadStatus = true;
+            var uploadStatus = true;
 
             // Upload content data.
             var fileDetail = contentDetails.ContentData as FileDetail;
@@ -980,7 +981,7 @@ namespace WWTMVC5.Services
         /// <param name="contentDetails">Details of the content.</param>
         private bool UploadFilesToAzure(ContentDetails contentDetails, Content content)
         {
-            bool uploadStatus = true;
+            var uploadStatus = true;
 
             // Upload content data.
             var fileDetail = contentDetails.ContentData as FileDetail;
@@ -1010,7 +1011,7 @@ namespace WWTMVC5.Services
         /// <param name="contentDetails">Details of the content.</param>
         private bool MoveAssociatedFiles(ContentDetails contentDetails)
         {
-            bool status = true;
+            var status = true;
             if (contentDetails.AssociatedFiles != null && contentDetails.AssociatedFiles.Count() > 0)
             {
                 foreach (var dataDetails in contentDetails.AssociatedFiles)
@@ -1037,15 +1038,15 @@ namespace WWTMVC5.Services
         /// <param name="fileDetails">Details of the thumbnail.</param>
         private Guid MoveThumbnail(FileDetail fileDetails)
         {
-            Guid thumbnailId = Guid.Empty;
+            var thumbnailId = Guid.Empty;
             if (fileDetails != null && fileDetails.AzureID != Guid.Empty)
             {
-                BlobDetails thumbnailBlob = new BlobDetails()
+                var thumbnailBlob = new BlobDetails()
                 {
                     BlobID = fileDetails.AzureID.ToString()
                 };
 
-                thumbnailId = this.blobDataRepository.MoveThumbnail(thumbnailBlob) ? fileDetails.AzureID : Guid.Empty;
+                thumbnailId = _blobDataRepository.MoveThumbnail(thumbnailBlob) ? fileDetails.AzureID : Guid.Empty;
             }
 
             return thumbnailId;
@@ -1057,13 +1058,13 @@ namespace WWTMVC5.Services
         /// <param name="fileDetails">Details of the file.</param>
         private bool MoveFile(FileDetail fileDetails)
         {
-            BlobDetails fileBlob = new BlobDetails()
+            var fileBlob = new BlobDetails()
             {
                 BlobID = fileDetails.AzureID.ToString(),
                 MimeType = fileDetails.MimeType
             };
 
-            return this.blobDataRepository.MoveFile(fileBlob);
+            return _blobDataRepository.MoveFile(fileBlob);
         }
 
         /// <summary>
@@ -1094,13 +1095,13 @@ namespace WWTMVC5.Services
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "TODO: This method will be used later")]
         private void DeleteTemporaryThumbnail(ContentDetails contentDetails)
         {
-            BlobDetails thumbnailBlob = new BlobDetails()
+            var thumbnailBlob = new BlobDetails()
             {
                 BlobID = contentDetails.Thumbnail.AzureID.ToString()
             };
 
             // Delete thumbnail from azure.
-            this.blobDataRepository.DeleteThumbnail(thumbnailBlob);
+            _blobDataRepository.DeleteThumbnail(thumbnailBlob);
         }
 
         /// <summary>
@@ -1109,52 +1110,50 @@ namespace WWTMVC5.Services
         /// <param name="fileDetail">Details of the file.</param>
         private void DeleteFile(FileDetail fileDetail)
         {
-            BlobDetails fileBlob = new BlobDetails()
+            var fileBlob = new BlobDetails()
             {
                 BlobID = fileDetail.AzureID.ToString(),
                 MimeType = fileDetail.MimeType
             };
 
             // Delete file from azure.
-            this.blobDataRepository.DeleteFile(fileBlob);
+            _blobDataRepository.DeleteFile(fileBlob);
         }
 
         /// <summary>
         /// Increments the download count of the content identified by the Condition.
         /// </summary>
         /// <param name="condition">Content Condition</param>
-        /// <param name="userID">User Identification.</param>
-        private void IncrementDownloadCount(Expression<Func<Content, bool>> condition, long userID)
+        /// <param name="userId">User Identification.</param>
+        private void IncrementDownloadCount(Expression<Func<Content, bool>> condition, long userId)
         {
-            var content = this.contentRepository.GetItem(condition);
+            var content =  _contentRepository.GetItem(condition);
             if (content != null)
             {
-                UserRole userRole = GetContentUserRole(content, userID);
-                if (CanReadContent(userRole))
-                {
+                
                     // Update download Count.
-                    content.DownloadCount = content.DownloadCount.HasValue ? content.DownloadCount.Value + 1 : 1;
-                    this.contentRepository.Update(content);
+                    content.DownloadCount = content.DownloadCount + 1 ?? 1;
+                    _contentRepository.Update(content);
 
                     // Save changes to the database
-                    this.contentRepository.SaveChanges();
-                }
+                    _contentRepository.SaveChanges();
+                
             }
         }
 
         /// <summary>
         /// Updates the all the entries for the given Content with all the details.
         /// </summary>
-        /// <param name="contentID">Content ID.</param>
+        /// <param name="contentId">Content ID.</param>
         /// <param name="details">Details provided.</param>
         /// <returns>True if content was updated; otherwise false.</returns>
-        private OperationStatus UpdateAllOffensiveContentEntry(long contentID, OffensiveEntry details)
+        private OperationStatus UpdateAllOffensiveContentEntry(long contentId, OffensiveEntry details)
         {
             OperationStatus status = null;
             try
             {
-                var offensiveContents = this.offensiveContentRepository.GetItems(oc => oc.ContentID == contentID && oc.OffensiveStatusID == (int)OffensiveStatusType.Flagged, null, false);
-                if (offensiveContents != null && offensiveContents.Count() > 0)
+                var offensiveContents =  _offensiveContentRepository.GetItems(oc => oc.ContentID == contentId && oc.OffensiveStatusID == (int)OffensiveStatusType.Flagged, null, false);
+                if (offensiveContents != null && offensiveContents.Any())
                 {
                     foreach (var item in offensiveContents)
                     {
@@ -1164,7 +1163,7 @@ namespace WWTMVC5.Services
                         item.ReviewerID = details.ReviewerID;
                         item.ReviewerDatetime = DateTime.UtcNow;
 
-                        this.offensiveContentRepository.Update(item);
+                        _offensiveContentRepository.Update(item);
                     }
                 }
             }

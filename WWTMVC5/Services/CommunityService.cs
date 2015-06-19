@@ -33,42 +33,42 @@ namespace WWTMVC5.Services
         /// <summary>
         /// Instance of Community repository
         /// </summary>
-        private ICommunityRepository communityRepository;
+        private ICommunityRepository _communityRepository;
 
         /// <summary>
         /// Instance of Tag repository
         /// </summary>
-        private IRepositoryBase<Tag> tagRepository;
+        private IRepositoryBase<Tag> _tagRepository;
 
         /// <summary>
         /// Instance of Blob data repository
         /// </summary>
-        private IBlobDataRepository blobDataRepository;
+        private IBlobDataRepository _blobDataRepository;
 
         /// <summary>
         /// Instance of User repository
         /// </summary>
-        private IUserRepository userRepository;
+        private IUserRepository _userRepository;
 
         /// <summary>
         /// Instance of Content Service
         /// </summary>
-        private IContentService contentService;
+        private IContentService _contentService;
 
         /// <summary>
         /// Instance of UserCommunities repository
         /// </summary>
-        private IUserCommunitiesRepository userCommunitiesRepository;
+        private IUserCommunitiesRepository _userCommunitiesRepository;
 
         /// <summary>
         /// Instance of OffensiveCommunities repository
         /// </summary>
-        private IRepositoryBase<OffensiveCommunities> offensiveCommunitiesRepository;
+        private IRepositoryBase<OffensiveCommunities> _offensiveCommunitiesRepository;
 
         /// <summary>
         /// Instance of OffensiveContent repository
         /// </summary>
-        private IRepositoryBase<OffensiveContent> offensiveContentRepository;
+        private IRepositoryBase<OffensiveContent> _offensiveContentRepository;
 
         #endregion Private Variables
 
@@ -91,16 +91,16 @@ namespace WWTMVC5.Services
             IRepositoryBase<OffensiveContent> offensiveContentRepository)
             : base(communityRepository, userRepository)
         {
-            this.communityRepository = communityRepository;
-            this.tagRepository = tagRepository;
-            this.blobDataRepository = blobDataRepository;
-            this.userRepository = userRepository;
-            this.userCommunitiesRepository = userCommunitiesRepository;
-            this.offensiveCommunitiesRepository = offensiveCommunitiesRepository;
-            this.offensiveContentRepository = offensiveContentRepository;
+            this._communityRepository = communityRepository;
+            this._tagRepository = tagRepository;
+            this._blobDataRepository = blobDataRepository;
+            this._userRepository = userRepository;
+            this._userCommunitiesRepository = userCommunitiesRepository;
+            this._offensiveCommunitiesRepository = offensiveCommunitiesRepository;
+            this._offensiveContentRepository = offensiveContentRepository;
 
             // TODO : Revisit this
-            this.contentService = DependencyResolver.Current.GetService(typeof(IContentService)) as IContentService;
+            _contentService = DependencyResolver.Current.GetService(typeof(IContentService)) as IContentService;
         }
 
         #endregion Constructor
@@ -110,47 +110,46 @@ namespace WWTMVC5.Services
         /// <summary>
         /// Gets the community identified by community ID for EDIT purpose, means user must have required role for editing the community
         /// </summary>
-        /// <param name="communityID">ID of the community which has to be retrieved</param>
-        /// <param name="userID">Id of the user who is accessing</param>
+        /// <param name="communityId">ID of the community which has to be retrieved</param>
+        /// <param name="userId">Id of the user who is accessing</param>
         /// <returns>Instance of community details</returns>
-        public CommunityDetails GetCommunityDetailsForEdit(long communityID, long userID)
+        public async Task<CommunityDetails> GetCommunityDetailsForEdit(long communityId, long userId)
         {
-            CommunityDetails communityDetails = null;
-            Community community = this.communityRepository.GetItem((Community c) => c.CommunityID == communityID && c.IsDeleted == false);
+            var community =  _communityRepository.GetItem(c => c.CommunityID == communityId && c.IsDeleted == false);
 
             // Make sure community is not null
             this.CheckNotNull(() => new { community });
 
-            UserRole userRole = GetCommunityUserRole(community.CommunityID, userID);
-            if (!CanEditDeleteCommunity(community, userID, userRole))
+            var userRole = GetCommunityUserRole(community.CommunityID, userId);
+            if (!CanEditDeleteCommunity(community, userId, userRole))
             {
                 throw new HttpException(401, Resources.NoPermissionUpdateCommunityMessage);
             }
 
-            communityDetails = CreateCommunityDetails(community, userID, true);
+            var communityDetails = CreateCommunityDetails(community, userId, true);
             return communityDetails;
         }
 
         /// <summary>
         /// Gets the community identified by community ID.
         /// </summary>
-        /// <param name="communityID">
+        /// <param name="communityId">
         /// ID of the community which has to be retrieved.
         /// </param>
-        /// <param name="userID">Id of the user who is accessing</param>
+        /// <param name="userId">Id of the user who is accessing</param>
         /// <param name="considerPrivateCommunity">Get community details for private community also? Needed for sharing private communities</param>
         /// <param name="updateReadCount">Update the read count for the community in case of true</param>
         /// <returns>
         /// Instance of community details
         /// </returns>
-        public async Task<CommunityDetails> GetCommunityDetails(long communityID, long? userID, bool considerPrivateCommunity = false, bool updateReadCount = false)
+        public async Task<CommunityDetails> GetCommunityDetails(long communityId, long? userId, bool considerPrivateCommunity = false, bool updateReadCount = false)
         {
             CommunityDetails communityDetails = null;
-            Community community = await communityRepository.GetCommunityAsync(communityID);
+            var community = await _communityRepository.GetCommunityAsync(communityId);
 
             try
             {
-                communityDetails = CreateCommunityDetails(community, userID, true);
+                communityDetails = CreateCommunityDetails(community, userId, true);
 
                 if (updateReadCount)
                 {
@@ -165,7 +164,7 @@ namespace WWTMVC5.Services
                 {
                     // In case of private community and user not having access to it, get the private community details instance
                     // which will be used only for joining the private community.
-                    communityDetails = CreatePrivateCommunityDetails(community, userID);
+                    communityDetails = CreatePrivateCommunityDetails(community, userId);
                 }
                 else
                 {
@@ -178,9 +177,9 @@ namespace WWTMVC5.Services
 
         public async Task<List<ContentDetails>> GetCommunityContents(long communityId, long userId)
         {
-            UserRole userRole = GetCommunityUserRole(communityId, userId);
-            Permission userPermission = userRole.GetPermission();
-            var contents = await communityRepository.GetContents(communityId, userId);
+            var userRole = GetCommunityUserRole(communityId, userId);
+            var userPermission = userRole.GetPermission();
+            var contents = await _communityRepository.GetContents(communityId, userId);
             var contentDetailsList = new List<ContentDetails>();
             foreach (var content in contents)
             {
@@ -197,9 +196,9 @@ namespace WWTMVC5.Services
 
         public async Task<List<CommunityDetails>> GetChildCommunities(long communityId, long userId)
         {
-            Community community = await communityRepository.GetCommunityAsync(communityId);
-            List<CommunityDetails> communityDetailsList = new List<CommunityDetails>();
-            foreach (CommunityRelation child in community.CommunityRelation)
+            var community = await _communityRepository.GetCommunityAsync(communityId);
+            var communityDetailsList = new List<CommunityDetails>();
+            foreach (var child in community.CommunityRelation)
             {
                 var childCommunity = child.Community1;
 
@@ -233,12 +232,17 @@ namespace WWTMVC5.Services
         /// </summary>
         /// <param name="communityDetail">Details of the community</param>
         /// <returns>Id of the community created. Returns -1 is creation is failed.</returns>
+        public async Task<long> CreateCommunityAsync(CommunityDetails communityDetail)
+        {
+            return CreateCommunity(communityDetail);
+        }
+
         public long CreateCommunity(CommunityDetails communityDetail)
         {
             // Make sure communityDetails is not null
             this.CheckNotNull(() => new { communityDetails = communityDetail });
 
-            UserRole userRole = GetCommunityUserRole(communityDetail.ParentID, communityDetail.CreatedByID);
+            var userRole = GetCommunityUserRole(communityDetail.ParentID, communityDetail.CreatedByID);
             if (!CanCreateCommunity(communityDetail.ParentID, userRole))
             {
                 throw new HttpException(401, Resources.NoPermissionCreateCommunityMessage);
@@ -248,8 +252,8 @@ namespace WWTMVC5.Services
             // There should be only one "User" community to be created per user.
             if (communityDetail.CommunityType == CommunityTypes.User)
             {
-                Community existingUserCommunity = this.communityRepository.GetItem(
-                                                            c => c.CommunityTypeID == (int)CommunityTypes.User && c.CreatedByID == communityDetail.CreatedByID);
+                var existingUserCommunity = _communityRepository.GetItem(
+                    c => c.CommunityTypeID == (int) CommunityTypes.User && c.CreatedByID == communityDetail.CreatedByID);
 
                 if (existingUserCommunity != null)
                 {
@@ -258,7 +262,7 @@ namespace WWTMVC5.Services
             }
 
             // 1. Add Community details to the community object.
-            Community community = new Community();
+            var community = new Community();
             Mapper.Map(communityDetail, community);
 
             // While creating the community, IsDeleted to be false always.
@@ -276,22 +280,24 @@ namespace WWTMVC5.Services
             }
 
             // 3. Add Tag details. This will also take care of creating tags if they are not there in the Layerscape database.
-            this.SetCommunityTags(communityDetail.Tags, community);
+            SetCommunityTags(communityDetail.Tags, community);
 
-            bool parentAddedToUserRole = false;
+            var parentAddedToUserRole = false;
             if (communityDetail.ParentID > 0)
             {
                 // 4. Add Parent Community details
-                CommunityRelation communityRelation = new CommunityRelation();
-                communityRelation.ParentCommunityID = communityDetail.ParentID;
-                communityRelation.ChildCommunityID = communityDetail.ID;
+                var communityRelation = new CommunityRelation
+                {
+                    ParentCommunityID = communityDetail.ParentID,
+                    ChildCommunityID = communityDetail.ID
+                };
 
                 // TODO: Need to rename the Data Model property CommunityRelation1 with a more meaningful name.
                 // Note that the relation to be added is to CommunityRelation1 since the current Community is Child.
                 // When the current community is parent, it's relation to be added in CommunityRelation.
                 community.CommunityRelation1.Add(communityRelation);
 
-                var parentCommunity = this.communityRepository.GetItem(c => c.CommunityID == communityDetail.ParentID);
+                var parentCommunity = _communityRepository.GetItem(c => c.CommunityID == communityDetail.ParentID);
                 if (parentCommunity != null && parentCommunity.UserCommunities.Count > 0)
                 {
                     parentCommunity.ModifiedByID = communityDetail.CreatedByID;
@@ -300,16 +306,18 @@ namespace WWTMVC5.Services
                     // 5. Inherit Parent Permission Details
                     foreach (var communityUserRole in parentCommunity.UserCommunities)
                     {
-                        var userCommunityRole = new UserCommunities();
+                        var userCommunityRole = new UserCommunities
+                        {
+                            CommunityId = communityDetail.ID,
+                            UserID = communityUserRole.UserID,
+                            RoleID = communityUserRole.RoleID,
+                            IsInherited = true,
+                            CreatedDatetime = DateTime.UtcNow
+                        };
 
                         // Add the current community to the use role
-                        userCommunityRole.CommunityId = communityDetail.ID;
 
                         // Add the existing users along with their roles
-                        userCommunityRole.UserID = communityUserRole.UserID;
-                        userCommunityRole.RoleID = communityUserRole.RoleID;
-                        userCommunityRole.IsInherited = true;
-                        userCommunityRole.CreatedDatetime = DateTime.UtcNow;
 
                         community.UserCommunities.Add(userCommunityRole);
 
@@ -324,22 +332,24 @@ namespace WWTMVC5.Services
             if (!parentAddedToUserRole)
             {
                 // 6. Add Owner Permission Details only if its not already inherited.
-                var userCommunity = new UserCommunities();
-                userCommunity.CommunityId = communityDetail.ID;
-                userCommunity.UserID = communityDetail.CreatedByID;
-                userCommunity.CreatedDatetime = DateTime.UtcNow;
+                var userCommunity = new UserCommunities
+                {
+                    CommunityId = communityDetail.ID,
+                    UserID = communityDetail.CreatedByID,
+                    CreatedDatetime = DateTime.UtcNow,
+                    RoleID = (int) UserRole.Owner,
+                    IsInherited = false
+                };
 
                 // User who is creating the community is the owner.
-                userCommunity.RoleID = (int)UserRole.Owner;
-                userCommunity.IsInherited = false;
                 community.UserCommunities.Add(userCommunity);
             }
 
             // Add the community to the repository
-            this.communityRepository.Add(community);
+            _communityRepository.Add(community);
 
             // Save all the changes made.
-            this.communityRepository.SaveChanges();
+            _communityRepository.SaveChanges();
 
             return community.CommunityID;
         }
@@ -348,20 +358,20 @@ namespace WWTMVC5.Services
         /// Creates the new community in Layerscape with the given details passed in CommunitiesView instance.
         /// </summary>
         /// <param name="communityDetail">Details of the community</param>
-        /// <param name="userID">User Identity</param>
+        /// <param name="userId">User Identity</param>
         /// <returns>Id of the community created. Returns -1 is creation is failed.</returns>
-        public void UpdateCommunity(CommunityDetails communityDetail, long userID)
+        public async void UpdateCommunity(CommunityDetails communityDetail, long userId)
         {
             // Make sure communityDetails is not null
             this.CheckNotNull(() => new { communityDetails = communityDetail });
 
-            Community community = this.communityRepository.GetItem((Community c) => c.CommunityID == communityDetail.ID && c.IsDeleted == false);
+            var community =  _communityRepository.GetItem((Community c) => c.CommunityID == communityDetail.ID && c.IsDeleted == false);
 
             // Make sure community is not null
             this.CheckNotNull(() => new { community });
 
-            UserRole userRole = GetCommunityUserRole(community.CommunityID, userID);
-            if (!CanEditDeleteCommunity(community, userID, userRole))
+            var userRole = GetCommunityUserRole(community.CommunityID, userId);
+            if (!CanEditDeleteCommunity(community, userId, userRole))
             {
                 throw new HttpException(401, Resources.NoPermissionUpdateCommunityMessage);
             }
@@ -380,7 +390,7 @@ namespace WWTMVC5.Services
 
                 Mapper.Map(communityDetail, community);
 
-                community.ModifiedByID = userID;
+                community.ModifiedByID = userId;
                 community.ModifiedDatetime = DateTime.UtcNow;
 
                 // 1. Add Thumbnail to blob
@@ -404,7 +414,7 @@ namespace WWTMVC5.Services
                 }
 
                 // 2. Update Tag details. This will also take care of creating tags if they are not there in the Layerscape database.
-                this.SetCommunityTags(communityDetail.Tags, community);
+                SetCommunityTags(communityDetail.Tags, community);
 
                 // 3. Update User role details. Any change in parent, roles need to be updated.
                 //      Even if there was no parent before, need to check if any parent is mentioned now.
@@ -412,12 +422,12 @@ namespace WWTMVC5.Services
                 long previousParent = 0;
                 if (community.CommunityRelation1.Count == 1)
                 {
-                    previousParent = Enumerable.ElementAt<CommunityRelation>(community.CommunityRelation1, 0).ParentCommunityID;
+                    previousParent = community.CommunityRelation1.ElementAt(0).ParentCommunityID;
                 }
 
                 if (communityDetail.ParentID != previousParent)
                 {
-                    this.userCommunitiesRepository.InheritParentRoles(community, communityDetail.ParentID);
+                    _userCommunitiesRepository.InheritParentRoles(community, communityDetail.ParentID);
                 }
 
                 // 4. Update Parent Community details in case if Parent is specified
@@ -427,7 +437,7 @@ namespace WWTMVC5.Services
                 // Few things to be noted:
                 // a) Obviously the count to be 0 or 1 always.
                 // b) A community can be child of only once parent community or folder and hence only one CommunityRelation1
-                if (community.CommunityRelation1.Count > 0 && Enumerable.ElementAt<CommunityRelation>(community.CommunityRelation1, 0).ParentCommunityID != communityDetail.ParentID)
+                if (community.CommunityRelation1.Count > 0 && community.CommunityRelation1.ElementAt(0).ParentCommunityID != communityDetail.ParentID)
                 {
                     community.CommunityRelation1.Clear();
                 }
@@ -435,7 +445,7 @@ namespace WWTMVC5.Services
                 if (communityDetail.ParentID > 0 && community.CommunityRelation1.Count == 0)
                 {
                     // Add Parent Community details again
-                    CommunityRelation communityRelation = new CommunityRelation();
+                    var communityRelation = new CommunityRelation();
                     communityRelation.ParentCommunityID = communityDetail.ParentID;
                     communityRelation.ChildCommunityID = communityDetail.ID;
 
@@ -446,11 +456,11 @@ namespace WWTMVC5.Services
                 }
 
                 // Mark the Community as updated
-                this.communityRepository.Update(community);
+                _communityRepository.Update(community);
 
                 // TODO: Need to check the concurrency scenarios.
                 // Save all the changes made.
-                this.communityRepository.SaveChanges();
+                _communityRepository.SaveChanges();
             }
             else
             {
@@ -461,57 +471,57 @@ namespace WWTMVC5.Services
         /// <summary>
         /// Deletes the specified community from the Earth database.
         /// </summary>
-        /// <param name="communityID">Community Id</param>
-        /// <param name="userID">User Identity</param>
+        /// <param name="communityId">Community Id</param>
+        /// <param name="userId">User Identity</param>
         /// <param name="isOffensive">Whether community is offensive or not.</param>
         /// <param name="offensiveDetails">Offensive Details.</param>
         /// <returns>Status of the operation. Success, if succeeded. Failure message and exception details in case of exception.</returns>
-        public OperationStatus DeleteCommunity(long communityID, long userID, bool isOffensive, OffensiveEntry offensiveDetails)
+        public OperationStatus DeleteCommunity(long communityId, long userId, bool isOffensive, OffensiveEntry offensiveDetails)
         {
-            return this.DeleteCommunityRecursively(communityID, userID, isOffensive, offensiveDetails);
+            return DeleteCommunityRecursively(communityId, userId, isOffensive, offensiveDetails);
         }
 
         /// <summary>
         /// Deletes the specified community from the Earth database.
         /// </summary>
-        /// <param name="communityID">Community Id</param>
-        /// <param name="userID">User Identity</param>
+        /// <param name="communityId">Community Id</param>
+        /// <param name="userId">User Identity</param>
         /// <returns>Status of the operation. Success, if succeeded. Failure message and exception details in case of exception.</returns>
-        public OperationStatus DeleteCommunity(long communityID, long userID)
+        public OperationStatus DeleteCommunity(long communityId, long userId)
         {
             var details = new OffensiveEntry()
             {
-                EntityID = communityID,
-                ReviewerID = userID,
+                EntityID = communityId,
+                ReviewerID = userId,
                 Status = OffensiveStatusType.Deleted,
                 Justification = "Deleted while deleting the Community."
             };
-            return this.DeleteCommunityRecursively(communityID, userID, false, details);
+            return DeleteCommunityRecursively(communityId, userId, false, details);
         }
 
         /// <summary>
         /// Un-deletes the specified community in the Earth database so that it is again accessible in the site.
         /// </summary>
-        /// <param name="communityID">Community Id</param>
-        /// <param name="userID">User Identity</param>
+        /// <param name="communityId">Community Id</param>
+        /// <param name="userId">User Identity</param>
         /// <returns>Status of the operation. Success, if succeeded. Failure message and exception details in case of exception.</returns>
-        public OperationStatus UnDeleteOffensiveCommunity(long communityID, long userID)
+        public async Task<OperationStatus> UnDeleteOffensiveCommunity(long communityId, long userId)
         {
             OperationStatus status = null;
 
             try
             {
-                if (this.userRepository.IsSiteAdmin(userID))
+                if (_userRepository.IsSiteAdmin(userId))
                 {
-                    Community community = this.communityRepository.GetItem((Community c) => c.CommunityID == communityID);
+                    var community = _communityRepository.GetItem(c => c.CommunityID == communityId);
 
                     // Make sure community exists
                     this.CheckNotNull(() => new { community });
 
-                    this.UnDeleteCommunityContents(community, true);
+                    UnDeleteCommunityContents(community, true);
 
-                    this.communityRepository.Update(community);
-                    this.communityRepository.SaveChanges();
+                    _communityRepository.Update(community);
+                    _communityRepository.SaveChanges();
 
                     // Create Success message if undelete is successful.
                     status = OperationStatus.CreateSuccessStatus();
@@ -532,19 +542,19 @@ namespace WWTMVC5.Services
         /// <summary>
         /// Sets the given access type for the specified community.
         /// </summary>
-        /// <param name="communityID">Community Id</param>
-        /// <param name="userID">User Identity</param>
+        /// <param name="communityId">Community Id</param>
+        /// <param name="userId">User Identity</param>
         /// <param name="accessType">Access type of the community.</param>
         /// <returns>Status of the operation. Success, if succeeded. Failure message and exception details in case of exception.</returns>
-        public OperationStatus SetCommunityAccessType(long communityID, long userID, AccessType accessType)
+        public async Task<OperationStatus> SetCommunityAccessType(long communityId, long userId, AccessType accessType)
         {
-            OperationStatus status = null;
+            OperationStatus status;
 
             try
             {
-                if (this.userRepository.IsSiteAdmin(userID))
+                if (_userRepository.IsSiteAdmin(userId))
                 {
-                    Community community = this.communityRepository.GetItem((Community c) => c.CommunityID == communityID);
+                    var community =  _communityRepository.GetItem(c => c.CommunityID == communityId);
 
                     // Make sure community exists
                     this.CheckNotNull(() => new { community });
@@ -555,15 +565,15 @@ namespace WWTMVC5.Services
 
                     var offensiveDetails = new OffensiveEntry()
                     {
-                        EntityID = communityID,
-                        ReviewerID = userID,
+                        EntityID = communityId,
+                        ReviewerID = userId,
                         Status = OffensiveStatusType.Offensive
                     };
 
-                    UpdateAllOffensiveCommunityEntry(communityID, offensiveDetails);
+                    UpdateAllOffensiveCommunityEntry(communityId, offensiveDetails);
 
-                    this.communityRepository.Update(community);
-                    this.communityRepository.SaveChanges();
+                    _communityRepository.Update(community);
+                    _communityRepository.SaveChanges();
 
                     // Create Success message if set access type is successful.
                     status = OperationStatus.CreateSuccessStatus();
@@ -585,43 +595,43 @@ namespace WWTMVC5.Services
         /// Gets the communities and folders which can be used as parent while creating a new 
         /// community/folder/content by the specified user.
         /// </summary>
-        /// <param name="communityID">Id of the current community which should not be returned</param>
-        /// <param name="userID">User for which the parent communities/folders are being fetched</param>
+        /// <param name="communityId">Id of the current community which should not be returned</param>
+        /// <param name="userId">User for which the parent communities/folders are being fetched</param>
         /// <returns>List of communities folders</returns>
-        public IEnumerable<Community> GetParentCommunities(long communityID, long userID)
+        public IEnumerable<Community> GetParentCommunities(long communityId, long userId)
         {
             // Need to check if the user is site admin or not.
-            UserRole currentUserRole = this.userRepository.GetUserRole(userID, null);
-            return this.communityRepository.GetParentCommunities(userID, communityID, CommunityTypes.User, UserRole.Moderator, currentUserRole);
+            var currentUserRole = _userRepository.GetUserRole(userId, null);
+            return _communityRepository.GetParentCommunities(userId, communityId, CommunityTypes.User, UserRole.Moderator, currentUserRole);
         }
 
         /// <summary>
         /// Get payload details for the community
         /// </summary>
-        /// <param name="communityID">community Id</param>
-        /// <param name="userID">user Identity</param>
+        /// <param name="communityId">community Id</param>
+        /// <param name="userId">user Identity</param>
         /// <returns>payload details</returns>
-        public PayloadDetails GetPayload(long communityID, long? userID)
+        public PayloadDetails GetPayload(long communityId, long? userId)
         {
             var payloadDetails = PayloadDetailsExtensions.InitializePayload();
-            var community = this.communityRepository.GetPayloadDetails(communityID);
+            var community = _communityRepository.GetPayloadDetails(communityId);
             if (community != null)
             {
                 payloadDetails.Name = community.Name;
                 payloadDetails.Id = community.CommunityID.ToString(CultureInfo.InvariantCulture);
                 payloadDetails.MSRCommunityId = community.CommunityID;
-                payloadDetails.CommunityType = community.CommunityTypeID.ToEnum<int, CommunityTypes>(CommunityTypes.Folder);
+                payloadDetails.CommunityType = community.CommunityTypeID.ToEnum(CommunityTypes.Folder);
                 payloadDetails.Thumbnail = community.ThumbnailID.HasValue ? community.ThumbnailID.ToString() : null;
 
                 // Set Child communities based on user permissions
-                List<CommunityDetails> communityDetailsList = new List<CommunityDetails>();
-                foreach (CommunityRelation child in community.CommunityRelation)
+                var communityDetailsList = new List<CommunityDetails>();
+                foreach (var child in community.CommunityRelation)
                 {
                     var childCommunity = child.Community1;
 
                     try
                     {
-                        var communityDetails = CreateCommunityDetails(childCommunity, userID, false);
+                        var communityDetails = CreateCommunityDetails(childCommunity, userId, false);
                         //// TODO : Better way to move IsDeleted Check
                         if (communityDetails != null && childCommunity.IsDeleted == false)
                         {
@@ -644,7 +654,7 @@ namespace WWTMVC5.Services
                 payloadDetails.SetValuesFrom(communityDetailsList);
 
                 // Set Child Content based on user permissions
-                var contentDetailsList = GetContentDetailsFromContent(community.CommunityContents.Select(item => item.Content).Where(item => item.IsDeleted == false), userID);
+                var contentDetailsList = GetContentDetailsFromContent(community.CommunityContents.Select(item => item.Content).Where(item => item.IsDeleted == false), userId);
                 payloadDetails.SetValuesFrom(contentDetailsList);
             }
 
@@ -654,13 +664,13 @@ namespace WWTMVC5.Services
         /// <summary>
         /// Get all tours in the community
         /// </summary>
-        /// <param name="communityID">community Id</param>
-        /// <param name="userID">user Identity</param>
+        /// <param name="communityId">community Id</param>
+        /// <param name="userId">user Identity</param>
         /// <returns>payload details</returns>
-        public PayloadDetails GetAllTours(long communityID, long? userID)
+        public PayloadDetails GetAllTours(long communityId, long? userId)
         {
-            var tourContents = this.communityRepository.GetAllTours(communityID);
-            var contentDetailsList = GetContentDetailsFromContent(tourContents, userID);
+            var tourContents = _communityRepository.GetAllTours(communityId);
+            var contentDetailsList = GetContentDetailsFromContent(tourContents, userId);
 
             var payloadDetails = PayloadDetailsExtensions.InitializePayload();
             payloadDetails.SetValuesFrom(contentDetailsList);
@@ -671,13 +681,13 @@ namespace WWTMVC5.Services
         /// <summary>
         /// Get latest content in the community
         /// </summary>
-        /// <param name="communityID">community Id</param>
-        /// <param name="userID">user Identity</param>
+        /// <param name="communityId">community Id</param>
+        /// <param name="userId">user Identity</param>
         /// <returns>payload details</returns>
-        public PayloadDetails GetLatestContent(long communityID, long? userID)
+        public PayloadDetails GetLatestContent(long communityId, long? userId)
         {
-            var latestContents = this.communityRepository.GetLatestContent(communityID, Constants.CommunityTourLatestFileDays);
-            var contentDetailsList = GetContentDetailsFromContent(latestContents, userID);
+            var latestContents = _communityRepository.GetLatestContent(communityId, Constants.CommunityTourLatestFileDays);
+            var contentDetailsList = GetContentDetailsFromContent(latestContents, userId);
 
             var payloadDetails = PayloadDetailsExtensions.InitializePayload();
             payloadDetails.SetValuesFrom(contentDetailsList);
@@ -688,27 +698,19 @@ namespace WWTMVC5.Services
         /// <summary>
         /// This function retrieves the communities to be shown at the root level for the user.
         /// </summary>
-        /// <param name="userID">User identity</param>
+        /// <param name="userId">User identity</param>
         /// <returns>Payload details.</returns>
-        public PayloadDetails GetRootCommunities(long userID)
+        public async Task<PayloadDetails> GetRootCommunities(long userId)
         {
-            UserRole currentUserRole = this.userRepository.GetUserRole(userID, null);
-            IEnumerable<long> userCommunityIds = this.userRepository.GetUserCommunitiesForRole(userID, currentUserRole, false);
-            Expression<Func<Community, bool>> condition = (Community c) => userCommunityIds.Contains(c.CommunityID);
+            var currentUserRole = _userRepository.GetUserRole(userId, null);
+            var userCommunityIds = _userRepository.GetUserCommunitiesForRole(userId, currentUserRole, false);
+            Expression<Func<Community, bool>> condition = c => userCommunityIds.Contains(c.CommunityID);
 
-            Func<Community, object> orderBy = (Community c) => c.ModifiedDatetime;
-            var communities = this.communityRepository.GetItems(condition, orderBy, true);
-            var communityDetailsList = new List<CommunityDetails>();
-            foreach (Community community in communities)
-            {
-                var communityDetails = CreateCommunityDetails(community, userID, false);
-                if (communityDetails != null)
-                {
-                    communityDetailsList.Add(communityDetails);
-                }
-            }
+            Func<Community, object> orderBy = c => c.ModifiedDatetime;
+            var communities = _communityRepository.GetItems(condition, orderBy, true);
+            var communityDetailsList = communities.Select(community => CreateCommunityDetails(community, userId, false)).Where(communityDetails => communityDetails != null).ToList();
 
-            PayloadDetails payloadDetails = PayloadDetailsExtensions.InitializePayload();
+            var payloadDetails = PayloadDetailsExtensions.InitializePayload();
             payloadDetails.Name = "My Communities";
             payloadDetails.Permission = Permission.Reader;
             payloadDetails.SetValuesFrom(communityDetailsList);
@@ -719,13 +721,20 @@ namespace WWTMVC5.Services
         /// <summary>
         /// Gets the default community of the User.
         /// </summary>
-        /// <param name="userID">user identification.</param>
+        /// <param name="userId">user identification.</param>
         /// <returns>Default community details.</returns>
-        public CommunityDetails GetDefaultCommunity(long userID)
+        public async Task<CommunityDetails> GetDefaultCommunityAsync(long userId)
         {
             CommunityDetails communityDetails = null;
-            var community = this.communityRepository.GetItem(c => c.CommunityTypeID == (int)CommunityTypes.User && c.CreatedByID == userID);
-            communityDetails = CreateCommunityDetails(community, userID, false);
+            var community = _communityRepository.GetItem(c => c.CommunityTypeID == (int)CommunityTypes.User && c.CreatedByID == userId);
+            communityDetails = CreateCommunityDetails(community, userId, false);
+            return communityDetails;
+        }
+        public CommunityDetails GetDefaultCommunity(long userId)
+        {
+            CommunityDetails communityDetails = null;
+            var community = _communityRepository.GetItem(c => c.CommunityTypeID == (int)CommunityTypes.User && c.CreatedByID == userId);
+            communityDetails = CreateCommunityDetails(community, userId, false);
             return communityDetails;
         }
 
@@ -738,7 +747,7 @@ namespace WWTMVC5.Services
         /// </returns>
         public IEnumerable<long> GetLatestCommunityIDs(int count)
         {
-            return this.communityRepository.GetLatestCommunityIDs(count);
+            return _communityRepository.GetLatestCommunityIDs(count);
         }
 
         /// <summary>
@@ -746,27 +755,27 @@ namespace WWTMVC5.Services
         /// </summary>
         /// <param name="inviteRequestItem">Invite request with details</param>
         /// <returns>Returns the collection of invite request send along with their tokens.</returns>
-        public IEnumerable<InviteRequestItem> InvitePeople(InviteRequestItem inviteRequestItem)
+        public async Task<IEnumerable<InviteRequestItem>> InvitePeople(InviteRequestItem inviteRequestItem)
         {
             // Make sure inviteRequest is not null.
             this.CheckNotNull(() => new { inviteRequestItem });
             IList<InviteRequestItem> invitedPeople = new List<InviteRequestItem>();
-            UserRole userRole = this.userRepository.GetUserRole(inviteRequestItem.InvitedByID, inviteRequestItem.CommunityID);
+            var userRole = _userRepository.GetUserRole(inviteRequestItem.InvitedByID, inviteRequestItem.CommunityID);
             if (userRole >= UserRole.Moderator)
             {
-                var community = this.communityRepository.GetItem(c => c.CommunityID == inviteRequestItem.CommunityID && c.IsDeleted == false);
+                var community =  _communityRepository.GetItem(c => c.CommunityID == inviteRequestItem.CommunityID && c.IsDeleted == false);
 
                 this.CheckNotNull(() => new { community });
 
                 // Create the invite request content.
-                InviteRequestContent inviteRequestContent = new InviteRequestContent();
+                var inviteRequestContent = new InviteRequestContent();
                 Mapper.Map(inviteRequestItem, inviteRequestContent);
                 inviteRequestContent.InvitedDate = DateTime.UtcNow;
 
                 foreach (var emailId in inviteRequestItem.EmailIdList)
                 {
                     // For each user getting invited, add the invite request and associate it with the invite request content.
-                    InviteRequest inviteRequest = new InviteRequest();
+                    var inviteRequest = new InviteRequest();
                     inviteRequest.EmailID = emailId;
                     inviteRequest.InviteRequestToken = Guid.NewGuid();
                     inviteRequest.Used = false;
@@ -774,7 +783,7 @@ namespace WWTMVC5.Services
 
                     inviteRequestContent.InviteRequest.Add(inviteRequest);
 
-                    InviteRequestItem invitedRequestItem = new InviteRequestItem();
+                    var invitedRequestItem = new InviteRequestItem();
                     Mapper.Map(inviteRequestItem, invitedRequestItem);
                     invitedRequestItem.EmailIdList.Add(emailId);
                     invitedRequestItem.InviteRequestToken = inviteRequest.InviteRequestToken;
@@ -785,10 +794,10 @@ namespace WWTMVC5.Services
                 community.InviteRequestContent.Add(inviteRequestContent);
 
                 // Mark the community as updated.
-                this.communityRepository.Update(community);
+                _communityRepository.Update(community);
 
                 // Save all the changes made.
-                this.communityRepository.SaveChanges();
+                _communityRepository.SaveChanges();
             }
 
             return invitedPeople;
@@ -811,16 +820,16 @@ namespace WWTMVC5.Services
             // Create Tags and relationships.
             if (!string.IsNullOrWhiteSpace(tagsString))
             {
-                IEnumerable<string> tagsArray = tagsString.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(p => p.Trim());
+                var tagsArray = tagsString.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(p => p.Trim());
                 if (tagsArray != null && tagsArray.Count() > 0)
                 {
                     var notExistingTags = from tag in tagsArray
-                                          where Enumerable.FirstOrDefault<CommunityTags>(community.CommunityTags, t => t.Tag.Name == tag) == null
+                                          where Enumerable.FirstOrDefault(community.CommunityTags, t => t.Tag.Name == tag) == null
                                           select tag;
 
-                    foreach (string tag in notExistingTags)
+                    foreach (var tag in notExistingTags)
                     {
-                        Tag objTag = tagRepository.GetItem((Tag t) => t.Name == tag);
+                        var objTag = _tagRepository.GetItem((Tag t) => t.Name == tag);
 
                         if (objTag == null)
                         {
@@ -828,7 +837,7 @@ namespace WWTMVC5.Services
                             objTag.Name = tag;
                         }
 
-                        CommunityTags communityTag = new CommunityTags();
+                        var communityTag = new CommunityTags();
                         communityTag.Community = community;
                         communityTag.Tag = objTag;
 
@@ -841,33 +850,33 @@ namespace WWTMVC5.Services
         /// <summary>
         /// Deletes the specified community from the Earth database.
         /// </summary>
-        /// <param name="communityID">Community Id</param>
-        /// <param name="userID">User Identity</param>
+        /// <param name="communityId">Community Id</param>
+        /// <param name="userId">User Identity</param>
         /// <param name="isOffensive">Community is offensive or not</param>
         /// <param name="offensiveDetails">Offensive Details.</param>
         /// <returns>True of the community is deleted. False otherwise.</returns>
-        private OperationStatus DeleteCommunityRecursively(long communityID, long userID, bool isOffensive, OffensiveEntry offensiveDetails)
+        private OperationStatus DeleteCommunityRecursively(long communityId, long userId, bool isOffensive, OffensiveEntry offensiveDetails)
         {
             OperationStatus status = null;
             try
             {
-                UserRole userRole = GetCommunityUserRole(communityID, userID);
-                Community community = this.communityRepository.GetItem((Community c) => c.CommunityID == communityID && c.CommunityTypeID != (int)CommunityTypes.User && c.IsDeleted == false);
+                var userRole = GetCommunityUserRole(communityId, userId);
+                var community = _communityRepository.GetItem((Community c) => c.CommunityID == communityId && c.CommunityTypeID != (int)CommunityTypes.User && c.IsDeleted == false);
 
                 if (community != null)
                 {
-                    if (CanEditDeleteCommunity(community, userID, userRole))
+                    if (CanEditDeleteCommunity(community, userId, userRole))
                     {
-                        this.DeleteCommunityContents(community, userID, isOffensive, offensiveDetails);
+                        DeleteCommunityContents(community, userId, isOffensive, offensiveDetails);
 
                         community.IsOffensive = isOffensive;
-                        community.DeletedByID = userID;
+                        community.DeletedByID = userId;
 
                         // Mark the Community as updated
-                        this.communityRepository.Update(community);
+                        _communityRepository.Update(community);
 
                         // Save all the changes made.
-                        this.communityRepository.SaveChanges();
+                        _communityRepository.SaveChanges();
                     }
                     else
                     {
@@ -876,7 +885,7 @@ namespace WWTMVC5.Services
                 }
                 else
                 {
-                    status = OperationStatus.CreateFailureStatus(string.Format(CultureInfo.CurrentCulture, "Community with ID '{0}' was not found", communityID));
+                    status = OperationStatus.CreateFailureStatus(string.Format(CultureInfo.CurrentCulture, "Community with ID '{0}' was not found", communityId));
                 }
             }
             catch (Exception exception)
@@ -916,12 +925,12 @@ namespace WWTMVC5.Services
                 //    exist and deleted, delete the parent relationship.
                 if (community.CommunityRelation1.Count > 0)
                 {
-                    long parentCommunityID = Enumerable.ElementAt<CommunityRelation>(community.CommunityRelation1, 0).Community.CommunityID;
+                    var parentCommunityId = Enumerable.ElementAt(community.CommunityRelation1, 0).Community.CommunityID;
 
-                    if (Enumerable.ElementAt<CommunityRelation>(community.CommunityRelation1, 0).Community.IsDeleted == true)
+                    if (Enumerable.ElementAt(community.CommunityRelation1, 0).Community.IsDeleted == true)
                     {
-                        parentCommunityID = 0;
-                        community.CommunityRelation1.Remove(Enumerable.ElementAt<CommunityRelation>(community.CommunityRelation1, 0));
+                        parentCommunityId = 0;
+                        community.CommunityRelation1.Remove(Enumerable.ElementAt(community.CommunityRelation1, 0));
                     }
 
                     if (updatePermissions)
@@ -930,15 +939,15 @@ namespace WWTMVC5.Services
                         //      3.1 If there is not parent community is there or if parent community is deleted, mark all the 
                         //          permissions as direct, not inherited.
                         //      3.2 If the parent community is available, then check for the roles which are inherited from parent.
-                        this.userCommunitiesRepository.InheritParentRoles(community, parentCommunityID);
+                        _userCommunitiesRepository.InheritParentRoles(community, parentCommunityId);
                     }
                 }
 
                 // 4. Mark all the contents of the community as undeleted, only if they are not offensive.
                 //      Also make sure we don't undelete contents which are explicitly deleted by the User. (DeletedBYID will be set explicitly if the content is deleted by user)
-                for (int i = community.CommunityContents.Count - 1; i >= 0; i--)
+                for (var i = community.CommunityContents.Count - 1; i >= 0; i--)
                 {
-                    CommunityContents communityContent = Enumerable.ElementAt<CommunityContents>(community.CommunityContents, i);
+                    var communityContent = Enumerable.ElementAt(community.CommunityContents, i);
 
                     // DeletedBy filed will be used to check if the user has explicitly deleted the Community. 
                     if (communityContent.Content.IsDeleted == true 
@@ -955,9 +964,9 @@ namespace WWTMVC5.Services
 
                 // 5. Mark all the child communities and folders as undeleted. Note that current community is parent and
                 //    all its relations with children will be there in CommunityRelation.
-                for (int i = community.CommunityRelation.Count - 1; i >= 0; i--)
+                for (var i = community.CommunityRelation.Count - 1; i >= 0; i--)
                 {
-                    CommunityRelation communityRelation = Enumerable.ElementAt<CommunityRelation>(community.CommunityRelation, i);
+                    var communityRelation = Enumerable.ElementAt(community.CommunityRelation, i);
 
                     // Incase if the same community is marked as its parent/child in DB directly, without this check delete call will go indefinitely.
                     if (communityRelation.Community1.IsDeleted == true 
@@ -975,8 +984,8 @@ namespace WWTMVC5.Services
         /// Deletes all the contents of the community, including its sub communities/folders and contents recursively.
         /// </summary>
         /// <param name="community">Community whose contents to be deleted</param>
-        /// <param name="profileID">User Identity</param>
-        private void DeleteCommunityContents(Community community, long profileID, bool isOffensive, OffensiveEntry offensiveDetails)
+        /// <param name="profileId">User Identity</param>
+        private void DeleteCommunityContents(Community community, long profileId, bool isOffensive, OffensiveEntry offensiveDetails)
         {
             if (community != null)
             {
@@ -991,9 +1000,9 @@ namespace WWTMVC5.Services
                 UpdateAllOffensiveCommunityEntry(community.CommunityID, offensiveDetails);
 
                 // Mark all the contents of the community as deleted and also delete the relation entry from CommunityContents table.
-                for (int i = community.CommunityContents.Count - 1; i >= 0; i--)
+                for (var i = community.CommunityContents.Count - 1; i >= 0; i--)
                 {
-                    CommunityContents communityContent = Enumerable.ElementAt<CommunityContents>(community.CommunityContents, i);
+                    var communityContent = Enumerable.ElementAt(community.CommunityContents, i);
 
                     if (communityContent.Content.IsDeleted == false)
                     {
@@ -1012,14 +1021,14 @@ namespace WWTMVC5.Services
 
                 // Mark all the child communities and folders as deleted. Note that current community is parent and
                 // all its relations with children will be there in CommunityRelation. Also deleting the relation entry from CommunityRelation table.
-                for (int i = community.CommunityRelation.Count - 1; i >= 0; i--)
+                for (var i = community.CommunityRelation.Count - 1; i >= 0; i--)
                 {
-                    CommunityRelation communityRelation = Enumerable.ElementAt<CommunityRelation>(community.CommunityRelation, i);
+                    var communityRelation = Enumerable.ElementAt(community.CommunityRelation, i);
 
                     // Incase if the same community is marked as its parent/child in DB directly, without this check delete call will go indefinitely.
                     if (communityRelation.Community1.IsDeleted == false && communityRelation.Community1.CommunityID != community.CommunityID)
                     {
-                        DeleteCommunityContents(communityRelation.Community1, profileID, isOffensive, offensiveDetails);
+                        DeleteCommunityContents(communityRelation.Community1, profileId, isOffensive, offensiveDetails);
                     }
                 }
             }
@@ -1031,12 +1040,12 @@ namespace WWTMVC5.Services
         /// <param name="thumbnail">Details of the thumbnail</param>
         private bool MoveThumbnail(FileDetail thumbnail)
         {
-            BlobDetails thumbnailBlob = new BlobDetails()
+            var thumbnailBlob = new BlobDetails()
             {
                 BlobID = thumbnail.AzureID.ToString()
             };
 
-            return this.blobDataRepository.MoveThumbnail(thumbnailBlob);
+            return _blobDataRepository.MoveThumbnail(thumbnailBlob);
         }
 
         /// <summary>
@@ -1044,17 +1053,17 @@ namespace WWTMVC5.Services
         /// on the community,based on that, CommunityDetails might be null in case is user is not having permission.
         /// </summary>
         /// <param name="community">Community for which community details has to be created</param>
-        /// <param name="userID">Current user id</param>
+        /// <param name="userId">Current user id</param>
         /// <param name="checkPendingRequest">Check for pending requests of the user</param>
         /// <returns>Community details instance</returns>
-        private CommunityDetails CreateCommunityDetails(Community community, long? userID, bool checkPendingRequest)
+        private CommunityDetails CreateCommunityDetails(Community community, long? userId, bool checkPendingRequest)
         {
             CommunityDetails communityDetails = null;
 
             if (community != null)
             {
                 Permission permission;
-                UserRole userRole = GetCommunityUserRole(community.CommunityID, userID);
+                var userRole = GetCommunityUserRole(community.CommunityID, userId);
 
                 if (!CanReadCommunity(userRole))
                 {
@@ -1067,8 +1076,8 @@ namespace WWTMVC5.Services
                 // 2. Pending approval is needed only for community details, not to be added in other places.
                 if (checkPendingRequest &&
                         userRole == UserRole.Visitor &&
-                        userID.HasValue &&
-                        this.userRepository.PendingPermissionRequests(userID.Value, community.CommunityID))
+                        userId.HasValue &&
+                        _userRepository.PendingPermissionRequests(userId.Value, community.CommunityID))
                 {
                     permission = Permission.PendingApproval;
                 }
@@ -1081,10 +1090,10 @@ namespace WWTMVC5.Services
                 communityDetails.ViewCount = community.ViewCount.HasValue ? community.ViewCount.Value : 0;
 
                 // Update parent details based on the permission.
-                var parent = Enumerable.FirstOrDefault<CommunityRelation>(community.CommunityRelation1);
+                var parent = Enumerable.FirstOrDefault(community.CommunityRelation1);
                 if (parent != null && parent.Community != null)
                 {
-                    UserRole parentUserRole = GetCommunityUserRole(parent.Community.CommunityID, userID);
+                    var parentUserRole = GetCommunityUserRole(parent.Community.CommunityID, userId);
 
                     if (!CanReadCommunity(parentUserRole))
                     {
@@ -1103,16 +1112,16 @@ namespace WWTMVC5.Services
         /// pending requests on the private community.
         /// </summary>
         /// <param name="community">Community for which private community details has to be created</param>
-        /// <param name="userID">Current user id</param>
+        /// <param name="userId">Current user id</param>
         /// <returns>Community details instance</returns>
-        private CommunityDetails CreatePrivateCommunityDetails(Community community, long? userID)
+        private CommunityDetails CreatePrivateCommunityDetails(Community community, long? userId)
         {
             CommunityDetails communityDetails = null;
 
-            Permission permission = Permission.Visitor;
+            var permission = Permission.Visitor;
 
             // Check if already any pending approvals are there.
-            if (userID.HasValue && this.userRepository.PendingPermissionRequests(userID.Value, community.CommunityID))
+            if (userId.HasValue && _userRepository.PendingPermissionRequests(userId.Value, community.CommunityID))
             {
                 permission = Permission.PendingApproval;
             }
@@ -1144,7 +1153,7 @@ namespace WWTMVC5.Services
             var contentDetailsList = new List<ContentDetails>();
             foreach (var childContent in contents)
             {
-                var userRole = this.contentService.GetContentUserRole(childContent, userId);
+                var userRole = _contentService.GetContentUserRole(childContent, userId);
 
                 // For private contents, user's who have not assigned explicit permission will not have access.
                 if (userRole != UserRole.None)
@@ -1185,26 +1194,26 @@ namespace WWTMVC5.Services
             {
                 // Increment view Count.
                 community.ViewCount = community.ViewCount.HasValue ? community.ViewCount.Value + 1 : 1;
-                this.communityRepository.Update(community);
+                _communityRepository.Update(community);
 
                 // Save changes to the database
-                this.communityRepository.SaveChanges();
+                _communityRepository.SaveChanges();
             }
         }
 
         /// <summary>
         /// Updates the all the entries for the given Community with all the details.
         /// </summary>
-        /// <param name="communityID">ID of the current community.</param>
+        /// <param name="communityId">ID of the current community.</param>
         /// <param name="details">Details provided.</param>
         /// <returns>True if Community was updated; otherwise false.</returns>
-        private OperationStatus UpdateAllOffensiveCommunityEntry(long communityID, OffensiveEntry details)
+        private OperationStatus UpdateAllOffensiveCommunityEntry(long communityId, OffensiveEntry details)
         {
             OperationStatus status = null;
             try
             {
-                var offensiveCommunities = this.offensiveCommunitiesRepository.GetItems(oc => oc.CommunityID == communityID && oc.OffensiveStatusID == (int)OffensiveStatusType.Flagged, null, false);
-                if (offensiveCommunities != null && offensiveCommunities.Count() > 0)
+                var offensiveCommunities =  _offensiveCommunitiesRepository.GetItems(oc => oc.CommunityID == communityId && oc.OffensiveStatusID == (int)OffensiveStatusType.Flagged, null, false);
+                if (offensiveCommunities != null && offensiveCommunities.Any())
                 {
                     foreach (var item in offensiveCommunities)
                     {
@@ -1214,7 +1223,7 @@ namespace WWTMVC5.Services
                         item.ReviewerID = details.ReviewerID;
                         item.ReviewerDatetime = DateTime.UtcNow;
 
-                        this.offensiveCommunitiesRepository.Update(item);
+                        _offensiveCommunitiesRepository.Update(item);
                     }
                 }
             }
@@ -1233,16 +1242,16 @@ namespace WWTMVC5.Services
         /// <summary>
         /// Updates the all the entries for the given Content with all the details.
         /// </summary>
-        /// <param name="contentID">Content ID.</param>
+        /// <param name="contentId">Content ID.</param>
         /// <param name="details">Details provided.</param>
         /// <returns>True if content was updated; otherwise false.</returns>
-        private OperationStatus UpdateAllOffensiveContentEntry(long contentID, OffensiveEntry details)
+        private OperationStatus UpdateAllOffensiveContentEntry(long contentId, OffensiveEntry details)
         {
             OperationStatus status = null;
             try
             {
-                var offensiveContents = this.offensiveContentRepository.GetItems(oc => oc.ContentID == contentID && oc.OffensiveStatusID == (int)OffensiveStatusType.Flagged, null, false);
-                if (offensiveContents != null && offensiveContents.Count() > 0)
+                var offensiveContents =  _offensiveContentRepository.GetItems(oc => oc.ContentID == contentId && oc.OffensiveStatusID == (int)OffensiveStatusType.Flagged, null, false);
+                if (offensiveContents != null && offensiveContents.Any())
                 {
                     foreach (var item in offensiveContents)
                     {
@@ -1252,7 +1261,7 @@ namespace WWTMVC5.Services
                         item.ReviewerID = details.ReviewerID;
                         item.ReviewerDatetime = DateTime.UtcNow;
 
-                        this.offensiveContentRepository.Update(item);
+                        _offensiveContentRepository.Update(item);
                     }
                 }
             }

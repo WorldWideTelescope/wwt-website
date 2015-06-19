@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
@@ -43,7 +44,7 @@ namespace WWTMVC5.Controllers
         public ProfileController(IProfileService profileService, ICommunityService communityService, INotificationService queueService)
             : base(profileService)
         {
-            this._communityService = communityService;
+            _communityService = communityService;
             _notificationService = queueService;
         }
 
@@ -55,7 +56,7 @@ namespace WWTMVC5.Controllers
         /// It returns the profile view
         /// </summary>
         /// <returns>It returns the profile detail</returns>
-        [HttpPost]
+        [HttpGet]
         [Route("Profile/MyProfile/Get")]
         public async Task<JsonResult> MyProfile()
         {
@@ -64,75 +65,41 @@ namespace WWTMVC5.Controllers
                 await TryAuthenticateFromHttpContext(_communityService, _notificationService);
             }
             var userDetail = GetProfile(CurrentUserId);
-            return new JsonResult { Data = userDetail };
+            return new JsonResult { Data = userDetail,JsonRequestBehavior = JsonRequestBehavior.AllowGet};
         }
 
-        /// <summary>
-        /// It returns the profile view
-        /// </summary>
-        /// <returns>It returns the profile detail</returns>
-        [HttpGet]
-        public ActionResult Index(long id)
-        {
-            ProfileViewModel userDetail = GetProfile(id);
-            return View(userDetail);
-        }
-
+        
         /// <summary>
         /// Returns the partial view of Profile Entity View
         /// </summary>
         /// <param name="entityType">Content / Community</param>
-        /// <param name="profileId">User profile Id</param>
         /// <param name="currentPage"></param>
         /// <param name="pageSize"></param>
-        [HttpPost]
+        [HttpGet]
         [Route("Profile/Entities/{entityType}/{currentPage}/{pageSize}")]
-        public JsonResult Render(EntityType entityType,  int currentPage, int pageSize)
+        public async Task<JsonResult> GetProfileEntities(EntityType entityType,  int currentPage, int pageSize)
         {
-            
+            if (CurrentUserId == 0)
+            {
+                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+            }
             // Initialize the page details object with current page as parameter. First time when page loads, current page is always 1.
-            PageDetails pageDetails = GetPageDetails(CurrentUserId, entityType, 1);
+            var pageDetails = GetPageDetails(CurrentUserId, entityType, 1);
             pageDetails.CurrentPage = currentPage;
             pageDetails.ItemsPerPage = pageSize;
 
-            List<EntityViewModel> entities = GetEntities(CurrentUserId, entityType, pageDetails);
+            var entities = await GetEntities(CurrentUserId, entityType, pageDetails);
 
             SetSiteAnalyticsPrefix(HighlightType.None);
 
-            return new JsonResult {Data = new {entities=entities,pageInfo=pageDetails}};
+            return new JsonResult
+            {
+                Data = new {entities, pageInfo=pageDetails},
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
 
         }
 
-        /// <summary>
-        /// Returns the partial view of Profile Entity View
-        /// </summary>
-        /// <param name="entityType">Content / Community</param>
-        /// <param name="profileId">User profile Id</param>
-        [HttpPost]
-        public void AjaxRender(EntityType entityType, long profileId, int currentPage)
-        {
-            try
-            {
-                // Initialize the page details object with current page as parameter.
-                PageDetails pageDetails = GetPageDetails(profileId, entityType, currentPage);
-
-                List<EntityViewModel> highlightEntities = GetEntities(profileId, entityType, pageDetails);
-
-                ViewData["CurrentPage"] = currentPage;
-                ViewData["TotalPage"] = pageDetails.TotalPages;
-                ViewData["TotalCount"] = pageDetails.TotalCount;
-
-                // It creates the prefix for id of links
-                SetSiteAnalyticsPrefix(HighlightType.None);
-
-                PartialView("ProfileEntityView", highlightEntities).ExecuteResult(this.ControllerContext);
-            }
-            catch (Exception)
-            {
-                // Consume the exception and render rest of the views in the page.
-                // TODO: Log the exception?
-            }
-        }
 
         /// <summary>
         /// Index Action which is default action rendering the Terms and condition window.
@@ -140,7 +107,6 @@ namespace WWTMVC5.Controllers
         /// <returns>Returns the View to be used</returns>
         /// <remarks>DO NOT ADD Live Authorization for this since it will go in an indefinite loop.</remarks>
         [HttpPost]
-        //[ValidateAntiForgeryToken]
         [Route("Profile/New/Create")]
         public async Task<JsonResult> New()
         {
@@ -148,7 +114,7 @@ namespace WWTMVC5.Controllers
             {
                 await TryAuthenticateFromHttpContext(_communityService, _notificationService);
             }
-            LiveLoginResult result = SessionWrapper.Get<LiveLoginResult>("LiveConnectResult");
+            var result = SessionWrapper.Get<LiveLoginResult>("LiveConnectResult");
             if (result != null && result.Status == LiveConnectSessionStatus.Connected)
             {
                 var profileDetails = SessionWrapper.Get<ProfileDetails>("ProfileDetails");
@@ -159,8 +125,8 @@ namespace WWTMVC5.Controllers
                 // When creating the user, by default the user type will be of regular. 
                 profileDetails.UserType = UserTypes.Regular;
 
-                profileDetails.ID = this.ProfileService.CreateProfile(profileDetails);
-                SessionWrapper.Set<long>("CurrentUserID", profileDetails.ID);
+                profileDetails.ID = ProfileService.CreateProfile(profileDetails);
+                SessionWrapper.Set("CurrentUserID", profileDetails.ID);
                 CreateDefaultUserCommunity(profileDetails.ID);
 
                 // Send New user notification.
@@ -183,7 +149,7 @@ namespace WWTMVC5.Controllers
         {
             if (profileId == CurrentUserId)
             {
-                ProfileDetails profileDetails = new ProfileDetails()
+                var profileDetails = new ProfileDetails()
                 {
                     ID = profileId,
                     Affiliation = Server.UrlDecode(affiliation),
@@ -207,7 +173,7 @@ namespace WWTMVC5.Controllers
                     }
                 }
                
-                this.ProfileService.UpdateProfile(profileDetails);
+                ProfileService.UpdateProfile(profileDetails);
 
                 // This will make sure that the latest name from DB will be fetched again.
                 SessionWrapper.Set<string>("CurrentUserProfileName", null);
@@ -229,8 +195,8 @@ namespace WWTMVC5.Controllers
         /// <returns>Profile view model.</returns>
         private ProfileViewModel GetProfile(long id)
         {
-            var profileDetails = this.ProfileService.GetProfile(id);
-            ProfileViewModel userDetail = new ProfileViewModel();
+            var profileDetails = ProfileService.GetProfile(id);
+            var userDetail = new ProfileViewModel();
             if (profileDetails != null)
             {
                 Mapper.Map(profileDetails, userDetail);
@@ -250,17 +216,17 @@ namespace WWTMVC5.Controllers
         /// <returns>Page details instance</returns>
         private PageDetails GetPageDetails(long userId, EntityType entityType, int currentPage)
         {
-            PageDetails pageDetails = new PageDetails(currentPage);
+            var pageDetails = new PageDetails(currentPage);
             pageDetails.ItemsPerPage = Constants.EntitiesPerUser;
 
-            int totalItemsForCondition = 0;
+            var totalItemsForCondition = 0;
             switch (entityType)
             {
                 case EntityType.Community:
-                    totalItemsForCondition = this.ProfileService.GetCommunitiesCount(userId, userId != CurrentUserId);
+                    totalItemsForCondition = ProfileService.GetCommunitiesCount(userId, userId != CurrentUserId);
                     break;
                 case EntityType.Content:
-                    totalItemsForCondition = this.ProfileService.GetContentsCount(userId, userId != CurrentUserId);
+                    totalItemsForCondition = ProfileService.GetContentsCount(userId, userId != CurrentUserId);
                     break;
                 default:
                     break;
@@ -280,27 +246,27 @@ namespace WWTMVC5.Controllers
         /// <param name="entityType">Entity type (Community/Content)</param>
         /// <param name="pageDetails">Details about the pagination</param>
         /// <returns>List of entity objects</returns>
-        private List<EntityViewModel> GetEntities(long userId, EntityType entityType, PageDetails pageDetails)
+        private async Task<List<EntityViewModel>> GetEntities(long userId, EntityType entityType, PageDetails pageDetails)
         {
             // TODO: Need to create a model for passing parameters to this controller
-            List<EntityViewModel> highlightEntities = new List<EntityViewModel>();
+            var highlightEntities = new List<EntityViewModel>();
 
             if (entityType == EntityType.Community)
             {
-                IEnumerable<CommunityDetails> communities = this.ProfileService.GetCommunities(userId, pageDetails, userId != CurrentUserId);
-                foreach (CommunityDetails community in communities)
+                var communities = ProfileService.GetCommunities(userId, pageDetails, userId != CurrentUserId);
+                foreach (var community in communities)
                 {
-                    CommunityViewModel communityViewModel = new CommunityViewModel();
+                    var communityViewModel = new CommunityViewModel();
                     Mapper.Map(community, communityViewModel);
                     highlightEntities.Add(communityViewModel);
                 }
             }
             else if (entityType == EntityType.Content)
             {
-                IEnumerable<ContentDetails> contents = this.ProfileService.GetContents(userId, pageDetails, userId != CurrentUserId);
-                foreach (ContentDetails content in contents)
+                var contents = ProfileService.GetContents(userId, pageDetails, userId != CurrentUserId);
+                foreach (var content in contents)
                 {
-                    ContentViewModel contentViewModel = new ContentViewModel();
+                    var contentViewModel = new ContentViewModel();
                     contentViewModel.SetValuesFrom(content);
                     highlightEntities.Add(contentViewModel);
                 }
@@ -317,7 +283,7 @@ namespace WWTMVC5.Controllers
         {
             // This will used as the default community when user is uploading a new content.
             // This community will need to have the following details:
-            CommunityDetails communityDetails = new CommunityDetails();
+            var communityDetails = new CommunityDetails();
 
             // 1. This community type should be User
             communityDetails.CommunityType = CommunityTypes.User;
@@ -338,7 +304,7 @@ namespace WWTMVC5.Controllers
             communityDetails.CategoryID = (int)CategoryType.GeneralInterest;
 
             // 7. Create the community
-            this._communityService.CreateCommunity(communityDetails);
+            _communityService.CreateCommunity(communityDetails);
         }
 
         #endregion Private Methods

@@ -24,6 +24,7 @@
             $scope.editedThumb = true;
             $timeout(function () {
                 $scope.community.ThumbnailID = response.ThumbnailID;
+                $scope.community.ThumbnailIsNull = false;
             });
         }
 
@@ -96,7 +97,7 @@
                     }
                 });
             });
-
+            setTimeout(wwt.triggerResize, 333);
         };
 
         
@@ -106,8 +107,12 @@
                 $scope.community.ParentID = uiHelper.positiveIntParamExists('parentId', $routeParams, $scope) ?
                     $routeParams.parentId : isNaN($scope.community.ParentID) ? $scope.community.ParentID.val : $scope.community.ParentID;
             }
-            
-            dataproxy.saveEditedCommunity($scope.community)
+            var community = $scope.community;
+            //community.Category = community.CategoryID;
+            //community.AccessType = community.AccessTypeID;
+            //delete community.CategoryID;
+            //delete community.AccessTypeID;
+            dataproxy.saveEditedCommunity(community)
                 .then(function (response) {
                     console.log("savecommunityresponse", arguments);
                     if (!response.error && response.id) {
@@ -115,7 +120,7 @@
                         location.href = '#/CommunityDetail/' + response.id;
                     }
                     else {
-                        bootbox.dialog("There was an error saving changes to this community.");
+                        bootbox.alert("There was an error saving changes to this community.");
                     }
                 });
         };
@@ -130,7 +135,7 @@
                         $scope.community = null;
                         location.href = '#/CommunityDetail/' + response.ID;
                     } else {
-                        bootbox.dialog("There was an error creating this community.");
+                        bootbox.alert("There was an error creating this community.");
                     }
                 });
         };

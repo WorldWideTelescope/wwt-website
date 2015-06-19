@@ -18,17 +18,17 @@ namespace WWTMVC5.Repositories.Interfaces
         /// to the user communities table.
         /// </summary>
         /// <param name="permissionItem">Permission item with details about the request</param>
-        /// <param name="updatedByID">User who is updating the permission request</param>
+        /// <param name="updatedById">User who is updating the permission request</param>
         /// <returns>Operation status with details</returns>
-        OperationStatus UpdateUserPermissionRequest(PermissionItem permissionItem, long updatedByID);
+        OperationStatus UpdateUserPermissionRequest(PermissionItem permissionItem, long updatedById);
 
          /// <summary>
         /// Updates the user roles for the current community. Takes the user roles of the parent community and joins
         /// with the current community being edited.
         /// </summary>
         /// <param name="childCommunity">Child community being edited</param>
-        /// <param name="parentID">Parent community specified</param>
-        void InheritParentRoles(Community childCommunity, long parentID);
+        /// <param name="parentId">Parent community specified</param>
+        void InheritParentRoles(Community childCommunity, long parentId);
 
         /// <summary>
         /// Updates the user roles with the given permission item which will be having the role to be updated for the

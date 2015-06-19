@@ -5,6 +5,7 @@
 //-----------------------------------------------------------------------
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using WWTMVC5.Models;
 
 namespace WWTMVC5.Services.Interfaces
@@ -18,18 +19,18 @@ namespace WWTMVC5.Services.Interfaces
         /// This function is used to update the featured communities.
         /// </summary>
         /// <param name="communities">List of all communities.</param>
-        /// <param name="userID">ID of the user who is updating the communities.</param>
-        /// <param name="categoryID">Category Type.</param>
+        /// <param name="userId">ID of the user who is updating the communities.</param>
+        /// <param name="categoryId">Category Type.</param>
         /// <returns>True of the communities are updated. False otherwise.</returns>
-        OperationStatus UpdateFeaturedCommunities(IEnumerable<AdminEntityDetails> communities, long userID, int? categoryID);
+        Task<OperationStatus> UpdateFeaturedCommunities(IEnumerable<AdminEntityDetails> communities, long userId, int? categoryId);
 
         /// <summary>
         /// This function is used to update the featured contents.
         /// </summary>
         /// <param name="contents">List of all contents.</param>
-        /// <param name="userID">ID of the user who is updating the contents.</param>
-        /// <param name="categoryID">Category Type.</param>
+        /// <param name="userId">ID of the user who is updating the contents.</param>
+        /// <param name="categoryId">Category Type.</param>
         /// <returns>True of the contents are updated. False otherwise.</returns>
-        OperationStatus UpdateFeaturedContents(IEnumerable<AdminEntityDetails> contents, long userID, int? categoryID);
+        Task<OperationStatus> UpdateFeaturedContents(IEnumerable<AdminEntityDetails> contents, long userId, int? categoryId);
     }
 }

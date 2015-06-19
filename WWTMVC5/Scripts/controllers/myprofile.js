@@ -15,7 +15,7 @@
             uiHelper.fixLinks('profileLink');
             dataproxy.requireAuth().then(function (types) {
                 $scope.types = types;
-                dataproxy.getMyProfile(0).then(setProfile);
+                dataproxy.getMyProfile(0).then(setProfile, function() {console.log(arguments)});
             }, function(reason) {
                 location.href = '#/';
             });
@@ -32,6 +32,7 @@
         function success(xhr, response) {
             $timeout(function() {
                 $scope.editProfile.profileImageId = response.ThumbnailID;
+
             });
         }
 

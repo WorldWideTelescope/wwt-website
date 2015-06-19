@@ -21,12 +21,12 @@ namespace WWTMVC5.Services
         /// <summary>
         /// Instance of Community repository
         /// </summary>
-        private ICommunityRepository communityRepository;
+        private ICommunityRepository _communityRepository;
 
         /// <summary>
         /// Instance of User repository
         /// </summary>
-        private IUserRepository userRepository;
+        private IUserRepository _userRepository;
 
         #endregion Private Variables
 
@@ -41,8 +41,8 @@ namespace WWTMVC5.Services
             ICommunityRepository communityRepository,
             IUserRepository userRepository)
         {
-            this.communityRepository = communityRepository;
-            this.userRepository = userRepository;
+            this._communityRepository = communityRepository;
+            this._userRepository = userRepository;
         }
 
         #endregion Constructor
@@ -56,7 +56,7 @@ namespace WWTMVC5.Services
         /// <returns>True if the user has permission to read the community; Otherwise False.</returns>
         protected static bool CanReadCommunity(UserRole userRole)
         {
-            bool canRead = false;
+            var canRead = false;
             if (userRole >= UserRole.Visitor)
             {
                 canRead = true;
@@ -72,7 +72,7 @@ namespace WWTMVC5.Services
         /// <returns>True if the user has permission to create content; Otherwise False.</returns>
         protected static bool CanCreateContent(UserRole userRole)
         {
-            bool canCreate = false;
+            var canCreate = false;
 
             // Owners, moderators and contributors can add content
             canCreate = userRole >= UserRole.Contributor;
@@ -84,15 +84,15 @@ namespace WWTMVC5.Services
         /// Check whether the user can edit/delete the content.
         /// </summary>
         /// <param name="content">Content instance</param>
-        /// <param name="userID">User Identification</param>
+        /// <param name="userId">User Identification</param>
         /// <param name="userRole">Role of the User.</param>
         /// <returns>True if the user has permission to edit/delete  the content; Otherwise False.</returns>
-        protected static bool CanEditDeleteContent(Content content, long userID, UserRole userRole)
+        protected static bool CanEditDeleteContent(Content content, long userId, UserRole userRole)
         {
-            bool canDelete = false;
+            var canDelete = false;
             if (content != null)
             {
-                if (userRole == UserRole.Contributor && content.CreatedByID == userID)
+                if (userRole == UserRole.Contributor && content.CreatedByID == userId)
                 {
                     // Contributors can edit/delete only content that they have added, they cannot modify/delete content added by others
                     canDelete = true;
@@ -114,7 +114,7 @@ namespace WWTMVC5.Services
         /// <returns>True if the user has permission to read the content; Otherwise False.</returns>
         protected static bool CanReadContent(UserRole userRole)
         {
-            bool canRead = false;
+            var canRead = false;
             if (userRole >= UserRole.Visitor)
             {
                 canRead = true;
@@ -130,15 +130,15 @@ namespace WWTMVC5.Services
         ///     b. Under an existing community (folders and sub-communities are used interchangeably), 
         ///         only owners and moderators can create sub communities
         /// </summary>
-        /// <param name="parentCommunityID">Parent Community ID</param>
+        /// <param name="parentCommunityId">Parent Community ID</param>
         /// <param name="userRole">Role of the User.</param>
         /// <returns>True if the user has permission to create community; Otherwise False.</returns>
-        protected static bool CanCreateCommunity(long? parentCommunityID, UserRole userRole)
+        protected static bool CanCreateCommunity(long? parentCommunityId, UserRole userRole)
         {
             // a.   At the root level, whichever user that creates a community becomes the owner of it
-            bool canCreate = true;
+            var canCreate = true;
 
-            if (parentCommunityID.HasValue && parentCommunityID.Value > 0)
+            if (parentCommunityId.HasValue && parentCommunityId.Value > 0)
             {
                 // b.   Under an existing community (folders and sub-communities are used interchangeably), 
                 //      only owners and moderators can create sub communities
@@ -152,19 +152,19 @@ namespace WWTMVC5.Services
         /// Gets the role of the user on the given Community.
         /// </summary>
         /// <param name="communityId">Community Id on which user role has to be found</param>
-        /// <param name="userID">Current user id</param>
+        /// <param name="userId">Current user id</param>
         /// <returns>UserRole on the Community</returns>
-        protected UserRole GetCommunityUserRole(long communityId, long? userID)
+        protected UserRole GetCommunityUserRole(long communityId, long? userId)
         {
-            UserRole userRole = UserRole.Visitor;
+            var userRole = UserRole.Visitor;
 
-            if (userID.HasValue && userID.Value > 0)
+            if (userId.HasValue && userId.Value > 0)
             {
-                userRole = this.userRepository.GetUserRole(userID.Value, communityId);
+                userRole = _userRepository.GetUserRole(userId.Value, communityId);
             }
 
             // In case if Private content, only site administrators or users who are owners/moderators/contributors/readers can access them.
-            if (userRole < UserRole.Reader && AccessType.Private.ToString() == this.communityRepository.GetCommunityAccessType(communityId))
+            if (userRole < UserRole.Reader && AccessType.Private.ToString() == _communityRepository.GetCommunityAccessType(communityId))
             {
                 return UserRole.None;
             }
@@ -176,12 +176,12 @@ namespace WWTMVC5.Services
         /// Check whether the user can edit/delete the community.
         /// </summary>
         /// <param name="community">Community instance</param>
-        /// <param name="userID">User Identification</param>
+        /// <param name="userId">User Identification</param>
         /// <param name="userRole">Role of the User.</param>
         /// <returns>True if the user has permission to edit/delete the community; Otherwise False.</returns>
-        protected bool CanEditDeleteCommunity(Community community, long userID, UserRole userRole)
+        protected bool CanEditDeleteCommunity(Community community, long userId, UserRole userRole)
         {
-            bool canEditDelete = false;
+            var canEditDelete = false;
 
             if (community != null)
             {
@@ -192,19 +192,19 @@ namespace WWTMVC5.Services
                 }
                 else
                 {
-                    long parentCommunityID = Enumerable.ElementAt<CommunityRelation>(community.CommunityRelation1, 0).ParentCommunityID;
+                    var parentCommunityId = Enumerable.ElementAt(community.CommunityRelation1, 0).ParentCommunityID;
 
                     if (userRole >= UserRole.ModeratorInheritted)
                     {
                         // Inherited Moderator can edit/delete the current community.
                         canEditDelete = true;
                     }
-                    else if (userRole == UserRole.Contributor && community.CreatedByID == userID)
+                    else if (userRole == UserRole.Contributor && community.CreatedByID == userId)
                     {
                         // Contributors can edit/delete only community that they have added, they cannot modify/delete community added by others
                         canEditDelete = true;
                     }
-                    else if (GetCommunityUserRole(parentCommunityID, userID) >= UserRole.Moderator)
+                    else if (GetCommunityUserRole(parentCommunityId, userId) >= UserRole.Moderator)
                     {
                         // b.   A moderator can edit/delete any communities/content including those created by others (even the owner) 
                         //      as long as he is the moderator of the parent of the community/content

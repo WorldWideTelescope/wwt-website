@@ -4,8 +4,6 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System.Collections.Generic;
-using Microsoft.WindowsAzure.StorageClient;
 using WWTMVC5.Models;
 
 namespace WWTMVC5.Repositories.Interfaces
@@ -158,11 +156,7 @@ namespace WWTMVC5.Repositories.Interfaces
         /// </returns>
         bool UploadAsset(BlobDetails details);
 
-        /// <summary>
-        /// Lists all blobs in asset container
-        /// </summary>
-        /// <returns>List of blobs</returns>
-        IEnumerable<CloudBlob> ListAssets();
+        
 
         /// <summary>
         /// Deletes a file from azure.

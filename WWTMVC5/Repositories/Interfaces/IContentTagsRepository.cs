@@ -18,9 +18,9 @@ namespace WWTMVC5.Repositories.Interfaces
         /// Gets the Ids of the related content of the given content. Related contents are taken based on the
         /// tags which are matching between the tags of given content.
         /// </summary>
-        /// <param name="contentID">Id of the Content.</param>
-        /// <param name="userID">User who is requesting the related contents</param>
+        /// <param name="contentId">Id of the Content.</param>
+        /// <param name="userId">User who is requesting the related contents</param>
         /// <returns>Ids of related contents.</returns>
-        IEnumerable<long> GetRelatedContentIDs(long contentID, long userID);
+        IEnumerable<long> GetRelatedContentIDs(long contentId, long userId);
     }
 }

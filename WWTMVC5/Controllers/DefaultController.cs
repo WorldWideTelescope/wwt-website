@@ -51,7 +51,7 @@ namespace WWTMVC5.Controllers
             "wwtstories"
         };
     
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             return GetViewOrRedirect(string.Empty,"index", _baseModel);
         }
@@ -60,8 +60,10 @@ namespace WWTMVC5.Controllers
         [Route("LiveId/Authenticate")]
         public async Task<JsonResult> Authenticate()
         {
-            LiveLoginResult result = await TryAuthenticateFromHttpContext(_communityService, _notificationService);
-            if (result.Status == LiveConnectSessionStatus.Connected){    
+            var result = await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+            if (result.Status == LiveConnectSessionStatus.Connected)
+            {
+                _baseModel.User = SessionWrapper.Get<ProfileDetails>("ProfileDetails");
                 return Json(new
                 {
                     Status = result.Status.ToString(), 
@@ -71,19 +73,22 @@ namespace WWTMVC5.Controllers
                         result.Session.AuthenticationToken,
                         Expires = result.Session.Expires.ToLocalTime().ToString(),
                         result.Session.RefreshToken,
-                        result.Session.Scopes
+                        result.Session.Scopes,
+                        User = SessionWrapper.Get<string>("CurrentUserProfileName")
                     },
                    
                 }, JsonRequestBehavior.AllowGet);
             }
-            else
-            {
-                return Json(new
-                {
-                    Status = result.Status.ToString()
-                });
-            }
+
+            var svc = new LiveIdAuth();
+            var url = svc.GetLogoutUrl("http://" + Request.Headers.Get("host"));
             
+            SessionWrapper.Clear();
+            return Json(new
+            {
+                Status = result.Status.ToString(),
+                S = url
+            }, JsonRequestBehavior.AllowGet);
         }
 
         [Route("Logout")]
@@ -100,7 +105,7 @@ namespace WWTMVC5.Controllers
         }
 
         [Route("{group}/{page=Index}")]
-        public ActionResult ViewResult(string group, string page)
+        public async Task<ActionResult> ViewResult(string group, string page)
         {
             try
             {
@@ -116,8 +121,15 @@ namespace WWTMVC5.Controllers
                 {
                     return GetViewOrRedirect("download","index", _baseModel);
                 }
-                if (group.ToLower() == "community" && page == "profile" && _baseModel.User == null)
+                if (group.ToLower() == "community" && page.ToLower() == "profile" && _baseModel.User == null)
                 {
+                    await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+                    if (CurrentUserId != 0)
+                    {
+                        _baseModel.User = SessionWrapper.Get<ProfileDetails>("ProfileDetails");
+                        return GetViewOrRedirect(group, page, _baseModel);
+                    }
+                    
                     return Redirect("/Community");
                 }
                 ViewBag.page = page = GetQsPage(page);

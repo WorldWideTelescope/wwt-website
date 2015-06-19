@@ -20,7 +20,7 @@ namespace WWTMVC5.Controllers
         /// <returns>General view</returns>
         public ActionResult General()
         {
-            string errorMessage = TempData["ErrorMessage"] as string;
+            var errorMessage = TempData["ErrorMessage"] as string;
             if (string.IsNullOrWhiteSpace(errorMessage))
             {
                 errorMessage = Resources.GeneralErrorMessage;

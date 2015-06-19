@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace WWTMVC5.Repositories.Interfaces
 {
@@ -40,6 +41,7 @@ namespace WWTMVC5.Repositories.Interfaces
         /// </summary>
         /// <param name="condition">Condition to be satisfied</param>
         /// <returns>Entity which satisfies the condition</returns>
+        Task<T> GetItemAsync(Expression<Func<T, bool>> condition);
         T GetItem(Expression<Func<T, bool>> condition);
 
         /// <summary>
@@ -49,6 +51,7 @@ namespace WWTMVC5.Repositories.Interfaces
         /// <param name="condition">Condition to be satisfied</param>
         /// <param name="include">Navigation property to be included</param>
         /// <returns>Entity which satisfies the condition</returns>
+        Task<T> GetItemAsync(Expression<Func<T, bool>> condition, string include);
         T GetItem(Expression<Func<T, bool>> condition, string include);
 
         /// <summary>
@@ -56,6 +59,7 @@ namespace WWTMVC5.Repositories.Interfaces
         /// </summary>
         /// <param name="condition">Condition to be applied</param>
         /// <returns>Count of items satisfying the condition</returns>
+        Task<int> GetItemsCountAsync(Expression<Func<T, bool>> condition);
         int GetItemsCount(Expression<Func<T, bool>> condition);
 
         /// <summary>
@@ -65,6 +69,7 @@ namespace WWTMVC5.Repositories.Interfaces
         /// <param name="orderBy">Order by clause</param>
         /// <param name="descending">Order by descending?</param>
         /// <returns>Collection of Entities</returns>
+        Task<IEnumerable<T>> GetItemsAsync(Expression<Func<T, bool>> condition, Func<T, object> orderBy, bool descending);
         IEnumerable<T> GetItems(Expression<Func<T, bool>> condition, Func<T, object> orderBy, bool descending);
 
         /// <summary>
@@ -76,6 +81,7 @@ namespace WWTMVC5.Repositories.Interfaces
         /// <param name="skipCount">Number of items to be skipped.</param>
         /// <param name="takeCount">Number of items to be picked up.</param>
         /// <returns>Collection of Entities</returns>
+        Task<IEnumerable<T>> GetItemsAsync(Expression<Func<T, bool>> condition, Func<T, object> orderBy, bool descending, int skipCount, int takeCount);
         IEnumerable<T> GetItems(Expression<Func<T, bool>> condition, Func<T, object> orderBy, bool descending, int skipCount, int takeCount);
 
         /// <summary>
@@ -83,11 +89,13 @@ namespace WWTMVC5.Repositories.Interfaces
         /// </summary>
         /// <param name="orderBy">Order by clause</param>
         /// <returns>Collection of Entities</returns>
+        Task<IEnumerable<T>> GetAllAsync(Func<T, object> orderBy);
         IEnumerable<T> GetAll(Func<T, object> orderBy);
 
         /// <summary>
         /// Saves the changes made in the data models to the Layerscape database.
         /// </summary>
         void SaveChanges();
+        void SaveChangesAsync();
     }
 }

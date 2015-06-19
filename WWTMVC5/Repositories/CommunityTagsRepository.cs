@@ -41,16 +41,16 @@ namespace WWTMVC5.Repositories
         /// Gets the Ids of the related communities of the given community. Related communities are taken based on the
         /// tags which are matching between the tags of given community
         /// </summary>
-        /// <param name="communityID">Id of the Community.</param>
-        /// <param name="userID">User who is requesting the related communities</param>
+        /// <param name="communityId">Id of the Community.</param>
+        /// <param name="userId">User who is requesting the related communities</param>
         /// <returns>Ids of related communities.</returns>
-        public IEnumerable<long> GetRelatedCommunityIDs(long communityID, long userID)
+        public IEnumerable<long> GetRelatedCommunityIDs(long communityId, long userId)
         {
-            string userIDstring = string.Format(CultureInfo.InvariantCulture, "~{0}~", Convert.ToString(userID, CultureInfo.InvariantCulture));
+            var userIDstring = string.Format(CultureInfo.InvariantCulture, "~{0}~", Convert.ToString(userId, CultureInfo.InvariantCulture));
 
             // Considering the performance of the query, Related Communities are fetched using the Search View
             // which will have information about the users who are having access to the community also.
-            string query = @"SELECT CommunityID FROM CommunityTags INNER JOIN SearchView ON CommunityID = ID
+            var query = @"SELECT CommunityID FROM CommunityTags INNER JOIN SearchView ON CommunityID = ID
                                 WHERE 
                                         Entity = 'Community'
                                     AND 
@@ -59,7 +59,7 @@ namespace WWTMVC5.Repositories
                                         (AccessType = 'Public' OR Users Like @userID)
                                 GROUP BY CommunityID, Rating
                                 ORDER BY COUNT(CommunityID) DESC, Rating DESC";
-            return this.EarthOnlineDbContext.Database.SqlQuery<long>(query, new SqlParameter("communityID", communityID), new SqlParameter("userID", userIDstring)).ToList();
+            return EarthOnlineDbContext.Database.SqlQuery<long>(query, new SqlParameter("communityID", communityId), new SqlParameter("userID", userIDstring)).ToList();
         }
 
         #endregion Public methods

@@ -41,16 +41,16 @@ namespace WWTMVC5.Repositories
         /// Gets the Ids of the related content of the given content. Related contents are taken based on the
         /// tags which are matching between the tags of given content.
         /// </summary>
-        /// <param name="contentID">Id of the Content.</param>
-        /// <param name="userID">User who is requesting the related contents</param>
+        /// <param name="contentId">Id of the Content.</param>
+        /// <param name="userId">User who is requesting the related contents</param>
         /// <returns>Ids of related contents.</returns>
-        public IEnumerable<long> GetRelatedContentIDs(long contentID, long userID)
+        public IEnumerable<long> GetRelatedContentIDs(long contentId, long userId)
         {
-            string userIDstring = string.Format(CultureInfo.InvariantCulture, "~{0}~", Convert.ToString(userID, CultureInfo.InvariantCulture));
+            var userIDstring = string.Format(CultureInfo.InvariantCulture, "~{0}~", Convert.ToString(userId, CultureInfo.InvariantCulture));
 
             // Considering the performance of the query, Related Contents are fetched using the Search View
             // which will have information about the users who are having access to the content also.
-            string query = @"SELECT ContentID FROM ContentTags INNER JOIN SearchView ON ContentID = ID
+            var query = @"SELECT ContentID FROM ContentTags INNER JOIN SearchView ON ContentID = ID
                                 WHERE 
                                         Entity = 'Content'
                                     AND 
@@ -59,7 +59,7 @@ namespace WWTMVC5.Repositories
                                         (AccessType = 'Public' OR Users Like @userID)
                                 GROUP BY ContentID, Rating
                                 ORDER BY COUNT(ContentID) DESC, Rating DESC";
-            return this.EarthOnlineDbContext.Database.SqlQuery<long>(query, new SqlParameter("contentID", contentID), new SqlParameter("userID", userIDstring)).ToList();
+            return EarthOnlineDbContext.Database.SqlQuery<long>(query, new SqlParameter("contentID", contentId), new SqlParameter("userID", userIDstring)).ToList();
         }
 
         #endregion Public methods

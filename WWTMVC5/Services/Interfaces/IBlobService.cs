@@ -18,35 +18,35 @@ namespace WWTMVC5.Services.Interfaces
         /// <summary>
         /// Gets the files from azure which is identified by file id.
         /// </summary>
-        /// <param name="fileID">
+        /// <param name="fileId">
         /// ID of the file.
         /// </param>
         /// <returns>
         /// Blob Details.
         /// </returns>
-        BlobDetails GetFile(Guid fileID);
+        BlobDetails GetFile(Guid fileId);
 
         /// <summary>
         /// Gets the files from azure which is identified by thumbnail id.
         /// </summary>
-        /// <param name="thumbnailID">
+        /// <param name="thumbnailId">
         /// ID of the thumbnail.
         /// </param>
         /// <returns>
         /// Blob Details.
         /// </returns>
-        BlobDetails GetThumbnail(Guid thumbnailID);
+        BlobDetails GetThumbnail(Guid thumbnailId);
 
         /// <summary>
         /// Gets the Temporary file (whether thumbnail/video etc.) from azure which is identified by thumbnail id.
         /// </summary>
-        /// <param name="thumbnailID">
+        /// <param name="thumbnailId">
         /// ID of the thumbnail.
         /// </param>
         /// <returns>
         /// Blob Details.
         /// </returns>
-        BlobDetails GetTemporaryFile(Guid thumbnailID);
+        BlobDetails GetTemporaryFile(Guid thumbnailId);
 
         /// <summary>
         /// Gets the files from azure which is identified by file name.
@@ -65,11 +65,11 @@ namespace WWTMVC5.Services.Interfaces
         /// <param name="fileDetails">Details of the file.</param>
         OperationStatus UploadAsset(FileDetail fileDetails);
 
-        /// <summary>
-        /// Lists all blobs in asset container
-        /// </summary>
-        /// <returns>List of blobs</returns>
-        IEnumerable<BlobDetails> ListAssets(PageDetails pageDetails);
+        ///// <summary>
+        ///// Lists all blobs in asset container
+        ///// </summary>
+        ///// <returns>List of blobs</returns>
+        //IEnumerable<BlobDetails> ListAssets(PageDetails pageDetails);
 
         /// <summary>
         /// Uploads the associated file to temporary container.

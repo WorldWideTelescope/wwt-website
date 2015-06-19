@@ -76,7 +76,7 @@
             $timeout(function () {
                 $scope.content.ThumbnailID = response.ThumbnailID;
                 $scope.editedThumb = true;
-                //$('#lstCommunity').val($scope.content.ParentID);
+                $scope.content.ThumbnailIsNull = false;
             });
         }
         $scope.addRelatedLink = function () {
@@ -134,7 +134,7 @@
                             .then(function (content) {
                                 $scope.content = content;
                                 setTimeout(function () { $('#lstCommunity').val(content.ParentID); }, 100);
-
+                                setTimeout(wwt.triggerResize, 333);
                             });
                     } else {
 
@@ -152,9 +152,10 @@
                                     var opt = $('#lstCommunity option[label="None"]').first();
                                     opt.prop('selected', true);
                                     $('#lstCommunity').trigger('change');
-                                    //$scope.content.ParentID = opt.val();
+                                    
                                 }, 500);
                             }
+                            setTimeout(wwt.triggerResize, 333);
                         }, 100);
                     }
                     if ($scope.isChildContent) {

@@ -72,10 +72,19 @@ namespace WWTMVC5.Controllers
         /// </summary>
         /// <param name="id">Content id to be processed</param>
         /// <returns>Returns the View to be used</returns>
-        [HttpPost]
-        [Route("Content/RenderDetailJson/{Id}")]
-        public ActionResult Index(long? id)
+        [HttpGet]
+        [Route("Content/Detail/{Id}")]
+        public async Task<JsonResult> CommunityDetail(long? id)
         {
+            if (CurrentUserId == 0)
+            {
+                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+            }
+            if (!id.HasValue)
+            {
+                return new JsonResult { Data = "error: invalid content id",
+                JsonRequestBehavior=JsonRequestBehavior.AllowGet};
+            }
             var contentDetail = _contentService.GetContentDetails(id.Value, CurrentUserId);
 
             var contentViewModel = new ContentViewModel();
@@ -85,75 +94,38 @@ namespace WWTMVC5.Controllers
             // It creates the prefix for id of links
             SetSiteAnalyticsPrefix(HighlightType.None);
 
-            return new JsonResult { Data = contentViewModel};
-        }
-
-        /// <summary>
-        /// Controller action which gets the details about the new content.
-        /// </summary>
-        /// <returns>View having page which gets details about new content</returns>
-        [HttpGet]
-        
-        public ActionResult New(long? id)
-        {
-            var contentInputViewModel = new ContentInputViewModel
-            {
-                CategoryList = CategoryType.All.ToSelectList(CategoryType.All),
-                CategoryID = (int) CategoryType.GeneralInterest
+            return new JsonResult { 
+                Data = contentViewModel,
+                JsonRequestBehavior=JsonRequestBehavior.AllowGet
             };
-
-            // Populating the category dropdown list.
-
-            // Populating the parent communities for the current user.
-            // TODO: Need to show the parent communities/folders in tree view dropdown.
-            IEnumerable<Community> parentCommunities = this._contentService.GetParentCommunities(CurrentUserId);
-            contentInputViewModel.ParentList = new SelectList(parentCommunities, "CommunityID", "Name");
-
-            // Default access type is public (2).
-            contentInputViewModel.AccessTypeID = 2;
-
-            // Set the thumbnail URL.
-            contentInputViewModel.ThumbnailLink = Url.Content("~/content/images/defaultgenericthumbnail.png");
-
-            Community parentCommunity = null;
-            if (id.HasValue)
-            {
-                // Set the Category, Distributed by and Tags from parent
-                parentCommunity = parentCommunities.FirstOrDefault(community => community.CommunityID == id);
-            }
-            else
-            {
-                // Get Visitor Community.
-                parentCommunity = parentCommunities.FirstOrDefault(community => community.CommunityTypeID == (int)CommunityTypes.User);
-            }
-
-            if (parentCommunity != null)
-            {
-                contentInputViewModel.ParentID = parentCommunity.CommunityID;
-
-                contentInputViewModel.CategoryID = parentCommunity.CategoryID;
-                contentInputViewModel.DistributedBy = parentCommunity.DistributedBy;
-            }
-
-            return View("Save", contentInputViewModel);
         }
-        [HttpPost]
+
+        [HttpGet]
         [Route("Content/User/CommunityList")]
-        public JsonResult GetUserCommunityList()
+        public async Task<JsonResult> GetUserCommunityList()
         {
+            if (CurrentUserId == 0)
+            {
+                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+            }
             return new JsonResult
             {
-                Data = new SelectList(this._contentService.GetParentCommunities(CurrentUserId), "CommunityID", "Name").ToList()
+                Data = new SelectList(_contentService.GetParentCommunities(CurrentUserId), "CommunityID", "Name").ToList(),
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("Content/User/Communities")]
-        public JsonResult GetUserCommunities()
+        public async Task<JsonResult> GetUserCommunities()
         {
-            var communities = this._contentService.GetParentCommunities(CurrentUserId);
+            if (CurrentUserId == 0)
+            {
+                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+            }
+            var communities = _contentService.GetParentCommunities(CurrentUserId);
             var result = new List<object>();
-            foreach (Community c in communities)
+            foreach (var c in communities)
             {
                 result.Add(new
                 {
@@ -171,7 +143,8 @@ namespace WWTMVC5.Controllers
             }
             return new JsonResult
             {
-                Data = result
+                Data = result,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
 
@@ -182,14 +155,18 @@ namespace WWTMVC5.Controllers
         /// <returns>Returns a redirection view</returns>
         [HttpPost]
         [Route("Content/Create/New")]
-        public JsonResult New(ContentInputViewModel contentInputViewModel, string id)
+        public async Task<JsonResult> New(ContentInputViewModel contentInputViewModel, string id)
         {
+            if (CurrentUserId == 0)
+            {
+                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+            }
             if (ModelState.IsValid)
             {
-                ContentDetails contentDetails = new ContentDetails();
+                var contentDetails = new ContentDetails();
                 contentDetails.SetValuesFrom(contentInputViewModel);
                 contentDetails.CreatedByID = CurrentUserId;
-                contentInputViewModel.ID = contentDetails.ID = this._contentService.CreateContent(contentDetails);
+                contentInputViewModel.ID = contentDetails.ID = _contentService.CreateContent(contentDetails);
             }
             return new JsonResult { Data = contentInputViewModel };
         }
@@ -199,41 +176,27 @@ namespace WWTMVC5.Controllers
         /// </summary>
         /// <param name="id">Id of the content getting edited.</param>
         /// <returns>View having page which gets details about content getting updated</returns>
-        [HttpPost]
+        [HttpGet]
         [Route("Content/Edit/{id}")]
-        public async Task<JsonResult> Edit(long id)
+        public async Task<JsonResult> GetEditableContent(long id)
         {
             if (CurrentUserId == 0)
             {
                 await TryAuthenticateFromHttpContext(_communityService, _notificationService);
             }
 
-            ContentInputViewModel contentInputViewModel = new ContentInputViewModel();
-            
-            //contentInputViewModel.CategoryList = CategoryType.All.ToSelectList(CategoryType.All);
+            var contentInputViewModel = new ContentInputViewModel();
+            var contentDetails = _contentService.GetContentDetailsForEdit(id, CurrentUserId);
 
-            // Populating the parent communities for the current user.
-            // TODO: Need to show the parent communities/folders in tree view dropdown.
-            //IEnumerable<Community> parentCommunities = this.contentService.GetParentCommunities(CurrentUserID);
-            //contentInputViewModel.ParentList = new SelectList(parentCommunities, "CommunityID", "Name");
-            
-            ContentDetails contentDetails = this._contentService.GetContentDetailsForEdit(id, this.CurrentUserId);
-
-            
             // Set value from ContentDetials to ContentInputViewModel.
             contentInputViewModel.SetValuesFrom(contentDetails);
 
             // Set Thumbnail URL.
-            if (contentInputViewModel.ThumbnailID != Guid.Empty)
-            {
-                contentInputViewModel.ThumbnailLink = Url.Action("Thumbnail", "File", new { id = contentInputViewModel.ThumbnailID });
-            }
-            else
-            {
-                contentInputViewModel.ThumbnailLink = Url.Content("~/content/images/default" + Enum.GetName(typeof(ContentTypes), contentDetails.ContentData.ContentType) + "thumbnail.png");
-            }
+            contentInputViewModel.ThumbnailLink = contentInputViewModel.ThumbnailID != Guid.Empty ? 
+                Url.Action("Thumbnail", "File", new { id = contentInputViewModel.ThumbnailID }) : 
+                Url.Content("~/content/images/default" + Enum.GetName(typeof(ContentTypes), contentDetails.ContentData.ContentType) + "thumbnail.png");
             
-            return new JsonResult{Data=contentInputViewModel};
+            return new JsonResult{Data=contentInputViewModel,JsonRequestBehavior = JsonRequestBehavior.AllowGet};
         }
 
         /// <summary>
@@ -260,19 +223,14 @@ namespace WWTMVC5.Controllers
                 {
                     var contentDetails = new ContentDetails();
                     contentDetails.SetValuesFrom(viewModel);
-
                     // Update contents.
                     _contentService.UpdateContent(contentDetails, CurrentUserId);
-
                     return Json(contentDetails);
                 }
                 return Json("error: User not logged in");
-
             }
-            else
-            {
-                return Json("error: Could not save changes to content");
-            }
+            return Json("error: Could not save changes to content");
+            
         }
 
         /// <summary>
@@ -281,14 +239,18 @@ namespace WWTMVC5.Controllers
         /// <param name="id">Id of the content to be deleted.</param>
         
         /// <returns>Returns status</returns>
-        [SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes", Justification = "TODO: Custom Exception handling to be added."), HttpPost]
+        [HttpPost]
         [Route("Content/Delete/{id}")]
-        public JsonResult Delete(long id)
+        public async Task<JsonResult> Delete(long id)
         {
+            if (CurrentUserId == 0)
+            {
+                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+            }
             OperationStatus status = null;
             if (CurrentUserId != 0)
             {
-                status = this._contentService.DeleteContent(id, this.CurrentUserId);
+                status = _contentService.DeleteContent(id, CurrentUserId);
 
                 // TODO: Need to add failure functionality.
                 //if (!status.Succeeded)
@@ -304,12 +266,13 @@ namespace WWTMVC5.Controllers
         /// </summary>
         /// <param name="contentFile">HttpPostedFileBase instance</param>
         [HttpPost]
-        //
-        //[ValidateAntiForgeryToken]
         [Route("Content/AddContent/{id}/{extended=false}")]
-        public JsonResult AddContent(HttpPostedFileBase contentFile, string id, bool extended)
+        public async Task<JsonResult> AddContent(HttpPostedFileBase contentFile, string id, bool extended)
         {
-            
+            if (CurrentUserId == 0)
+            {
+                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+            }
             var contentDataViewModel = new ContentDataViewModel();
             XmlDocument tourDoc = null;
             if (contentFile != null)
@@ -401,19 +364,21 @@ namespace WWTMVC5.Controllers
         /// </summary>
         /// <param name="associatedFile">HttpPostedFileBase instance</param>
         [HttpPost]
-        
         [Route("Content/Add/AssociatedContent")]
-        public JsonResult AssociatedContent(HttpPostedFileBase associatedFile)
+        public async Task<JsonResult> AssociatedContent(HttpPostedFileBase associatedFile)
         {
-            
+            if (CurrentUserId == 0)
+            {
+                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+            }
             if (associatedFile != null)
             {
                 // Get File details.
                 var fileDetail = new FileDetail();
                 fileDetail.SetValuesFrom(associatedFile);
 
-                string fileName = Path.GetFileNameWithoutExtension(associatedFile.FileName);
-                string fileDetailString = string.Format(
+                var fileName = Path.GetFileNameWithoutExtension(associatedFile.FileName);
+                var fileDetailString = string.Format(
                     CultureInfo.InvariantCulture,
                     "{0}~{1}~{2}~{3}~-1",
                     Path.GetExtension(associatedFile.FileName),
@@ -439,68 +404,21 @@ namespace WWTMVC5.Controllers
         /// </summary>
         /// <param name="id">Content id.</param>
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public void IncrementDownloadCount(long id)
-        {
-            if (id > 0)
-            {
-                this._contentService.IncrementDownloadCount(id, this.CurrentUserId);
-            }
-        }
-
-        /// <summary>
-        /// Controller action which gets the video file upload view.
-        /// </summary>
-        [HttpGet]
-        
-        public void AddVideo()
-        {
-            VideoDataViewModel videoDataViewModel = new VideoDataViewModel();
-            PartialView("AddVideoView", videoDataViewModel).ExecuteResult(this.ControllerContext);
-        }
-
-        /// <summary>
-        /// Controller action which gets the video file upload view.
-        /// </summary>
-        /// <param name="video">HttpPostedFileBase instance</param>
-        [HttpPost]
-        
-        [ValidateAntiForgeryToken]
-        public void AddVideo(HttpPostedFileBase video)
+        [Route("Content/Downloads/Increment/{id}")]
+        public bool IncrementDownloadCount(long id)
         {
             try
             {
-                VideoDataViewModel videoDataViewModel = new VideoDataViewModel();
-
-                if (video != null)
+                if (id > 0)
                 {
-                    // Get File details.
-                    var fileDetail = new FileDetail();
-                    fileDetail.SetValuesFrom(video);
-
-                    videoDataViewModel.VideoID = fileDetail.AzureID;
-                    videoDataViewModel.VideoName = Path.GetFileName(video.FileName);
-                    videoDataViewModel.VideoFileDetail = string.Format(
-                        CultureInfo.InvariantCulture,
-                        "{0}~{1}~{2}~{3}~-1",
-                        Path.GetExtension(video.FileName),
-                        video.ContentLength,
-                        fileDetail.AzureID,
-                        video.ContentType);
-
-                    // Upload video file in the temporary container. Once the user publishes the content 
-                    // then we will move the file from temporary container to the actual container.
-                    this._contentService.UploadTemporaryFile(fileDetail);
+                    _contentService.IncrementDownloadCount(id, CurrentUserId);
+                    return true;
                 }
-
-                PartialView("AddVideoView", videoDataViewModel).ExecuteResult(this.ControllerContext);
             }
-            catch (Exception)
-            {
-                // Consume the exception and render rest of the views in the page.
-                // TODO: Log the exception?
-            }
+            catch (Exception){}
+            return false;
         }
+        
         #endregion Action Methods
     }
 }

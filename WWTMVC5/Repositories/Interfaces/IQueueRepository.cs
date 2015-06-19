@@ -5,7 +5,8 @@
 //-----------------------------------------------------------------------
 
 
-using Microsoft.WindowsAzure.StorageClient;
+using Microsoft.WindowsAzure.Storage.Queue;
+
 namespace WWTMVC5.Repositories.Interfaces
 {
     /// <summary>

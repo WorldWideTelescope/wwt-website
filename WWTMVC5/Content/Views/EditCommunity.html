@@ -88,13 +88,13 @@
 
             <div class="form-group">
 
-                <img ng-show="!community.ThumbnailID && !editedThumb" class="pull-right" ng-src="{{contentRoot}}/images/defaultcommunitythumbnail.png" />
-                <img ng-show="community.ThumbnailID && (!isEdit || editedThumb)" class="pull-right" ng-src="/file/TemporaryFile/{{community.ThumbnailID}}" />
-                <img ng-show="community.ThumbnailID && isEdit && !editedThumb" class="pull-right" ng-src="/file/thumbnail/{{community.ThumbnailID}}" />
+                <img ng-if="community.ThumbnailIsNull && !editedThumb" class="pull-right" ng-src="{{contentRoot}}/images/defaultcommunitythumbnail.png" />
+                <img ng-if="!community.ThumbnailIsNull && (!isEdit || editedThumb)" class="pull-right" ng-src="/file/TemporaryFile/{{community.ThumbnailID}}" />
+                <img ng-if="!community.ThumbnailIsNull && isEdit && !editedThumb" class="pull-right" ng-src="/file/thumbnail/{{community.ThumbnailID}}" />
                 <div>
                     <strong>Thumbnail</strong>
                 </div>
-                <span class="btn btn-primary btn-file btn-sm">
+                <span class="btn btn-info btn-file btn-sm">
                     Choose Thumbnail...
                     <input type="file" nv-file-select uploader="thumbuploader" />
                 </span>

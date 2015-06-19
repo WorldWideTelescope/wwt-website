@@ -34,17 +34,17 @@ namespace WWTMVC5.Repositories
         /// <summary>
         /// Gets the content specified by the content id. Eager loads the navigation properties to avoid multiple calls to DB.
         /// </summary>
-        /// <param name="contentID">Id of the content.</param>
+        /// <param name="contentId">Id of the content.</param>
         /// <returns>Content instance.</returns>
-        public Content GetContent(long contentID)
+        public Content GetContent(long contentId)
         {
-            var content = Queryable.Where<Content>(this.EarthOnlineDbContext.Content, item => item.ContentID == contentID && item.IsDeleted == false)
+            var content = EarthOnlineDbContext.Content.Where(item => item.ContentID == contentId && item.IsDeleted == false)
                 .Include(c => c.AccessType)
-                .Include<Content, ICollection<ContentRatings>>(c => c.ContentRatings)
-                .Include(c => Enumerable.Select<ContentTags, Tag>(c.ContentTags, ct => ct.Tag))
-                .Include<Content, User>(c => c.User)
-                .Include(cr => Enumerable.Select<ContentRelation, Content>(cr.ContentRelation, r => r.Content1))
-                .Include(cc => Enumerable.Select<CommunityContents, Community>(cc.CommunityContents, r => r.Community)).FirstOrDefault();
+                .Include(c => c.ContentRatings)
+                .Include(c => c.ContentTags.Select(ct => ct.Tag))
+                .Include(c => c.User)
+                .Include(cr => cr.ContentRelation.Select(r => r.Content1))
+                .Include(cc => cc.CommunityContents.Select(r => r.Community)).FirstOrDefault();
 
             return content;
         }
@@ -56,13 +56,13 @@ namespace WWTMVC5.Repositories
         /// <returns>Content instance.</returns>
         public Content GetContent(Guid azureId)
         {
-            var content = Queryable.Where<Content>(this.EarthOnlineDbContext.Content, item => item.ContentAzureID == azureId && item.IsDeleted == false)
+            var content = EarthOnlineDbContext.Content.Where(item => item.ContentAzureID == azureId && item.IsDeleted == false)
                 .Include(c => c.AccessType)
-                .Include<Content, ICollection<ContentRatings>>(c => c.ContentRatings)
-                .Include(c => Enumerable.Select<ContentTags, Tag>(c.ContentTags, ct => ct.Tag))
-                .Include<Content, User>(c => c.User)
-                .Include(cr => Enumerable.Select<ContentRelation, Content>(cr.ContentRelation, r => r.Content1))
-                .Include(cc => Enumerable.Select<CommunityContents, Community>(cc.CommunityContents, r => r.Community)).FirstOrDefault();
+                .Include(c => c.ContentRatings)
+                .Include(c => c.ContentTags.Select(ct => ct.Tag))
+                .Include(c => c.User)
+                .Include(cr => cr.ContentRelation.Select(r => r.Content1))
+                .Include(cc => cc.CommunityContents.Select(r => r.Community)).FirstOrDefault();
 
             return content;
         }
@@ -74,13 +74,11 @@ namespace WWTMVC5.Repositories
         /// <returns>Collection of Contents</returns>
         public IEnumerable<Content> GetItems(IEnumerable<long> contentIDs)
         {
-            IEnumerable<Content> result = null;
-
-            result = Queryable.OrderByDescending<Content, DateTime?>(Queryable.Where(this.DbSet, content => contentIDs.Contains(content.ContentID))
-                                    .Include<Content, ICollection<ContentRatings>>(cc => cc.ContentRatings)
-                                    .Include(cr => Enumerable.Select<ContentRelation, Content>(cr.ContentRelation, r => r.Content1))
-                                    .Include<Content, ICollection<CommunityContents>>(cc => cc.CommunityContents)
-                                    .Include(cc => Enumerable.Select<ContentTags, Tag>(cc.ContentTags, t => t.Tag)), content => content.ModifiedDatetime);
+            IEnumerable<Content> result = DbSet.Where(content => contentIDs.Contains(content.ContentID))
+                .Include(cc => cc.ContentRatings)
+                .Include(cr => cr.ContentRelation.Select(r => r.Content1))
+                .Include(cc => cc.CommunityContents)
+                .Include(cc => cc.ContentTags.Select(t => t.Tag)).OrderByDescending(content => content.ModifiedDatetime);
 
             return result.ToList();
         }
@@ -88,12 +86,12 @@ namespace WWTMVC5.Repositories
         /// <summary>
         /// Gets the access type for the given content.
         /// </summary>
-        /// <param name="contentID">Content for which access type has to be returned</param>
+        /// <param name="contentId">Content for which access type has to be returned</param>
         /// <returns>Access type of the content</returns>
-        public string GetContentAccessType(long contentID)
+        public string GetContentAccessType(long contentId)
         {
-            string query = "SELECT dbo.GetContentAccessType(@contentID)";
-            return this.EarthOnlineDbContext.Database.SqlQuery<string>(query, new SqlParameter("contentID", contentID)).FirstOrDefault();
+            var query = "SELECT dbo.GetContentAccessType(@contentID)";
+            return EarthOnlineDbContext.Database.SqlQuery<string>(query, new SqlParameter("contentID", contentId)).FirstOrDefault();
         }
 
         /// <summary>
@@ -106,8 +104,8 @@ namespace WWTMVC5.Repositories
         public IEnumerable<long> GetLatestContentIDs(int count)
         {
             // Get the contents which are not deleted.
-            var result = Queryable.Select<Content, long>(Queryable.OrderByDescending<Content, long>(Queryable.Where<Content>(this.EarthOnlineDbContext.Content, content => !(bool)content.IsDeleted &&
-                                                                                                                                                                         content.AccessTypeID == (int)AccessType.Public), content => content.ContentID), content => content.ContentID)
+            var result = EarthOnlineDbContext.Content.Where(content => !(bool)content.IsDeleted &&
+                                                                            content.AccessTypeID == (int)AccessType.Public).OrderByDescending(content => content.ContentID).Select(content => content.ContentID)
                                 .Take(count);
 
             return result.ToList();

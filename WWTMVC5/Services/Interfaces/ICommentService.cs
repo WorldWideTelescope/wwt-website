@@ -5,6 +5,7 @@
 //-----------------------------------------------------------------------
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using WWTMVC5.Models;
 
 namespace WWTMVC5.Services.Interfaces
@@ -20,7 +21,7 @@ namespace WWTMVC5.Services.Interfaces
         /// <param name="filter">Filter which comments to be fetched</param>
         /// <param name="pageDetails">Details about the pagination</param>
         /// <returns>List of all comments of the Content</returns>
-        IEnumerable<CommentDetails> GetContentComments(CommentFilter filter, PageDetails pageDetails);
+        Task<IEnumerable<CommentDetails>> GetContentComments(CommentFilter filter, PageDetails pageDetails);
 
         /// <summary>
         /// Gets all the comments for the specified Community.
@@ -28,7 +29,7 @@ namespace WWTMVC5.Services.Interfaces
         /// <param name="filter">Filter which comments to be fetched</param>
         /// <param name="pageDetails">Details about the pagination</param>
         /// <returns>List of all comments of the Community</returns>
-        IEnumerable<CommentDetails> GetCommunityComments(CommentFilter filter, PageDetails pageDetails);
+        Task<IEnumerable<CommentDetails>> GetCommunityComments(CommentFilter filter, PageDetails pageDetails);
 
         /// <summary>
         /// Gets the total number of community comments for the given filter.
@@ -61,15 +62,15 @@ namespace WWTMVC5.Services.Interfaces
         /// <summary>
         /// Deletes the comment on the community.
         /// </summary>
-        /// <param name="communityCommentsID">Id of the comment.</param>
+        /// <param name="communityCommentsId">Id of the comment.</param>
         /// <returns>True if the Comment was deleted successfully; Otherwise false.</returns>
-        bool DeleteCommunityComment(long communityCommentsID);
+        bool DeleteCommunityComment(long communityCommentsId);
 
         /// <summary>
         /// Deletes the comment on the content.
         /// </summary>
-        /// <param name="contentCommentsID">Id of the comment.</param>
+        /// <param name="contentCommentsId">Id of the comment.</param>
         /// <returns>True if the Comment was deleted successfully; Otherwise false.</returns>
-        bool DeleteContentComment(long contentCommentsID);
+        bool DeleteContentComment(long contentCommentsId);
     }
 }

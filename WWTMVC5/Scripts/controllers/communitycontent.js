@@ -154,7 +154,7 @@
         xs: [12, 40, 60, 100]
     }
     $scope.pageCountChange = function(count) {
-        $scope.pageInfo.ItemsPerPage = count;
+        $scope.pageInfo.ItemsPerPage = count || $scope.pageSizeOptions[$scope.currentResolution][1];
         $scope.getEntities();
     }
     $scope.$watch('pageInfo.CurrentPage', function() {

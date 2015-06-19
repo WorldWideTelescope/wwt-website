@@ -47,7 +47,7 @@ namespace WWTMVC5.Repositories
         /// <returns>Community instance.</returns>
         public async Task<Community> GetCommunityAsync(long communityId)
         {
-            var community = EarthOnlineDbContext.Community
+            var community = await EarthOnlineDbContext.Community
                 .Where(item => item.CommunityID == communityId
                     && item.IsDeleted == false && item.CommunityTypeID != (int) CommunityTypes.User)
                 .Include(c => c.AccessType)
@@ -57,8 +57,9 @@ namespace WWTMVC5.Repositories
                 .Include(c => c.CommunityTags.Select(ct => ct.Tag))
                 .Include(c => c.User).ToListAsync();
 
-            return community.Result.FirstOrDefault();
+            return community.FirstOrDefault();
         }
+
         public Community GetCommunity(long communityId)
         {
             var community = EarthOnlineDbContext.Community
@@ -77,27 +78,30 @@ namespace WWTMVC5.Repositories
         /// <summary>
         /// Retrieves the IDs of sub communities of a given community. This only retrieves the immediate children.
         /// </summary>
-        /// <param name="communityID">
+        /// <param name="communityId">
         /// ID of the community.
         /// </param>
         /// <param name="userId">Id of the user who is accessing</param>
         /// <returns>
         /// Collection of IDS of sub communities.
         /// </returns>
-        public IEnumerable<long> GetSubCommunityIDs(long communityID, long userId)
+        public IEnumerable<long> GetSubCommunityIDs(long communityId, long userId)
         {
             // TODO: Need to remove this once we have logic for loading objects from DBSet directly.
             IEnumerable<long> subCommunityIds = null;
 
             // Get the child communities for the given community first.
-            DbSet<CommunityRelation> communitiesRelation = this.EarthOnlineDbContext.Set<CommunityRelation>();
-            subCommunityIds = Queryable.Select<CommunityRelation, long>(Queryable.Where(communitiesRelation, relation => relation.ParentCommunityID == communityID), relation => relation.ChildCommunityID);
+            var communitiesRelation = EarthOnlineDbContext.Set<CommunityRelation>();
+            subCommunityIds = communitiesRelation.Where(relation => relation.ParentCommunityID == communityId).Select(relation => relation.ChildCommunityID);
 
             // Get the communities which are public. Get private communities only if the owner is current user.
-            var result = Queryable.Select<Community, long>(Queryable.OrderByDescending<Community, DateTime?>(Queryable.Where<Community>(this.EarthOnlineDbContext.Community, community => subCommunityIds.Contains(community.CommunityID) && !(bool)community.IsDeleted &&
-                                                                                                                                                                                    (community.AccessTypeID == (int)AccessType.Public ||
-                                                                                                                                                                                     (Queryable.Where<User>(this.EarthOnlineDbContext.User, user => user.UserID == userId && user.UserTypeID == 1).FirstOrDefault() != null ||
-                                                                                                                                                                                      Queryable.Where<UserCommunities>(this.EarthOnlineDbContext.UserCommunities, uc => uc.UserID == userId && uc.CommunityId == communityID && uc.RoleID >= (int)UserRole.Reader).FirstOrDefault() != null))), community => community.ModifiedDatetime), community => community.CommunityID);
+            var result =
+                EarthOnlineDbContext.Community.Where(community =>
+                        subCommunityIds.Contains(community.CommunityID) && !(bool) community.IsDeleted &&
+                        (community.AccessTypeID == (int) AccessType.Public ||
+                         (EarthOnlineDbContext.User.FirstOrDefault(user => user.UserID == userId && user.UserTypeID == 1) != null ||
+                          EarthOnlineDbContext.UserCommunities.FirstOrDefault(uc => uc.UserID == userId && uc.CommunityId == communityId &&
+                                  uc.RoleID >= (int) UserRole.Reader) != null))).OrderByDescending(community => community.ModifiedDatetime).Select(community => community.CommunityID);
 
             return result.ToList();
         }
@@ -105,23 +109,23 @@ namespace WWTMVC5.Repositories
         /// <summary>
         /// Retrieves the IDs of contents of a given community.
         /// </summary>
-        /// <param name="communityID">
+        /// <param name="communityId">
         /// ID of the community.
         /// </param>
         /// <param name="userId">Id of the user who is accessing</param>
         /// <returns>
         /// Collection of IDs of contents.
         /// </returns>
-        public IEnumerable<long> GetContentIDs(long communityID, long userId)
+        public IEnumerable<long> GetContentIDs(long communityId, long userId)
         {
             // TODO: Need to remove this once we have logic for loading objects from DBSet directly.
             IEnumerable<long> subContentIds = null;
 
             // Get the child contents for the given community/folder first.
-            DbSet<CommunityContents> communityContents = this.EarthOnlineDbContext.Set<CommunityContents>();
-            subContentIds = Queryable.Select<CommunityContents, long>(Queryable.Where(communityContents, relation => relation.CommunityID == communityID), relation => relation.ContentID);
+            var communityContents = EarthOnlineDbContext.Set<CommunityContents>();
+            subContentIds = communityContents.Where(relation => relation.CommunityID == communityId).Select(relation => relation.ContentID);
 
-            DbSet<ContentsView> contentsView = this.EarthOnlineDbContext.Set<ContentsView>();
+            var contentsView = EarthOnlineDbContext.Set<ContentsView>();
 
             // Get the contents which are public. 
             // Get private contents only if:
@@ -129,8 +133,8 @@ namespace WWTMVC5.Repositories
             //      2. If the user is given explicit permission through roles.
             var result = contentsView
                             .Where(content => subContentIds.Contains(content.ContentID) && (content.AccessType == Resources.Public ||
-                                        (Queryable.Where<User>(this.EarthOnlineDbContext.User, user => user.UserID == userId && user.UserTypeID == 1).FirstOrDefault() != null ||
-                                            Queryable.Where<UserCommunities>(this.EarthOnlineDbContext.UserCommunities, uc => uc.UserID == userId && uc.CommunityId == communityID && uc.RoleID >= (int)UserRole.Reader).FirstOrDefault() != null)))
+                                        (EarthOnlineDbContext.User.FirstOrDefault(user => user.UserID == userId && user.UserTypeID == 1) != null ||
+                                            EarthOnlineDbContext.UserCommunities.FirstOrDefault(uc => uc.UserID == userId && uc.CommunityId == communityId && uc.RoleID >= (int)UserRole.Reader) != null)))
                             .OrderByDescending(content => content.LastUpdatedDatetime)
                             .Select(content => content.ContentID);
 
@@ -141,13 +145,12 @@ namespace WWTMVC5.Repositories
         public async Task<IEnumerable<ContentsView>> GetContents(long communityId, long userId)
         {
             // TODO: Need to remove this once we have logic for loading objects from DBSet directly.
-            IEnumerable<long> subContentIds = null;
 
             // Get the child contents for the given community/folder first.
-            DbSet<CommunityContents> communityContents = this.EarthOnlineDbContext.Set<CommunityContents>();
-            subContentIds = Queryable.Select<CommunityContents, long>(Queryable.Where(communityContents, relation => relation.CommunityID == communityId), relation => relation.ContentID);
+            var communityContents = EarthOnlineDbContext.Set<CommunityContents>();
+            IEnumerable<long> subContentIds = communityContents.Where(relation => relation.CommunityID == communityId).Select(relation => relation.ContentID);
 
-            DbSet<ContentsView> contentsView = this.EarthOnlineDbContext.Set<ContentsView>();
+            var contentsView = EarthOnlineDbContext.Set<ContentsView>();
 
             // Get the contents which are public. 
             // Get private contents only if:
@@ -156,20 +159,14 @@ namespace WWTMVC5.Repositories
             var result = await contentsView
                 .Where(
                     content => subContentIds.Contains(content.ContentID) && (content.AccessType == Resources.Public ||
-                        (Queryable.Where<User>(
-                            this.EarthOnlineDbContext.User,
-                            user =>
-                                user.UserID == userId &&
-                                user.UserTypeID == 1)
-                            .FirstOrDefault() != null ||
-                        Queryable.Where<UserCommunities>(
-                            this.EarthOnlineDbContext
-                                .UserCommunities,
-                            uc =>
-                                uc.UserID == userId &&
+                        (EarthOnlineDbContext.User
+                            .FirstOrDefault(user => user.UserID == userId &&
+                                user.UserTypeID == 1) != null ||
+                        EarthOnlineDbContext
+                            .UserCommunities
+                            .FirstOrDefault(uc => uc.UserID == userId &&
                                 uc.CommunityId == communityId &&
-                                uc.RoleID >= (int) UserRole.Reader)
-                            .FirstOrDefault() != null)))
+                                uc.RoleID >= (int) UserRole.Reader) != null)))
                 .OrderByDescending(content => content.LastUpdatedDatetime).ToListAsync();
                             
             return result;
@@ -178,35 +175,35 @@ namespace WWTMVC5.Repositories
         /// <summary>
         /// Retrieves the payload details of a given community.
         /// </summary>
-        /// <param name="communityID">
+        /// <param name="communityId">
         /// ID of the community.
         /// </param>
         /// <returns>
         /// Payload details of a given community.
         /// </returns>
-        public Community GetPayloadDetails(long communityID)
+        public Community GetPayloadDetails(long communityId)
         {
             // Get Community details along with child content and child relationships
-            var payloadDetails = Queryable.Where<Community>(this.EarthOnlineDbContext.Community, item => item.CommunityID == communityID && item.IsDeleted == false)
-                .Include<Community, ICollection<CommunityContents>>(c => c.CommunityContents).Include(child => Enumerable.Select<CommunityContents, Content>(child.CommunityContents, p => p.Content))
-                .Include<Community, ICollection<CommunityRelation>>(c => c.CommunityRelation).Include(child => Enumerable.Select<CommunityRelation, Community>(child.CommunityRelation, p => p.Community1));
+            var payloadDetails = EarthOnlineDbContext.Community.Where(item => item.CommunityID == communityId && item.IsDeleted == false)
+                .Include(c => c.CommunityContents).Include(child => child.CommunityContents.Select(p => p.Content))
+                .Include(c => c.CommunityRelation).Include(child => child.CommunityRelation.Select(p => p.Community1));
 
-            return payloadDetails.FirstOrDefault<Community>();
+            return payloadDetails.FirstOrDefault();
         }
 
         /// <summary>
         /// Get All Tours for the community
         /// </summary>
-        /// <param name="communityID">community ID</param>
+        /// <param name="communityId">community ID</param>
         /// <returns>Tour content</returns>
-        public IEnumerable<Content> GetAllTours(long communityID)
+        public IEnumerable<Content> GetAllTours(long communityId)
         {
-            var childCommunities = GetAllChildrenCommunities(communityID);
+            var childCommunities = GetAllChildrenCommunities(communityId);
 
-            var payloadDetails = Queryable.Where<Community>(this.EarthOnlineDbContext.Community, item => childCommunities.Contains(item.CommunityID) || (item.CommunityID == communityID))
-                .Include<Community, ICollection<CommunityContents>>(c => c.CommunityContents).Include(child => Enumerable.Select<CommunityContents, Content>(child.CommunityContents, p => p.Content));
+            var payloadDetails = EarthOnlineDbContext.Community.Where(item => childCommunities.Contains(item.CommunityID) || (item.CommunityID == communityId))
+                .Include(c => c.CommunityContents).Include(child => child.CommunityContents.Select(p => p.Content));
 
-            var contents = Queryable.Select<CommunityContents, Content>(Queryable.SelectMany<Community, CommunityContents>(payloadDetails, item => item.CommunityContents), item => item.Content)
+            var contents = payloadDetails.SelectMany(item => item.CommunityContents).Select(item => item.Content)
                 .Where(item => item.Filename.EndsWith(Constants.TourFileExtension));
 
             return contents.ToList();
@@ -215,19 +212,19 @@ namespace WWTMVC5.Repositories
         /// <summary>
         /// Get latest content for the community
         /// </summary>
-        /// <param name="communityID">community ID</param>
+        /// <param name="communityId">community ID</param>
         /// <param name="daysToConsider">days to consider for latest</param>
         /// <returns>latest content</returns>
-        public IEnumerable<Content> GetLatestContent(long communityID, int daysToConsider)
+        public IEnumerable<Content> GetLatestContent(long communityId, int daysToConsider)
         {
-            var childCommunities = GetAllChildrenCommunities(communityID);
+            var childCommunities = GetAllChildrenCommunities(communityId);
 
-            var payloadDetails = Queryable.Where<Community>(this.EarthOnlineDbContext.Community, item => childCommunities.Contains(item.CommunityID) || (item.CommunityID == communityID))
-                .Include<Community, ICollection<CommunityContents>>(c => c.CommunityContents).Include(child => Enumerable.Select<CommunityContents, Content>(child.CommunityContents, p => p.Content));
+            var payloadDetails = EarthOnlineDbContext.Community.Where(item => childCommunities.Contains(item.CommunityID) || (item.CommunityID == communityId))
+                .Include(c => c.CommunityContents).Include(child => child.CommunityContents.Select(p => p.Content));
 
-            DateTime latestDateTime = DateTime.UtcNow.AddDays(-(daysToConsider));
+            var latestDateTime = DateTime.UtcNow.AddDays(-(daysToConsider));
 
-            var contents = Queryable.OrderByDescending<Content, DateTime?>(Queryable.Where(Queryable.Select<CommunityContents, Content>(Queryable.SelectMany<Community, CommunityContents>(payloadDetails, item => item.CommunityContents), item => item.Content), item => item.ModifiedDatetime > latestDateTime), item => item.ModifiedDatetime);
+            var contents = payloadDetails.SelectMany(item => item.CommunityContents).Select(item => item.Content).Where(item => item.ModifiedDatetime > latestDateTime).OrderByDescending(item => item.ModifiedDatetime);
 
             return contents.ToList();
         }
@@ -236,14 +233,14 @@ namespace WWTMVC5.Repositories
         /// Gets the communities and folders which can be used as parent while creating a new 
         /// community/folder/content by the specified user.
         /// </summary>
-        /// <param name="userID">User for which the parent communities/folders are being fetched</param>
+        /// <param name="userId">User for which the parent communities/folders are being fetched</param>
         /// <param name="currentCommunityId">Id of the current community which should not be returned</param>
         /// <param name="excludeCommunityType">Community type which needs to be excluded</param>
         /// <param name="userRoleOnParentCommunity">Specified user should have given user role or higher on the given community</param>
         /// <param name="currentUserRole">Current user role</param>
         /// <returns>List of communities folders</returns>
         public IEnumerable<Community> GetParentCommunities(
-                long userID,
+                long userId,
                 long currentCommunityId,
                 CommunityTypes excludeCommunityType,
                 UserRole userRoleOnParentCommunity,
@@ -258,7 +255,7 @@ namespace WWTMVC5.Repositories
                 if (excludeCommunityType == CommunityTypes.None)
                 {
                     // If parent communities are retrieved for Contents (when excludeCommunityType is None), need to send the "None" Community of site admin.
-                    condition = (Community c) => (c.CommunityTypeID != (int)CommunityTypes.User || c.CreatedByID == userID) &&
+                    condition = (Community c) => (c.CommunityTypeID != (int)CommunityTypes.User || c.CreatedByID == userId) &&
                                                         !(bool)c.IsDeleted &&
                                                         c.CommunityID != currentCommunityId;
                 }
@@ -294,7 +291,7 @@ namespace WWTMVC5.Repositories
                     condition = (Community c) => !(bool)c.IsDeleted &&
                         c.CommunityTypeID != (int)excludeCommunityType &&
                         c.CommunityID != currentCommunityId &&
-                        Enumerable.Where<UserCommunities>(c.UserCommunities, u => u.UserID == userID && u.RoleID >= (int)userRoleOnParentCommunity).FirstOrDefault() != null && 
+                        c.UserCommunities.Where(u => u.UserID == userId && u.RoleID >= (int)userRoleOnParentCommunity).FirstOrDefault() != null && 
                         !childCommunities.Contains(c.CommunityID);
                 }
                 else
@@ -305,12 +302,12 @@ namespace WWTMVC5.Repositories
                     condition = (Community c) => !(bool)c.IsDeleted &&
                         c.CommunityTypeID != (int)excludeCommunityType &&
                         c.CommunityID != currentCommunityId &&
-                        Enumerable.Where<UserCommunities>(c.UserCommunities, u => u.UserID == userID && u.RoleID >= (int)userRoleOnParentCommunity).FirstOrDefault() != null;
+                        c.UserCommunities.Where(u => u.UserID == userId && u.RoleID >= (int)userRoleOnParentCommunity).FirstOrDefault() != null;
                 }
             }
 
             Func<Community, object> orderBy = (Community c) => c.CommunityID;
-            return Queryable.Where(this.EarthOnlineDbContext.Community, condition).OrderBy(orderBy);
+            return EarthOnlineDbContext.Community.Where(condition).OrderBy(orderBy);
         }
 
         /// <summary>
@@ -326,11 +323,11 @@ namespace WWTMVC5.Repositories
         {
             IEnumerable<Community> result = null;
 
-            result = Queryable.OrderByDescending<Community, DateTime?>(Queryable.Where(this.DbSet, community => communityIDs.Contains(community.CommunityID))
-                                    .Include<Community, ICollection<CommunityRatings>>(c => c.CommunityRatings)
-                                    .Include<Community, ICollection<CommunityRelation>>(c => c.CommunityRelation1)
-                                    .Include(c => Enumerable.Select<CommunityTags, Tag>(c.CommunityTags, ct => ct.Tag))
-                                    .Include<Community, User>(c => c.User), community => community.ModifiedDatetime);
+            result = DbSet.Where(community => communityIDs.Contains(community.CommunityID))
+                .Include(c => c.CommunityRatings)
+                .Include(c => c.CommunityRelation1)
+                .Include(c => c.CommunityTags.Select(ct => ct.Tag))
+                .Include(c => c.User).OrderByDescending(community => community.ModifiedDatetime);
 
             return result.ToList();
         }
@@ -338,40 +335,40 @@ namespace WWTMVC5.Repositories
         /// <summary>
         /// Gets the access type for the given Community.
         /// </summary>
-        /// <param name="communityID">Community for which access type has to be returned</param>
+        /// <param name="communityId">Community for which access type has to be returned</param>
         /// <returns>Access type of the Community</returns>
-        public string GetCommunityAccessType(long communityID)
+        public string GetCommunityAccessType(long communityId)
         {
-            string query = "SELECT dbo.GetCommunityAccessType(@communityID)";
-            return this.EarthOnlineDbContext.Database.SqlQuery<string>(query, new SqlParameter("communityID", communityID)).FirstOrDefault();
+            var query = "SELECT dbo.GetCommunityAccessType(@communityID)";
+            return EarthOnlineDbContext.Database.SqlQuery<string>(query, new SqlParameter("communityID", communityId)).FirstOrDefault();
         }
 
         /// <summary>
         /// Gets all the approvers details of a given community
         /// </summary>
-        /// <param name="communityID">Identification of a community.</param>
+        /// <param name="communityId">Identification of a community.</param>
         /// <returns>All approvers of a given community.</returns>
-        public IEnumerable<User> GetApprovers(long communityID)
+        public IEnumerable<User> GetApprovers(long communityId)
         {
-            var approvers = from userCommunities in this.EarthOnlineDbContext.UserCommunities
-                            where userCommunities.CommunityId == communityID && userCommunities.RoleID >= (int)UserRole.Moderator
+            var approvers = from userCommunities in EarthOnlineDbContext.UserCommunities
+                            where userCommunities.CommunityId == communityId && userCommunities.RoleID >= (int)UserRole.Moderator
                             select userCommunities.User;
 
-            return Enumerable.ToList<User>(approvers);
+            return approvers.ToList();
         }
 
         /// <summary>
         /// Gets all Contributors(including Moderators and Owners) of a given community of a given community
         /// </summary>
-        /// <param name="communityID">Identification of a community.</param>
+        /// <param name="communityId">Identification of a community.</param>
         /// <returns>All Contributors of a given community.</returns>
-        public IEnumerable<User> GetContributors(long communityID)
+        public IEnumerable<User> GetContributors(long communityId)
         {
-            var contributors = from userCommunities in this.EarthOnlineDbContext.UserCommunities
-                               where userCommunities.CommunityId == communityID && userCommunities.RoleID >= (int)UserRole.Contributor
+            var contributors = from userCommunities in EarthOnlineDbContext.UserCommunities
+                               where userCommunities.CommunityId == communityId && userCommunities.RoleID >= (int)UserRole.Contributor
                                select userCommunities.User;
 
-            return Enumerable.ToList<User>(contributors);
+            return contributors.ToList();
         }
 
         /// <summary>
@@ -384,9 +381,9 @@ namespace WWTMVC5.Repositories
         public IEnumerable<long> GetLatestCommunityIDs(int count)
         {
             // Get the communities which are not deleted.
-            var result = Queryable.Select<Community, long>(Queryable.OrderByDescending<Community, long>(Queryable.Where<Community>(this.EarthOnlineDbContext.Community, community => !(bool)community.IsDeleted &&
-                                                                                                                                                                                   community.CommunityTypeID != (int)CommunityTypes.User &&
-                                                                                                                                                                                   community.AccessTypeID == (int)AccessType.Public), community => community.CommunityID), community => community.CommunityID)
+            var result = EarthOnlineDbContext.Community.Where(community => !(bool)community.IsDeleted &&
+                                                                                community.CommunityTypeID != (int)CommunityTypes.User &&
+                                                                                community.AccessTypeID == (int)AccessType.Public).OrderByDescending(community => community.CommunityID).Select(community => community.CommunityID)
                                 .Take(count);
 
             return result.ToList();
@@ -399,21 +396,21 @@ namespace WWTMVC5.Repositories
         /// <summary>
         /// Retrieves the IDs of sub communities of a given community recursively for all children and grand children
         /// </summary>
-        /// <param name="communityID">
+        /// <param name="communityId">
         /// ID of the community.
         /// </param>
         /// <returns>
         /// Collection of IDS of sub communities.
         /// </returns>
-        private IEnumerable<long> GetAllChildrenCommunities(long communityID)
+        private IEnumerable<long> GetAllChildrenCommunities(long communityId)
         {
             IEnumerable<long> results = null;
-            DbSet<CommunityRelation> communitiesRelation = this.EarthOnlineDbContext.Set<CommunityRelation>();
+            var communitiesRelation = EarthOnlineDbContext.Set<CommunityRelation>();
 
-            results = Queryable.Select<CommunityRelation, long>(Queryable.Where(communitiesRelation, relation => relation.ParentCommunityID == communityID), relation => relation.ChildCommunityID);
+            results = communitiesRelation.Where(relation => relation.ParentCommunityID == communityId).Select(relation => relation.ChildCommunityID);
 
             // TODO : Optimize multiple calls going to DB
-            foreach (long result in results)
+            foreach (var result in results)
             {
                 results = results.Concat(GetAllChildrenCommunities(result));
             }

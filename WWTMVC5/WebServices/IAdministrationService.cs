@@ -7,6 +7,7 @@
 using System.IO;
 using System.ServiceModel;
 using System.ServiceModel.Web;
+using System.Threading.Tasks;
 using WWTMVC5.Models;
 
 namespace WWTMVC5.WebServices
@@ -16,11 +17,11 @@ namespace WWTMVC5.WebServices
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "We cannot use properties in a rest service call."), OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare, UriTemplate = "/Offensive/Community")]
-        OffensiveEntityDetailsList GetOffensiveCommunities();
+        Task<OffensiveEntityDetailsList> GetOffensiveCommunities();
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "We cannot use properties in a rest service call."), OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare, UriTemplate = "/Offensive/Content")]
-        OffensiveEntityDetailsList GetOffensiveContents();
+        Task<OffensiveEntityDetailsList> GetOffensiveContents();
 
         [OperationContract]
         [WebInvoke(BodyStyle = WebMessageBodyStyle.Bare, UriTemplate = "OffensiveCommunityEntry/{id}", Method = "DELETE")]
@@ -40,44 +41,44 @@ namespace WWTMVC5.WebServices
 
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare, UriTemplate = "/Community/{categoryID}")]
-        AdminEntityDetailsList GetCommunities(string categoryID);
+        Task<AdminEntityDetailsList> GetCommunities(string categoryId);
 
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare, UriTemplate = "/Content/{categoryID}")]
-        AdminEntityDetailsList GetContents(string categoryID);
+        Task<AdminEntityDetailsList> GetContents(string categoryId);
 
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare, UriTemplate = "/AdminUser")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "We cannot use properties in a rest service call.")]
-        AdminUserDetailsList GetUsers();
+        Task<AdminUserDetailsList> GetUsers();
 
-        [OperationContract]
-        [WebGet(BodyStyle = WebMessageBodyStyle.Bare, UriTemplate = "/User")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "We cannot use properties in a rest service call.")]
-        AdminReportProfileDetailsList GetUsersForReport();
+        //[OperationContract]
+        //[WebGet(BodyStyle = WebMessageBodyStyle.Bare, UriTemplate = "/User")]
+        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "We cannot use properties in a rest service call.")]
+        //AdminReportProfileDetailsList GetUsersForReport();
 
         [OperationContract]
         [WebInvoke(BodyStyle = WebMessageBodyStyle.Bare, UriTemplate = "/FeaturedCommunity/{categoryID}", Method = "POST", RequestFormat = WebMessageFormat.Xml)]
-        bool UpdateFeaturedCommunities(string categoryID, Stream featuredCommunities);
+        Task<bool> UpdateFeaturedCommunities(string categoryId, Stream featuredCommunities);
 
         [OperationContract]
         [WebInvoke(BodyStyle = WebMessageBodyStyle.Bare, UriTemplate = "/FeaturedContent/{categoryID}", Method = "POST", RequestFormat = WebMessageFormat.Xml)]
-        bool UpdateFeaturedContents(string categoryID, Stream featuredContents);
+        Task<bool> UpdateFeaturedContents(string categoryId, Stream featuredContents);
 
         [OperationContract]
         [WebInvoke(BodyStyle = WebMessageBodyStyle.Bare, UriTemplate = "/AdminUser", Method = "POST", RequestFormat = WebMessageFormat.Xml)]
-        bool UpdateAdminUsers(Stream adminUsers);
+        Task<bool> UpdateAdminUsers(Stream adminUsers);
 
         [OperationContract]
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare, UriTemplate = "/AllCommunities/{categoryID}")]
-        AdminEntityDetailsList GetAllCommunities(string categoryID);
+        Task<AdminEntityDetailsList> GetAllCommunities(string categoryId);
 
         [WebGet(BodyStyle = WebMessageBodyStyle.Bare, UriTemplate = "/AllContents/{categoryID}")]
-        AdminEntityDetailsList GetAllContents(string categoryID);
+        Task<AdminEntityDetailsList> GetAllContents(string categoryId);
 
         [OperationContract]
         [WebInvoke(BodyStyle = WebMessageBodyStyle.Bare, UriTemplate = "UnDeleteCommunity/{id}", Method = "POST")]
-        bool UnDeleteOffensiveCommunity(string id);
+        Task<bool> UnDeleteOffensiveCommunity(string id);
 
         [OperationContract]
         [WebInvoke(BodyStyle = WebMessageBodyStyle.Bare, UriTemplate = "UnDeleteContent/{id}", Method = "POST")]

@@ -5,6 +5,7 @@
 //-----------------------------------------------------------------------
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using WWTMVC5.Models;
 
 namespace WWTMVC5.Services.Interfaces
@@ -31,16 +32,16 @@ namespace WWTMVC5.Services.Interfaces
         /// <summary>
         /// Get all Offensive communities.
         /// </summary>
-        /// <param name="userID">Id of the user</param>
+        /// <param name="userId">Id of the user</param>
         /// <returns>List of all offensive communities.</returns>
-        IEnumerable<OffensiveEntityDetails> GetOffensiveCommunities(long userID);
+        Task<IEnumerable<OffensiveEntityDetails>> GetOffensiveCommunities(long userId);
 
         /// <summary>
         /// Get all Offensive contents.
         /// </summary>
-        /// <param name="userID">Id of the user</param>
+        /// <param name="userId">Id of the user</param>
         /// <returns>List of all offensive contents.</returns>
-        IEnumerable<OffensiveEntityDetails> GetOffensiveContents(long userID);
+        Task<IEnumerable<OffensiveEntityDetails>> GetOffensiveContents(long userId);
 
         /// <summary>
         /// Updates the Community Entry with all the details.
@@ -61,13 +62,8 @@ namespace WWTMVC5.Services.Interfaces
         /// </summary>
         /// <param name="details">Details provided.</param>
         /// <returns>True if Community was updated; otherwise false.</returns>
-        OperationStatus UpdateAllOffensiveCommunityEntry(OffensiveEntry details);
+        Task<OperationStatus> UpdateAllOffensiveCommunityEntry(OffensiveEntry details);
 
-        /// <summary>
-        /// Updates the all the entries for the given Content with all the details.
-        /// </summary>
-        /// <param name="details">Details provided.</param>
-        /// <returns>True if content was updated; otherwise false.</returns>
-        OperationStatus UpdateAllOffensiveContentEntry(OffensiveEntry details);
+        
     }
 }

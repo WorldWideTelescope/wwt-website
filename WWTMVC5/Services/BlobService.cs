@@ -17,7 +17,7 @@ namespace WWTMVC5.Services
 {
     public class BlobService : IBlobService
     {
-        private IBlobDataRepository blobDataRepository;
+        private IBlobDataRepository _blobDataRepository;
         
         /// <summary>
         /// Initializes a new instance of the BlobService class.
@@ -27,49 +27,49 @@ namespace WWTMVC5.Services
         /// </param>
         public BlobService(IBlobDataRepository blobDataRepository)
         {
-            this.blobDataRepository = blobDataRepository;
+            this._blobDataRepository = blobDataRepository;
         }
 
         /// <summary>
         /// Gets the files from azure which is identified by file id.
         /// </summary>
-        /// <param name="fileID">
+        /// <param name="fileId">
         /// ID of the file.
         /// </param>
         /// <returns>
         /// Blob details.
         /// </returns>
-        public BlobDetails GetFile(Guid fileID)
+        public BlobDetails GetFile(Guid fileId)
         {
-            return this.blobDataRepository.GetBlobContent(fileID.ToString().ToUpperInvariant());
+            return _blobDataRepository.GetBlobContent(fileId.ToString().ToUpperInvariant());
         }
 
         /// <summary>
         /// Gets the files from azure which is identified by thumbnail id.
         /// </summary>
-        /// <param name="thumbnailID">
+        /// <param name="thumbnailId">
         /// ID of the thumbnail.
         /// </param>
         /// <returns>
         /// Blob details.
         /// </returns>
-        public BlobDetails GetThumbnail(Guid thumbnailID)
+        public BlobDetails GetThumbnail(Guid thumbnailId)
         {
-            return this.blobDataRepository.GetThumbnail(thumbnailID.ToString().ToUpperInvariant());
+            return _blobDataRepository.GetThumbnail(thumbnailId.ToString().ToUpperInvariant());
         }
 
         /// <summary>
         /// Gets the Temporary file(whether thumbnail/video from azure which is identified by thumbnail id.
         /// </summary>
-        /// <param name="thumbnailID">
+        /// <param name="thumbnailId">
         /// ID of the thumbnail.
         /// </param>
         /// <returns>
         /// Blob Details.
         /// </returns>
-        public BlobDetails GetTemporaryFile(Guid thumbnailID)
+        public BlobDetails GetTemporaryFile(Guid thumbnailId)
         {
-            return this.blobDataRepository.GetTemporaryFile(thumbnailID.ToString().ToUpperInvariant());
+            return _blobDataRepository.GetTemporaryFile(thumbnailId.ToString().ToUpperInvariant());
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace WWTMVC5.Services
         /// </returns>
         public BlobDetails GetAsset(string fileName)
         {
-            return this.blobDataRepository.GetAsset(fileName);
+            return _blobDataRepository.GetAsset(fileName);
         }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace WWTMVC5.Services
             OperationStatus operationStatus = null;
             this.CheckNotNull(() => new { fileDetails });
 
-            BlobDetails fileBlob = new BlobDetails()
+            var fileBlob = new BlobDetails()
             {
                 BlobID = fileDetails.Name,
                 Data = fileDetails.DataStream,
@@ -136,7 +136,7 @@ namespace WWTMVC5.Services
             };
             try
             {
-                if (this.blobDataRepository.UploadAsset(fileBlob))
+                if (_blobDataRepository.UploadAsset(fileBlob))
                 {
                     operationStatus = OperationStatus.CreateSuccessStatus();
                 }
@@ -153,35 +153,7 @@ namespace WWTMVC5.Services
             return operationStatus;
         }
 
-        /// <summary>
-        /// Lists all blobs in asset container
-        /// </summary>
-        /// <returns>List of blobs</returns>
-        public IEnumerable<BlobDetails> ListAssets(PageDetails pageDetails)
-        {
-            this.CheckNotNull(() => new { pageDetails });
-
-            var blobs = new List<BlobDetails>();
-            var assetList = this.blobDataRepository.ListAssets();
-
-            // Gets the total items satisfying the condition
-            pageDetails.TotalCount = assetList.Count();
-            pageDetails.TotalPages = (pageDetails.TotalCount / pageDetails.ItemsPerPage) + ((pageDetails.TotalCount % pageDetails.ItemsPerPage == 0) ? 0 : 1);
-            pageDetails.CurrentPage = pageDetails.CurrentPage > pageDetails.TotalPages ? pageDetails.TotalPages : pageDetails.CurrentPage;
-
-            foreach (var asset in assetList.Skip((pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage).Take(pageDetails.ItemsPerPage).ToList())
-            {
-                BlobDetails fileBlob = new BlobDetails()
-                {
-                    BlobID = asset.Uri.Segments.Last(),
-                    MimeType = asset.Properties.ContentType,
-                };
-
-                blobs.Add(fileBlob);
-            }
-
-            return blobs;
-        }
+        
 
         /// <summary>
         /// Deletes the file from azure which is identified by file name.
@@ -195,14 +167,14 @@ namespace WWTMVC5.Services
         public OperationStatus DeleteAsset(string fileName)
         {
             OperationStatus operationStatus = null;
-            BlobDetails fileBlob = new BlobDetails()
+            var fileBlob = new BlobDetails()
             {
                 BlobID = fileName,
             };
 
             try
             {
-                this.blobDataRepository.DeleteAsset(fileBlob);
+                _blobDataRepository.DeleteAsset(fileBlob);
                 operationStatus = OperationStatus.CreateSuccessStatus();
             }
             catch (Exception)
@@ -225,14 +197,14 @@ namespace WWTMVC5.Services
         public OperationStatus CheckIfAssetExists(string fileName)
         {
             OperationStatus operationStatus = null;
-            BlobDetails fileBlob = new BlobDetails()
+            var fileBlob = new BlobDetails()
             {
                 BlobID = fileName,
             };
 
             try
             {
-                if (this.blobDataRepository.CheckIfAssetExists(fileBlob))
+                if (_blobDataRepository.CheckIfAssetExists(fileBlob))
                 {
                     operationStatus = OperationStatus.CreateSuccessStatus();
                 }
@@ -261,7 +233,7 @@ namespace WWTMVC5.Services
             // Make sure file detail is not null
             this.CheckNotNull(() => new { fileDetail });
 
-            BlobDetails fileBlob = new BlobDetails()
+            var fileBlob = new BlobDetails()
             {
                 BlobID = fileDetail.AzureID.ToString(),
                 Data = fileDetail.DataStream,
@@ -270,7 +242,7 @@ namespace WWTMVC5.Services
 
             try
             {
-                this.blobDataRepository.UploadTemporaryFile(fileBlob);
+                _blobDataRepository.UploadTemporaryFile(fileBlob);
                 operationStatus = OperationStatus.CreateSuccessStatus();
             }
             catch (Exception)
@@ -287,13 +259,13 @@ namespace WWTMVC5.Services
         /// <param name="fileDetails">Details of the file.</param>
         private bool MoveAssetFile(FileDetail fileDetails)
         {
-            BlobDetails fileBlob = new BlobDetails()
+            var fileBlob = new BlobDetails()
             {
                 BlobID = fileDetails.AzureID.ToString(),
                 MimeType = fileDetails.MimeType
             };
 
-            return this.blobDataRepository.MoveAssetFile(fileBlob);
+            return _blobDataRepository.MoveAssetFile(fileBlob);
         }
     }
 }

@@ -134,13 +134,13 @@ URL / website"></textarea>
 
     <div class="form-group">
 
-        <img ng-if="!content.ThumbnailID && !editedThumb" class="pull-right" ng-src="{{contentRoot}}/images/defaultdocthumbnail.png" />
-        <img ng-if="content.ThumbnailID && (!isEdit || editedThumb)" class="pull-right" ng-src="/file/TemporaryFile/{{content.ThumbnailID}}" />
-        <img ng-if="content.ThumbnailID && isEdit && !editedThumb" class="pull-right" ng-src="/file/thumbnail/{{content.ThumbnailID}}" />
+        <img ng-if="content.ThumbnailIsNull && !editedThumb" class="pull-right" ng-src="{{contentRoot}}/images/defaultdocthumbnail.png" />
+        <img ng-if="!content.ThumbnailIsNull && (!isEdit || editedThumb)" class="pull-right" ng-src="/file/TemporaryFile/{{content.ThumbnailID}}" />
+        <img ng-if="!content.ThumbnailIsNull && isEdit && !editedThumb" class="pull-right" ng-src="/file/thumbnail/{{content.ThumbnailID}}" />
         <div>
             <strong>Thumbnail</strong>
         </div>
-        <span class="btn btn-primary btn-file btn-sm">
+        <span class="btn btn-info btn-file btn-sm">
             Choose Thumbnail...
             <input type="file" nv-file-select uploader="thumbuploader" />
         </span>

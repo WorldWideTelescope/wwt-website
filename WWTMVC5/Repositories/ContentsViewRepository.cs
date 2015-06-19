@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using WWTMVC5.Models;
 using WWTMVC5.Properties;
 using WWTMVC5.Repositories.Interfaces;
@@ -36,18 +37,18 @@ namespace WWTMVC5.Repositories
         /// <param name="contentIDs">
         /// Content IDs.
         /// </param>
-        /// <param name="communityID">Community Id</param>
+        /// <param name="communityId">Community Id</param>
         /// <returns>
         /// Collection of ContentsView.
         /// </returns>
-        public IEnumerable<ContentsView> GetItems(IEnumerable<long> contentIDs, long communityID)
+        public IEnumerable<ContentsView> GetItems(IEnumerable<long> contentIDs, long communityId)
         {
             IEnumerable<ContentsView> result = null;
 
             // TODO: Since the data is populated through data generator tools, there are contents part of multiple communities.
             // To avoid showing invalid data, additional parameter and check is added which needs to be removed later.
             result = from contents in DbSet
-                     where contentIDs.Contains(contents.ContentID) && contents.CommunityID == communityID
+                     where contentIDs.Contains(contents.ContentID) && contents.CommunityID == communityId
                      orderby contents.LastUpdatedDatetime descending
                      select contents;
 
@@ -60,9 +61,10 @@ namespace WWTMVC5.Repositories
         /// <param name="searchText">Text to be searched</param>
         /// <param name="userId">User who is searching</param>
         /// <returns>Count of search result items</returns>
-        public int SearchContentsCount(string searchText, long userId)
+        public async Task<int> SearchContentsCount(string searchText, long userId)
         {
-            return GetItems(GetContentSearchCondition(searchText, userId), GetContentOrderByCondition(), true).Count();
+            var items = GetItems(GetContentSearchCondition(searchText, userId), GetContentOrderByCondition(), true);
+            return items.Count();
         }
 
         /// <summary>
@@ -73,6 +75,10 @@ namespace WWTMVC5.Repositories
         /// <param name="skipCount">Items to be skipped based on pagination</param>
         /// <param name="takeCount">Items to be taken based on pagination</param>
         /// <returns>Search result items</returns>
+        public async Task<IEnumerable<ContentsView>> SearchContentsAsync(string searchText, long userId, int skipCount, int takeCount)
+        {
+            return await GetItemsAsync(GetContentSearchCondition(searchText, userId), GetContentOrderByCondition(), true, skipCount, takeCount);
+        }
         public IEnumerable<ContentsView> SearchContents(string searchText, long userId, int skipCount, int takeCount)
         {
             return GetItems(GetContentSearchCondition(searchText, userId), GetContentOrderByCondition(), true, skipCount, takeCount);
@@ -81,11 +87,11 @@ namespace WWTMVC5.Repositories
         /// <summary>
         /// Gets total consumed size for the user.
         /// </summary>
-        /// <param name="userID">ID of the user.</param>
+        /// <param name="userId">ID of the user.</param>
         /// <returns>Total consumed size.</returns>
-        public decimal GetConsumedSize(long userID)
+        public decimal GetConsumedSize(long userId)
         {
-            var consumedSize = Queryable.Where<Content>(this.EarthOnlineDbContext.Content, item => item.CreatedByID == userID && item.IsDeleted == false)
+            var consumedSize = EarthOnlineDbContext.Content.Where(item => item.CreatedByID == userId && item.IsDeleted == false)
                 .Sum(item => item.Size);
 
             return consumedSize.HasValue ? consumedSize.Value : 0;
@@ -116,8 +122,8 @@ namespace WWTMVC5.Repositories
                                             c.Citation.ToLower().Contains(searchText) ||
                                             c.Tags.ToLower().Contains(searchText)) &&
                                             (c.AccessType == Resources.Public || 
-                                                Queryable.Where<User>(this.EarthOnlineDbContext.User, user => user.UserID == userId && user.UserTypeID == 1).FirstOrDefault() != null ||
-                                                Queryable.Where<UserCommunities>(this.EarthOnlineDbContext.UserCommunities, uc => uc.UserID == userId && uc.CommunityId == c.CommunityID && uc.RoleID >= (int)UserRole.Reader).FirstOrDefault() != null ||
+                                                EarthOnlineDbContext.User.Where(user => user.UserID == userId && user.UserTypeID == 1).FirstOrDefault() != null ||
+                                                EarthOnlineDbContext.UserCommunities.Where(uc => uc.UserID == userId && uc.CommunityId == c.CommunityID && uc.RoleID >= (int)UserRole.Reader).FirstOrDefault() != null ||
                                                 c.CreatedByID == userId);
         }
     }

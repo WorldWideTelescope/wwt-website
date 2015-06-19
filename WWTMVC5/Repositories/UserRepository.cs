@@ -4,7 +4,6 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -36,12 +35,12 @@ namespace WWTMVC5.Repositories
         /// <returns>Role of user on the given community, for site admin it will be always Owner for all the communities</returns>
         public UserRole GetUserRole(long userId, long? communityId)
         {
-            UserRole userRole = UserRole.Visitor;
+            var userRole = UserRole.Visitor;
             UserCommunities userCommunityRole = null;
 
             // 1. Check if the user is site administrator.
             // 2. Get the user's role for the given community.
-            User user = Queryable.Where<User>(this.EarthOnlineDbContext.User, u => u.UserID == userId).Include<User, ICollection<UserCommunities>>(u => u.UserCommunities).FirstOrDefault();
+            var user = EarthOnlineDbContext.User.Where(u => u.UserID == userId).Include(u => u.UserCommunities).FirstOrDefault();
             
             if (user != null)
             {
@@ -50,7 +49,7 @@ namespace WWTMVC5.Repositories
                     userRole = UserRole.SiteAdmin;
                 }
                 else if (communityId.HasValue &&
-                            (userCommunityRole = Enumerable.Where<UserCommunities>(user.UserCommunities, uc => uc.CommunityId == communityId).FirstOrDefault()) != null)
+                            (userCommunityRole = user.UserCommunities.Where(uc => uc.CommunityId == communityId).FirstOrDefault()) != null)
                 {
                     userRole = (UserRole)userCommunityRole.RoleID;
 
@@ -75,13 +74,16 @@ namespace WWTMVC5.Repositories
         public IEnumerable<long> GetUserCommunitiesForRole(long userId, UserRole userRole, bool onlyPublic)
         {
             // Get the communities to which user is having given role or more.
-            var userCommunityIds = Queryable.Select<UserCommunities, long>(Queryable.Where<UserCommunities>(this.EarthOnlineDbContext.UserCommunities, communityRole => communityRole.UserID == userId && communityRole.RoleID >= (int)userRole), communityRole => communityRole.CommunityId);
+            var userCommunityIds = EarthOnlineDbContext.UserCommunities.Where(communityRole => communityRole.UserID == userId && communityRole.RoleID >= (int)userRole).Select(communityRole => communityRole.CommunityId);
 
             // Get the communities which are not deleted.
-            var result = Queryable.Select<Community, long>(Queryable.OrderByDescending<Community, DateTime?>(Queryable.Where<Community>(this.EarthOnlineDbContext.Community, community => userCommunityIds.Contains(community.CommunityID) && 
-                !(bool)community.IsDeleted && 
-                community.CommunityTypeID != (int)CommunityTypes.User &&
-                (onlyPublic ? community.AccessTypeID == (int)AccessType.Public : !onlyPublic)), community => community.ModifiedDatetime), community => community.CommunityID);
+            var result = EarthOnlineDbContext.Community.Where(
+                community => userCommunityIds.Contains(community.CommunityID) &&
+                             !(bool) community.IsDeleted &&
+                             community.CommunityTypeID != (int) CommunityTypes.User &&
+                             (onlyPublic ? community.AccessTypeID == (int) AccessType.Public : !onlyPublic))
+                .OrderByDescending(community => community.ModifiedDatetime)
+                .Select(community => community.CommunityID);
 
             return result.ToList();
         }
@@ -94,12 +96,9 @@ namespace WWTMVC5.Repositories
         /// <returns>True if requests are pending, false otherwise</returns>
         public bool PendingPermissionRequests(long userId, long communityId)
         {
-            bool pendingPermissionRequests = false;
-
-            if (Queryable.Where<PermissionRequest>(this.EarthOnlineDbContext.PermissionRequest, user => user.UserID == userId && user.CommunityID == communityId && user.Approved == null).FirstOrDefault() != null)
-            {
-                pendingPermissionRequests = true;
-            }
+            bool pendingPermissionRequests =
+                EarthOnlineDbContext.PermissionRequest.FirstOrDefault(
+                    user => user.UserID == userId && user.CommunityID == communityId && user.Approved == null) != null;
 
             return pendingPermissionRequests;
         }
@@ -114,7 +113,7 @@ namespace WWTMVC5.Repositories
         public IEnumerable<long> GetLatestProfileIDs(int count)
         {
             // Get the profiles which are not deleted.
-            var result = Queryable.Select<User, long>(Queryable.OrderByDescending<User, long>(Queryable.Where<User>(this.EarthOnlineDbContext.User, user => !(bool)user.IsDeleted), user => user.UserID), user => user.UserID)
+            var result = EarthOnlineDbContext.User.Where(user => !(bool)user.IsDeleted).OrderByDescending(user => user.UserID).Select(user => user.UserID)
                                 .Take(count);
 
             return result.ToList();
@@ -123,13 +122,13 @@ namespace WWTMVC5.Repositories
         /// <summary>
         /// Check if the user is site Admin or not.
         /// </summary>
-        /// <param name="userID">Id of the user.</param>
+        /// <param name="userId">Id of the user.</param>
         /// <returns>True if user is site admin;Otherwise false.</returns>
-        public bool IsSiteAdmin(long userID)
+        public bool IsSiteAdmin(long userId)
         {
-            bool isSiteAdmin = false;
+            var isSiteAdmin = false;
 
-            var userInstance = Queryable.Where<User>(this.EarthOnlineDbContext.User, user => user.UserID == userID).FirstOrDefault();
+            var userInstance = EarthOnlineDbContext.User.Where(user => user.UserID == userId).FirstOrDefault();
             if (userInstance != null)
             {
                 isSiteAdmin = userInstance.UserTypeID == (int)UserTypes.SiteAdmin;

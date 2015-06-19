@@ -47,8 +47,8 @@ namespace WWTMVC5.Controllers
         public SitemapController(ICommunityService communityService, IContentService contentService, IProfileService profileService)
             : base(profileService)
         {
-            this._communityService = communityService;
-            this._contentService = contentService;
+            _communityService = communityService;
+            _contentService = contentService;
         }
 
         #endregion
@@ -72,19 +72,19 @@ namespace WWTMVC5.Controllers
             weeklyUrl.Add(GetUrl(new { controller = "Home", action = "InstallWWT" }));
             weeklyUrl.Add(GetUrl(new { controller = "Home", action = "ExcelAddInWelcome" }));
 
-            var communityList = this._communityService.GetLatestCommunityIDs(Constants.SitemapCount);
+            var communityList = _communityService.GetLatestCommunityIDs(Constants.SitemapCount);
             foreach (var item in communityList)
             {
                 weeklyUrl.Add(string.Format(CultureInfo.InvariantCulture, "{0}/{1}", GetUrl(new { controller = "Community", action = "Index" }), item));
             }
 
-            var contentList = this._contentService.GetLatestContentIDs(Constants.SitemapCount);
+            var contentList = _contentService.GetLatestContentIDs(Constants.SitemapCount);
             foreach (var item in contentList)
             {
                 weeklyUrl.Add(string.Format(CultureInfo.InvariantCulture, "{0}/{1}", GetUrl(new { controller = "Content", action = "Index" }), item));
             }
 
-            var profileList = this.ProfileService.GetLatestProfileIDs(Constants.SitemapCount);
+            var profileList = ProfileService.GetLatestProfileIDs(Constants.SitemapCount);
             foreach (var item in profileList)
             {
                 weeklyUrl.Add(string.Format(CultureInfo.InvariantCulture, "{0}/{1}", GetUrl(new { controller = "Profile", action = "Index" }), item));
@@ -112,9 +112,9 @@ namespace WWTMVC5.Controllers
         /// <returns>URL obtained from route value</returns>
         private string GetUrl(object routeValues)
         {
-            RouteValueDictionary values = new RouteValueDictionary(routeValues);
-            RequestContext context = new RequestContext(HttpContext, RouteData);
-            string url = RouteTable.Routes.GetVirtualPath(context, values).VirtualPath;
+            var values = new RouteValueDictionary(routeValues);
+            var context = new RequestContext(HttpContext, RouteData);
+            var url = RouteTable.Routes.GetVirtualPath(context, values).VirtualPath;
             return new Uri(Request.Url, url).AbsoluteUri;
         }
 

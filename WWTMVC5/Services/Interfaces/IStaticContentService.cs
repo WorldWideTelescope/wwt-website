@@ -5,6 +5,7 @@
 //-----------------------------------------------------------------------
 
 
+using System.Threading.Tasks;
 using WWTMVC5.Models;
 
 namespace WWTMVC5.Services.Interfaces
@@ -19,6 +20,7 @@ namespace WWTMVC5.Services.Interfaces
         /// </summary>
         /// <param name="staticContentDetails">static content details.</param>
         /// <returns>True if the content was updated successfully; Otherwise false.</returns>
+        Task<OperationStatus> UpdateStaticContentAsync(StaticContentDetails staticContentDetails);
         OperationStatus UpdateStaticContent(StaticContentDetails staticContentDetails);
 
         /// <summary>

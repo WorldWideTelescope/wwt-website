@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using WWTMVC5.Models;
 using WWTMVC5.Properties;
 using WWTMVC5.Repositories.Interfaces;
@@ -36,9 +37,20 @@ namespace WWTMVC5.Repositories
         /// <param name="searchText">Text to be searched</param>
         /// <param name="userId">User who is searching</param>
         /// <returns>Count of search result items</returns>
-        public int SearchCommunitiesCount(string searchText, long userId)
+        public async Task<int> SearchCommunitiesCountAsync(string searchText, long userId)
         {
+            var items = await GetItemsAsync(GetCommunitiesSearchCondition(searchText, userId), GetCommunitiesOrderByCondition(), true);
+            return items.Count();
+        }
+        public int SearchCommunitiesCount(string searchText, long userId)
+        {   
             return GetItems(GetCommunitiesSearchCondition(searchText, userId), GetCommunitiesOrderByCondition(), true).Count();
+        }
+
+
+        IEnumerable<CommunitiesView> ICommunitiesViewRepository.SearchCommunities(string searchText, long userId, int skipCount, int takeCount)
+        {
+            return GetItems(GetCommunitiesSearchCondition(searchText, userId), GetCommunitiesOrderByCondition(), true, skipCount, takeCount);
         }
 
         /// <summary>
@@ -49,9 +61,9 @@ namespace WWTMVC5.Repositories
         /// <param name="skipCount">Items to be skipped based on pagination</param>
         /// <param name="takeCount">Items to be taken based on pagination</param>
         /// <returns>Search result items</returns>
-        public IEnumerable<CommunitiesView> SearchCommunities(string searchText, long userId, int skipCount, int takeCount)
+        public async Task<IEnumerable<CommunitiesView>> SearchCommunitiesAsync(string searchText, long userId, int skipCount, int takeCount)
         {
-            return GetItems(GetCommunitiesSearchCondition(searchText, userId), GetCommunitiesOrderByCondition(), true, skipCount, takeCount);
+            return await GetItemsAsync(GetCommunitiesSearchCondition(searchText, userId), GetCommunitiesOrderByCondition(), true, skipCount, takeCount);
         }
 
         /// <summary>
@@ -60,7 +72,7 @@ namespace WWTMVC5.Repositories
         /// <returns>Condition for ordering communities.</returns>
         private static Func<CommunitiesView, object> GetCommunitiesOrderByCondition()
         {
-            return (CommunitiesView c) => c.AverageRating;
+            return c => c.AverageRating;
         }
 
         /// <summary>
@@ -72,15 +84,19 @@ namespace WWTMVC5.Repositories
         private Expression<Func<CommunitiesView, bool>> GetCommunitiesSearchCondition(string searchText, long userId)
         {
             searchText = searchText.ToLower(CultureInfo.CurrentCulture);
-            return (CommunitiesView c) => c.CommunityTypeID == (int)CommunityTypes.Community &&
-                                            (c.CommunityName.ToLower().Contains(searchText) ||
-                                                c.Description.ToLower().Contains(searchText) ||
-                                                c.DistributedBy.ToLower().Contains(searchText) ||
-                                                c.ProducedBy.ToLower().Contains(searchText) ||
-                                                c.Tags.ToLower().Contains(searchText)) &&
-                                            (c.AccessType == Resources.Public || 
-                                                (Queryable.Where<User>(this.EarthOnlineDbContext.User, user => user.UserID == userId && user.UserTypeID == 1).FirstOrDefault() != null ||
-                                                Queryable.Where<UserCommunities>(this.EarthOnlineDbContext.UserCommunities, uc => uc.UserID == userId && uc.CommunityId == c.CommunityID && uc.RoleID >= (int)UserRole.Reader).FirstOrDefault() != null));
+            return c => c.CommunityTypeID == (int) CommunityTypes.Community &&
+                        (c.CommunityName.ToLower().Contains(searchText) ||
+                         c.Description.ToLower().Contains(searchText) ||
+                         c.DistributedBy.ToLower().Contains(searchText) ||
+                         c.ProducedBy.ToLower().Contains(searchText) ||
+                         c.Tags.ToLower().Contains(searchText)) &&
+                        (c.AccessType == Resources.Public ||
+                         (EarthOnlineDbContext.User.FirstOrDefault(user => user.UserID == userId && user.UserTypeID == 1) !=
+                          null ||
+                          EarthOnlineDbContext.UserCommunities.FirstOrDefault(
+                              uc =>
+                                  uc.UserID == userId && uc.CommunityId == c.CommunityID &&
+                                  uc.RoleID >= (int) UserRole.Reader) != null));
         }
     }
 }

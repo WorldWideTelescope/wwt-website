@@ -18,9 +18,9 @@ namespace WWTMVC5.Repositories.Interfaces
         /// <summary>
         /// Gets the content specified by the content id. Eager loads the navigation properties to avoid multiple calls to DB.
         /// </summary>
-        /// <param name="contentID">Id of the content.</param>
+        /// <param name="contentId">Id of the content.</param>
         /// <returns>Content instance.</returns>
-        Content GetContent(long contentID);
+        Content GetContent(long contentId);
 
         Content GetContent(Guid azureId);
 
@@ -34,9 +34,9 @@ namespace WWTMVC5.Repositories.Interfaces
         /// <summary>
         /// Gets the access type for the given content.
         /// </summary>
-        /// <param name="contentID">Content for which access type has to be returned</param>
+        /// <param name="contentId">Content for which access type has to be returned</param>
         /// <returns>Access type of the content</returns>
-        string GetContentAccessType(long contentID);
+        string GetContentAccessType(long contentId);
 
         /// <summary>
         /// Retrieves the latest content IDs for sitemap.

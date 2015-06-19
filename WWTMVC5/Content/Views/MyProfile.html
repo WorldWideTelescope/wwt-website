@@ -3,11 +3,13 @@
 <div class="pull-right col-md-3 boxGradient" style="padding: 10px 10px 10px;">
     <h4 style="margin: 2px 0 5px">Storage Used {{profile.PercentageUsedStorage}}</h4>
     <div class="progress">
-        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{profile ? profile.PercentageUsedStorage.split('%')[0]: 0}}" aria-valuemin="0" aria-valuemax="100" ng-style="{'width': '{{profile.PercentageUsedStorage}}'}">
+        <div class="progress-bar progress-bar-info" role="progressbar"
+             aria-valuenow="{{profile ? profile.PercentageUsedStorage.split('%')[0]: 0}}"
+             aria-valuemin="0" aria-valuemax="100" ng-style="{'width':  profile.PercentageUsedStorage}">
             <span class="sr-only">{{profile.PercentageUsedStorage}} Used</span>
         </div>
     </div>
-    <div class="small">{{profile.UsedStorage}} of {{profile.TotalStorage}} available</div>
+    <div class="small">{{profile.UsedStorage}} used - {{profile.TotalStorage}} available</div>
 </div>
 <div style="margin-top: 20px">
     <img ng-src="{{profile.ProfilePhotoLink}}" class="pull-left" style="margin: 0 12px 12px 0" alt="Profile Picture"/>
@@ -68,12 +70,20 @@
 </ul>
 <div class="tab-content">
     <div class="tab-pane {{options.activeTab == 'uploads' ? 'active' : 'hide'}}">
-        <div ng-show="profile.uploads == null">
+        <div ng-show="profile.uploads && profile.uploads.length == 0">
             <p>&nbsp;</p>
             <p>
                 <em>You have not uploaded any content yet</em>
             </p>
 
+        </div>
+        <div class="row" ng-show="!profile.uploads" style="padding: 25px 0">
+            <div class="col-md-6 col-md-offset-3" style="text-align: center">
+                <label>Content loading. Please wait...</label>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped active progress-bar-info" style="width: 100%" role="progressbar"></div>
+                </div>
+            </div>
         </div>
         <div class="row" ng-if="profile.uploads">
             <div class="col-lg-2 col-sm-3 col-xs-6" ng-repeat="entity in profile.uploads">
@@ -103,12 +113,20 @@
 </div>
 <div class="tab-content">
     <div class="tab-pane {{options.activeTab == 'communities' ? 'active' : 'hide'}}">
-        <div ng-show="profile.communities == null">
+        <div ng-show="profile.communities && profile.communities.length == 0">
             <p>&nbsp;</p>
             <p>
                 <em>You have not joined or created any communities yet.</em>
             </p>
             <p>&nbsp;</p>
+        </div>
+        <div class="row" ng-show="!profile.communities" style="padding: 25px 0">
+            <div class="col-md-6 col-md-offset-3" style="text-align: center">
+                <label>Communities loading. Please wait...</label>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped active progress-bar-info" style="width: 100%" role="progressbar"></div>
+                </div>
+            </div>
         </div>
         <div class="row" ng-if="profile.communities">
             <div class="col-lg-2 col-sm-3 col-xs-6" ng-repeat="community in profile.communities">
@@ -124,7 +142,6 @@
 
             </div>
         </div>
-
         <a class="btn btn-info btn-sm" href="#/AddCommunity">Create New Community</a>
         <div class="clearfix"></div>
         <p>&nbsp;</p>

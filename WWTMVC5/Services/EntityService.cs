@@ -28,67 +28,67 @@ namespace WWTMVC5.Services
         /// <summary>
         /// Instance of Contents View repository
         /// </summary>
-        private IContentsViewRepository contentsViewRepository;
+        private IContentsViewRepository _contentsViewRepository;
 
         /// <summary>
         /// Instance of All Contents View repository
         /// </summary>
-        private IRepositoryBase<AllContentsView> allContentsViewRepository;
+        private IRepositoryBase<AllContentsView> _allContentsViewRepository;
 
         /// <summary>
         /// Instance of Contents repository
         /// </summary>
-        private IContentRepository contentRepository;
+        private IContentRepository _contentRepository;
 
         /// <summary>
         /// Instance of Communities View repository
         /// </summary>
-        private ICommunitiesViewRepository communitiesViewRepository;
+        private ICommunitiesViewRepository _communitiesViewRepository;
 
         /// <summary>
         /// Instance of All Communities View repository
         /// </summary>
-        private IRepositoryBase<AllCommunitiesView> allCommunitiesViewRepository;
+        private IRepositoryBase<AllCommunitiesView> _allCommunitiesViewRepository;
 
         /// <summary>
         /// Instance of TopCategoryEntities repository
         /// </summary>
-        private IRepositoryBase<TopCategoryEntities> topCategoryEntities;
+        private IRepositoryBase<TopCategoryEntities> _topCategoryEntities;
 
         /// <summary>
         /// Instance of Community repository
         /// </summary>
-        private ICommunityRepository communityRepository;
+        private ICommunityRepository _communityRepository;
 
         /// <summary>
         /// Instance of User repository
         /// </summary>
-        private IUserRepository userRepository;
+        private IUserRepository _userRepository;
 
         /// <summary>
         /// Instance of Blob data repository
         /// </summary>
-        private IBlobDataRepository blobDataRepository;
+        private IBlobDataRepository _blobDataRepository;
 
         /// <summary>
         /// Instance of FeaturedCommunitiesView repository
         /// </summary>
-        private IRepositoryBase<FeaturedCommunitiesView> featuredCommunitiesViewRepository;
+        private IRepositoryBase<FeaturedCommunitiesView> _featuredCommunitiesViewRepository;
 
         /// <summary>
         /// Instance of FeaturedCommunitiesView repository
         /// </summary>
-        private IRepositoryBase<FeaturedContentsView> featuredContentsViewRepository;
+        private IRepositoryBase<FeaturedContentsView> _featuredContentsViewRepository;
 
         /// <summary>
         /// Instance of CommunityTags repository
         /// </summary>
-        private ICommunityTagsRepository communityTagsRepository;
+        private ICommunityTagsRepository _communityTagsRepository;
 
         /// <summary>
         /// Instance of ContentTags repository
         /// </summary>
-        private IContentTagsRepository contentTagsRepository;
+        private IContentTagsRepository _contentTagsRepository;
 
         #endregion
 
@@ -125,19 +125,19 @@ namespace WWTMVC5.Services
                 ICommunityTagsRepository communityTagsRepository,
                 IContentTagsRepository contentTagsRepository)
         {
-            this.contentsViewRepository = contentsViewRepository;
-            this.allContentsViewRepository = allContentsViewRepository;
-            this.contentRepository = contentRepository;
-            this.communitiesViewRepository = communitiesViewRepository;
-            this.allCommunitiesViewRepository = allCommunitiesViewRepository;
-            this.topCategoryEntities = topCategoryEntities;
-            this.communityRepository = communityRepository;
-            this.userRepository = userRepository;
-            this.blobDataRepository = blobDataRepository;
-            this.featuredCommunitiesViewRepository = featuredCommunitiesViewRepository;
-            this.featuredContentsViewRepository = featuredContentsViewRepository;
-            this.communityTagsRepository = communityTagsRepository;
-            this.contentTagsRepository = contentTagsRepository;
+            _contentsViewRepository = contentsViewRepository;
+            _allContentsViewRepository = allContentsViewRepository;
+            _contentRepository = contentRepository;
+            _communitiesViewRepository = communitiesViewRepository;
+            _allCommunitiesViewRepository = allCommunitiesViewRepository;
+            _topCategoryEntities = topCategoryEntities;
+            _communityRepository = communityRepository;
+            _userRepository = userRepository;
+            _blobDataRepository = blobDataRepository;
+            _featuredCommunitiesViewRepository = featuredCommunitiesViewRepository;
+            _featuredContentsViewRepository = featuredContentsViewRepository;
+            _communityTagsRepository = communityTagsRepository;
+            _contentTagsRepository = contentTagsRepository;
         }
 
         #endregion
@@ -151,46 +151,46 @@ namespace WWTMVC5.Services
         /// <param name="entityHighlightFilter">Filters needed while retrieving collection of entities</param>
         /// <param name="pageDetails">Details about the pagination</param>
         /// <returns>List of all communities</returns>
-        public IEnumerable<CommunityDetails> GetCommunities(EntityHighlightFilter entityHighlightFilter, PageDetails pageDetails)
+        public async Task<IEnumerable<CommunityDetails>> GetCommunities(EntityHighlightFilter entityHighlightFilter, PageDetails pageDetails)
         {
             this.CheckNotNull(() => new { entityHighlightFilter, pageDetails });
 
             if (entityHighlightFilter.HighlightType == HighlightType.Featured)
             {
-                return GetFeaturedCommunityDetails(entityHighlightFilter, pageDetails);
+                return  GetFeaturedCommunityDetails(entityHighlightFilter, pageDetails);
             }
             if (entityHighlightFilter.HighlightType == HighlightType.Related)
             {
-                return GetRelatedCommunityDetails(entityHighlightFilter, pageDetails);
+                return  GetRelatedCommunityDetails(entityHighlightFilter, pageDetails);
             }
-            return GetCommunityDetails(entityHighlightFilter, pageDetails);
+            return  GetCommunityDetails(entityHighlightFilter, pageDetails);
             
         }
 
         /// <summary>
         /// Gets all the communities from the Layerscape database including the deleted items.
         /// </summary>
-        /// <param name="userID">Id of the user who is accessing</param>
-        /// <param name="categoryID">Category ID for which communities to be fetched</param>
+        /// <param name="userId">Id of the user who is accessing</param>
+        /// <param name="categoryId">Category ID for which communities to be fetched</param>
         /// <returns>List of all communities</returns>
-        public IEnumerable<CommunityDetails> GetAllCommunities(long userID, int? categoryID)
+        public async Task<IEnumerable<CommunityDetails>> GetAllCommunities(long userId, int? categoryId)
         {
             Func<AllCommunitiesView, object> orderBy = c => c.LastUpdatedDatetime;
-            Expression<Func<AllCommunitiesView, bool>> condition = null;
             var communityDetails = new List<CommunityDetails>();
 
-            if (this.userRepository.IsSiteAdmin(userID))
+            if (_userRepository.IsSiteAdmin(userId))
             {
-                if (categoryID != null)
+                Expression<Func<AllCommunitiesView, bool>> condition = null;
+                if (categoryId != null)
                 {
-                    condition = (AllCommunitiesView ac) => ac.CategoryID == categoryID && ac.CommunityTypeID != (int)CommunityTypes.User;
+                    condition = ac => ac.CategoryID == categoryId && ac.CommunityTypeID != (int)CommunityTypes.User;
                 }
                 else
                 {
-                    condition = (AllCommunitiesView ac) => ac.CommunityTypeID != (int)CommunityTypes.User;
+                    condition = ac => ac.CommunityTypeID != (int)CommunityTypes.User;
                 }
 
-                foreach (var community in this.allCommunitiesViewRepository.GetItems(condition, orderBy, true))
+                foreach (var community in  _allCommunitiesViewRepository.GetItems(condition, orderBy, true))
                 {
                     var communityDetail = new CommunityDetails();
                     Mapper.Map(community, communityDetail);
@@ -214,38 +214,36 @@ namespace WWTMVC5.Services
 
             if (entityHighlightFilter.HighlightType == HighlightType.Featured)
             {
-                return GetFeaturedContentDetails(entityHighlightFilter, pageDetails);
+                return  GetFeaturedContentDetails(entityHighlightFilter, pageDetails);
             }
-            else if (entityHighlightFilter.HighlightType == HighlightType.Related)
+            if (entityHighlightFilter.HighlightType == HighlightType.Related)
             {
-                return GetRelatedContentDetails(entityHighlightFilter, pageDetails);
+                return  GetRelatedContentDetails(entityHighlightFilter, pageDetails);
             }
-            else
-            {
-                return GetContentDetails(entityHighlightFilter, pageDetails);
-            }
+            return  GetContentDetails(entityHighlightFilter, pageDetails);
+            
         }
 
         /// <summary>
         /// Gets all the contents from the Layerscape database including the deleted items.
         /// </summary>
-        /// <param name="userID">Id of the user who is accessing</param>
-        /// <param name="categoryID">Category ID for which contents to be fetched</param>
+        /// <param name="userId">Id of the user who is accessing</param>
+        /// <param name="categoryId">Category ID for which contents to be fetched</param>
         /// <returns>List of all Contents</returns>
-        public IEnumerable<ContentDetails> GetAllContents(long userID, int? categoryID)
+        public async Task<IEnumerable<ContentDetails>> GetAllContents(long userId, int? categoryId)
         {
             Func<AllContentsView, object> orderBy = c => c.LastUpdatedDatetime;
             Expression<Func<AllContentsView, bool>> condition = null;
             var contentDetails = new List<ContentDetails>();
 
-            if (this.userRepository.IsSiteAdmin(userID))
+            if (_userRepository.IsSiteAdmin(userId))
             {
-                if (categoryID != null)
+                if (categoryId != null)
                 {
-                    condition = (AllContentsView content) => content.CategoryID == categoryID;
+                    condition = content => content.CategoryID == categoryId;
                 }
 
-                foreach (var content in this.allContentsViewRepository.GetItems(condition, orderBy, true))
+                foreach (var content in  _allContentsViewRepository.GetItems(condition, orderBy, true))
                 {
                     var contentDetail = new ContentDetails();
                     Mapper.Map(content, contentDetail);
@@ -262,7 +260,7 @@ namespace WWTMVC5.Services
         /// </summary>
         /// <param name="entityHighlightFilter">Filters needed while retrieving collection of entities</param>
         /// <returns>List of all communities</returns>
-        public IEnumerable<CommunityDetails> GetCommunities(EntityHighlightFilter entityHighlightFilter)
+        public async Task<IEnumerable<CommunityDetails>> GetCommunities(EntityHighlightFilter entityHighlightFilter)
         {
             this.CheckNotNull(() => new { entityHighlightFilter });
 
@@ -270,10 +268,9 @@ namespace WWTMVC5.Services
             {
                 return GetAllFeaturedCommunities(entityHighlightFilter);
             }
-            else
-            {
-                return GetAllCommunities(entityHighlightFilter);
-            }
+            
+            return GetAllCommunities(entityHighlightFilter);
+            
         }
 
         /// <summary>
@@ -282,36 +279,36 @@ namespace WWTMVC5.Services
         /// </summary>
         /// <param name="entityHighlightFilter">Filters needed while retrieving collection of entities</param>
         /// <returns>List of all contents</returns>
-        public IEnumerable<ContentDetails> GetContents(EntityHighlightFilter entityHighlightFilter)
+        public async Task<IEnumerable<ContentDetails>> GetContents(EntityHighlightFilter entityHighlightFilter)
         {
             this.CheckNotNull(() => new { entityHighlightFilter });
 
             if (entityHighlightFilter.HighlightType == HighlightType.Featured)
             {
-                return GetAllFeaturedContents(entityHighlightFilter);
+                return  GetAllFeaturedContents(entityHighlightFilter);
             }
             else
             {
-                return GetAllContents(entityHighlightFilter);
+                return  GetAllContents(entityHighlightFilter);
             }
         }
 
         /// <summary>
         /// Retrieves the sub communities of a given community. This only retrieves the immediate children.
         /// </summary>
-        /// <param name="communityID">ID of the community.</param>
+        /// <param name="communityId">ID of the community.</param>
         /// <param name="userId">Id of the user who is accessing</param>
         /// <param name="pageDetails">Details about the pagination</param>
         /// <param name="onlyItemCount">To get only item count, not the entities. When community details page is loaded first time, 
         /// no need to get the communities, only count is enough.</param>
         /// <returns>Collection of sub communities</returns>
-        public IEnumerable<CommunityDetails> GetSubCommunities(long communityID, long userId, PageDetails pageDetails, bool onlyItemCount)
+        public IEnumerable<CommunityDetails> GetSubCommunities(long communityId, long userId, PageDetails pageDetails, bool onlyItemCount)
         {
             this.CheckNotNull(() => new { pageDetails });
 
             IList<CommunityDetails> subCommunities = new List<CommunityDetails>();
 
-            IEnumerable<long> subCommunityIDs = this.communityRepository.GetSubCommunityIDs(communityID, userId);
+            var subCommunityIDs = _communityRepository.GetSubCommunityIDs(communityId, userId);
 
             // Gets the total number of direct sub communities of the community
             pageDetails.TotalCount = subCommunityIDs.Count();
@@ -322,10 +319,10 @@ namespace WWTMVC5.Services
             if (!onlyItemCount && subCommunityIDs != null && subCommunityIDs.Count() > 0)
             {
                 subCommunityIDs = subCommunityIDs.Skip((pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage).Take(pageDetails.ItemsPerPage);
-                foreach (var community in this.communityRepository.GetItems(subCommunityIDs))
+                foreach (var community in _communityRepository.GetItems(subCommunityIDs))
                 {
-                    UserRole userRole = this.userRepository.GetUserRole(userId, community.CommunityID);
-                    CommunityDetails communityDetails = new CommunityDetails(userRole.GetPermission());
+                    var userRole = _userRepository.GetUserRole(userId, community.CommunityID);
+                    var communityDetails = new CommunityDetails(userRole.GetPermission());
 
                     // Some of the values which comes from complex objects need to be set through this method.
                     communityDetails.SetValuesFrom(community);
@@ -340,17 +337,17 @@ namespace WWTMVC5.Services
         /// <summary>
         /// Retrieves the contents of the given community.
         /// </summary>
-        /// <param name="communityID">ID of the community.</param>
+        /// <param name="communityId">ID of the community.</param>
         /// <param name="userId">Id of the user who is accessing</param>
         /// <param name="pageDetails">Details about the pagination</param>
         /// <returns>An enumerable which contains the contents of the community</returns>
-        public IEnumerable<ContentDetails> GetContents(long communityID, long userId, PageDetails pageDetails)
+        public IEnumerable<ContentDetails> GetContents(long communityId, long userId, PageDetails pageDetails)
         {
             this.CheckNotNull(() => new { pageDetails });
 
             IList<ContentDetails> contents = new List<ContentDetails>();
 
-            IEnumerable<long> contentIDs = this.communityRepository.GetContentIDs(communityID, userId);
+            var contentIDs = _communityRepository.GetContentIDs(communityId, userId);
 
             // Gets the total number of contents of the community
             pageDetails.TotalCount = contentIDs.Count();
@@ -360,9 +357,9 @@ namespace WWTMVC5.Services
             if (contentIDs != null && contentIDs.Count() > 0)
             {
                 contentIDs = contentIDs.Skip((pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage).Take(pageDetails.ItemsPerPage);
-                foreach (var content in this.contentRepository.GetItems(contentIDs))
+                foreach (var content in _contentRepository.GetItems(contentIDs))
                 {
-                    UserRole userRole = UserRole.Visitor;
+                    var userRole = UserRole.Visitor;
 
                     if (content.CreatedByID == userId)
                     {
@@ -370,7 +367,7 @@ namespace WWTMVC5.Services
                     }
                     else
                     {
-                        userRole = this.userRepository.GetUserRole(userId, communityID);
+                        userRole = _userRepository.GetUserRole(userId, communityId);
 
                         if (userRole == UserRole.Moderator)
                         {
@@ -386,7 +383,7 @@ namespace WWTMVC5.Services
                         }
                     }
 
-                    ContentDetails contentDetails = new ContentDetails(userRole.GetPermission());
+                    var contentDetails = new ContentDetails(userRole.GetPermission());
 
                     // Some of the values which comes from complex objects need to be set through this method.
                     contentDetails.SetValuesFrom(content);
@@ -402,16 +399,16 @@ namespace WWTMVC5.Services
         /// Gets the top categories from the Layerscape database based on the number of contents which belongs to the category.
         /// </summary>
         /// <returns>List of top 6 categories</returns>
-        public IEnumerable<EntityDetails> GetTopCategories()
+        public async Task<IEnumerable<EntityDetails>> GetTopCategories()
         {
             IList<EntityDetails> topCategories = new List<EntityDetails>();
-            var topCategoryItems = this.topCategoryEntities.GetAll((TopCategoryEntities t) => t.CategoryID);
+            var topCategoryItems =  _topCategoryEntities.GetAll(t => t.CategoryID);
             var contents = topCategoryItems.Where(t => t.EntityType == EntityType.Content.ToString());
             var communities = topCategoryItems.Where(t => t.EntityType == EntityType.Community.ToString());
-            for (int i = 0; i < contents.Count(); i++)
+            for (var i = 0; i < contents.Count(); i++)
             {
                 var content = contents.ElementAt(i);
-                ContentDetails contentDetails = new ContentDetails();
+                var contentDetails = new ContentDetails();
                 Mapper.Map(content, contentDetails);
 
                 if (content.ThumbnailID.HasValue)
@@ -429,7 +426,7 @@ namespace WWTMVC5.Services
 
                 // Get the first community for the current content.
                 TopCategoryEntities firstCommunity = contentCommunities.ElementAtOrDefault(0);
-                EntityDetails communityDetails = new EntityDetails();
+                var communityDetails = new EntityDetails();
                 Mapper.Map(firstCommunity, communityDetails);
 
                 if (firstCommunity != null)
@@ -466,7 +463,7 @@ namespace WWTMVC5.Services
                 }
             }
 
-            return topCategories.AsEnumerable<EntityDetails>();
+            return topCategories.AsEnumerable();
         }
 
         /// <summary>
@@ -479,14 +476,14 @@ namespace WWTMVC5.Services
             // Make sure file detail is not null
             this.CheckNotNull(() => new { fileDetail });
 
-            BlobDetails fileBlob = new BlobDetails()
+            var fileBlob = new BlobDetails()
             {
                 BlobID = fileDetail.AzureID.ToString(),
                 Data = fileDetail.DataStream,
                 MimeType = fileDetail.MimeType
             };
 
-            return this.blobDataRepository.UploadTemporaryFile(fileBlob);
+            return _blobDataRepository.UploadTemporaryFile(fileBlob);
         }
         #endregion
 
@@ -509,14 +506,14 @@ namespace WWTMVC5.Services
                     break;
             }
 
-            string accessType = AccessType.Public.ToString();
+            var accessType = AccessType.Public.ToString();
 
             // Only when category type is other then "All" and also the condition is not already set (which will happen when this method is called 
             // with highlight type as Featured and category type as not "All"), condition to be set here.
             if (entityHighlightFilter.CategoryType != CategoryType.All && condition == null)
             {
-                string categoryType = entityHighlightFilter.CategoryType.ToString();
-                condition = (CommunitiesView c) => c.CategoryName == categoryType
+                var categoryType = entityHighlightFilter.CategoryType.ToString();
+                condition = c => c.CategoryName == categoryType
                                                         && c.CommunityTypeID == (int)CommunityTypes.Community
                                                         && c.AccessType == accessType;
             }
@@ -524,7 +521,7 @@ namespace WWTMVC5.Services
             // Still if condition is not set, add a condition to get only public communities.
             if (condition == null)
             {
-                condition = (CommunitiesView c) => c.CommunityTypeID == (int)CommunityTypes.Community && c.AccessType == accessType;
+                condition = c => c.CommunityTypeID == (int)CommunityTypes.Community && c.AccessType == accessType;
             }
 
             return condition;
@@ -543,7 +540,7 @@ namespace WWTMVC5.Services
             switch (entityHighlightFilter.HighlightType)
             {
                 case HighlightType.Latest:
-                    orderBy = (CommunitiesView c) => c.LastUpdatedDatetime;
+                    orderBy = c => c.LastUpdatedDatetime;
                     break;
             }
 
@@ -570,7 +567,7 @@ namespace WWTMVC5.Services
                     break;
             }
 
-            string accessType = AccessType.Public.ToString();
+            var accessType = AccessType.Public.ToString();
 
             // Only when category type is other then "All" and also the condition is not already set (which will happen when this method is called 
             // with highlight type as Featured and category type as not "All"), condition to be set here.
@@ -620,7 +617,7 @@ namespace WWTMVC5.Services
         private static Expression<Func<FeaturedCommunitiesView, bool>> GetFeaturedCommunitiesCondition(EntityHighlightFilter entityHighlightFilter)
         {
             Expression<Func<FeaturedCommunitiesView, bool>> condition;
-            string accessType = AccessType.Public.ToString();
+            var accessType = AccessType.Public.ToString();
 
             // In case of Featured highlight, condition to be decided based on highlight and category as well.
             condition = c =>
@@ -657,7 +654,7 @@ namespace WWTMVC5.Services
         {
             Expression<Func<CommunitiesView, bool>> condition;
 
-            string accessType = AccessType.Public.ToString();
+            var accessType = AccessType.Public.ToString();
 
             // In case of TopRated highlight, condition to be decided based on Rating and category as well.
             if (entityHighlightFilter.CategoryType == CategoryType.All)
@@ -669,7 +666,7 @@ namespace WWTMVC5.Services
             }
             else
             {
-                string categoryType = entityHighlightFilter.CategoryType.ToString();
+                var categoryType = entityHighlightFilter.CategoryType.ToString();
                 condition = (CommunitiesView c) => c.AverageRating > 0
                     && c.RatedPeople >= Constants.MinRatedPeopleCount
                     && c.CategoryName == categoryType
@@ -689,7 +686,7 @@ namespace WWTMVC5.Services
         {
             Expression<Func<FeaturedContentsView, bool>> condition;
 
-            string accessType = AccessType.Public.ToString();
+            var accessType = AccessType.Public.ToString();
 
             // In case of Featured highlight, condition to be decided based on highlight and category as well.
             condition = c =>
@@ -725,7 +722,7 @@ namespace WWTMVC5.Services
         {
             Expression<Func<ContentsView, bool>> condition;
 
-            string accessType = AccessType.Public.ToString();
+            var accessType = AccessType.Public.ToString();
 
             // In case of Top Rated highlight, condition to be decided based on rating and category as well.
             if (entityHighlightFilter.CategoryType == CategoryType.All)
@@ -775,20 +772,20 @@ namespace WWTMVC5.Services
         {
             Expression<Func<ContentsView, bool>> condition;
 
-            string accessType = AccessType.Public.ToString();
+            var accessType = AccessType.Public.ToString();
 
             // In case of Top Rated highlight, condition to be decided based on rating and category as well.
             if (entityHighlightFilter.CategoryType == CategoryType.All)
             {
                 if (entityHighlightFilter.ContentType != ContentTypes.All)
                 {
-                    condition = (ContentsView c) => c.AccessType == accessType &&
+                    condition = c => c.AccessType == accessType &&
                                                     c.DownloadCount > 0 &&
                                                     c.TypeID == (int) entityHighlightFilter.ContentType;
                 }
                 else
                 {
-                    condition = (ContentsView c) => c.AccessType == accessType &&
+                    condition = c => c.AccessType == accessType &&
                                                     c.DownloadCount > 0;
                 }
             }
@@ -796,7 +793,7 @@ namespace WWTMVC5.Services
             {
                 if (entityHighlightFilter.ContentType != ContentTypes.All)
                 {
-                    condition = (ContentsView c) => c.CategoryID == (int)entityHighlightFilter.CategoryType && 
+                    condition = c => c.CategoryID == (int)entityHighlightFilter.CategoryType && 
                                                     c.AccessType == accessType &&
                                                     c.DownloadCount > 0 &&
                                                     c.TypeID == (int) entityHighlightFilter.ContentType;
@@ -813,11 +810,11 @@ namespace WWTMVC5.Services
 
         private IEnumerable<CommunityDetails> GetCommunityDetails(EntityHighlightFilter entityHighlightFilter, PageDetails pageDetails)
         {
-            Func<CommunitiesView, object> orderBy = GetCommunityOrderByClause(entityHighlightFilter);
-            Expression<Func<CommunitiesView, bool>> condition = GetCommunityConditionClause(entityHighlightFilter);
+            var orderBy = GetCommunityOrderByClause(entityHighlightFilter);
+            var condition = GetCommunityConditionClause(entityHighlightFilter);
 
             // Gets the total items satisfying the
-            int totalItemsForCondition = this.communitiesViewRepository.GetItemsCount(condition);
+            var totalItemsForCondition = _communitiesViewRepository.GetItemsCount(condition);
 
             // If TotalCount is already specified in pageDetails, need to consider that. Ignore even if there are more items in the DB.
             if (pageDetails.TotalCount > 0 && totalItemsForCondition > pageDetails.TotalCount)
@@ -834,14 +831,14 @@ namespace WWTMVC5.Services
             {
                 // TODO: This is a temporary fix, since multiple order by cannot be passed.
                 // Need to do this in a better way, instead of getting all the items.
-                communities = this.communitiesViewRepository.GetItems(condition, null, true);
-                communities = communities.OrderByDescending<CommunitiesView, decimal?>((CommunitiesView c) => c.AverageRating).ThenByDescending<CommunitiesView, int?>((CommunitiesView c) => c.RatedPeople)
+                communities =   _communitiesViewRepository.GetItems(condition, null, true);
+                communities = communities.OrderByDescending(c => c.AverageRating).ThenByDescending(c => c.RatedPeople)
                                 .Skip((pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage)
                                 .Take(pageDetails.ItemsPerPage).ToList();
             }
             else
             {
-                communities = this.communitiesViewRepository.GetItems(condition, orderBy, true, (pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage, pageDetails.ItemsPerPage);
+                communities =  _communitiesViewRepository.GetItems(condition, orderBy, true, (pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage, pageDetails.ItemsPerPage);
             }
 
             var communityDetails = new List<CommunityDetails>();
@@ -863,11 +860,11 @@ namespace WWTMVC5.Services
 
         private IEnumerable<ContentDetails> GetContentDetails(EntityHighlightFilter entityHighlightFilter, PageDetails pageDetails)
         {
-            Func<ContentsView, object> orderBy = GetContentOrderByClause(entityHighlightFilter);
-            Expression<Func<ContentsView, bool>> condition = GetContentConditionClause(entityHighlightFilter);
+            var orderBy = GetContentOrderByClause(entityHighlightFilter);
+            var condition = GetContentConditionClause(entityHighlightFilter);
 
             // Gets the total items satisfying the
-            int totalItemsForCondition = this.contentsViewRepository.GetItemsCount(condition);
+            var totalItemsForCondition = _contentsViewRepository.GetItemsCount(condition);
 
             // If TotalCount is already specified in pageDetails, need to consider that. Ignore even if there are more items in the DB.
             if (pageDetails.TotalCount > 0 && totalItemsForCondition > pageDetails.TotalCount)
@@ -885,10 +882,10 @@ namespace WWTMVC5.Services
             {
                 // TODO: This is a temporary fix, since multiple order by cannot be passed.
                 // Need to do this in a better way, instead of getting all the items.
-                contents = this.contentsViewRepository.GetItems(condition, null, true);
+                contents =  _contentsViewRepository.GetItems(condition, null, true);
                 
                 contents = contents
-                    .OrderByDescending<ContentsView, decimal?>((ContentsView c) => c.AverageRating)
+                    .OrderByDescending((ContentsView c) => c.AverageRating)
                     .ThenByDescending<ContentsView, int?>((ContentsView c) => c.RatedPeople)
                     .Skip((pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage)
                     .Take(pageDetails.ItemsPerPage)
@@ -896,7 +893,7 @@ namespace WWTMVC5.Services
             }
             else
             {
-                contents = this.contentsViewRepository.GetItems(condition, orderBy, true, (pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage, pageDetails.ItemsPerPage);
+                contents =  _contentsViewRepository.GetItems(condition, orderBy, true, (pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage, pageDetails.ItemsPerPage);
             }
 
             var contentDetails = new List<ContentDetails>();
@@ -919,10 +916,10 @@ namespace WWTMVC5.Services
         private IEnumerable<CommunityDetails> GetFeaturedCommunityDetails(EntityHighlightFilter entityHighlightFilter, PageDetails pageDetails)
         {
             Func<FeaturedCommunitiesView, object> orderBy = c => c.SortOrder;
-            Expression<Func<FeaturedCommunitiesView, bool>> condition = GetFeaturedCommunitiesCondition(entityHighlightFilter);
+            var condition = GetFeaturedCommunitiesCondition(entityHighlightFilter);
 
             // Gets the total items satisfying the
-            int totalItemsForCondition = this.featuredCommunitiesViewRepository.GetItemsCount(condition);
+            var totalItemsForCondition = _featuredCommunitiesViewRepository.GetItemsCount(condition);
 
             // If TotalCount is already specified in pageDetails, need to consider that. Ignore even if there are more items in the DB.
             if (pageDetails.TotalCount > 0 && totalItemsForCondition > pageDetails.TotalCount)
@@ -934,7 +931,7 @@ namespace WWTMVC5.Services
 
             IEnumerable<FeaturedCommunitiesView> communities = null;
 
-            communities = this.featuredCommunitiesViewRepository.GetItems(condition, orderBy, false, (pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage, pageDetails.ItemsPerPage);
+            communities =  _featuredCommunitiesViewRepository.GetItems(condition, orderBy, false, (pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage, pageDetails.ItemsPerPage);
 
             var communityDetails = new List<CommunityDetails>();
             if (communities != null)
@@ -961,14 +958,14 @@ namespace WWTMVC5.Services
         /// <returns>Collection of related communities</returns>
         private IEnumerable<CommunityDetails> GetRelatedCommunityDetails(EntityHighlightFilter entityHighlightFilter, PageDetails pageDetails)
         {
-            long userID = entityHighlightFilter.EntityId.HasValue ? entityHighlightFilter.EntityId.Value : 0;
+            var userId = entityHighlightFilter.EntityId.HasValue ? entityHighlightFilter.EntityId.Value : 0;
 
-            var relatedCommunityIds = this.communityTagsRepository.GetRelatedCommunityIDs(userID, entityHighlightFilter.UserID);
+            var relatedCommunityIds = _communityTagsRepository.GetRelatedCommunityIDs(userId, entityHighlightFilter.UserID);
 
-            Expression<Func<CommunitiesView, bool>> condition = GetRelatedCommunitiesCondition(relatedCommunityIds);
+            var condition = GetRelatedCommunitiesCondition(relatedCommunityIds);
 
             // Gets the total items satisfying the
-            int totalItemsForCondition = this.communitiesViewRepository.GetItemsCount(condition);
+            var totalItemsForCondition = _communitiesViewRepository.GetItemsCount(condition);
 
             // If TotalCount is already specified in pageDetails, need to consider that. Ignore even if there are more items in the DB.
             if (pageDetails.TotalCount > 0 && totalItemsForCondition > pageDetails.TotalCount)
@@ -983,7 +980,7 @@ namespace WWTMVC5.Services
             relatedCommunityIds = relatedCommunityIds.Skip((pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage).Take(pageDetails.ItemsPerPage);
             condition = GetRelatedCommunitiesCondition(relatedCommunityIds);
 
-            communities = this.communitiesViewRepository.GetItems(condition, null, false);
+            communities =  _communitiesViewRepository.GetItems(condition, null, false);
 
             var communityDetails = new List<CommunityDetails>();
             if (communities != null)
@@ -991,7 +988,7 @@ namespace WWTMVC5.Services
                 foreach (var communityId in relatedCommunityIds)
                 {
                     var communityDetail = new CommunityDetails();
-                    CommunitiesView community = communities.Where(c => c.CommunityID == communityId).FirstOrDefault();
+                    var community = communities.Where(c => c.CommunityID == communityId).FirstOrDefault();
 
                     // Some of the values which comes from complex objects need to be set through this method.
                     Mapper.Map(community, communityDetail);
@@ -1006,10 +1003,10 @@ namespace WWTMVC5.Services
         private IEnumerable<ContentDetails> GetFeaturedContentDetails(EntityHighlightFilter entityHighlightFilter, PageDetails pageDetails)
         {
             Func<FeaturedContentsView, object> orderBy = c => c.SortOrder;
-            Expression<Func<FeaturedContentsView, bool>> condition = GetFeaturedContentCondition(entityHighlightFilter);
+            var condition = GetFeaturedContentCondition(entityHighlightFilter);
 
             // Gets the total items satisfying the
-            int totalItemsForCondition = this.featuredContentsViewRepository.GetItemsCount(condition);
+            var totalItemsForCondition = _featuredContentsViewRepository.GetItemsCount(condition);
 
             // If TotalCount is already specified in pageDetails, need to consider that. Ignore even if there are more items in the DB.
             if (pageDetails.TotalCount > 0 && totalItemsForCondition > pageDetails.TotalCount)
@@ -1023,7 +1020,7 @@ namespace WWTMVC5.Services
             IEnumerable<FeaturedContentsView> contents = null;
 
             // Only for Popular/Top Rated, there is multiple order by which needs to added here.
-            contents = this.featuredContentsViewRepository.GetItems(condition, orderBy, false, (pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage, pageDetails.ItemsPerPage);
+            contents =  _featuredContentsViewRepository.GetItems(condition, orderBy, false, (pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage, pageDetails.ItemsPerPage);
 
             var contentDetails = new List<ContentDetails>();
             if (contents != null)
@@ -1050,14 +1047,14 @@ namespace WWTMVC5.Services
         /// <returns>Collection of related contents</returns>
         private IEnumerable<ContentDetails> GetRelatedContentDetails(EntityHighlightFilter entityHighlightFilter, PageDetails pageDetails)
         {
-            long userID = entityHighlightFilter.EntityId.HasValue ? entityHighlightFilter.EntityId.Value : 0;
+            var userId = entityHighlightFilter.EntityId.HasValue ? entityHighlightFilter.EntityId.Value : 0;
 
-            var relatedContentIds = this.contentTagsRepository.GetRelatedContentIDs(userID, entityHighlightFilter.UserID);
+            var relatedContentIds = _contentTagsRepository.GetRelatedContentIDs(userId, entityHighlightFilter.UserID);
 
-            Expression<Func<ContentsView, bool>> condition = GetRelatedContentsCondition(relatedContentIds);
+            var condition = GetRelatedContentsCondition(relatedContentIds);
 
             // Gets the total items satisfying the
-            int totalItemsForCondition = this.contentsViewRepository.GetItemsCount(condition);
+            var totalItemsForCondition = _contentsViewRepository.GetItemsCount(condition);
 
             // If TotalCount is already specified in pageDetails, need to consider that. Ignore even if there are more items in the DB.
             if (pageDetails.TotalCount > 0 && totalItemsForCondition > pageDetails.TotalCount)
@@ -1072,15 +1069,15 @@ namespace WWTMVC5.Services
             relatedContentIds = relatedContentIds.Skip((pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage).Take(pageDetails.ItemsPerPage);
             condition = GetRelatedContentsCondition(relatedContentIds);
 
-            contents = this.contentsViewRepository.GetItems(condition, null, false);
+            contents =  _contentsViewRepository.GetItems(condition, null, false);
 
             var contentDetails = new List<ContentDetails>();
             if (contents != null)
             {
-                foreach (var contentID in relatedContentIds)
+                foreach (var contentId in relatedContentIds)
                 {
                     var contentDetail = new ContentDetails();
-                    ContentsView content = contents.Where(c => c.ContentID == contentID).FirstOrDefault();
+                    var content = contents.Where(c => c.ContentID == contentId).FirstOrDefault();
 
                     // Some of the values which comes from complex objects need to be set through this method.
                     Mapper.Map(content, contentDetail);
@@ -1099,7 +1096,7 @@ namespace WWTMVC5.Services
             Expression<Func<FeaturedCommunitiesView, bool>> condition = condition = c => c.FeaturedCategoryID == (int)entityHighlightFilter.CategoryType
                     && (c.CommunityTypeID == (int)CommunityTypes.Community || c.CommunityTypeID == (int)CommunityTypes.Folder);
 
-            IEnumerable<FeaturedCommunitiesView> communities = this.featuredCommunitiesViewRepository.GetItems(condition, orderBy, false);
+            var communities =  _featuredCommunitiesViewRepository.GetItems(condition, orderBy, false);
 
             var communityDetails = new List<CommunityDetails>();
             if (communities != null)
@@ -1121,9 +1118,9 @@ namespace WWTMVC5.Services
         private IEnumerable<ContentDetails> GetAllFeaturedContents(EntityHighlightFilter entityHighlightFilter)
         {
             Func<FeaturedContentsView, object> orderBy = c => c.SortOrder;
-            Expression<Func<FeaturedContentsView, bool>> condition = condition = c => c.FeaturedCategoryID == (int)entityHighlightFilter.CategoryType;
+            Expression<Func<FeaturedContentsView, bool>> condition = c => c.FeaturedCategoryID == (int)entityHighlightFilter.CategoryType;
 
-            IEnumerable<FeaturedContentsView> contents = this.featuredContentsViewRepository.GetItems(condition, orderBy, false);
+            var contents =  _featuredContentsViewRepository.GetItems(condition, orderBy, false);
 
             var contentDetails = new List<ContentDetails>();
             if (contents != null)
@@ -1146,7 +1143,7 @@ namespace WWTMVC5.Services
         {
             Func<CommunitiesView, object> orderBy = c => c.LastUpdatedDatetime;
 
-            string accessType = AccessType.Public.ToString();
+            var accessType = AccessType.Public.ToString();
             Expression<Func<CommunitiesView, bool>> condition = null;
             if (entityHighlightFilter.CategoryType != CategoryType.All)
             {
@@ -1159,7 +1156,7 @@ namespace WWTMVC5.Services
                     (c.CommunityTypeID == (int)CommunityTypes.Community || c.CommunityTypeID == (int)CommunityTypes.Folder);
             }
 
-            IEnumerable<CommunitiesView> communities = this.communitiesViewRepository.GetItems(condition, orderBy, true);
+            var communities =  _communitiesViewRepository.GetItems(condition, orderBy, true);
 
             var communityDetails = new List<CommunityDetails>();
             if (communities != null)
@@ -1182,14 +1179,14 @@ namespace WWTMVC5.Services
         {
             Func<ContentsView, object> orderBy = c => c.LastUpdatedDatetime;
 
-            string accessType = AccessType.Public.ToString();
+            var accessType = AccessType.Public.ToString();
             Expression<Func<ContentsView, bool>> condition = c => c.AccessType == accessType;
             if (entityHighlightFilter.CategoryType != CategoryType.All)
             {
                 condition = c => c.CategoryID == (int)entityHighlightFilter.CategoryType && c.AccessType == accessType;
             }
 
-            IEnumerable<ContentsView> contents = this.contentsViewRepository.GetItems(condition, orderBy, true);
+            var contents =  _contentsViewRepository.GetItems(condition, orderBy, true);
 
             var contentDetails = new List<ContentDetails>();
             if (contents != null)

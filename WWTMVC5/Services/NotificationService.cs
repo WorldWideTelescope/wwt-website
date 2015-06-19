@@ -4,9 +4,10 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using Microsoft.WindowsAzure.StorageClient;
+using Microsoft.WindowsAzure.Storage;
 using System;
 using System.Globalization;
+using Microsoft.WindowsAzure.Storage.Queue;
 using WWTMVC5.Models;
 using WWTMVC5;
 using WWTMVC5.Repositories.Interfaces;
@@ -16,7 +17,7 @@ namespace WWTMVC5.Services
 {
     public class NotificationService : INotificationService
     {
-        private IQueueRepository queueRepository;
+        private IQueueRepository _queueRepository;
 
         /// <summary>
         /// Initializes a new instance of the NotificationService class.
@@ -26,7 +27,7 @@ namespace WWTMVC5.Services
         /// </param>
         public NotificationService(IQueueRepository queueRepository)
         {
-            this.queueRepository = queueRepository;
+            this._queueRepository = queueRepository;
         }
 
         /// <summary>
@@ -163,8 +164,8 @@ namespace WWTMVC5.Services
 
         private void SendMail(object notification)
         {
-            CloudQueueMessage message = this.queueRepository.Pack(notification);
-            this.queueRepository.NotificationQueue.AddMessage(message);
+            var message = _queueRepository.Pack(notification);
+            _queueRepository.NotificationQueue.AddMessage(message);
         }
 
         /// <summary>
@@ -206,7 +207,7 @@ namespace WWTMVC5.Services
             try
             {
                 // Send Mail.
-                NewEntityRequest request = new NewEntityRequest();
+                var request = new NewEntityRequest();
                 request.EntityType = communityDetails.CommunityType == CommunityTypes.Community ? EntityType.Community : EntityType.Folder;
                 request.EntityID = communityDetails.ID;
                 request.EntityName = communityDetails.Name;
@@ -231,7 +232,7 @@ namespace WWTMVC5.Services
             try
             {
                 // Send Mail.
-                NewEntityRequest request = new NewEntityRequest();
+                var request = new NewEntityRequest();
                 request.EntityType = EntityType.User;
                 request.EntityID = profileDetails.ID;
                 request.EntityName = profileDetails.FirstName + " " + profileDetails.LastName;

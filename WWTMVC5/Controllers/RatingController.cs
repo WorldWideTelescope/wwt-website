@@ -50,14 +50,14 @@ namespace WWTMVC5.Controllers
         public JsonResult ConverstRatings(int contentId, int rating, int userId)
         {
             // Sending data to business logic
-            RatingDetails ratingDetails = new RatingDetails()
+            var ratingDetails = new RatingDetails()
             {
                 Rating = rating,
                 RatedByID = userId,
                 ParentID = contentId
             };
 
-            bool status = false;
+            var status = false;
             
             status = _ratingService.UpdateContentRating(ratingDetails);
             
@@ -77,14 +77,14 @@ namespace WWTMVC5.Controllers
         public bool Rate(int contentId, int rating, EntityType type)
         {
             // Sending data to business logic
-            RatingDetails ratingDetails = new RatingDetails()
+            var ratingDetails = new RatingDetails()
             {
                 Rating = rating,
                 RatedByID = CurrentUserId,
                 ParentID = contentId
             };
 
-            bool status = false;
+            var status = false;
             switch (type)
             {
                 case EntityType.All:

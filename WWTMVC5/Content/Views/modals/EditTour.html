@@ -65,9 +65,9 @@
                         <input type="file" nv-file-select uploader="tourthumbuploader" />
                     </span>
                     <div class="thumb">
-                        <img class=img-responsive ng-if="!tour.ThumbnailID && !editedTourThumb" ng-src="{{contentRoot}}/images/defaulttoursthumbnail.png" alt="Tour Thumbnail" />
-                        <img class=img-responsive ng-if="tour.ThumbnailID && (!isEdit || editedTourThumb)" ng-src="/file/TemporaryFile/{{tour.ThumbnailID}}" alt="Tour Thumbnail" />
-                        <img class=img-responsive ng-if="tour.ThumbnailID && isEdit && !editedTourThumb" ng-src="/file/thumbnail/{{tour.ThumbnailID}}" alt="Tour Thumbnail" />
+                        <img class=img-responsive ng-if="tour.ThumbnailIsNull && !editedTourThumb" ng-src="{{contentRoot}}/images/defaulttoursthumbnail.png" alt="Tour Thumbnail" />
+                        <img class=img-responsive ng-if="!tour.ThumbnailIsNull && (!isEdit || editedTourThumb)" ng-src="/file/TemporaryFile/{{tour.ThumbnailID}}" alt="Tour Thumbnail" />
+                        <img class=img-responsive ng-if="!tour.ThumbnailIsNull && isEdit && !editedTourThumb" ng-src="/file/thumbnail/{{tour.ThumbnailID}}" alt="Tour Thumbnail" />
                     </div>
 
 

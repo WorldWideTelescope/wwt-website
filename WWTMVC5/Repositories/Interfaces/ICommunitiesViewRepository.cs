@@ -5,6 +5,7 @@
 //-----------------------------------------------------------------------
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using WWTMVC5.Models;
 
 namespace WWTMVC5.Repositories.Interfaces
@@ -20,6 +21,7 @@ namespace WWTMVC5.Repositories.Interfaces
         /// <param name="searchText">Text to be searched</param>
         /// <param name="userId">User who is searching</param>
         /// <returns>Count of search result items</returns>
+        Task<int> SearchCommunitiesCountAsync(string searchText, long userId);
         int SearchCommunitiesCount(string searchText, long userId);
 
         /// <summary>
@@ -30,6 +32,7 @@ namespace WWTMVC5.Repositories.Interfaces
         /// <param name="skipCount">Items to be skipped based on pagination</param>
         /// <param name="takeCount">Items to be taken based on pagination</param>
         /// <returns>Search result items</returns>
+        Task<IEnumerable<CommunitiesView>> SearchCommunitiesAsync(string searchText, long userId, int skipCount, int takeCount);
         IEnumerable<CommunitiesView> SearchCommunities(string searchText, long userId, int skipCount, int takeCount);
     }
 }

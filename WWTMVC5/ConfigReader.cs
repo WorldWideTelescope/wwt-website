@@ -83,7 +83,6 @@ namespace WWTMVC5
                 {
                     settingValue = ConfigurationManager.AppSettings[settingKey];
                 }
-
                 
             }
             catch

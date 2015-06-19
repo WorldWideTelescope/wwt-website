@@ -5,6 +5,7 @@
 //-----------------------------------------------------------------------
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using WWTMVC5.Models;
 
 namespace WWTMVC5.Repositories.Interfaces
@@ -20,11 +21,11 @@ namespace WWTMVC5.Repositories.Interfaces
         /// <param name="contentIDs">
         /// Content IDs.
         /// </param>
-        /// <param name="communityID">Community Id</param>
+        /// <param name="communityId">Community Id</param>
         /// <returns>
         /// Collection of ContentsView.
         /// </returns>
-        IEnumerable<ContentsView> GetItems(IEnumerable<long> contentIDs, long communityID);
+        IEnumerable<ContentsView> GetItems(IEnumerable<long> contentIDs, long communityId);
 
         /// <summary>
         /// Gets the search result count for the given search text from contents.
@@ -32,7 +33,7 @@ namespace WWTMVC5.Repositories.Interfaces
         /// <param name="searchText">Text to be searched</param>
         /// <param name="userId">User who is searching</param>
         /// <returns>Count of search result items</returns>
-        int SearchContentsCount(string searchText, long userId);
+        Task<int> SearchContentsCount(string searchText, long userId);
 
         /// <summary>
         /// Gets the search results for the given search text from contents.
@@ -47,8 +48,8 @@ namespace WWTMVC5.Repositories.Interfaces
         /// <summary>
         /// Gets total consumed size for the user.
         /// </summary>
-        /// <param name="userID">ID of the user.</param>
+        /// <param name="userId">ID of the user.</param>
         /// <returns>Total consumed size.</returns>
-        decimal GetConsumedSize(long userID);
+        decimal GetConsumedSize(long userId);
     }
 }

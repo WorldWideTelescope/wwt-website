@@ -51,8 +51,8 @@ namespace WWTMVC5.Repositories.Interfaces
         /// <summary>
         /// Check if the user is site Admin or not.
         /// </summary>
-        /// <param name="userID">Id of the user.</param>
+        /// <param name="userId">Id of the user.</param>
         /// <returns>True if user is site admin;Otherwise false.</returns>
-        bool IsSiteAdmin(long userID);
+        bool IsSiteAdmin(long userId);
     }
 }

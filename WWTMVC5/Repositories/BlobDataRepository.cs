@@ -5,12 +5,10 @@
 //-----------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Configuration;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Linq;
-using Microsoft.WindowsAzure.StorageClient;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
 using WWTMVC5.Extensions;
 using WWTMVC5.Models;
 using WWTMVC5.Repositories.Interfaces;
@@ -23,25 +21,22 @@ namespace WWTMVC5.Repositories
     /// </summary>
     public class BlobDataRepository : IBlobDataRepository
     {
-        private static Lazy<CloudBlobClient> lazyClient;
-        private Microsoft.WindowsAzure.CloudStorageAccount storageAccount;
+        private static CloudBlobClient _blobClient;
+        private CloudStorageAccount _storageAccount;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BlobDataRepository"/> class.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands", Justification = "Code does not grant its callers access to operations or resources that can be used in a destructive manner.")]
+        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands",
+            Justification =
+                "Code does not grant its callers access to operations or resources that can be used in a destructive manner."
+            )]
         public BlobDataRepository()
         {
-            Microsoft.WindowsAzure.CloudStorageAccount.SetConfigurationSettingPublisher((configName, configSetter) =>
-            {
-                // Provide the configSetter with the initial value
-                configSetter(ConfigurationManager.AppSettings[configName]);
-
-            });
-
-            //Microsoft.WindowsAzure.CloudStorageAccount.TryParse("EarthOnlineStorage", out storageAccount);
-            storageAccount = Microsoft.WindowsAzure.CloudStorageAccount.FromConfigurationSetting("EarthOnlineStorage");
-            lazyClient = new Lazy<CloudBlobClient>(() => (storageAccount.CreateCloudBlobClient()));
+               
+            _storageAccount = CloudStorageAccount.Parse(ConfigReader<string>.GetSetting("EarthOnlineStorage"));
+            _blobClient = _storageAccount.CreateCloudBlobClient();
+            
         }
 
         /// <summary>
@@ -62,9 +57,7 @@ namespace WWTMVC5.Repositories
         {
             get
             {
-                CloudBlobClient blobclient = lazyClient.Value;
-                blobclient.RetryPolicy = Constants.DefaultRetryPolicy;
-                return blobclient;
+                return _blobClient;
             }
         }
 
@@ -274,27 +267,11 @@ namespace WWTMVC5.Repositories
         public bool UploadAsset(BlobDetails details)
         {
             this.CheckNotNull(() => details);
-
+            
             return UploadBlobContent(details, Constants.AssetContainerName);
         }
 
-        /// <summary>
-        /// Lists all blobs in asset container
-        /// </summary>
-        /// <returns>List of blobs</returns>
-        public IEnumerable<CloudBlob> ListAssets()
-        {
-            CloudBlobContainer container = GetContainer(Constants.AssetContainerName);
-
-            IEnumerable<CloudBlob> blobs = container.ListBlobs(
-                new BlobRequestOptions()
-                {
-                    UseFlatBlobListing = true,
-                    BlobListingDetails = BlobListingDetails.Metadata
-                }).OfType<CloudBlob>();
-
-            return blobs.OrderByDescending(item => item.Properties.LastModifiedUtc);
-        }
+        
 
         /// <summary>
         /// Deletes a file from azure.
@@ -355,7 +332,7 @@ namespace WWTMVC5.Repositories
         /// </returns>
         private static BlobProperties GetContent(string blobName, Stream outputStream, CloudBlobContainer container)
         {
-            var blob = container.GetBlobReference(blobName.ToUpperInvariant());
+            var blob = container.GetBlobReferenceFromServer(blobName.ToUpperInvariant());
             blob.DownloadToStream(outputStream);
             return blob.Properties;
         }
@@ -371,10 +348,9 @@ namespace WWTMVC5.Repositories
         /// </returns>
         private static CloudBlobContainer GetContainer(string containerName)
         {
-            // TODO: Need to make sure the container is created. This was commented out as this was 
-            //      proving to be a redundant call to azure and to improve performance
-            var blobContainer = new CloudBlobContainer(containerName, BlobClient);
-            return blobContainer;
+            var container = _blobClient.GetContainerReference(containerName);
+            container.CreateIfNotExists();
+            return container;
         }
 
         /// <summary>
@@ -396,7 +372,7 @@ namespace WWTMVC5.Repositories
             try
             {
                 outputStream = new MemoryStream();
-                CloudBlobContainer container = GetContainer(containerName);
+                var container = GetContainer(containerName);
                 properties = GetContent(blobName, outputStream, container);
             }
             catch (InvalidOperationException)
@@ -405,7 +381,7 @@ namespace WWTMVC5.Repositories
                 // "Error getting contents of blob {0}: {1}", ContainerUrl + _PathSeparator + blobName, sc.Message
                 outputStream = null;
             }
-            catch (StorageClientException exception)
+            catch (StorageException exception)
             {
                 
                 // TODO: Add error handling logic
@@ -439,7 +415,7 @@ namespace WWTMVC5.Repositories
         /// <returns>
         /// True, if the blob is successfully moved;otherwise false.
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ignore all exceptions.")]
+        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ignore all exceptions.")]
         private static bool MoveBlob(BlobDetails details, string sourceContainerName, string destinationContainerName)
         {
             try
@@ -452,7 +428,7 @@ namespace WWTMVC5.Repositories
                 var sourceBlob = sourceContainer.GetBlockBlobReference(details.BlobID.ToUpperInvariant());
                 var destinationBlob = destinationContainer.GetBlockBlobReference(details.BlobID.ToUpperInvariant());
 
-                destinationBlob.CopyFromBlob(sourceBlob);
+                destinationBlob.StartCopyFromBlob(sourceBlob);
                 destinationBlob.Properties.ContentType = sourceBlob.Properties.ContentType;
                 sourceBlob.Delete();
                 return true;
@@ -481,16 +457,16 @@ namespace WWTMVC5.Repositories
         {
             try
             {
-                CloudBlobContainer container = GetContainer(containerName);
+                var container = GetContainer(containerName);
 
                 // TODO: Check if the input file type and then use either block blob or page blob.
                 // For plate file we need to upload the file as page blob.
-                var blob = container.GetBlobReference(details.BlobID.ToUpperInvariant());
+                var blob = container.GetBlobReferenceFromServer(details.BlobID.ToUpperInvariant());
                 blob.FetchAttributes();
 
                 return true;
             }
-            catch (StorageClientException)
+            catch (StorageException)
             {
                 // "Error uploading blob {0}: {1}", ContainerUrl + _PathSeparator + blobName, se.Message
             }
@@ -511,9 +487,9 @@ namespace WWTMVC5.Repositories
         {
             try
             {
-                CloudBlobContainer container = GetContainer(containerName);
+                var container = GetContainer(containerName);
 
-                container.GetBlobReference(details.BlobID.ToUpperInvariant()).Delete();
+                container.GetBlobReferenceFromServer(details.BlobID.ToUpperInvariant()).Delete();
                 return true;
             }
             catch (InvalidOperationException)
@@ -541,7 +517,7 @@ namespace WWTMVC5.Repositories
 
             try
             {
-                CloudBlobContainer container = GetContainer(containerName);
+                var container = GetContainer(containerName);
 
                 // Seek to start.
                 details.Data.Position = 0;
@@ -549,7 +525,7 @@ namespace WWTMVC5.Repositories
                 // TODO: Check if the input file type and then use either block blob or page blob.
                 // For plate file we need to upload the file as page blob.
                 var blob = container.GetBlockBlobReference(details.BlobID.ToUpperInvariant());
-                blob.Attributes.Properties.ContentType = details.MimeType;
+                blob.Properties.ContentType = details.MimeType;
                 blob.UploadFromStream(details.Data);
 
                 return true;

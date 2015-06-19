@@ -21,8 +21,12 @@
         });
     };
 
+    $scope.incrementDownloadCount = function() {
+        dataproxy.incrementDownloadCount($routeParams.contentId).then(function() {
+            console.log(arguments);
+        });
+    }
 
-   
     wwt.triggerResize();
 
 }]);

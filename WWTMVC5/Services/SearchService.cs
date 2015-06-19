@@ -26,22 +26,22 @@ namespace WWTMVC5.Services
         /// <summary>
         /// Instance of CommunitiesView repository
         /// </summary>
-        private ICommunitiesViewRepository communitiesViewRepository;
+        private ICommunitiesViewRepository _communitiesViewRepository;
 
         /// <summary>
         /// Instance of ContentsView repository
         /// </summary>
-        private IContentsViewRepository contentsViewRepository;
+        private IContentsViewRepository _contentsViewRepository;
 
         /// <summary>
         /// Instance of SearchView repository
         /// </summary>
-        private ISearchViewRepository searchViewRepository;
+        private ISearchViewRepository _searchViewRepository;
 
         /// <summary>
         /// Instance of User repository
         /// </summary>
-        private IUserRepository userRepository;
+        private IUserRepository _userRepository;
 
         /// <summary>
         /// Initializes a new instance of the SearchService class.
@@ -56,10 +56,10 @@ namespace WWTMVC5.Services
                 ISearchViewRepository searchViewRepository,
                 IUserRepository userRepository)
         {
-            this.communitiesViewRepository = communitiesViewRepository;
-            this.contentsViewRepository = contentsViewRepository;
-            this.searchViewRepository = searchViewRepository;
-            this.userRepository = userRepository;
+            this._communitiesViewRepository = communitiesViewRepository;
+            this._contentsViewRepository = contentsViewRepository;
+            this._searchViewRepository = searchViewRepository;
+            this._userRepository = userRepository;
         }
 
         /// <summary>
@@ -79,23 +79,23 @@ namespace WWTMVC5.Services
             // User Id to be used while searching. This will be used to see whether user is having permission or not.
             long? searchUserId = userId;
 
-            if (this.userRepository.GetUserRole(userId, null) == UserRole.SiteAdmin)
+            if (_userRepository.GetUserRole(userId, null) == UserRole.SiteAdmin)
             {
                 // Set user id as 0 for Site Administrators, so that role check will be ignored for private communities
                 searchUserId = null;
             }
 
             // Gets the total communities/contents satisfying the search condition
-            pageDetails.TotalCount = this.searchViewRepository.SearchCount(searchText, searchUserId, searchQueryDetails);
+            pageDetails.TotalCount = _searchViewRepository.SearchCount(searchText, searchUserId, searchQueryDetails);
 
             // Set the total pages for the search term
             pageDetails.TotalPages = (pageDetails.TotalCount / pageDetails.ItemsPerPage) + ((pageDetails.TotalCount % pageDetails.ItemsPerPage == 0) ? 0 : 1);
 
             // Get the skip count and take count for the given page
-            int skipCount = (pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage;
-            int takeCount = pageDetails.ItemsPerPage;
-            var results = await searchViewRepository.SearchAsync(searchText, searchUserId, skipCount, takeCount, searchQueryDetails);
-            foreach (SearchView entity in results)
+            var skipCount = (pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage;
+            var takeCount = pageDetails.ItemsPerPage;
+            var results = await _searchViewRepository.SearchAsync(searchText, searchUserId, skipCount, takeCount, searchQueryDetails);
+            foreach (var entity in results)
             {
                 EntityViewModel entityViewModel;
 
@@ -105,7 +105,7 @@ namespace WWTMVC5.Services
                     entityViewModel = new ContentViewModel();
 
                     // This is needed to avoid the FxCop warning.
-                    ContentViewModel contentViewModel = entityViewModel as ContentViewModel;
+                    var contentViewModel = entityViewModel as ContentViewModel;
 
                     // Setting the properties which are specific to Contents.
                     contentViewModel.IsLink = entity.ContentType == (int)ContentTypes.Link;
@@ -131,12 +131,12 @@ namespace WWTMVC5.Services
         /// <param name="searchText">Text to be searched</param>
         /// <param name="userId">Id of the user who is accessing</param>
         /// <returns>Communities/Contents which are having the search text</returns>
-        public IEnumerable<DeepZoomViewModel> DeepZoomSearch(string searchText, long userId)
+        public async Task<IEnumerable<DeepZoomViewModel>> DeepZoomSearch(string searchText, long userId)
         {
             var searchResults = new List<DeepZoomViewModel>();
 
-            var communitiesResult = this.communitiesViewRepository.SearchCommunities(searchText, userId, 0, Constants.PivotResultsCount * 2);
-            var contentResult = this.contentsViewRepository.SearchContents(searchText, userId, 0, Constants.PivotResultsCount * 2);
+            var communitiesResult =  _communitiesViewRepository.SearchCommunities(searchText, userId, 0, Constants.PivotResultsCount * 2);
+            var contentResult =  _contentsViewRepository.SearchContents(searchText, userId, 0, Constants.PivotResultsCount * 2);
             var communitiesResultCount = communitiesResult.Count();
             var contentResultCount = contentResult.Count();
             var communityTakeCount = Constants.PivotResultsCount;
@@ -152,7 +152,7 @@ namespace WWTMVC5.Services
                 communityTakeCount = (Constants.PivotResultsCount * 2) - contentResultCount;
             }
 
-            foreach (CommunitiesView community in communitiesResult.Take(communityTakeCount))
+            foreach (CommunitiesView community in communitiesResult.ToList().Take(communityTakeCount))
             {
                 var communityViewModel = new DeepZoomViewModel();
                 communityViewModel.SetValuesFrom(community);
@@ -160,7 +160,7 @@ namespace WWTMVC5.Services
             }
 
             // Searching the contents for the given search text
-            foreach (ContentsView content in contentResult.Take(contentTakeCount))
+            foreach (var content in contentResult.ToList().Take(contentTakeCount))
             {
                 var contentViewModel = new DeepZoomViewModel();
                 contentViewModel.SetValuesFrom(content);
@@ -168,7 +168,7 @@ namespace WWTMVC5.Services
             }
 
             // TODO: Need to send the results based on relevance with following order: Title, Description, Tags and Parent.
-            return searchResults.AsEnumerable<DeepZoomViewModel>().OrderByDescending(item => item.Rating);
+            return searchResults.AsEnumerable().OrderByDescending(item => item.Rating);
         }
     }
 }

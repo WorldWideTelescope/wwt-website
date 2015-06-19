@@ -11,7 +11,6 @@ using System.Text;
 using System.Threading.Tasks;
 using WWTMVC5.Models;
 using WWTMVC5.Repositories.Interfaces;
-using System.Data.Entity;
 
 namespace WWTMVC5.Repositories
 {
@@ -39,12 +38,12 @@ namespace WWTMVC5.Repositories
         /// <returns>Number of items satisfying the given search condition</returns>
         public int SearchCount(string searchText, long? userId, SearchQueryDetails searchQueryDetails)
         {
-            StringBuilder query = new StringBuilder("SELECT COUNT(*) FROM SearchView WHERE ");
+            var query = new StringBuilder("SELECT COUNT(*) FROM SearchView WHERE ");
 
             // Gets the WHERE clause for the search query
             query = query.Append(GetSearchQueryConditions(searchText, userId, searchQueryDetails));
 
-            return this.EarthOnlineDbContext.Database.SqlQuery<int>(query.ToString()).FirstOrDefault();
+            return EarthOnlineDbContext.Database.SqlQuery<int>(query.ToString()).FirstOrDefault();
         }
 
         /// <summary>
@@ -58,7 +57,7 @@ namespace WWTMVC5.Repositories
         /// <returns>Items satisfying the given search condition</returns>
         public IEnumerable<SearchView> Search(string searchText, long? userId, int skipCount, int takeCount, SearchQueryDetails searchQueryDetails)
         {
-            StringBuilder query = new StringBuilder("SELECT * FROM SearchView WHERE ");
+            var query = new StringBuilder("SELECT * FROM SearchView WHERE ");
 
             // Gets the WHERE clause for the search query
             query = query.Append(GetSearchQueryConditions(searchText, userId, searchQueryDetails));
@@ -66,12 +65,12 @@ namespace WWTMVC5.Repositories
             // Gets the ORDER BY clause for the search query
             query = query.Append(GetSearchOrderBy(searchQueryDetails));
 
-            return this.EarthOnlineDbContext.Database.SqlQuery<SearchView>(query.ToString()).Skip(skipCount).Take(takeCount).ToList();
+            return EarthOnlineDbContext.Database.SqlQuery<SearchView>(query.ToString()).Skip(skipCount).Take(takeCount).ToList();
         }
 
         public async Task<IEnumerable<SearchView>> SearchAsync(string searchText, long? userId, int skipCount, int takeCount, SearchQueryDetails searchQueryDetails)
         {
-            StringBuilder query = new StringBuilder("SELECT * FROM SearchView WHERE ");
+            var query = new StringBuilder("SELECT * FROM SearchView WHERE ");
 
             // Gets the WHERE clause for the search query
             query = query.Append(GetSearchQueryConditions(searchText, userId, searchQueryDetails));
@@ -95,7 +94,7 @@ namespace WWTMVC5.Repositories
         /// <returns>Where condition to be used in the query</returns>
         private static string GetSearchQueryConditions(string searchText, long? userId, SearchQueryDetails searchQueryDetails)
         {
-            StringBuilder queryCondition = new StringBuilder(
+            var queryCondition = new StringBuilder(
                 string.Format(CultureInfo.InvariantCulture, "(Name LIKE '%{0}%' OR Description LIKE '%{1}%' OR DistributedBy LIKE '%{2}%' OR Producer LIKE '%{3}%' OR Tags LIKE '%{4}%' OR Citation LIKE '%{5}%')", searchText, searchText, searchText, searchText, searchText, searchText));
 
             if (userId != null)
@@ -105,13 +104,13 @@ namespace WWTMVC5.Repositories
 
             if (searchQueryDetails.CategoryFilter.Count > 0)
             {
-                string categoryList = string.Join(",", searchQueryDetails.CategoryFilter);
+                var categoryList = string.Join(",", searchQueryDetails.CategoryFilter);
                 queryCondition = queryCondition.Append(string.Format(CultureInfo.InvariantCulture, " AND (Category IN ({0}))", categoryList));
             }
 
             if (searchQueryDetails.ContentTypeFilter.Count > 0)
             {
-                string contentTypeList = string.Join(",", searchQueryDetails.ContentTypeFilter);
+                var contentTypeList = string.Join(",", searchQueryDetails.ContentTypeFilter);
                 queryCondition = queryCondition.Append(string.Format(CultureInfo.InvariantCulture, " AND (ContentType IN ({0}))", contentTypeList));
             }
 
@@ -126,7 +125,7 @@ namespace WWTMVC5.Repositories
         private static string GetSearchOrderBy(SearchQueryDetails searchQueryDetails)
         {
             // default order by is Rating.
-            string orderBy = string.Empty;
+            var orderBy = string.Empty;
 
             switch (searchQueryDetails.SortBy)
             {

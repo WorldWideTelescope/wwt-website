@@ -37,7 +37,7 @@ namespace WWTMVC5.Controllers
         public SearchController(ISearchService searchService, IProfileService profileService)
             : base(profileService)
         {
-            this._searchService = searchService;
+            _searchService = searchService;
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace WWTMVC5.Controllers
             {
                 // There is another overloaded constructor for View, which takes string as parameter and considers that as view name.
                 // To pass the value for Model, need to use the parameter type as OBJECT only.
-                PartialView("SearchView", searchText as object).ExecuteResult(this.ControllerContext);
+                PartialView("SearchView", searchText as object).ExecuteResult(ControllerContext);
             }
             catch (Exception)
             {
@@ -144,14 +144,14 @@ namespace WWTMVC5.Controllers
             ViewData["SearchText"] = searchText = (string.IsNullOrWhiteSpace(searchText) || searchText.ToLower(CultureInfo.CurrentCulture).Equals(Resources.DefaultSearchText.ToLower(CultureInfo.CurrentCulture))) ? string.Empty : searchText;
             ViewData["SearchMessage"] = string.Empty;
             IEnumerable<EntityViewModel> results = null;
-            PageDetails pageDetails = new PageDetails(currentPage);
+            var pageDetails = new PageDetails(currentPage);
             
                 if (!string.IsNullOrWhiteSpace(searchText))
                 {
                     
                     pageDetails.ItemsPerPage = searchQuery.ResultsPerPage;
 
-                    SearchQueryDetails searchQueryDetails = new SearchQueryDetails();
+                    var searchQueryDetails = new SearchQueryDetails();
 
                     if (searchQuery.ContentTypeFilter != null)
                     {
@@ -171,7 +171,7 @@ namespace WWTMVC5.Controllers
 
                     searchQueryDetails.SortBy = searchQuery.SortBy.ToEnum<string, SearchSortBy>(sortBy);
 
-                    results = await _searchService.SimpleSearch(searchText.Replace("'", "''"), this.CurrentUserId, pageDetails, searchQueryDetails);
+                    results = await _searchService.SimpleSearch(searchText.Replace("'", "''"), CurrentUserId, pageDetails, searchQueryDetails);
 
                     // If the total count of items are less than the selected per page items, select previous per page items
                     //ViewData["CurrentPage"] = currentPage;

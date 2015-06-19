@@ -71,14 +71,15 @@ namespace WWTMVC5.Controllers
         /// <param name="categoryType">Category type, default value is to get entities from all categories.</param>
         /// <param name="contentType"></param>
         /// <param name="entityId"></param>
-        [SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = ".net framework 4 way of passing default parameters."), HttpPost]
-        [Route("Entity/RenderJson/{highlightType}/{entityType}/{categoryType}/{contentType}/{page}/{pageSize}")]
-        public async Task<JsonResult> RenderJson(HighlightType highlightType, EntityType entityType, int page, int pageSize, CategoryType categoryType, ContentTypes contentType, long? entityId)
+        [SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = ".net framework 4 way of passing default parameters."), HttpGet]
+        [Route("Entity/Browse/{highlightType}/{entityType}/{categoryType}/{contentType}/{page}/{pageSize}")]
+        
+        public async Task<JsonResult> GetBrowseContent(HighlightType highlightType, EntityType entityType, int page, int pageSize, CategoryType categoryType, ContentTypes contentType, long? entityId)
         {
 
-            PageDetails pageDetails = new PageDetails(page);
+            var pageDetails = new PageDetails(page);
             pageDetails.ItemsPerPage = pageSize;
-            EntityHighlightFilter entityHighlightFilter = new EntityHighlightFilter(highlightType, categoryType, entityId, contentType);
+            var entityHighlightFilter = new EntityHighlightFilter(highlightType, categoryType, entityId, contentType);
             var highlightEntities = await GetHighlightEntities(entityType, entityHighlightFilter, pageDetails);
 
             
@@ -91,40 +92,17 @@ namespace WWTMVC5.Controllers
                 {
                     entities = highlightEntities,
                     pageInfo = pageDetails
-                }
-            };
-            return result;
-
-        }
-
-        /// <summary>
-        /// returns the entity detail data
-        /// </summary>
-        /// <param name="entityId"></param>
-        /// <param name="entityType"></param>
-        [SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = ".net framework 4 way of passing default parameters."), HttpPost]
-        [Route("Entity/RenderDetailJson/{entityId}/{entityType=Content}")]
-        public async Task<JsonResult> RenderDetailJson(long entityId, EntityType entityType)
-        {
-
-            PageDetails pageDetails = new PageDetails(1) {ItemsPerPage = 1};
-            EntityHighlightFilter entityHighlightFilter = new EntityHighlightFilter(HighlightType.None, CategoryType.All, entityId);
-            var entityResult = await GetHighlightEntities(entityType, entityHighlightFilter, pageDetails);
-            
-            SetSiteAnalyticsPrefix(HighlightType.None);
-            var result = new JsonResult
-            {
-                Data = new
-                {
-                    entity = entityResult
-                }
+                },
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
             return result;
 
         }
 
         
-        [HttpPost]
+
+        
+        [HttpGet]
         [Route("Entity/Types/GetAll")]
         public async Task<JsonResult> GetAllTypes()
         {
@@ -152,7 +130,8 @@ namespace WWTMVC5.Controllers
                     searchValues=searchTypes,
                     currentUserId=CurrentUserId,
                     isAdmin=admin
-                }
+                },
+                JsonRequestBehavior=JsonRequestBehavior.AllowGet
             };
         }
 
@@ -175,8 +154,8 @@ namespace WWTMVC5.Controllers
                     await TryAuthenticateFromHttpContext(_communityService, _notificationService);
                 }
 
-                Guid thumbnailId = Guid.Empty;
-                string thumnailUrl = Url.Content("~/content/images/" +
+                var thumbnailId = Guid.Empty;
+                var thumnailUrl = Url.Content("~/content/images/" +
                                                  (entity == EntityType.User
                                                      ? "profile.png"
                                                      : entity == EntityType.Content
@@ -207,13 +186,13 @@ namespace WWTMVC5.Controllers
 
                     // Once the user publishes the content then we will move the file from temporary container to the actual container.
                     // TODO: Need to have clean up task which will delete all unused file from temporary container.
-                    this._entityService.UploadTemporaryFile(fileDetail);
+                    _entityService.UploadTemporaryFile(fileDetail);
 
                     thumbnailId = fileDetail.AzureID;
                     thumnailUrl = "/file/thumbnail/" + thumbnailId;
                 }
 
-                DefaultThumbnailViewModel viewModel = new DefaultThumbnailViewModel(thumbnailId, entity, string.Empty,
+                var viewModel = new DefaultThumbnailViewModel(thumbnailId, entity, string.Empty,
                     ContentTypes.Generic);
                 viewModel.ThumbnailLink = thumnailUrl;
 
@@ -239,7 +218,7 @@ namespace WWTMVC5.Controllers
         private async Task<List<EntityViewModel>> GetHighlightEntities(EntityType entityType, EntityHighlightFilter entityHighlightFilter, PageDetails pageDetails)
         {
             // TODO: Need to create a model for passing parameters to this controller
-            List<EntityViewModel> highlightEntities = new List<EntityViewModel>();
+            var highlightEntities = new List<EntityViewModel>();
 
             // Set the user who is getting the highlight entities.
             entityHighlightFilter.UserID = CurrentUserId;
@@ -251,10 +230,10 @@ namespace WWTMVC5.Controllers
             }
             if (entityType == EntityType.Community)
             {
-                IEnumerable<CommunityDetails> communities = _entityService.GetCommunities(entityHighlightFilter, pageDetails);
+                var communities = await _entityService.GetCommunities(entityHighlightFilter, pageDetails);
                 foreach (var community in communities)
                 {
-                    CommunityViewModel communityViewModel = new CommunityViewModel();
+                    var communityViewModel = new CommunityViewModel();
                     Mapper.Map(community, communityViewModel);
                     highlightEntities.Add(communityViewModel);
                 }
@@ -264,7 +243,7 @@ namespace WWTMVC5.Controllers
                 var contents = await _entityService.GetContents(entityHighlightFilter, pageDetails);
                 foreach (var content in contents)
                 {
-                    ContentViewModel contentViewModel = new ContentViewModel();
+                    var contentViewModel = new ContentViewModel();
                     contentViewModel.SetValuesFrom(content);
                     highlightEntities.Add(contentViewModel);
                 }
@@ -284,7 +263,7 @@ namespace WWTMVC5.Controllers
         /// <returns>Collection of entities</returns>
         private List<EntityViewModel> GetCommunityEntities(long entityId, EntityType entityType, PageDetails pageDetails, bool onlyItemCount)
         {
-            List<EntityViewModel> entities = new List<EntityViewModel>();
+            var entities = new List<EntityViewModel>();
 
             // Default value is 20 if the value is not specified or wrong in the configuration file.
             // Total pages will be set by the service.
@@ -295,20 +274,20 @@ namespace WWTMVC5.Controllers
             {
                 if (entityType == EntityType.Community || entityType == EntityType.Folder)
                 {
-                    var subCommunities = this._entityService.GetSubCommunities(entityId, this.CurrentUserId, pageDetails, onlyItemCount);
+                    var subCommunities = _entityService.GetSubCommunities(entityId, CurrentUserId, pageDetails, onlyItemCount);
                     foreach (var item in subCommunities)
                     {
-                        CommunityViewModel subCommunityViewModel = new CommunityViewModel();
+                        var subCommunityViewModel = new CommunityViewModel();
                         Mapper.Map(item, subCommunityViewModel);
                         entities.Add(subCommunityViewModel);
                     }
                 }
                 else
                 {
-                    var contents = this._entityService.GetContents(entityId, this.CurrentUserId, pageDetails);
+                    var contents = _entityService.GetContents(entityId, CurrentUserId, pageDetails);
                     foreach (var item in contents)
                     {
-                        ContentViewModel contentViewModel = new ContentViewModel();
+                        var contentViewModel = new ContentViewModel();
                         contentViewModel.SetValuesFrom(item);
                         entities.Add(contentViewModel);
                     }

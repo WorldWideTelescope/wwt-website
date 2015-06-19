@@ -17,6 +17,7 @@ namespace WWTMVC5.Models
 	    private readonly string _downloadUrl;
 	    private readonly string _legacyUrl;
 	    private bool _isOpenWwtKiosk = false;
+	    private ProfileDetails _profile;
 
 
 	    public BaseModel()
@@ -93,6 +94,10 @@ namespace WWTMVC5.Models
 	    {
 	        get
 	        {
+	            if (_profile != null)
+	            {
+	                return _profile;
+	            }
 	            ProfileDetails profileDetails = null;
 	            LiveLoginResult result = SessionWrapper.Get<LiveLoginResult>("LiveConnectResult");
 	            if (result != null && result.Status == LiveConnectSessionStatus.Connected)
@@ -102,6 +107,7 @@ namespace WWTMVC5.Models
 	            }
 	            return profileDetails;
 	        }
+	        set { _profile = value; }
 	    }
 	}
 }

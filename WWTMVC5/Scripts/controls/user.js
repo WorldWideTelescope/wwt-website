@@ -9,8 +9,9 @@
             data[k] = v;
             localStorage.setItem('userSettings', JSON.stringify(data));
         } catch (ex) {
-            data['accessToken'] = '';
-            data['authToken'] = '';
+            delete data['accessToken'];
+            delete data["authToken"];
+            
         }
     }
     function getKey(k) {

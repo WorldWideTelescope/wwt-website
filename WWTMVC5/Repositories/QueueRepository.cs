@@ -5,12 +5,12 @@
 //-----------------------------------------------------------------------
 
 using System;
-using System.Configuration;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Xml.Serialization;
-using Microsoft.WindowsAzure;
-using Microsoft.WindowsAzure.ServiceRuntime;
-using Microsoft.WindowsAzure.StorageClient;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.WindowsAzure.Storage.Queue;
 using WWTMVC5.Models;
 using WWTMVC5.Repositories.Interfaces;
 
@@ -19,26 +19,22 @@ namespace WWTMVC5.Repositories
     /// <summary>
     /// Class representing the Queue Repository.
     /// </summary>
-    public class QueueRepository //: WWTMVC5.Repositories.Interfaces.IQueueRepository TODO: Reimplement interface
-        : IQueueRepository
+    public class QueueRepository : IQueueRepository
     {
-        private static Lazy<CloudBlobClient> lazyBlobClient;
-        private static Lazy<CloudQueueClient> lazyQueueClient;
-        private Microsoft.WindowsAzure.CloudStorageAccount storageAccount;
+        
+        private static CloudQueueClient _queueClient;
+        private static CloudBlobClient _blobClient;
+        private CloudStorageAccount _storageAccount;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="QueueRepository"/> class.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands", Justification = "Code does not grant its callers access to operations or resources that can be used in a destructive manner.")]
+        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands", Justification = "Code does not grant its callers access to operations or resources that can be used in a destructive manner.")]
         public QueueRepository()
         {
-            storageAccount = CloudStorageAccount.FromConfigurationSetting(Constants.EarthOnlineStorageSettingName);
-            lazyBlobClient = new Lazy<CloudBlobClient>(() =>
-            {
-                var cloudStorageAccount = this.storageAccount;
-                return cloudStorageAccount != null ? (cloudStorageAccount.CreateCloudBlobClient()) : null;
-            });
-            lazyQueueClient = new Lazy<CloudQueueClient>(() => (this.storageAccount.CreateCloudQueueClient()));
+            _storageAccount = CloudStorageAccount.Parse(ConfigReader<string>.GetSetting("EarthOnlineStorage"));
+            _blobClient = _storageAccount.CreateCloudBlobClient();
+            _queueClient = _storageAccount.CreateCloudQueueClient();
         }
 
         /// <summary>
@@ -70,9 +66,8 @@ namespace WWTMVC5.Repositories
         {
             get
             {
-                CloudBlobClient blobclient = lazyBlobClient.Value;
-                blobclient.RetryPolicy = Constants.DefaultRetryPolicy;
-                return blobclient;
+                
+                return _blobClient;
             }
         }
 
@@ -81,13 +76,7 @@ namespace WWTMVC5.Repositories
         /// </summary>
         private static CloudQueueClient QueueClient
         {
-            get
-            {
-                CloudQueueClient client = lazyQueueClient.Value;
-                client.RetryPolicy = Constants.DefaultRetryPolicy;
-
-                return client;
-            }
+            get { return _queueClient; }
         }
 
         /// <summary>
@@ -104,8 +93,8 @@ namespace WWTMVC5.Repositories
 
             // Serialize the message
             byte[] content;
-            XmlSerializer serializer = new XmlSerializer(notification.GetType());
-            using (MemoryStream stream = new MemoryStream())
+            var serializer = new XmlSerializer(notification.GetType());
+            using (var stream = new MemoryStream())
             {
                 serializer.Serialize(stream, notification);
                 stream.Flush();
@@ -119,7 +108,7 @@ namespace WWTMVC5.Repositories
             // If the content of the initial message is greater than 2KB then we place the content 
             // in Blob storage and include a reference to the Blob in the MessagePayload. Otherwise, 
             // the content of the initial message is embedded directly in the generic message.
-            MessagePayload m = new MessagePayload();
+            var m = new MessagePayload();
             m.NotificationType = notification.GetType().FullName;
             if (content.Length <= Constants.MessageSizeThreshold)
             {
@@ -128,18 +117,18 @@ namespace WWTMVC5.Repositories
             }
             else
             {
-                CloudBlobContainer container = GetContainer(Constants.NotificationContainerName);
-                string blobAddress = Guid.NewGuid().ToString();
-                CloudBlob blob = container.GetBlobReference(blobAddress);
+                var container = GetContainer(Constants.NotificationContainerName);
+                var blobAddress = Guid.NewGuid().ToString();
+                var blob = container.GetBlobReferenceFromServer(blobAddress);
                 blob.ServiceClient.ParallelOperationThreadCount = 1;
-                blob.UploadByteArray(content);
+                blob.UploadFromByteArray(content,0,content.Length);
 
                 m.BlobAddress = blobAddress;
                 m.EmbeddedContent = null;
             }
 
             serializer = new XmlSerializer(typeof(MessagePayload));
-            using (MemoryStream stream = new MemoryStream())
+            using (var stream = new MemoryStream())
             {
                 serializer.Serialize(stream, m);
                 stream.Flush();
@@ -161,10 +150,10 @@ namespace WWTMVC5.Repositories
                 throw new ArgumentNullException("message");
             }
 
-            byte[] content = message.AsBytes;
+            var content = message.AsBytes;
             MessagePayload genericMessage;
-            XmlSerializer serializer = new XmlSerializer(typeof(MessagePayload));
-            using (MemoryStream ms = new MemoryStream(content))
+            var serializer = new XmlSerializer(typeof(MessagePayload));
+            using (var ms = new MemoryStream(content))
             {
                 genericMessage = serializer.Deserialize(ms) as MessagePayload;
             }
@@ -176,18 +165,18 @@ namespace WWTMVC5.Repositories
             }
             else
             {
-                CloudBlobContainer container = GetContainer(Constants.NotificationContainerName);
-                string blobAddress = genericMessage.BlobAddress;
-                CloudBlob blob = container.GetBlobReference(blobAddress);
+                var container = GetContainer(Constants.NotificationContainerName);
+                var blobAddress = genericMessage.BlobAddress;
+                var blob = container.GetBlobReferenceFromServer(blobAddress);
                 blob.ServiceClient.ParallelOperationThreadCount = 1;
-                content = blob.DownloadByteArray();
+                blob.DownloadToByteArray(content, 0);
                 blob.Delete();
             }
 
             object result = null;
-            Type targetType = Type.GetType(genericMessage.NotificationType);
+            var targetType = Type.GetType(genericMessage.NotificationType);
             serializer = new XmlSerializer(targetType);
-            using (MemoryStream ms = new MemoryStream(content))
+            using (var ms = new MemoryStream(content))
             {
                 result = serializer.Deserialize(ms);
             }
@@ -206,10 +195,9 @@ namespace WWTMVC5.Repositories
         /// </returns>
         private static CloudBlobContainer GetContainer(string containerName)
         {
-            // TODO: Need to make sure the container is created. This was commented out as this was 
-            //      proving to be a redundant call to azure and to improve performance
-            var blobContainer = new CloudBlobContainer(containerName, BlobClient);
-            return blobContainer;
+            var container = _blobClient.GetContainerReference(containerName);
+            container.CreateIfNotExists();
+            return container;
         }
     }
 }

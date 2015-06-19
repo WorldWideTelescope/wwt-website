@@ -35,12 +35,12 @@ namespace WWTMVC5.Repositories
         /// to the user communities table.
         /// </summary>
         /// <param name="permissionItem">Permission item with details about the request</param>
-        /// <param name="updatedByID">User who is updating the permission request</param>
-        public OperationStatus UpdateUserPermissionRequest(PermissionItem permissionItem, long updatedByID)
+        /// <param name="updatedById">User who is updating the permission request</param>
+        public OperationStatus UpdateUserPermissionRequest(PermissionItem permissionItem, long updatedById)
         {
-            OperationStatus operationStatus = OperationStatus.CreateSuccessStatus();
+            var operationStatus = OperationStatus.CreateSuccessStatus();
 
-            PermissionRequest permissionRequest = Queryable.Where(this.EarthOnlineDbContext.PermissionRequest, (PermissionRequest pr) => pr.UserID == permissionItem.UserID && 
+            var permissionRequest = EarthOnlineDbContext.PermissionRequest.Where((PermissionRequest pr) => pr.UserID == permissionItem.UserID && 
                                                     pr.CommunityID == permissionItem.CommunityID && 
                                                     pr.Approved == null).FirstOrDefault();
 
@@ -49,11 +49,11 @@ namespace WWTMVC5.Repositories
 
             // Update the status of the permission request as approved or rejected.
             permissionRequest.Approved = permissionItem.Approved;
-            permissionRequest.RespondedByID = updatedByID;
+            permissionRequest.RespondedByID = updatedById;
             permissionRequest.RespondedDate = DateTime.UtcNow;
 
             // Check if any existing user community role is already there for the user for the same community.
-            UserCommunities existingUserCommunityRole = Queryable.Where(this.DbSet, (UserCommunities uc) => uc.UserID == permissionItem.UserID && uc.CommunityId == permissionItem.CommunityID).FirstOrDefault();
+            var existingUserCommunityRole = DbSet.Where((UserCommunities uc) => uc.UserID == permissionItem.UserID && uc.CommunityId == permissionItem.CommunityID).FirstOrDefault();
 
             // If the request is approved and also there are no roles for the same community and same user (not approved by anyone else) or 
             // the new role is higher than the existing role,
@@ -81,10 +81,10 @@ namespace WWTMVC5.Repositories
             else
             {
                 // To update the permission request.
-                this.Update(Enumerable.FirstOrDefault<UserCommunities>(permissionRequest.Community.UserCommunities));
+                Update(permissionRequest.Community.UserCommunities.FirstOrDefault());
             }
 
-            this.SaveChanges();
+            SaveChanges();
             return operationStatus;
         }
 
@@ -93,15 +93,15 @@ namespace WWTMVC5.Repositories
         /// with the current community being edited.
         /// </summary>
         /// <param name="childCommunity">Child community being edited</param>
-        /// <param name="parentID">Parent community specified</param>
-        public void InheritParentRoles(Community childCommunity, long parentID)
+        /// <param name="parentId">Parent community specified</param>
+        public void InheritParentRoles(Community childCommunity, long parentId)
         {
             // Make sure childCommunity is not null
             this.CheckNotNull(() => new { childCommunity });
 
-            if (parentID > 0)
+            if (parentId > 0)
             {
-                Community parent = Queryable.Where(this.EarthOnlineDbContext.Community, (Community c) => c.CommunityID == parentID).FirstOrDefault();
+                var parent = EarthOnlineDbContext.Community.Where((Community c) => c.CommunityID == parentId).FirstOrDefault();
 
                 // Make sure parent community is not null
                 this.CheckNotNull(() => new { parent });
@@ -110,7 +110,7 @@ namespace WWTMVC5.Repositories
                 // and also for their children recursively.
                 foreach (var parentUserCommunities in parent.UserCommunities)
                 {
-                    PermissionItem permissionItem = new PermissionItem();
+                    var permissionItem = new PermissionItem();
                     permissionItem.UserID = parentUserCommunities.UserID;
                     permissionItem.Role = (UserRole)parentUserCommunities.RoleID;
                     permissionItem.IsInherited = true;
@@ -134,24 +134,24 @@ namespace WWTMVC5.Repositories
         /// <returns>Operation status with details</returns>
         public OperationStatus UpdateUserRoles(PermissionItem permissionItem)
         {
-            OperationStatus operationStatus = new OperationStatus();
+            var operationStatus = new OperationStatus();
 
             permissionItem.IsInherited = false;
-            Community currentCommunity = Queryable.Where<Community>(this.EarthOnlineDbContext.Community, community => community.CommunityID == permissionItem.CommunityID).FirstOrDefault();
+            var currentCommunity = EarthOnlineDbContext.Community.Where(community => community.CommunityID == permissionItem.CommunityID).FirstOrDefault();
 
-            UserCommunities userCommunityRole = Queryable.Where(this.DbSet, (UserCommunities uc) => uc.UserID == permissionItem.UserID && uc.CommunityId == permissionItem.CommunityID).FirstOrDefault();
+            var userCommunityRole = DbSet.Where((UserCommunities uc) => uc.UserID == permissionItem.UserID && uc.CommunityId == permissionItem.CommunityID).FirstOrDefault();
 
             if (userCommunityRole != null)
             {
                 // Get the parent community of the current community whose role is being updated.
-                var parentCommunity = Enumerable.FirstOrDefault<CommunityRelation>(userCommunityRole.Community.CommunityRelation1);
+                var parentCommunity = userCommunityRole.Community.CommunityRelation1.FirstOrDefault();
 
                 // 1. Role will be update the current community and also for all his children recursively.
                 // 2. If this is the root community, mark inherited as false and update the permission for the community and its children.
                 if (parentCommunity != null)
                 {
                     // 3. Check whether user is having a role for the parent community.
-                    UserCommunities userCommunity = Enumerable.Where(parentCommunity.Community.UserCommunities, (UserCommunities uc) => uc.UserID == permissionItem.UserID).FirstOrDefault();
+                    var userCommunity = parentCommunity.Community.UserCommunities.Where((UserCommunities uc) => uc.UserID == permissionItem.UserID).FirstOrDefault();
 
                     if (userCommunity != null)
                     {
@@ -174,8 +174,8 @@ namespace WWTMVC5.Repositories
             }
 
             // Get the owners list for the community.
-            IEnumerable<long> communityOwners = Queryable.Select<UserCommunities, long>(Queryable.Where(this.DbSet, (UserCommunities uc) => uc.CommunityId == permissionItem.CommunityID && 
-                                                                                                                               uc.RoleID == (int)UserRole.Owner), (UserCommunities uc) => uc.UserID);
+            IEnumerable<long> communityOwners = DbSet.Where((UserCommunities uc) => uc.CommunityId == permissionItem.CommunityID && 
+                                                                                         uc.RoleID == (int)UserRole.Owner).Select((UserCommunities uc) => uc.UserID);
 
             // If there is only one owner and user role is being updated for him, then block the update (both edit and delete).
             if (communityOwners.Count() <= 1 && communityOwners.Contains(permissionItem.UserID))
@@ -189,7 +189,7 @@ namespace WWTMVC5.Repositories
 
             UpdateCommunityPermission(currentCommunity, permissionItem, true);
 
-            this.SaveChanges();
+            SaveChanges();
 
             operationStatus.Succeeded = true;
             return operationStatus;
@@ -204,12 +204,12 @@ namespace WWTMVC5.Repositories
         private void UpdateCommunityPermission(Community community, PermissionItem permissionItem, bool forceUpdate)
         {
             // Check if any existing user community role is already there for the user for the same community.
-            UserCommunities existingUserCommunityRole = Enumerable.Where(community.UserCommunities, (UserCommunities uc) => uc.UserID == permissionItem.UserID).FirstOrDefault();
+            var existingUserCommunityRole = community.UserCommunities.Where((UserCommunities uc) => uc.UserID == permissionItem.UserID).FirstOrDefault();
 
             if (permissionItem.Role == UserRole.None && existingUserCommunityRole != null)
             {
                 // If the role is none, then delete the user role for the community.
-                this.Delete(existingUserCommunityRole);
+                Delete(existingUserCommunityRole);
             }
             else if (permissionItem.Role != UserRole.None)
             {

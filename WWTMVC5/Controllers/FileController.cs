@@ -26,7 +26,7 @@ namespace WWTMVC5.Controllers
         /// <param name="blobService">Instance of a blob service</param>
         public FileController(IBlobService blobService)
         {
-            this._blobService = blobService;
+            _blobService = blobService;
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace WWTMVC5.Controllers
             if (id.HasValue)
             {
                 // Get the thumbnail from Azure.
-                var blobDetails = this._blobService.GetThumbnail(id.Value);
+                var blobDetails = _blobService.GetThumbnail(id.Value);
 
                 if (blobDetails != null && blobDetails.Data != null)
                 {
@@ -81,7 +81,7 @@ namespace WWTMVC5.Controllers
             if (id.HasValue)
             {
                 // Get the thumbnail from Azure.
-                var blobDetails = this._blobService.GetTemporaryFile(id.Value);
+                var blobDetails = _blobService.GetTemporaryFile(id.Value);
 
                 if (blobDetails != null && blobDetails.Data != null)
                 {
@@ -108,7 +108,7 @@ namespace WWTMVC5.Controllers
             if (id.HasValue)
             {
                 // Get the thumbnail from Azure.
-                var blobDetails = this._blobService.GetThumbnail(id.Value);
+                var blobDetails = _blobService.GetThumbnail(id.Value);
 
                 if (blobDetails != null && blobDetails.Data != null)
                 {
@@ -143,7 +143,7 @@ namespace WWTMVC5.Controllers
             if (id.HasValue)
             {
                 // Get the file from Azure.
-                var blobDetails = this._blobService.GetFile(id.Value);
+                var blobDetails = _blobService.GetFile(id.Value);
 
                 if (blobDetails != null && blobDetails.Data != null)
                 {
@@ -154,7 +154,7 @@ namespace WWTMVC5.Controllers
 
                     // Set the position to Begin.
                     blobDetails.Data.Seek(0, SeekOrigin.Begin);
-
+                    
                     return new FileStreamResult(blobDetails.Data, blobDetails.MimeType);
                 }
             }

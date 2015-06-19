@@ -32,6 +32,6 @@ namespace WWTMVC5.Services.Interfaces
         /// <param name="searchText">Text to be searched</param>
         /// <param name="userId">Id of the user who is accessing</param>
         /// <returns>Communities/Contents which are having the search text</returns>
-        IEnumerable<DeepZoomViewModel> DeepZoomSearch(string searchText, long userId);
+        Task<IEnumerable<DeepZoomViewModel>> DeepZoomSearch(string searchText, long userId);
     }
 }

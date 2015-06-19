@@ -17,8 +17,8 @@ namespace WWTMVC5.Repositories.Interfaces
         /// <summary>
         /// Gets list of all users who have commented on the given community.
         /// </summary>
-        /// <param name="communityID">Community ID.</param>
+        /// <param name="communityId">Community ID.</param>
         /// <returns>List of all user who have commented on the community.</returns>
-        IEnumerable<User> GetCommenters(long communityID);
+        IEnumerable<User> GetCommenters(long communityId);
     }
 }

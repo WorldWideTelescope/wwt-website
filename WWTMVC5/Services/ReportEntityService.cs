@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using WWTMVC5.Extensions;
 using WWTMVC5.Models;
@@ -26,17 +27,17 @@ namespace WWTMVC5.Services
         /// <summary>
         /// Instance of OffensiveContent repository
         /// </summary>
-        private IRepositoryBase<OffensiveContent> offensiveContentRepository;
+        private IRepositoryBase<OffensiveContent> _offensiveContentRepository;
 
         /// <summary>
         /// Instance of OffensiveCommunities repository
         /// </summary>
-        private IRepositoryBase<OffensiveCommunities> offensiveCommunitiesRepository;
+        private IRepositoryBase<OffensiveCommunities> _offensiveCommunitiesRepository;
 
         /// <summary>
         /// Instance of User repository
         /// </summary>
-        private IUserRepository userRepository;
+        private IUserRepository _userRepository;
 
         #endregion
 
@@ -52,9 +53,9 @@ namespace WWTMVC5.Services
             IRepositoryBase<OffensiveCommunities> offensiveCommunitiesRepository,
             IUserRepository userRepository)
         {
-            this.offensiveCommunitiesRepository = offensiveCommunitiesRepository;
-            this.offensiveContentRepository = offensiveContentRepository;
-            this.userRepository = userRepository;
+            this._offensiveCommunitiesRepository = offensiveCommunitiesRepository;
+            this._offensiveContentRepository = offensiveContentRepository;
+            this._userRepository = userRepository;
         }
 
         #endregion
@@ -74,13 +75,13 @@ namespace WWTMVC5.Services
             this.CheckNotNull(() => new { reportEntityDetails = offensiveCommunityDetails });
             try
             {
-                OffensiveCommunities offensiveCommunity = new OffensiveCommunities();
+                var offensiveCommunity = new OffensiveCommunities();
                 Mapper.Map(offensiveCommunityDetails, offensiveCommunity);
 
                 offensiveCommunity.ReportedDatetime = DateTime.UtcNow;
 
-                this.offensiveCommunitiesRepository.Add(offensiveCommunity);
-                this.offensiveCommunitiesRepository.SaveChanges();
+                _offensiveCommunitiesRepository.Add(offensiveCommunity);
+                _offensiveCommunitiesRepository.SaveChanges();
             }
             catch (Exception exception)
             {
@@ -108,13 +109,13 @@ namespace WWTMVC5.Services
 
             try
             {
-                OffensiveContent offensiveContent = new OffensiveContent();
+                var offensiveContent = new OffensiveContent();
                 Mapper.Map(offensiveContentDetails, offensiveContent);
 
                 offensiveContent.ReportedDatetime = DateTime.UtcNow;
 
-                this.offensiveContentRepository.Add(offensiveContent);
-                this.offensiveContentRepository.SaveChanges();
+                _offensiveContentRepository.Add(offensiveContent);
+                _offensiveContentRepository.SaveChanges();
             }
             catch (Exception exception)
             {
@@ -131,25 +132,25 @@ namespace WWTMVC5.Services
         /// <summary>
         /// Get all Offensive communities.
         /// </summary>
-        /// <param name="userID">Id of the user</param>
+        /// <param name="userId">Id of the user</param>
         /// <returns>List of all offensive communities.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Need to ignore any exception which occurs.")]
-        public IEnumerable<OffensiveEntityDetails> GetOffensiveCommunities(long userID)
+        public async Task<IEnumerable<OffensiveEntityDetails>> GetOffensiveCommunities(long userId)
         {
-            List<OffensiveEntityDetails> results = new List<OffensiveEntityDetails>();
+            var results = new List<OffensiveEntityDetails>();
 
             try
             {
-                if (this.userRepository.IsSiteAdmin(userID))
+                if (_userRepository.IsSiteAdmin(userId))
                 {
-                    var offensiveCommunities = this.offensiveCommunitiesRepository.GetItems(
+                    var offensiveCommunities =  _offensiveCommunitiesRepository.GetItems(
                         oc => oc.OffensiveStatusID == (int)OffensiveStatusType.Flagged,
                         oc => oc.ReportedDatetime,
                         true);
 
                     foreach (var item in offensiveCommunities)
                     {
-                        OffensiveEntityDetails detail = new OffensiveEntityDetails();
+                        var detail = new OffensiveEntityDetails();
                         Mapper.Map(item, detail);
                         results.Add(detail);
                     }
@@ -166,25 +167,25 @@ namespace WWTMVC5.Services
         /// <summary>
         /// Get all Offensive contents.
         /// </summary>
-        /// <param name="userID">Id of the user</param>
+        /// <param name="userId">Id of the user</param>
         /// <returns>List of all offensive contents.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Need to ignore any exception which occurs.")]
-        public IEnumerable<OffensiveEntityDetails> GetOffensiveContents(long userID)
+        public async Task<IEnumerable<OffensiveEntityDetails>> GetOffensiveContents(long userId)
         {
-            List<OffensiveEntityDetails> results = new List<OffensiveEntityDetails>();
+            var results = new List<OffensiveEntityDetails>();
 
             try
             {
-                if (this.userRepository.IsSiteAdmin(userID))
+                if (_userRepository.IsSiteAdmin(userId))
                 {
-                    var offensiveContents = this.offensiveContentRepository.GetItems(
+                    var offensiveContents =  _offensiveContentRepository.GetItems(
                         oc => oc.OffensiveStatusID == (int)OffensiveStatusType.Flagged,
                         oc => oc.ReportedDatetime,
                         true);
 
                     foreach (var item in offensiveContents)
                     {
-                        OffensiveEntityDetails detail = new OffensiveEntityDetails();
+                        var detail = new OffensiveEntityDetails();
                         Mapper.Map(item, detail);
                         results.Add(detail);
                     }
@@ -211,9 +212,9 @@ namespace WWTMVC5.Services
             OperationStatus status = null;
             try
             {
-                if (this.userRepository.IsSiteAdmin(details.ReviewerID))
+                if (_userRepository.IsSiteAdmin(details.ReviewerID))
                 {
-                    OffensiveCommunities offensiveCommunities = this.offensiveCommunitiesRepository.GetItem(oc => oc.OffensiveCommunitiesID == details.EntryID);
+                    var offensiveCommunities = _offensiveCommunitiesRepository.GetItem(oc => oc.OffensiveCommunitiesID == details.EntryID);
                     if (offensiveCommunities != null)
                     {
                         offensiveCommunities.OffensiveStatusID = (int)details.Status;
@@ -222,8 +223,8 @@ namespace WWTMVC5.Services
                         offensiveCommunities.ReviewerID = details.ReviewerID;
                         offensiveCommunities.ReviewerDatetime = DateTime.UtcNow;
 
-                        this.offensiveCommunitiesRepository.Update(offensiveCommunities);
-                        this.offensiveCommunitiesRepository.SaveChanges();
+                        _offensiveCommunitiesRepository.Update(offensiveCommunities);
+                        _offensiveCommunitiesRepository.SaveChanges();
                     }
                 }
                 else
@@ -256,9 +257,9 @@ namespace WWTMVC5.Services
             OperationStatus status = null;
             try
             {
-                if (this.userRepository.IsSiteAdmin(details.ReviewerID))
+                if (_userRepository.IsSiteAdmin(details.ReviewerID))
                 {
-                    OffensiveContent offensiveContents = this.offensiveContentRepository.GetItem(oc => oc.OffensiveContentID == details.EntryID);
+                    var offensiveContents = _offensiveContentRepository.GetItem(oc => oc.OffensiveContentID == details.EntryID);
                     if (offensiveContents != null)
                     {
                         offensiveContents.OffensiveStatusID = (int)details.Status;
@@ -267,8 +268,8 @@ namespace WWTMVC5.Services
                         offensiveContents.ReviewerID = details.ReviewerID;
                         offensiveContents.ReviewerDatetime = DateTime.UtcNow;
 
-                        this.offensiveContentRepository.Update(offensiveContents);
-                        this.offensiveContentRepository.SaveChanges();
+                        _offensiveContentRepository.Update(offensiveContents);
+                        _offensiveContentRepository.SaveChanges();
                     }
                 }
                 else
@@ -294,17 +295,17 @@ namespace WWTMVC5.Services
         /// <param name="details">Details provided.</param>
         /// <returns>True if Community was updated; otherwise false.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "We are returning the details of the exceptions as part of the function.")]
-        public OperationStatus UpdateAllOffensiveCommunityEntry(OffensiveEntry details)
+        public async Task<OperationStatus> UpdateAllOffensiveCommunityEntry(OffensiveEntry details)
         {
             this.CheckNotNull(() => new { details = details });
 
             OperationStatus status = null;
             try
             {
-                if (this.userRepository.IsSiteAdmin(details.ReviewerID))
+                if (_userRepository.IsSiteAdmin(details.ReviewerID))
                 {
-                    var offensiveCommunities = this.offensiveCommunitiesRepository.GetItems(oc => oc.CommunityID == details.EntityID && oc.OffensiveStatusID == (int)OffensiveStatusType.Flagged, null, false);
-                    if (offensiveCommunities != null && offensiveCommunities.Count() > 0)
+                    var offensiveCommunities =  _offensiveCommunitiesRepository.GetItems(oc => oc.CommunityID == details.EntityID && oc.OffensiveStatusID == (int)OffensiveStatusType.Flagged, null, false);
+                    if (offensiveCommunities != null && offensiveCommunities.Any())
                     {
                         foreach (var item in offensiveCommunities)
                         {
@@ -314,10 +315,10 @@ namespace WWTMVC5.Services
                             item.ReviewerID = details.ReviewerID;
                             item.ReviewerDatetime = DateTime.UtcNow;
 
-                            this.offensiveCommunitiesRepository.Update(item);
+                            _offensiveCommunitiesRepository.Update(item);
                         }
 
-                        this.offensiveCommunitiesRepository.SaveChanges();
+                        _offensiveCommunitiesRepository.SaveChanges();
                     }
                 }
                 else
@@ -343,17 +344,17 @@ namespace WWTMVC5.Services
         /// <param name="details">Details provided.</param>
         /// <returns>True if content was updated; otherwise false.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "We are returning the details of the exceptions as part of the function.")]
-        public OperationStatus UpdateAllOffensiveContentEntry(OffensiveEntry details)
+        public async Task<OperationStatus> UpdateAllOffensiveContentEntry(OffensiveEntry details)
         {
             this.CheckNotNull(() => new { details = details });
 
             OperationStatus status = null;
             try
             {
-                if (this.userRepository.IsSiteAdmin(details.ReviewerID))
+                if (_userRepository.IsSiteAdmin(details.ReviewerID))
                 {
-                    var offensiveContents = this.offensiveContentRepository.GetItems(oc => oc.ContentID == details.EntityID && oc.OffensiveStatusID == (int)OffensiveStatusType.Flagged, null, false);
-                    if (offensiveContents != null && offensiveContents.Count() > 0)
+                    var offensiveContents =  _offensiveContentRepository.GetItems(oc => oc.ContentID == details.EntityID && oc.OffensiveStatusID == (int)OffensiveStatusType.Flagged, null, false);
+                    if (offensiveContents != null && offensiveContents.Any())
                     {
                         foreach (var item in offensiveContents)
                         {
@@ -363,10 +364,10 @@ namespace WWTMVC5.Services
                             item.ReviewerID = details.ReviewerID;
                             item.ReviewerDatetime = DateTime.UtcNow;
 
-                            this.offensiveContentRepository.Update(item);
+                            _offensiveContentRepository.Update(item);
                         }
 
-                        this.offensiveContentRepository.SaveChanges();
+                        _offensiveContentRepository.SaveChanges();
                     }
                 }
                 else

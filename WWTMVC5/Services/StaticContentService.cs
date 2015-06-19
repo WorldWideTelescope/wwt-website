@@ -7,6 +7,7 @@
 using System;
 using System.Globalization;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using AutoMapper;
 using WWTMVC5.Models;
 using WWTMVC5.Properties;
@@ -26,7 +27,7 @@ namespace WWTMVC5.Services
         /// <summary>
         /// Instance of Static Content repository
         /// </summary>
-        private IRepositoryBase<StaticContent> staticContentRepository;
+        private IRepositoryBase<StaticContent> _staticContentRepository;
 
         #endregion
 
@@ -38,7 +39,7 @@ namespace WWTMVC5.Services
         /// <param name="staticContentRepository">Instance of staticContent repository</param>
         public StaticContentService(IRepositoryBase<StaticContent> staticContentRepository)
         {
-            this.staticContentRepository = staticContentRepository;
+            this._staticContentRepository = staticContentRepository;
         }
 
         #endregion
@@ -51,20 +52,25 @@ namespace WWTMVC5.Services
         /// <param name="staticContentDetails">static Content details.</param>
         /// <returns>True if the content was updated successfully; Otherwise false.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Need to ignore any exception which occurs.")]
+        public async Task<OperationStatus> UpdateStaticContentAsync(StaticContentDetails staticContentDetails)
+        {
+            return UpdateStaticContent(staticContentDetails);
+        }
+
         public OperationStatus UpdateStaticContent(StaticContentDetails staticContentDetails)
         {
             OperationStatus status = null;
             try
             {
                 Expression<Func<StaticContent, bool>> condition = content => content.TypeID == (int)staticContentDetails.TypeID && content.IsDeleted == false;
-                var contentValue = this.staticContentRepository.GetItem(condition);
+                var contentValue = _staticContentRepository.GetItem(condition);
                 if (contentValue != null)
                 {
                     contentValue.Content = staticContentDetails.Content;
                     contentValue.ModifiedByID = staticContentDetails.ModifiedByID;
                     contentValue.ModifiedDatetime = DateTime.UtcNow;
-                    this.staticContentRepository.Update(contentValue);
-                    this.staticContentRepository.SaveChanges();
+                    _staticContentRepository.Update(contentValue);
+                    _staticContentRepository.SaveChanges();
                 }
                 else
                 {
@@ -89,7 +95,7 @@ namespace WWTMVC5.Services
         public StaticContentDetails GetStaticContent(StaticContentType staticContentType)
         {
             Expression<Func<StaticContent, bool>> condition = (staticContent) => staticContent.StaticContentType.TypeID == (int)staticContentType && staticContent.IsDeleted == false;
-            var content = this.staticContentRepository.GetItem(condition);
+            var content = _staticContentRepository.GetItem(condition);
 
             var staticContentDetails = new StaticContentDetails();
             Mapper.Map(content, staticContentDetails);

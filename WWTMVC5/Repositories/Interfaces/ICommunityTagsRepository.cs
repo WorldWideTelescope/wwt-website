@@ -18,9 +18,9 @@ namespace WWTMVC5.Repositories.Interfaces
         /// Gets the Ids of the related communities of the given community. Related communities are taken based on the
         /// tags which are matching between the tags of given community
         /// </summary>
-        /// <param name="communityID">Id of the Community.</param>
-        /// <param name="userID">User who is requesting the related communities</param>
+        /// <param name="communityId">Id of the Community.</param>
+        /// <param name="userId">User who is requesting the related communities</param>
         /// <returns>Ids of related communities.</returns>
-        IEnumerable<long> GetRelatedCommunityIDs(long communityID, long userID);
+        IEnumerable<long> GetRelatedCommunityIDs(long communityId, long userId);
     }
 }

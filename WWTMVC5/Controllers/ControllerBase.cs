@@ -37,7 +37,7 @@ namespace WWTMVC5.Controllers
         /// <param name="profileService">Instance of profile Service</param>
         public ControllerBase(IProfileService profileService)
         {
-            this.ProfileService = profileService;
+            ProfileService = profileService;
         }
         
         #endregion
@@ -62,7 +62,7 @@ namespace WWTMVC5.Controllers
         {
             get
             {
-                bool? isSiteAdmin = SessionWrapper.Get<bool?>("IsSiteAdmin");
+                var isSiteAdmin = SessionWrapper.Get<bool?>("IsSiteAdmin");
 
                 if (!isSiteAdmin.HasValue)
                 {
@@ -88,37 +88,7 @@ namespace WWTMVC5.Controllers
             }
         }
 
-        /// <summary>
-        /// Gets the current user's profile name
-        /// </summary>
-        public string CurrentUserProfileName
-        {
-            get
-            {
-                string userProfileName = SessionWrapper.Get<string>("CurrentUserProfileName", null);
-
-                if (userProfileName == null)
-                {
-                    var identity = HttpContext.GetIdentityName();
-                    if (!string.IsNullOrWhiteSpace(identity))
-                    {
-                        var profile = ProfileService.GetProfile(identity);
-                        if (profile != null)
-                        {
-                            userProfileName = profile.GetProfileName();
-                            profile.SetProfileSessionValues();
-                        }
-                        else
-                        {
-                            userProfileName = HttpContext.GetIdentityProfileName();
-                            SessionWrapper.Set<string>("CurrentUserProfileName", userProfileName);
-                        }
-                    }
-                }
-
-                return userProfileName ?? string.Empty;
-            }
-        }
+        
 
         /// <summary>
         /// Gets or sets Instance of profile Service
@@ -132,7 +102,7 @@ namespace WWTMVC5.Controllers
         protected async Task<LiveLoginResult> TryAuthenticateFromHttpContext(ICommunityService communityService, INotificationService notificationService)
         {
             var svc = new LiveIdAuth();
-            LiveLoginResult result = await svc.Authenticate();
+            var result = await svc.Authenticate();
             if (result.Status == LiveConnectSessionStatus.Connected)
             {
                 var client = new LiveConnectClient(result.Session);
@@ -151,11 +121,11 @@ namespace WWTMVC5.Controllers
 
                     // When creating the user, by default the user type will be of regular. 
                     profileDetails.UserType = UserTypes.Regular;
-                    profileDetails.ID = this.ProfileService.CreateProfile(profileDetails);
+                    profileDetails.ID = ProfileService.CreateProfile(profileDetails);
 
                     // This will used as the default community when user is uploading a new content.
                     // This community will need to have the following details:
-                    CommunityDetails communityDetails = new CommunityDetails
+                    var communityDetails = new CommunityDetails
                     {
                         CommunityType = CommunityTypes.User, // 1. This community type should be User
                         CreatedByID = profileDetails.ID, // 2. CreatedBy will be the new USER.
@@ -201,7 +171,7 @@ namespace WWTMVC5.Controllers
         /// <param name="highlightType">Related / Latest / Top etc.</param>
         protected void SetSiteAnalyticsPrefix(HighlightType highlightType)
         {
-            string pageName = string.Empty;
+            var pageName = string.Empty;
 
             if (HttpContext.Request.IsAjaxRequest())
             {
@@ -246,11 +216,11 @@ namespace WWTMVC5.Controllers
             {
                 return cachedProfile;
             }
-            string userId = await svc.GetUserId(token);
+            var userId = await svc.GetUserId(token);
             
             if (userId != null && userId.Length > 3)
             {
-                IProfileService profileService = DependencyResolver.Current.GetService(typeof(IProfileService)) as IProfileService;
+                var profileService = DependencyResolver.Current.GetService(typeof(IProfileService)) as IProfileService;
                 var profileDetails = profileService.GetProfile(userId);
                 if (profileDetails != null)
                 {
@@ -265,7 +235,7 @@ namespace WWTMVC5.Controllers
 
         protected static Guid ValidateGuid(string guid)
         {
-            Guid result = Guid.Empty;
+            var result = Guid.Empty;
             if (!Guid.TryParse(guid, out result))
             {
                 throw new WebFaultException<string>("Invalid GUID", HttpStatusCode.BadRequest);

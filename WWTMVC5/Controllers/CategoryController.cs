@@ -23,7 +23,7 @@ namespace WWTMVC5.Controllers
         /// <remarks>Using id as parameter to avoid one more route</remarks>
         public ActionResult Index(int id)
         {
-            CategoryType categoryName = CategoryType.All;
+            var categoryName = CategoryType.All;
 
             // Get the categoryName from the Enum based on the index.
             categoryName = id.ToEnum<int, CategoryType>(CategoryType.All);

@@ -42,7 +42,7 @@ namespace WWTMVC5.Controllers
         public StaticContentController(IStaticContentService staticContentService, IProfileService profileService)
             : base(profileService)
         {
-            this._staticContentService = staticContentService;
+            _staticContentService = staticContentService;
         }
 
         #endregion
@@ -71,7 +71,7 @@ namespace WWTMVC5.Controllers
             CheckIfSiteAdmin();
 
             var staticContentViewModel = new StaticContentViewModel();
-            var staticContent = this._staticContentService.GetStaticContent(contentType);
+            var staticContent = _staticContentService.GetStaticContent(contentType);
             staticContentViewModel.Content = staticContent.Content;
 
             try
@@ -117,10 +117,10 @@ namespace WWTMVC5.Controllers
                 {
                     TypeID = staticContentViewModel.ContentType,
                     Content = staticContentViewModel.Content,
-                    ModifiedByID = this.CurrentUserId
+                    ModifiedByID = CurrentUserId
                 };
 
-                OperationStatus status = this._staticContentService.UpdateStaticContent(staticContent);
+                var status = _staticContentService.UpdateStaticContent(staticContent);
                 if (!status.Succeeded)
                 {
                     throw new Exception(status.ErrorMessage, status.Exception);
@@ -171,8 +171,8 @@ namespace WWTMVC5.Controllers
         {
             try
             {
-                var staticContent = this._staticContentService.GetStaticContent(staticContentType);
-                PartialView("StaticContentView", staticContent).ExecuteResult(this.ControllerContext);
+                var staticContent = _staticContentService.GetStaticContent(staticContentType);
+                PartialView("StaticContentView", staticContent).ExecuteResult(ControllerContext);
             }
             catch (Exception)
             {

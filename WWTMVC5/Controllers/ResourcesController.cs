@@ -51,10 +51,10 @@ namespace WWTMVC5.Controllers
         public ResourcesController(IContentService contentService, IProfileService profileService, ICommunityService communityService, INotificationService queueService)
             : base(profileService)
         {
-            this._contentService = contentService;
-            this._notificationService = queueService;
-            this._profileService = profileService;
-            this._communityService = communityService;
+            _contentService = contentService;
+            _notificationService = queueService;
+            _profileService = profileService;
+            _communityService = communityService;
         }
 
         #endregion Constructor
@@ -70,7 +70,7 @@ namespace WWTMVC5.Controllers
         [Route("Resource/Service/User")]
         public async Task<bool> CheckIfUserExists()
         {
-            ProfileDetails profileDetails = await ValidateAuthentication();
+            var profileDetails = await ValidateAuthentication();
             return profileDetails != null;
         }
 
@@ -79,7 +79,7 @@ namespace WWTMVC5.Controllers
         [Route("Resource/Service/User")]
         public async Task<bool> RegisterUser()
         {
-            ProfileDetails profileDetails = await ValidateAuthentication();
+            var profileDetails = await ValidateAuthentication();
 
             if (profileDetails == null)
             {
@@ -91,11 +91,11 @@ namespace WWTMVC5.Controllers
 
                 // When creating the user, by default the user type will be of regular. 
                 profileDetails.UserType = UserTypes.Regular;
-                profileDetails.ID = this.ProfileService.CreateProfile(profileDetails);
+                profileDetails.ID = ProfileService.CreateProfile(profileDetails);
                     
                 // This will used as the default community when user is uploading a new content.
                 // This community will need to have the following details:
-                CommunityDetails communityDetails = new CommunityDetails
+                var communityDetails = new CommunityDetails
                 {
                     CommunityType = CommunityTypes.User,// 1. This community type should be User
                     CreatedByID = profileDetails.ID,// 2. CreatedBy will be the new USER.
@@ -109,7 +109,7 @@ namespace WWTMVC5.Controllers
                 _communityService.CreateCommunity(communityDetails);
 
                 // Send New user notification.
-                this._notificationService.NotifyNewEntityRequest(profileDetails,
+                _notificationService.NotifyNewEntityRequest(profileDetails,
                     HttpContext.Request.Url.GetServerLink());
             }
             else
@@ -126,13 +126,13 @@ namespace WWTMVC5.Controllers
         [Route("Resource/Service/Community/{id}")]
         public async Task<bool> DeleteCommunity(string id)
         {
-            ProfileDetails profileDetails = await ValidateAuthentication();
+            var profileDetails = await ValidateAuthentication();
             if (profileDetails != null)
             {
-                long communityId = ValidateEntityId(id);
-                ICommunityService communityService = DependencyResolver.Current.GetService(typeof(ICommunityService)) as ICommunityService;
+                var communityId = ValidateEntityId(id);
+                var communityService = DependencyResolver.Current.GetService(typeof(ICommunityService)) as ICommunityService;
 
-                OperationStatus status = communityService.DeleteCommunity(communityId, profileDetails.ID);
+                var status = communityService.DeleteCommunity(communityId, profileDetails.ID);
                 return status != null && status.Succeeded;
             }
             else
@@ -148,13 +148,13 @@ namespace WWTMVC5.Controllers
         [Route("Resource/Service/Content/{id}")]
         public async Task<bool> DeleteContent(string id)
         {
-            ProfileDetails profileDetails = await ValidateAuthentication();
+            var profileDetails = await ValidateAuthentication();
                 
             if (profileDetails != null)
             {
-                long contentId = ValidateEntityId(id);
+                var contentId = ValidateEntityId(id);
                     
-                OperationStatus status = _contentService.DeleteContent(contentId, profileDetails.ID);
+                var status = _contentService.DeleteContent(contentId, profileDetails.ID);
                 return status != null && status.Succeeded;
             }
             else
@@ -171,14 +171,14 @@ namespace WWTMVC5.Controllers
         public async Task<FileStreamResult> GetMyCommunities()
         {
             Stream resultStream = null;
-            ProfileDetails profileDetails = await ValidateAuthentication();
+            var profileDetails = await ValidateAuthentication();
             
             if (profileDetails != null)
             {
                 // Get the payload XML for My Communities.
-                ICommunityService communityService = DependencyResolver.Current.GetService(typeof(ICommunityService)) as ICommunityService;
+                var communityService = DependencyResolver.Current.GetService(typeof(ICommunityService)) as ICommunityService;
                 
-                var payloadDetails = communityService.GetRootCommunities(profileDetails.ID);
+                var payloadDetails = await communityService.GetRootCommunities(profileDetails.ID);
 
                 // Rewrite URL with Community and not with Folder
                 RewritePayloadUrls(payloadDetails, true);
@@ -198,11 +198,11 @@ namespace WWTMVC5.Controllers
         public async Task<FileStreamResult> GetMyContents()
         {
             Stream resultStream = null;
-            ProfileDetails profileDetails = await ValidateAuthentication();
+            var profileDetails = await ValidateAuthentication();
                 if (profileDetails != null)
                 {
-                    IContentService contentService = DependencyResolver.Current.GetService(typeof(IContentService)) as IContentService;
-                    var payloadDetails = contentService.GetUserContents(profileDetails.ID);
+                    var contentService = DependencyResolver.Current.GetService(typeof(IContentService)) as IContentService;
+                    var payloadDetails = await contentService.GetUserContents(profileDetails.ID);
                     RewritePayloadUrls(payloadDetails, false);
                     resultStream = GetOutputStream(payloadDetails);
                 }
@@ -220,17 +220,17 @@ namespace WWTMVC5.Controllers
         public async Task<long> PublishContent(string filename, Stream fileContent)
         {
             long contentId = -1;
-            ProfileDetails profileDetails = await ValidateAuthentication();
+            var profileDetails = await ValidateAuthentication();
             if (!string.IsNullOrWhiteSpace(filename) && fileContent != null)
             {
                 
                 //// TODO: Check permissions if the user can add content to the parent.
                 if (profileDetails != null)
                 {
-                    ICommunityService communityService = DependencyResolver.Current.GetService(typeof(ICommunityService)) as ICommunityService;
+                    var communityService = DependencyResolver.Current.GetService(typeof(ICommunityService)) as ICommunityService;
 
                     // If id is null then we need to get the Visitor community for the current user.
-                    CommunityDetails parentCommunity = communityService.GetDefaultCommunity(profileDetails.ID);
+                    var parentCommunity = communityService.GetDefaultCommunity(profileDetails.ID);
                     switch (Path.GetExtension(filename).ToUpperInvariant())
                     {
                         case Constants.TourFileExtension:
@@ -259,25 +259,25 @@ namespace WWTMVC5.Controllers
         [Route("Resource/Service/Content/Rate/{id}/{rating}")]
         public async Task<bool> RateContent(string id, string rating)
         {
-            ProfileDetails profileDetails = await ValidateAuthentication();
+            var profileDetails = await ValidateAuthentication();
 
             if (profileDetails != null)
             {
-                long contentId = ValidateEntityId(id);
-                int ratingValue = 5;
+                var contentId = ValidateEntityId(id);
+                var ratingValue = 5;
                 if (int.TryParse(rating, out ratingValue))
                 {
                     // Dummy Call
                 }
                     
-                RatingDetails ratingDetails = new RatingDetails()
+                var ratingDetails = new RatingDetails()
                 {
                     Rating = ratingValue >= 5 || ratingValue <= 0 ? 5 : ratingValue,
                     RatedByID = profileDetails.ID,
                     ParentID = contentId 
                 };
 
-                IRatingService ratingService = DependencyResolver.Current.GetService(typeof(IRatingService)) as IRatingService;
+                var ratingService = DependencyResolver.Current.GetService(typeof(IRatingService)) as IRatingService;
                 ratingService.UpdateContentRating(ratingDetails);
 
                 return true;
@@ -294,24 +294,24 @@ namespace WWTMVC5.Controllers
         [Route("Resource/Service/Community/Rate/{id}/{rating}")]
         public async Task<bool> RateCommunity(string id, string rating)
         {
-            ProfileDetails profileDetails = await ValidateAuthentication();
+            var profileDetails = await ValidateAuthentication();
             if (profileDetails != null)
                 {
-                    long contentId = ValidateEntityId(id);
-                    int ratingValue = 5;
+                    var contentId = ValidateEntityId(id);
+                    var ratingValue = 5;
                     if (int.TryParse(rating, out ratingValue))
                     {
                         // Dummy Call
                     }
                     
-                    RatingDetails ratingDetails = new RatingDetails()
+                    var ratingDetails = new RatingDetails()
                     {
                         Rating = ratingValue >= 5 || ratingValue <= 0 ? 5 : ratingValue,
                         RatedByID = profileDetails.ID,
                         ParentID = contentId
                     };
 
-                    IRatingService ratingService = DependencyResolver.Current.GetService(typeof(IRatingService)) as IRatingService;
+                    var ratingService = DependencyResolver.Current.GetService(typeof(IRatingService)) as IRatingService;
                     ratingService.UpdateCommunityRating(ratingDetails);
 
                     return true;
@@ -333,9 +333,9 @@ namespace WWTMVC5.Controllers
         [Route("Resource/Service/Payload")]
         public FileStreamResult GetProfilePayload()
         {
-            string serviceBaseUri = ServiceBaseUri();
+            var serviceBaseUri = ServiceBaseUri();
             // If we are not doing Re-writes of Url, we need to set the thumbnails explicitly at all places
-            PayloadDetails payloadDetails = PayloadDetailsExtensions.InitializePayload();
+            var payloadDetails = PayloadDetailsExtensions.InitializePayload();
             payloadDetails.Thumbnail = RewriteThumbnailUrl(payloadDetails.Thumbnail, "defaultfolderwwtthumbnail");
             payloadDetails.Name = Resources.MyFolderLabel;
 
@@ -394,11 +394,11 @@ namespace WWTMVC5.Controllers
         public async Task<FileStreamResult> GetCommunity(string id)
         {
             // Parameter validation can be outside in cases where Live Id validation is optional
-            long communityId = ValidateEntityId(id);
+            var communityId = ValidateEntityId(id);
             Stream resultStream = null;
-            ProfileDetails profileDetails = await ValidateAuthentication();
+            var profileDetails = await ValidateAuthentication();
             PayloadDetails payloadDetails;
-            ICommunityService communityService = DependencyResolver.Current.GetService(typeof(ICommunityService)) as ICommunityService;
+            var communityService = DependencyResolver.Current.GetService(typeof(ICommunityService)) as ICommunityService;
             if (profileDetails != null)
             {
                 //// TODO : Permissions check
@@ -428,11 +428,11 @@ namespace WWTMVC5.Controllers
         public async Task<FileStreamResult> GetFolder(string id)
         {
             // Parameter validation can be outside in cases where Live Id validation is optional
-            long communityId = ValidateEntityId(id);
+            var communityId = ValidateEntityId(id);
             Stream resultStream = null;
-            ProfileDetails profileDetails = await ValidateAuthentication();
+            var profileDetails = await ValidateAuthentication();
             PayloadDetails payloadDetails;
-            ICommunityService communityService = DependencyResolver.Current.GetService(typeof(ICommunityService)) as ICommunityService;
+            var communityService = DependencyResolver.Current.GetService(typeof(ICommunityService)) as ICommunityService;
             if (profileDetails != null)
             {
                 // TODO : Permissions check
@@ -458,10 +458,10 @@ namespace WWTMVC5.Controllers
         public async Task<FileStreamResult> GetAllTours(string id)
         {
             // Parameter validation can be outside in cases where Live Id validation is optional
-            long communityId = ValidateEntityId(id);
+            var communityId = ValidateEntityId(id);
             Stream resultStream = null;
-            ProfileDetails profileDetails = await ValidateAuthentication();
-            ICommunityService communityService = DependencyResolver.Current.GetService(typeof(ICommunityService)) as ICommunityService;
+            var profileDetails = await ValidateAuthentication();
+            var communityService = DependencyResolver.Current.GetService(typeof(ICommunityService)) as ICommunityService;
             var payloadDetails = profileDetails != null ? 
                 communityService.GetAllTours(communityId, profileDetails.ID) : 
                 communityService.GetAllTours(communityId, null);
@@ -476,11 +476,11 @@ namespace WWTMVC5.Controllers
         public async Task<FileStreamResult> GetLatest(string id)
         {
             // Parameter validation can be outside in cases where Live Id validation is optional
-            long communityId = ValidateEntityId(id);
+            var communityId = ValidateEntityId(id);
             Stream resultStream = null;
-            ProfileDetails profileDetails = await ValidateAuthentication();
+            var profileDetails = await ValidateAuthentication();
             PayloadDetails payloadDetails;
-            ICommunityService communityService = DependencyResolver.Current.GetService(typeof(ICommunityService)) as ICommunityService;
+            var communityService = DependencyResolver.Current.GetService(typeof(ICommunityService)) as ICommunityService;
 
             payloadDetails = profileDetails != null ? communityService.GetLatestContent(communityId, profileDetails.ID) : communityService.GetLatestContent(communityId, null);
 
@@ -497,9 +497,9 @@ namespace WWTMVC5.Controllers
         [Route("Resource/Service/Thumbnail/{id}")]
         public FileStreamResult GetThumbnail(string id)
         {
-            Guid thumbnailId = ValidateGuid(id);
+            var thumbnailId = ValidateGuid(id);
             //// TODO : Authenticate?
-            IBlobService blobService = DependencyResolver.Current.GetService(typeof(IBlobService)) as IBlobService;
+            var blobService = DependencyResolver.Current.GetService(typeof(IBlobService)) as IBlobService;
             var blobDetails = blobService.GetThumbnail(thumbnailId);
             if (blobDetails != null && blobDetails.Data != null)
             {
@@ -517,14 +517,14 @@ namespace WWTMVC5.Controllers
         [Route("Resource/Service/File/{id}")]
         public FileStreamResult GetFile(string id)
         {
-            Guid contentId = ValidateGuid(id);
+            var contentId = ValidateGuid(id);
             //// TODO : Authenticate?
-            IBlobService blobService = DependencyResolver.Current.GetService(typeof(IBlobService)) as IBlobService;
+            var blobService = DependencyResolver.Current.GetService(typeof(IBlobService)) as IBlobService;
             var blobDetails = blobService.GetFile(contentId);
             
             if (blobDetails != null && blobDetails.Data != null)
             {
-                Stream resultStream =  GetFileStream(blobDetails);
+                var resultStream =  GetFileStream(blobDetails);
                 return new FileStreamResult(resultStream, Response.ContentType);
             }
 
@@ -536,15 +536,15 @@ namespace WWTMVC5.Controllers
         [Route("Resource/Service/Download/{id}/{name}")]
         public FileStreamResult DownloadFile(string id, string name)
         {
-            Guid contentId = ValidateGuid(id);
+            var contentId = ValidateGuid(id);
             //// TODO : Authenticate?
-            IBlobService blobService = DependencyResolver.Current.GetService(typeof(IBlobService)) as IBlobService;
+            var blobService = DependencyResolver.Current.GetService(typeof(IBlobService)) as IBlobService;
             var blobDetails = blobService.GetFile(contentId);
             if (blobDetails != null && blobDetails.Data != null)
             {
                 Response.Headers.Add("Content-Encoding", blobDetails.MimeType);
                 Response.Headers.Add("content-disposition", "attachment;filename=" + name);
-                Stream resultStream = GetFileStream(blobDetails);
+                var resultStream = GetFileStream(blobDetails);
                 return new FileStreamResult(resultStream, Response.ContentType);
             }
 
@@ -556,9 +556,9 @@ namespace WWTMVC5.Controllers
         [Route("Resource/Service/Browse")]
         public FileStreamResult GetBrowsePayload()
         {
-            string baseUri = BaseUri();
-            string serviceUri = ServiceBaseUri();
-            PayloadDetails payloadDetails = PayloadDetailsExtensions.InitializePayload();
+            var baseUri = BaseUri();
+            var serviceUri = ServiceBaseUri();
+            var payloadDetails = PayloadDetailsExtensions.InitializePayload();
             payloadDetails.Name = "Browse";
             payloadDetails.Thumbnail = RewriteThumbnailUrl(payloadDetails.Thumbnail, "defaultfolderwwtthumbnail");
 
@@ -604,7 +604,7 @@ namespace WWTMVC5.Controllers
             categories.Thumbnail = RewriteThumbnailUrl(categories.Thumbnail, "defaultfolderwwtthumbnail");
             payloadDetails.Children.Add(categories);
 
-            Stream resultStream = GetOutputStream(payloadDetails);
+            var resultStream = GetOutputStream(payloadDetails);
             return new FileStreamResult(resultStream, Response.ContentType);
             
         }
@@ -639,18 +639,18 @@ namespace WWTMVC5.Controllers
         [AllowAnonymous]
         [HttpGet]
         [Route("Resource/Service/Browse/TopRatedCommunity")]
-        public FileStreamResult GetTopRatedCommunity()
+        public async Task<FileStreamResult> GetTopRatedCommunity()
         {
-            Stream resultStream = GetTopCommunity(new EntityHighlightFilter(HighlightType.Popular, CategoryType.All, null));
+            var resultStream = await GetTopCommunity(new EntityHighlightFilter(HighlightType.Popular, CategoryType.All, null));
             return new FileStreamResult(resultStream, Response.ContentType);
         }
 
         [AllowAnonymous]
         [HttpGet]
         [Route("Resource/Service/Browse/LatestCommunity")]
-        public FileStreamResult GetLatestCommunity()
+        public async Task<FileStreamResult> GetLatestCommunity()
         {
-            Stream resultStream = GetTopCommunity(new EntityHighlightFilter(HighlightType.Latest, CategoryType.All, null));
+            var resultStream = await GetTopCommunity(new EntityHighlightFilter(HighlightType.Latest, CategoryType.All, null));
             return new FileStreamResult(resultStream, Response.ContentType);
         }
 
@@ -661,18 +661,18 @@ namespace WWTMVC5.Controllers
         public FileStreamResult GetCategories()
         {
             var categories = CategoryType.All.ToSelectList(CategoryType.All);
-            PayloadDetails payloadDetails = PayloadDetailsExtensions.InitializePayload();
+            var payloadDetails = PayloadDetailsExtensions.InitializePayload();
             payloadDetails.Name = "Categories";
             payloadDetails.Permission = Permission.Reader;
             payloadDetails.SetValuesFrom(categories);
 
-            string baseUri = BaseUri();
+            var baseUri = BaseUri();
             foreach (var childCategory in payloadDetails.Children)
             {
                 childCategory.Thumbnail = RewriteThumbnailUrl(childCategory.Thumbnail, childCategory.Id.ToEnum<string, CategoryType>(CategoryType.GeneralInterest).ToString().ToLowerInvariant() + "wwtthumbnail");
                 childCategory.Url = string.Format(CultureInfo.InvariantCulture, "{0}/Resource/Service/Browse/Category/{1}", baseUri, childCategory.Id);
             }
-            Stream resultStream = GetOutputStream(payloadDetails);
+            var resultStream = GetOutputStream(payloadDetails);
             return new FileStreamResult(resultStream, Response.ContentType);
 
         }
@@ -682,7 +682,7 @@ namespace WWTMVC5.Controllers
         [Route("Resource/Service/Browse/Category/{id}")]
         public async Task<FileStreamResult> GetCategory(string id)
         {
-            long categoryId = ValidateEntityId(id);
+            var categoryId = ValidateEntityId(id);
             var resultStream = await GetTopContent(new EntityHighlightFilter(HighlightType.MostDownloaded, ((int)categoryId).ToEnum<int, CategoryType>(CategoryType.All), null));
             return new FileStreamResult(resultStream, Response.ContentType);
         }
@@ -710,7 +710,7 @@ namespace WWTMVC5.Controllers
         /// <param name="payloadDetails">PayloadDetails object</param>
         /// <param name="hasChildCommunities"></param>
         
-        private void RewritePayloadUrls(PayloadDetails payloadDetails, bool hasChildCommunities)
+        private async void RewritePayloadUrls(PayloadDetails payloadDetails, bool hasChildCommunities)
         {
             var baseUri = BaseUri();
 
@@ -758,14 +758,10 @@ namespace WWTMVC5.Controllers
                     }
                     else
                     {
-                        if (childCommunity.CommunityType == CommunityTypes.Community)
-                        {
-                            childCommunity.Thumbnail = RewriteThumbnailUrl(childCommunity.Thumbnail, "defaultcommunitywwtthumbnail");
-                        }
-                        else
-                        {
-                            childCommunity.Thumbnail = RewriteThumbnailUrl(childCommunity.Thumbnail, "defaultfolderwwtthumbnail");
-                        }
+                        childCommunity.Thumbnail = RewriteThumbnailUrl(childCommunity.Thumbnail, 
+                            childCommunity.CommunityType == CommunityTypes.Community ? 
+                            "defaultcommunitywwtthumbnail" : 
+                            "defaultfolderwwtthumbnail");
 
                         childCommunity.Url = string.Format(CultureInfo.InvariantCulture, "{0}/Folder/{1}", ServiceBaseUri(), childCommunity.Id);
                     }
@@ -778,7 +774,7 @@ namespace WWTMVC5.Controllers
             {
                 // AuthorImageUrl has the created by ID of the user. This needs to be replaced with the URL for users picture
                 var userList = payloadDetails.Tours.Select(item => item.AuthorImageUrl).ToList().ConvertAll<long>(Convert.ToInt64).AsEnumerable();
-                profileDetails = _profileService.GetProfiles(userList.Distinct());
+                profileDetails =  _profileService.GetProfiles(userList.Distinct());
             }
 
             // Update Tour Urls including thumbnail, author and author image
@@ -836,7 +832,7 @@ namespace WWTMVC5.Controllers
         /// <param name="payloadDetails">PayloadDetails object</param>
         private void AddTourFolders(PayloadDetails payloadDetails)
         {
-            string baseUri = ServiceBaseUri();
+            var baseUri = ServiceBaseUri();
             var allTours = PayloadDetailsExtensions.InitializePayload();
             allTours.Name = "All Tours";
             allTours.Url = string.Format(CultureInfo.InvariantCulture, "{0}/Community/{1}/Tours", baseUri, payloadDetails.Id);
@@ -893,12 +889,12 @@ namespace WWTMVC5.Controllers
                 content.Name = Path.GetFileNameWithoutExtension(filename);
             }
 
-            IContentService contentService = DependencyResolver.Current.GetService(typeof(IContentService)) as IContentService;
-            long contentId = content.ID = contentService.CreateContent(content);
+            var contentService = DependencyResolver.Current.GetService(typeof(IContentService)) as IContentService;
+            var contentId = content.ID = contentService.CreateContent(content);
 
             if (contentId > 0)
             {
-                INotificationService notificationService = DependencyResolver.Current.GetService(typeof(INotificationService)) as INotificationService;
+                var notificationService = DependencyResolver.Current.GetService(typeof(INotificationService)) as INotificationService;
                 notificationService.NotifyNewEntityRequest(content, BaseUri() + "/");
             }
 
@@ -907,7 +903,7 @@ namespace WWTMVC5.Controllers
 
         private long CreateTour(string filename, Stream fileContent, ProfileDetails profileDetails, CommunityDetails parentCommunity)
         {
-            XmlDocument tourDoc = new XmlDocument();
+            var tourDoc = new XmlDocument();
             ContentDetails content = null;
 
             // NetworkStream is not Seek able. Need to load into memory stream so that it can be sought
@@ -929,12 +925,12 @@ namespace WWTMVC5.Controllers
                 content.TourLength = tourDoc.GetAttributeValue("Tour", "RunTime");
             }
 
-            IContentService contentService = DependencyResolver.Current.GetService(typeof(IContentService)) as IContentService;
-            long contentId = content.ID = contentService.CreateContent(content);
+            var contentService = DependencyResolver.Current.GetService(typeof(IContentService)) as IContentService;
+            var contentId = content.ID = contentService.CreateContent(content);
 
             if (contentId > 0)
             {
-                INotificationService notificationService = DependencyResolver.Current.GetService(typeof(INotificationService)) as INotificationService;
+                var notificationService = DependencyResolver.Current.GetService(typeof(INotificationService)) as INotificationService;
                 notificationService.NotifyNewEntityRequest(content, BaseUri() + "/");
             }
 
@@ -944,7 +940,7 @@ namespace WWTMVC5.Controllers
         private long CreateCollection(string filename, Stream fileContent, ProfileDetails profileDetails, CommunityDetails parentCommunity)
         {
             // Get name/ tags/ category from Tour.
-            XmlDocument collectionDoc = new XmlDocument();
+            var collectionDoc = new XmlDocument();
             ContentDetails content = null;
 
             // NetworkStream is not Seek able. Need to load into memory stream so that it can be sought
@@ -962,12 +958,12 @@ namespace WWTMVC5.Controllers
                 content.Name = collectionDoc.GetAttributeValue("Folder", "Name");
             }
 
-            IContentService contentService = DependencyResolver.Current.GetService(typeof(IContentService)) as IContentService;
-            long contentId = content.ID = contentService.CreateContent(content);
+            var contentService = DependencyResolver.Current.GetService(typeof(IContentService)) as IContentService;
+            var contentId = content.ID = contentService.CreateContent(content);
 
             if (contentId > 0)
             {
-                INotificationService notificationService = DependencyResolver.Current.GetService(typeof(INotificationService)) as INotificationService;
+                var notificationService = DependencyResolver.Current.GetService(typeof(INotificationService)) as INotificationService;
                 notificationService.NotifyNewEntityRequest(content, BaseUri() + "/");
             }
 
@@ -976,7 +972,7 @@ namespace WWTMVC5.Controllers
 
         private ContentDetails GetContentDetail(string filename, Stream fileContent, ProfileDetails profileDetails, CommunityDetails parentCommunity)
         {
-            ContentDetails content = new ContentDetails();
+            var content = new ContentDetails();
 
             var fileDetail = UpdateFileDetails(filename, fileContent);
 
@@ -996,7 +992,7 @@ namespace WWTMVC5.Controllers
 
         private FileDetail UpdateFileDetails(string filename, Stream fileContent)
         {
-            IContentService contentService = DependencyResolver.Current.GetService(typeof(IContentService)) as IContentService;
+            var contentService = DependencyResolver.Current.GetService(typeof(IContentService)) as IContentService;
 
             var fileDetail = new FileDetail();
             fileDetail.SetValuesFrom(filename, fileContent);
@@ -1013,8 +1009,8 @@ namespace WWTMVC5.Controllers
 
         private async Task<Stream> GetTopContent(EntityHighlightFilter entityHighlightFilter)
         {
-            IEntityService entityService = DependencyResolver.Current.GetService(typeof(IEntityService)) as IEntityService;
-            PageDetails pageDetails = new PageDetails(1);
+            var entityService = DependencyResolver.Current.GetService(typeof(IEntityService)) as IEntityService;
+            var pageDetails = new PageDetails(1);
             pageDetails.ItemsPerPage = 20;
             var contents = await entityService.GetContents(entityHighlightFilter, pageDetails);
 
@@ -1025,12 +1021,12 @@ namespace WWTMVC5.Controllers
             return GetOutputStream(payloadDetails);
         }
 
-        private Stream GetTopCommunity(EntityHighlightFilter entityHighlightFilter)
+        private async Task<Stream> GetTopCommunity(EntityHighlightFilter entityHighlightFilter)
         {
-            IEntityService entityService = DependencyResolver.Current.GetService(typeof(IEntityService)) as IEntityService;
-            PageDetails pageDetails = new PageDetails(1);
+            var entityService = DependencyResolver.Current.GetService(typeof(IEntityService)) as IEntityService;
+            var pageDetails = new PageDetails(1);
             pageDetails.ItemsPerPage = 20;
-            var communities = entityService.GetCommunities(entityHighlightFilter, pageDetails);
+            var communities = await entityService.GetCommunities(entityHighlightFilter, pageDetails);
 
             var payloadDetails = PayloadDetailsExtensions.InitializePayload();
             payloadDetails.SetValuesFrom(communities);

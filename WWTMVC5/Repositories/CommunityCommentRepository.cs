@@ -31,13 +31,13 @@ namespace WWTMVC5.Repositories
         /// <summary>
         /// Gets list of all users who have commented on the given community.
         /// </summary>
-        /// <param name="communityID">Community ID.</param>
+        /// <param name="communityId">Community ID.</param>
         /// <returns>List of all user who have commented on the community.</returns>
-        public IEnumerable<User> GetCommenters(long communityID)
+        public IEnumerable<User> GetCommenters(long communityId)
         {
-            var commenters = Queryable.Distinct<User>((from comments in this.EarthOnlineDbContext.CommunityComments
-                                  where comments.CommunityID == communityID && comments.IsDeleted == false
-                                  select comments.User));
+            var commenters = (from comments in EarthOnlineDbContext.CommunityComments
+                where comments.CommunityID == communityId && comments.IsDeleted == false
+                select comments.User).Distinct();
 
             return commenters.ToList();
         }

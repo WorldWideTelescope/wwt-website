@@ -159,44 +159,60 @@ if (top === self) {
 	                }).then(
                         function (response) {
                             console.log(response);
-                            $.get("/LiveId/Authenticate").success(function (data) {
-                                wwt.user.set('authToken', '');//data.Session.AuthenticationToken);
-                                wwt.user.set('accessToken', '');//data.Session.AccessToken);
-                                console.log(arguments);
-                                //$('#signinContainer label').remove();
-                                $('#profileMenuItem, #profileLink').removeClass('hide');
-                                $(window).trigger('login');
-                                wwt.signingIn = false;
-                                $('#signin').html(response.first_name + ' ' + response.last_name).on('click', function (e) {
-                                    e.stopImmediatePropagation();
-                                    location.href = '/Community/Profile';
-                                }).attr('title', '(Signed in) View your WWT Profile').prop('authenticated', true);
-                            });
+                            tryServerSignin(response);
                         },
-                        function (responseFailed) {
-                            wwt.signingIn = false;
-                            wwt.failedSigninAttempts++;
-                            console.log('loginfail, attempts:' + wwt.failedSigninAttempts, responseFailed);
-                            if (wwt.failedSigninAttempts > 3) {
-                                $('#signin').html("Login failed");
-                                $(window).trigger('loginfail');
-                            } else {
-                                signIn();
-                            }
-
-                        }
+                        loginFail
                     );
 	            }
 	        },
-            function (responseFailed) {
-                $('#signin').html("Login failed").title('Retry Login');
-            });
+            loginFail);
 	        if ($('#signin').attr('title').indexOf('(Sign') === -1) {
 	            $('#signin').html('Signing in...').attr('title', 'Please wait while we sign you in to WorldWide Telescope');
 	        }
 	    }
 
-		function hashChange() {
+        var tryServerSignin = function(response) {
+            $.get("/LiveId/Authenticate").success(function (data) {
+                console.log(arguments);
+                $('#profileMenuItem, #profileLink').removeClass('hide');
+                $(window).trigger('login');
+                wwt.signingIn = false;
+                if (data.Status === 'Connected') {
+                    $('#signin').off('click').html(data.Session.User).on('click', function(e) {
+                        e.stopImmediatePropagation();
+                        e.preventDefault();
+                        location.href = '/Community/Profile';
+                    }).attr('title', '(Signed in) View your WWT Profile').prop('authenticated', true);
+                } else if (data.LogoutUrl) {
+                    
+                    WL.logout();
+                    location.href = data.LogoutUrl;
+                } else {
+                    loginFail(data);
+                }
+            }).error(loginFail);
+        }/*"wl_auth=client_id=000000004015657B&status=connected&request_ts=1434563935347&access_token=EwCQAq1DBAAUGCCXc8wU%2FzFu9QnLdZXy%2BYnElFkAAf5Wo9QRY782aeEuOnHrx%2B7aVgtah5XfQMvMhCDjDV%2Fn8Tdi8qDiifSddVQxSsa6zdkH4bXxvLhfSID9mylb1PksmO8Af6X9kSRfCqs3o5r4lmvDzIGUVtR4MFrGOfgNsoHj7lTrF%2BiMDP1hWUdVIzcPICs17w58k5F6OCBA3%2BoMKxv9qCvCx%2BLZtW01J9MtF6%2BhQHq2s%2Bf08s3K%2Fv79x7GsB6d64WD6CIPmYCkVak47XWmC9h2%2BK8UrT9WwvQRpYWESdC%2FiwofgmDqZR1vr%2FI%2F83gFyDtRx6Z0kEkBdPrIj4%2B%2Bu%2BzoADbakBu4g%2F1buuqnxq60KoId77f6mfl0z%2FCMDZgAACB5fe39AVlF2YAGOJDZLydCTtviMayffgQSbVj6d0VR97EKL3%2BQaWW6DY%2F9MdefxRRDCEksy%2FgtTxYtg65l1fzo%2B%2B3ICldWk0X%2BBp0x8jcQzL%2FOwqz6jMAmKxR7Hb8ZmcD4X2E2zOh5stp1ke%2BpeiY%2BG3PY08Lb4ml%2BlsdrAQgktj00cFnVNdpWcHCAmMzEe%2FH5PZB%2BIpBAh5bmemo68DqGHLU%2FYY1GCikwZoXHe5YpF0ty8g9DoeCB5dbGBAeM1pPVcJZPcUDD0uTQby3Ldd1ju%2BD3i1xNxsXrNIX32dmNtUy2fzjoB9JWcpHneUHCyckbUiFid4BnSHwkrZCIt%2FvLwcHoyk0Y7r8O0FrKmxfRhntd9foRqcaIaMTjhNbTR3Z9IlSUEEojMudkfcMTYrPtcqPyR7p7Lw8JoUABymHQk7zQHT7fPxw%2BLLGgtwoZUnosd9Vy9JYvnY6DLuvG8J2U9kcMe5Ev9jJE6YAE%3D&authentication_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImtpZCI6IjEifQ.eyJ2ZXIiOjEsImlzcyI6InVybjp3aW5kb3dzOmxpdmVpZCIsImV4cCI6MTQzNDY1MDMzNCwidWlkIjoiN2Y0ZDc5ODc1Y2Q0YTliYjY2YjUxMTczNjk5YmQyZmUiLCJhdWQiOiJ3b3JsZHdpZGV0ZWxlc2NvcGUub3JnIiwidXJuOm1pY3Jvc29mdDphcHB1cmkiOiJhcHBpZDovLzAwMDAwMDAwNDAxNTY1N0IiLCJ1cm46bWljcm9zb2Z0OmFwcGlkIjoiMDAwMDAwMDA0MDE1NjU3QiJ9.IpjItIYfSPF_zRm9F3gziioU9OZyKbqY9i8gSlQeuDw&scope=wl.signin%20wl.emails&expires_in=3599&expires=1434567538; wl_auth=client_id=000000004015657B&status=unchecked"*/
+
+	    var loginFail = function(responseFailed) {
+            wwt.signingIn = false;
+            wwt.failedSigninAttempts++;
+            console.log('loginfail, attempts:' + wwt.failedSigninAttempts, responseFailed);
+            if (wwt.failedSigninAttempts > 1) {
+                $('#signin').html("Login failed");
+                $(window).trigger('loginfail');
+                WL.logout();
+            } else {
+                // Cleanse wl_auth cookie
+                var hosts = ['http://www.worldwidetelescope.org', 'www.worldwidetelescope.org', '.worldwidetelescope.org', 'worldwidetelescope.org'];
+                document.cookie = 'wl_auth=; expires=Thu, 01-Jan-1970 00:00:01 GMT;';
+                for (var i = 0; i < hosts.length; i++) {
+                    document.cookie = 'wl_auth=; expires=Thu, 01-Jan-1970 00:00:01 GMT;domain=' + hosts[i] + ';path=/';
+                }
+                tryServerSignin();
+            }
+        }
+
+	    function hashChange() {
 			if (wwt.scriptHashChange) {
 				return;
 			}

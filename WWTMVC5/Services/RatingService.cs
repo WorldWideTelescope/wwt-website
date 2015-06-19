@@ -23,12 +23,12 @@ namespace WWTMVC5.Services
         /// <summary>
         /// Instance of ContentRatings repository
         /// </summary>
-        private IRepositoryBase<ContentRatings> contentRatingRepository;
+        private IRepositoryBase<ContentRatings> _contentRatingRepository;
 
         /// <summary>
         /// Instance of CommunityRatings repository
         /// </summary>
-        private IRepositoryBase<CommunityRatings> communityRatingRepository;
+        private IRepositoryBase<CommunityRatings> _communityRatingRepository;
 
         #endregion
 
@@ -41,8 +41,8 @@ namespace WWTMVC5.Services
         /// <param name="communityRatingRepository">Instance of CommunityRatings repository</param>
         public RatingService(IRepositoryBase<ContentRatings> contentRatingsRepository, IRepositoryBase<CommunityRatings> communityRatingRepository)
         {
-            this.contentRatingRepository = contentRatingsRepository;
-            this.communityRatingRepository = communityRatingRepository;
+            _contentRatingRepository = contentRatingsRepository;
+            this._communityRatingRepository = communityRatingRepository;
         }
 
         #endregion
@@ -62,7 +62,7 @@ namespace WWTMVC5.Services
 
             try
             {
-                CommunityRatings communityRatings = this.communityRatingRepository
+                var communityRatings = _communityRatingRepository
                     .GetItem(r => (r.CommunityID == rating.ParentID && r.RatedByID == rating.RatedByID));
 
                 if (communityRatings != null)
@@ -97,7 +97,7 @@ namespace WWTMVC5.Services
 
             try
             {
-                ContentRatings contentRatings = this.contentRatingRepository
+                var contentRatings = _contentRatingRepository
                     .GetItem(r => (r.ContentID == rating.ParentID && r.RatingByID == rating.RatedByID));
 
                 if (contentRatings != null)
@@ -129,13 +129,13 @@ namespace WWTMVC5.Services
         /// <param name="rating">Rating details.</param>
         private void CreateCommunityRating(RatingDetails rating)
         {
-            CommunityRatings communityRatings = new CommunityRatings();
+            var communityRatings = new CommunityRatings();
             Mapper.Map(rating, communityRatings);
 
             communityRatings.ModifiedDatetime = communityRatings.CreatedDatetime = DateTime.UtcNow;
 
-            this.communityRatingRepository.Add(communityRatings);
-            this.communityRatingRepository.SaveChanges();
+            _communityRatingRepository.Add(communityRatings);
+            _communityRatingRepository.SaveChanges();
         }
 
         /// <summary>
@@ -144,13 +144,13 @@ namespace WWTMVC5.Services
         /// <param name="rating">Rating details.</param>
         private void CreateContentRating(RatingDetails rating)
         {
-            ContentRatings contentRating = new ContentRatings();
+            var contentRating = new ContentRatings();
             Mapper.Map(rating, contentRating);
 
             contentRating.ModifiedDatetime = contentRating.CreatedDatetime = DateTime.UtcNow;
 
-            this.contentRatingRepository.Add(contentRating);
-            this.contentRatingRepository.SaveChanges();
+            _contentRatingRepository.Add(contentRating);
+            _contentRatingRepository.SaveChanges();
         }
 
         /// <summary>
@@ -163,8 +163,8 @@ namespace WWTMVC5.Services
             communityRatings.Rating = rating.Rating;
             communityRatings.ModifiedDatetime = DateTime.UtcNow;
 
-            this.communityRatingRepository.Update(communityRatings);
-            this.communityRatingRepository.SaveChanges();
+            _communityRatingRepository.Update(communityRatings);
+            _communityRatingRepository.SaveChanges();
         }
 
         /// <summary>
@@ -177,8 +177,8 @@ namespace WWTMVC5.Services
             contentRatings.Rating = rating.Rating;
             contentRatings.ModifiedDatetime = DateTime.UtcNow;
 
-            this.contentRatingRepository.Update(contentRatings);
-            this.contentRatingRepository.SaveChanges();
+            _contentRatingRepository.Update(contentRatings);
+            _contentRatingRepository.SaveChanges();
         }
 
         #endregion

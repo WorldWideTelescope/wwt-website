@@ -44,8 +44,8 @@ namespace WWTMVC5.Controllers
         public OffensiveController(IReportEntityService reportEntityService, IProfileService profileService, INotificationService notificationService)
             : base(profileService)
         {
-            this._reportEntityService = reportEntityService;
-            this._notificationService = notificationService;
+            _reportEntityService = reportEntityService;
+            _notificationService = notificationService;
         }
 
         #endregion
@@ -61,10 +61,10 @@ namespace WWTMVC5.Controllers
         [ValidateAntiForgeryToken]//http://stackoverflow.com/questions/10851283/antiforgerytoken-deprecated-in-asp-net-mvc-4-rc
         public string ReportEntity(long entityId, EntityType entityType, string comments, ReportEntityType offenceType)
         {
-            string status = string.Empty;
+            var status = string.Empty;
             if (!string.IsNullOrWhiteSpace(comments))
             {
-                ReportEntityDetails report = new ReportEntityDetails()
+                var report = new ReportEntityDetails()
                 {
                     Comment = comments,
                     ReportEntityID = entityId,
@@ -78,10 +78,10 @@ namespace WWTMVC5.Controllers
                 {
                     case EntityType.Community:
                     case EntityType.Folder:
-                        this._reportEntityService.ReportOffensiveCommunity(report);
+                        _reportEntityService.ReportOffensiveCommunity(report);
                         break;
                     case EntityType.Content:
-                        this._reportEntityService.ReportOffensiveContent(report);
+                        _reportEntityService.ReportOffensiveContent(report);
                         break;
                     default:
                         break;
@@ -106,7 +106,7 @@ namespace WWTMVC5.Controllers
             try
             {
                 // Send Mail.
-                FlaggedRequest request = new FlaggedRequest()
+                var request = new FlaggedRequest()
                 {
                     ID = details.ReportEntityID,
                     EntityType = entityType,
@@ -130,7 +130,7 @@ namespace WWTMVC5.Controllers
                         break;
                 }
 
-                this._notificationService.NotifyFlagged(request);
+                _notificationService.NotifyFlagged(request);
             }
             catch (Exception)
             {
