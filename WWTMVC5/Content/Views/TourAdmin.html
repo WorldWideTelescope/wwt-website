@@ -2,7 +2,17 @@
 <p>
     As an administrator, you have the ability to add/remove/edit tours displayed in the WWT client and the web client. Please ensure your edits are thoughtful and approved by the entire team if you make significant changes. Misuse of this tool can have widespread impact to the WWT community. Please make changes wisely!
 </p>
+<p>
+    Upload new tours by scrolling to the bottom of all tours and click Add Tour. Tours can be put in multiple folders and can be related to other tours. If you relate a tour, add the relationship to the related tour because relationships are not automatically reciprocal.
+</p>
 <ul class="nav nav-tabs">
+    <li class="{{options.activeTab == 'communities' ? 'active' : ''}}" ng-click="tabChange('communities')">
+        <a href="javascript:void(0)" data-toggle="tab">
+            Folders
+            <span ng-if="community.communities">({{community.communities.length}})</span>
+            <span ng-if="!community.communities">(0)</span>
+        </a>
+    </li>
     <li class="{{options.activeTab == 'contents' ? 'active' : ''}}" ng-click="tabChange('contents')">
         <a href="javascript:void(0)" data-toggle="tab">
             All Tours
@@ -10,19 +20,7 @@
             <span ng-if="!community.contents">(0)</span>
         </a>
     </li>
-    <li class="{{options.activeTab == 'communities' ? 'active' : ''}}" ng-click="tabChange('communities')">
-        <a href="javascript:void(0)" data-toggle="tab">
-            Folders/Categories
-            <span ng-if="community.communities">({{community.communities.length}})</span>
-            <span ng-if="!community.communities">(0)</span>
-        </a>
-    </li>
-    <!--<li class="{{options.activeTab == 'xml' ? 'active' : ''}}" ng-click="tabChange('xml')">
-        <a href="javascript:void(0)" data-toggle="tab">
-            Generated XML
-            
-        </a>
-    </li>-->
+
 </ul>
 
 <div class="tab-content">
@@ -82,15 +80,20 @@
                    data-auto-close="true"
                    title="{{community.Name}}"
                    style="width: 100%"
-                   href="javascript:void(0)">
-                    <img ng-src="{{community.ThumbnailUrl}}" class="img-thumbnail"/>
+                   href="javascript:void(0)"
+                   ng-click="openFolder(community)">
+                    <span class="typeicon" title="Add to folder" ng-click="addTour(tour, $index)" style="width: 24px;">
+                        {{community.Description ? community.Description.split(',').length : '0'}}
+                    </span>
+                    <img src="/file/thumbnail/35603770-9cbc-490c-8ec8-cab68b3b099e" class="img-thumbnail"/>
                     <label class="small" style="font-weight: 100">{{community.Name}}</label>
                 </a>
 
             </div>
         </div>
 
-        <!--<a class="btn btn-info btn-sm" href="#/AddCommunity/{{community.Id}}">Create New Folder</a>-->
+        <a class="btn btn-info btn-sm" href="javascript:void(0)" ng-if="community.communities"
+           ng-click="openFolder()">Create New Folder</a>
         <div class="clearfix"></div>
         <p>&nbsp;</p>
     </div>

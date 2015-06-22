@@ -459,7 +459,7 @@
                         item.FileSize = !item.Size ? 'n/a' : uiHelper.getFileSizeString(item.Size);
                         if (item.ContentType === 1) {
                             item.webclientUrl = 'http://' + location.host + '/webclient?tourUrl=' +
-                                encodeURIComponent('http://' + location.host + '/file/download/' + item.ContentAzureID + '/' + item.FileName);
+                                encodeURIComponent('http://' + location.host + item.DownloadUrl);
                         } else if (item.ContentType === 0) { //TODO: Find out why type can be "all"
                             item.ContentType = 7;
                         } else if (item.ContentType === 2) {

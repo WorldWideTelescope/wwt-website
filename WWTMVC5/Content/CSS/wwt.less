@@ -882,6 +882,33 @@ ul.pagination{
         display:inline-block;
         margin:0 5px;
     }
+    
+    
+     .tab-content{
+         padding-top:10px;
+     }
+     .entity-detail{
+         a.thumbnail{
+             float:left;
+             margin-right:10px;
+         }
+         h1{
+             margin-bottom: 28px
+         }
+         em.last-updated{
+             color:@text-muted;
+             .small(); 
+             position:relative;
+             top:-20px;
+         }
+         ul.entity-details{
+             list-style: none; 
+             padding-left: 0; 
+             margin-bottom: 30px;
+         }
+     }
+}
+.community-content, .modal-body{
     a.thumbnail {
          padding-bottom: 0;
          text-align: center;
@@ -910,37 +937,12 @@ ul.pagination{
              top:2px;
              right:2px;
              padding:2px;
+             z-index:2;
              .boxGradient();
              #gradient > .vertical-four-colors(rgba(255,255,255,.8), rgba(155,155,155,.6), 55%, rgba(0,0,0,.6), 55.1%, rgba(0,0,0,.8));
              display:inline-block;
          }
      }
-    
-     .tab-content{
-         padding-top:10px;
-     }
-     .entity-detail{
-         a.thumbnail{
-             float:left;
-             margin-right:10px;
-         }
-         h1{
-             margin-bottom: 28px
-         }
-         em.last-updated{
-             color:@text-muted;
-             .small(); 
-             position:relative;
-             top:-20px;
-         }
-         ul.entity-details{
-             list-style: none; 
-             padding-left: 0; 
-             margin-bottom: 30px;
-         }
-     }
-
-     
 }
 .btn-file {
     position: relative;

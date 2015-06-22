@@ -276,11 +276,11 @@
                     } catch (er) {
                         console.log('error in community:', community);
                     }
-                    if (community.Description && community.Description.length) {
-                        community.Description += ',';
-                    } else {
-                        community.Description = '';
-                    }
+                    //if (community.Description && community.Description.length) {
+                    //    community.Description += ',';
+                    //} else {
+                    //    community.Description = '';
+                    //}
 
                     var goodArray = [];
                     var tourArray = community.Description.split(',');
@@ -310,19 +310,39 @@
                     savePromises.push(dataproxy.saveEditedCommunity(community));
 
                 });
+                $q.all(savePromises).then(function (results) {
+                    $.each(results, function (i, response) {
+                        console.log('saved tour references for folder', response);
+                    });
+                    $scope.savingWhat = 'Rebuilding master tour file';
+                    var rebuildUrl = '/Community/Rebuild/Tours';
+                    
+                    $http.get(rebuildUrl).success(function(result) {
+                        console.log('new tour file at ' + result);
+                    });
+                    if ($scope.webclientChange) {
+                        $scope.savingWhat = 'Web client state changed - rebuilding web client master tour file';
+                        $http.get(rebuildUrl + '/true').success(function (result) {
+                            if (hide) {
+                                $scope.savingChanges = false;
+                                $scope.$hide();
+                            }
+                            console.log('new webclient tour file at ' + result);
+                        });
+                    }
+                    else if (hide) {
+                        $scope.savingChanges = false;
+                        $scope.$hide();
+                    }
+                });
             });
 
-            $q.all(savePromises).then(function (results) {
-                $.each(results, function (i, response) {
-                    console.log('saved tour to ' + community.Name + ' folder', response, desc);
-                });
-                if (hide) {
-                    $scope.$hide();
-                }
-            });
+            
         }
 
         $scope.SaveTour = function () {
+            $scope.savingWhat = 'Saving tour and folder references';
+            $scope.savingChanges = true;
             pushExtendedProperties();
             console.log('save edits', $scope.tour);
             dataproxy.saveEditedContent($scope.tour).then(function (response) {
@@ -330,22 +350,24 @@
                 if (!response.error) {
                         
                     setTimeout(function () {
-                        saveCommunityTours(!$scope.ratingtotal);
+                        saveCommunityTours(true);//!$scope.ratingtotal);
                     }, 1000);
                 }
             });
         };
 
         $scope.AddTour = function () {
+            $scope.savingWhat = 'Saving tour and folder references';
+            $scope.savingChanges = true;
             pushExtendedProperties();
             console.log('save new tour',$scope.tour);
             dataproxy.publishContent($scope.tour).then(function (response) {
                 console.log('saved new tour response', response);
                 if (!response.error) {
                     tourId = response.ID;
-                    bootstrapRatings();
+                    
                     setTimeout(function () {
-                        saveCommunityTours(!$scope.ratingtotal);
+                        saveCommunityTours(true); //!$scope.ratingtotal);
                     }, 1000);
                 }
                 //hide
@@ -353,6 +375,8 @@
         };
 
         $scope.confirmDelete = function () {
+            $scope.savingWhat = 'Removing tour and folder references';
+            $scope.savingChanges = true;
             bootbox.confirm("Delete this Tour?", function (result) {
                 if (result) {
                     dataproxy.deleteContent($scope.tour.ID).then($scope.$hide);

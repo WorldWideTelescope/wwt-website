@@ -537,6 +537,7 @@
     <Content Include="Content\Views\CommunityDetail.html" />
     <Content Include="Content\Views\ContentPreview.html" />
     <Content Include="Content\Views\generatedtours.xml" />
+    <Content Include="Content\Views\modals\EditFolder.html" />
     <Content Include="Content\Views\modals\EditTour.html" />
     <Content Include="Content\Views\TestResources.html" />
     <Content Include="Content\Views\TourAdmin.html" />
@@ -641,6 +642,7 @@
     <Content Include="hello.aspx" />
     <Content Include="hello2.aspx" />
     <Content Include="msshrtmi.dll" />
+    <Content Include="Scripts\controllers\modals\editfolder.js" />
     <Content Include="Scripts\controllers\modals\edittour.js" />
     <Content Include="Scripts\controllers\touradmin.js" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
@@ -781,7 +783,9 @@
     <Content Include="webclient\favicon.ico" />
     <Content Include="webclient\favicon.png" />
     <Content Include="webclient\fblogin.js" />
-    <Content Include="webclient\gettours_webclient.xml" />
+    <Content Include="webclient\gettours_webclient.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="webclient\Global.asax" />
     <Content Include="webclient\Gruntfile.js" />
     <Content Include="webclient\images\bing-search-button.png" />
@@ -925,6 +929,12 @@
     <Content Include="Content\CSS\multiselect.less" />
     <Content Include="Content\OpenWWT\OpenWWT_Development.pdf" />
     <Content Include="App_Data\wurfl-latest.zip" />
+    <Content Include="Content\Views\webclienttours.wtml">
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Properties\PublishProfiles\wwt.thewebkid.com.pubxml" />
+    <None Include="Properties\PublishProfiles\wwtstaging - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\wwt.thewebkid.com.pubxml" />
     <None Include="Properties\PublishProfiles\wwtstaging - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy.pubxml" />

@@ -178,7 +178,7 @@
                         <strong>&nbsp;</strong>
                     </div>
                     <label style="">
-                        <input ng-model="extData.webclient" type="checkbox" />
+                        <input ng-model="extData.webclient" type="checkbox" ng-change="webclientChange = true" />
                         Show in web client
                     </label>
 
@@ -189,15 +189,24 @@
         </div>
 
         <hr />
-        <div class="row" ng-if="ratingtotal">
-            <div class="col-md-10 col-md-offset-1" style="text-align: center">
-                <label style="font-weight: 100">Populating rating table. Progress: {{ratingCurrent}}/{{ratingtotal}} ({{ratingPct}}%)</label>
+
+    <!--<div class="row" ng-if="ratingtotal">
+        <div class="col-md-10 col-md-offset-1" style="text-align: center">
+            <label style="font-weight: 100">Populating rating table. Progress: {{ratingCurrent}}/{{ratingtotal}} ({{ratingPct}}%)</label>
+            <div class="progress">
+                <div class="progress-bar progress-bar-striped active progress-bar-info" style="width: { {ratingPct}}% " role="progressbar"></div>
+            </div>
+        </div>
+    </div>-->
+        <div class="row" ng-if="savingChanges">
+            <div class="col-md-12" style="text-align: center">
+                <label style="font-weight: 100">{{savingWhat}}. Please wait...</label>
                 <div class="progress">
-                    <div class="progress-bar progress-bar-striped active progress-bar-info" style="width:{{ratingPct}}%" role="progressbar"></div>
+                    <div class="progress-bar progress-bar-striped active progress-bar-info" style="width:100%" role="progressbar"></div>
                 </div>
             </div>
         </div>
-        <div class="row" ng-if="!ratingtotal">
+        <div class="row" ng-if="!savingChanges">
             <div class="col-md-12">
                 <button class="btn btn-info btn-sm pull-right" ng-click="AddTour()" ng-if="!isEdit">Add New Tour</button>
                 <button class="btn btn-info btn-sm pull-right" ng-click="SaveTour()" ng-if="isEdit">Save Tour Changes</button>

@@ -1,6 +1,6 @@
 ﻿wwtng.controller('TourAdmin', [
-    '$scope', 'dataproxy', '$timeout', '$routeParams', '$http', 'UIHelper','$modal',
-    function ($scope, dataproxy, $timeout, $routeParams, $http, uiHelper, $modal) {
+    '$scope', 'dataproxy', '$timeout', '$routeParams', '$http', 'UIHelper','$modal','$q',
+    function ($scope, dataproxy, $timeout, $routeParams, $http, uiHelper, $modal,$q) {
         var communityId = $scope.communityId = 596915;
         wwt.triggerResize();
         var init = function () {
@@ -48,7 +48,7 @@
 
         $scope.refreshCommunityDetail = updateCommunityContents;
 
-        $scope.options = { activeTab: 'contents' }
+        $scope.options = { activeTab: 'communities' }
 
         $scope.tabChange = function (tab) {
             $scope.options.activeTab = tab;
@@ -84,11 +84,24 @@
             var tours = folder.Description ? folder.Description.split(',') : [];
             $.each(tours, function (i, tourId) {
                 if (tourId && tourId.length > 3) {
-                    collection.push($scope.getTourById(tourId));
+                    var tour = $scope.getTourById(tourId);
+                    if (tour) collection.push(tour);
                 }
             });
             return collection;
         }
+        $scope.getToursNotInFolder = function(folder) {
+             var collection = [];
+             var tourIds = folder.Description ? folder.Description.split(',') : [];
+             $.each($scope.community.contents, function (i, t) {
+                 var tourId = t.Id.toString();
+                 if ($.inArray(tourId,tourIds) === -1) {
+                     var tour = $scope.getTourById(tourId);
+                     if (tour) collection.push(tour);
+                 }
+             });
+             return collection;
+         }
 
         $scope.getFolderId = function (node) {
             var parent = node.parent();
@@ -106,6 +119,18 @@
             return community;
         }
 
+        var newFolderModal = $modal({
+            scope: $scope,
+            contentTemplate: '/content/views/modals/editfolder.html',
+            show: false,
+            title: 'Add New Folder'
+        });
+        var editFolderModal = $modal({
+            scope: $scope,
+            contentTemplate: '/content/views/modals/editfolder.html',
+            show: false,
+            title: 'Edit Folder'
+        });
         var newTourModal = $modal({
             scope: $scope,
             contentTemplate: '/content/views/modals/edittour.html',
@@ -125,6 +150,18 @@
                 editTourModal.$promise.then(editTourModal.show);
             } else {
                 newTourModal.$promise.then(newTourModal.show);
+            }
+        };
+
+        $scope.openFolder = function(community) {
+            $scope.folder = community;
+            
+            if (community) {
+                $scope.folder.tours = $scope.getFolderTours(community);
+                $scope.folder.notIncluded = $scope.getToursNotInFolder($scope.folder);
+                editFolderModal.$promise.then(editFolderModal.show);
+            } else {
+                newFolderModal.$promise.then(newFolderModal.show);
             }
         };
 
@@ -172,7 +209,35 @@
         
 
         var repairTourType = function () {
-            $scope.buildXml();
+            //$scope.buildXml();
+            //$q.all([
+            //    $http({ method: 'GET', url: '/content/views/tours.xml' }),
+            //    $http({ method: 'GET', url: '/community/fetch/tours' })
+            //]).then(function(results) {
+            //    origXml = $(results[0].data);
+            //    newXml = $(results[1].data);
+            //    var origFolders = origXml.find('Folder[Name]');
+            //    var newFolders = newXml.find('Folder[Name]');
+            //    origFolders.each(function(i, folder) {
+            //        var fld = $(folder);
+            //        var name = fld.attr('Name');
+            //        var nFld = newFolders.filter('[Name="' + name + '"]');
+            //        var origTours = fld.find('Tour');
+            //        var newTours = nFld.find('Tour');
+            //        console.log({ folder: name, origCount: origTours.length, newCount: newTours.length });
+            //        var origTourNames = [], newTourNames = [];
+            //        origTours.each(function (i, t) {
+            //            origTourNames.push($(t).attr('RelatedTours').split(';').length);
+            //        }); newTours.each(function (i, t) {
+            //            newTourNames.push($(t).attr('RelatedTours').split(';').length);
+            //        });
+            //        console.log(origTourNames.sort());
+            //        console.log(newTourNames.sort());
+            //    });
+                
+
+            //});
+            return;
             $.each($scope.community.contents, function(i, tour) {
                 var tourId = tour.Id;
                 if (tour.ContentType === 7) {

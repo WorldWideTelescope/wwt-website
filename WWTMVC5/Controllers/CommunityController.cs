@@ -42,6 +42,8 @@ namespace WWTMVC5.Controllers
         /// </summary>
         private INotificationService _notificationService;
 
+        private IBlobService _blobService;
+        private IContentService _contentService;
         #endregion Private Variables
 
         #region Constructor
@@ -51,11 +53,13 @@ namespace WWTMVC5.Controllers
         /// </summary>
         /// <param name="communityService">Instance of community Service</param>
         /// <param name="profileService">Instance of profile Service</param>
-        public CommunityController(ICommunityService communityService, IProfileService profileService, INotificationService queueService)
+        public CommunityController(ICommunityService communityService, IProfileService profileService, INotificationService queueService, IBlobService blobService, IContentService contentService)
             : base(profileService)
         {
             _communityService = communityService;
             _notificationService = queueService;
+            _blobService = blobService;
+            _contentService = contentService;
         }
 
         #endregion Constructor
@@ -141,6 +145,43 @@ namespace WWTMVC5.Controllers
 
         [HttpGet]
         [AllowAnonymous]
+        [Route("Community/TourThumbnail/{tourId}")]
+        public ActionResult GetTourThumb(Guid tourId)
+        {
+            var tour = _contentService.GetContentDetails(tourId);
+            // Get the thumbnail from Azure.
+            Stream thumbStream = tour.Thumbnail.DataStream.GenerateThumbnail(Constants.DefaultClientThumbnailWidth, Constants.DefaultClientThumbnailHeight, Constants.DefaultThumbnailImageFormat);
+
+            return File(thumbStream, Constants.DefaultThumbnailMimeType);
+
+        }
+        [HttpGet]
+        [AllowAnonymous]
+        [Route("Community/AuthorThumbnail/{tourId}")]
+        public ActionResult GetTourAuthorThumb(Guid tourId)
+        {
+            var tour = _contentService.GetContentDetails(tourId);
+            var thumb = tour.AssociatedFiles.FirstOrDefault();
+            var thumbContent = new Content();
+            thumbContent.SetValuesFrom(tour, thumb);
+
+            var blobDetails = _blobService.GetFile(thumbContent.ContentAzureID);
+            if (blobDetails != null && blobDetails.Data != null)
+            {
+                blobDetails.MimeType = Constants.DefaultThumbnailMimeType;
+
+                // Update the response header.
+                Response.AddHeader("Content-Encoding", blobDetails.MimeType);
+
+                // Set the position to Begin.
+                blobDetails.Data.Seek(0, SeekOrigin.Begin);
+                return new FileStreamResult(blobDetails.Data, blobDetails.MimeType);
+            }
+            return new EmptyResult();
+
+        }
+        [HttpGet]
+        [AllowAnonymous]
         [Route("Community/Fetch/Tours/{webclient=false}")]
         public ActionResult GetTourXml(bool webclient)
         {
@@ -158,7 +199,7 @@ namespace WWTMVC5.Controllers
     
         [HttpGet]
         [AllowAnonymous]
-        [Route("Community/Rebuid/Tours/{webclient=false}")]
+        [Route("Community/Rebuild/Tours/{webclient=false}")]
         public async Task<string> BuildPublicTourXml(bool webclient)
         {
             
@@ -168,9 +209,11 @@ namespace WWTMVC5.Controllers
             var tourContentList = new List<ContentInputViewModel>();
             foreach (var item in tourDetailList)
             {
+                
                 var contentInputViewModel = new ContentInputViewModel();
                 contentInputViewModel.SetValuesFrom(item);
                 tourContentList.Add(contentInputViewModel);
+                
             }
             var children = await _communityService.GetChildCommunities(adminCommunityId, adminId);
             var folders = new List<CommunityViewModel>();
@@ -189,38 +232,91 @@ namespace WWTMVC5.Controllers
                     xmlWriter.WriteStartElement("Folder");
                     foreach (var folder in folders)
                     {
-                        xmlWriter.WriteStartElement("Folder");
-                        xmlWriter.WriteAttributeString("Name", folder.Name);
-                        xmlWriter.WriteAttributeString("Group", "Tour");
-                        xmlWriter.WriteAttributeString("Thumbnail", "");
-                        var tourIds = folder.Description.Split(',');
+                        
+                        var tourIds = folder.Description != null ? folder.Description.Split(',') : new string[0];
+                        var toursInFolder = false;
                         foreach (var tourId in tourIds)
                         {
-                            var id = Convert.ToInt32(tourId);
-                            var tourDetails = tourDetailList.Find(details => details.ID == id);
-                            var tourContents = tourContentList.Find(model => model.ID == id);
-                            var json = tourDetails.Citation.Replace("json://", "");
-                            var extData = JsonConvert.DeserializeObject<dynamic>(json);
-                            Newtonsoft.Json.Linq.JArray related = extData.related;
-                            var relatedTours = string.Join(";", related);
-                            xmlWriter.WriteStartElement("Tour");
-                            xmlWriter.WriteAttributeString("Title", tourDetails.Name);
-                            xmlWriter.WriteAttributeString("ID", extData.tourGuid.ToString());
-                            xmlWriter.WriteAttributeString("Description", tourDetails.Description);
-                            xmlWriter.WriteAttributeString("Classification", extData["classification"]!= null ? extData["classification"].ToString(): "Other");
-                            xmlWriter.WriteAttributeString("AuthorEmail", extData.authorEmail != null ? extData.authorEmail.ToString() : "");
-                            xmlWriter.WriteAttributeString("Author", extData.author != null ? extData.author.ToString(): "");
-                            xmlWriter.WriteAttributeString("AverageRating", tourDetails.AverageRating.ToString(CultureInfo.InvariantCulture));
-                            xmlWriter.WriteAttributeString("LengthInSecs", tourContents.TourLength);
-                            xmlWriter.WriteAttributeString("OrganizationUrl", extData.organizationUrl != null ? extData.organizationUrl.ToString() : "");
-                            xmlWriter.WriteAttributeString("OrganizationName", extData.organization != null ? extData.organization.ToString():"");
-                            xmlWriter.WriteAttributeString("ITHList", extData.ithList != null ? extData.ithList.ToString() : extData.taxonomy != null ? extData.taxonomy.ToString() : "");
-                            xmlWriter.WriteAttributeString("AstroObjectsList", string.Empty);
-                            xmlWriter.WriteAttributeString("Keywords", tourDetails.Tags.Replace(',', ';').Replace(" ",""));
-                            xmlWriter.WriteAttributeString("RelatedTours", relatedTours);
-                            xmlWriter.WriteEndElement();
+                            try
+                            {
+                                var id = Convert.ToInt32(tourId);
+                                var tourDetails = tourDetailList.Find(details => details.ID == id);
+                                if (tourDetails == null || tourDetails.IsDeleted) continue;
+                                var tourContents = tourContentList.Find(model => model.ID == id);
+                                var json = tourDetails.Citation.Replace("json://", "");
+                                var extData = JsonConvert.DeserializeObject<dynamic>(json);
+                                if (webclient && (extData.webclient == null || extData.webclient != true)) continue;
+                                Newtonsoft.Json.Linq.JArray related = extData.related;
+                                string relatedTours = String.Empty;
+                                if (webclient)
+                                {
+                                    foreach (Guid guid in related)
+                                    {
+                                        var relatedTour = tourContentList.Find(t => t.ContentDataID == guid);
+                                        var relatedJson = relatedTour.Citation.Replace("json://", "");
+                                        var relatedExtData = JsonConvert.DeserializeObject<dynamic>(relatedJson);
+                                        if (relatedExtData.webclient != null && relatedExtData.webclient == true)
+                                        {
+                                            if (relatedTours.Length > 0)
+                                            {
+                                                relatedTours += ";";
+                                            }
+                                            relatedTours += guid.ToString();
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    relatedTours = string.Join(";", related);
+                                }
+                                // write folder xml ONLY after first viable tour obj is found
+                                if (!toursInFolder)
+                                {
+                                    xmlWriter.WriteStartElement("Folder");
+                                    xmlWriter.WriteAttributeString("Name", folder.Name);
+                                    xmlWriter.WriteAttributeString("Group", "Tour");
+                                    xmlWriter.WriteAttributeString("Thumbnail", "");
+                                    toursInFolder = true;
+                                }
+                                xmlWriter.WriteStartElement("Tour");
+                                xmlWriter.WriteAttributeString("Title", tourDetails.Name.Replace("&", "&amp;"));
+                                xmlWriter.WriteAttributeString("ID", tourContents.ContentDataID.ToString());
+                                xmlWriter.WriteAttributeString("Description",
+                                    tourDetails.Description.Replace("&", "&amp;"));
+                                xmlWriter.WriteAttributeString("Classification",
+                                    extData["classification"] != null ? extData["classification"].ToString() : "Other");
+                                xmlWriter.WriteAttributeString("AuthorEmail",
+                                    extData.authorEmail != null ? extData.authorEmail.ToString() : "");
+                                xmlWriter.WriteAttributeString("Author",
+                                    extData.author != null ? extData.author.ToString().Replace("&", "&amp;") : "");
+                                xmlWriter.WriteAttributeString("AverageRating",
+                                    tourDetails.AverageRating.ToString(CultureInfo.InvariantCulture));
+                                xmlWriter.WriteAttributeString("LengthInSecs", tourContents.TourLength);
+                                xmlWriter.WriteAttributeString("OrganizationUrl",
+                                    extData.organizationUrl != null
+                                        ? extData.organizationUrl.ToString().Replace("&", "&amp;")
+                                        : "");
+                                xmlWriter.WriteAttributeString("OrganizationName",
+                                    extData.organization != null
+                                        ? extData.organization.ToString().Replace("&", "&amp;")
+                                        : "");
+                                xmlWriter.WriteAttributeString("ITHList",
+                                    extData.ithList != null
+                                        ? extData.ithList.ToString()
+                                        : extData.taxonomy != null ? extData.taxonomy.ToString() : "");
+                                xmlWriter.WriteAttributeString("AstroObjectsList", string.Empty);
+                                xmlWriter.WriteAttributeString("Keywords",
+                                    tourDetails.Tags.Replace(',', ';').Replace(" ", ""));
+                                xmlWriter.WriteAttributeString("RelatedTours", relatedTours);
+                                xmlWriter.WriteEndElement();
+                            }
+                            catch (NullReferenceException)
+                            {
+                                //ignore - deleted tour
+                            }
                         }
-                        xmlWriter.WriteEndElement();
+                        if (toursInFolder)
+                            xmlWriter.WriteEndElement();
                     }
                     
                     xmlWriter.WriteEndElement();
@@ -235,7 +331,7 @@ namespace WWTMVC5.Controllers
                 
                 var blobClient = storageAccount.CreateCloudBlobClient();
                 var cloudBlobContainer = blobClient.GetContainerReference("tours");
-                var toursBlob = cloudBlobContainer.GetBlobReferenceFromServer("alltours.wtml");
+                var toursBlob = cloudBlobContainer.GetBlobReferenceFromServer(webclient? "webclienttours.wtml" : "alltours.wtml");
                 var bytes = new byte[xml.Length * sizeof(char)];
                 Buffer.BlockCopy(xml.ToCharArray(), 0, bytes, 0, bytes.Length);
                 toursBlob.UploadFromByteArray(bytes,0,bytes.Length);

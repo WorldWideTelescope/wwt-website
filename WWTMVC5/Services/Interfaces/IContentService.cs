@@ -4,6 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WWTMVC5.Models;
@@ -23,6 +24,7 @@ namespace WWTMVC5.Services.Interfaces
         /// <returns>Details about the content</returns>
         ContentDetails GetContentDetails(long contentId, long userId);
 
+        ContentDetails GetContentDetails(Guid azureId);
         /// <summary>
         /// Gets the contents from the Layerscape database.
         /// </summary>
