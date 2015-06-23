@@ -9,7 +9,7 @@ using System.Configuration;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Reflection;
-using Microsoft.WindowsAzure.StorageClient;
+using Microsoft.WindowsAzure.Storage.RetryPolicies;
 
 namespace WWTMVC5
 {
@@ -371,11 +371,11 @@ namespace WWTMVC5
         /// <summary>
         /// Gets Retry policy for azure connections.
         /// </summary>
-        public static RetryPolicy DefaultRetryPolicy
+        public static IRetryPolicy DefaultRetryPolicy
         {
             get
             {
-                return RetryPolicies.Retry(3, TimeSpan.FromSeconds(1));
+                return new LinearRetry(TimeSpan.FromSeconds(1), 3);
             }
         }
 
