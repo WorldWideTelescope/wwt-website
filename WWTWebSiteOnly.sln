@@ -17,12 +17,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{2B24D8
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapDataUtil", "MapDataUtil\MapDataUtil.csproj", "{31DC6DC8-AF43-41AC-B9B7-7E77E6CD8950}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WWTLib", "WWTLib\WWTLib.csproj", "{CA87D083-4651-446C-A1E3-C5F8C78A1726}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WWTWebservices", "WWTWebservices\WWTWebservices.csproj", "{1CF4D986-51AD-43F8-A84A-38B6ECBA2172}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,40 +38,6 @@ Global
 		{53EB6FD6-9D50-45D4-9987-328A7AE53E2C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{53EB6FD6-9D50-45D4-9987-328A7AE53E2C}.Release|Mixed Platforms.Deploy.0 = Release|Any CPU
 		{53EB6FD6-9D50-45D4-9987-328A7AE53E2C}.Release|x86.ActiveCfg = Release|Any CPU
-		{31DC6DC8-AF43-41AC-B9B7-7E77E6CD8950}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{31DC6DC8-AF43-41AC-B9B7-7E77E6CD8950}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{31DC6DC8-AF43-41AC-B9B7-7E77E6CD8950}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{31DC6DC8-AF43-41AC-B9B7-7E77E6CD8950}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{31DC6DC8-AF43-41AC-B9B7-7E77E6CD8950}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{31DC6DC8-AF43-41AC-B9B7-7E77E6CD8950}.Debug|x86.Build.0 = Debug|Any CPU
-		{31DC6DC8-AF43-41AC-B9B7-7E77E6CD8950}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{31DC6DC8-AF43-41AC-B9B7-7E77E6CD8950}.Release|Any CPU.Build.0 = Release|Any CPU
-		{31DC6DC8-AF43-41AC-B9B7-7E77E6CD8950}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{31DC6DC8-AF43-41AC-B9B7-7E77E6CD8950}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{31DC6DC8-AF43-41AC-B9B7-7E77E6CD8950}.Release|x86.ActiveCfg = Release|Any CPU
-		{31DC6DC8-AF43-41AC-B9B7-7E77E6CD8950}.Release|x86.Build.0 = Release|Any CPU
-		{CA87D083-4651-446C-A1E3-C5F8C78A1726}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CA87D083-4651-446C-A1E3-C5F8C78A1726}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CA87D083-4651-446C-A1E3-C5F8C78A1726}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{CA87D083-4651-446C-A1E3-C5F8C78A1726}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{CA87D083-4651-446C-A1E3-C5F8C78A1726}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{CA87D083-4651-446C-A1E3-C5F8C78A1726}.Debug|x86.Build.0 = Debug|Any CPU
-		{CA87D083-4651-446C-A1E3-C5F8C78A1726}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CA87D083-4651-446C-A1E3-C5F8C78A1726}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CA87D083-4651-446C-A1E3-C5F8C78A1726}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{CA87D083-4651-446C-A1E3-C5F8C78A1726}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{CA87D083-4651-446C-A1E3-C5F8C78A1726}.Release|x86.ActiveCfg = Release|Any CPU
-		{CA87D083-4651-446C-A1E3-C5F8C78A1726}.Release|x86.Build.0 = Release|Any CPU
-		{1CF4D986-51AD-43F8-A84A-38B6ECBA2172}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1CF4D986-51AD-43F8-A84A-38B6ECBA2172}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1CF4D986-51AD-43F8-A84A-38B6ECBA2172}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{1CF4D986-51AD-43F8-A84A-38B6ECBA2172}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{1CF4D986-51AD-43F8-A84A-38B6ECBA2172}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{1CF4D986-51AD-43F8-A84A-38B6ECBA2172}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1CF4D986-51AD-43F8-A84A-38B6ECBA2172}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1CF4D986-51AD-43F8-A84A-38B6ECBA2172}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{1CF4D986-51AD-43F8-A84A-38B6ECBA2172}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{1CF4D986-51AD-43F8-A84A-38B6ECBA2172}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
