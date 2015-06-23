@@ -17813,7 +17813,7 @@ window.wwtlib = function(){
     return '';
   };
   Util.getProxiedUrl = function(url) {
-    if (ss.startsWith(url.toLowerCase(), 'http://worldwidetelescope.org') || ss.startsWith(url.toLowerCase(), 'http://www.worldwidetelescope.org')) {
+    if ((ss.startsWith(url.toLowerCase(), 'http://worldwidetelescope.org') || ss.startsWith(url.toLowerCase(), 'http://www.worldwidetelescope.org')) && url.toLowerCase().indexOf('worldwidetelescope.org/wwtweb/') === -1) {
       return url.split('worldwidetelescope.org')[1];
     }
     if (ss.startsWith(url.toLowerCase(), 'http')) {

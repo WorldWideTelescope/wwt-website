@@ -97,12 +97,6 @@ if (top === self) {
 	    //}
 
 	    function initLiveId() {
-	        //WL.Event.subscribe('auth.login', logWL);
-	        //WL.Event.subscribe('auth.logout', logWL);
-	        //WL.Event.subscribe('auth.sessionChange', logWL);
-	        //WL.Event.subscribe('auth.statusChange', logWL);
-	        //WL.Event.subscribe('wl.log', logWL);
-
 	        var autoSignin = false;
 	        var signedIn = $('#signinContainer input').length !== 1;
 	        if (wwt.user.get('rememberMe') === false) {
@@ -191,7 +185,7 @@ if (top === self) {
                     loginFail(data);
                 }
             }).error(loginFail);
-        }/*"wl_auth=client_id=000000004015657B&status=connected&request_ts=1434563935347&access_token=EwCQAq1DBAAUGCCXc8wU%2FzFu9QnLdZXy%2BYnElFkAAf5Wo9QRY782aeEuOnHrx%2B7aVgtah5XfQMvMhCDjDV%2Fn8Tdi8qDiifSddVQxSsa6zdkH4bXxvLhfSID9mylb1PksmO8Af6X9kSRfCqs3o5r4lmvDzIGUVtR4MFrGOfgNsoHj7lTrF%2BiMDP1hWUdVIzcPICs17w58k5F6OCBA3%2BoMKxv9qCvCx%2BLZtW01J9MtF6%2BhQHq2s%2Bf08s3K%2Fv79x7GsB6d64WD6CIPmYCkVak47XWmC9h2%2BK8UrT9WwvQRpYWESdC%2FiwofgmDqZR1vr%2FI%2F83gFyDtRx6Z0kEkBdPrIj4%2B%2Bu%2BzoADbakBu4g%2F1buuqnxq60KoId77f6mfl0z%2FCMDZgAACB5fe39AVlF2YAGOJDZLydCTtviMayffgQSbVj6d0VR97EKL3%2BQaWW6DY%2F9MdefxRRDCEksy%2FgtTxYtg65l1fzo%2B%2B3ICldWk0X%2BBp0x8jcQzL%2FOwqz6jMAmKxR7Hb8ZmcD4X2E2zOh5stp1ke%2BpeiY%2BG3PY08Lb4ml%2BlsdrAQgktj00cFnVNdpWcHCAmMzEe%2FH5PZB%2BIpBAh5bmemo68DqGHLU%2FYY1GCikwZoXHe5YpF0ty8g9DoeCB5dbGBAeM1pPVcJZPcUDD0uTQby3Ldd1ju%2BD3i1xNxsXrNIX32dmNtUy2fzjoB9JWcpHneUHCyckbUiFid4BnSHwkrZCIt%2FvLwcHoyk0Y7r8O0FrKmxfRhntd9foRqcaIaMTjhNbTR3Z9IlSUEEojMudkfcMTYrPtcqPyR7p7Lw8JoUABymHQk7zQHT7fPxw%2BLLGgtwoZUnosd9Vy9JYvnY6DLuvG8J2U9kcMe5Ev9jJE6YAE%3D&authentication_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImtpZCI6IjEifQ.eyJ2ZXIiOjEsImlzcyI6InVybjp3aW5kb3dzOmxpdmVpZCIsImV4cCI6MTQzNDY1MDMzNCwidWlkIjoiN2Y0ZDc5ODc1Y2Q0YTliYjY2YjUxMTczNjk5YmQyZmUiLCJhdWQiOiJ3b3JsZHdpZGV0ZWxlc2NvcGUub3JnIiwidXJuOm1pY3Jvc29mdDphcHB1cmkiOiJhcHBpZDovLzAwMDAwMDAwNDAxNTY1N0IiLCJ1cm46bWljcm9zb2Z0OmFwcGlkIjoiMDAwMDAwMDA0MDE1NjU3QiJ9.IpjItIYfSPF_zRm9F3gziioU9OZyKbqY9i8gSlQeuDw&scope=wl.signin%20wl.emails&expires_in=3599&expires=1434567538; wl_auth=client_id=000000004015657B&status=unchecked"*/
+        }
 
 	    var loginFail = function(responseFailed) {
             wwt.signingIn = false;

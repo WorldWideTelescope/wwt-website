@@ -191,7 +191,7 @@ namespace WWTMVC5.Controllers
 
             var blobClient = storageAccount.CreateCloudBlobClient();
             var cloudBlobContainer = blobClient.GetContainerReference("tours");
-            var toursBlob = cloudBlobContainer.GetBlobReferenceFromServer("alltours.wtml");
+            var toursBlob = cloudBlobContainer.GetBlobReferenceFromServer(webclient? "webclienttours.wtml" : "alltours.wtml");
 
             toursBlob.DownloadToStream(Response.OutputStream);
             return new EmptyResult();
@@ -247,7 +247,7 @@ namespace WWTMVC5.Controllers
                                 var extData = JsonConvert.DeserializeObject<dynamic>(json);
                                 if (webclient && (extData.webclient == null || extData.webclient != true)) continue;
                                 Newtonsoft.Json.Linq.JArray related = extData.related;
-                                string relatedTours = String.Empty;
+                                var relatedTours = string.Empty;
                                 if (webclient)
                                 {
                                     foreach (Guid guid in related)
@@ -255,14 +255,14 @@ namespace WWTMVC5.Controllers
                                         var relatedTour = tourContentList.Find(t => t.ContentDataID == guid);
                                         var relatedJson = relatedTour.Citation.Replace("json://", "");
                                         var relatedExtData = JsonConvert.DeserializeObject<dynamic>(relatedJson);
-                                        if (relatedExtData.webclient != null && relatedExtData.webclient == true)
+                                        // only include related tours that are also webclient friendly
+                                        if (relatedExtData.webclient == null || relatedExtData.webclient != true)
+                                            continue;
+                                        if (relatedTours.Length > 0)
                                         {
-                                            if (relatedTours.Length > 0)
-                                            {
-                                                relatedTours += ";";
-                                            }
-                                            relatedTours += guid.ToString();
+                                            relatedTours += ";";
                                         }
+                                        relatedTours += guid.ToString();
                                     }
                                 }
                                 else
