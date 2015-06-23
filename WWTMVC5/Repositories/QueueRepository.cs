@@ -32,9 +32,13 @@ namespace WWTMVC5.Repositories
         [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands", Justification = "Code does not grant its callers access to operations or resources that can be used in a destructive manner.")]
         public QueueRepository()
         {
-            _storageAccount = CloudStorageAccount.Parse(ConfigReader<string>.GetSetting("EarthOnlineStorage"));
-            _blobClient = _storageAccount.CreateCloudBlobClient();
-            _queueClient = _storageAccount.CreateCloudQueueClient();
+            try
+            {
+                _storageAccount = CloudStorageAccount.Parse(ConfigReader<string>.GetSetting("EarthOnlineStorage"));
+                _blobClient = _storageAccount.CreateCloudBlobClient();
+                _queueClient = _storageAccount.CreateCloudQueueClient();
+            }
+            catch (Exception) { }//fail silently for developers without valid storage settings
         }
 
         /// <summary>

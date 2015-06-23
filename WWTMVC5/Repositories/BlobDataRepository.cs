@@ -33,10 +33,12 @@ namespace WWTMVC5.Repositories
             )]
         public BlobDataRepository()
         {
-               
-            _storageAccount = CloudStorageAccount.Parse(ConfigReader<string>.GetSetting("EarthOnlineStorage"));
-            _blobClient = _storageAccount.CreateCloudBlobClient();
-            
+            try
+            {
+                _storageAccount = CloudStorageAccount.Parse(ConfigReader<string>.GetSetting("EarthOnlineStorage"));
+                _blobClient = _storageAccount.CreateCloudBlobClient();
+            }
+            catch (Exception) { }// setting not available
         }
 
         /// <summary>
