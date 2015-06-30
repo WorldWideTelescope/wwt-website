@@ -1,3 +1,5 @@
+Copyright (C) .NET Foundation
+
 # WorldWideTelescope.org web site code
 WorldWide Telescope (WWT) enables you to explore the universe, bringing together imagery from the best ground- and space-based telescopes in the world and combining it with 3D navigation, data visualization, and more. Please see [WorldWideTelescope.org](http://WorldWideTelescope.org/) for an overview.
 
@@ -9,4 +11,7 @@ We plan to add more documentation to this README soon, but in the meantime pleas
 
 * https://github.com/WorldWideTelescope/wwt-windows-client
 * https://github.com/WorldWideTelescope/wwt-web-client
+
+
+[WorldWide Telescope](http://worldwidetelescope.org) is a [.NET Foundation](http://dotnetfoundation.org) project
 
