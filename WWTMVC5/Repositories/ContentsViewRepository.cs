@@ -115,16 +115,16 @@ namespace WWTMVC5.Repositories
         private Expression<Func<ContentsView, bool>> GetContentSearchCondition(string searchText, long userId)
         {
             searchText = searchText.ToLower(CultureInfo.CurrentCulture);
-            return (ContentsView c) => (c.Title.ToLower().Contains(searchText) ||
-                                            c.Description.ToLower().Contains(searchText) ||
-                                            c.DistributedBy.ToLower().Contains(searchText) ||
-                                            c.ProducedBy.ToLower().Contains(searchText) ||
-                                            c.Citation.ToLower().Contains(searchText) ||
-                                            c.Tags.ToLower().Contains(searchText)) &&
-                                            (c.AccessType == Resources.Public || 
-                                                EarthOnlineDbContext.User.Where(user => user.UserID == userId && user.UserTypeID == 1).FirstOrDefault() != null ||
-                                                EarthOnlineDbContext.UserCommunities.Where(uc => uc.UserID == userId && uc.CommunityId == c.CommunityID && uc.RoleID >= (int)UserRole.Reader).FirstOrDefault() != null ||
-                                                c.CreatedByID == userId);
+            return c => (c.Title.ToLower().Contains(searchText) ||
+                        c.Description.ToLower().Contains(searchText) ||
+                        c.DistributedBy.ToLower().Contains(searchText) ||
+                        c.ProducedBy.ToLower().Contains(searchText) ||
+                        c.Citation.ToLower().Contains(searchText) ||
+                        c.Tags.ToLower().Contains(searchText)) &&
+                        (c.AccessType == Resources.Public || 
+                            EarthOnlineDbContext.User.FirstOrDefault(user => user.UserID == userId && user.UserTypeID == 1) != null ||
+                            EarthOnlineDbContext.UserCommunities.FirstOrDefault(uc => uc.UserID == userId && uc.CommunityId == c.CommunityID && uc.RoleID >= (int)UserRole.Reader) != null ||
+                            c.CreatedByID == userId);
         }
     }
 }

@@ -339,6 +339,14 @@ namespace WWTMVC5.Controllers
             payloadDetails.Thumbnail = RewriteThumbnailUrl(payloadDetails.Thumbnail, "defaultfolderwwtthumbnail");
             payloadDetails.Name = Resources.MyFolderLabel;
 
+            //upgrade notice
+            //var upgradeLink = new Place();
+            //upgradeLink.Name = "Upgrade Notice";
+            //upgradeLink.Url = "/upgrade/index?wwtfull=true";
+            //upgradeLink.Permission = Permission.Reader;
+            //upgradeLink.Thumbnail = RewriteThumbnailUrl(upgradeLink.Thumbnail, "upgradenotice");
+            //payloadDetails.Links.Add(upgradeLink);
+
             // Get My communities node.
             var myCommunities = PayloadDetailsExtensions.InitializePayload();
             myCommunities.Name = Resources.MyCommunitiesWWTLabel;

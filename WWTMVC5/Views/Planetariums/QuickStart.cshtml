@@ -1,0 +1,49 @@
+﻿@{
+    Layout = "~/Views/Shared/_ContentPage.cshtml";
+}
+@section leftnav{
+    @Html.Partial("~/Views/Planetariums/LeftNav.cshtml")
+}
+
+<h1>Planetarium Quick Start</h1>
+<p>This guide is intended to provide a simple path for planetarium setups.  It assumes that you aren’t very familiar with WorldWide Telescope (WWT) in domes and steps you through setting it up, loading and playing a tour designed for domes.  This guide is meant to be a starting place and is not exhaustive.</p>
+<p>Digital planetarium systems are either single computer, which can drive a single projector or cluster of computers which is needed to drive multiple projectors.  WWT can be used in both situations.  Most steps are common but we describe the two scenarios separately.</p>
+<p><strong>Note: </strong>There is no special dome version of WWT. </p>
+<h3>Single Computer Quick Start</h3>
+<p>This is the simplest setup and has a single computer with two video outputs.  One output acts as the console and the other drives the projector that drives the some through a fisheye lens or spherical mirror.</p>
+<ol>
+    <li>Get the hardware ready.
+        <ol>
+            <li>Make sure the computer is setup with the primary display connected to a desktop monitor and the secondary display connected to the projector powering the dome. </li>
+            <li>Also, make sure the audio output of the computer is connected to a dome audio system.</li>
+            <li>Connect the computer to the network.</li>
+        </ol>
+    </li>
+    <li>Install the latest build of WWT - <a href="/Download/">http://worldwidetelescope.org/Download/</a>.</li>
+    <li>Startup WWT.</li>
+    <li>Setup Dome.  <strong>View/Full Dome/Dome Setup</strong>.   Under Dome Type, you can select “FishEye,” “Mirrordome 16:9” or “Mirrordome 4:3.”  You can also set the Dome Tilt.  </li>
+    <li>Send dome view to projector by selecting <strong>View/Full Dome/Detatch Main View to Second Monitor</strong>.  You should see the view in dome format through your connected projector.</li>
+    <li>Download the full dome version of the Impacts tour - <a href="http://cdn.worldwidetelescope.org/Content/Planetariums/Impacts%20-%20FULL%20DOME%20v2.1.wtt">http://cdn.worldwidetelescope.org/Content/Planetariums/Impacts%20-%20FULL%20DOME%20v2.1.wtt</a>.</li>
+    <li>Load and play the tour.  Run the tour through once to cache the data.  Subsequent viewing should not show data loading.  </li>
+    <li>If performance is choppy take a look at the <a href="/Learn/SettingUp#performance">Setting Up/Tweaking Performance</a> document.</li>
+</ol>
+<h3>Cluster Quick Start</h3>
+<p>WWT can be setup on multiple computers with a single <strong>master</strong> and 1 or more <strong>projection servers</strong>.  You can build your own system from scratch or install WWT alongside an existing planetarium system. </p>
+<ol>
+    <li>Get the hardware ready.
+        <ol>
+            <li>Make sure the master computer is setup connected to a desktop monitor and all projection servers (one per projector) are connected to their projectors and that all servers and projectors are powered on.</li>
+            <li>Also, make sure the audio output of the master computer is connected to a dome audio system.</li>
+            <li>Connect all computers to the network.</li>
+        </ol>
+    </li>
+    <li>Setup the cluster environment.  Usually people make a network share that all projection servers can access and put the installer there and then use VNC to login to each computer and do the initial install.  Or you can login to each projector server and download from a USB drive or the Internet.</li>
+    <li>Follow the <a href="@Model.ResLoc/Content/Planetariums/Controller Mapping.pdf">Multi-Channel Setup Guide</a></li>
+    <li>Download the full dome version of the Impacts tour - <a href="http://cdn.worldwidetelescope.org/Content/Planetariums/Impacts%20-%20FULL%20DOME%20v2.1.wtt">http://cdn.worldwidetelescope.org/Content/Planetariums/Impacts%20-%20FULL%20DOME%20v2.1.wtt</a></li>
+    <li>Load the Impacts tour on the Master. </li>
+    <li>Send the Tour to the projection servers – <strong>Guided Tours/Send Tour to Projection Servers</strong>.  Make sure that <strong>Guided Tours/Automatic Tour Sync with Projects Servers</strong> is checked.  This will ensure that any changes to the tour on the master are sent immediately to the projection severs.</li>
+    <li>Load and play the tour.  Run the tour through once to cache the data.  Subsequent viewing should not show data loading</li>
+    <li>If performance is choppy take a look at the <a href="/Learn/SettingUp#performance">Setting Up/Tweaking Performance</a> document.</li>
+</ol>
+<h3>Making Your Own Dome Shows</h3>
+<p>You can play any Tour on the dome.  Some objects may not be placed in the desired location and timing may require adjustment.  Of course you can also create tours from scratch designed specifically for the dome.  Details of authoring for the dome are available <a href="/Learn/Authoring#domeauthoring">here</a>.</p>

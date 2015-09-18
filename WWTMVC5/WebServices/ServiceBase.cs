@@ -19,17 +19,7 @@ namespace WWTMVC5.WebServices
         [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "We are creating a new instance of profileDetails every time.")]
         [SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "It is required as per the design.")]
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "RPS calls")]
-        protected static bool ValidateAuthentication(bool throwWebFaultException, out ProfileDetails profileDetails)
-        {
-            LiveLoginResult result = SessionWrapper.Get<LiveLoginResult>("LiveConnectResult");
-            if (result != null && result.Status == LiveConnectSessionStatus.Connected)
-            {
-                profileDetails = SessionWrapper.Get<ProfileDetails>("ProfileDetails");
-                return true;
-            }
-            profileDetails = new ProfileDetails();
-            return false;
-        }
+        
 
         protected static long ValidateEntityId(string id)
         {

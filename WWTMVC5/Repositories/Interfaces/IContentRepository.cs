@@ -46,5 +46,7 @@ namespace WWTMVC5.Repositories.Interfaces
         /// Collection of IDs.
         /// </returns>
         IEnumerable<long> GetLatestContentIDs(int count);
+
+        Content GetContent(Guid contentId, bool? deletedCondition);
     }
 }

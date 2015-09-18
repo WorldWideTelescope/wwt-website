@@ -702,8 +702,8 @@ namespace WWTMVC5.Services
         /// <returns>Payload details.</returns>
         public async Task<PayloadDetails> GetRootCommunities(long userId)
         {
-            var currentUserRole = _userRepository.GetUserRole(userId, null);
-            var userCommunityIds = _userRepository.GetUserCommunitiesForRole(userId, currentUserRole, false);
+            //var currentUserRole = _userRepository.GetUserRole(userId, null);this yields 0 results
+            var userCommunityIds = _userRepository.GetUserCommunitiesForRole(userId, UserRole.Contributor, false);
             Expression<Func<Community, bool>> condition = c => userCommunityIds.Contains(c.CommunityID);
 
             Func<Community, object> orderBy = c => c.ModifiedDatetime;

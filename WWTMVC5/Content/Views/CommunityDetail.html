@@ -138,7 +138,7 @@
                 <i class="fa fa-trash"></i>
                 Delete Community
             </a>
-            <a class="btn btn-sm btn-info" data-toggle="modal" data-target="#joinCommunityModal" ng-if="permission == null || permission.CurrentUserPermission < 2">Join</a>
+            <a class="btn btn-sm btn-info" data-toggle="modal" data-target="#joinCommunityModal" ng-if="permission == null || permission.CurrentUserPermission < 2 || permission.Result == null">Join</a>
             <a class="btn btn-primary btn-sm" ng-href="#/CommunityDetail/{{community.ParentId}}" ng-if="community.ParentName != 'None' && community.ParentId != 0">
                 <i class="fa fa-level-up"></i>
                 View Parent Community

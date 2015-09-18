@@ -9,11 +9,10 @@
             data[k] = v;
             localStorage.setItem('userSettings', JSON.stringify(data));
         } catch (ex) {
-            delete data['accessToken'];
-            delete data["authToken"];
             
         }
     }
+
     function getKey(k) {
         return data[k];
     }
@@ -21,7 +20,6 @@
     var init = function () {
         var storedData = localStorage.getItem('userSettings');
         data = storedData ? JSON.parse(storedData) : {};
-        //console.log(data);
     };
 
     init();

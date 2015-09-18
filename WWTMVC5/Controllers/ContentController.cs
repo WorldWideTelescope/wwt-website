@@ -11,6 +11,7 @@ using System.Dynamic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -23,6 +24,7 @@ using WWTMVC5.Models;
 using WWTMVC5.Services.Interfaces;
 using WWTMVC5.ViewModels;
 using WWTMVC5.WebServices;
+using Formatting = System.Xml.Formatting;
 
 namespace WWTMVC5.Controllers
 {
@@ -78,7 +80,7 @@ namespace WWTMVC5.Controllers
         {
             if (CurrentUserId == 0)
             {
-                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+                await TryAuthenticateFromHttpContext();
             }
             if (!id.HasValue)
             {
@@ -106,7 +108,7 @@ namespace WWTMVC5.Controllers
         {
             if (CurrentUserId == 0)
             {
-                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+                await TryAuthenticateFromHttpContext();
             }
             return new JsonResult
             {
@@ -121,7 +123,7 @@ namespace WWTMVC5.Controllers
         {
             if (CurrentUserId == 0)
             {
-                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+                await TryAuthenticateFromHttpContext();
             }
             var communities = _contentService.GetParentCommunities(CurrentUserId);
             var result = new List<object>();
@@ -159,7 +161,7 @@ namespace WWTMVC5.Controllers
         {
             if (CurrentUserId == 0)
             {
-                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+                await TryAuthenticateFromHttpContext();
             }
             if (ModelState.IsValid)
             {
@@ -182,7 +184,7 @@ namespace WWTMVC5.Controllers
         {
             if (CurrentUserId == 0)
             {
-                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+                await TryAuthenticateFromHttpContext();
             }
 
             var contentInputViewModel = new ContentInputViewModel();
@@ -210,7 +212,7 @@ namespace WWTMVC5.Controllers
         {
             if (CurrentUserId == 0)
             {
-                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+                await TryAuthenticateFromHttpContext();
             }
 
             //TODO: understand why can't cast the viewmodel directly  the way we do with new content??
@@ -245,7 +247,7 @@ namespace WWTMVC5.Controllers
         {
             if (CurrentUserId == 0)
             {
-                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+                await TryAuthenticateFromHttpContext();
             }
             OperationStatus status = null;
             if (CurrentUserId != 0)
@@ -259,8 +261,6 @@ namespace WWTMVC5.Controllers
             return new JsonResult{Data=status};
         }
 
-        
-
         /// <summary>
         /// Controller action which gets the content file upload view.
         /// </summary>
@@ -271,14 +271,15 @@ namespace WWTMVC5.Controllers
         {
             if (CurrentUserId == 0)
             {
-                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+                await TryAuthenticateFromHttpContext();
             }
             var contentDataViewModel = new ContentDataViewModel();
             XmlDocument tourDoc = null;
+            var fileDetail = new FileDetail();
             if (contentFile != null)
             {
                 // Get File details.
-                var fileDetail = new FileDetail();
+                
                 fileDetail.SetValuesFrom(contentFile);
 
                 contentDataViewModel.ContentDataID = fileDetail.AzureID;
@@ -296,7 +297,7 @@ namespace WWTMVC5.Controllers
                 // Upload associated file in the temporary container. Once the user publishes the content 
                 // then we will move the file from temporary container to the actual container.
                 // TODO: Need to have clean up task which will delete all unused file from temporary container.
-                _contentService.UploadTemporaryFile(fileDetail);
+               
 
                 // Only for tour files, properties of the tour like title, description, author and thumbnail should be taken.
                 if (Constants.TourFileExtension.Equals(Path.GetExtension(contentFile.FileName), StringComparison.OrdinalIgnoreCase))
@@ -313,6 +314,7 @@ namespace WWTMVC5.Controllers
                         contentDataViewModel.TourDescription = tourDoc.GetAttributeValue("Tour", "Descirption");
                         contentDataViewModel.TourDistributedBy = tourDoc.GetAttributeValue("Tour", "Author");
                         contentDataViewModel.TourLength = tourDoc.GetAttributeValue("Tour", "RunTime");
+                        
                     }
                 }
                 else if (Constants.CollectionFileExtension.Equals(Path.GetExtension(contentFile.FileName), StringComparison.OrdinalIgnoreCase))
@@ -328,8 +330,10 @@ namespace WWTMVC5.Controllers
                     }
                 }
             }
-
             
+
+            _contentService.UploadTemporaryFile(fileDetail);
+
             return Json(new
             {
                 contentData=contentDataViewModel,
@@ -369,7 +373,7 @@ namespace WWTMVC5.Controllers
         {
             if (CurrentUserId == 0)
             {
-                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+                await TryAuthenticateFromHttpContext();
             }
             if (associatedFile != null)
             {

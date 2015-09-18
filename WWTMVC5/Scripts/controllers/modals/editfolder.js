@@ -102,18 +102,18 @@
                     console.log('error in community:', community);
                 }
                 function eliminateDuplicates(arr) {
-                    var i,
-                        len = arr.length,
-                        out = [],
-                        obj = {};
+                    var result = [],
+                    unique = {};
 
-                    for (i = 0; i < len; i++) {
-                        obj[arr[i]] = 0;
+                    for (var i = 0; i < arr.length; i++) {
+                        unique[arr[i]] = 0;
                     }
-                    for (i in obj) {
-                        out.push(i);
+                    for (value in unique) {
+                        if (unique.hasOwnProperty(value)) {
+                            result.push(value);
+                        }
                     }
-                    return out;
+                    return result;
                 }
 
                 community.Name = $scope.folder.Name;

@@ -47,61 +47,87 @@ namespace WWTMVC5.Controllers
             "researchers",
             "support",
             "terms",
+            "upgrade",
             "wwtinaction",
             "wwtstories"
         };
     
         public async Task<ActionResult> Index()
         {
-            return GetViewOrRedirect(string.Empty,"index", _baseModel);
+            return await GetViewOrRedirect(string.Empty,"index", _baseModel);
         }
 
         [AllowAnonymous]
         [Route("LiveId/Authenticate")]
         public async Task<JsonResult> Authenticate()
         {
-            var result = await TryAuthenticateFromHttpContext(_communityService, _notificationService);
-            if (result.Status == LiveConnectSessionStatus.Connected)
+            var profile = await TryAuthenticateFromHttpContext();
+            if (profile != null)
             {
-                _baseModel.User = SessionWrapper.Get<ProfileDetails>("ProfileDetails");
+                _baseModel.User = profile;
                 return Json(new
                 {
-                    Status = result.Status.ToString(), 
+                    Status = "Connected",
                     Session = new
                     {
-                        result.Session.AccessToken,
-                        result.Session.AuthenticationToken,
-                        Expires = result.Session.Expires.ToLocalTime().ToString(),
-                        result.Session.RefreshToken,
-                        result.Session.Scopes,
+                        
                         User = SessionWrapper.Get<string>("CurrentUserProfileName")
                     },
-                   
+
                 }, JsonRequestBehavior.AllowGet);
             }
 
             var svc = new LiveIdAuth();
             var url = svc.GetLogoutUrl("http://" + Request.Headers.Get("host"));
-            
+
             SessionWrapper.Clear();
             return Json(new
             {
-                Status = result.Status.ToString(),
+                Status = "unknown",
                 S = url
             }, JsonRequestBehavior.AllowGet);
+        }
+
+        
+        [Route("LiveId/AuthenticateFromCode/{code}")]
+        public async Task<ActionResult> AuthenticateFromCode(string code)
+        {
+            var user = await TryAuthenticateFromAuthCode(code);
+            _baseModel.User = user;
+            string url = Uri.UnescapeDataString(Request.QueryString["returnUrl"]).ToLower();
+            if (url.IndexOf("/community") != -1)
+            {
+                return Redirect("/Community");
+            }
+            if (url.IndexOf("/webclient") != -1)
+            {
+                return Redirect("/webclient?loggedIn=true");
+            }
+
+            return Redirect("/");
         }
 
         [Route("Logout")]
         public ActionResult Logout()
         {
-            var svc = SessionWrapper.Get<LiveIdAuth>("LiveAuthSvc");
-            var url = "/";
-            if (svc != null) 
-            {
-                url = svc.GetLogoutUrl("http://" + Request.Headers.Get("host")); 
-            }
+            var svc = new LiveIdAuth();
+            var url =  svc.GetLogoutUrl("http://" + Request.Headers.Get("host")); 
+            
             SessionWrapper.Clear();
-            return Redirect(url); //View("~/Views/Index.cshtml", baseModel);
+            var refreshTokenCookie = Response.Cookies["refresh_token"];
+            var accessTokenCookie = Response.Cookies["access_token"];
+            if (refreshTokenCookie != null && !string.IsNullOrEmpty(refreshTokenCookie.Value))
+            {
+                refreshTokenCookie.Expires = DateTime.Now.AddDays(-1);
+                Response.Cookies.Add(refreshTokenCookie);
+            }
+            if (accessTokenCookie != null && !string.IsNullOrEmpty(accessTokenCookie.Value))
+            {
+                accessTokenCookie.Expires = DateTime.Now.AddDays(-1);
+                Response.Cookies.Add(accessTokenCookie);
+            }
+            
+            return Redirect(url); 
         }
 
         [Route("{group}/{page=Index}")]
@@ -119,15 +145,15 @@ namespace WWTMVC5.Controllers
                 }
                 if (page.Contains(".msi") || (page.ToLower() == "error" && Request.RawUrl.Contains(".msi")))
                 {
-                    return GetViewOrRedirect("download","index", _baseModel);
+                    return await GetViewOrRedirect("download","index", _baseModel);
                 }
                 if (group.ToLower() == "community" && page.ToLower() == "profile" && _baseModel.User == null)
                 {
-                    await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+                    await TryAuthenticateFromHttpContext();
                     if (CurrentUserId != 0)
                     {
                         _baseModel.User = SessionWrapper.Get<ProfileDetails>("ProfileDetails");
-                        return GetViewOrRedirect(group, page, _baseModel);
+                        return await GetViewOrRedirect(group, page, _baseModel);
                     }
                     
                     return Redirect("/Community");
@@ -136,7 +162,7 @@ namespace WWTMVC5.Controllers
                 ViewBag.group = group;
                 ViewBag.CurrentUserId = CurrentUserId;
 
-                return GetViewOrRedirect(group, page, _baseModel);
+                return await GetViewOrRedirect(group, page, _baseModel);
             }
             catch (Exception ex)
             {
@@ -152,7 +178,7 @@ namespace WWTMVC5.Controllers
         /// <param name="page"></param>
         /// <param name="model"></param>
         /// <returns></returns>
-        private ActionResult GetViewOrRedirect(string group, string page, BaseModel model)
+        private async Task<ActionResult> GetViewOrRedirect(string group, string page, BaseModel model)
         {
             model.IsOpenWwtKiosk = Request.Headers.Get("host").ToLower().Contains("openwwt.org");
 
@@ -161,13 +187,24 @@ namespace WWTMVC5.Controllers
                 group = "openwwt";
                 page = "index";
             }
+            if (model.User == null)
+            {
+                if (Request.QueryString["code"] != null)
+                {
+                    model.User = await TryAuthenticateFromAuthCode(Request.QueryString["code"]);
+                }
+                if (Request.Cookies["refresh_token"] != null)
+                {
+                    model.User = await TryAuthenticateFromHttpContext();
+                }
+            }
             return group == string.Empty ? View("~/Views/index.cshtml", model) : View("~/Views/" + group + "/" + page + ".cshtml", model);
         }
 
         //Ensure old webform routes still return the proper view
         private string GetQsPage(string page)
         {
-            if (page == "Index" && Request.QueryString.Count == 1)
+            if (page == "Index" && Request.QueryString.Count == 1 && Request.QueryString["code"] == null)
             {
                 page = Request.QueryString.Get(0);
             }

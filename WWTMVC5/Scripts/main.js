@@ -86,6 +86,7 @@ if (top === self) {
 	        $('#accordion').on('click', wwt.accordianClick);
 	        $('#chkRemember').on('change', function() {
 	            wwt.user.set('rememberMe', $(this).prop('checked'));
+	            wwt.autoSignin = $(this).prop('checked');
 	        });
 	    }
 
@@ -97,17 +98,24 @@ if (top === self) {
 	    //}
 
 	    function initLiveId() {
-	        var autoSignin = false;
+	        if (getQSValue('code') != null) {
+	            var returnUrl = location.href.split('?')[0];
+	            location.href = '/LiveId/AuthenticateFromCode/' + getQSValue('code') +
+	                '?returnUrl=' + encodeURIComponent(returnUrl);
+	            return;
+	        }
+	        var autoSignin = wwt.autoSignin = false;
 	        var signedIn = $('#signinContainer input').length !== 1;
 	        if (wwt.user.get('rememberMe') === false) {
 	            $('#chkRemember').prop('checked', false);
 	        }
 	        else if (wwt.user.get('rememberMe') === true) {
 	            $('#chkRemember').prop('checked', true);
-	            autoSignin = true;
+	            autoSignin = wwt.autoSignin = true;
 	        } else {
 	            wwt.user.set('rememberMe', false);
 	        }
+	        
 	        if (wwt.currentResolution === 'md' || wwt.currentResolution === 'lg') {
 	            $('#signinContainer label').slideUp(function() {
 	                $('.sign-in').show();
@@ -116,9 +124,9 @@ if (top === self) {
 	        if (!signedIn) {
 	            WL.init({
 	                client_id: _liveClientId,
-	                redirect_uri: 'http://' + location.host + '/Community',
+	                redirect_uri: 'http://' + location.host,
 	                response_type: "token",
-                    logging:true
+	                logging:true
 	            });
 	        }
 	        $('#signinContainer').on('mouseenter', function () {
@@ -130,7 +138,7 @@ if (top === self) {
 	                $(this).find('label').slideUp();
 	            }
 	        }).find('#signin').on('click', function () {
-	            signinScope = $('#chkRemember').prop('checked') ? 'wl.signin' : 'wl.basic';
+	            //signinScope = $('#chkRemember').prop('checked') ? 'wl.signin' : 'wl.basic';
 	            signIn();
 	        });
 
@@ -142,8 +150,21 @@ if (top === self) {
 
 	    function signIn() {
 	        wwt.signingIn = true;
+	        if (wwt.autoSignin) {
+	            if (wwt.user.get('authCodeRedirect')) {
+	                cleanCookies();
+	            }
+	            wwt.user.set('authCodeRedirect', true);
+	            var dir = location.href.toLowerCase().indexOf('/community') !== -1 ? '/community' : '';
+	            var redir = 'http://' + location.host + dir;
+	            var wlUrl = 'https://login.live.com/oauth20_authorize.srf?client_id=' +
+                    _liveClientId + '&scope=wl.offline_access%20wl.emails&response_type=code&redirect_uri=' +
+                    encodeURIComponent(redir) + '&display=popup';
+	            location.href = wlUrl;
+	            return;
+	        }
 	        WL.login({
-	            scope: ['wl.signin', 'wl.emails']//, "wl.offline_access"
+	            scope: ['wl.offline_access', 'wl.emails']//, "wl.offline_access"
 	        }).then(function (session) {
 	            if (!session.error) {
 	                $('#signinContainer label').html('&nbsp;');
@@ -197,12 +218,16 @@ if (top === self) {
                 WL.logout();
             } else {
                 // Cleanse wl_auth cookie
-                var hosts = ['http://www.worldwidetelescope.org', 'www.worldwidetelescope.org', '.worldwidetelescope.org', 'worldwidetelescope.org'];
-                document.cookie = 'wl_auth=; expires=Thu, 01-Jan-1970 00:00:01 GMT;';
-                for (var i = 0; i < hosts.length; i++) {
-                    document.cookie = 'wl_auth=; expires=Thu, 01-Jan-1970 00:00:01 GMT;domain=' + hosts[i] + ';path=/';
-                }
+                cleanCookies();
                 tryServerSignin();
+            }
+        }
+
+        var cleanCookies = function() {
+            var hosts = ['.wwtstaging.azurewebsites.net', 'wwtstaging.azurewebsites.net', '.worldwidetelescope.org', 'www.worldwidetelescope.org', 'worldwidetelescope.org'];
+            document.cookie = 'wl_auth=; expires=Thu, 01-Jan-1970 00:00:01 GMT;';
+            for (var i = 0; i < hosts.length; i++) {
+                document.cookie = 'wl_auth=; expires=Thu, 01-Jan-1970 00:00:01 GMT;domain=' + hosts[i] + ';path=/';
             }
         }
 
@@ -431,7 +456,7 @@ function getQSValue(name) {
 	var regex = new RegExp(regexS);
 	var results = regex.exec(window.location.href);
 	if (results == null)
-		return "";
+		return null;
 	else
 		return results[1];
 }

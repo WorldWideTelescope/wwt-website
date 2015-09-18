@@ -6,18 +6,20 @@
 
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using System.Xml;
 using AutoMapper;
 using Newtonsoft.Json;
 using WWTMVC5.Extensions;
 using WWTMVC5.Models;
-using WWTMVC5.Properties;
 using WWTMVC5.Services.Interfaces;
 using WWTMVC5.ViewModels;
 using Formatting = System.Xml.Formatting;
@@ -78,7 +80,7 @@ namespace WWTMVC5.Controllers
         {
             if (CurrentUserId == 0)
             {
-                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+                await TryAuthenticateFromHttpContext();
             }
             var communityDetails = await _communityService.GetCommunityDetails(id.Value, CurrentUserId, true, true);
             var permissionDetails = GetUserPermissionDetails(id.Value, PermissionsTab.Users, 0);
@@ -121,7 +123,7 @@ namespace WWTMVC5.Controllers
         {
             if (CurrentUserId == 0)
             {
-                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+                await TryAuthenticateFromHttpContext();
             }
             var contents = await _communityService.GetCommunityContents(communityId, CurrentUserId);
             var entities = new List<EntityViewModel>();
@@ -149,12 +151,45 @@ namespace WWTMVC5.Controllers
         public ActionResult GetTourThumb(Guid tourId)
         {
             var tour = _contentService.GetContentDetails(tourId);
-            // Get the thumbnail from Azure.
-            Stream thumbStream = tour.Thumbnail.DataStream.GenerateThumbnail(Constants.DefaultClientThumbnailWidth, Constants.DefaultClientThumbnailHeight, Constants.DefaultThumbnailImageFormat);
 
-            return File(thumbStream, Constants.DefaultThumbnailMimeType);
+            var thumb = _blobService.GetThumbnail(tour.Thumbnail.AzureID);
+            if (thumb != null && thumb.Data != null)
+            {
+                thumb.MimeType = Constants.DefaultThumbnailMimeType;
+
+                // Update the response header.
+                Response.AddHeader("Content-Encoding", thumb.MimeType);
+
+                // Set the position to Begin.
+                thumb.Data.Seek(0, SeekOrigin.Begin);
+                return new FileStreamResult(thumb.Data, thumb.MimeType);
+            }
+            return new EmptyResult();
 
         }
+        [HttpGet]
+        [AllowAnonymous]
+        [Route("Community/GetTour/{tourId}/{tourName=tour}")]
+        public ActionResult GetTour(Guid tourId, string tourName)
+        {
+            var storageAccount = Microsoft.WindowsAzure.Storage.CloudStorageAccount.Parse(
+                        ConfigurationManager.AppSettings["EarthOnlineStorage"]);
+            var blobClient = storageAccount.CreateCloudBlobClient();
+            var cloudBlobContainer = blobClient.GetContainerReference("contentcontainer");
+            var toursBlob = cloudBlobContainer.GetBlobReferenceFromServer(tourId.ToString().ToUpper());
+            toursBlob.DownloadToStream(Response.OutputStream);
+            return new EmptyResult();
+
+        }
+        [HttpGet]
+        [AllowAnonymous]
+        [Route("Community/GetTourName/{tourId}")]
+        public string GetTourName(Guid tourId)
+        {
+            var tour = _contentService.GetContentDetails(tourId, true);
+            return tour.Name;
+        }
+
         [HttpGet]
         [AllowAnonymous]
         [Route("Community/AuthorThumbnail/{tourId}")]
@@ -352,7 +387,7 @@ namespace WWTMVC5.Controllers
         {
             if (CurrentUserId == 0)
             {
-                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+                await TryAuthenticateFromHttpContext();
             }
 
             if (ModelState.IsValid)
@@ -389,7 +424,7 @@ namespace WWTMVC5.Controllers
         {
             if (CurrentUserId == 0)
             {
-                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+                await TryAuthenticateFromHttpContext();
             }
             try
             {
@@ -427,7 +462,7 @@ namespace WWTMVC5.Controllers
         {
             if (CurrentUserId == 0)
             {
-                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+                await TryAuthenticateFromHttpContext();
             }
             if (id.HasValue)
             {
@@ -456,7 +491,7 @@ namespace WWTMVC5.Controllers
         {
             if (CurrentUserId == 0)
             {
-                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+                await TryAuthenticateFromHttpContext();
             }
             var details =  GetUserPermissionDetails(entityId, permissionsTab, currentPage);
             return Json(details,JsonRequestBehavior.AllowGet);
@@ -476,7 +511,7 @@ namespace WWTMVC5.Controllers
         {
             if (CurrentUserId == 0)
             {
-                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+                await TryAuthenticateFromHttpContext();
             }
 
             var permission = new PermissionItem
@@ -514,7 +549,7 @@ namespace WWTMVC5.Controllers
         {
             if (CurrentUserId == 0)
             {
-                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+                await TryAuthenticateFromHttpContext();
             }
             var ajaxResponse = "Success";
             var permission = new PermissionItem
@@ -853,6 +888,171 @@ namespace WWTMVC5.Controllers
             }
         }
 
+        public static void Extract(FileStream fs, HttpResponseBase response)
+        {
+
+            //try
+            {
+               
+
+
+                string data;
+                XmlDocument doc = new XmlDocument();
+                int headerSize = 0;
+                
+
+                    byte[] buffer = new byte[256];
+                    fs.Read(buffer, 0, 255);
+                    data = Encoding.UTF8.GetString(buffer);
+
+                    int start = data.IndexOf("0x");
+                    if (start == -1)
+                    {
+                        throw new SystemException("Invalid File Format");
+                    }
+                    headerSize = Convert.ToInt32(data.Substring(start, 10), 16);
+
+                    fs.Seek(0, SeekOrigin.Begin);
+
+
+                    buffer = new byte[headerSize];
+                    fs.Read(buffer, 0, headerSize);
+                    data = Encoding.UTF8.GetString(buffer);
+                    doc.LoadXml(data);
+
+                    XmlNode cab = doc["FileCabinet"];
+                    XmlNode files = cab["Files"];
+
+                    int offset = headerSize;
+
+                    foreach (XmlNode child in files.ChildNodes)
+                    {
+                        FileEntry entry = new FileEntry(child.Attributes["Name"].Value.ToLower(), Convert.ToInt32(child.Attributes["Size"].Value));
+                        entry.Offset = offset;
+                        offset += entry.Size;
+
+                        if (entry.Filename.Contains(@"\"))
+                        {
+                            entry.Filename = entry.Filename.Substring(entry.Filename.LastIndexOf("\\") + 1);
+                        }
+
+
+                        //if (entry.Filename == filetarget || filetarget == "master")
+                        //{
+
+                            buffer = new byte[entry.Size];
+                            fs.Seek(entry.Offset, SeekOrigin.Begin);
+                            if (fs.Read(buffer, 0, entry.Size) != entry.Size)
+                            {
+                                throw new SystemException("One of the files in the collection is missing, corrupt or inaccessable");
+                            }
+
+                            buffer = UnGzip(buffer);
+
+                            response.ContentType = GetMimeTypoForFile(entry.Filename);
+                            response.OutputStream.Write(buffer, 0, buffer.Length);
+                            return;
+                        //}
+
+                    }
+
+
+                   
+            }
+            //catch
+            {
+                //  UiTools.ShowMessageBox("The data cabinet file was not found. WWT will now download all data from network.");
+            }
+
+        }
+        static byte[] UnGzip(byte[] buffer)
+        {
+            if (buffer[0] == 31 && buffer[1] == 139)
+            {
+                MemoryStream msIn = new MemoryStream(buffer);
+                MemoryStream msOut = new MemoryStream();
+                System.IO.Compression.GZipStream gzip = new System.IO.Compression.GZipStream(msIn, System.IO.Compression.CompressionMode.Decompress);
+
+                byte[] data = new byte[2048];
+
+                while (true)
+                {
+                    int count = gzip.Read(data, 0, 2048);
+                    msOut.Write(data, 0, count);
+
+                    if (count < 2048)
+                    {
+                        break;
+                    }
+                }
+                gzip.Close();
+                msOut.Close();
+                return msOut.ToArray();
+
+            }
+            return buffer;
+        }
+
+        static string GetMimeTypoForFile(string filename)
+        {
+            if (filename.Contains("."))
+            {
+                string extention = filename.Substring(filename.LastIndexOf(".") + 1).ToLower();
+
+                switch (extention)
+                {
+
+                    case "jepg":
+                    case "jpg":
+                    case "jfif":
+                        return "images/jepg";
+                    case "png":
+                        return "images/png";
+                    case "wma":
+                        return "audio/x-ms-wma";
+                    case "mp3":
+                        return "audio/mp3";
+                    case "xml":
+                        return "text/xml";
+                    case "txt":
+                        return "text/plain";
+                    case "asf":
+                        return "video/x-ms-asf";
+                    case "asx":
+                        return "video/x-ms-asf";
+                    case "wmv":
+                        return "audio/x-ms-wmv";
+                    case "wvx":
+                        return "video/x-ms-wm";
+                    case "wmx":
+                        return "video/x-ms-wmx";
+                    case "wmz":
+                        return "application/x-ms-wmz";
+                    case "wmd":
+                        return "application/x-ms-wmd";
+
+                }
+
+            }
+
+            return "text/xml";
+        }
+
         #endregion Private Methods
+    }
+    public class FileEntry
+    {
+        public string Filename;
+        public int Size;
+        public int Offset;
+        public FileEntry(string filename, int size)
+        {
+            Filename = filename;
+            Size = size;
+        }
+        public override string ToString()
+        {
+            return Filename;
+        }
     }
 }

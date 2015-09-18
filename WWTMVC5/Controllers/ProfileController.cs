@@ -62,7 +62,7 @@ namespace WWTMVC5.Controllers
         {
             if (CurrentUserId == 0)
             {
-                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+                await TryAuthenticateFromHttpContext();
             }
             var userDetail = GetProfile(CurrentUserId);
             return new JsonResult { Data = userDetail,JsonRequestBehavior = JsonRequestBehavior.AllowGet};
@@ -81,7 +81,7 @@ namespace WWTMVC5.Controllers
         {
             if (CurrentUserId == 0)
             {
-                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+                await TryAuthenticateFromHttpContext();
             }
             // Initialize the page details object with current page as parameter. First time when page loads, current page is always 1.
             var pageDetails = GetPageDetails(CurrentUserId, entityType, 1);
@@ -101,43 +101,7 @@ namespace WWTMVC5.Controllers
         }
 
 
-        /// <summary>
-        /// Index Action which is default action rendering the Terms and condition window.
-        /// </summary>
-        /// <returns>Returns the View to be used</returns>
-        /// <remarks>DO NOT ADD Live Authorization for this since it will go in an indefinite loop.</remarks>
-        [HttpPost]
-        [Route("Profile/New/Create")]
-        public async Task<JsonResult> New()
-        {
-            if (CurrentUserId == 0)
-            {
-                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
-            }
-            var result = SessionWrapper.Get<LiveLoginResult>("LiveConnectResult");
-            if (result != null && result.Status == LiveConnectSessionStatus.Connected)
-            {
-                var profileDetails = SessionWrapper.Get<ProfileDetails>("ProfileDetails");
-                
-                // While creating the user, IsSubscribed to be true always.
-                profileDetails.IsSubscribed = true;
-
-                // When creating the user, by default the user type will be of regular. 
-                profileDetails.UserType = UserTypes.Regular;
-
-                profileDetails.ID = ProfileService.CreateProfile(profileDetails);
-                SessionWrapper.Set("CurrentUserID", profileDetails.ID);
-                CreateDefaultUserCommunity(profileDetails.ID);
-
-                // Send New user notification.
-                _notificationService.NotifyNewEntityRequest(profileDetails, HttpContext.Request.Url.GetServerLink());
-                return new JsonResult{Data = profileDetails};
-            }
-            return Json("error: User not logged in");
-            
-            
-        }
-
+        
         /// <summary>
         /// Save Action which saves the profile details to database.
         /// </summary>

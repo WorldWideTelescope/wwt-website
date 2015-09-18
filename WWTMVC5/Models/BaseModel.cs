@@ -32,6 +32,7 @@ namespace WWTMVC5.Models
             _resVer = ConfigReader<string>.GetSetting("ResourcesVersion");
             _downloadUrl = ConfigReader<string>.GetSetting("WWTDownloadUrl");
             _legacyUrl = ConfigReader<string>.GetSetting("WWTLegacyDownloadUrl");
+            _isOpenWwtKiosk = false;
 	    }
 
 	    public string ResLoc
@@ -98,13 +99,7 @@ namespace WWTMVC5.Models
 	            {
 	                return _profile;
 	            }
-	            ProfileDetails profileDetails = null;
-	            LiveLoginResult result = SessionWrapper.Get<LiveLoginResult>("LiveConnectResult");
-	            if (result != null && result.Status == LiveConnectSessionStatus.Connected)
-	            {
-	                profileDetails = SessionWrapper.Get<ProfileDetails>("ProfileDetails");
-
-	            }
+	            var profileDetails = SessionWrapper.Get<ProfileDetails>("ProfileDetails");
 	            return profileDetails;
 	        }
 	        set { _profile = value; }

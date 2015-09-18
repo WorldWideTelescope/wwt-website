@@ -122,8 +122,14 @@ namespace WWTMVC5.Services
 
         public ContentDetails GetContentDetails(Guid azureId)
         {
+            return GetContentDetails(azureId, false);
+        }
+
+        public ContentDetails GetContentDetails(Guid azureId, bool? deleted)
+        {
+            var deletedCondition = deleted.HasValue ? deleted : false;
             ContentDetails contentDetails = null;
-            var content = _contentRepository.GetContent(azureId);
+            var content = _contentRepository.GetContent(azureId, deletedCondition);
             if (content != null)
             {
                 var userRole = UserRole.SiteAdmin;

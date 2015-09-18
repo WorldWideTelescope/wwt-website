@@ -60,11 +60,11 @@
             $scope.editProfile.profileId = profile.ProfileId;
             $scope.editProfile.isSubscribed = profile.IsSubscribed;
             dataproxy.getUserEntities('Content', profile.ProfileId).then(function (response) {
-                $scope.profile.uploads = response.entities && response.entities.length ? response.entities : null;
+                $scope.profile.uploads = response.entities && response.entities.length ? response.entities : [];
                 wwt.triggerResize();
             });
             dataproxy.getUserEntities('Community', profile.ProfileId).then(function (response) {
-                $scope.profile.communities = response.entities && response.entities.length ? response.entities : null;
+                $scope.profile.communities = response.entities && response.entities.length ? response.entities : [];
                 wwt.triggerResize();
             });
             getRequests();

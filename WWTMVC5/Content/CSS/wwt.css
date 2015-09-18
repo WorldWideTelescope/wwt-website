@@ -8526,6 +8526,8 @@ body.wwt .navbar.hero-nav {
   margin-bottom: -50px;
   margin-top: 40px;
   padding-top: 0;
+  position: relative;
+  z-index: 2;
 }
 body.wwt .navbar.hero-nav a {
   font-size: 14px;

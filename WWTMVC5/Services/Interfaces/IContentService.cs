@@ -25,6 +25,7 @@ namespace WWTMVC5.Services.Interfaces
         ContentDetails GetContentDetails(long contentId, long userId);
 
         ContentDetails GetContentDetails(Guid azureId);
+        ContentDetails GetContentDetails(Guid azureId, bool?deleted);
         /// <summary>
         /// Gets the contents from the Layerscape database.
         /// </summary>

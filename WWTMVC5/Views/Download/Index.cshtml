@@ -9,9 +9,9 @@
 	$(function () {
 		if (navigator.platform == 'Win32' || navigator.platform == 'Win64') {
 			var ua = navigator.userAgent;
-			if (ua.indexOf('Windows NT 6') !== -1 && ua.indexOf('Windows NT 6.0') === -1) {
+			if (ua.indexOf('Windows NT 6') > -1 || ua.indexOf('Windows NT 6.0') > -1 || ua.indexOf('Windows NT 10.') > -1) {
 				setTimeout(function () {
-					location.href = '@Model.DownloadUrl';
+					//location.href = '@Model.DownloadUrl';
 				}, 3000);
 			} else {
 				$('#modalSpawner').click();
@@ -24,7 +24,7 @@
 	<h1>WorldWide Telescope 5.1 Gold for Windows</h1>
 	<p>WorldWide Telescope 5.1 Gold is the latest version of WorldWide Telescope (WWT). WWT 5.1 Gold is already in production use in some of the world’s premiere planetariums. This feature-rich application is now available to everyone as a free download.</p>
 	<p>Select WorldWide Telescope download options below.</p>
-	<h3><a href="@Model.DownloadUrl">WWT 5.1 Gold</a></h3>
+	<h3><a href="@Model.DownloadUrl">Download WWT 5.1 Gold</a></h3>
 	<p>Version 5.1 Gold runs on Windows 7 or Windows 8, in either 32- or 64-bit mode, depending on your operating system. It also supports native DirectX 11, DirectX 10, and has some support for down-level DirectX 9 hardware running through the DirectX 11 API.</p>
 	
    

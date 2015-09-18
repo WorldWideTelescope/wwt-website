@@ -24,7 +24,7 @@
 					(i < 9 ? '0' + (i + 1) : i + 1) + ' - ' + track.find('Title').text():
 						track.find('Title').text();
 					row.find('a.music-link').attr('href',
-						'@Model.ContentDir/WWTMusic/' +
+						'https:' + '@Model.ContentDir/wwtmusic/' +
 						track.find('Folder').text() + '/' +
 						title + '.' +
 						track.find('Type').text());
@@ -74,19 +74,19 @@
 				creditLink: 'http://www.celestiamotherlode.net/catalog/show_addon_details.php?addon_id=287'
 			},
 			{
-				img: 'Emu.jpg',
+				img: 'emu.jpg',
 				title: 'Extravehicular Mobility Unit (EMU)',
 				credit: 'Michael Carbajal, NASA Headquarters',
 				creditLink: 'http://www.nasa.gov/centers/hq/'
 			},
 			{
-				img: 'Corot.jpg',
+				img: 'corot.jpg',
 				title: 'Corot',
 				credit: 'Celestial Motherlode',
 				creditLink: 'http://www.celestiamotherlode.net/catalog/show_addon_details.php?addon_id=1039'
 			},
 			{
-				img: 'Shuttle.jpg',
+				img: 'shuttle.jpg',
 				title: 'Space Shuttle Orbiter',
 				credit: 'DigitalSpace Corporation',
 				creditLink: 'http://www.digitalspace.com'
@@ -99,8 +99,8 @@
 			}
 		];
 
-		var imgPath = '@Model.ImgDir/3d/';
-		var assetPath = '@Model.ContentDir/Assets/3d/';
+		var imgPath = '@(Model.ImgDir.ToLower())/3d/';
+		var assetPath = '@Model.ContentDir/assets/3d/';
 		$.each(modelJson, function () {
 			var row = $($('#3dAsset').html());
 			row.find('.3d-preview img').attr({

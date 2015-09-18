@@ -108,7 +108,7 @@ namespace WWTMVC5.Controllers
         {
             if (CurrentUserId == 0)
             {
-                await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+                await TryAuthenticateFromHttpContext();
             }
             var highlightTypes = (from HighlightType t in Enum.GetValues(typeof (HighlightType)) select t.ToString()).ToList();
             var entityTypes = (from EntityType t in Enum.GetValues(typeof (EntityType)) select t.ToString()).ToList();
@@ -151,7 +151,7 @@ namespace WWTMVC5.Controllers
             {
                 if (CurrentUserId == 0)
                 {
-                    await TryAuthenticateFromHttpContext(_communityService, _notificationService);
+                    await TryAuthenticateFromHttpContext();
                 }
 
                 var thumbnailId = Guid.Empty;

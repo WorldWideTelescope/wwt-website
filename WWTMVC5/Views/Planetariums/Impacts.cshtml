@@ -1,10 +1,10 @@
 ﻿@{
 	Layout = "~/Views/Shared/_ContentPage.cshtml";
-	ViewBag.contentDir = Model.ContentDir + "/Planetariums";
+	ViewBag.contentDir = Model.ResLoc + "/Content/Planetariums";
 	ViewBag.slidesDir = ViewBag.contentDir + "/Impacts Slides";
-	ViewBag.imgDir = Model.ImgDir + "/Planetariums";
-	
+	ViewBag.imgDir = Model.ResLoc + "/Content/Images/Planetariums";
 }
+
 @section leftnav{
 	@Html.Partial("~/Views/Planetariums/LeftNav.cshtml")
 }

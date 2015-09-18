@@ -49,24 +49,46 @@ namespace WWTMVC5.Repositories
             return content;
         }
 
+        public Content GetContent(Guid azureId)
+        {
+            return GetContent(azureId, false);
+        }
+
         /// <summary>
         /// Gets the content specified by the content id. Eager loads the navigation properties to avoid multiple calls to DB.
         /// </summary>
         /// <param name="azureId">azure guid of the content.</param>
+        /// <param name="deleted">return content even if deleted</param>
         /// <returns>Content instance.</returns>
-        public Content GetContent(Guid azureId)
+        public Content GetContent(Guid azureId, bool?deleted)
         {
-            var content = EarthOnlineDbContext.Content.Where(item => item.ContentAzureID == azureId && item.IsDeleted == false)
-                .Include(c => c.AccessType)
-                .Include(c => c.ContentRatings)
-                .Include(c => c.ContentTags.Select(ct => ct.Tag))
-                .Include(c => c.User)
-                .Include(cr => cr.ContentRelation.Select(r => r.Content1))
-                .Include(cc => cc.CommunityContents.Select(r => r.Community)).FirstOrDefault();
+            var includeDeleted = deleted.HasValue ? deleted.Value : false;
 
-            return content;
+            if (includeDeleted == true)
+            {
+                var content = EarthOnlineDbContext.Content.Where(item => item.ContentAzureID == azureId)
+                    .Include(c => c.AccessType)
+                    .Include(c => c.ContentRatings)
+                    .Include(c => c.ContentTags.Select(ct => ct.Tag))
+                    .Include(c => c.User)
+                    .Include(cr => cr.ContentRelation.Select(r => r.Content1))
+                    .Include(cc => cc.CommunityContents.Select(r => r.Community)).FirstOrDefault();
+                return content;
+            }
+            else
+            {
+                var content = EarthOnlineDbContext.Content.Where(item => item.ContentAzureID == azureId && item.IsDeleted == false)
+                    .Include(c => c.AccessType)
+                    .Include(c => c.ContentRatings)
+                    .Include(c => c.ContentTags.Select(ct => ct.Tag))
+                    .Include(c => c.User)
+                    .Include(cr => cr.ContentRelation.Select(r => r.Content1))
+                    .Include(cc => cc.CommunityContents.Select(r => r.Community)).FirstOrDefault();
+                return content;
+            }
+            
         }
-
+        
         /// <summary>
         /// Retrieves the multiple instances of contents for the given IDs. Eager loads the navigation properties to avoid multiple calls to DB.
         /// </summary>
@@ -105,8 +127,8 @@ namespace WWTMVC5.Repositories
         {
             // Get the contents which are not deleted.
             var result = EarthOnlineDbContext.Content.Where(content => !(bool)content.IsDeleted &&
-                                                                            content.AccessTypeID == (int)AccessType.Public).OrderByDescending(content => content.ContentID).Select(content => content.ContentID)
-                                .Take(count);
+                    content.AccessTypeID == (int)AccessType.Public).OrderByDescending(content => content.ContentID).Select(content => content.ContentID)
+                     .Take(count);
 
             return result.ToList();
         }
