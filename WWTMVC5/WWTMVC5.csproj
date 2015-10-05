@@ -545,6 +545,9 @@
       <DependentUpon>sprites.css</DependentUpon>
     </Content>
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\images\addview.png" />
+    <Content Include="Content\images\layoutpage.png" />
+    <Content Include="Content\images\solutionexplorer.png" />
     <Content Include="Content\Views\EditCommunity.html" />
     <Content Include="Content\Views\CommunityDetail.html" />
     <Content Include="Content\Views\ContentPreview.html" />
@@ -731,6 +734,7 @@
     <Content Include="Content\bootstrap\bootstrap.less" />
     <Content Include="Content\bootstrap\badges.less" />
     <Content Include="Content\bootstrap\alerts.less" />
+    <Content Include="Scripts\ext\hljsrazor.js" />
     <Content Include="Scripts\ext\ui-bootstrap-tpls-0.12.1.modified.js" />
   </ItemGroup>
   <ItemGroup>
@@ -1005,6 +1009,7 @@
     <Content Include="webclient\ESO.wtml" />
     <Content Include="webclient\Hubble.wtml" />
     <Content Include="Views\Planetariums\QuickStart.cshtml" />
+    <Content Include="Views\Learn\WebDevelopment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Home\" />
@@ -1141,31 +1146,22 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>4675</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets')" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
-  <Target Name="WebClientFiles">
-    <ItemGroup>
-      <_CustomFiles Include="webclient\**\*" />
-      <FilesForPackagingFromProject Include="%(_CustomFiles.Identity)">
-        <DestinationRelativePath>webclient\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
-      </FilesForPackagingFromProject>
-    </ItemGroup>
-    <PropertyGroup>
-      <CopyAllFilesToSingleFolderForPackageDependsOn>
-        WebClientFiles;
-        $(CopyAllFilesToSingleFolderForPackageDependsOn);
-      </CopyAllFilesToSingleFolderForPackageDependsOn>
-      <CopyAllFilesToSingleFolderForMsdeployDependsOn>
-        WebClientFiles;
-        $(CopyAllFilesToSingleFolderForPackageDependsOn);
-      </CopyAllFilesToSingleFolderForMsdeployDependsOn>
-    </PropertyGroup>
-  </Target>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
@@ -1190,18 +1186,4 @@ setlocal enableDelayedExpansion
 )
 </PreBuildEvent>
   </PropertyGroup>
-  <!--<UsingTask TaskName="TransformXml" AssemblyFile="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Web\Microsoft.Web.Publishing.Tasks.dll" />
-  <Target Name="Transform">
-    <MakeDir Directories="obj\$(Configuration)" Condition="!Exists('obj\$(Configuration)')" />
-    <TransformXml Source="Web.Config" Transform="Web.$(Configuration).config" Destination="obj\$(Configuration)\Web.config" StackTrace="true" />
-  </Target>
-  PostBuildEvent "$(MSBUILDBINPATH)\msbuild" "$(ProjectPath)" /t:Transform /p:Configuration=$(ConfigurationName);Platform=AnyCPU
-      xcopy "$(ProjectDir)obj\$(ConfigurationName)\Web.Config" "$(ProjectDir)". /F /R /Y
-  -->
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target> -->
 </Project>
