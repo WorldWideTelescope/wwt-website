@@ -5,11 +5,21 @@
 1. If you do not already have Visual Studio, you may [download Visual Studio Community Edition for free](http://visualstudio.com) (2015 is the latest version).
 
 2. You need the Internet Information Services (IIS) web server enabled on your machine.  To turn it on, go to the Control Panel and search for "Turn Windows Features On or Off."
-Check these: 
-Internet Information Services
-Web Management Tools -> IIS Management Console
-World Wide Web Services -> Application Development Features -> ASP.NET 4.5
-Security-> Windows Authentication
+Check the following under __Internet Information Services__:
+      - Web Management Tools
+        - IIS Management Console
+        - IIS Management Scripts and Tools
+        - IIS Management Service
+    - World Wide Web Services
+      - Application Development Features
+        - ASP.NET 3.5
+        - ASP.NET 4.5
+      - Common HTTP Features
+        - Static Content
+    - Security
+        - Windows Authentication
+
+  You may need to restart the server after making these changes.
 
 3. Install (Azure SDK
 2.6)[https://azure.microsoft.com/blog/2015/04/29/announcing-the-azure-sdk-2-6-for-net/].
@@ -62,3 +72,22 @@ team](https://dev.modern.ie/tools/vms/linux/).
 3. Import the .ova file into VirtualBox.
 
 4. In your new Windows virtual machine, follow the instructions above.
+
+
+### Troubleshooting
+
+If the website builds and loads in the browser, but the styles are
+incorrect, here are some things you can try:
+
+1. Install "Web Compiler" for Visual Studio by going to Tools ->
+Extensions and Updates and searching for "Web Compiler."
+
+    - Once this is installed, right-click on "wwt.less" in the Solution
+      Explorer and choose "Web Compiler" -> "Re-compile file."  This may
+      read just "Compile file" if it hasn't been compiled at all yet.
+
+2. Or, in Solution Explorer, right click on WWTMVC5 and choose "Manage
+  NuGet Packages."  Search for Twitter.Bootstrap.Less and click
+  "Upgrade."  If prompted, overwrite all files.
+
+Let us know if you have other problems building the site by [opening an issue](https://github.com/WorldWideTelescope/wwt-website/issues).
