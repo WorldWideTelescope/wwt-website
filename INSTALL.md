@@ -10,19 +10,19 @@ Check the following under __Internet Information Services__:
         - IIS Management Console
         - IIS Management Scripts and Tools
         - IIS Management Service
-    - World Wide Web Services
-      - Application Development Features
-        - ASP.NET 3.5
-        - ASP.NET 4.5
-      - Common HTTP Features
-        - Static Content
-    - Security
-        - Windows Authentication
+      - World Wide Web Services
+        - Application Development Features
+          - ASP.NET 3.5
+          - ASP.NET 4.5
+        - Common HTTP Features
+          - Static Content
+        - Security
+          - Windows Authentication
 
   You may need to restart the server after making these changes.
 
-3. Install (Azure SDK
-2.6)[https://azure.microsoft.com/blog/2015/04/29/announcing-the-azure-sdk-2-6-for-net/].
+3. Install [Azure SDK
+2.6](https://azure.microsoft.com/blog/2015/04/29/announcing-the-azure-sdk-2-6-for-net/).
 An easy way to do this is to go into the Visual Studio menu: "Tools" ->
 "Extensions and Updates" and update first SQL Server (to get LocalDB
 installed) and then the Azure SDK, which depends on LocalDB.
