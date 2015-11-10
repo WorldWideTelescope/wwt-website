@@ -337,7 +337,7 @@
                         deferred.resolve(types);
                     } else if (wwt.signingIn) {
                         $(window).on('login', refreshTypes); 
-                    } else if ($('#signin').length && $('#signin').prop('authenticated')) {
+                    } else if ($('#signinContainer').attr('loggedIn') === 'true') {
                         refreshTypes();
                     }else {
                         wwt.viewMaster.signIn();

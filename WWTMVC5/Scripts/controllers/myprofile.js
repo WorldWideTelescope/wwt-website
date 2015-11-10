@@ -17,7 +17,7 @@
                 $scope.types = types;
                 dataproxy.getMyProfile(0).then(setProfile, function() {console.log(arguments)});
             }, function(reason) {
-                location.href = '#/';
+                location.href = '/Community?#/MyProfile';
             });
         }
 
@@ -72,6 +72,9 @@
 
         var getRequests = function() {
             dataproxy.getUserRequests().then(function (response) {
+                if (response.Result && response.Result.PermissionItemList) {
+                    response = response.Result;
+                }
                 $scope.profile.requests = response.PermissionItemList && response.PermissionItemList.length ? response.PermissionItemList : null;
                 wwt.triggerResize();
             });

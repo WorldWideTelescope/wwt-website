@@ -43,7 +43,8 @@ if (top === self) {
 			wwt.resLoc = $('body').attr('resLoc');
 		    //console.log('init');
 		    bindEvents();
-			
+		    var rememberSetting = wwt.user.get('rememberMe');
+		    wwt.autoSignin = rememberSetting && rememberSetting===true;
 			resize();
 			if (!isLoaded) {
 				layoutTimer = setInterval(function() {
@@ -84,10 +85,7 @@ if (top === self) {
 	        $(window).on('hashchange', hashChange);
 	        $('img.img-border:not([data-nofs])').on('click', fullScreenImage).attr('title', 'click to view full size');
 	        $('#accordion').on('click', wwt.accordianClick);
-	        $('#chkRemember').on('change', function() {
-	            wwt.user.set('rememberMe', $(this).prop('checked'));
-	            wwt.autoSignin = $(this).prop('checked');
-	        });
+	       
 	    }
 
 	    //function logWL(info) {
@@ -98,50 +96,24 @@ if (top === self) {
 	    //}
 
 	    function initLiveId() {
-	        if (getQSValue('code') != null) {
+	        var signedIn = $('#signinContainer').attr('loggedIn') === 'true';
+	        if (!signedIn && getQSValue('code') != null) {
 	            var returnUrl = location.href.split('?')[0];
 	            location.href = '/LiveId/AuthenticateFromCode/' + getQSValue('code') +
 	                '?returnUrl=' + encodeURIComponent(returnUrl);
 	            return;
 	        }
-	        var autoSignin = wwt.autoSignin = false;
-	        var signedIn = $('#signinContainer input').length !== 1;
-	        if (wwt.user.get('rememberMe') === false) {
-	            $('#chkRemember').prop('checked', false);
-	        }
-	        else if (wwt.user.get('rememberMe') === true) {
-	            $('#chkRemember').prop('checked', true);
-	            autoSignin = wwt.autoSignin = true;
-	        } else {
-	            wwt.user.set('rememberMe', false);
-	        }
+	        var rememberSetting = wwt.user.get('rememberMe');
+	        var autoSignin = wwt.autoSignin = rememberSetting && rememberSetting === true;
+	       
 	        
 	        if (wwt.currentResolution === 'md' || wwt.currentResolution === 'lg') {
 	            $('#signinContainer label').slideUp(function() {
 	                $('.sign-in').show();
 	            });
 	        }
-	        if (!signedIn) {
-	            WL.init({
-	                client_id: _liveClientId,
-	                redirect_uri: 'http://' + location.host,
-	                response_type: "token",
-	                logging:true
-	            });
-	        }
-	        $('#signinContainer').on('mouseenter', function () {
-	            if (wwt.currentResolution === 'md' || wwt.currentResolution === 'lg') {
-	                $(this).find('label').slideDown();
-	            }
-	        }).on('mouseleave', function () {
-	            if (wwt.currentResolution === 'md' || wwt.currentResolution === 'lg') {
-	                $(this).find('label').slideUp();
-	            }
-	        }).find('#signin').on('click', function () {
-	            //signinScope = $('#chkRemember').prop('checked') ? 'wl.signin' : 'wl.basic';
-	            signIn();
-	        });
-
+	        
+	        $('#signinContainer #signin').on('click', signIn);
 	        
             if (autoSignin && !signedIn) {
 	            signIn();
@@ -149,80 +121,28 @@ if (top === self) {
 	    }
 
 	    function signIn() {
-	        wwt.signingIn = true;
-	        if (wwt.autoSignin) {
-	            if (wwt.user.get('authCodeRedirect')) {
-	                cleanCookies();
-	            }
-	            wwt.user.set('authCodeRedirect', true);
-	            var dir = location.href.toLowerCase().indexOf('/community') !== -1 ? '/community' : '';
-	            var redir = 'http://' + location.host + dir;
-	            var wlUrl = 'https://login.live.com/oauth20_authorize.srf?client_id=' +
-                    _liveClientId + '&scope=wl.offline_access%20wl.emails&response_type=code&redirect_uri=' +
-                    encodeURIComponent(redir) + '&display=popup';
-	            location.href = wlUrl;
+	        var signedIn = $('#signinContainer').attr('loggedIn') === 'true';
+	        if (signedIn) {
 	            return;
 	        }
-	        WL.login({
-	            scope: ['wl.offline_access', 'wl.emails']//, "wl.offline_access"
-	        }).then(function (session) {
-	            if (!session.error) {
-	                $('#signinContainer label').html('&nbsp;');
-	                WL.api({
-	                    path: "me",
-	                    method: "GET"
-	                }).then(
-                        function (response) {
-                            console.log(response);
-                            tryServerSignin(response);
-                        },
-                        loginFail
-                    );
-	            }
-	        },
-            loginFail);
-	        if ($('#signin').attr('title').indexOf('(Sign') === -1) {
-	            $('#signin').html('Signing in...').attr('title', 'Please wait while we sign you in to WorldWide Telescope');
+	        wwt.signingIn = true;
+	        wwt.user.set('rememberMe', true);
+	        if (wwt.user.get('authCodeRedirect')) {
+	            cleanCookies();
 	        }
+	        wwt.user.set('authCodeRedirect', true);
+	        var dir = '';//location.href.toLowerCase().indexOf('/community') !== -1 ? '/Community' : '';
+	        var redir = 'http://' + location.host + dir;
+	        var wlUrl = 'https://login.live.com/oauth20_authorize.srf?client_id=' +
+                _liveClientId + '&scope=wl.offline_access%20wl.emails&response_type=code&redirect_uri=' +
+                encodeURIComponent(redir) + '&display=popup';
+	        location.href = wlUrl;
+	        return;
+	        //}
+	        
 	    }
 
-        var tryServerSignin = function(response) {
-            $.get("/LiveId/Authenticate").success(function (data) {
-                console.log(arguments);
-                $('#profileMenuItem, #profileLink').removeClass('hide');
-                $(window).trigger('login');
-                wwt.signingIn = false;
-                if (data.Status === 'Connected') {
-                    $('#signin').off('click').html(data.Session.User).on('click', function(e) {
-                        e.stopImmediatePropagation();
-                        e.preventDefault();
-                        location.href = '/Community/Profile';
-                    }).attr('title', '(Signed in) View your WWT Profile').prop('authenticated', true);
-                } else if (data.LogoutUrl) {
-                    
-                    WL.logout();
-                    location.href = data.LogoutUrl;
-                } else {
-                    loginFail(data);
-                }
-            }).error(loginFail);
-        }
-
-	    var loginFail = function(responseFailed) {
-            wwt.signingIn = false;
-            wwt.failedSigninAttempts++;
-            console.log('loginfail, attempts:' + wwt.failedSigninAttempts, responseFailed);
-            if (wwt.failedSigninAttempts > 1) {
-                $('#signin').html("Login failed");
-                $(window).trigger('loginfail');
-                WL.logout();
-            } else {
-                // Cleanse wl_auth cookie
-                cleanCookies();
-                tryServerSignin();
-            }
-        }
-
+        
         var cleanCookies = function() {
             var hosts = ['.wwtstaging.azurewebsites.net', 'wwtstaging.azurewebsites.net', '.worldwidetelescope.org', 'www.worldwidetelescope.org', 'worldwidetelescope.org'];
             document.cookie = 'wl_auth=; expires=Thu, 01-Jan-1970 00:00:01 GMT;';

@@ -7,6 +7,7 @@
         dataproxy.getEntityDetail({ entityId: $routeParams.contentId })
             .then(function (entity) {
                 $scope.entity = entity;
+                $scope.canEditDelete = entity.UserPermission && entity.UserPermission === 63;
                 uiHelper.imageHelper('.img-thumbnail');
             });
     });

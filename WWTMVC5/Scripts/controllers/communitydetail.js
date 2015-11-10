@@ -23,7 +23,8 @@
             dataproxy.getCommunityDetail($routeParams.communityId).then(function (response) {
                 $scope.community = response.community;
                 $scope.permission = response.permission;
-                $scope.userCanEdit = (response.permission && response.permission.CurrentUserPermission === 63) || $scope.types.currentUserId === response.community.ProducerId || $scope.types.isAdmin;
+                var permissionLevel = response.permission.CurrentUserPermission || response.permission.Result.CurrentUserPermission;
+                $scope.userCanEdit = (response.permission && permissionLevel === 63) || $scope.types.currentUserId === response.community.ProducerId || $scope.types.isAdmin;
                 $scope.loadingContent = true;
                 uiHelper.imageHelper('.img-thumbnail');
                 dataproxy.getCommunityContents($scope.communityId).then(function (response) {

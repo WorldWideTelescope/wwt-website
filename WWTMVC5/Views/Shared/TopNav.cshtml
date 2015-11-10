@@ -21,8 +21,8 @@
             <li class="sign-in">
                 @if (Model.User != null)
                 {
-                    <div id="signinContainer">
-                        <label>&nbsp;</label>
+                    <div id="signinContainer" loggedIn="true">
+                        
                         <a class="small" href="/Community/#/MyProfile" id="username"
                            title="View My WWT Profile">@(Model.User.FirstName + " " + Model.User.LastName)</a>
                     </div>
@@ -30,11 +30,11 @@
                 else
                 {
                     <div id="signinContainer">
-                        <label title="WWT will automatically attempt to sign you in when you visit this page next time">
+                        @*<label title="WWT will automatically attempt to sign you in when you visit this page next time">
                             Remember me
                             <input type="checkbox" id="chkRemember"/>
 
-                        </label>
+                        </label>*@
                         <a class="small" href="javascript:void(0)" id="signin" title="Sign in to WWT">Sign in</a>
                     </div>
                 }
@@ -77,10 +77,10 @@
                 <div class="input-group input-group-sm">
                     <input type="text" class="form-control" placeholder="bing search">
                     <span class="input-group-btn">
-                            <button class="btn btn-info" type="button">
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </span>
+                        <button class="btn btn-info" type="button">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </span>
                 </div><!-- /input-group -->
             </li>
         </ul>
@@ -112,8 +112,6 @@
                     <li><a href="/Interact/Spectrum">Spectroscopy in Astronomy</a></li>
                     <li><a href="/Interact/GreatObservatories">Great Observatories</a></li>
                     <li><a href="/Interact/PlanetExplorer">Planet Explorer</a></li>
-
-
                 </ul>
 
             </li>

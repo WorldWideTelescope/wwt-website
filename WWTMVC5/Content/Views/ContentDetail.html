@@ -61,11 +61,11 @@
             </a>
 
             <a class="btn btn-primary btn-sm" ng-href="{{entity.webclientUrl}}" ng-if="entity.webclientUrl" target="webclient">View in WWT Web Client</a>
-            <a class="btn btn-info btn-sm" ng-href="#/EditContent/{{entity.Id}}" ng-if="types.currentUserId == entity.ProducerId || types.isAdmin">
+            <a class="btn btn-info btn-sm" ng-href="#/EditContent/{{entity.Id}}" ng-if="types.currentUserId == entity.ProducerId || types.isAdmin || canEditDelete">
                 <i class="fa fa-edit"></i>
                 Edit
             </a>
-            <a class="btn btn-warning btn-sm" ng-click="confirmDelete()" ng-if="types.currentUserId == entity.ProducerId || types.isAdmin">
+            <a class="btn btn-warning btn-sm" ng-click="confirmDelete()" ng-if="types.currentUserId == entity.ProducerId || types.isAdmin || canEditDelete">
                 <i class="fa fa-trash"></i>
                 Delete
             </a>

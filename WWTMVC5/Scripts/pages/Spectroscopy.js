@@ -104,7 +104,7 @@
 				}, i * 111);
 			});
 		});
-		ctl.loadImageCollection(wwt.resLoc + "/Content/WTML/WMAP.xml");
+		ctl.loadImageCollection('https://wwtweb.blob.core.windows.net/wtml/WMAP.xml');
 	};
 	//#endregion
 

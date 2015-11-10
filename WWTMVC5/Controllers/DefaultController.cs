@@ -169,8 +169,7 @@ namespace WWTMVC5.Controllers
                 return View("~/Views/Support/Error.cshtml", _baseModel);
             }
         }
-
-
+        
         /// <summary>
         /// All web page views go through this function - it ensures we are not in openwwt land - which should only display a kiosk
         /// </summary>
@@ -192,6 +191,14 @@ namespace WWTMVC5.Controllers
                 if (Request.QueryString["code"] != null)
                 {
                     model.User = await TryAuthenticateFromAuthCode(Request.QueryString["code"]);
+                    if (page == "index")
+                    {
+                        page = "";
+                    }
+                    var strippedUrl = group + "/" + page;
+                    
+                    //redirect strips gnarly looking code from qs
+                    return Redirect(strippedUrl);
                 }
                 if (Request.Cookies["refresh_token"] != null)
                 {
