@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -705,6 +705,10 @@
     <Content Include="Content\CSS\multiselect.less" />
     <Content Include="Content\OpenWWT\OpenWWT_Development.pdf" />
     <Content Include="App_Data\wurfl-latest.zip" />
+    <None Include="Properties\PublishProfiles\wwt.thewebkid.com.pubxml" />
+    <None Include="Properties\PublishProfiles\wwtstaging - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy.pubxml" />
     <Content Include="Content\Views\alltours.wtml" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
