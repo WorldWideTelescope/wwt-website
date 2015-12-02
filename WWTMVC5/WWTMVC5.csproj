@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -707,6 +707,9 @@
     <Content Include="App_Data\wurfl-latest.zip" />
     <None Include="Properties\PublishProfiles\wwt.thewebkid.com.pubxml" />
     <None Include="Properties\PublishProfiles\wwtstaging - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\wwt.thewebkid.com.pubxml" />
+    <None Include="Properties\PublishProfiles\wwtstaging - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy.pubxml" />
     <Content Include="Content\Views\alltours.wtml" />
@@ -809,9 +812,6 @@
     <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy.pubxml" />
     <Content Include="Scripts\ext\multiselect.js" />
     <Content Include="Scripts\factory\uihelper.js" />
-    <None Include="Scripts\jquery-1.9.1.intellisense.js" />
-    <Content Include="Scripts\jquery-1.9.1.js" />
-    <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Scripts\main.js" />
     <Content Include="Scripts\pages\home.js" />
     <Content Include="Scripts\pages\ImportImage.js" />
@@ -852,7 +852,6 @@
     <Content Include="Views\Upgrade\Index.cshtml" />
     <Content Include="Views\Planetariums\QuickStart.cshtml" />
     <Content Include="Views\Learn\WebDevelopment.cshtml" />
-    <Content Include="Scripts\jquery-1.9.1.min.map" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Home\" />
@@ -1005,6 +1004,24 @@
   </ProjectExtensions>
   <Import Project="..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets')" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
+  <Target Name="WebClientFiles">
+    <ItemGroup>
+      <_CustomFiles Include="webclient\**\*" />
+      <FilesForPackagingFromProject Include="%(_CustomFiles.Identity)">
+        <DestinationRelativePath>webclient\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
+      </FilesForPackagingFromProject>
+    </ItemGroup>
+    <PropertyGroup>
+      <CopyAllFilesToSingleFolderForPackageDependsOn>
+        WebClientFiles;
+        $(CopyAllFilesToSingleFolderForPackageDependsOn);
+      </CopyAllFilesToSingleFolderForPackageDependsOn>
+      <CopyAllFilesToSingleFolderForMsdeployDependsOn>
+        WebClientFiles;
+        $(CopyAllFilesToSingleFolderForPackageDependsOn);
+      </CopyAllFilesToSingleFolderForMsdeployDependsOn>
+    </PropertyGroup>
+  </Target>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
