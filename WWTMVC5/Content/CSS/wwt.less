@@ -146,14 +146,25 @@ body.wwt .navbar-inverse {
 
 
 	.navbar-brand {
+        span.aas{display:none;}
+        
+        position:relative;
 		text-shadow: 0 -1px 0 rgba(0,0,0,.5);
 		font-size: @font-size-large;
-		padding: 15px 15px 20px 21px; 
+		padding: 19px 15px 20px 21px; 
 		margin-left:35px;
 		margin-right:-20px;
 		@media screen and (min-width: @screen-md) {
 			//(search)font-size: @font-size-large * 1.15;
-			font-size: @font-size-large * 1.25;
+			font-size: @font-size-large * 1.15;
+            span.aas{
+                display:inline-block;
+                font-size: 13px;
+                font-weight: 500;
+                position: absolute;
+                top: 2px;
+                left: 22px;
+            }
 		} 
 		color:white;   
 		font-weight:600;
@@ -179,7 +190,7 @@ body.wwt .navbar-inverse {
 .navbar-fixed-top .container{
 	background-position:-2px -10px;
 	@media screen and (min-width: @screen-md) {
-	background-position:10px -10px;
+	background-position:10px -15px;
 	}
 	background-repeat: no-repeat;
 }
@@ -623,6 +634,9 @@ body.wwt {
                         color: white;
                         text-decoration:underline;
                     }
+                }
+                .hero-backdrop.lighter{
+                    background-color: fade(#334, 50%);
                 }
                 .hero-backdrop.spitzer{
                     //left:11%;

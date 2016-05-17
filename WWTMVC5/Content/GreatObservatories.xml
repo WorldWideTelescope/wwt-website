@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<Folder MSRCommunityId="0" MSRComponentId="0" Permission="0" Name="GreatObservatories" Group="Explorer" Searchable="False" Type="Earth">
+  <VersionDependent>false</VersionDependent>
+  <Place MSRCommunityId="0" MSRComponentId="0" Permission="0" Name="Orion Nebula" DataSetType="Sky" RA="5.5808333333333344" Dec="-5.44416666666667" Constellation="ORI" Classification="Nebula" Magnitude="0" Distance="0" ZoomLevel="19.59" Rotation="0" Angle="0" DomeAlt="0" DomeAz="0" Opacity="100" AngularSize="19.59">
+    <Target>Undefined</Target>
+    <ForegroundImageSet>
+      <ImageSet MSRCommunityId="0" MSRComponentId="0" Permission="0" Generic="False" DataSetType="Sky" BandPass="IR" Url="http://r{S:1}.ortho.tiles.virtualearth.net/tiles/wsa0000010231{Q}?g=131" TileLevels="5" WidthFactor="2" Sparse="True" Rotation="0.015915112700651" QuadTreeMap="0123" Projection="Tangent" Name="Orion Nebula" FileType=".png" CenterY="-5.59338109097" CenterX="83.6383655257" BottomsUp="False" StockSet="False" ElevationModel="False" OffsetX="-0.151262042234303" OffsetY="0.179267217168241" BaseTileLevel="0" BaseDegreesPerTile="0.682489467823981" MeanRadius="0">
+        <Credits>NASA/JPL-Caltech/T. Megeath (University of Toledo), M. Robberto (STScI), HST</Credits>
+        <CreditsUrl>http://www.spitzer.caltech.edu/images/1690-ssc2006-21a-Chaos-at-the-Heart-of-Orion</CreditsUrl>
+        <ThumbnailUrl>http://www.worldwidetelescope.org/wwtweb/thumbnail.aspx?name=1154245897</ThumbnailUrl>
+      </ImageSet>
+    </ForegroundImageSet>
+    <Description Title="Chaos at the Heart of Orion">
+      <p>NASA's Spitzer and Hubble Space Telescopes have teamed up to expose the chaos that baby stars are creating 1,500 light-years away in a cosmic cloud called the Orion Nebula.</p>
+      <p>This striking infrared and visible-light composite indicates that four monstrously massive stars at the center of the cloud may be the main culprits in the familiar Orion constellation. The stars are collectively called the "Trapezium." Their community can be identified as the yellow smudge near the center of the image.</p>
+      <p>Swirls of green in Hubble's ultraviolet and visible-light view reveal hydrogen and sulfur gas that have been heated and ionized by intense ultraviolet radiation from the Trapezium's stars. Meanwhile, Spitzer's infrared view exposes carbon-rich molecules called polycyclic aromatic hydrocarbons in the cloud. These organic molecules have been illuminated by the Trapezium's stars, and are shown in the composite as wisps of red and orange. On Earth, polycyclic aromatic hydrocarbons are found on burnt toast and in automobile exhaust.</p>
+      <p>Together, the telescopes expose the stars in Orion as a rainbow of dots sprinkled throughout the image. Orange-yellow dots revealed by Spitzer are actually infant stars deeply embedded in a cocoon of dust and gas. Hubble showed less embedded stars as specks of green, and foreground stars as blue spots.</p>
+      <p>Stellar winds from clusters of newborn stars scattered throughout the cloud etched all of the well-defined ridges and cavities in Orion. The large cavity near the right of the image was most likely carved by winds from the Trapezium's stars.</p>
+      <p>Located 1,500 light-years away from Earth, the Orion Nebula is the brightest spot in the sword of the Orion, or the "Hunter" constellation. The cosmic cloud is also our closest massive star-formation factory, and astronomers believe it contains more than 1,000 young stars.</p>
+      <p>The Orion constellation is a familiar sight in the fall and winter night sky in the northern hemisphere. The nebula is invisible to the unaided eye, but can be resolved with binoculars or small telescopes.</p>
+      <p>This composite image displays light detected at wavelengths of 0.43, 0.50, and 0.53 microns in blue. Light at wavelengths of 0.6, 0.65, and 0.91 microns is green. Light at 3.6 microns is orange, and 8.0 microns is red.</p>
+    </Description>
+  </Place>
+  <Place MSRCommunityId="0" MSRComponentId="0" Permission="0" Name="M81" DataSetType="Sky" RA="9.92583333333333" Dec="69.0661111111111" Constellation="UMA" Classification="Galaxy" Magnitude="0" Distance="0" ZoomLevel="3.93833333333333" Rotation="0" Angle="0" DomeAlt="0" DomeAz="0" Opacity="100" AngularSize="3.93833333333333">
+    <Target>Undefined</Target>
+    <ForegroundImageSet>
+      <ImageSet MSRCommunityId="0" MSRComponentId="0" Permission="0" Generic="False" DataSetType="Sky" BandPass="IR" Url="http://r{S:3}.ortho.tiles.virtualearth.net/tiles/wsa0000011213{Q}?g=131" TileLevels="4" WidthFactor="2" Sparse="True" Rotation="-89.508107562815" QuadTreeMap="0123" Projection="Tangent" Name="M81;NGC 3031;Bode's Galaxy" FileType=".png" CenterY="69.0646109949804" CenterX="149.180016253303" BottomsUp="False" StockSet="False" ElevationModel="False" OffsetX="-0.00618503353352126" OffsetY="0.102537327780535" BaseTileLevel="0" BaseDegreesPerTile="0.426929655361101" MeanRadius="0">
+        <Credits>Spitzer data: NASA/JPL/Caltech/S. Willner (Harvard-Smithsonian CfA);Hubble data: NASA, ESA, and A. Zezas (Harvard-Smithsonian CfA); GALEX data: NASA, JPL-Caltech, GALEX Team, J. Huchra et al. (Harvard-Smithsonian CfA)</Credits>
+        <CreditsUrl>http://www.spitzer.caltech.edu/images/2126-sig07-009-Multiwavelength-M81</CreditsUrl>
+        <ThumbnailUrl>http://www.worldwidetelescope.org/wwtweb/thumbnail.aspx?name=892575158</ThumbnailUrl>
+      </ImageSet>
+    </ForegroundImageSet>
+    <Description Title="Multiwavelength M81">
+      <p>This beautiful galaxy is tilted at an oblique angle on to our line of sight, giving a "birds-eye view" of the spiral structure. The galaxy is similar to our Milky Way, but our favorable view provides a better picture of the typical architecture of spiral galaxies.</p>
+      <p>M81 may be undergoing a surge of star formation along the spiral arms due to a close encounter it may have had with its nearby spiral galaxy NGC 3077 and a nearby starburst galaxy (M82) about 300 million years ago.</p>
+      <p>M81 is one of the brightest galaxies that can be seen from the Earth. It is high in the northern sky in the circumpolar constellation Ursa Major, the Great Bear. At an apparent magnitude of 6.8 it is just at the limit of naked-eye visibility. The galaxy's angular size is about the same as that of the Full Moon.</p>
+      <p>This image combines data from the Hubble Space Telescope, the Spitzer Space Telescope, and the Galaxy Evolution Explorer (GALEX) missions. The GALEX ultraviolet data were from the far-UV portion of the spectrum (135 to 175 nanometers). The Spitzer infrared data were taken with the IRAC channel 4 detector (8 microns). The Hubble data were taken at the blue portion of the spectrum.</p>
+    </Description>
+  </Place>
+  <Place MSRCommunityId="0" MSRComponentId="0" Permission="0" Name="Cartwheel Galaxy" DataSetType="Sky" RA="0.62712052663200168" Dec="-33.7183380127" Constellation="SCL" Classification="Galaxy" Magnitude="0" Distance="0" ZoomLevel="1" Rotation="0" Angle="0" DomeAlt="0" DomeAz="0" Opacity="100" AngularSize="1">
+    <Target>Undefined</Target>
+    <ForegroundImageSet>
+      <ImageSet MSRCommunityId="0" MSRComponentId="0" Permission="0" Generic="False" DataSetType="Sky" BandPass="XRay" Url="http://r{S:0}.ortho.tiles.virtualearth.net/tiles/wsa0000000110{Q}?g=131" TileLevels="3" WidthFactor="2" Sparse="True" Rotation="-89.9503358018785" QuadTreeMap="0123" Projection="Tangent" Name="Cartwheel Galaxy" FileType=".png" CenterY="-33.7183380127" CenterX="9.40680789948" BottomsUp="False" StockSet="False" ElevationModel="False" OffsetX="-0.0069164076586671" OffsetY="-0.0128921838757555" BaseTileLevel="0" BaseDegreesPerTile="0.0566592115398009" MeanRadius="0">
+        <Credits>NASA/JPL/Caltech/P.Appleton et al. X-ray: NASA/CXC/A.Wolter &amp; G.Trinchieri et al.</Credits>
+        <CreditsUrl>http://chandra.harvard.edu/photo/2006/cartwheel/</CreditsUrl>
+        <ThumbnailUrl>http://www.worldwidetelescope.org/wwtweb/thumbnail.aspx?name=3555282318</ThumbnailUrl>
+      </ImageSet>
+    </ForegroundImageSet>
+    
+    <Description Title="Cartwheel Galaxy: Astronomers Do Flips Over Cartwheel Galaxy">
+      <p>This image combines data from four different observatories: the Chandra X-ray Observatory (purple); the Galaxy Evolution Explorer satellite (ultraviolet/blue); the Hubble Space Telescope (visible/green); the Spitzer Space Telescope (infrared/red). The unusual shape of the Cartwheel Galaxy is likely due to a collision with one of the smaller galaxies on the lower left several hundred million years ago.</p>
+      <p>The smaller galaxy produced compression waves in the gas of the Cartwheel as it plunged through it. These compression waves trigger bursts of star formation. The most recent star burst has lit up the Cartwheel's rim, which has a diameter larger than that of the Milky Way galaxy, with millions of bright young stars.</p>
+      <p>When the most massive of these stars explode as supernovas, they leave behind neutron stars and black holes. Some of these neutron stars and black holes have nearby companion stars, and have become powerful sources of X-rays as they pull matter off their companions.</p>
+      <p>The brightest X-ray sources are likely black holes with companion stars, and appear as the white dots that lie along the rim of the X-ray image. The Cartwheel contains an exceptionally large number of these black hole binary X-ray sources, because many massive stars formed in the rim.</p>
+
+
+    </Description>
+  </Place>
+  <Place MSRCommunityId="0" MSRComponentId="0" Permission="0" Name="Light and Shadow in the Carina Nebula (NGC 3372)" DataSetType="Sky" RA="10.744999999999997" Dec="-59.6480555555556" Constellation="CAR" Classification="Nebula" Magnitude="0" Distance="0" ZoomLevel="3.36333333333333" Rotation="0" Angle="0" DomeAlt="0" DomeAz="0" Opacity="100" AngularSize="3.36333333333333">
+    <Target>Undefined</Target>
+    <ForegroundImageSet>
+      <ImageSet DemUrl="" MSRCommunityId="0" MSRComponentId="0" Permission="0" Generic="False" DataSetType="Sky" BandPass="Visible" Url="http://r{S:2}.ortho.tiles.virtualearth.net/tiles/wsa0000002132{Q}?g=138" TileLevels="3" WidthFactor="2" Sparse="True" Rotation="177.823624213756" QuadTreeMap="0123" Projection="Tangent" Name="Light and Shadow in the Carina Nebula (NGC 3372)" FileType=".png" CenterY="-59.6484568272354" CenterX="161.178898367045" BottomsUp="False" StockSet="False" ElevationModel="False" OffsetX="0" OffsetY="0" BaseTileLevel="0" BaseDegreesPerTile="0.116951513885838" MeanRadius="0">
+        <Credits>Image Credit: NASA, The Hubble Heritage Team (AURA/STScI)</Credits>
+        <CreditsUrl>http://hubblesite.org/newscenter/newsdesk/archive/releases/2000/06/</CreditsUrl>
+        <ThumbnailUrl>http://www.worldwidetelescope.org/wwtweb/thumbnail.aspx?name=1353700001</ThumbnailUrl>
+      </ImageSet>
+    </ForegroundImageSet>
+    <Description Title="Light and Shadow in the Carina Nebula">
+
+      <p>Previously unseen details of a mysterious, complex structure within the Carina Nebula (NGC 3372) are revealed by this image of the "Keyhole Nebula," obtained with NASA's Hubble Space Telescope. The picture is a montage assembled from four different April 1999 telescope pointings with Hubble's Wide Field Planetary Camera 2, which used six different color filters.</p>
+      <p>The picture is dominated by a large, approximately circular feature, which is part of the Keyhole Nebula, named in the 19th century by Sir John Herschel. This region, about 8000 light-years from Earth, is located adjacent to the famous explosive variable star Eta Carinae, which lies just outside the field of view toward the upper right. The Carina Nebula also contains several other stars that are among the hottest and most massive known, each about 10 times as hot, and 100 times as massive, as our Sun.</p>
+      <p>The circular Keyhole structure contains both bright filaments of hot, fluorescing gas, and dark silhouetted clouds of cold molecules and dust, all of which are in rapid, chaotic motion. The high resolution of the Hubble images reveals the relative three-dimensional locations of many of these features, as well as showing numerous small dark globules that may be in the process of collapsing to form new stars.</p>
+      <p>Two striking large, sharp-edged dust clouds are located near the bottom center and upper left edges of the image. The former is immersed within the ring and the latter is just outside the ring. The pronounced pillars and knobs of the upper left cloud appear to point toward a luminous, massive star located just outside the field further toward the upper left, which may be responsible for illuminating and sculpting them by means of its high-energy radiation and stellar wind of high-velocity ejected material. These large dark clouds may eventually evaporate, or if there are sufficiently dense condensations within them, give birth to small star clusters.</p>
+      <p>The Carina Nebula, with an overall diameter of more than 200 light-years, is one of the outstanding features of the Southern-Hemisphere portion of the Milky Way. The diameter of the Keyhole ring structure shown here is about 7 light-years.</p>
+
+    </Description>
+  </Place>
+  <Place MSRCommunityId="0" MSRComponentId="0" Permission="0" Name="NGC 6543: The Cat's Eye Nebula Redux" DataSetType="Sky" RA="17.976111111111095" Dec="66.6319444444444" Constellation="DRA" Classification="PlanetaryNebula" Magnitude="0" Distance="0" ZoomLevel="0.703333333333333" Rotation="0" Angle="0" DomeAlt="0" DomeAz="0" Opacity="100" AngularSize="0.703333333333333">
+    <Target>Undefined</Target>
+    <ForegroundImageSet>
+      <ImageSet MSRCommunityId="0" MSRComponentId="0" Permission="0" Generic="False" DataSetType="Sky" BandPass="Visible" Url="http://www.worldwidetelescope.org/wwtweb/tiles.aspx?q={1},{2},{3},962869576" TileLevels="4" WidthFactor="2" Sparse="True" Rotation="-144.44702955079" QuadTreeMap="" Projection="Tangent" Name="NGC 6543: The Cat's Eye Nebula Redux;NGC 6543;Cat's Eye Nebula" FileType=".png" CenterY="66.6320819962155" CenterX="269.640136719" BottomsUp="False" StockSet="False" ElevationModel="False" OffsetX="-0.00132605936732667" OffsetY="-0.00056052475266126" BaseTileLevel="0" BaseDegreesPerTile="0.0229317608672014" MeanRadius="0">
+        <Credits>X-ray: NASA/CXC/SAO; Optical: NASA/STScI
+A composite image of data from NASA’s Chandra X-ray Observatory (blue) and Hubble Space Telescope (red and purple) of NGC 6543 shows a phase that Sun-like stars undergo at the end of their lives. Material from the outer layers of the star in the Cat's Eye is flying away at about 4 million miles per hour. A hot core is left behind that eventually collapses to become a white dwarf star. The Chandra data reveal that the central star in NGC 6543 is surrounded by a cloud of multi-million-degree gas.</Credits>
+        <CreditsUrl>http://chandra.harvard.edu/photo/2008/catseye/</CreditsUrl>
+        <ThumbnailUrl>http://www.worldwidetelescope.org/wwtweb/thumbnail.aspx?name=962869576</ThumbnailUrl>
+      </ImageSet>
+    </ForegroundImageSet>
+    <Description Title="NGC 6543: The Cat's Eye Nebula Redux">
+      <p>This composite of data from NASA's Chandra X-ray Observatory and Hubble Space Telescope is a new look for NGC 6543, better known as the Cat's Eye nebula. This famous object is a so-called planetary nebula that represents a phase of stellar evolution that the Sun should experience several billion years from now. When a star like the Sun begins to run out of fuel, it becomes what is known as a red giant. In this phase, a star sheds some of its outer layers, eventually leaving behind a hot core that collapses to form a dense white dwarf star. A fast wind emanating from the hot core rams into the ejected atmosphere, pushes it outward, and creates the graceful filamentary structures seen with optical telescopes.</p>
+      <p>Chandra's X-ray data (colored in blue) of NGC 6543 shows that its central star is surrounded by a cloud of multi-million-degree gas. By comparing where the X-rays lie in relation to the structures seen in optical light by Hubble (red and purple), astronomers were able to deduce that the chemical abundances in the region of hot gas were like those in the wind from the central star and different from the outer cooler material. In the case of the Cat's Eye, material shed by the star is flying away at a speed of about 4 million miles per hour. The star itself is expected to collapse to become a white dwarf star in a few million years.</p>
+      
+
+    </Description>
+  </Place>
+  <Place MSRCommunityId="0" MSRComponentId="0" Permission="0" Name="Firestorm of Star Birth In Galaxy NGC 604" DataSetType="Sky" RA="1.5758333333333283" Dec="30.7838888888889" Constellation="TRI" Classification="Galaxy" Magnitude="0" Distance="0" ZoomLevel="1.93" Rotation="0" Angle="0" DomeAlt="0" DomeAz="0" Opacity="100" AngularSize="1.93">
+    <Target>Undefined</Target>
+    <ForegroundImageSet>
+      <ImageSet DemUrl="" MSRCommunityId="0" MSRComponentId="0" Permission="0" Generic="False" DataSetType="Sky" BandPass="Visible" Url="http://r{S:2}.ortho.tiles.virtualearth.net/tiles/wsa0000001212{Q}?g=138" TileLevels="3" WidthFactor="2" Sparse="True" Rotation="20.781199545066" QuadTreeMap="0123" Projection="Tangent" Name="Firestorm of Star Birth In Galaxy NGC 604" FileType=".png" CenterY="30.7842525381567" CenterX="23.6354980985943" BottomsUp="False" StockSet="False" ElevationModel="False" OffsetX="0" OffsetY="0" BaseTileLevel="0" BaseDegreesPerTile="0.0570308519546673" MeanRadius="0">
+        <Credits>Image Credit: NASA and The Hubble Heritage Team (AURA/STScI) Acknowledgment: D. Garnett (U. Arizona), J. Hester (ASU), and J. Westphal (Caltech)</Credits>
+        <CreditsUrl>http://hubblesite.org/newscenter/newsdesk/archive/releases/2003/30/</CreditsUrl>
+        <ThumbnailUrl>http://www.worldwidetelescope.org/wwtweb/thumbnail.aspx?name=1424292271</ThumbnailUrl>
+      </ImageSet>
+    </ForegroundImageSet>
+    <Description Title="Firestorm of Star Birth Seen in a Local Galaxy">
+      <p>This full mosaic WFPC2 image shows a slightly larger area around NGC 604. The scale of this image is 2.5 arcminutes along the bottom.</p>
+    </Description>
+  </Place>
+</Folder>

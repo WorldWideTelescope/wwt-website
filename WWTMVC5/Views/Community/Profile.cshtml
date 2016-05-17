@@ -3,6 +3,9 @@
     Layout = "~/Views/Shared/_CommunityLayout.cshtml";
 }
 
-<script>location.href = '/Community/#/MyProfile/@ViewBag.CurrentUserId';</script>
+<script>
+    console.log('@ViewBag.CurrentUserId');
+    location.href = '#/MyProfile/@ViewBag.CurrentUserId';
+</script>
 
 

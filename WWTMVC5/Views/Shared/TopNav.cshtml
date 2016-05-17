@@ -10,7 +10,8 @@
 	                <span class="icon-bar"></span>
 	            </button>
 	        }
-	        <a class="navbar-brand" href="@(Model.IsOpenWwtKiosk?"http://worldwidetelescope.org":"/")">
+	        <a class="navbar-brand" href="@(Model.IsOpenWwtKiosk ? "http://worldwidetelescope.org" : "/")">
+	            <span class="aas">American Astronomical Society</span>
 	            World<span class=text-info>Wide Telescope</span>
 	        </a>
 	    </div>
@@ -128,6 +129,7 @@
                     <li><a href="/Developers/DataFilesReference">Data Files Reference</a></li>
                     <li><a href="/Developers/ProjectionReference">Projection Reference</a></li>
                     <li><a href="/Developers/ImportImage">Import Image</a></li>
+                    <li><a href="/Interact/Embed">Embed Web Control</a></li>
                 </ul>
 
             </li>

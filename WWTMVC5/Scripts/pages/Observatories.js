@@ -109,7 +109,7 @@
     };
 
     var loadWtml = function(callback) {
-        var wtmlPath = "/Content/WTML/GreatObservatories.xml";
+        var wtmlPath = "/Content/GreatObservatories.xml";
         ctl.add_collectionLoaded(function() {
             $.ajax({
                 url: wtmlPath,

@@ -15,9 +15,6 @@
     </script>
 }
 
-
-
-
 <div class="row">
     <div class="col-md-12 home-install">
 
@@ -25,9 +22,10 @@
             <div class="carousel slide" id="carousel" data-ride="carousel" data-interval="8000">
 
                 <ol class="carousel-indicators">
-                    <li data-target="#carousel" data-slide-to="0" class="active" title="WorldWide Telescope Stories"></li>
-                    <li data-target="#carousel" data-slide-to="1" title="WWT Ambassadors"></li>
-                    <li data-target="#carousel" data-slide-to="2" title="Visit the horsehead nebula with WorldWide Telescope"></li>
+                    <li data-target="#carousel" data-slide-to="0" class="active" title="WWT and Planet Nine"></li>
+                    <li data-target="#carousel" data-slide-to="1" title="WorldWide Telescope Stories"></li>
+                    <li data-target="#carousel" data-slide-to="2" title="WWT Ambassadors"></li>
+                    @*<li data-target="#carousel" data-slide-to="3" title="Visit the horsehead nebula with WorldWide Telescope"></li>*@
                     <li data-target="#carousel" data-slide-to="3" title="WorldWide Telescope features Bing 3D Cities"></li>
                     <li data-target="#carousel" data-slide-to="4" title="Mars"></li>
                     <li data-target="#carousel" data-slide-to="5" title="Explore Earth with WorldWide Telescope"></li>
@@ -35,8 +33,15 @@
                 </ol>
 
                 <div class="carousel-inner">
-
                     <div class="item active">
+                        <img alt="WorldWide Telescope Stories" src="https://cloud.githubusercontent.com/assets/9676722/12996674/9264f1e4-d0f7-11e5-86b1-23c0cd3e2a12.jpg" class="img-responsive" id="heroBg" />
+                        <div class="hero-backdrop lighter left">
+                            <h1 class="text-white">WWT and Planet Nine</h1>
+                            <p class="text-white">WorldWide Telescope used to visualize orbit for possible new Planet Nine.</p>
+                            <p class="text-white"><a href="/news/planet9">Learn more and find out to include these visualizations</a></p>
+                        </div>
+                    </div>
+                    <div class="item">
                         <img alt="WorldWide Telescope Stories" src="@Model.ImgDir/WWTStoriesImage.jpg" class="img-responsive" id="heroBg" />
                         <div class="hero-backdrop left">
                             <h1 class="text-white">WorldWide Telescope Stories</h1>
@@ -52,14 +57,14 @@
                             <p class="text-white"><a href="http://wwtambassadors.org">wwtambassadors.org</a></p>
                         </div>
                     </div>
-                    <div class="item">
+                    @*<div class="item">
                         <img alt="Visit the horsehead nebula with WorldWide Telescope" src="@Model.ImgDir/horsehead.jpg" class="img-responsive" id="heroBg" />
                         <div class="hero-backdrop right">
                             <h1 class="text-white">Horsehead and Flame Nebula</h1>
                             <p class="text-white">Now you can visit the horsehead nebula at lunch, and still be home in time for dinner.</p>
                             <p class="text-white"><a href="/webclient/#/place=59.18&ra=5.66500&dec=-2.40056&fov=2.65720">View it in the WWT Web Client.</a></p>
                         </div>
-                    </div>
+                    </div>*@
                     <div class="item">
                         <img alt="WorldWide Telescope features Bing 3D Cities" src="@Model.ImgDir/seattle.jpg" class="img-responsive" id="heroBg" />
                         <div class="hero-backdrop right">

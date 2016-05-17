@@ -204,7 +204,7 @@ namespace WWTMVC5.Repositories
                 .Include(c => c.CommunityContents).Include(child => child.CommunityContents.Select(p => p.Content));
 
             var contents = payloadDetails.SelectMany(item => item.CommunityContents).Select(item => item.Content)
-                .Where(item => item.Filename.EndsWith(Constants.TourFileExtension));
+                .Where(item => item.Filename.EndsWith(Constants.TourFileExtension) && item.IsDeleted.Value.Equals(false));
 
             return contents.ToList();
         }
@@ -224,7 +224,10 @@ namespace WWTMVC5.Repositories
 
             var latestDateTime = DateTime.UtcNow.AddDays(-(daysToConsider));
 
-            var contents = payloadDetails.SelectMany(item => item.CommunityContents).Select(item => item.Content).Where(item => item.ModifiedDatetime > latestDateTime).OrderByDescending(item => item.ModifiedDatetime);
+            var contents = payloadDetails.SelectMany(item => item.CommunityContents)
+                .Select(item => item.Content)
+                .Where(item => item.ModifiedDatetime > latestDateTime && item.IsDeleted.Value.Equals(false))
+                .OrderByDescending(item => item.ModifiedDatetime);
 
             return contents.ToList();
         }

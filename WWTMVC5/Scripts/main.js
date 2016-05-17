@@ -160,7 +160,7 @@ if (top === self) {
 				var hashLink = $('a[href=' + curHash + ']');
 				if (hashLink.length) {
 					hashLink.click();
-						location.href = curHash;
+					location.href = curHash;
 					setTimeout(function() {
 						//hashLink.click();
 						location.href = curHash;

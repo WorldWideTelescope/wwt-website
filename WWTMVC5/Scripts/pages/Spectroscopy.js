@@ -45,13 +45,24 @@
 		fgOpacity = $('#fgOpacity');
 		bgOpacity = $('#bgOpacity');
 		sliderMover = new wwt.Move({
-			el: sliderbar,
-			bounds: {
-				x: [0, slider.width()],
-				y: [0, 0]
-			},
-			onmove: sliderMove
+		    el: sliderbar,
+		    bounds: {
+		        x: [0, $('#WWTCanvas').width()],
+		        y: [0, 0]
+		    },
+		    onmove: function () {
+		        sliderCurLeft = this.css.left;
+		        moveSlider(sliderCurLeft);
+		    }
 		});
+		//sliderMover = new wwt.Move({
+		//	el: sliderbar,
+		//	bounds: {
+		//		x: [0, slider.width()],
+		//		y: [0, 0]
+		//	},
+		//	onmove: sliderMove
+		//});
 		
 		ctl.add_ready(cacheBackgrounds);
 		var modal = $('#imageryDetailModal');
@@ -109,37 +120,36 @@
 	//#endregion
 
 	//#region slider functions
-	var moveTimer;
-	var setOpacity = function() {
-		var wid = slider.width();
-		var w = wid / (surveys.length - 1);
-		var left = sliderCurLeft = this.css.left;
+	
+    var setOpacity = function() {
+        var wid = slider.width();
+        var w = wid / (surveys.length - 1);
+        var left = sliderCurLeft;
+        if (!left) {
+            left = sliderCurLeft = 0;
+        }
+        
 
-		var bgIndex = Math.floor(left / w);
-		var fgIndex = Math.ceil(left / w);
-		var fgTrans = (left % w) / w;
-		var opacity = (fgTrans * 100).toFixed(1);
-	   
-		$('#opacitySpan').text(opacity);
+        var bgIndex = Math.floor(left / w);
+        var fgIndex = Math.ceil(left / w);
+        var fgTrans = (left % w) / w;
+        var opacity = parseFloat((fgTrans * 100).toFixed(2));
+        console.log(left,opacity, fgIndex, bgInd);
+        $('#opacitySpan').text(opacity);
 
-		fgOpacity.width((opacity * 2) + 10);
-		bgOpacity.width(((100 - opacity) * 2) + 10);
-		if (bgInd != bgIndex) {
-			ctl.setForegroundImageByName(surveys[fgIndex].name);
-			ctl.setBackgroundImageByName(surveys[bgIndex].name);
-			$('#surveyBg').text(surveys[bgIndex].name);
-			$('#surveyFg').text(surveys[fgIndex].name);
-			bgInd = bgIndex;
-		}
-		ctl.setForegroundOpacity(opacity);
-	}
-	var sliderMove = function () {
-		clearTimeout(moveTimer);
-		var left = this.css.left
-		moveTimer = setTimeout(function() {
-			setOpacity.call({ css: { left: left } });
-		}, 400);
-	};
+        fgOpacity.width((opacity * 2) + 10);
+        bgOpacity.width(((100 - opacity) * 2) + 10);
+        if (bgInd !== bgIndex) {
+            ctl.setForegroundImageByName(surveys[fgIndex].name);
+            ctl.setBackgroundImageByName(/*surveys[bgIndex].name.indexOf('WMAP') === 0 ? 'WMAP' : */surveys[bgIndex].name);
+            $('#surveyBg').text(surveys[bgIndex].name);
+            $('#surveyFg').text(surveys[fgIndex].name);
+            bgInd = bgIndex;
+        }
+        ctl.setForegroundOpacity(opacity);
+    };
+    
+    
 
 	var setupSlider = function (oldWidth, newWidth) {
 		if (!surveys) {
@@ -155,14 +165,7 @@
 			sliderMover = null;
 			slider.width(newWidth);
 		}
-		sliderMover = new wwt.Move({
-			el: sliderbar,
-			bounds: {
-				x: [0, $('#WWTCanvas').width()],
-				y: [0, 0]
-			},
-			onmove: sliderMove
-		});
+		
 		var bandContainer = slider.find('.band-container');
 		slider.find('.band-marker, .band').remove();
 		slider.removeClass('hide').show();
@@ -219,14 +222,10 @@
 		}
 	};
 
-	
-
 	var moveSlider = function (leftCoord) {
 		sliderCurLeft = leftCoord;
 		sliderbar.css('left', sliderCurLeft);
-		sliderMove.call({ css: { left: sliderCurLeft } });
-		
-
+		setOpacity();
 	};
 
 	var startMode = function () {
@@ -239,8 +238,6 @@
 			interactionMode();
 
 		}
-		
-		
 		wwt.triggerResize();
 	};
 

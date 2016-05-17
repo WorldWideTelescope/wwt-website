@@ -41,6 +41,7 @@ namespace WWTMVC5.Controllers
             "layerscape",
             "learn",
             "museums",
+            "news",
             "openwwt",
             "planetariums",
             "profile",

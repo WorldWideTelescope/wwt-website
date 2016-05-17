@@ -9,15 +9,17 @@
     function ($rootScope, $scope, dataproxy, $timeout, $routeParams, uiHelper, fileUploader) {
 
         function init() {
+            console.log('myprofile init');
             $scope.options = {
                 activeTab: 'uploads'
             };
             uiHelper.fixLinks('profileLink');
             dataproxy.requireAuth().then(function (types) {
                 $scope.types = types;
+                console.log('requireAuth', types);
                 dataproxy.getMyProfile(0).then(setProfile, function() {console.log(arguments)});
             }, function(reason) {
-                location.href = '/Community?#/MyProfile';
+                location.reload();
             });
         }
 
@@ -41,6 +43,7 @@
         }
 
         function setProfile(profile) {
+            console.log('setProfile', profile);
             if (typeof profile == 'string' && profile.indexOf('error') === 0) {
                 location.reload();
             }
@@ -60,23 +63,31 @@
             $scope.editProfile.profileId = profile.ProfileId;
             $scope.editProfile.isSubscribed = profile.IsSubscribed;
             dataproxy.getUserEntities('Content', profile.ProfileId).then(function (response) {
-                $scope.profile.uploads = response.entities && response.entities.length ? response.entities : [];
-                wwt.triggerResize();
+                console.log('userUploads', response);
+                $scope.$applyAsync(function() {
+                    $scope.profile.uploads = response.entities && response.entities.length ? response.entities : [];
+                    wwt.triggerResize();
+                });
             });
             dataproxy.getUserEntities('Community', profile.ProfileId).then(function (response) {
-                $scope.profile.communities = response.entities && response.entities.length ? response.entities : [];
-                wwt.triggerResize();
+                console.log('userCommunities', response);
+                $scope.$applyAsync(function() {
+                    $scope.profile.communities = response.entities && response.entities.length ? response.entities : [];
+                    wwt.triggerResize();
+                });
             });
             getRequests();
         }
 
         var getRequests = function() {
             dataproxy.getUserRequests().then(function (response) {
+                $scope.$applyAsync(function() {
                 if (response.Result && response.Result.PermissionItemList) {
                     response = response.Result;
                 }
                 $scope.profile.requests = response.PermissionItemList && response.PermissionItemList.length ? response.PermissionItemList : null;
                 wwt.triggerResize();
+                });
             });
         }
 
