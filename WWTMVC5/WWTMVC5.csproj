@@ -526,11 +526,9 @@
     <Compile Include="ViewModels\VideoDataViewModel.cs" />
     <Compile Include="webclient\Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="webclient\login.aspx.cs">
       <DependentUpon>login.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WebServices\IResourceService.cs" />
     <Compile Include="WebServices\LiveIdAuth.svc.cs">
