@@ -37,6 +37,7 @@ namespace WWTMVC5.Controllers
             "educators",
             "explorers",
             "eyewire",
+            "home",
             "interact",
             "layerscape",
             "learn",
@@ -105,7 +106,7 @@ namespace WWTMVC5.Controllers
                 return Redirect("/webclient?loggedIn=true");
             }
 
-            return Redirect("/");
+            return Redirect("/home");
         }
 
         [Route("Logout")]
@@ -197,16 +198,21 @@ namespace WWTMVC5.Controllers
                         page = "";
                     }
                     var strippedUrl = group + "/" + page;
-                    
+                    if (strippedUrl == "/") {
+                        strippedUrl = "/home";
+                    }
                     //redirect strips gnarly looking code from qs
                     return Redirect(strippedUrl);
                 }
                 if (Request.Cookies["refresh_token"] != null)
                 {
-                    model.User = await TryAuthenticateFromHttpContext();
+                    model.User = await TryAuthenticateFromAuthCode("");
                 }
             }
-            return group == string.Empty ? View("~/Views/index.cshtml", model) : View("~/Views/" + group + "/" + page + ".cshtml", model);
+            if (group == string.Empty) {
+                return Redirect("webclient");
+            }
+            return group.ToLower() == "home" ? View("~/Views/index.cshtml", model) : View("~/Views/" + group + "/" + page + ".cshtml", model);
         }
 
         //Ensure old webform routes still return the proper view

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -1044,13 +1044,16 @@
     <Content Include="Views\Upgrade\Index.cshtml" />
     <Content Include="Views\Planetariums\QuickStart.cshtml" />
     <Content Include="Views\Learn\WebDevelopment.cshtml" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\News\planet9.cshtml" />
     <Content Include="Views\News\LeftNav.cshtml" />
     <Content Include="Views\News\index.cshtml" />
     <Content Include="Views\About\Data.cshtml" />
     <Content Include="Views\Developers\Embed.cshtml" />
     <Content Include="Views\Developers\WebDevelopment.cshtml" />
+    <Content Include="Views\News\Eclipse2017.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>

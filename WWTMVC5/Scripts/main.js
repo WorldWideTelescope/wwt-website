@@ -99,6 +99,8 @@ if (top === self) {
 	        var signedIn = $('#signinContainer').attr('loggedIn') === 'true';
 	        if (!signedIn && getQSValue('code') != null) {
 	            var returnUrl = location.href.split('?')[0];
+	            console.log(returnUrl);
+	            return;
 	            location.href = '/LiveId/AuthenticateFromCode/' + getQSValue('code') +
 	                '?returnUrl=' + encodeURIComponent(returnUrl);
 	            return;
@@ -131,7 +133,7 @@ if (top === self) {
 	            cleanCookies();
 	        }
 	        wwt.user.set('authCodeRedirect', true);
-	        var dir = '';//location.href.toLowerCase().indexOf('/community') !== -1 ? '/Community' : '';
+	        var dir = '/home';//location.href.toLowerCase().indexOf('/community') !== -1 ? '/Community' : '';
 	        var redir = 'http://' + location.host + dir;
 	        var wlUrl = 'https://login.live.com/oauth20_authorize.srf?client_id=' +
                 _liveClientId + '&scope=wl.offline_access%20wl.emails&response_type=code&redirect_uri=' +

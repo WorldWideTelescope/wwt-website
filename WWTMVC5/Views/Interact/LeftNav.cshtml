@@ -1,5 +1,5 @@
 ﻿@{
-	ViewBag.sdkUrl = "http://www.worldwidetelescope.org/html5sdk/1.0.0/wwtsdk" + (Request.QueryString["debug"] == null ? ".min" : "") + ".js";
+	ViewBag.sdkUrl = Model.ResLoc +"/html5sdk/wwtsdk" + (Request.QueryString["debug"] == null ? ".min" : "") + ".js";
 }
 
 <script src="@ViewBag.sdkUrl"></script>

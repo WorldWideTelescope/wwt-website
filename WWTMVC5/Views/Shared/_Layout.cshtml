@@ -49,10 +49,6 @@
 				background-image: url(@Model.ImgDir/bg/navbar-logo-glow.png);
 			}
 		</style>
-		@if (ViewBag.KnowledgeWidget == true)
-		{
-			<script type='text/javascript' src='//www.bing.com/widget/bootstrap.js' data-visualization='linksandimages' data-carouselstate='collapsed' data-strength='moderate' data-maxlinks='12' data-maxentitylinks='4' data-maxparagraphlinks='5' data-version='1.0b' data-autosnapshot='true' data-id='829a001add0c423c851b167315a8bd8f' data-options='dc=dotyellow,cse=1' async></script>
-		}
 		
 		@RenderSection("head", required: false)
 	</head>
@@ -69,6 +65,19 @@
        @Html.Partial("Footer");
     } 
     
-
+    <div class="modal fade" id="mailChimp">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="close-button">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    
+                    <iframe class="embed-responsive-item" frameborder="0" src="http://worldwidetelescope.us11.list-manage.com/subscribe?u=92369f48c120de5898e8ea9f5&id=d52401e7c0"></iframe>
+                    
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 </body>
 </html>

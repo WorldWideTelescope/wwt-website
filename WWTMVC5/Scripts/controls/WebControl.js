@@ -813,7 +813,8 @@ wwt.WebControl = (function () {
 		reinit: reinit,
 		interact: interact,
 		setForegroundImage: setForegroundImage,
-		loadExternalImage: loadExternalImage
+		loadExternalImage: loadExternalImage,
+        parseWtml:parseWtml
 	};
 
 })();

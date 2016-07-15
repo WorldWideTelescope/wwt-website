@@ -1797,24 +1797,6 @@ window.wwtlib = function(){
   };
 
 
-  // wwtlib.SelectionAnchor
-
-  var SelectionAnchor = {
-    topLeft: 0, 
-    top: 1, 
-    topRight: 2, 
-    right: 3, 
-    bottomRight: 4, 
-    bottom: 5, 
-    bottomLeft: 6, 
-    left: 7, 
-    rotate: 8, 
-    move: 9, 
-    center: 10, 
-    none: 11
-  };
-
-
   // wwtlib.TextBorderStyle
 
   var TextBorderStyle = {
@@ -1834,213 +1816,6 @@ window.wwtlib = function(){
     advanced: 2, 
     educator: 3, 
     professional: 4
-  };
-
-
-  // wwtlib.Keys
-
-  var Keys = {
-    modifiers: -65536, 
-    none: 0, 
-    lButton: 1, 
-    rButton: 2, 
-    cancel: 3, 
-    mButton: 4, 
-    xButton1: 5, 
-    xButton2: 6, 
-    back: 8, 
-    tab: 9, 
-    lineFeed: 10, 
-    clearKey: 12, 
-    returnKey: 13, 
-    enter: 13, 
-    shiftKey: 16, 
-    controlKey: 17, 
-    menu: 18, 
-    pause: 19, 
-    capital: 20, 
-    capsLock: 20, 
-    kanaMode: 21, 
-    hanguelMode: 21, 
-    hangulMode: 21, 
-    junjaMode: 23, 
-    finalMode: 24, 
-    hanjaMode: 25, 
-    kanjiMode: 25, 
-    escape: 27, 
-    imeConvert: 28, 
-    imeNonconvert: 29, 
-    imeAccept: 30, 
-    imeAceept: 30, 
-    imeModeChange: 31, 
-    space: 32, 
-    prior: 33, 
-    pageUp: 33, 
-    next: 34, 
-    pageDown: 34, 
-    end: 35, 
-    home: 36, 
-    left: 37, 
-    up: 38, 
-    right: 39, 
-    down: 40, 
-    select: 41, 
-    print: 42, 
-    execute: 43, 
-    snapshot: 44, 
-    printScreen: 44, 
-    insertKey: 45, 
-    deleteKey: 46, 
-    help: 47, 
-    d0: 48, 
-    d1: 49, 
-    d2: 50, 
-    d3: 51, 
-    d4: 52, 
-    d5: 53, 
-    d6: 54, 
-    d7: 55, 
-    d8: 56, 
-    d9: 57, 
-    a: 65, 
-    b: 66, 
-    c: 67, 
-    d: 68, 
-    e: 69, 
-    f: 70, 
-    g: 71, 
-    h: 72, 
-    i: 73, 
-    j: 74, 
-    k: 75, 
-    l: 76, 
-    m: 77, 
-    n: 78, 
-    o: 79, 
-    p: 80, 
-    q: 81, 
-    r: 82, 
-    s: 83, 
-    t: 84, 
-    u: 85, 
-    v: 86, 
-    w: 87, 
-    x: 88, 
-    y: 89, 
-    z: 90, 
-    lWin: 91, 
-    rWin: 92, 
-    apps: 93, 
-    sleep: 95, 
-    numPad0: 96, 
-    numPad1: 97, 
-    numPad2: 98, 
-    numPad3: 99, 
-    numPad4: 100, 
-    numPad5: 101, 
-    numPad6: 102, 
-    numPad7: 103, 
-    numPad8: 104, 
-    numPad9: 105, 
-    multiply: 106, 
-    add: 107, 
-    separator: 108, 
-    subtract: 109, 
-    decimal: 110, 
-    divide: 111, 
-    f1: 112, 
-    f2: 113, 
-    f3: 114, 
-    f4: 115, 
-    f5: 116, 
-    f6: 117, 
-    f7: 118, 
-    f8: 119, 
-    f9: 120, 
-    f10: 121, 
-    f11: 122, 
-    f12: 123, 
-    f13: 124, 
-    f14: 125, 
-    f15: 126, 
-    f16: 127, 
-    f17: 128, 
-    f18: 129, 
-    f19: 130, 
-    f20: 131, 
-    f21: 132, 
-    f22: 133, 
-    f23: 134, 
-    f24: 135, 
-    numLock: 144, 
-    scroll: 145, 
-    lShiftKey: 160, 
-    rShiftKey: 161, 
-    lControlKey: 162, 
-    rControlKey: 163, 
-    lMenu: 164, 
-    rMenu: 165, 
-    browserBack: 166, 
-    browserForward: 167, 
-    browserRefresh: 168, 
-    browserStop: 169, 
-    browserSearch: 170, 
-    browserFavorites: 171, 
-    browserHome: 172, 
-    volumeMute: 173, 
-    volumeDown: 174, 
-    volumeUp: 175, 
-    mediaNextTrack: 176, 
-    mediaPreviousTrack: 177, 
-    mediaStop: 178, 
-    mediaPlayPause: 179, 
-    launchMail: 180, 
-    selectMedia: 181, 
-    launchApplication1: 182, 
-    launchApplication2: 183, 
-    oemSemicolon: 186, 
-    oem1: 186, 
-    oemplus: 187, 
-    oemcomma: 188, 
-    oemMinus: 189, 
-    oemPeriod: 190, 
-    oemQuestion: 191, 
-    oem2: 191, 
-    oemtilde: 192, 
-    oem3: 192, 
-    oemOpenBrackets: 219, 
-    oem4: 219, 
-    oemPipe: 220, 
-    oem5: 220, 
-    oemCloseBrackets: 221, 
-    oem6: 221, 
-    oemQuotes: 222, 
-    oem7: 222, 
-    oem8: 223, 
-    oemBackslash: 226, 
-    oem102: 226, 
-    processKey: 229, 
-    packet: 231, 
-    attn: 246, 
-    crsel: 247, 
-    exsel: 248, 
-    eraseEof: 249, 
-    play: 250, 
-    zoom: 251, 
-    noName: 252, 
-    pa1: 253, 
-    oemClear: 254, 
-    keyCode: 65535, 
-    shift: 65536, 
-    control: 131072, 
-    alt: 262144
-  };
-
-
-  // wwtlib.DialogResult
-
-  var DialogResult = {
-    OK: 1
   };
 
 
@@ -2246,11 +2021,6 @@ window.wwtlib = function(){
   // wwtlib.ISettings
 
   function ISettings() { }
-
-
-  // wwtlib.IUndoStep
-
-  function IUndoStep() { }
 
 
   // wwtlib.IFolder
@@ -2620,9 +2390,6 @@ window.wwtlib = function(){
   };
   CT.dmS2Dp = function(Degrees, Minutes, Seconds, bPositive) {
     if (!bPositive) {
-      console.assert(Degrees >= 0);
-      console.assert(Minutes >= 0);
-      console.assert(Seconds >= 0);
     }
     if (bPositive) {
       return Degrees + Minutes / 60 + Seconds / 3600;
@@ -2719,7 +2486,6 @@ window.wwtlib = function(){
     return JD - DT.dateToJD(Year, 1, 1, bGregorianCalendar) + 1;
   };
   DT.daysInMonthForMonth = function(Month, bLeap) {
-    console.assert(Month >= 1 && Month <= 12);
     var MonthLength = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31, 0 ];
     if (bLeap) {
       MonthLength[1]++;
@@ -2884,7 +2650,6 @@ window.wwtlib = function(){
     }
     else if (y < 1998) {
       var Index = ss.truncate(((y - 1620) / 2));
-      console.assert(Index < GFX.deltaTTable.length);
       y = y / 2 - Index - 810;
       Delta = (GFX.deltaTTable[Index] + (GFX.deltaTTable[Index + 1] - GFX.deltaTTable[Index]) * y);
     }
@@ -3830,7 +3595,6 @@ window.wwtlib = function(){
           R = CAAPluto.radiusVector(JD0);
           break;
         default:
-          console.assert(false);
           break;
       }
       if (!bFirstRecalc) {
@@ -5287,7 +5051,6 @@ window.wwtlib = function(){
     var A3 = CT.m360(313.45 + 481266.484 * T);
     A3 = CT.d2R(A3);
     var nLCoefficients = GFX.g_MoonCoefficients1.length;
-    console.assert(GFX.g_MoonCoefficients2.length === nLCoefficients);
     var SigmaL = 0;
     for (var i = 0; i < nLCoefficients; i++) {
       var ThisSigma = GFX.g_MoonCoefficients2[i].a * Math.sin(GFX.g_MoonCoefficients1[i].d * D + GFX.g_MoonCoefficients1[i].m * M + GFX.g_MoonCoefficients1[i].mdash * Mdash + GFX.g_MoonCoefficients1[i].f * F);
@@ -5322,7 +5085,6 @@ window.wwtlib = function(){
     var A3 = CT.m360(313.45 + 481266.484 * T);
     A3 = CT.d2R(A3);
     var nBCoefficients = GFX.g_MoonCoefficients3.length;
-    console.assert(GFX.g_MoonCoefficients4.length === nBCoefficients);
     var SigmaB = 0;
     for (var i = 0; i < nBCoefficients; i++) {
       var ThisSigma = GFX.g_MoonCoefficients4[i] * Math.sin(GFX.g_MoonCoefficients3[i].d * D + GFX.g_MoonCoefficients3[i].m * M + GFX.g_MoonCoefficients3[i].mdash * Mdash + GFX.g_MoonCoefficients3[i].f * F);
@@ -5359,7 +5121,6 @@ window.wwtlib = function(){
     var A3 = CT.m360(313.45 + 481266.484 * T);
     A3 = CT.d2R(A3);
     var nRCoefficients = GFX.g_MoonCoefficients1.length;
-    console.assert(GFX.g_MoonCoefficients2.length === nRCoefficients);
     var SigmaR = 0;
     for (var i = 0; i < nRCoefficients; i++) {
       var ThisSigma = GFX.g_MoonCoefficients2[i].b * Math.cos(GFX.g_MoonCoefficients1[i].d * D + GFX.g_MoonCoefficients1[i].m * M + GFX.g_MoonCoefficients1[i].mdash * Mdash + GFX.g_MoonCoefficients1[i].f * F);
@@ -5676,7 +5437,6 @@ window.wwtlib = function(){
       JD += DeltaJD;
     }
     else {
-      console.assert(false);
     }
     var DeltaJD2 = 0.000325 * Math.sin(A1) + 0.000165 * Math.sin(A2) + 0.000164 * Math.sin(A3) + 0.000126 * Math.sin(A4) + 0.00011 * Math.sin(A5) + 6.2E-05 * Math.sin(A6) + 6E-05 * Math.sin(A7) + 5.6E-05 * Math.sin(A8) + 4.7E-05 * Math.sin(A9) + 4.2E-05 * Math.sin(A10) + 4E-05 * Math.sin(A11) + 3.7E-05 * Math.sin(A12) + 3.5E-05 * Math.sin(A13) + 2.3E-05 * Math.sin(A14);
     JD += DeltaJD2;
@@ -7530,42 +7290,6 @@ window.wwtlib = function(){
   };
 
 
-  // wwtlib.PositionColoredTexturedVertexBuffer
-
-  function PositionColoredTexturedVertexBuffer(count) {
-    this.count = 0;
-    this._verts = null;
-    this.count = count;
-  }
-  var PositionColoredTexturedVertexBuffer$ = {
-    lock: function() {
-      this._verts = new Array(this.count);
-      return this._verts;
-    },
-    unlock: function() {
-      this.vertexBuffer = Tile.prepDevice.createBuffer();
-      Tile.prepDevice.bindBuffer(34962, this.vertexBuffer);
-      var f32array = new Float32Array(this.count * 9);
-      var buffer = f32array;
-      var index = 0;
-      var $enum1 = ss.enumerate(this._verts);
-      while ($enum1.moveNext()) {
-        var pt = $enum1.current;
-        buffer[index++] = pt.position.x;
-        buffer[index++] = pt.position.y;
-        buffer[index++] = pt.position.z;
-        buffer[index++] = pt.color.r / 255;
-        buffer[index++] = pt.color.g / 255;
-        buffer[index++] = pt.color.b / 255;
-        buffer[index++] = pt.color.a / 255;
-        buffer[index++] = pt.tu;
-        buffer[index++] = pt.tv;
-      }
-      Tile.prepDevice.bufferData(34962, f32array, 35044);
-    }
-  };
-
-
   // wwtlib.Dates
 
   function Dates(start, end) {
@@ -8433,137 +8157,6 @@ window.wwtlib = function(){
   };
 
 
-  // wwtlib.SpriteShader
-
-  function SpriteShader() {
-  }
-  SpriteShader.init = function(renderContext) {
-    var gl = renderContext.gl;
-    var fragShaderText = ' precision mediump float;                                                                \n' + '                                                                                         \n' + '   varying vec2 vTextureCoord;                                                           \n' + '   varying lowp vec4 vColor;                                                             \n' + '   uniform sampler2D uSampler;                                                           \n' + '                                                                                         \n' + '   void main(void) {                                                                     \n' + '   gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t)) * vColor;  \n' + '   }                                                                                     \n';
-    var vertexShaderText = '     attribute vec3 aVertexPosition;                                              \n' + '     attribute vec2 aTextureCoord;                                                \n' + '     attribute lowp vec4 aColor;                                                \n' + '                                                                                  \n' + '     uniform mat4 uMVMatrix;                                                      \n' + '     uniform mat4 uPMatrix;                                                       \n' + '                                                                                  \n' + '     varying vec2 vTextureCoord;                                                  \n' + '     varying vec4 vColor;                                                         \n' + '                                                                                  \n' + '                                                                                  \n' + '     void main(void) {                                                            \n' + '         gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);         \n' + '         vTextureCoord = aTextureCoord;                                           \n' + '         vColor = aColor;                                                         \n' + '     }                                                                            \n' + '                                                                                  \n';
-    SpriteShader._frag = gl.createShader(35632);
-    gl.shaderSource(SpriteShader._frag, fragShaderText);
-    gl.compileShader(SpriteShader._frag);
-    var stat = gl.getShaderParameter(SpriteShader._frag, 35713);
-    SpriteShader._vert = gl.createShader(35633);
-    gl.shaderSource(SpriteShader._vert, vertexShaderText);
-    gl.compileShader(SpriteShader._vert);
-    var stat1 = gl.getShaderParameter(SpriteShader._vert, 35713);
-    SpriteShader._prog = gl.createProgram();
-    gl.attachShader(SpriteShader._prog, SpriteShader._vert);
-    gl.attachShader(SpriteShader._prog, SpriteShader._frag);
-    gl.linkProgram(SpriteShader._prog);
-    var errcode = gl.getProgramParameter(SpriteShader._prog, 35714);
-    gl.useProgram(SpriteShader._prog);
-    SpriteShader.vertLoc = gl.getAttribLocation(SpriteShader._prog, 'aVertexPosition');
-    SpriteShader.textureLoc = gl.getAttribLocation(SpriteShader._prog, 'aTextureCoord');
-    SpriteShader.colorLoc = gl.getAttribLocation(SpriteShader._prog, 'aColor');
-    SpriteShader.projMatLoc = gl.getUniformLocation(SpriteShader._prog, 'uPMatrix');
-    SpriteShader.mvMatLoc = gl.getUniformLocation(SpriteShader._prog, 'uMVMatrix');
-    SpriteShader.sampLoc = gl.getUniformLocation(SpriteShader._prog, 'uSampler');
-    Tile.uvMultiple = 1;
-    Tile.demEnabled = true;
-    gl.enable(3042);
-    gl.blendFunc(770, 771);
-    SpriteShader.initialized = true;
-  };
-  SpriteShader.use = function(renderContext, vertex, texture) {
-    var gl = renderContext.gl;
-    if (gl != null) {
-      if (!SpriteShader.initialized) {
-        SpriteShader.init(renderContext);
-      }
-      gl.useProgram(SpriteShader._prog);
-      var mvMat = Matrix3d.multiplyMatrix(renderContext.get_world(), renderContext.get_view());
-      gl.uniformMatrix4fv(SpriteShader.mvMatLoc, false, mvMat.floatArray());
-      gl.uniformMatrix4fv(SpriteShader.projMatLoc, false, renderContext.get_projection().floatArray());
-      gl.uniform1i(SpriteShader.sampLoc, 0);
-      if (renderContext.space) {
-        gl.disable(2929);
-      }
-      else {
-        gl.enable(2929);
-      }
-      gl.enableVertexAttribArray(SpriteShader.vertLoc);
-      gl.enableVertexAttribArray(SpriteShader.textureLoc);
-      gl.enableVertexAttribArray(SpriteShader.colorLoc);
-      gl.bindBuffer(34962, vertex);
-      gl.vertexAttribPointer(SpriteShader.vertLoc, 3, 5126, false, 36, 0);
-      gl.vertexAttribPointer(SpriteShader.colorLoc, 4, 5126, false, 36, 12);
-      gl.vertexAttribPointer(SpriteShader.textureLoc, 2, 5126, false, 36, 28);
-      gl.activeTexture(33984);
-      gl.bindTexture(3553, texture);
-      gl.bindBuffer(34963, null);
-      gl.blendFunc(770, 771);
-    }
-  };
-  var SpriteShader$ = {
-
-  };
-
-
-  // wwtlib.ShapeSpriteShader
-
-  function ShapeSpriteShader() {
-  }
-  ShapeSpriteShader.init = function(renderContext) {
-    var gl = renderContext.gl;
-    var fragShaderText = ' precision mediump float;                                                                \n' + '                                                                                         \n' + '   varying lowp vec4 vColor;                                                             \n' + '                                                                                         \n' + '   void main(void) {                                                                     \n' + '   gl_FragColor =  vColor;  \n' + '   }                                                                                     \n';
-    var vertexShaderText = '     attribute vec3 aVertexPosition;                                              \n' + '     attribute lowp vec4 aColor;                                                \n' + '                                                                                  \n' + '     uniform mat4 uMVMatrix;                                                      \n' + '     uniform mat4 uPMatrix;                                                       \n' + '                                                                                  \n' + '     varying vec2 vTextureCoord;                                                  \n' + '     varying vec4 vColor;                                                         \n' + '                                                                                  \n' + '                                                                                  \n' + '     void main(void) {                                                            \n' + '         gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);         \n' + '         vColor = aColor;                                                         \n' + '     }                                                                            \n' + '                                                                                  \n';
-    ShapeSpriteShader._frag = gl.createShader(35632);
-    gl.shaderSource(ShapeSpriteShader._frag, fragShaderText);
-    gl.compileShader(ShapeSpriteShader._frag);
-    var stat = gl.getShaderParameter(ShapeSpriteShader._frag, 35713);
-    ShapeSpriteShader._vert = gl.createShader(35633);
-    gl.shaderSource(ShapeSpriteShader._vert, vertexShaderText);
-    gl.compileShader(ShapeSpriteShader._vert);
-    var stat1 = gl.getShaderParameter(ShapeSpriteShader._vert, 35713);
-    ShapeSpriteShader._prog = gl.createProgram();
-    gl.attachShader(ShapeSpriteShader._prog, ShapeSpriteShader._vert);
-    gl.attachShader(ShapeSpriteShader._prog, ShapeSpriteShader._frag);
-    gl.linkProgram(ShapeSpriteShader._prog);
-    var errcode = gl.getProgramParameter(ShapeSpriteShader._prog, 35714);
-    gl.useProgram(ShapeSpriteShader._prog);
-    ShapeSpriteShader.vertLoc = gl.getAttribLocation(ShapeSpriteShader._prog, 'aVertexPosition');
-    ShapeSpriteShader.colorLoc = gl.getAttribLocation(ShapeSpriteShader._prog, 'aColor');
-    ShapeSpriteShader.projMatLoc = gl.getUniformLocation(ShapeSpriteShader._prog, 'uPMatrix');
-    ShapeSpriteShader.mvMatLoc = gl.getUniformLocation(ShapeSpriteShader._prog, 'uMVMatrix');
-    gl.enable(3042);
-    gl.blendFunc(770, 771);
-    ShapeSpriteShader.initialized = true;
-  };
-  ShapeSpriteShader.use = function(renderContext, vertex) {
-    var gl = renderContext.gl;
-    if (gl != null) {
-      if (!ShapeSpriteShader.initialized) {
-        ShapeSpriteShader.init(renderContext);
-      }
-      gl.useProgram(ShapeSpriteShader._prog);
-      var mvMat = Matrix3d.multiplyMatrix(renderContext.get_world(), renderContext.get_view());
-      gl.uniformMatrix4fv(ShapeSpriteShader.mvMatLoc, false, mvMat.floatArray());
-      gl.uniformMatrix4fv(ShapeSpriteShader.projMatLoc, false, renderContext.get_projection().floatArray());
-      gl.uniform1i(ShapeSpriteShader.sampLoc, 0);
-      if (renderContext.space) {
-        gl.disable(2929);
-      }
-      else {
-        gl.enable(2929);
-      }
-      gl.enableVertexAttribArray(ShapeSpriteShader.vertLoc);
-      gl.enableVertexAttribArray(ShapeSpriteShader.textureLoc);
-      gl.enableVertexAttribArray(ShapeSpriteShader.colorLoc);
-      gl.bindBuffer(34962, vertex);
-      gl.vertexAttribPointer(ShapeSpriteShader.vertLoc, 3, 5126, false, 36, 0);
-      gl.vertexAttribPointer(ShapeSpriteShader.colorLoc, 4, 5126, false, 36, 12);
-      gl.bindBuffer(34963, null);
-      gl.blendFunc(770, 771);
-    }
-  };
-  var ShapeSpriteShader$ = {
-
-  };
-
-
   // wwtlib.TextShader
 
   function TextShader() {
@@ -8626,77 +8219,6 @@ window.wwtlib = function(){
   };
   var TextShader$ = {
 
-  };
-
-
-  // wwtlib.Sprite2d
-
-  function Sprite2d() {
-    this.vertCount = 0;
-  }
-  var Sprite2d$ = {
-    draw: function(renderContext, points, count, texture, triangleStrips, opacity) {
-      if (this.vertexBuffer == null) {
-        this.create(points);
-      }
-      else {
-        this.update(points);
-      }
-      if (texture == null) {
-        ShapeSpriteShader.use(renderContext, this.vertexBuffer);
-        renderContext.gl.drawArrays((triangleStrips) ? 5 : 4, 0, points.length);
-      }
-      else {
-        SpriteShader.use(renderContext, this.vertexBuffer, (texture != null) ? texture.texture2d : null);
-        renderContext.gl.drawArrays((triangleStrips) ? 5 : 4, 0, points.length);
-      }
-    },
-    create: function(verts) {
-      this.vertexBuffer = Tile.prepDevice.createBuffer();
-      Tile.prepDevice.bindBuffer(34962, this.vertexBuffer);
-      var f32array = new Float32Array(verts.length * 9);
-      var buffer = f32array;
-      var index = 0;
-      var $enum1 = ss.enumerate(verts);
-      while ($enum1.moveNext()) {
-        var pt = $enum1.current;
-        buffer[index++] = pt.position.x;
-        buffer[index++] = pt.position.y;
-        buffer[index++] = pt.position.z;
-        buffer[index++] = pt.color.r / 255;
-        buffer[index++] = pt.color.g / 255;
-        buffer[index++] = pt.color.b / 255;
-        buffer[index++] = pt.color.a / 255;
-        buffer[index++] = pt.tu;
-        buffer[index++] = pt.tv;
-      }
-      Tile.prepDevice.bufferData(34962, f32array, 35048);
-    },
-    update: function(verts) {
-      if (this.vertCount < verts.length) {
-        Tile.prepDevice.deleteBuffer(this.vertexBuffer);
-        this.create(verts);
-        return;
-      }
-      Tile.prepDevice.bindBuffer(34962, this.vertexBuffer);
-      var f32array = new Float32Array(verts.length * 9);
-      var buffer = f32array;
-      var index = 0;
-      var $enum1 = ss.enumerate(verts);
-      while ($enum1.moveNext()) {
-        var pt = $enum1.current;
-        buffer[index++] = pt.position.x;
-        buffer[index++] = pt.position.y;
-        buffer[index++] = pt.position.z;
-        buffer[index++] = pt.color.r / 255;
-        buffer[index++] = pt.color.g / 255;
-        buffer[index++] = pt.color.b / 255;
-        buffer[index++] = pt.color.a / 255;
-        buffer[index++] = pt.tu;
-        buffer[index++] = pt.tv;
-      }
-      Tile.prepDevice.bufferSubData(34962, 0, f32array);
-    }
   };
 
 
@@ -8812,16 +8334,7 @@ window.wwtlib = function(){
     this._errored = false;
     this.URL = '';
   }
-  Texture.fromUrl = function(url) {
-    var tex = new Texture();
-    tex.load(url);
-    return tex;
-  };
   var Texture$ = {
-    cleanUp: function() {
-      this.imageElement = null;
-      Tile.prepDevice.deleteTexture(this.texture2d);
-    },
     load: function(url) {
       var $this = this;
 
@@ -8862,7 +8375,7 @@ window.wwtlib = function(){
             temp.height = this._fitPowerOfTwo(image.height);
             temp.width = this._fitPowerOfTwo(image.width);
             var ctx = temp.getContext('2d');
-            ctx.drawImage(image, 0, 0, temp.width, temp.height);
+            ctx.drawImage(image, 0, 0, image.width, image.height);
             image = temp;
           }
           Tile.prepDevice.texParameteri(3553, 10242, 33071);
@@ -10100,45 +9613,6 @@ window.wwtlib = function(){
     renderContext.set_nominalRadius(oldNominalRadius);
     renderContext.set_world(matOld);
     renderContext.set_worldBaseNonRotating(matOldNonRotating);
-  };
-  LayerManager._getVisibleLayerList = function(previous) {
-    var list = {};
-    var $enum1 = ss.enumerate(ss.keys(LayerManager.get_layerList()));
-    while ($enum1.moveNext()) {
-      var key = $enum1.current;
-      var layer = LayerManager.get_layerList()[key];
-      if (layer.get_enabled()) {
-        var info = new LayerInfo();
-        info.startOpacity = info.endOpacity = layer.get_opacity();
-        info.id = layer.id;
-        info.startParams = layer.getParams();
-        if (ss.keyExists(previous, info.id)) {
-          info.endOpacity = previous[info.id].endOpacity;
-          info.endParams = previous[info.id].endParams;
-        }
-        else {
-          info.endParams = layer.getParams();
-        }
-        list[layer.id] = info;
-      }
-    }
-    return list;
-  };
-  LayerManager.setVisibleLayerList = function(list) {
-    var $enum1 = ss.enumerate(ss.keys(LayerManager.get_layerList()));
-    while ($enum1.moveNext()) {
-      var key = $enum1.current;
-      var layer = LayerManager.get_layerList()[key];
-      layer.set_enabled(ss.keyExists(list, layer.id));
-      try {
-        if (layer.get_enabled()) {
-          layer.set_opacity(list[layer.id].frameOpacity);
-          layer.setParams(list[layer.id].frameParams);
-        }
-      }
-      catch ($e2) {
-      }
-    }
   };
   LayerManager._preDraw = function(renderContext, opacity, astronomical, referenceFrame, nested) {
     if (!ss.keyExists(LayerManager.get_allMaps(), referenceFrame)) {
@@ -12336,20 +11810,6 @@ window.wwtlib = function(){
       this._fovLocal = value;
       return value;
     },
-    setupMatricesOverlays: function() {
-      this.set_world(Matrix3d.get_identity());
-      var lookAtAdjust = Matrix3d.get_identity();
-      var lookFrom = Vector3d.create(0, 0, 0);
-      var lookAt = Vector3d.create(0, 0, 1);
-      var lookUp = Vector3d.create(0, 1, 0);
-      var view;
-      view = Matrix3d.lookAtLH(lookFrom, lookAt, lookUp);
-      view._multiply(Matrix3d._scaling(1, -1, 1));
-      this.set_view(view);
-      var back = 10000;
-      this.nearPlane = 0.1;
-      this.set_projection(Matrix3d.perspectiveFovLH(this._fovLocal, this.width / this.height, this.nearPlane, back));
-    },
     setupMatricesSolarSystem: function(forStars) {
       this.lighting = Settings.get_active().get_solarSystemLighting();
       this.space = false;
@@ -12481,11 +11941,6 @@ window.wwtlib = function(){
       Tile.uvMultiple = 1;
       Tile.demEnabled = true;
       TileShader.init(this);
-    },
-    freezeView: function() {
-      this.targetAlt = this.alt;
-      this.targetAz = this.az;
-      this.targetCamera = this.viewCamera.copy();
     }
   };
 
@@ -13053,7 +12508,6 @@ window.wwtlib = function(){
     this._solarSystemMultiRes = true;
     this._solarSystemScale = 1;
     this._smoothPan = true;
-    this._showElevationModel = true;
     this._showEquatorialGridText = false;
     this._showGalacticGrid = false;
     this._showGalacticGridText = false;
@@ -13085,7 +12539,6 @@ window.wwtlib = function(){
     this._milkyWayModel = false;
     this._minorPlanetsFilter = 255;
     this._planetOrbitsFilter = 2147483647;
-    this._constellations = true;
   }
   Settings.get_current = function() {
     if (Settings._active == null) {
@@ -13154,10 +12607,6 @@ window.wwtlib = function(){
     get_actualPlanetScale: function() {
       return this._actualPlanetScale;
     },
-    set_actualPlanetScale: function(value) {
-      this._actualPlanetScale = value;
-      return value;
-    },
     get_fovCamera: function() {
       return this._fovCamera;
     },
@@ -13220,11 +12669,7 @@ window.wwtlib = function(){
       return value;
     },
     get_showElevationModel: function() {
-      return this._showElevationModel;
-    },
-    set_showElevationModel: function(value) {
-      this._showElevationModel = value;
-      return value;
+      return false;
     },
     get_showFieldOfView: function() {
       return this._showFiledOfView;
@@ -13251,10 +12696,6 @@ window.wwtlib = function(){
     },
     get_showSolarSystem: function() {
       return this._showSolarSystem;
-    },
-    set_showSolarSystem: function(value) {
-      this._showSolarSystem = value;
-      return value;
     },
     get_localHorizonMode: function() {
       return this._localHorizonMode;
@@ -13541,13 +12982,6 @@ window.wwtlib = function(){
     },
     set_planetOrbitsFilter: function(value) {
       this._planetOrbitsFilter = value;
-      return value;
-    },
-    get_constellations: function() {
-      return this._constellations;
-    },
-    set_constellations: function(value) {
-      this._constellations = value;
       return value;
     },
     getSetting: function(type) {
@@ -15275,17 +14709,11 @@ window.wwtlib = function(){
   // wwtlib.Overlay
 
   function Overlay() {
-    this.isDynamic = false;
     this.isDesignTimeOnly = false;
     this.id = (Overlay.nextId++).toString();
     this._owner = null;
     this._url = '';
     this._linkID = '';
-    this._domeMatrix = Matrix3d.get_identity();
-    this._domeMatX = 0;
-    this._domeMatY = 0;
-    this._domeAngle = 0;
-    this.points = null;
     this._animate = false;
     this._tweenFactor = 0;
     this._endX = 0;
@@ -15305,7 +14733,6 @@ window.wwtlib = function(){
     this._rotationAngle = 0;
     this.currentRotation = 0;
     this.texture = null;
-    this.texture2d = null;
     this._interpolationType = 5;
   }
   Overlay._fromXml = function(owner, overlay) {
@@ -15356,18 +14783,6 @@ window.wwtlib = function(){
       this._owner = value;
       return value;
     },
-    get_zOrder: function() {
-      var index = 0;
-      var $enum1 = ss.enumerate(this._owner.get_overlays());
-      while ($enum1.moveNext()) {
-        var item = $enum1.current;
-        if (item === this) {
-          break;
-        }
-        index++;
-      }
-      return index;
-    },
     get_url: function() {
       return this._url;
     },
@@ -15390,32 +14805,7 @@ window.wwtlib = function(){
     },
     seek: function(time) {
     },
-    makePosition: function(centerX, centerY, offsetX, offsetY, angle) {
-      centerX -= 960;
-      centerY -= 558;
-      var point = Vector3d.create(centerX + offsetX, centerY + offsetY, 1347);
-      if (!!this._domeMatX || !!this._domeMatY || this._domeAngle !== angle) {
-        this._domeMatX = centerX;
-        this._domeMatY = centerY;
-        this._domeMatrix = Matrix3d.translation(Vector3d.create(-centerX, -centerY, 0));
-        this._domeMatrix._multiply(Matrix3d._rotationZ((angle / 180 * Math.PI)));
-        this._domeMatrix._multiply(Matrix3d.translation(Vector3d.create(centerX, centerY, 0)));
-      }
-      point = Vector3d._transformCoordinate(point, this._domeMatrix);
-      return point;
-    },
     draw3D: function(renderContext, designTime) {
-      if (RenderContext.useGl) {
-        if (this.texture == null || this.isDynamic) {
-          this.initializeTexture();
-        }
-        if (!this.isDesignTimeOnly || designTime) {
-          this.initiaizeGeometry();
-          this.updateRotation();
-        }
-      }
-      else {
-      }
     },
     cleanUp: function() {
       if (this.texture != null) {
@@ -15426,33 +14816,8 @@ window.wwtlib = function(){
     },
     cleanUpGeometry: function() {
       this.currentRotation = 0;
-      this.points = null;
     },
     initiaizeGeometry: function() {
-      if (this.points == null) {
-        this.currentRotation = 0;
-        this.points = new Array(4);
-        this.points[0] = new PositionColoredTextured();
-        this.points[0].position = this.makePosition(this.get_x(), this.get_y(), -this.get_width() / 2, -this.get_height() / 2, this.get_rotationAngle());
-        this.points[0].tu = 0;
-        this.points[0].tv = 0;
-        this.points[0].color = this.get_color();
-        this.points[1] = new PositionColoredTextured();
-        this.points[1].position = this.makePosition(this.get_x(), this.get_y(), this.get_width() / 2, -this.get_height() / 2, this.get_rotationAngle());
-        this.points[1].tu = 1;
-        this.points[1].tv = 0;
-        this.points[1].color = this.get_color();
-        this.points[2] = new PositionColoredTextured();
-        this.points[2].position = this.makePosition(this.get_x(), this.get_y(), -this.get_width() / 2, this.get_height() / 2, this.get_rotationAngle());
-        this.points[2].tu = 0;
-        this.points[2].tv = 1;
-        this.points[2].color = this.get_color();
-        this.points[3] = new PositionColoredTextured();
-        this.points[3].position = this.makePosition(this.get_x(), this.get_y(), this.get_width() / 2, this.get_height() / 2, this.get_rotationAngle());
-        this.points[3].tu = 1;
-        this.points[3].tv = 1;
-        this.points[3].color = this.get_color();
-      }
     },
     updateRotation: function() {
     },
@@ -15642,12 +15007,7 @@ window.wwtlib = function(){
       return value;
     },
     hitTest: function(pntTest) {
-      var tempPoints = new Array(1);
-      tempPoints[0] = Vector2d.create(pntTest.x, pntTest.y);
-      var mat = Matrix2d.rotateAt(-this.get_rotationAngle() / 180 * Math.PI, Vector2d.create(this.get_x(), this.get_y()));
-      mat._transformPoints(tempPoints);
-      var rect = Rectangle.create((this.get_x() - (this.get_width() / 2)), (this.get_y() - (this.get_height() / 2)), this.get_width(), this.get_height());
-      return rect.contains(tempPoints[0]);
+      return false;
     },
     get_bounds: function() {
       return this._bounds;
@@ -15719,200 +15079,6 @@ window.wwtlib = function(){
     },
     toString: function() {
       return this.get_name();
-    }
-  };
-
-
-  // wwtlib.Selection
-
-  function Selection() {
-    this._singleSelectHandles = null;
-    this._multiSelectHandles = null;
-    this._focusHandles = null;
-    this.selectionSet = [];
-    this._focus = null;
-    this._ratio = 1;
-    this._sprite = new Sprite2d();
-    this._centerX = 0;
-    this._centerY = 0;
-  }
-  var Selection$ = {
-    clearSelection: function() {
-      this.selectionSet.length = 0;
-    },
-    addSelection: function(overlay) {
-      if (overlay != null) {
-        if (!(this.selectionSet.indexOf(overlay) >= 0)) {
-          this.selectionSet.push(overlay);
-        }
-      }
-    },
-    addSelectionRange: function(overlays) {
-      var $enum1 = ss.enumerate(overlays);
-      while ($enum1.moveNext()) {
-        var ov = $enum1.current;
-        this.selectionSet.push(ov);
-      }
-    },
-    isOverlaySelected: function(overlay) {
-      return (this.selectionSet.indexOf(overlay) >= 0);
-    },
-    setSelection: function(overlay) {
-      this.selectionSet.length = 0;
-      if (overlay != null) {
-        this.selectionSet.push(overlay);
-      }
-    },
-    get_multiSelect: function() {
-      return this.selectionSet.length > 1;
-    },
-    setSelectionRange: function(overlays) {
-      this.selectionSet.length = 0;
-      var $enum1 = ss.enumerate(overlays);
-      while ($enum1.moveNext()) {
-        var ov = $enum1.current;
-        this.selectionSet.push(ov);
-      }
-    },
-    get_focus: function() {
-      return this._focus;
-    },
-    set_focus: function(value) {
-      this._focus = value;
-      return value;
-    },
-    draw3D: function(renderContext, transparancy) {
-      this._ratio = 1116 / renderContext.height;
-      if (this._singleSelectHandles == null) {
-        this._singleSelectHandles = Texture.fromUrl('images/Selhand.bmp');
-      }
-      if (this._multiSelectHandles == null) {
-        this._multiSelectHandles = Texture.fromUrl('images/multiSelhand.bmp');
-      }
-      if (this._focusHandles == null) {
-        this._focusHandles = Texture.fromUrl('images/FocusHandles.png');
-      }
-      if (this.selectionSet.length > 1) {
-        var $enum1 = ss.enumerate(this.selectionSet);
-        while ($enum1.moveNext()) {
-          var overlay = $enum1.current;
-          if (overlay === this._focus) {
-            this._drawSelectionHandles(renderContext, overlay, this._focusHandles);
-          }
-          else {
-            this._drawSelectionHandles(renderContext, overlay, this._multiSelectHandles);
-          }
-        }
-      }
-      else {
-        var $enum2 = ss.enumerate(this.selectionSet);
-        while ($enum2.moveNext()) {
-          var overlay = $enum2.current;
-          this._drawSelectionHandles(renderContext, overlay, this._singleSelectHandles);
-        }
-      }
-    },
-    _drawSelectionHandles: function(renderContext, overlay, handleTexture) {
-      var handles = this.makeHandles(overlay);
-      var angle = overlay.get_rotationAngle();
-      var i = 0;
-      var j = 0;
-      var $enum1 = ss.enumerate(handles);
-      while ($enum1.moveNext()) {
-        var handle = $enum1.current;
-        Selection._points[i + 0] = new PositionColoredTextured();
-        Selection._points[i + 0].position = overlay.makePosition(this._centerX, this._centerY, handle.get_left() - this._centerX, handle.get_top() - this._centerY, angle);
-        Selection._points[i + 0].tu = j * (1 / 9);
-        Selection._points[i + 0].tv = 0;
-        Selection._points[i + 0].color = Colors.get_white();
-        Selection._points[i + 1] = new PositionColoredTextured();
-        Selection._points[i + 1].position = overlay.makePosition(this._centerX, this._centerY, handle.get_right() - this._centerX, handle.get_top() - this._centerY, angle);
-        Selection._points[i + 1].tu = (j + 1) * (1 / 9);
-        Selection._points[i + 1].tv = 0;
-        Selection._points[i + 1].color = Colors.get_white();
-        Selection._points[i + 2] = new PositionColoredTextured();
-        Selection._points[i + 2].position = overlay.makePosition(this._centerX, this._centerY, handle.get_left() - this._centerX, handle.get_bottom() - this._centerY, angle);
-        Selection._points[i + 2].tu = j * (1 / 9);
-        Selection._points[i + 2].tv = 1;
-        Selection._points[i + 2].color = Colors.get_white();
-        Selection._points[i + 3] = new PositionColoredTextured();
-        Selection._points[i + 3].position = overlay.makePosition(this._centerX, this._centerY, handle.get_right() - this._centerX, handle.get_top() - this._centerY, angle);
-        Selection._points[i + 3].tu = (j + 1) * (1 / 9);
-        Selection._points[i + 3].tv = 0;
-        Selection._points[i + 3].color = Colors.get_white();
-        Selection._points[i + 4] = new PositionColoredTextured();
-        Selection._points[i + 4].position = overlay.makePosition(this._centerX, this._centerY, handle.get_right() - this._centerX, handle.get_bottom() - this._centerY, angle);
-        Selection._points[i + 4].tu = (j + 1) * (1 / 9);
-        Selection._points[i + 4].tv = 1;
-        Selection._points[i + 4].color = Colors.get_white();
-        Selection._points[i + 5] = new PositionColoredTextured();
-        Selection._points[i + 5].position = overlay.makePosition(this._centerX, this._centerY, handle.get_left() - this._centerX, handle.get_bottom() - this._centerY, angle);
-        Selection._points[i + 5].tu = j * (1 / 9);
-        Selection._points[i + 5].tv = 1;
-        Selection._points[i + 5].color = Colors.get_white();
-        i += 6;
-        j++;
-      }
-      if (this.get_multiSelect()) {
-        this._sprite.draw(renderContext, Selection._points, Selection._points.length - 6, handleTexture, false, 1);
-      }
-      else {
-        this._sprite.draw(renderContext, Selection._points, Selection._points.length, handleTexture, false, 1);
-      }
-    },
-    pointToSelectionSpace: function(pntIn) {
-      var tempPoints = new Array(1);
-      tempPoints[0] = Vector2d.create(pntIn.x, pntIn.y);
-      var mat = Matrix2d.rotateAt(-this.selectionSet[0].get_rotationAngle() / 180 * Math.PI, Vector2d.create(this.selectionSet[0].get_x(), this.selectionSet[0].get_y()));
-      mat._transformPoints(tempPoints);
-      return tempPoints[0];
-    },
-    pointToScreenSpace: function(pntIn) {
-      var tempPoints = new Array(1);
-      tempPoints[0] = Vector2d.create(pntIn.x, pntIn.y);
-      var mat = Matrix2d.rotateAt(this.selectionSet[0].get_rotationAngle() / 180 * Math.PI, Vector2d.create(this.selectionSet[0].get_x(), this.selectionSet[0].get_y()));
-      mat._transformPoints(tempPoints);
-      return tempPoints[0];
-    },
-    hitTest: function(position) {
-      if (this.selectionSet.length === 1) {
-        var $enum1 = ss.enumerate(this.selectionSet);
-        while ($enum1.moveNext()) {
-          var overlay = $enum1.current;
-          var handles = this.makeHandles(overlay);
-          var index = 0;
-          var testPoint = this.pointToSelectionSpace(position);
-          var $enum2 = ss.enumerate(handles);
-          while ($enum2.moveNext()) {
-            var rectf = $enum2.current;
-            if (rectf.contains(testPoint)) {
-              return index;
-            }
-            index++;
-          }
-        }
-      }
-      return 11;
-    },
-    makeHandles: function(overlay) {
-      var x = ss.truncate((overlay.get_x() - (overlay.get_width() / 2))) + 0.5;
-      var y = (ss.truncate(overlay.get_y()) - (overlay.get_height() / 2)) + 0.5;
-      this._centerX = overlay.get_x();
-      this._centerY = overlay.get_y();
-      var width = overlay.get_width();
-      var height = overlay.get_height();
-      var handleSize = 12 * this._ratio;
-      var handles = new Array(9);
-      handles[0] = Rectangle.create(x - handleSize, y - handleSize, handleSize, handleSize);
-      handles[1] = Rectangle.create((x + (width / 2)) - (handleSize / 2), y - handleSize, handleSize, handleSize);
-      handles[2] = Rectangle.create(x + width, y - handleSize, handleSize, handleSize);
-      handles[3] = Rectangle.create(x + width, (y + (height / 2)) - (handleSize / 2), handleSize, handleSize);
-      handles[4] = Rectangle.create(x + width, (y + height), handleSize, handleSize);
-      handles[5] = Rectangle.create((x + (width / 2)) - (handleSize / 2), (y + height), handleSize, handleSize);
-      handles[6] = Rectangle.create(x - handleSize, (y + height), handleSize, handleSize);
-      handles[7] = Rectangle.create(x - handleSize, (y + (height / 2)) - (handleSize / 2), handleSize, handleSize);
-      handles[8] = Rectangle.create((x + (width / 2)) - (handleSize / 2), y - 30 * this._ratio, handleSize, handleSize);
-      return handles;
     }
   };
 
@@ -16639,18 +15805,6 @@ window.wwtlib = function(){
       this._textureList[filename] = texture;
       return texture;
     },
-    getCachedTexture2d: function(filename) {
-      if (this._textureList2d == null) {
-        this._textureList2d = {};
-      }
-      if (ss.keyExists(this._textureList2d, filename)) {
-        return this._textureList2d[filename];
-      }
-      var texture = new Texture();
-      texture.load(this.getFileStream(filename));
-      this._textureList2d[filename] = texture;
-      return texture;
-    },
     getFileStream: function(filename) {
       return Util.getTourComponent(this.url, filename);
     },
@@ -16680,2106 +15834,6 @@ window.wwtlib = function(){
     },
     clearTempFiles: function() {
     }
-  };
-
-
-  // wwtlib.TourEditTab
-
-  function TourEditTab() {
-    this.musicTrack = new SoundEditor();
-    this.voiceTrack = new SoundEditor();
-    this._tour = null;
-    this.tourStopList = new TourStopList();
-    this.tourEditorUI = new TourEditor();
-    this._contextMenu = new ContextMenuStrip();
-    this.playing = false;
-    this._player = null;
-    this._defultColor = Colors.get_white();
-  }
-  var TourEditTab$ = {
-    setUiStrings: function() {
-    },
-    get_tour: function() {
-      return this._tour;
-    },
-    set_tour: function(value) {
-      this._tour = value;
-      this.tourEditorUI.set_tour(this._tour);
-      this.tourStopList.tour = this._tour;
-      Overlay.defaultAnchor = 1;
-      if (this._tour.get_tourStops().length > 0) {
-        WWTControl.singleton.gotoTarget(this._tour.get_tourStops()[0].get_target(), false, true, false);
-        this._tour.set_currentTourstopIndex(0);
-        this.tourStopList.selectedItem = this._tour.get_currentTourstopIndex();
-        this.musicTrack.target = this._tour.get_currentTourStop();
-        this.voiceTrack.target = this._tour.get_currentTourStop();
-        LayerManager.setVisibleLayerList(this._tour.get_currentTourStop().layers);
-      }
-      this.setEditMode(this._tour.get_editMode());
-      return value;
-    },
-    tour_CurrentTourstopChanged: function(sender, e) {
-      OverlayList._updateOverlayList(this._tour.get_currentTourStop(), this.tourEditorUI.selection);
-      this.tourStopList.refresh();
-    },
-    setFocusedChild: function() {
-    },
-    selectCurrent: function() {
-      this.tourStopList.selectedItem = this._tour.get_currentTourstopIndex();
-      this.tourStopList.refresh();
-    },
-    tourEdit_Load: function(sender, e) {
-    },
-    playNow: function(fromStart) {
-      this.playing = true;
-      if (this.get_tour().get_editMode() || fromStart) {
-        this.get_tour().set_currentTourstopIndex(-1);
-      }
-      this.setPlayPauseMode();
-    },
-    _tourPlayer_TourEnded: function(sender, e) {
-    },
-    _endTour_CloseTour: function(sender, e) {
-    },
-    _endTour_LaunchTour: function(sender, e) {
-      this.playNow(true);
-    },
-    setEditMode: function(visible) {
-    },
-    tourStopList_ItemClicked: function(sender, e) {
-      if (this._tour.get_currentTourStop() !== e) {
-        this._tour.set_currentTourStop(e);
-        if (e != null) {
-          this.musicTrack.target = this._tour.get_currentTourStop();
-          this.voiceTrack.target = this._tour.get_currentTourStop();
-        }
-        else {
-          this.musicTrack.target = null;
-          this.voiceTrack.target = null;
-        }
-        this.tourEditorUI.clearSelection();
-      }
-      if (this.playing) {
-        this._playFromHere_Click(sender, new ss.EventArgs());
-      }
-    },
-    tourStopList_ItemDoubleClicked: function(sender, e) {
-      this.showSlideStartPosition(e);
-    },
-    showSlideStartPosition: function(ts) {
-      this._tour.set_currentTourStop(ts);
-      if (ts != null) {
-        this.musicTrack.target = this._tour.get_currentTourStop();
-        this.voiceTrack.target = this._tour.get_currentTourStop();
-      }
-      else {
-        this.musicTrack.target = null;
-        this.voiceTrack.target = null;
-      }
-      this.tourEditorUI.clearSelection();
-      if (this._tour.get_currentTourStop() != null) {
-        this._tour.get_currentTourStop().syncSettings();
-        SpaceTimeController.set_now(this._tour.get_currentTourStop().get_startTime());
-        SpaceTimeController.set_syncToClock(false);
-        WWTControl.singleton.gotoTarget(ts.get_target(), false, true, false);
-        this._tour.get_currentTourStop().set_tweenPosition(0);
-        this._tour.get_currentTourStop()._updateLayerOpacity();
-        LayerManager.setVisibleLayerList(this._tour.get_currentTourStop().layers);
-      }
-    },
-    tourStopList_MouseClick: function(sender, e) {
-      if (!this._tour.get_editMode()) {
-      }
-      if (this.tourStopList.multipleSelection) {
-        if (this._contextMenu != null) {
-          this._contextMenu._dispose();
-        }
-        this._contextMenu = new ContextMenuStrip();
-        var selectAllMenu = ToolStripMenuItem.create(Language.getLocalizedText(1345, 'Select All'));
-        var cutMenu = ToolStripMenuItem.create(Language.getLocalizedText(427, 'Cut'));
-        var copyMenu = ToolStripMenuItem.create(Language.getLocalizedText(428, 'Copy'));
-        var pasteMenu = ToolStripMenuItem.create(Language.getLocalizedText(429, 'Paste'));
-        var deleteMenu = ToolStripMenuItem.create(Language.getLocalizedText(167, 'Delete'));
-        cutMenu.click = ss.bind('_cutMenu_Click', this);
-        copyMenu.click = ss.bind('_copyMenu_Click', this);
-        pasteMenu.click = ss.bind('_pasteMenu_Click', this);
-        deleteMenu.click = ss.bind('_deleteMenu_Click', this);
-        selectAllMenu.click = ss.bind('_selectAllMenu_Click', this);
-        var sep1 = new ToolStripSeparator();
-        this._contextMenu.items.push(selectAllMenu);
-        this._contextMenu.items.push(sep1);
-        this._contextMenu.items.push(cutMenu);
-        this._contextMenu.items.push(copyMenu);
-        this._contextMenu.items.push(pasteMenu);
-        this._contextMenu.items.push(deleteMenu);
-        this._contextMenu._show(Cursor.get_position());
-      }
-      else if (this._tour.get_currentTourStop() == null) {
-        if (this._contextMenu != null) {
-          this._contextMenu._dispose();
-        }
-        this._contextMenu = new ContextMenuStrip();
-        var selectAllMenu = ToolStripMenuItem.create(Language.getLocalizedText(1345, 'Select All'));
-        var pasteMenu = ToolStripMenuItem.create(Language.getLocalizedText(425, 'Paste'));
-        var sep1 = new ToolStripSeparator();
-        var sep2 = new ToolStripSeparator();
-        var insertSlide = ToolStripMenuItem.create(Language.getLocalizedText(426, 'Add New Slide'));
-        pasteMenu.click = ss.bind('_pasteMenu_Click', this);
-        selectAllMenu.click = ss.bind('_selectAllMenu_Click', this);
-        insertSlide.click = ss.bind('_addNewSlide_Click', this);
-        this._contextMenu.items.push(selectAllMenu);
-        this._contextMenu.items.push(sep1);
-        this._contextMenu.items.push(pasteMenu);
-        this._contextMenu.items.push(sep2);
-        this._contextMenu.items.push(insertSlide);
-        this._contextMenu._show(Cursor.get_position());
-      }
-      else {
-        if (this._contextMenu != null) {
-          this._contextMenu._dispose();
-        }
-        this._contextMenu = new ContextMenuStrip();
-        var selectAllMenu = ToolStripMenuItem.create(Language.getLocalizedText(1345, 'Select All'));
-        var cutMenu = ToolStripMenuItem.create(Language.getLocalizedText(427, 'Cut'));
-        var copyMenu = ToolStripMenuItem.create(Language.getLocalizedText(428, 'Copy'));
-        var pasteMenu = ToolStripMenuItem.create(Language.getLocalizedText(429, 'Paste'));
-        var deleteMenu = ToolStripMenuItem.create(Language.getLocalizedText(167, 'Delete'));
-        var sep1 = new ToolStripSeparator();
-        var sep3 = new ToolStripSeparator();
-        var sep4 = new ToolStripSeparator();
-        var sep5 = new ToolStripSeparator();
-        var sep6 = new ToolStripSeparator();
-        var sep7 = new ToolStripSeparator();
-        var insertSlide = ToolStripMenuItem.create(Language.getLocalizedText(431, 'Insert New Slide'));
-        var insertDuplicate = ToolStripMenuItem.create(Language.getLocalizedText(627, 'Duplicate Slide at End Position'));
-        var insertSlideshow = ToolStripMenuItem.create(Language.getLocalizedText(628, 'Merge Tour after slide...'));
-        var playFromHere = ToolStripMenuItem.create(Language.getLocalizedText(432, 'Preview Tour From Here'));
-        var sep2 = new ToolStripSeparator();
-        var captureThumbnail = ToolStripMenuItem.create(Language.getLocalizedText(433, 'Capture New Thumbnail'));
-        var setSkyPosition = ToolStripMenuItem.create(Language.getLocalizedText(434, 'Set Start Camera Position'));
-        var setEndSkyPosition = ToolStripMenuItem.create(Language.getLocalizedText(435, 'Set End Camera Position'));
-        var showSkyPosition = ToolStripMenuItem.create(Language.getLocalizedText(436, 'Show Start Camera Position'));
-        var showEndSkyPosition = ToolStripMenuItem.create(Language.getLocalizedText(437, 'Show End Camera Position'));
-        var masterSlide = ToolStripMenuItem.create(Language.getLocalizedText(438, 'Master Slide'));
-        var makeTimeline = ToolStripMenuItem.create(Language.getLocalizedText(1346, 'Create Timeline'));
-        var showTimeline = ToolStripMenuItem.create(Language.getLocalizedText(1347, 'Show Timeline'));
-        var linkString = this._tour.get_currentTourStop().get_nextSlide();
-        switch (linkString) {
-          case '':
-          case null:
-          case 'Next':
-            linkString = ' (' + Language.getLocalizedText(610, 'Next Slide') + ')';
-            break;
-          case 'Return':
-            linkString = ' (' + Language.getLocalizedText(602, 'Return to Caller') + ')';
-            break;
-          default:
-            var index = this.get_tour().getTourStopIndexByID(linkString);
-            if (index > -1) {
-              if (ss.emptyString(this._tour.get_tourStops()[index].get_description())) {
-                linkString = ss.format(' (Slide {0})', index);
-              }
-              else {
-                linkString = ' (' + this._tour.get_tourStops()[index].get_description() + ')';
-              }
-            }
-            break;
-        }
-        var setNextSlide = ToolStripMenuItem.create(Language.getLocalizedText(590, 'Set Next Slide') + linkString);
-        var trackSpaceTime = ToolStripMenuItem.create(Language.getLocalizedText(439, 'Track Date/Time/Location'));
-        var fadeInOverlays = ToolStripMenuItem.create(Language.getLocalizedText(629, 'Fade In Slide Elements'));
-        var properties = ToolStripMenuItem.create(Language.getLocalizedText(20, 'Properties'));
-        var interpolation = ToolStripMenuItem.create(Language.getLocalizedText(1029, 'Animation Tween Type'));
-        var Linear = ToolStripMenuItem.create(Language.getLocalizedText(1030, 'Linear'));
-        var Ease = ToolStripMenuItem.create(Language.getLocalizedText(1031, 'Ease In/Out'));
-        var EaseIn = ToolStripMenuItem.create(Language.getLocalizedText(1032, 'Ease In'));
-        var EaseOut = ToolStripMenuItem.create(Language.getLocalizedText(1033, 'Ease Out'));
-        var Exponential = ToolStripMenuItem.create(Language.getLocalizedText(1034, 'Exponential'));
-        Linear.tag = 0;
-        Ease.tag = 3;
-        EaseIn.tag = 1;
-        EaseOut.tag = 2;
-        Exponential.tag = 4;
-        Linear.click = ss.bind('_interpolation_Click', this);
-        Ease.click = ss.bind('_interpolation_Click', this);
-        EaseIn.click = ss.bind('_interpolation_Click', this);
-        EaseOut.click = ss.bind('_interpolation_Click', this);
-        Exponential.click = ss.bind('_interpolation_Click', this);
-        switch (this._tour.get_currentTourStop().get_interpolationType()) {
-          case 0:
-            Linear.checked = true;
-            break;
-          case 1:
-            EaseIn.checked = true;
-            break;
-          case 2:
-            EaseOut.checked = true;
-            break;
-          case 3:
-            Ease.checked = true;
-            break;
-          case 4:
-            Exponential.checked = true;
-            break;
-          default:
-            break;
-        }
-        interpolation.dropDownItems.push(Linear);
-        interpolation.dropDownItems.push(Ease);
-        interpolation.dropDownItems.push(EaseIn);
-        interpolation.dropDownItems.push(EaseOut);
-        interpolation.dropDownItems.push(Exponential);
-        selectAllMenu.click = ss.bind('_selectAllMenu_Click', this);
-        insertDuplicate.click = ss.bind('_insertDuplicate_Click', this);
-        cutMenu.click = ss.bind('_cutMenu_Click', this);
-        copyMenu.click = ss.bind('_copyMenu_Click', this);
-        pasteMenu.click = ss.bind('_pasteMenu_Click', this);
-        deleteMenu.click = ss.bind('_deleteMenu_Click', this);
-        insertSlide.click = ss.bind('_insertNewSlide_Click', this);
-        properties.click = ss.bind('_properties_Click', this);
-        captureThumbnail.click = ss.bind('_captureThumbnail_Click', this);
-        setSkyPosition.click = ss.bind('_setSkyPosition_Click', this);
-        setEndSkyPosition.click = ss.bind('_setEndSkyPosition_Click', this);
-        showEndSkyPosition.click = ss.bind('_showEndSkyPosition_Click', this);
-        showSkyPosition.click = ss.bind('_showSkyPosition_Click', this);
-        playFromHere.click = ss.bind('_playFromHere_Click', this);
-        masterSlide.click = ss.bind('_masterSlide_Click', this);
-        setNextSlide.click = ss.bind('_setNextSlide_Click', this);
-        trackSpaceTime.click = ss.bind('_trackSpaceTime_Click', this);
-        insertSlideshow.click = ss.bind('_insertSlideshow_Click', this);
-        fadeInOverlays.click = ss.bind('_fadeInOverlays_Click', this);
-        if (this._tour.get_currentTourStop().get_masterSlide()) {
-          masterSlide.checked = true;
-        }
-        if (this._tour.get_currentTourStop().get_hasTime()) {
-          trackSpaceTime.checked = true;
-        }
-        fadeInOverlays.checked = this._tour.get_currentTourStop().get_fadeInOverlays();
-        this._contextMenu.items.push(selectAllMenu);
-        this._contextMenu.items.push(sep7);
-        this._contextMenu.items.push(cutMenu);
-        this._contextMenu.items.push(copyMenu);
-        this._contextMenu.items.push(pasteMenu);
-        this._contextMenu.items.push(deleteMenu);
-        this._contextMenu.items.push(sep1);
-        this._contextMenu.items.push(insertSlide);
-        this._contextMenu.items.push(insertDuplicate);
-        this._contextMenu.items.push(insertSlideshow);
-        this._contextMenu.items.push(sep2);
-        this._contextMenu.items.push(playFromHere);
-        this._contextMenu.items.push(sep3);
-        this._contextMenu.items.push(setSkyPosition);
-        this._contextMenu.items.push(setEndSkyPosition);
-        this._contextMenu.items.push(sep4);
-        this._contextMenu.items.push(showSkyPosition);
-        this._contextMenu.items.push(showEndSkyPosition);
-        this._contextMenu.items.push(sep5);
-        this._contextMenu.items.push(captureThumbnail);
-        this._contextMenu.items.push(sep6);
-        if (!this._tour.get_currentTourStop().get_keyFramed()) {
-          this._contextMenu.items.push(makeTimeline);
-        }
-        else {
-          this._contextMenu.items.push(showTimeline);
-        }
-        this._contextMenu.items.push(masterSlide);
-        this._contextMenu.items.push(setNextSlide);
-        this._contextMenu.items.push(fadeInOverlays);
-        this._contextMenu.items.push(trackSpaceTime);
-        this._contextMenu.items.push(interpolation);
-        this._contextMenu._show(Vector2d.create(e.clientX, e.clientY));
-      }
-    },
-    _selectAllMenu_Click: function(sender, e) {
-      this.tourStopList.selectAll();
-    },
-    _interpolation_Click: function(sender, e) {
-      var item = sender;
-      this._tour.get_currentTourStop().set_interpolationType(item.tag);
-    },
-    _setNextSlide_Click: function(sender, e) {
-    },
-    _insertDuplicate_Click: function(sender, e) {
-    },
-    _fadeInOverlays_Click: function(sender, e) {
-      this._tour.get_currentTourStop().set_fadeInOverlays(!this._tour.get_currentTourStop().get_fadeInOverlays());
-    },
-    _insertSlideshow_Click: function(sender, e) {
-    },
-    _trackSpaceTime_Click: function(sender, e) {
-      Undo.push(new UndoTourStopChange(Language.getLocalizedText(532, 'Track Time Edit'), this._tour));
-      this._tour.get_currentTourStop().set_hasTime(!this._tour.get_currentTourStop().get_hasTime());
-    },
-    _masterSlide_Click: function(sender, e) {
-      Undo.push(new UndoTourStopChange(Language.getLocalizedText(533, 'Master Slide State Edit'), this._tour));
-      this._tour.get_currentTourStop().set_masterSlide(!this._tour.get_currentTourStop().get_masterSlide());
-      this.tourStopList.refresh();
-    },
-    _playFromHere_Click: function(sender, e) {
-      this.playFromCurrentTourstop();
-    },
-    playFromCurrentTourstop: function() {
-      this.playing = true;
-      WWTControl.singleton.gotoTarget(this._tour.get_currentTourStop().get_target(), false, true, false);
-      SpaceTimeController.set_now(this._tour.get_currentTourStop().get_startTime());
-      SpaceTimeController.set_syncToClock(false);
-      this.setPlayPauseMode();
-    },
-    playFromTourstop: function(ts) {
-      this._tour.set_currentTourStop(ts);
-      this.playFromCurrentTourstop();
-    },
-    _showSkyPosition_Click: function(sender, e) {
-      if (this._tour.get_currentTourStop() != null) {
-        WWTControl.singleton.gotoTarget(this._tour.get_currentTourStop().get_target(), false, true, false);
-        this._tour.get_currentTourStop().syncSettings();
-        SpaceTimeController.set_now(this._tour.get_currentTourStop().get_startTime());
-        SpaceTimeController.set_syncToClock(false);
-        this._tour.get_currentTourStop().set_tweenPosition(0);
-        LayerManager.setVisibleLayerList(this._tour.get_currentTourStop().layers);
-        this.tourStopList.refresh();
-      }
-    },
-    _showEndSkyPosition_Click: function(sender, e) {
-      this._tour.get_currentTourStop().set_tweenPosition(1);
-      this._tour.get_currentTourStop()._updateLayerOpacity();
-      if (this._tour.get_currentTourStop() != null && this._tour.get_currentTourStop().get_endTarget() != null) {
-        WWTControl.singleton.gotoTargetFull(false, true, this._tour.get_currentTourStop().get_endTarget().get_camParams(), this._tour.get_currentTourStop().get_target().get_studyImageset(), this._tour.get_currentTourStop().get_target().get_backgroundImageset());
-        WWTControl.singleton.renderContext.set_solarSystemTrack(this._tour.get_currentTourStop().get_endTarget().get_target());
-        SpaceTimeController.set_now(this._tour.get_currentTourStop().get_endTime());
-        this._tour.get_currentTourStop().syncSettings();
-        LayerManager.setVisibleLayerList(this._tour.get_currentTourStop().layers);
-        SpaceTimeController.set_syncToClock(false);
-        this.tourStopList.refresh();
-        this.tourEditorUI.clearSelection();
-      }
-    },
-    _setEndSkyPosition_Click: function(sender, e) {
-      if (this._tour.get_currentTourStop() != null) {
-        Undo.push(new UndoTourStopChange(Language.getLocalizedText(435, 'Set End Camera Position'), this._tour));
-        var newPlace = Place.createCameraParams('End Place', WWTControl.singleton.renderContext.viewCamera, 268435456, WWTControl.singleton.constellation, WWTControl.singleton.renderContext.get_backgroundImageset().get_dataSetType(), WWTControl.singleton.renderContext.get_solarSystemTrack());
-        this._tour.get_currentTourStop().set_endTarget(newPlace);
-        this._tour.get_currentTourStop().get_endTarget().set_constellation(WWTControl.singleton.constellation);
-        this._tour.get_currentTourStop().set_endTime(SpaceTimeController.get_now());
-        this._tour.get_currentTourStop().set_tweenPosition(1);
-        var $enum1 = ss.enumerate(ss.keys(this._tour.get_currentTourStop().layers));
-        while ($enum1.moveNext()) {
-          var key = $enum1.current;
-          var info = this._tour.get_currentTourStop().layers[key];
-          if (ss.keyExists(LayerManager.get_layerList(), info.id)) {
-            info.endOpacity = LayerManager.get_layerList()[info.id].get_opacity();
-            info.endParams = LayerManager.get_layerList()[info.id].getParams();
-          }
-        }
-        this._tour.get_currentTourStop()._updateLayerOpacity();
-        this.tourStopList.refresh();
-        TimeLine.refreshUi();
-        this.tourEditorUI.clearSelection();
-      }
-    },
-    _setSkyPosition_Click: function(sender, e) {
-      if (this._tour.get_currentTourStop() != null) {
-        Undo.push(new UndoTourStopChange(Language.getLocalizedText(434, 'Set Start Camera Position'), this._tour));
-        this._tour.get_currentTourStop().get_target().set_target(WWTControl.singleton.renderContext.get_solarSystemTrack());
-        this._tour.get_currentTourStop().get_target().set_type(WWTControl.singleton.renderContext.get_backgroundImageset().get_dataSetType());
-        this._tour.get_currentTourStop().get_target().set_camParams(WWTControl.singleton.renderContext.viewCamera);
-        this._tour.get_currentTourStop().get_target().set_constellation(WWTControl.singleton.constellation);
-        this._tour.get_currentTourStop().get_target().set_studyImageset(WWTControl.singleton.renderContext.get_foregroundImageset());
-        this._tour.get_currentTourStop().get_target().set_type(WWTControl.singleton.renderContext.get_backgroundImageset().get_dataSetType());
-        this._tour.get_currentTourStop().get_target().set_backgroundImageset(WWTControl.singleton.renderContext.get_backgroundImageset().get_stockImageSet());
-        this._tour.get_currentTourStop().captureSettings();
-        this._tour.get_currentTourStop().layers = LayerManager._getVisibleLayerList(this._tour.get_currentTourStop().layers);
-        this._tour.get_currentTourStop().set_tweenPosition(0);
-        this.tourStopList.refresh();
-        TimeLine.refreshUi();
-        this.tourEditorUI.clearSelection();
-      }
-    },
-    _captureThumbnail_Click: function(sender, e) {
-      if (this._tour.get_currentTourStop() != null) {
-        this._tour.get_currentTourStop().set_thumbnail(WWTControl.singleton.captureThumbnail());
-        this.tourStopList.refresh();
-      }
-    },
-    _properties_Click: function(sender, e) {
-      throw new Error('The method or operation is not implemented.');
-    },
-    tourStopList_AddNewSlide: function(sender, e) {
-      this.addSlide(false);
-      this.tourStopList.ensureAddVisible();
-    },
-    _addNewSlide_Click: function(sender, e) {
-      this.addSlide(false);
-      this.tourStopList.ensureAddVisible();
-    },
-    _insertNewSlide_Click: function(sender, e) {
-      this.addSlide(true);
-    },
-    addSlide: function(insert) {
-      Undo.push(new UndoTourSlidelistChange(Language.getLocalizedText(426, 'Add New Slide'), this._tour));
-      Cursor.set_current(Cursors.get_waitCursor());
-      var placeName = 'Current Screen';
-      var newPlace = Place.createCameraParams(placeName, WWTControl.singleton.renderContext.viewCamera, 268435456, WWTControl.singleton.constellation, WWTControl.singleton.renderContext.get_backgroundImageset().get_dataSetType(), WWTControl.singleton.renderContext.get_solarSystemTrack());
-      newPlace.set_studyImageset(WWTControl.singleton.renderContext.get_foregroundImageset());
-      newPlace.set_backgroundImageset(WWTControl.singleton.renderContext.get_backgroundImageset().get_stockImageSet());
-      var newTourStop = TourStop.create(newPlace);
-      if (insert) {
-        this._tour.insertTourStop(newTourStop);
-      }
-      else {
-        this._tour.addTourStop(newTourStop);
-      }
-      if (this._tour.get_currentTourStop() != null) {
-        this.musicTrack.target = this._tour.get_currentTourStop();
-        this.voiceTrack.target = this._tour.get_currentTourStop();
-      }
-      else {
-        this.musicTrack.target = null;
-        this.voiceTrack.target = null;
-      }
-      this._tour.get_currentTourStop().layers = LayerManager._getVisibleLayerList(this._tour.get_currentTourStop().layers);
-      newTourStop.set_thumbnail(newPlace.set_thumbnail(WWTControl.singleton.captureThumbnail()));
-      this.tourStopList.selectedItem = this.tourStopList.findItem(newTourStop);
-      this.tourStopList.refresh();
-      this.tourEditorUI.clearSelection();
-      Cursor.set_current(Cursors.get_defaultV());
-      TimeLine.refreshUi();
-    },
-    _deleteMenu_Click: function(sender, e) {
-      Undo.push(new UndoTourSlidelistChange(Language.getLocalizedText(534, 'Delete Slide'), this._tour));
-      var $enum1 = ss.enumerate(ss.keys(this.tourStopList.selectedItems));
-      while ($enum1.moveNext()) {
-        var key = $enum1.current;
-        var item = this.tourStopList.selectedItems[key];
-        this._tour.removeTourStop(item);
-      }
-      ss.clearKeys(this.tourStopList.selectedItems);
-      this.tourStopList.selectedItem = -1;
-      this._tour.set_currentTourStop(null);
-      this.musicTrack.target = null;
-      this.voiceTrack.target = null;
-      this.tourStopList.refresh();
-      this.tourEditorUI.clearSelection();
-    },
-    _pasteMenu_Click: function(sender, e) {
-    },
-    _copyMenu_Click: function(sender, e) {
-    },
-    _cutMenu_Click: function(sender, e) {
-      Undo.push(new UndoTourSlidelistChange(Language.getLocalizedText(536, 'Cut Slide'), this._tour));
-      this._copyMenu_Click(sender, e);
-      var $enum1 = ss.enumerate(ss.keys(this.tourStopList.selectedItems));
-      while ($enum1.moveNext()) {
-        var key = $enum1.current;
-        var item = this.tourStopList.selectedItems[key];
-        this._tour.removeTourStop(item);
-      }
-      ss.clearKeys(this.tourStopList.selectedItems);
-      this.tourStopList.refresh();
-      this.tourEditorUI.clearSelection();
-    },
-    pauseTour: function() {
-      if (this.playing) {
-        this.playing = false;
-      }
-      this.setPlayPauseMode();
-    },
-    preview_Click: function(sender, e) {
-      this.playing = !this.playing;
-      if (this.playing && this._tour.get_editMode()) {
-        this.get_tour().set_currentTourstopIndex(-1);
-      }
-      this.setPlayPauseMode();
-    },
-    setPlayPauseMode: function() {
-      if (this._tour.get_editMode()) {
-        if (this.playing) {
-          if (this._player == null) {
-            this._player = new TourPlayer();
-          }
-          this._player.set_tour(this._tour);
-          WWTControl.singleton.uiController = this._player;
-          this._player.play();
-          this.tourStopList.showAddButton = false;
-        }
-        else {
-          WWTControl.singleton.uiController = this.tourEditorUI;
-          if (this._player != null) {
-            this._player.stop(false);
-          }
-          this._player = null;
-          WWTControl.singleton.uiController = null;
-          WWTControl.singleton.set__mover(null);
-          this.tourStopList.showAddButton = this._tour.get_editMode();
-        }
-      }
-      else {
-        if (this.playing) {
-          if (this._player == null) {
-            this._player = new TourPlayer();
-          }
-          this._player.set_tour(this._tour);
-          WWTControl.singleton.uiController = this._player;
-          this._player.play();
-          this.tourStopList.showAddButton = false;
-        }
-        else {
-          WWTControl.singleton.uiController = null;
-          WWTControl.singleton.renderContext.freezeView();
-          if (this._player != null) {
-            this._player.stop(false);
-          }
-          this._player = null;
-          WWTControl.singleton.uiController = null;
-          WWTControl.singleton.set__mover(null);
-          this.tourStopList.showAddButton = this._tour.get_editMode();
-        }
-      }
-    },
-    playerTimer_Tick: function(sender, e) {
-      if (this.playing) {
-        if (this._player != null) {
-          if (!TourPlayer.get_playing()) {
-            this.playing = false;
-            this.setPlayPauseMode();
-          }
-          else {
-            if (this.tourStopList.selectedItem !== this._tour.get_currentTourstopIndex()) {
-              this.tourStopList.selectedItem = this._tour.get_currentTourstopIndex();
-            }
-          }
-        }
-      }
-    },
-    insertShapeCircle_Click: function(sender, e) {
-      this.tourEditorUI.addShape('', 0);
-    },
-    insertShapeRectangle_Click: function(sender, e) {
-      this.tourEditorUI.addShape('', 1);
-    },
-    insertShapeLine_Click: function(sender, e) {
-      this.tourEditorUI.addShape('', 5);
-    },
-    insertDonut_Click: function(sender, e) {
-      this.tourEditorUI.addShape('', 3);
-    },
-    _addArrow_Click: function(sender, e) {
-      this.tourEditorUI.addShape('', 4);
-    },
-    insertVideo_Click: function(sender, e) {
-    },
-    insertAudio_Click: function(sender, e) {
-    },
-    insertHyperlink_Click: function(sender, e) {
-    },
-    colorPicker_Click: function(sender, e) {
-    },
-    tourEditTab_Leave: function(sender, e) {
-    },
-    editTourProperties_Click: function(sender, e) {
-    },
-    saveTour_Click: function(sender, e) {
-      this.save(false);
-    },
-    save: function(saveAs) {
-      return true;
-    },
-    addVideo_Click: function(sender, e) {
-    },
-    addPicture_Click: function(sender, e) {
-    },
-    addShape_Click: function(sender, e) {
-    },
-    _addOpenRectangle_Click: function(sender, e) {
-      this.tourEditorUI.addShape('', 6);
-    },
-    _addStar_Click: function(sender, e) {
-      this.tourEditorUI.addShape('', 2);
-    },
-    addText_Click: function(sender, e) {
-    },
-    preview_EnabledChanged: function(sender, e) {
-      if (this.playing) {
-      }
-      else {
-      }
-    },
-    preview_MouseEnter: function(sender, e) {
-    },
-    preview_MouseLeave: function(sender, e) {
-    },
-    preview_MouseUp: function(sender, e) {
-    },
-    preview_MouseDown: function(sender, e) {
-    },
-    tourStopList_ItemHover: function(sender, e) {
-    },
-    refresh: function() {
-    },
-    undoStep: function() {
-      if (Undo.peekAction()) {
-        Undo.stepBack();
-        this.tourStopList.refresh();
-        this.tourStopList.selectedItem = this._tour.get_currentTourstopIndex();
-        this.showSlideStartPosition(this._tour.get_currentTourStop());
-        this.refresh();
-        OverlayList._updateOverlayList(this._tour.get_currentTourStop(), this.tourEditorUI.selection);
-      }
-    },
-    redoStep: function() {
-      if (Undo.peekRedoAction()) {
-        Undo.stepForward();
-        this.tourStopList.refresh();
-        this.tourStopList.selectedItem = this._tour.get_currentTourstopIndex();
-        this.showSlideStartPosition(this._tour.get_currentTourStop());
-        this.refresh();
-        OverlayList._updateOverlayList(this._tour.get_currentTourStop(), this.tourEditorUI.selection);
-      }
-    },
-    tourStopList_ShowEndPosition: function(sender, e) {
-      this._showEndSkyPosition_Click(this, new ss.EventArgs());
-    },
-    tourStopList_ShowStartPosition: function(sender, e) {
-      this.showSlideStartPosition(this.get_tour().get_currentTourStop());
-      this.tourEditorUI.clearSelection();
-    },
-    tourStopList_KeyDown: function(sender, e) {
-      if (e.ctrlKey) {
-        switch (e.keyCode) {
-          case 67:
-            this._copyMenu_Click(null, new ss.EventArgs());
-            break;
-          case 86:
-            this._pasteMenu_Click(null, new ss.EventArgs());
-            break;
-          case 88:
-            this._cutMenu_Click(null, new ss.EventArgs());
-            break;
-          case 90:
-            if (Undo.peekAction()) {
-              TourEdit._undoStep();
-            }
-            else {
-              UiTools._beep();
-            }
-            break;
-          case 89:
-            if (Undo.peekRedoAction()) {
-              TourEdit._redoStep();
-            }
-            else {
-              UiTools._beep();
-            }
-            break;
-        }
-      }
-      if (e.keyCode === 46) {
-        this._deleteMenu_Click(null, new ss.EventArgs());
-      }
-    },
-    _ensureSelectedVisible: function() {
-      this.tourStopList.ensureSelectedVisible();
-    }
-  };
-
-
-  // wwtlib.TourEditor
-
-  function TourEditor() {
-    this.selection = new Selection();
-    this._contextMenu = new ContextMenuStrip();
-    this._tour = null;
-    this._mouseDown = false;
-    this._selectionAction = 11;
-    this._needUndoFrame = false;
-    this._contextPoint = new Vector2d();
-    this._dragCopying = false;
-    this._brokeThreshold = false;
-    this._defaultColor = Colors.get_white();
-  }
-  var TourEditor$ = {
-    render: function(renderContext) {
-      renderContext.setupMatricesOverlays();
-      if (this._tour == null || this._tour.get_currentTourStop() == null) {
-        return;
-      }
-      var $enum1 = ss.enumerate(this._tour.get_currentTourStop().get_overlays());
-      while ($enum1.moveNext()) {
-        var overlay = $enum1.current;
-        if (overlay.get_animate() && this.get_tour().get_currentTourStop().get_keyFramed()) {
-          overlay.set_tweenFactor(this._tour.get_currentTourStop().get_tweenPosition());
-        }
-        else if (!this.get_tour().get_currentTourStop().get_keyFramed()) {
-          overlay.set_tweenFactor((this._tour.get_currentTourStop().get_tweenPosition() < 0.5) ? 0 : 1);
-        }
-        overlay.draw3D(renderContext, true);
-      }
-      this.selection.draw3D(renderContext, 1);
-      if (TourEditor.currentEditor != null) {
-        TourEditor.currentEditor.render(renderContext);
-      }
-      Settings.tourSettings = null;
-    },
-    get_tour: function() {
-      return this._tour;
-    },
-    set_tour: function(value) {
-      this._tour = value;
-      return value;
-    },
-    close: function() {
-      if (this._tour != null) {
-        this._tour = null;
-        this.set_focus(null);
-      }
-    },
-    clearSelection: function() {
-      this.selection.clearSelection();
-      OverlayList._updateOverlayListSelection(this.selection);
-      this.set_focus(null);
-    },
-    get_focus: function() {
-      return this.selection.get_focus();
-    },
-    set_focus: function(value) {
-      this.selection.set_focus(value);
-      return value;
-    },
-    pointToView: function(pnt) {
-      var clientHeight = WWTControl.singleton.renderContext.height;
-      var clientWidth = WWTControl.singleton.renderContext.width;
-      var viewWidth = (WWTControl.singleton.renderContext.width / WWTControl.singleton.renderContext.height) * 1116;
-      var x = ((pnt.x) / (clientWidth) * viewWidth) - ((viewWidth - 1920) / 2);
-      var y = (pnt.y) / clientHeight * 1116;
-      return Vector2d.create(x, y);
-    },
-    mouseDown: function(sender, e) {
-      this._brokeThreshold = false;
-      this._needUndoFrame = true;
-      var location = this.pointToView(Vector2d.create(e.offsetX, e.offsetY));
-      if (this._tour == null || this._tour.get_currentTourStop() == null) {
-        this._needUndoFrame = false;
-        return false;
-      }
-      if (TourEditor.currentEditor != null) {
-        if (TourEditor.currentEditor.mouseDown(sender, e)) {
-          return true;
-        }
-      }
-      if (this.get_focus() != null) {
-        if (this.selection.get_multiSelect()) {
-          var $enum1 = ss.enumerate(this.selection.selectionSet);
-          while ($enum1.moveNext()) {
-            var overlay = $enum1.current;
-            if (overlay.hitTest(location)) {
-              this._selectionAction = 9;
-              this._mouseDown = true;
-              this._pointDown = location;
-              this.set_focus(overlay);
-              if (e.ctrlKey) {
-                this._dragCopying = true;
-              }
-              return true;
-            }
-          }
-        }
-        else {
-          if (this.get_focus().hitTest(location)) {
-            this._selectionAction = 9;
-            this._mouseDown = true;
-            this._pointDown = location;
-            if (e.ctrlKey) {
-              this._dragCopying = true;
-            }
-            return true;
-          }
-        }
-        var hit = this.selection.hitTest(location);
-        if (hit !== 11) {
-          this._selectionAction = hit;
-          this._mouseDown = true;
-          if (hit === 8) {
-            this._pointDown = location;
-          }
-          else {
-            this._pointDown = this.selection.pointToSelectionSpace(location);
-          }
-          return true;
-        }
-      }
-      for (var i = this._tour.get_currentTourStop().get_overlays().length - 1; i >= 0; i--) {
-        if (this._tour.get_currentTourStop().get_overlays()[i].hitTest(location)) {
-          this._selectionAction = 9;
-          this.set_focus(this._tour.get_currentTourStop().get_overlays()[i]);
-          if (e.ctrlKey || e.shiftKey) {
-            this.selection.addSelection(this.get_focus());
-          }
-          else {
-            this.selection.setSelection(this.get_focus());
-          }
-          OverlayList._updateOverlayListSelection(this.selection);
-          this._mouseDown = true;
-          this._pointDown = location;
-          return true;
-        }
-      }
-      this.set_focus(null);
-      this.clearSelection();
-      this._needUndoFrame = false;
-      return false;
-    },
-    mouseUp: function(sender, e) {
-      this._brokeThreshold = false;
-      if (TourEditor.currentEditor != null) {
-        if (TourEditor.currentEditor.mouseUp(sender, e)) {
-          return true;
-        }
-      }
-      this._contextPoint = Vector2d.create(e.offsetX, e.offsetY);
-      if (this._mouseDown) {
-        this._mouseDown = false;
-        if (e.button === 2) {
-          if (this.get_focus() != null) {
-            this.showSelectionContextMenu(Vector2d.create(e.offsetX, e.offsetY));
-          }
-        }
-        return true;
-      }
-      if (e.button === 2) {
-        if (this.get_focus() == null) {
-          this._showNoSelectionContextMenu(Vector2d.create(e.offsetX, e.offsetY));
-        }
-        return true;
-      }
-      return false;
-    },
-    mouseMove: function(sender, e) {
-      if (TourEditor.currentEditor != null) {
-        if (TourEditor.currentEditor.mouseMove(sender, e)) {
-          return true;
-        }
-      }
-      var location = this.pointToView(Vector2d.create(e.offsetX, e.offsetY));
-      if (this._mouseDown && this.get_focus() != null) {
-        var undoFrame = null;
-        var actionText = Language.getLocalizedText(502, 'Edit');
-        if (this._needUndoFrame) {
-          undoFrame = new UndoTourStopChange(Language.getLocalizedText(502, 'Edit'), this._tour);
-        }
-        var moveX;
-        var moveY;
-        if (this._selectionAction !== 9 && this._selectionAction !== 8) {
-          var newPoint = this.selection.pointToSelectionSpace(location);
-          moveX = newPoint.x - this._pointDown.x;
-          moveY = newPoint.y - this._pointDown.y;
-          this._pointDown = newPoint;
-        }
-        else {
-          moveX = location.x - this._pointDown.x;
-          moveY = location.y - this._pointDown.y;
-          if (this._selectionAction === 9 && !this._brokeThreshold) {
-            if (Math.abs(moveX) > 3 || Math.abs(moveY) > 3) {
-              this._brokeThreshold = true;
-            }
-            else {
-              return true;
-            }
-          }
-          this._pointDown = location;
-        }
-        if (this._dragCopying) {
-          if (this.selection.get_multiSelect()) {
-            var set = this.selection.selectionSet;
-            this.clearSelection();
-            var $enum1 = ss.enumerate(set);
-            while ($enum1.moveNext()) {
-              var overlay = $enum1.current;
-              var newOverlay = this.addOverlay(overlay);
-              newOverlay.set_x(overlay.get_x());
-              newOverlay.set_y(overlay.get_y());
-              this.set_focus(newOverlay);
-              this.selection.addSelection(this.get_focus());
-            }
-            OverlayList._updateOverlayList(this._tour.get_currentTourStop(), this.selection);
-            this._dragCopying = false;
-          }
-          else {
-            var newOverlay = this.addOverlay(this.get_focus());
-            newOverlay.set_x(this.get_focus().get_x());
-            newOverlay.set_y(this.get_focus().get_y());
-            this.set_focus(newOverlay);
-            this.selection.setSelection(this.get_focus());
-            OverlayList._updateOverlayList(this._tour.get_currentTourStop(), this.selection);
-            this._dragCopying = false;
-          }
-        }
-        var aspect = this.get_focus().get_width() / this.get_focus().get_height();
-        var center = Vector2d.create(this.get_focus().get_x(), this.get_focus().get_y());
-        if (e.ctrlKey) {
-          actionText = Language.getLocalizedText(537, 'Resize');
-          switch (this._selectionAction) {
-            case 0:
-              this.get_focus().set_width(Math.max(2, this.get_focus().get_width() - moveX * 2));
-              this.get_focus().set_height(Math.max(2, this.get_focus().get_height() - (moveX / aspect) * 2));
-              break;
-            case 1:
-              this.get_focus().set_height(Math.max(2, this.get_focus().get_height() - moveY * 2));
-              break;
-            case 2:
-              this.get_focus().set_width(Math.max(2, this.get_focus().get_width() + moveX * 2));
-              this.get_focus().set_height(Math.max(2, this.get_focus().get_height() + (moveX / aspect) * 2));
-              break;
-            case 3:
-              this.get_focus().set_width(Math.max(2, this.get_focus().get_width() + moveX * 2));
-              break;
-            case 4:
-              this.get_focus().set_width(Math.max(2, this.get_focus().get_width() + moveX * 2));
-              this.get_focus().set_height(Math.max(2, this.get_focus().get_height() + (moveX / aspect) * 2));
-              break;
-            case 5:
-              this.get_focus().set_height(Math.max(2, this.get_focus().get_height() + moveY * 2));
-              break;
-            case 6:
-              this.get_focus().set_width(Math.max(2, this.get_focus().get_width() - moveX * 2));
-              this.get_focus().set_height(Math.max(2, this.get_focus().get_height() - (moveX / aspect) * 2));
-              break;
-            case 7:
-              this.get_focus().set_width(Math.max(2, this.get_focus().get_width() - moveX * 2));
-              break;
-            case 8:
-              actionText = Language.getLocalizedText(538, 'Rotate');
-              this.get_focus().set_rotationAngle(this.get_focus().get_rotationAngle() + moveX / 10);
-              break;
-            case 9:
-              actionText = Language.getLocalizedText(539, 'Drag Copy');
-              center.x += moveX;
-              center.y += moveY;
-              break;
-            case 10:
-              break;
-            case 11:
-              break;
-            default:
-              break;
-          }
-        }
-        else {
-          if (this._selectionAction !== 8 && this._selectionAction !== 9) {
-            if (moveX > (this.get_focus().get_width() - 2)) {
-              moveX = 0;
-            }
-            if (moveY > (this.get_focus().get_height() - 2)) {
-              moveY = 0;
-            }
-          }
-          actionText = Language.getLocalizedText(537, 'Resize');
-          switch (this._selectionAction) {
-            case 0:
-              this.get_focus().set_width(this.get_focus().get_width() - moveX);
-              this.get_focus().set_height(this.get_focus().get_height() - (moveX / aspect));
-              center.x += (moveX / 2);
-              center.y += ((moveX / aspect) / 2);
-              break;
-            case 1:
-              this.get_focus().set_height(this.get_focus().get_height() - moveY);
-              center.y += (moveY / 2);
-              break;
-            case 2:
-              this.get_focus().set_width(this.get_focus().get_width() + moveX);
-              this.get_focus().set_height(this.get_focus().get_height() + (moveX / aspect));
-              center.x += (moveX / 2);
-              center.y -= ((moveX / aspect) / 2);
-              break;
-            case 3:
-              this.get_focus().set_width(this.get_focus().get_width() + moveX);
-              center.x += (moveX / 2);
-              break;
-            case 4:
-              this.get_focus().set_width(this.get_focus().get_width() + moveX);
-              this.get_focus().set_height(this.get_focus().get_height() + (moveX / aspect));
-              center.x += (moveX / 2);
-              center.y += ((moveX / aspect) / 2);
-              break;
-            case 5:
-              this.get_focus().set_height(this.get_focus().get_height() + moveY);
-              center.y += (moveY / 2);
-              break;
-            case 6:
-              this.get_focus().set_width(this.get_focus().get_width() - moveX);
-              this.get_focus().set_height(this.get_focus().get_height() - (moveX / aspect));
-              center.x += (moveX / 2);
-              center.y -= ((moveX / aspect) / 2);
-              break;
-            case 7:
-              this.get_focus().set_width(this.get_focus().get_width() - moveX);
-              center.x += (moveX / 2);
-              break;
-            case 8:
-              actionText = Language.getLocalizedText(538, 'Rotate');
-              this.get_focus().set_rotationAngle(this.get_focus().get_rotationAngle() + moveX);
-              break;
-            case 9:
-              actionText = Language.getLocalizedText(540, 'Move');
-              center.x += moveX;
-              center.y += moveY;
-              break;
-            case 10:
-              break;
-            case 11:
-              break;
-            default:
-              break;
-          }
-        }
-        if (this._selectionAction !== 9 && this._selectionAction !== 8) {
-          center = this.selection.pointToScreenSpace(center);
-        }
-        if (this.selection.get_multiSelect()) {
-          var $enum2 = ss.enumerate(this.selection.selectionSet);
-          while ($enum2.moveNext()) {
-            var overlay = $enum2.current;
-            overlay.set_x(overlay.get_x() + moveX);
-            overlay.set_y(overlay.get_y() + moveY);
-          }
-        }
-        else {
-          this.get_focus().set_x(center.x);
-          this.get_focus().set_y(center.y);
-        }
-        if (this._needUndoFrame) {
-          this._needUndoFrame = false;
-          undoFrame.set_actionText(actionText);
-          Undo.push(undoFrame);
-        }
-      }
-      else {
-        if (this.get_focus() != null) {
-          if (this.get_focus().hitTest(location)) {
-            Cursor.set_current(Cursors.get_sizeAll());
-            return false;
-          }
-          var hit = this.selection.hitTest(location);
-          if (hit === 11) {
-            return false;
-          }
-          switch (hit) {
-            case 0:
-              Cursor.set_current(Cursors.get_sizeNWSE());
-              break;
-            case 1:
-              Cursor.set_current(Cursors.get_sizeNS());
-              break;
-            case 2:
-              Cursor.set_current(Cursors.get_sizeNESW());
-              break;
-            case 3:
-              Cursor.set_current(Cursors.get_sizeWE());
-              break;
-            case 4:
-              Cursor.set_current(Cursors.get_sizeNWSE());
-              break;
-            case 5:
-              Cursor.set_current(Cursors.get_sizeNS());
-              break;
-            case 6:
-              Cursor.set_current(Cursors.get_sizeNESW());
-              break;
-            case 7:
-              Cursor.set_current(Cursors.get_sizeWE());
-              break;
-            case 8:
-              Cursor.set_current(Cursors.get_sizeWE());
-              break;
-            case 10:
-              break;
-            case 11:
-              break;
-            default:
-              break;
-          }
-        }
-      }
-      return false;
-    },
-    _showNoSelectionContextMenu: function(position) {
-      if (this._contextMenu != null) {
-        this._contextMenu._dispose();
-      }
-      if (this._tour.get_currentTourStop() == null) {
-        return;
-      }
-      this._contextMenu = new ContextMenuStrip();
-      var AddCircle = ToolStripMenuItem.create(Language.getLocalizedText(444, 'Circle'));
-      var AddRectangle = ToolStripMenuItem.create(Language.getLocalizedText(445, 'Rectangle'));
-      var AddOpenRectangle = ToolStripMenuItem.create(Language.getLocalizedText(446, 'Open Rectangle'));
-      var AddRing = ToolStripMenuItem.create(Language.getLocalizedText(447, 'Ring'));
-      var AddLine = ToolStripMenuItem.create(Language.getLocalizedText(448, 'Line'));
-      var AddArrow = ToolStripMenuItem.create(Language.getLocalizedText(449, 'Arrow'));
-      var AddStar = ToolStripMenuItem.create(Language.getLocalizedText(450, 'Star'));
-      AddCircle.click = ss.bind('_insertShapeCircle_Click', this);
-      AddRectangle.click = ss.bind('_insertShapeRectangle_Click', this);
-      AddOpenRectangle.click = ss.bind('_addOpenRectangle_Click', this);
-      AddRing.click = ss.bind('_insertDonut_Click', this);
-      AddLine.click = ss.bind('_insertShapeLine_Click', this);
-      AddArrow.click = ss.bind('_addArrow_Click', this);
-      AddStar.click = ss.bind('_addStar_Click', this);
-      this._contextMenu.items.push(AddCircle);
-      this._contextMenu.items.push(AddRectangle);
-      this._contextMenu.items.push(AddOpenRectangle);
-      this._contextMenu.items.push(AddRing);
-      this._contextMenu.items.push(AddLine);
-      this._contextMenu.items.push(AddArrow);
-      this._contextMenu.items.push(AddStar);
-      this._contextMenu._show(position);
-    },
-    _addOpenRectangle_Click: function(sender, e) {
-      this.addShape('', 6);
-    },
-    _addStar_Click: function(sender, e) {
-      this.addShape('', 2);
-    },
-    _insertShapeCircle_Click: function(sender, e) {
-      this.addShape('', 0);
-    },
-    _insertShapeRectangle_Click: function(sender, e) {
-      this.addShape('', 1);
-    },
-    _insertShapeLine_Click: function(sender, e) {
-      this.addShape('', 5);
-    },
-    _insertDonut_Click: function(sender, e) {
-      this.addShape('', 3);
-    },
-    _addArrow_Click: function(sender, e) {
-      this.addShape('', 4);
-    },
-    showSelectionContextMenu: function(position) {
-      if (this.get_focus() == null) {
-        return;
-      }
-      var multiSelect = this.selection.get_multiSelect();
-      if (this._contextMenu != null) {
-        this._contextMenu._dispose();
-      }
-      this._contextMenu = new ContextMenuStrip();
-      var cutMenu = ToolStripMenuItem.create(Language.getLocalizedText(427, 'Cut'));
-      var copyMenu = ToolStripMenuItem.create(Language.getLocalizedText(428, 'Copy'));
-      var pasteMenu = ToolStripMenuItem.create(Language.getLocalizedText(425, 'Paste'));
-      var deleteMenu = ToolStripMenuItem.create(Language.getLocalizedText(167, 'Delete'));
-      var sep1 = new ToolStripSeparator();
-      var sep2 = new ToolStripSeparator();
-      var sep3 = new ToolStripSeparator();
-      var bringToFront = ToolStripMenuItem.create(Language.getLocalizedText(452, 'Bring to Front'));
-      var sendToBack = ToolStripMenuItem.create(Language.getLocalizedText(453, 'Send to Back'));
-      var bringForward = ToolStripMenuItem.create(Language.getLocalizedText(454, 'Bring Forward'));
-      var sendBackward = ToolStripMenuItem.create(Language.getLocalizedText(455, 'Send Backward'));
-      var properties = ToolStripMenuItem.create(Language.getLocalizedText(20, 'Properties'));
-      var editText = ToolStripMenuItem.create(Language.getLocalizedText(502, 'Edit'));
-      var url = ToolStripMenuItem.create(Language.getLocalizedText(587, 'Hyperlink'));
-      var linkString = this.get_focus().get_linkID();
-      switch (this.get_focus().get_linkID()) {
-        case '':
-        case null:
-          linkString = ' (' + Language.getLocalizedText(609, 'No Link') + ')';
-          break;
-        case 'Next':
-          linkString = ' (' + Language.getLocalizedText(610, 'Next Slide') + ')';
-          break;
-        case 'Return':
-          linkString = ' (' + Language.getLocalizedText(602, 'Return to Caller') + ')';
-          break;
-        default:
-          var index = this.get_tour().getTourStopIndexByID(this.get_focus().get_linkID());
-          if (index > -1) {
-            if (ss.emptyString(this._tour.get_tourStops()[index].get_description())) {
-              linkString = ss.format(' (' + Language.getLocalizedText(1340, 'Slide') + ' {0})', index);
-            }
-            else {
-              linkString = ' (' + this._tour.get_tourStops()[index].get_description() + ')';
-            }
-          }
-          break;
-      }
-      var animateMenu = ToolStripMenuItem.create(Language.getLocalizedText(588, 'Animate'));
-      var linkID = ToolStripMenuItem.create(Language.getLocalizedText(589, 'Link to Slide') + linkString);
-      var pickColor = ToolStripMenuItem.create(Language.getLocalizedText(458, 'Color/Opacity'));
-      var flipbookProperties = ToolStripMenuItem.create(Language.getLocalizedText(630, 'Flipbook Properties'));
-      var interpolateMenu = ToolStripMenuItem.create(Language.getLocalizedText(1029, 'Animation Tween Type'));
-      var Linear = ToolStripMenuItem.create(Language.getLocalizedText(1030, 'Linear'));
-      var Ease = ToolStripMenuItem.create(Language.getLocalizedText(1031, 'Ease In/Out'));
-      var EaseIn = ToolStripMenuItem.create(Language.getLocalizedText(1032, 'Ease In'));
-      var EaseOut = ToolStripMenuItem.create(Language.getLocalizedText(1033, 'Ease Out'));
-      var Exponential = ToolStripMenuItem.create(Language.getLocalizedText(1034, 'Exponential'));
-      var Default = ToolStripMenuItem.create(Language.getLocalizedText(1035, 'Slide Default'));
-      var Align = ToolStripMenuItem.create(Language.getLocalizedText(790, 'Align'));
-      var AlignTop = ToolStripMenuItem.create(Language.getLocalizedText(1333, 'Top'));
-      var AlignBottom = ToolStripMenuItem.create(Language.getLocalizedText(1334, 'Bottom'));
-      var AlignLeft = ToolStripMenuItem.create(Language.getLocalizedText(1335, 'Left'));
-      var AlignRight = ToolStripMenuItem.create(Language.getLocalizedText(1336, 'Right'));
-      var AlignHorizon = ToolStripMenuItem.create(Language.getLocalizedText(1337, 'Horizontal'));
-      var AlignVertical = ToolStripMenuItem.create(Language.getLocalizedText(1338, 'Vertical'));
-      var AlignCenter = ToolStripMenuItem.create(Language.getLocalizedText(1339, 'Centered'));
-      Align.dropDownItems.push(AlignTop);
-      Align.dropDownItems.push(AlignBottom);
-      Align.dropDownItems.push(AlignLeft);
-      Align.dropDownItems.push(AlignRight);
-      Align.dropDownItems.push(AlignHorizon);
-      Align.dropDownItems.push(AlignVertical);
-      Align.dropDownItems.push(AlignCenter);
-      Linear.tag = 0;
-      Ease.tag = 3;
-      EaseIn.tag = 1;
-      EaseOut.tag = 2;
-      Exponential.tag = 4;
-      Default.tag = 5;
-      Linear.click = ss.bind('_interpolation_Click', this);
-      Ease.click = ss.bind('_interpolation_Click', this);
-      EaseIn.click = ss.bind('_interpolation_Click', this);
-      EaseOut.click = ss.bind('_interpolation_Click', this);
-      Exponential.click = ss.bind('_interpolation_Click', this);
-      Default.click = ss.bind('_interpolation_Click', this);
-      switch (this.get_focus().get_interpolationType()) {
-        case 0:
-          Linear.checked = true;
-          break;
-        case 1:
-          EaseIn.checked = true;
-          break;
-        case 2:
-          EaseOut.checked = true;
-          break;
-        case 3:
-          Ease.checked = true;
-          break;
-        case 4:
-          Exponential.checked = true;
-          break;
-        case 5:
-          Default.checked = true;
-          break;
-        default:
-          break;
-      }
-      interpolateMenu.dropDownItems.push(Default);
-      interpolateMenu.dropDownItems.push(Linear);
-      interpolateMenu.dropDownItems.push(Ease);
-      interpolateMenu.dropDownItems.push(EaseIn);
-      interpolateMenu.dropDownItems.push(EaseOut);
-      interpolateMenu.dropDownItems.push(Exponential);
-      cutMenu.click = ss.bind('_cutMenu_Click', this);
-      copyMenu.click = ss.bind('_copyMenu_Click', this);
-      deleteMenu.click = ss.bind('_deleteMenu_Click', this);
-      bringToFront.click = ss.bind('_bringToFront_Click', this);
-      sendToBack.click = ss.bind('_sendToBack_Click', this);
-      sendBackward.click = ss.bind('_sendBackward_Click', this);
-      bringForward.click = ss.bind('_bringForward_Click', this);
-      properties.click = ss.bind('_properties_Click', this);
-      editText.click = ss.bind('_editText_Click', this);
-      url.click = ss.bind('_url_Click', this);
-      pickColor.click = ss.bind('_pickColor_Click', this);
-      pasteMenu.click = ss.bind('_pasteMenu_Click', this);
-      animateMenu.click = ss.bind('_animateMenu_Click', this);
-      flipbookProperties.click = ss.bind('_flipbookProperties_Click', this);
-      linkID.click = ss.bind('_linkID_Click', this);
-      AlignTop.click = ss.bind('_alignTop_Click', this);
-      AlignBottom.click = ss.bind('_alignBottom_Click', this);
-      AlignLeft.click = ss.bind('_alignLeft_Click', this);
-      AlignRight.click = ss.bind('_alignRight_Click', this);
-      AlignHorizon.click = ss.bind('_alignHorizon_Click', this);
-      AlignVertical.click = ss.bind('_alignVertical_Click', this);
-      AlignCenter.click = ss.bind('_alignCenter_Click', this);
-      this._contextMenu.items.push(cutMenu);
-      this._contextMenu.items.push(copyMenu);
-      this._contextMenu.items.push(pasteMenu);
-      this._contextMenu.items.push(deleteMenu);
-      this._contextMenu.items.push(sep1);
-      this._contextMenu.items.push(bringToFront);
-      this._contextMenu.items.push(sendToBack);
-      this._contextMenu.items.push(bringForward);
-      this._contextMenu.items.push(sendBackward);
-      this._contextMenu.items.push(Align);
-      this._contextMenu.items.push(sep2);
-      pasteMenu.enabled = false;
-      this._contextMenu.items.push(pickColor);
-      this._contextMenu.items.push(url);
-      this._contextMenu.items.push(linkID);
-      this._contextMenu.items.push(animateMenu);
-      this._contextMenu.items.push(sep3);
-      this._contextMenu.items.push(flipbookProperties);
-      animateMenu.checked = this.get_focus().get_animate();
-      this._contextMenu.items.push(interpolateMenu);
-      interpolateMenu.enabled = this.get_focus().get_animate();
-      flipbookProperties.visible = (ss.canCast(this.get_focus(), FlipbookOverlay));
-      sep3.visible = (ss.canCast(this.get_focus(), FlipbookOverlay));
-      if (multiSelect) {
-        url.visible = false;
-        linkID.visible = false;
-        properties.visible = false;
-        flipbookProperties.visible = false;
-        bringForward.visible = false;
-        sendBackward.visible = false;
-      }
-      else {
-        Align.visible = false;
-      }
-      this._contextMenu.items.push(properties);
-      if (this.get_focus() != null) {
-        if (ss.typeOf(this.get_focus()) === TextOverlay) {
-          this._contextMenu.items.push(editText);
-        }
-      }
-      this._contextMenu._show(position);
-    },
-    _editText_Click: function(sender, e) {
-      if (this.get_focus() != null) {
-        if (ss.typeOf(this.get_focus()) === TextOverlay) {
-          this._editText();
-        }
-      }
-    },
-    _alignVertical_Click: function(sender, e) {
-      if (this.get_focus() == null) {
-        return;
-      }
-      Undo.push(new UndoTourStopChange(Language.getLocalizedText(1036, 'Vertical Align'), this._tour));
-      var xCenter = this.get_focus().get_x();
-      var $enum1 = ss.enumerate(this.selection.selectionSet);
-      while ($enum1.moveNext()) {
-        var overlay = $enum1.current;
-        overlay.set_x(xCenter);
-      }
-    },
-    _alignHorizon_Click: function(sender, e) {
-      if (this.get_focus() == null) {
-        return;
-      }
-      Undo.push(new UndoTourStopChange(Language.getLocalizedText(1037, 'Horizontal Align'), this._tour));
-      var yCenter = this.get_focus().get_y();
-      var $enum1 = ss.enumerate(this.selection.selectionSet);
-      while ($enum1.moveNext()) {
-        var overlay = $enum1.current;
-        overlay.set_y(yCenter);
-      }
-    },
-    _alignCenter_Click: function(sender, e) {
-      if (this.get_focus() == null) {
-        return;
-      }
-      Undo.push(new UndoTourStopChange(Language.getLocalizedText(1038, 'Align Centers'), this._tour));
-      var yCenter = this.get_focus().get_y();
-      var xCenter = this.get_focus().get_x();
-      var $enum1 = ss.enumerate(this.selection.selectionSet);
-      while ($enum1.moveNext()) {
-        var overlay = $enum1.current;
-        overlay.set_y(yCenter);
-        overlay.set_x(xCenter);
-      }
-    },
-    _alignRight_Click: function(sender, e) {
-      if (this.get_focus() == null) {
-        return;
-      }
-      Undo.push(new UndoTourStopChange(Language.getLocalizedText(1040, 'Align Right'), this._tour));
-      var left = this.get_focus().get_x() + this.get_focus().get_width() / 2;
-      var $enum1 = ss.enumerate(this.selection.selectionSet);
-      while ($enum1.moveNext()) {
-        var overlay = $enum1.current;
-        overlay.set_x(left - overlay.get_width() / 2);
-      }
-    },
-    _alignLeft_Click: function(sender, e) {
-      if (this.get_focus() == null) {
-        return;
-      }
-      Undo.push(new UndoTourStopChange(Language.getLocalizedText(1041, 'Align Left'), this._tour));
-      var right = this.get_focus().get_x() - this.get_focus().get_width() / 2;
-      var $enum1 = ss.enumerate(this.selection.selectionSet);
-      while ($enum1.moveNext()) {
-        var overlay = $enum1.current;
-        overlay.set_x(right + overlay.get_width() / 2);
-      }
-    },
-    _alignBottom_Click: function(sender, e) {
-      if (this.get_focus() == null) {
-        return;
-      }
-      Undo.push(new UndoTourStopChange(Language.getLocalizedText(1042, 'Align Bottoms'), this._tour));
-      var top = this.get_focus().get_y() + this.get_focus().get_height() / 2;
-      var $enum1 = ss.enumerate(this.selection.selectionSet);
-      while ($enum1.moveNext()) {
-        var overlay = $enum1.current;
-        overlay.set_y(top - overlay.get_height() / 2);
-      }
-    },
-    _alignTop_Click: function(sender, e) {
-      if (this.get_focus() == null) {
-        return;
-      }
-      Undo.push(new UndoTourStopChange(Language.getLocalizedText(1039, 'Align Tops'), this._tour));
-      var top = this.get_focus().get_y() - this.get_focus().get_height() / 2;
-      var $enum1 = ss.enumerate(this.selection.selectionSet);
-      while ($enum1.moveNext()) {
-        var overlay = $enum1.current;
-        overlay.set_y(top + overlay.get_height() / 2);
-      }
-    },
-    _interpolation_Click: function(sender, e) {
-      var item = sender;
-      if (this.get_focus() != null) {
-        var $enum1 = ss.enumerate(this.selection.selectionSet);
-        while ($enum1.moveNext()) {
-          var overlay = $enum1.current;
-          overlay.set_interpolationType(item.tag);
-        }
-      }
-    },
-    _linkID_Click: function(sender, e) {
-      var selectDialog = new SelectLink();
-      selectDialog.tour = this._tour;
-      selectDialog.id = this.get_focus().get_linkID();
-      if (selectDialog._showDialog() === 1) {
-        this.get_focus().set_linkID(selectDialog.id);
-      }
-    },
-    _flipbookProperties_Click: function(sender, e) {
-    },
-    _animateMenu_Click: function(sender, e) {
-      if (this.get_focus() != null) {
-        Undo.push(new UndoTourStopChange(Language.getLocalizedText(588, 'Animate'), this._tour));
-        var animate = !this.get_focus().get_animate();
-        var $enum1 = ss.enumerate(this.selection.selectionSet);
-        while ($enum1.moveNext()) {
-          var overlay = $enum1.current;
-          overlay.set_animate(animate);
-        }
-      }
-    },
-    _url_Click: function(sender, e) {
-      if (this.get_focus() != null) {
-        var input = new SimpleInput(Language.getLocalizedText(541, 'Edit Hyperlink'), Language.getLocalizedText(542, 'Url'), this.get_focus().get_url(), 2048);
-        if (input.showDialog() === 1) {
-          Undo.push(new UndoTourStopChange(Language.getLocalizedText(541, 'Edit Hyperlink'), this._tour));
-          this.get_focus().set_url(input.resultText);
-        }
-      }
-    },
-    _pickColor_Click: function(sender, e) {
-      var $this = this;
-
-      var picker = new ColorPicker();
-      picker.callBack = function() {
-        Undo.push(new UndoTourStopChange(Language.getLocalizedText(543, 'Edit Color'), $this._tour));
-        var $enum1 = ss.enumerate($this.selection.selectionSet);
-        while ($enum1.moveNext()) {
-          var overlay = $enum1.current;
-          overlay.set_color(picker.color);
-        }
-      };
-      picker.show(Vector2d.create(500, 500));
-    },
-    _volume_Click: function(sender, e) {
-      var vol = new PopupVolume();
-      vol.volume = (this.get_focus()).get_volume();
-      vol.showDialog();
-      (this.get_focus()).set_volume(vol.volume);
-    },
-    _deleteMenu_Click: function(sender, e) {
-      if (this._tour == null || this._tour.get_currentTourStop() == null) {
-        return;
-      }
-      Undo.push(new UndoTourStopChange(Language.getLocalizedText(167, 'Delete'), this._tour));
-      var $enum1 = ss.enumerate(this.selection.selectionSet);
-      while ($enum1.moveNext()) {
-        var overlay = $enum1.current;
-        this._tour.get_currentTourStop().removeOverlay(overlay);
-      }
-      this.set_focus(null);
-      this.clearSelection();
-      OverlayList._updateOverlayList(this._tour.get_currentTourStop(), this.selection);
-    },
-    _properties_Click: function(sender, e) {
-      if (this._tour == null || this._tour.get_currentTourStop() == null) {
-      }
-      Undo.push(new UndoTourStopChange(Language.getLocalizedText(549, 'Properties Edit'), this._tour));
-      var props = new OverlayProperties();
-      props.overlay = this.get_focus();
-      props.showDialog();
-      OverlayList._updateOverlayList(this._tour.get_currentTourStop(), this.selection);
-    },
-    _bringForward_Click: function(sender, e) {
-      if (this._tour == null || this._tour.get_currentTourStop() == null) {
-        return;
-      }
-      Undo.push(new UndoTourStopChange(Language.getLocalizedText(454, 'Bring Forward'), this._tour));
-      var $enum1 = ss.enumerate(this._getSortedSelection(false));
-      while ($enum1.moveNext()) {
-        var overlay = $enum1.current;
-        this._tour.get_currentTourStop().bringForward(overlay);
-      }
-      OverlayList._updateOverlayList(this._tour.get_currentTourStop(), this.selection);
-    },
-    _sendBackward_Click: function(sender, e) {
-      if (this._tour == null || this._tour.get_currentTourStop() == null) {
-        return;
-      }
-      Undo.push(new UndoTourStopChange(Language.getLocalizedText(455, 'Send Backward'), this._tour));
-      var $enum1 = ss.enumerate(this._getSortedSelection(true));
-      while ($enum1.moveNext()) {
-        var overlay = $enum1.current;
-        this._tour.get_currentTourStop().sendBackward(overlay);
-      }
-      OverlayList._updateOverlayList(this._tour.get_currentTourStop(), this.selection);
-    },
-    _sendToBack_Click: function(sender, e) {
-      if (this._tour == null || this._tour.get_currentTourStop() == null) {
-        return;
-      }
-      Undo.push(new UndoTourStopChange(Language.getLocalizedText(453, 'Send to Back'), this._tour));
-      var $enum1 = ss.enumerate(this._getSortedSelection(true));
-      while ($enum1.moveNext()) {
-        var overlay = $enum1.current;
-        this._tour.get_currentTourStop().sendToBack(overlay);
-      }
-      OverlayList._updateOverlayList(this._tour.get_currentTourStop(), this.selection);
-    },
-    _bringToFront_Click: function(sender, e) {
-      if (this._tour == null || this._tour.get_currentTourStop() == null) {
-        return;
-      }
-      Undo.push(new UndoTourStopChange(Language.getLocalizedText(452, 'Bring to Front'), this._tour));
-      var $enum1 = ss.enumerate(this._getSortedSelection(false));
-      while ($enum1.moveNext()) {
-        var overlay = $enum1.current;
-        this._tour.get_currentTourStop().bringToFront(overlay);
-      }
-      OverlayList._updateOverlayList(this._tour.get_currentTourStop(), this.selection);
-    },
-    _getSortedSelection: function(reverse) {
-      var sorted = [];
-      var $enum1 = ss.enumerate(this.selection.selectionSet);
-      while ($enum1.moveNext()) {
-        var ov = $enum1.current;
-        sorted.push(ov);
-      }
-      if (reverse) {
-        sorted.sort(function(p1, p2) {
-          return -Util.compare(p1.get_zOrder(), p2.get_zOrder());
-        });
-      }
-      else {
-        sorted.sort(function(p1, p2) {
-          return Util.compare(p1.get_zOrder(), p2.get_zOrder());
-        });
-      }
-      return sorted;
-    },
-    _copyMenu_Click: function(sender, e) {
-    },
-    _cutMenu_Click: function(sender, e) {
-      if (this._tour == null || this._tour.get_currentTourStop() == null) {
-        return;
-      }
-      Undo.push(new UndoTourStopChange(Language.getLocalizedText(427, 'Cut'), this._tour));
-      this._copyMenu_Click(sender, e);
-      var $enum1 = ss.enumerate(this.selection.selectionSet);
-      while ($enum1.moveNext()) {
-        var overlay = $enum1.current;
-        this._tour.get_currentTourStop().removeOverlay(overlay);
-      }
-      this.set_focus(null);
-      this.clearSelection();
-      OverlayList._updateOverlayList(this._tour.get_currentTourStop(), this.selection);
-    },
-    _pasteMenu_Click: function(sender, e) {
-    },
-    mouseClick: function(sender, e) {
-      if (TourEditor.currentEditor != null) {
-        if (TourEditor.currentEditor.mouseClick(sender, e)) {
-          return true;
-        }
-      }
-      return false;
-    },
-    click: function(sender, e) {
-      if (TourEditor.currentEditor != null) {
-        if (TourEditor.currentEditor.click(sender, e)) {
-          return true;
-        }
-      }
-      return false;
-    },
-    mouseDoubleClick: function(sender, e) {
-      if (TourEditor.currentEditor != null) {
-        if (TourEditor.currentEditor.mouseDoubleClick(sender, e)) {
-          return true;
-        }
-      }
-      if (this.get_focus() != null) {
-        if (ss.typeOf(this.get_focus()) === TextOverlay) {
-          this._editText();
-          return true;
-        }
-      }
-      return true;
-    },
-    _editText: function() {
-    },
-    keyDown: function(sender, e) {
-      if (TourEditor.currentEditor != null) {
-        if (TourEditor.currentEditor.keyDown(sender, e)) {
-          return true;
-        }
-      }
-      var increment = 1;
-      if (e.ctrlKey) {
-        increment = 10;
-      }
-      switch (e.keyCode) {
-        case 65:
-          if (e.ctrlKey) {
-            this.clearSelection();
-            this.selection.addSelectionRange(this._tour.get_currentTourStop().get_overlays());
-            OverlayList._updateOverlayListSelection(this.selection);
-            if (this._tour.get_currentTourStop().get_overlays().length > 0) {
-              this.set_focus(this._tour.get_currentTourStop().get_overlays()[0]);
-            }
-          }
-          break;
-        case 90:
-          if (e.ctrlKey) {
-            if (Undo.peekAction()) {
-              TourEdit._undoStep();
-            }
-            else {
-              UiTools._beep();
-            }
-          }
-          break;
-        case 89:
-          if (e.ctrlKey) {
-            if (Undo.peekRedoAction()) {
-              TourEdit._redoStep();
-            }
-            else {
-              UiTools._beep();
-            }
-          }
-          break;
-        case 67:
-          if (e.ctrlKey) {
-            this._copyMenu_Click(this, new ss.EventArgs());
-          }
-          break;
-        case 86:
-          if (e.ctrlKey) {
-            this._pasteMenu_Click(this, new ss.EventArgs());
-          }
-          break;
-        case 88:
-          if (e.ctrlKey) {
-            this._cutMenu_Click(this, new ss.EventArgs());
-          }
-          break;
-        case 46:
-          this._deleteMenu_Click(null, null);
-          return true;
-        case 9:
-          if (e.shiftKey) {
-            this._selectLast();
-          }
-          else {
-            this._selectNext();
-          }
-          return true;
-        case 37:
-          if (this.get_focus() != null) {
-            var $enum1 = ss.enumerate(this.selection.selectionSet);
-            while ($enum1.moveNext()) {
-              var overlay = $enum1.current;
-              if (e.shiftKey) {
-                if (e.altKey) {
-                  if (overlay.get_width() > increment) {
-                    Undo.push(new UndoTourStopChange(Language.getLocalizedText(537, 'Resize'), this._tour));
-                    overlay.set_width(overlay.get_width() - increment);
-                  }
-                }
-                else {
-                  var aspect = overlay.get_width() / overlay.get_height();
-                  if (overlay.get_width() > increment && overlay.get_height() > (increment * aspect)) {
-                    Undo.push(new UndoTourStopChange(Language.getLocalizedText(537, 'Resize'), this._tour));
-                    overlay.set_width(overlay.get_width() - increment);
-                    overlay.set_height(overlay.get_height() - increment * aspect);
-                  }
-                }
-              }
-              else if (e.altKey) {
-                Undo.push(new UndoTourStopChange(Language.getLocalizedText(538, 'Rotate'), this._tour));
-                overlay.set_rotationAngle(overlay.get_rotationAngle() - increment);
-              }
-              else {
-                Undo.push(new UndoTourStopChange(Language.getLocalizedText(540, 'Move'), this._tour));
-                overlay.set_x(overlay.get_x() - increment);
-              }
-            }
-            return true;
-          }
-          break;
-        case 39:
-          if (this.get_focus() != null) {
-            var $enum2 = ss.enumerate(this.selection.selectionSet);
-            while ($enum2.moveNext()) {
-              var overlay = $enum2.current;
-              if (e.shiftKey) {
-                Undo.push(new UndoTourStopChange(Language.getLocalizedText(537, 'Resize'), this._tour));
-                if (e.altKey) {
-                  overlay.set_width(overlay.get_width() + increment);
-                }
-                else {
-                  var aspect = overlay.get_width() / overlay.get_height();
-                  overlay.set_width(overlay.get_width() + increment);
-                  overlay.set_height(overlay.get_height() + increment * aspect);
-                }
-              }
-              else if (e.altKey) {
-                Undo.push(new UndoTourStopChange(Language.getLocalizedText(538, 'Rotate'), this._tour));
-                overlay.set_rotationAngle(overlay.get_rotationAngle() + increment);
-              }
-              else {
-                Undo.push(new UndoTourStopChange(Language.getLocalizedText(540, 'Move'), this._tour));
-                overlay.set_x(overlay.get_x() + increment);
-              }
-            }
-            return true;
-          }
-          break;
-        case 38:
-          if (this.get_focus() != null) {
-            var $enum3 = ss.enumerate(this.selection.selectionSet);
-            while ($enum3.moveNext()) {
-              var overlay = $enum3.current;
-              if (e.shiftKey) {
-                Undo.push(new UndoTourStopChange(Language.getLocalizedText(537, 'Resize'), this._tour));
-                if (e.altKey) {
-                  overlay.set_height(overlay.get_height() + increment);
-                }
-                else {
-                  var aspect = overlay.get_width() / overlay.get_height();
-                  overlay.set_width(overlay.get_width() + increment);
-                  overlay.set_height(overlay.get_height() + increment * aspect);
-                }
-              }
-              else if (!e.altKey) {
-                Undo.push(new UndoTourStopChange(Language.getLocalizedText(540, 'Move'), this._tour));
-                overlay.set_y(overlay.get_y() - increment);
-              }
-            }
-            return true;
-          }
-          break;
-        case 40:
-          if (this.get_focus() != null) {
-            var $enum4 = ss.enumerate(this.selection.selectionSet);
-            while ($enum4.moveNext()) {
-              var overlay = $enum4.current;
-              if (e.shiftKey) {
-                if (e.altKey) {
-                  if (overlay.get_height() > increment) {
-                    Undo.push(new UndoTourStopChange(Language.getLocalizedText(537, 'Resize'), this._tour));
-                    overlay.set_height(overlay.get_height() - increment);
-                  }
-                }
-                else {
-                  var aspect = overlay.get_width() / overlay.get_height();
-                  if (overlay.get_width() > increment && overlay.get_height() > (increment * aspect)) {
-                    Undo.push(new UndoTourStopChange(Language.getLocalizedText(537, 'Resize'), this._tour));
-                    overlay.set_width(overlay.get_width() - increment);
-                    overlay.set_height(overlay.get_height() - increment * aspect);
-                  }
-                }
-              }
-              else if (!e.altKey) {
-                Undo.push(new UndoTourStopChange(Language.getLocalizedText(540, 'Move'), this._tour));
-                overlay.set_y(overlay.get_y() + increment);
-              }
-            }
-            return true;
-          }
-          break;
-        case 34:
-          if (e.altKey) {
-            if (this._tour.get_currentTourstopIndex() < (this._tour.get_tourStops().length - 1)) {
-              this._tour.set_currentTourstopIndex(this._tour.get_currentTourstopIndex() + 1) - 1;
-              TourEdit._selectCurrent();
-              TourEdit._ensureSelectedVisible();
-            }
-            return true;
-          }
-          break;
-        case 33:
-          if (e.altKey) {
-            if (this._tour.get_currentTourstopIndex() > 0) {
-              this._tour.set_currentTourstopIndex(this._tour.get_currentTourstopIndex() - 1) + 1;
-              TourEdit._selectCurrent();
-              TourEdit._ensureSelectedVisible();
-            }
-            return true;
-          }
-          break;
-      }
-      return false;
-    },
-    _selectNext: function() {
-      if (this._tour == null || this._tour.get_currentTourStop() == null) {
-        return;
-      }
-      this.set_focus(this._tour.get_currentTourStop().getNextOverlay(this.get_focus()));
-      this.selection.setSelection(this.get_focus());
-      OverlayList._updateOverlayList(this._tour.get_currentTourStop(), this.selection);
-    },
-    _selectLast: function() {
-      if (this._tour == null || this._tour.get_currentTourStop() == null) {
-        return;
-      }
-      this.set_focus(this._tour.get_currentTourStop().getPerviousOverlay(this.get_focus()));
-      this.selection.setSelection(this.get_focus());
-      OverlayList._updateOverlayList(this._tour.get_currentTourStop(), this.selection);
-    },
-    keyUp: function(sender, e) {
-      if (TourEditor.currentEditor != null) {
-        if (TourEditor.currentEditor.keyUp(sender, e)) {
-          return true;
-        }
-      }
-      return false;
-    },
-    addPicture: function(filename) {
-      if (this._tour == null || this._tour.get_currentTourStop() == null) {
-        return false;
-      }
-      Undo.push(new UndoTourStopChange(Language.getLocalizedText(546, 'Insert Picture'), this._tour));
-      var bmp = BitmapOverlay.create(this._tour.get_currentTourStop(), filename);
-      bmp.set_x(960);
-      bmp.set_y(600);
-      this._tour.get_currentTourStop().addOverlay(bmp);
-      OverlayList._updateOverlayList(this._tour.get_currentTourStop(), this.selection);
-      return true;
-    },
-    addFlipbook: function(filename) {
-      return false;
-    },
-    addAudio: function(filename) {
-      if (this._tour == null || this._tour.get_currentTourStop() == null) {
-        return false;
-      }
-      var audio = AudioOverlay.create(this._tour.get_currentTourStop(), filename);
-      audio.set_x(900);
-      audio.set_y(600);
-      this._tour.get_currentTourStop().addOverlay(audio);
-      return true;
-    },
-    addVideo: function(filename) {
-      return true;
-    },
-    addText: function(p, textObject) {
-      if (this._tour == null || this._tour.get_currentTourStop() == null) {
-        return false;
-      }
-      var text = TextOverlay.create(textObject);
-      text.set_color(textObject._foregroundColor);
-      text.set_x(960);
-      text.set_y(600);
-      Undo.push(new UndoTourStopChange(Language.getLocalizedText(547, 'Insert Text'), this._tour));
-      this._tour.get_currentTourStop().addOverlay(text);
-      OverlayList._updateOverlayList(this._tour.get_currentTourStop(), this.selection);
-      return true;
-    },
-    addOverlay: function(ol) {
-      if (this._tour == null || this._tour.get_currentTourStop() == null) {
-        return null;
-      }
-      if (ss.typeOf(ol) === ShapeOverlay) {
-        var srcShapeOverlay = ol;
-        if (srcShapeOverlay != null) {
-          var shape = ShapeOverlay._create(this._tour.get_currentTourStop(), srcShapeOverlay.get_shapeType());
-          shape.set_width(srcShapeOverlay.get_width());
-          shape.set_height(srcShapeOverlay.get_height());
-          shape.set_x(this._contextPoint.x);
-          shape.set_y(this._contextPoint.y);
-          shape.set_color(srcShapeOverlay.get_color());
-          shape.set_rotationAngle(srcShapeOverlay.get_rotationAngle());
-          this._tour.get_currentTourStop().addOverlay(shape);
-          return shape;
-        }
-      }
-      else if (ss.typeOf(ol) === TextOverlay) {
-        var srcTxtOverlay = ol;
-        if (srcTxtOverlay != null) {
-          var text = TextOverlay.create(srcTxtOverlay.textObject);
-          text.set_x(this._contextPoint.x);
-          text.set_y(this._contextPoint.y);
-          text.set_color(srcTxtOverlay.get_color());
-          this._tour.get_currentTourStop().addOverlay(text);
-          return text;
-        }
-      }
-      else if (ss.typeOf(ol) === BitmapOverlay) {
-        var srcBmpOverlay = ol;
-        if (srcBmpOverlay != null) {
-          var bitmap = srcBmpOverlay.copy(this._tour.get_currentTourStop());
-          bitmap.set_x(this._contextPoint.x);
-          bitmap.set_y(this._contextPoint.y);
-          this._tour.get_currentTourStop().addOverlay(bitmap);
-          return bitmap;
-        }
-      }
-      else if (ss.typeOf(ol) === FlipbookOverlay) {
-        var srcFlipbookOverlay = ol;
-        if (srcFlipbookOverlay != null) {
-          var bitmap = srcFlipbookOverlay.copy(this._tour.get_currentTourStop());
-          bitmap.set_x(this._contextPoint.x);
-          bitmap.set_y(this._contextPoint.y);
-          this._tour.get_currentTourStop().addOverlay(bitmap);
-          return bitmap;
-        }
-      }
-      return null;
-    },
-    addShape: function(p, shapeType) {
-      if (this._tour == null || this._tour.get_currentTourStop() == null) {
-        return false;
-      }
-      Undo.push(new UndoTourStopChange(Language.getLocalizedText(548, 'Insert Shape'), this._tour));
-      var shape = ShapeOverlay._create(this._tour.get_currentTourStop(), shapeType);
-      shape.set_width(200);
-      shape.set_height(200);
-      if (shapeType === 4) {
-        shape.set_height(shape.get_height() / 2);
-      }
-      if (shapeType === 5) {
-        shape.set_height(12);
-      }
-      shape.set_x(960);
-      shape.set_y(600);
-      this._tour.get_currentTourStop().addOverlay(shape);
-      this.set_focus(shape);
-      this.selection.setSelection(this.get_focus());
-      OverlayList._updateOverlayList(this._tour.get_currentTourStop(), this.selection);
-      return true;
-    },
-    getCurrentColor: function() {
-      if (this._tour == null || this._tour.get_currentTourStop() == null) {
-        return this._defaultColor;
-      }
-      if (this.get_focus() != null) {
-        return this.get_focus().get_color();
-      }
-      else {
-        return this._defaultColor;
-      }
-    },
-    setCurrentColor: function(color) {
-      this._defaultColor = color;
-      if (this._tour == null || this._tour.get_currentTourStop() == null) {
-        return;
-      }
-      if (this.get_focus() != null) {
-        this.get_focus().set_color(color);
-      }
-    },
-    dispose: function() {
-      if (this._contextMenu != null) {
-        this._contextMenu._dispose();
-        this._contextMenu = null;
-      }
-    },
-    hover: function(pnt) {
-      if (TourEditor.currentEditor != null) {
-        if (TourEditor.currentEditor.hover(pnt)) {
-          return true;
-        }
-      }
-      return true;
-    }
-  };
-
-
-  // wwtlib.OverlayList
-
-  function OverlayList() {
-  }
-  OverlayList._updateOverlayList = function(currentTourStop, selection) {
-  };
-  OverlayList._updateOverlayListSelection = function(selection) {
-  };
-  var OverlayList$ = {
-
-  };
-
-
-  // wwtlib.TourEdit
-
-  function TourEdit() {
-  }
-  TourEdit._ensureSelectedVisible = function() {
-  };
-  TourEdit._redoStep = function() {
-  };
-  TourEdit._selectCurrent = function() {
-  };
-  TourEdit._undoStep = function() {
-  };
-  var TourEdit$ = {
-
-  };
-
-
-  // wwtlib.SoundEditor
-
-  function SoundEditor() {
-    this.target = null;
-  }
-  var SoundEditor$ = {
-
-  };
-
-
-  // wwtlib.TourStopList
-
-  function TourStopList() {
-    this.tour = null;
-    this.showAddButton = false;
-    this.selectedItems = null;
-    this.selectedItem = -1;
-    this.refreshCallback = null;
-    this.multipleSelection = false;
-    this.hitType = false;
-  }
-  var TourStopList$ = {
-    selectAll: function() {
-    },
-    refresh: function() {
-      if (this.refreshCallback != null) {
-        this.refreshCallback();
-      }
-    },
-    findItem: function(ts) {
-      return -1;
-    },
-    ensureSelectedVisible: function() {
-    },
-    ensureAddVisible: function() {
-    }
-  };
-
-
-  // wwtlib.TimeLine
-
-  function TimeLine() {
-  }
-  TimeLine.refreshUi = function() {
-  };
-  var TimeLine$ = {
-
   };
 
 
@@ -18862,56 +15916,35 @@ window.wwtlib = function(){
         }
       }
       if (renderContext.gl != null) {
-        renderContext.setupMatricesOverlays();
-        if (this._currentMasterSlide != null) {
-          var $enum2 = ss.enumerate(this._currentMasterSlide.get_overlays());
-          while ($enum2.moveNext()) {
-            var overlay = $enum2.current;
-            overlay.set_tweenFactor(1);
+        return;
+      }
+      renderContext.device.scale(renderContext.height / 1116, renderContext.height / 1116);
+      var aspectOrig = 1920 / 1116;
+      var aspectNow = renderContext.width / renderContext.height;
+      renderContext.device.translate(-((1920 - (aspectNow * 1116)) / 2), 0);
+      if (this._currentMasterSlide != null) {
+        var $enum2 = ss.enumerate(this._currentMasterSlide.get_overlays());
+        while ($enum2.moveNext()) {
+          var overlay = $enum2.current;
+          overlay.set_tweenFactor(1);
+          overlay.draw3D(renderContext, false);
+        }
+      }
+      if (this._onTarget) {
+        var $enum3 = ss.enumerate(this._tour.get_currentTourStop().get_overlays());
+        while ($enum3.moveNext()) {
+          var overlay = $enum3.current;
+          if (overlay.get_name().toLowerCase() !== 'caption' || WWTControl.scriptInterface.get_showCaptions()) {
+            overlay.set_tweenFactor(CameraParameters.easeCurve(this._tour.get_currentTourStop().get_tweenPosition(), (overlay.get_interpolationType() === 5) ? this._tour.get_currentTourStop().get_interpolationType() : overlay.get_interpolationType()));
             overlay.draw3D(renderContext, false);
           }
         }
-        if (this._onTarget) {
-          var $enum3 = ss.enumerate(this._tour.get_currentTourStop().get_overlays());
-          while ($enum3.moveNext()) {
-            var overlay = $enum3.current;
-            if (overlay.get_name().toLowerCase() !== 'caption' || WWTControl.scriptInterface.get_showCaptions()) {
-              overlay.set_tweenFactor(CameraParameters.easeCurve(this._tour.get_currentTourStop().get_tweenPosition(), (overlay.get_interpolationType() === 5) ? this._tour.get_currentTourStop().get_interpolationType() : overlay.get_interpolationType()));
-              overlay.draw3D(renderContext, false);
-            }
-          }
-        }
-        renderContext.restore();
       }
       else {
-        renderContext.device.scale(renderContext.height / 1116, renderContext.height / 1116);
-        var aspectOrig = 1920 / 1116;
-        var aspectNow = renderContext.width / renderContext.height;
-        renderContext.device.translate(-((1920 - (aspectNow * 1116)) / 2), 0);
-        if (this._currentMasterSlide != null) {
-          var $enum4 = ss.enumerate(this._currentMasterSlide.get_overlays());
-          while ($enum4.moveNext()) {
-            var overlay = $enum4.current;
-            overlay.set_tweenFactor(1);
-            overlay.draw3D(renderContext, false);
-          }
-        }
-        if (this._onTarget) {
-          var $enum5 = ss.enumerate(this._tour.get_currentTourStop().get_overlays());
-          while ($enum5.moveNext()) {
-            var overlay = $enum5.current;
-            if (overlay.get_name().toLowerCase() !== 'caption' || WWTControl.scriptInterface.get_showCaptions()) {
-              overlay.set_tweenFactor(CameraParameters.easeCurve(this._tour.get_currentTourStop().get_tweenPosition(), (overlay.get_interpolationType() === 5) ? this._tour.get_currentTourStop().get_interpolationType() : overlay.get_interpolationType()));
-              overlay.draw3D(renderContext, false);
-            }
-          }
-        }
-        else {
-          var i = 0;
-        }
-        renderContext.restore();
-        this._drawPlayerControls(renderContext);
+        var i = 0;
       }
+      renderContext.restore();
+      this._drawPlayerControls(renderContext);
     },
     _drawPlayerControls: function(renderContext) {
       this._loadImages();
@@ -19484,11 +16517,6 @@ window.wwtlib = function(){
     this._voiceTrack = null;
     this._id = Guid.newGuid().toString();
   }
-  TourStop.create = function(target) {
-    var ts = new TourStop();
-    ts._target = target;
-    return ts;
-  };
   TourStop._fromXml = function(owner, tourStop) {
     var newTourStop = new TourStop();
     newTourStop._owner = owner;
@@ -19787,9 +16815,6 @@ window.wwtlib = function(){
     if (voiceNode != null) {
       newTourStop._voiceTrack = Overlay._fromXml(newTourStop, Util.selectSingleNode(voiceNode, 'Overlay'));
     }
-    newTourStop._thumbnail = owner.getCachedTexture(ss.format('{0}.thumb.png', newTourStop._id), function() {
-      var c = 0;
-    });
     return newTourStop;
   };
   var TourStop$ = {
@@ -20076,57 +17101,6 @@ window.wwtlib = function(){
       this._milkyWayModel = Settings.get_current().get_milkyWayModel();
       this._minorPlanetsFilter = Settings.get_current().get_minorPlanetsFilter();
       this._planetOrbitsFilter = Settings.get_current().get_planetOrbitsFilter();
-    },
-    syncSettings: function() {
-      Settings.get_globalSettings().set_actualPlanetScale(this._actualPlanetScale);
-      Settings.get_globalSettings().set_locationAltitude(this._locationAltitude);
-      Settings.get_globalSettings().set_locationLat(this._locationLat);
-      Settings.get_globalSettings().set_locationLng(this._locationLng);
-      Settings.get_globalSettings().set_earthCutawayView(this._earthCutawayView);
-      Settings.get_globalSettings().set_showConstellationBoundries(this._showConstellationBoundries);
-      Settings.get_globalSettings().set_showConstellationFigures(this._showConstellationFigures);
-      Settings.get_globalSettings().set_showConstellationSelection(this._showConstellationSelection);
-      Settings.get_globalSettings().set_showEcliptic(this._showEcliptic);
-      Settings.get_globalSettings().set_showElevationModel(this._showElevationModel);
-      Settings.get_globalSettings().set_showGrid(this._showGrid);
-      Settings.get_globalSettings().set_showHorizon(this._showHorizon);
-      Settings.get_globalSettings().set_showSolarSystem(this._showSolarSystem);
-      Settings.get_globalSettings().set_localHorizonMode(this._localHorizonMode);
-      Settings.get_globalSettings().set_galacticMode(this._galacticMode);
-      Settings.get_globalSettings().set_solarSystemStars(this._solarSystemStars);
-      Settings.get_globalSettings().set_solarSystemMilkyWay(this._solarSystemMilkyWay);
-      Settings.get_globalSettings().set_solarSystemCosmos(this._solarSystemCosmos);
-      Settings.get_globalSettings().set_solarSystemCMB(this._solarSystemCMB);
-      Settings.get_globalSettings().set_solarSystemOrbits(this._solarSystemOrbits);
-      Settings.get_globalSettings().set_solarSystemMinorOrbits(this._solarSystemMinorOrbits);
-      Settings.get_globalSettings().set_solarSystemMinorPlanets(this._solarSystemMinorPlanets);
-      Settings.get_globalSettings().set_solarSystemOverlays(this._solarSystemOverlays);
-      Settings.get_globalSettings().set_solarSystemLighting(this._solarSystemLighting);
-      Settings.get_globalSettings().set_showISSModel(this._showISSModel);
-      Settings.get_globalSettings().set_solarSystemScale(this._solarSystemScale);
-      Settings.get_globalSettings().set_solarSystemMultiRes(this._solarSystemMultiRes);
-      Settings.get_globalSettings().set_showEarthSky(this._showEarthSky);
-      Settings.get_globalSettings().set_minorPlanetsFilter(this._minorPlanetsFilter);
-      Settings.get_globalSettings().set_planetOrbitsFilter(this._planetOrbitsFilter);
-      Settings.get_globalSettings().set_showEquatorialGridText(this._showEquatorialGridText);
-      Settings.get_globalSettings().set_showGalacticGrid(this._showGalacticGrid);
-      Settings.get_globalSettings().set_showGalacticGridText(this._showGalacticGridText);
-      Settings.get_globalSettings().set_showEclipticGrid(this._showEclipticGrid);
-      Settings.get_globalSettings().set_showEclipticGridText(this._showEclipticGridText);
-      Settings.get_globalSettings().set_showEclipticOverviewText(this._showEclipticOverviewText);
-      Settings.get_globalSettings().set_showAltAzGrid(this._showAltAzGrid);
-      Settings.get_globalSettings().set_showAltAzGridText(this._showAltAzGridText);
-      Settings.get_globalSettings().set_showPrecessionChart(this._showPrecessionChart);
-      Settings.get_globalSettings().set_showConstellationPictures(this._showConstellationPictures);
-      Settings.get_globalSettings().set_constellationsEnabled(this._constellationsEnabled);
-      Settings.get_globalSettings().set_showSkyOverlays(this._showSkyOverlays);
-      Settings.get_globalSettings().set_constellations(this._showConstellations);
-      Settings.get_globalSettings().set_showSkyNode(this._showSkyNode);
-      Settings.get_globalSettings().set_showSkyGrids(this._showSkyGrids);
-      Settings.get_globalSettings().set_constellationFiguresFilter(this._constellationFiguresFilter.clone());
-      Settings.get_globalSettings().set_constellationBoundariesFilter(this._constellationBoundariesFilter.clone());
-      Settings.get_globalSettings().set_constellationNamesFilter(this._constellationNamesFilter.clone());
-      Settings.get_globalSettings().set_constellationArtFilter(this._constellationArtFilter.clone());
     },
     get_solarSystemStars: function() {
       return this._solarSystemStars;
@@ -20645,211 +17619,6 @@ window.wwtlib = function(){
   };
 
 
-  // wwtlib.UndoTourStopChange
-
-  function UndoTourStopChange(text, tour) {
-    this._undoXml = '';
-    this._redoXml = '';
-    this._currentIndex = 0;
-    this._actionText = '';
-    this._targetTour = null;
-  }
-  var UndoTourStopChange$ = {
-    get_actionText: function() {
-      return this._actionText;
-    },
-    set_actionText: function(value) {
-      this._actionText = value;
-      return value;
-    },
-    undo: function() {
-    },
-    redo: function() {
-    },
-    toString: function() {
-      return this._actionText;
-    }
-  };
-
-
-  // wwtlib.Undo
-
-  function Undo() {
-  }
-  Undo.clear = function() {
-    Undo._undoStack = new ss.Stack();
-    Undo._redoStack = new ss.Stack();
-  };
-  Undo.push = function(step) {
-    Undo._undoStack.push(step);
-    Undo._redoStack = new ss.Stack();
-  };
-  Undo.peekActionString = function() {
-    if (Undo._undoStack.count > 0) {
-      return Undo._undoStack.peek().toString();
-    }
-    else {
-      return Language.getLocalizedText(551, 'Nothing to Undo');
-    }
-  };
-  Undo.peekRedoActionString = function() {
-    if (Undo._redoStack.count > 0) {
-      return Undo._redoStack.peek().toString();
-    }
-    else {
-      return '';
-    }
-  };
-  Undo.peekAction = function() {
-    return (Undo._undoStack.count > 0);
-  };
-  Undo.peekRedoAction = function() {
-    return (Undo._redoStack.count > 0);
-  };
-  Undo.stepBack = function() {
-    var step = Undo._undoStack.pop();
-    step.undo();
-    Undo._redoStack.push(step);
-  };
-  Undo.stepForward = function() {
-    var step = Undo._redoStack.pop();
-    step.redo();
-    Undo._undoStack.push(step);
-  };
-  var Undo$ = {
-
-  };
-
-
-  // wwtlib.UndoStep
-
-  function UndoStep() {
-  }
-  var UndoStep$ = {
-    undo: function() {
-    },
-    redo: function() {
-    },
-    toString: function() {
-      return Language.getLocalizedText(551, 'Nothing to Undo');
-    }
-  };
-
-
-  // wwtlib.UndoTourSlidelistChange
-
-  function UndoTourSlidelistChange(text, tour) {
-    this._currentIndex = 0;
-    this._actionText = '';
-    this._targetTour = null;
-    this._undoList = [];
-    for (var i = 0; i < tour.get_tourStops().length; i++) {
-      this._undoList.push(tour.get_tourStops()[i]);
-    }
-    this._currentIndex = tour.get_currentTourstopIndex();
-    this._actionText = text;
-    this._targetTour = tour;
-    this._targetTour.set_tourDirty(true);
-  }
-  var UndoTourSlidelistChange$ = {
-    get_actionText: function() {
-      return this._actionText;
-    },
-    set_actionText: function(value) {
-      this._actionText = value;
-      return value;
-    },
-    undo: function() {
-      this._redoList = this._targetTour.get_tourStops();
-      this._targetTour.set_tourStops(this._undoList);
-      this._targetTour.set_currentTourstopIndex(this._currentIndex);
-      this._targetTour.set_tourDirty(true);
-    },
-    redo: function() {
-      this._undoList = this._targetTour.get_tourStops();
-      this._targetTour.set_tourStops(this._redoList);
-      this._targetTour.set_currentTourstopIndex(this._currentIndex);
-      this._targetTour.set_tourDirty(true);
-    },
-    toString: function() {
-      return this._actionText;
-    }
-  };
-
-
-  // wwtlib.UndoTourPropertiesChange
-
-  function UndoTourPropertiesChange(text, tour) {
-    this._actionText = '';
-    this._targetTour = null;
-    this._undoDomeMode = false;
-    this._undoLevel = 0;
-    this._redoDomeMode = false;
-    this._redoLevel = 0;
-    this._undoTitle = tour.get_title();
-    this._undoAuthor = tour.get_author();
-    this._undoAuthorEmail = tour.get_authorEmail();
-    this._undoDescription = tour.get_description();
-    this._undoAuthorImage = tour.get_authorImage();
-    this._undoOrganizationUrl = tour.get_organizationUrl();
-    this._undoOrgName = tour.get_orgName();
-    this._undoKeywords = tour.get_keywords();
-    this._undoTaxonomy = tour.get_taxonomy();
-    this._undoLevel = tour.get_level();
-    this._actionText = text;
-    this._targetTour = tour;
-    this._targetTour.set_tourDirty(true);
-  }
-  var UndoTourPropertiesChange$ = {
-    get_actionText: function() {
-      return this._actionText;
-    },
-    set_actionText: function(value) {
-      this._actionText = value;
-      return value;
-    },
-    undo: function() {
-      this._redoTitle = this._targetTour.get_title();
-      this._redoAuthor = this._targetTour.get_author();
-      this._redoAuthorEmail = this._targetTour.get_authorEmail();
-      this._redoDescription = this._targetTour.get_description();
-      this._redoAuthorImage = this._targetTour.get_authorImage();
-      this._redoOrganizationUrl = this._targetTour.get_organizationUrl();
-      this._redoOrgName = this._targetTour.get_orgName();
-      this._redoKeywords = this._targetTour.get_keywords();
-      this._redoTaxonomy = this._targetTour.get_taxonomy();
-      this._redoLevel = this._targetTour.get_level();
-      this._targetTour.set_title(this._undoTitle);
-      this._targetTour.set_author(this._undoAuthor);
-      this._targetTour.set_authorEmail(this._undoAuthorEmail);
-      this._targetTour.set_description(this._undoDescription);
-      this._targetTour.set_authorImage(this._undoAuthorImage);
-      this._targetTour.set_organizationUrl(this._undoOrganizationUrl);
-      this._targetTour.set_orgName(this._undoOrgName);
-      this._targetTour.set_keywords(this._undoKeywords);
-      this._targetTour.set_taxonomy(this._undoTaxonomy);
-      this._targetTour.set_level(this._undoLevel);
-      this._targetTour.set_tourDirty(true);
-    },
-    redo: function() {
-      this._targetTour.set_title(this._redoTitle);
-      this._targetTour.set_author(this._redoAuthor);
-      this._targetTour.set_authorEmail(this._redoAuthorEmail);
-      this._targetTour.set_description(this._redoDescription);
-      this._targetTour.set_authorImage(this._redoAuthorImage);
-      this._targetTour.set_organizationUrl(this._redoOrganizationUrl);
-      this._targetTour.set_orgName(this._redoOrgName);
-      this._targetTour.set_keywords(this._redoKeywords);
-      this._targetTour.set_taxonomy(this._redoTaxonomy);
-      this._targetTour.set_level(this._redoLevel);
-      this._targetTour.set_tourDirty(true);
-    },
-    toString: function() {
-      return this._actionText;
-    }
-  };
-
-
   // wwtlib.Triangle
 
   function Triangle() {
@@ -21042,8 +17811,6 @@ window.wwtlib = function(){
     }
     return output;
   };
-  UiTools._beep = function() {
-  };
   var UiTools$ = {
 
   };
@@ -21063,15 +17830,6 @@ window.wwtlib = function(){
       hash = ((hash << 5) - hash) + c;
     }
     return hash;
-  };
-  Util.compare = function(l, r) {
-    if (l === r) {
-      return 0;
-    }
-    if (l > r) {
-      return 1;
-    }
-    return -1;
   };
   Util.logN = function(num, b) {
     return Math.log(num) / Math.log(b);
@@ -21250,17 +18008,6 @@ window.wwtlib = function(){
     get_bottom: function() {
       return this.y + this.height;
     },
-    contains: function(point) {
-      return (this._between(point.x, this.x, this.x + this.width) && this._between(point.y, this.y, this.y + this.height));
-    },
-    _between: function(n, n1, n2) {
-      if (n1 > n2) {
-        return !(n > n1) && !(n < n2);
-      }
-      else {
-        return !(n < n1) && !(n > n2);
-      }
-    },
     copy: function() {
       var temp = new Rectangle();
       temp.x = this.x;
@@ -21317,328 +18064,6 @@ window.wwtlib = function(){
       } while ((element = element.offsetParent) != null);
     }
     return me.pageY - y;
-  };
-
-
-  // wwtlib.Language
-
-  function Language() {
-  }
-  Language.getLocalizedText = function(id, text) {
-    return text;
-  };
-  var Language$ = {
-
-  };
-
-
-  // wwtlib.Cursor
-
-  function Cursor() {
-  }
-  Cursor.get_position = function() {
-    return new Vector2d();
-  };
-  Cursor.get_current = function() {
-    return document.body.style.cursor;
-  };
-  Cursor.set_current = function(value) {
-    document.body.style.cursor = value;
-    return value;
-  };
-  var Cursor$ = {
-
-  };
-
-
-  // wwtlib.Cursors
-
-  function Cursors() {
-  }
-  Cursors.get_arrow = function() {
-    return 'default';
-  };
-  Cursors.get_cross = function() {
-    return 'crosshair';
-  };
-  Cursors.get_defaultV = function() {
-    return 'default';
-  };
-  Cursors.get_hand = function() {
-    return 'grab';
-  };
-  Cursors.get_help = function() {
-    return 'help';
-  };
-  Cursors.get_hSplit = function() {
-    return 'row-resize';
-  };
-  Cursors.get_iBeam = function() {
-    return 'text';
-  };
-  Cursors.get_no = function() {
-    return 'not-allowed';
-  };
-  Cursors.get_sizeAll = function() {
-    return 'help';
-  };
-  Cursors.get_sizeNESW = function() {
-    return 'nwse-resize';
-  };
-  Cursors.get_sizeNS = function() {
-    return 'ns-resize';
-  };
-  Cursors.get_sizeNWSE = function() {
-    return 'nwse-resize';
-  };
-  Cursors.get_sizeWE = function() {
-    return 'ew-resize';
-  };
-  Cursors.get_upArrow = function() {
-    return 'help';
-  };
-  Cursors.get_vSplit = function() {
-    return 'col-resize';
-  };
-  Cursors.get_waitCursor = function() {
-    return 'wait';
-  };
-  var Cursors$ = {
-
-  };
-
-
-  // wwtlib.SimpleInput
-
-  function SimpleInput(v1, v2, url, v3) {
-    this._v3 = 0;
-    this.resultText = new String();
-    this._v1 = v1;
-    this._v2 = v2;
-    this._url = url;
-    this._v3 = v3;
-  }
-  var SimpleInput$ = {
-    showDialog: function() {
-      return 1;
-    }
-  };
-
-
-  // wwtlib.SelectLink
-
-  function SelectLink() {
-    this.id = new String();
-    this.tour = null;
-  }
-  var SelectLink$ = {
-    _showDialog: function() {
-      return 1;
-    }
-  };
-
-
-  // wwtlib.PopupVolume
-
-  function PopupVolume() {
-    this.volume = 0;
-  }
-  var PopupVolume$ = {
-    showDialog: function() {
-      return 1;
-    }
-  };
-
-
-  // wwtlib.PopupColorPicker
-
-  function PopupColorPicker() {
-    this.volume = 0;
-    this.location = new Vector2d();
-    this.color = new Color();
-  }
-  var PopupColorPicker$ = {
-    showDialog: function() {
-      return 1;
-    }
-  };
-
-
-  // wwtlib.OverlayProperties
-
-  function OverlayProperties() {
-    this.volume = 0;
-    this.location = new Vector2d();
-    this.overlay = null;
-  }
-  var OverlayProperties$ = {
-    showDialog: function() {
-      return 1;
-    }
-  };
-
-
-  // wwtlib.ColorPicker
-
-  function ColorPicker() {
-    this.callBack = null;
-    this.color = Colors.get_red();
-  }
-  var ColorPicker$ = {
-    nonMenuClick: function(e) {
-      var menu = document.getElementById('colorpicker');
-      menu.style.display = 'none';
-      window.removeEventListener('click', ss.bind('nonMenuClick', this), true);
-      var image = document.getElementById('colorhex');
-      image.removeEventListener('click', ss.bind('pickColor', this), false);
-    },
-    show: function(position) {
-      var picker = document.getElementById('colorpicker');
-      picker.className = 'colorpicker';
-      picker.style.display = 'block';
-      picker.style.left = position.x.toString() + 'px';
-      picker.style.top = position.y.toString() + 'px';
-      window.addEventListener('click', ss.bind('nonMenuClick', this), true);
-      var image = document.getElementById('colorhex');
-      image.addEventListener('mousedown', ss.bind('pickColor', this), false);
-    },
-    pickColor: function(e) {
-      var picker = document.getElementById('colorpicker');
-      var image = document.getElementById('colorhex');
-      var canvas = document.createElement('canvas');
-      canvas.width = image.width;
-      canvas.height = image.height;
-      var ctx = canvas.getContext('2d');
-      ctx.drawImage(image, 0, 0);
-      var pixels = ctx.getImageData(e.offsetX, e.offsetY, 1, 1).data;
-      this.color = Color.fromArgb(pixels[3], pixels[0], pixels[1], pixels[2]);
-      if (this.callBack != null) {
-        this.callBack(this.color);
-      }
-    }
-  };
-
-
-  // wwtlib.ContextMenuStrip
-
-  function ContextMenuStrip() {
-    this.items = [];
-  }
-  var ContextMenuStrip$ = {
-    _dispose: function() {
-    },
-    _nonMenuClick: function(e) {
-      var menu = document.getElementById('contextmenu');
-      menu.style.display = 'none';
-      window.removeEventListener('click', ss.bind('_nonMenuClick', this), false);
-      var popup = document.getElementById('popoutmenu');
-      while (popup.firstChild != null) {
-        popup.removeChild(popup.firstChild);
-      }
-      popup.style.display = 'none';
-    },
-    _menuItemClicked: function(e) {
-      var me = e.currentTarget;
-      me.itemTag.click(me.itemTag, new ss.EventArgs());
-    },
-    _show: function(position) {
-      var menu = document.getElementById('contextmenu');
-      while (menu.firstChild != null) {
-        menu.removeChild(menu.firstChild);
-      }
-      menu.className = 'contextmenu';
-      menu.style.display = 'block';
-      menu.style.left = position.x.toString() + 'px';
-      menu.style.top = position.y.toString() + 'px';
-      window.addEventListener('click', ss.bind('_nonMenuClick', this), true);
-      var $enum1 = ss.enumerate(this.items);
-      while ($enum1.moveNext()) {
-        var item = $enum1.current;
-        if (item.visible) {
-          var md = document.createElement('div');
-          if (item.dropDownItems.length > 0) {
-            md.className = 'contextmenuitem submenu';
-          }
-          else {
-            if (item.checked) {
-              md.className = 'contextmenuitem checkedmenu';
-            }
-            else {
-              md.className = 'contextmenuitem';
-            }
-          }
-          md.innerText = item.name;
-          var it = md;
-          it.itemTag = item;
-          md.addEventListener('mouseover', ss.bind('_openSubMenu', this), false);
-          if (item.click != null) {
-            md.addEventListener('click', ss.bind('_menuItemClicked', this), false);
-          }
-          menu.appendChild(md);
-        }
-      }
-    },
-    _openSubMenu: function(e) {
-      var me = e.currentTarget;
-      var child = me.itemTag;
-      var menu = document.getElementById('popoutmenu');
-      while (menu.firstChild != null) {
-        menu.removeChild(menu.firstChild);
-      }
-      menu.style.display = 'none';
-      if (!child.dropDownItems.length) {
-        return;
-      }
-      var position = new Vector2d();
-      position.x = e.currentTarget.parentNode.offsetLeft + e.currentTarget.parentNode.clientWidth;
-      position.y = e.currentTarget.parentNode.offsetTop + e.currentTarget.offsetTop;
-      menu.className = 'contextmenu';
-      menu.style.display = 'block';
-      menu.style.left = position.x.toString() + 'px';
-      menu.style.top = position.y.toString() + 'px';
-      window.addEventListener('click', ss.bind('_nonMenuClick', this), true);
-      var $enum1 = ss.enumerate(child.dropDownItems);
-      while ($enum1.moveNext()) {
-        var item = $enum1.current;
-        if (item.visible) {
-          var md = document.createElement('div');
-          md.className = 'contextmenuitem';
-          md.innerText = item.name;
-          var it = md;
-          it.itemTag = item;
-          md.addEventListener('click', ss.bind('_menuItemClicked', this), false);
-          menu.appendChild(md);
-        }
-      }
-    }
-  };
-
-
-  // wwtlib.ToolStripMenuItem
-
-  function ToolStripMenuItem() {
-    this.tag = null;
-    this.dropDownItems = [];
-    this.checked = false;
-    this.enabled = true;
-    this.visible = true;
-  }
-  ToolStripMenuItem.create = function(name) {
-    var tsmi = new ToolStripMenuItem();
-    tsmi.name = name;
-    return tsmi;
-  };
-  var ToolStripMenuItem$ = {
-
-  };
-
-
-  // wwtlib.TagMe
-
-  function TagMe() {
-  }
-  var TagMe$ = {
-
   };
 
 
@@ -21901,8 +18326,7 @@ window.wwtlib = function(){
     this._moving = false;
     this._targetStudyImageset = null;
     this._targetBackgroundImageset = null;
-    this.tour = null;
-    this.tourEdit = null;
+    this._tour = null;
   }
   WWTControl.get_renderNeeded = function() {
     return WWTControl._renderNeeded;
@@ -21937,7 +18361,6 @@ window.wwtlib = function(){
       else {
         Tile.prepDevice = gl;
         WWTControl.singleton.renderContext.gl = gl;
-        RenderContext.useGl = true;
       }
       WWTControl.singleton.canvas = canvas;
       WWTControl.singleton.renderContext.width = canvas.width;
@@ -22215,7 +18638,7 @@ window.wwtlib = function(){
       }
       setTimeout(function() {
         $this.render();
-      }, 10);
+      }, 20);
     },
     _drawSkyOverlays: function() {
       if (Settings.get_active().get_showConstellationPictures()) {
@@ -22407,7 +18830,6 @@ window.wwtlib = function(){
       }
     },
     setup: function(canvas) {
-      window.addEventListener('contextmenu', ss.bind('onContextMenu', this), false);
       canvas.addEventListener('dblclick', ss.bind('onDoubleClick', this), false);
       canvas.addEventListener('mousedown', ss.bind('onMouseDown', this), false);
       canvas.addEventListener('mousewheel', ss.bind('onMouseWheel', this), false);
@@ -22678,10 +19100,6 @@ window.wwtlib = function(){
       this._lastX = Mouse.offsetX(this.canvas, e);
       this._lastY = Mouse.offsetY(this.canvas, e);
     },
-    onContextMenu: function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-    },
     onMouseMove: function(e) {
       this._lastMouseMove = ss.now();
       this._hoverTextPoint = Vector2d.create(Mouse.offsetX(this.canvas, e), Mouse.offsetY(this.canvas, e));
@@ -22725,7 +19143,6 @@ window.wwtlib = function(){
       if (this.uiController != null) {
         if (this.uiController.mouseUp(this, e)) {
           this._mouseDown = false;
-          e.preventDefault();
           return;
         }
       }
@@ -23083,24 +19500,6 @@ window.wwtlib = function(){
     },
     _closeTour: function() {
     },
-    createTour: function(name) {
-      if (ss.canCast(this.uiController, TourPlayer)) {
-        var player = this.uiController;
-        player.stop(false);
-      }
-      this.tour = new TourDocument();
-      this.tour.set_title(name);
-      this.setupTour();
-      this.tourEdit.addSlide(false);
-      return this.tour;
-    },
-    setupTour: function() {
-      this.tourEdit = new TourEditTab();
-      this.tourEdit.set_tour(this.tour);
-      this.tour.set_currentTourstopIndex(0);
-      this.tour.set_editMode(true);
-      this.uiController = this.tourEdit.tourEditorUI;
-    },
     playTour: function(url) {
       var $this = this;
 
@@ -23108,9 +19507,12 @@ window.wwtlib = function(){
         var player = this.uiController;
         player.stop(false);
       }
-      this.tour = TourDocument.fromUrl(url, function() {
-        $this.setupTour();
-        WWTControl.scriptInterface._fireTourReady();
+      this._tour = TourDocument.fromUrl(url, function() {
+        var player = new TourPlayer();
+        player.set_tour($this._tour);
+        $this._tour.set_currentTourstopIndex(-1);
+        $this.uiController = player;
+        player.play();
       });
     },
     playCurrentTour: function() {
@@ -23169,12 +19571,6 @@ window.wwtlib = function(){
         ctx.stroke();
         ctx.restore();
       }
-    },
-    captureThumbnail: function() {
-      this.render();
-      var image = document.createElement('img');
-      image.src = WWTControl.singleton.canvas.toDataURL();
-      return image;
     }
   };
 
@@ -25186,7 +21582,6 @@ window.wwtlib = function(){
   function PositionColoredTextured() {
     this.tu = 0;
     this.tv = 0;
-    this.color = new Color();
     this.position = new Vector3d();
   }
   PositionColoredTextured.createPos = function(pos, u, v) {
@@ -26421,26 +22816,8 @@ window.wwtlib = function(){
   Matrix2d.multiply = function(matrix1, matrix2) {
     return Matrix2d.create((((matrix1.m11 * matrix2.m11) + (matrix1.m12 * matrix2.m21)) + (matrix1.m13 * matrix2.m31)), (((matrix1.m11 * matrix2.m12) + (matrix1.m12 * matrix2.m22)) + (matrix1.m13 * matrix2.m32)), (((matrix1.m11 * matrix2.m13) + (matrix1.m12 * matrix2.m23)) + (matrix1.m13 * matrix2.m33)), (((matrix1.m21 * matrix2.m11) + (matrix1.m22 * matrix2.m21)) + (matrix1.m23 * matrix2.m31)), (((matrix1.m21 * matrix2.m12) + (matrix1.m22 * matrix2.m22)) + (matrix1.m23 * matrix2.m32)), (((matrix1.m21 * matrix2.m13) + (matrix1.m22 * matrix2.m23)) + (matrix1.m23 * matrix2.m33)), (((matrix1.m31 * matrix2.m11) + (matrix1.m32 * matrix2.m21)) + (matrix1.m33 * matrix2.m31)), (((matrix1.m31 * matrix2.m12) + (matrix1.m32 * matrix2.m22)) + (matrix1.m33 * matrix2.m32)), (((matrix1.m31 * matrix2.m13) + (matrix1.m32 * matrix2.m23)) + (matrix1.m33 * matrix2.m33)));
   };
-  Matrix2d.rotateAt = function(angle, pnt) {
-    var matT0 = Matrix2d.translation(-pnt.x, -pnt.y);
-    var matR = Matrix2d.rotation(angle);
-    var matT1 = Matrix2d.translation(pnt.x, pnt.y);
-    return Matrix2d.multiply(Matrix2d.multiply(matT0, matR), matT1);
-  };
   var Matrix2d$ = {
-    _transformPoints: function(points) {
-      var $enum1 = ss.enumerate(points);
-      while ($enum1.moveNext()) {
-        var pnt = $enum1.current;
-        this.multiplyPoint(pnt);
-      }
-    },
-    multiplyPoint: function(point) {
-      var x = point.x;
-      var y = point.y;
-      point.x = (((x * this.m11) + (y * this.m21)) + this.m31);
-      point.y = (((x * this.m12) + (y * this.m22)) + this.m32);
-    }
+
   };
 
 
@@ -28490,7 +24867,7 @@ window.wwtlib = function(){
   Place._fromXml = function(place) {
     var newPlace = new Place();
     newPlace._name = place.attributes.getNamedItem('Name').nodeValue;
-    if (place.attributes.getNamedItem('MSRComponentId') != null && place.attributes.getNamedItem('Permission') != null && place.attributes.getNamedItem('Url') != null) {
+    if (place.attributes.getNamedItem('Url') != null && place.attributes.getNamedItem('MSRComponentId') != null && place.attributes.getNamedItem('Permission') != null) {
       newPlace.set_url(place.attributes.getNamedItem('Url').nodeValue);
       newPlace.set_thumbnailUrl(place.attributes.getNamedItem('Thumbnail').nodeValue);
       return newPlace;
@@ -32510,10 +28887,9 @@ window.wwtlib = function(){
 
   function BitmapOverlay() {
     this._textureReady$1 = false;
-    this._sprite$1 = new Sprite2d();
     Overlay.call(this);
   }
-  BitmapOverlay.create = function(owner, filename) {
+  BitmapOverlay.create = function(renderContext, owner, image) {
     var temp = new BitmapOverlay();
     temp.set_owner(owner);
     temp._filename$1 = (Overlay.nextId++).toString() + '.png';
@@ -32539,24 +28915,14 @@ window.wwtlib = function(){
     },
     cleanUp: function() {
       this.texture = null;
-      if (this.texture2d != null) {
-        this.texture2d.cleanUp();
-        this.texture2d = null;
-      }
     },
     initializeTexture: function() {
       var $this = this;
 
       try {
-        if (RenderContext.useGl) {
-          this.texture2d = this.get_owner().get_owner().getCachedTexture2d(this._filename$1);
-          this._textureReady$1 = true;
-        }
-        else {
-          this.texture = this.get_owner().get_owner().getCachedTexture(this._filename$1, function() {
-            $this._textureReady$1 = true;
-          });
-        }
+        this.texture = this.get_owner().get_owner().getCachedTexture(this._filename$1, function() {
+          $this._textureReady$1 = true;
+        });
         if (!this.get_width() && !this.get_height()) {
         }
       }
@@ -32564,29 +28930,19 @@ window.wwtlib = function(){
       }
     },
     draw3D: function(renderContext, designTime) {
-      if (RenderContext.useGl) {
-        if (this.texture2d == null) {
-          this.initializeTexture();
-        }
-        this.initiaizeGeometry();
-        this.updateRotation();
-        this._sprite$1.draw(renderContext, this.points, this.points.length, this.texture2d, true, 1);
+      if (this.texture == null) {
+        this.initializeTexture();
       }
-      else {
-        if (this.texture == null) {
-          this.initializeTexture();
-        }
-        if (!this._textureReady$1) {
-          return;
-        }
-        var ctx = renderContext.device;
-        ctx.save();
-        ctx.translate(this.get_x(), this.get_y());
-        ctx.rotate(this.get_rotationAngle() * Overlay.RC);
-        ctx.globalAlpha = this.get_opacity();
-        ctx.drawImage(this.texture, -this.get_width() / 2, -this.get_height() / 2, this.get_width(), this.get_height());
-        ctx.restore();
+      if (!this._textureReady$1) {
+        return;
       }
+      var ctx = renderContext.device;
+      ctx.save();
+      ctx.translate(this.get_x(), this.get_y());
+      ctx.rotate(this.get_rotationAngle() * Overlay.RC);
+      ctx.globalAlpha = this.get_opacity();
+      ctx.drawImage(this.texture, -this.get_width() / 2, -this.get_height() / 2, this.get_width(), this.get_height());
+      ctx.restore();
     },
     initializeFromXml: function(node) {
       var bitmap = Util.selectSingleNode(node, 'Bitmap');
@@ -32598,16 +28954,8 @@ window.wwtlib = function(){
   // wwtlib.TextOverlay
 
   function TextOverlay() {
-    this._sprite$1 = new Sprite2d();
-    this._ctx$1 = null;
-    this._ce$1 = null;
     Overlay.call(this);
   }
-  TextOverlay.create = function(textObject) {
-    var to = new TextOverlay();
-    to.textObject = textObject;
-    return to;
-  };
   var TextOverlay$ = {
     get_color: function() {
       return Overlay.prototype.get_color.call(this);
@@ -32621,23 +28969,11 @@ window.wwtlib = function(){
       return value;
     },
     draw3D: function(renderContext, designTime) {
-      if (RenderContext.useGl) {
-        this.initializeTexture();
-        this.initiaizeGeometry();
-        this.updateRotation();
-        this._sprite$1.draw(renderContext, this.points, this.points.length, this.texture2d, true, 1);
-      }
-      else {
-        var ctx = renderContext.device;
-        ctx.save();
-        ctx.translate(this.get_x(), this.get_y());
-        ctx.rotate(this.get_rotationAngle() * Overlay.RC);
-        ctx.globalAlpha = this.get_opacity();
-        this._drawCanvasText$1(ctx);
-        ctx.restore();
-      }
-    },
-    _drawCanvasText$1: function(ctx) {
+      var ctx = renderContext.device;
+      ctx.save();
+      ctx.translate(this.get_x(), this.get_y());
+      ctx.rotate(this.get_rotationAngle() * Overlay.RC);
+      ctx.globalAlpha = this.get_opacity();
       ctx.fillStyle = this.textObject.forgroundColor.toString();
       ctx.font = ((this.textObject.italic) ? 'italic' : 'normal') + ' ' + ((this.textObject.bold) ? 'bold' : 'normal') + ' ' + Math.round(this.textObject.fontSize * 1.2).toString() + 'px ' + this.textObject.fontName;
       ctx.textBaseline = 'top';
@@ -32651,7 +28987,6 @@ window.wwtlib = function(){
           var time = ss.format('{0:HH:mm:ss}', SpaceTimeController.get_now());
           text = ss.replaceString(text, '{$TIME}', time);
         }
-        text = ss.replaceString(text, '{$DIST}', UiTools.formatDistance(WWTControl.singleton.renderContext.get_solarSystemCameraDistance()));
         text = ss.replaceString(text, '{$LAT}', Coordinates.formatDMS(WWTControl.singleton.renderContext.viewCamera.lat));
         text = ss.replaceString(text, '{$LNG}', Coordinates.formatDMS(WWTControl.singleton.renderContext.viewCamera.lat));
         text = ss.replaceString(text, '{$RA}', Coordinates.formatDMS(WWTControl.singleton.renderContext.viewCamera.get_RA()));
@@ -32672,31 +29007,15 @@ window.wwtlib = function(){
           baseline += lineSpace;
         }
       }
+      ctx.restore();
     },
     initializeTexture: function() {
-      if (this.texture2d == null) {
-        if (this._ctx$1 == null || this._ce$1 == null) {
-          this._ce$1 = document.createElement('canvas');
-          this._ce$1.height = ss.truncate(this.get_height());
-          this._ce$1.width = ss.truncate(this.get_width());
-          this._ctx$1 = this._ce$1.getContext('2d');
-        }
-        this._ctx$1.translate(this.get_width() / 2, this.get_height() / 2);
-        this._ctx$1.clearRect(0, 0, this.get_width(), this.get_height());
-        this._drawCanvasText$1(this._ctx$1);
-        this.texture2d = new Texture();
-        this.texture2d.imageElement = this._ce$1;
-        this.texture2d.makeTexture();
-      }
     },
     initializeFromXml: function(node) {
       var text = Util.selectSingleNode(node, 'Text');
       this.textObject = TextObject._fromXml(Util.selectSingleNode(text, 'TextObject'));
     },
     initiaizeGeometry: function() {
-      if (RenderContext.useGl) {
-        Overlay.prototype.initiaizeGeometry.call(this);
-      }
     }
   };
 
@@ -32705,16 +29024,8 @@ window.wwtlib = function(){
 
   function ShapeOverlay() {
     this._shapeType$1 = 1;
-    this._sprite$1 = new Sprite2d();
-    this._triangleStrip$1 = true;
     Overlay.call(this);
   }
-  ShapeOverlay._create = function(currentTourStop, shapeType) {
-    var overlay = new ShapeOverlay();
-    overlay._shapeType$1 = shapeType;
-    overlay.set_owner(currentTourStop);
-    return overlay;
-  };
   var ShapeOverlay$ = {
     get_shapeType: function() {
       return this._shapeType$1;
@@ -32725,309 +29036,35 @@ window.wwtlib = function(){
       return value;
     },
     draw3D: function(renderContext, designTime) {
-      if (RenderContext.useGl) {
-        this.initiaizeGeometry();
-        this._sprite$1.draw(renderContext, this.points, this.points.length, null, this._triangleStrip$1, this.get_opacity());
-      }
-      else {
-        switch (this._shapeType$1) {
-          case 0:
-            this._drawCircleGeometry$1(renderContext);
-            break;
-          case 1:
-            this._drawRectGeometry$1(renderContext);
-            break;
-          case 6:
-            this._drawOpenRectGeometry$1(renderContext);
-            break;
-          case 2:
-            this._drawStarGeometry$1(renderContext);
-            break;
-          case 3:
-            this._drawDonutGeometry$1(renderContext);
-            break;
-          case 4:
-            this._drawArrowGeometry$1(renderContext);
-            break;
-          case 5:
-            this._drawLineGeometry$1(renderContext);
-            break;
-          default:
-            break;
-        }
+      switch (this._shapeType$1) {
+        case 0:
+          this._createCircleGeometry$1(renderContext);
+          break;
+        case 1:
+          this._createRectGeometry$1(renderContext);
+          break;
+        case 6:
+          this._createOpenRectGeometry$1(renderContext);
+          break;
+        case 2:
+          this._createStarGeometry$1(renderContext);
+          break;
+        case 3:
+          this._createDonutGeometry$1(renderContext);
+          break;
+        case 4:
+          this._createArrowGeometry$1(renderContext);
+          break;
+        case 5:
+          this._createLineGeometry$1(renderContext);
+          break;
+        default:
+          break;
       }
     },
     initiaizeGeometry: function() {
-      if (this.points == null) {
-        switch (this._shapeType$1) {
-          case 0:
-            this._createCircleGeometry$1();
-            break;
-          case 1:
-            Overlay.prototype.initiaizeGeometry.call(this);
-            break;
-          case 6:
-            this._createOpenRectGeometry$1();
-            break;
-          case 2:
-            this._createStarGeometry$1();
-            break;
-          case 3:
-            this._createDonutGeometry$1();
-            break;
-          case 4:
-            this._createArrowGeometry$1();
-            break;
-          case 5:
-            this._createLineGeometry$1();
-            break;
-          default:
-            break;
-        }
-      }
     },
-    _createLineGeometry$1: function() {
-      var centerX = this.get_x();
-      var centerY = this.get_y();
-      var radius = this.get_width() / 2;
-      var length = this.get_width();
-      var segments = ss.truncate((length / 12)) + 1;
-      var radiansPerSegment = (Math.PI * 2) / segments;
-      if (this.points == null) {
-        this.points = new Array(segments * 2 + 2);
-      }
-      for (var j = 0; j <= segments; j++) {
-        var i = j * 2;
-        this.points[i] = new PositionColoredTextured();
-        this.points[i].position = this.makePosition(this.get_x(), this.get_y(), ((j / segments) * this.get_width() - (this.get_width() / 2)), 6, this.get_rotationAngle());
-        this.points[i].tu = (j % 2);
-        this.points[i].tv = 0;
-        this.points[i].color = this.get_color();
-        this.points[i + 1] = new PositionColoredTextured();
-        this.points[i + 1].position = this.makePosition(this.get_x(), this.get_y(), ((j / segments) * this.get_width() - (this.get_width() / 2)), -6, this.get_rotationAngle());
-        this.points[i + 1].tu = (j % 2);
-        this.points[i + 1].tv = 1;
-        this.points[i + 1].color = this.get_color();
-      }
-    },
-    _createOpenRectGeometry$1: function() {
-      var centerX = this.get_x();
-      var centerY = this.get_y();
-      var radius = this.get_width() / 2;
-      var length = this.get_width();
-      var segments = ss.truncate((length / 12)) + 1;
-      var segmentsHigh = ss.truncate((this.get_height() / 12)) + 1;
-      var totalPoints = (((segments + 1) * 2) + ((segmentsHigh + 1) * 2)) * 2;
-      if (this.points == null) {
-        this.points = new Array(totalPoints);
-      }
-      for (var j = 0; j <= segments; j++) {
-        var i = j * 2;
-        this.points[i] = new PositionColoredTextured();
-        this.points[i].position = this.makePosition(centerX, centerY, (j / segments) * this.get_width() - (this.get_width() / 2), (this.get_height() / 2), this.get_rotationAngle());
-        this.points[i].tu = (j % 2);
-        this.points[i].tv = 0;
-        this.points[i].color = this.get_color();
-        this.points[i + 1] = new PositionColoredTextured();
-        this.points[i + 1].position = this.makePosition(centerX, centerY, (j / segments) * this.get_width() - (this.get_width() / 2), ((this.get_height() / 2) - 12), this.get_rotationAngle());
-        this.points[i + 1].tu = (j % 2);
-        this.points[i + 1].tv = 1;
-        this.points[i + 1].color = this.get_color();
-        var k = (((segments + 1) * 4) + ((segmentsHigh + 1) * 2) - 2) - i;
-        this.points[k] = new PositionColoredTextured();
-        this.points[k].position = this.makePosition(centerX, centerY, (j / segments) * this.get_width() - (this.get_width() / 2), (-(this.get_height() / 2)) + 12, this.get_rotationAngle());
-        this.points[k].tu = (j % 2);
-        this.points[k].tv = 0;
-        this.points[k].color = this.get_color();
-        this.points[k + 1] = new PositionColoredTextured();
-        this.points[k + 1].position = this.makePosition(centerX, centerY, (j / segments) * this.get_width() - (this.get_width() / 2), (-(this.get_height() / 2)), this.get_rotationAngle());
-        this.points[k + 1].tu = (j % 2);
-        this.points[k + 1].tv = 1;
-        this.points[k + 1].color = this.get_color();
-      }
-      var offset = ((segments + 1) * 2);
-      for (var j = 0; j <= segmentsHigh; j++) {
-        var top = ((segmentsHigh + 1) * 2) + offset - 2;
-        var i = j * 2;
-        this.points[top - i] = new PositionColoredTextured();
-        this.points[top - i].position = this.makePosition(centerX, centerY, (this.get_width() / 2), ((j / segmentsHigh) * this.get_height() - (this.get_height() / 2)), this.get_rotationAngle());
-        this.points[top - i].tu = (j % 2);
-        this.points[top - i].tv = 0;
-        this.points[top - i].color = this.get_color();
-        this.points[top - i + 1] = new PositionColoredTextured();
-        this.points[top - i + 1].position = this.makePosition(centerX, centerY, ((this.get_width() / 2) - 12), ((j / segmentsHigh) * this.get_height() - (this.get_height() / 2)), this.get_rotationAngle());
-        this.points[top - i + 1].tu = (j % 2);
-        this.points[top - i + 1].tv = 1;
-        this.points[top - i + 1].color = this.get_color();
-        var k = i + ((segments + 1) * 4) + ((segmentsHigh + 1) * 2);
-        this.points[k] = new PositionColoredTextured();
-        this.points[k].position = this.makePosition(centerX, centerY, (-(this.get_width() / 2) + 12), ((j / segmentsHigh) * this.get_height() - (this.get_height() / 2)), this.get_rotationAngle());
-        this.points[k].tu = (j % 2);
-        this.points[k].tv = 0;
-        this.points[k].color = this.get_color();
-        this.points[k + 1] = new PositionColoredTextured();
-        this.points[k + 1].position = this.makePosition(centerX, centerY, (-(this.get_width() / 2)), ((j / segmentsHigh) * this.get_height() - (this.get_height() / 2)), this.get_rotationAngle());
-        this.points[k + 1].tu = (j % 2);
-        this.points[k + 1].tv = 1;
-        this.points[k + 1].color = this.get_color();
-      }
-    },
-    _createStarGeometry$1: function() {
-      var centerX = this.get_x();
-      var centerY = this.get_y();
-      var radius = this.get_width() / 2;
-      var radiansPerSegment = (Math.PI * 2) / 5;
-      if (this.points == null) {
-        this.points = new Array(12);
-      }
-      if (this._pnts$1 == null) {
-        this._pnts$1 = new Array(10);
-      }
-      for (var i = 0; i < 5; i++) {
-        var rads = i * radiansPerSegment - (Math.PI / 2);
-        this._pnts$1[i] = new PositionColoredTextured();
-        this._pnts$1[i].position = this.makePosition(centerX, centerY, (Math.cos(rads) * (this.get_width() / 2)), (Math.sin(rads) * (this.get_height() / 2)), this.get_rotationAngle());
-        this._pnts$1[i].tu = 0;
-        this._pnts$1[i].tv = 0;
-        this._pnts$1[i].color = this.get_color();
-      }
-      for (var i = 5; i < 10; i++) {
-        var rads = i * radiansPerSegment + (radiansPerSegment / 2) - (Math.PI / 2);
-        this._pnts$1[i] = new PositionColoredTextured();
-        this._pnts$1[i].position = this.makePosition(centerX, centerY, (Math.cos(rads) * (this.get_width() / 5.3)), (Math.sin(rads) * (this.get_height() / 5.3)), this.get_rotationAngle());
-        this._pnts$1[i].tu = 0;
-        this._pnts$1[i].tv = 0;
-        this._pnts$1[i].color = this.get_color();
-      }
-      this.points[0] = this._pnts$1[0];
-      this.points[1] = this._pnts$1[5];
-      this.points[2] = this._pnts$1[9];
-      this.points[3] = this._pnts$1[1];
-      this.points[4] = this._pnts$1[7];
-      this.points[5] = this._pnts$1[4];
-      this.points[6] = this._pnts$1[6];
-      this.points[7] = this._pnts$1[2];
-      this.points[8] = this._pnts$1[7];
-      this.points[9] = this._pnts$1[7];
-      this.points[10] = this._pnts$1[3];
-      this.points[11] = this._pnts$1[8];
-      this._triangleStrip$1 = false;
-    },
-    _createArrowGeometry$1: function() {
-      if (this.points == null) {
-        this.points = new Array(9);
-      }
-      this.points[0] = new PositionColoredTextured();
-      this.points[0].position = this.makePosition(this.get_x(), this.get_y(), -this.get_width() / 2, -this.get_height() / 4, this.get_rotationAngle());
-      this.points[0].tu = 0;
-      this.points[0].tv = 0;
-      this.points[0].color = this.get_color();
-      this.points[1] = new PositionColoredTextured();
-      this.points[1].position = this.makePosition(this.get_x(), this.get_y(), this.get_width() / 4, -this.get_height() / 4, this.get_rotationAngle());
-      this.points[1].tu = 1;
-      this.points[1].tv = 0;
-      this.points[1].color = this.get_color();
-      this.points[2] = new PositionColoredTextured();
-      this.points[2].position = this.makePosition(this.get_x(), this.get_y(), -this.get_width() / 2, this.get_height() / 4, this.get_rotationAngle());
-      this.points[2].tu = 0;
-      this.points[2].tv = 1;
-      this.points[2].color = this.get_color();
-      this.points[3] = new PositionColoredTextured();
-      this.points[3].position = this.makePosition(this.get_x(), this.get_y(), this.get_width() / 4, -this.get_height() / 4, this.get_rotationAngle());
-      this.points[3].tu = 1;
-      this.points[3].tv = 0;
-      this.points[3].color = this.get_color();
-      this.points[4] = new PositionColoredTextured();
-      this.points[4].position = this.makePosition(this.get_x(), this.get_y(), -this.get_width() / 2, this.get_height() / 4, this.get_rotationAngle());
-      this.points[4].tu = 0;
-      this.points[4].tv = 1;
-      this.points[4].color = this.get_color();
-      this.points[5] = new PositionColoredTextured();
-      this.points[5].position = this.makePosition(this.get_x(), this.get_y(), this.get_width() / 4, this.get_height() / 4, this.get_rotationAngle());
-      this.points[5].tu = 1;
-      this.points[5].tv = 1;
-      this.points[5].color = this.get_color();
-      this.points[6] = new PositionColoredTextured();
-      this.points[6].position = this.makePosition(this.get_x(), this.get_y(), this.get_width() / 4, -this.get_height() / 2, this.get_rotationAngle());
-      this.points[6].tu = 1;
-      this.points[6].tv = 1;
-      this.points[6].color = this.get_color();
-      this.points[7] = new PositionColoredTextured();
-      this.points[7].position = this.makePosition(this.get_x(), this.get_y(), this.get_width() / 2, 0, this.get_rotationAngle());
-      this.points[7].tu = 1;
-      this.points[7].tv = 0.5;
-      this.points[7].color = this.get_color();
-      this.points[8] = new PositionColoredTextured();
-      this.points[8].position = this.makePosition(this.get_x(), this.get_y(), this.get_width() / 4, this.get_height() / 2, this.get_rotationAngle());
-      this.points[8].tu = 1;
-      this.points[8].tv = 1;
-      this.points[8].color = this.get_color();
-      this._triangleStrip$1 = false;
-    },
-    _createDonutGeometry$1: function() {
-      var centerX = this.get_x();
-      var centerY = this.get_y();
-      var radius = this.get_width() / 2;
-      var circumference = Math.PI * 2 * radius;
-      var segments = ss.truncate((circumference / 12)) + 1;
-      var radiansPerSegment = (Math.PI * 2) / segments;
-      if (this.points == null) {
-        this.points = new Array(segments * 2 + 2);
-      }
-      for (var j = 0; j <= segments; j++) {
-        var i = j * 2;
-        this.points[i] = new PositionColoredTextured();
-        this.points[i].position = this.makePosition(centerX, centerY, (Math.cos(j * radiansPerSegment) * (this.get_width() / 2)), (Math.sin(j * radiansPerSegment) * (this.get_height() / 2)), this.get_rotationAngle());
-        this.points[i].tu = (j % 2);
-        this.points[i].tv = 0;
-        this.points[i].color = this.get_color();
-        this.points[i + 1] = new PositionColoredTextured();
-        this.points[i + 1].position = this.makePosition(centerX, centerY, (Math.cos(j * radiansPerSegment) * ((this.get_width() / 2) - 10)), (Math.sin(j * radiansPerSegment) * ((this.get_height() / 2) - 10)), this.get_rotationAngle());
-        this.points[i + 1].tu = (j % 2);
-        this.points[i + 1].tv = 1;
-        this.points[i + 1].color = this.get_color();
-      }
-    },
-    _createCircleGeometry$1: function() {
-      var centerX = this.get_x();
-      var centerY = this.get_y();
-      var radius = this.get_width() / 2;
-      var circumference = Math.PI * 2 * radius;
-      var segments = ss.truncate((circumference / 12)) + 1;
-      var radiansPerSegment = (Math.PI * 2) / segments;
-      if (this.points == null) {
-        this.points = new Array(segments * 2 + 2);
-      }
-      for (var j = 0; j <= segments; j++) {
-        var i = j * 2;
-        this.points[i] = new PositionColoredTextured();
-        this.points[i].position = this.makePosition(centerX, centerY, (Math.cos(j * radiansPerSegment) * (this.get_width() / 2)), (Math.sin(j * radiansPerSegment) * (this.get_height() / 2)), this.get_rotationAngle());
-        this.points[i].tu = (j % 2);
-        this.points[i].tv = 0;
-        this.points[i].color = this.get_color();
-        this.points[i + 1] = new PositionColoredTextured();
-        this.points[i + 1].position = this.makePosition(centerX, centerY, 0, 0, this.get_rotationAngle());
-        this.points[i + 1].tu = (j % 2);
-        this.points[i + 1].tv = 1;
-        this.points[i + 1].color = this.get_color();
-      }
-    },
-    initializeTexture: function() {
-      switch (this.get_shapeType()) {
-        case 5:
-        case 3:
-        case 6:
-          break;
-        case 0:
-        case 1:
-        case 2:
-        case 4:
-        default:
-          this.texture = null;
-          break;
-      }
-    },
-    _drawLineGeometry$1: function(renderContext) {
+    _createLineGeometry$1: function(renderContext) {
       var ctx = renderContext.device;
       ctx.save();
       var radius = this.get_width() / 2;
@@ -33041,7 +29078,7 @@ window.wwtlib = function(){
       ctx.stroke();
       ctx.restore();
     },
-    _drawOpenRectGeometry$1: function(renderContext) {
+    _createOpenRectGeometry$1: function(renderContext) {
       var ctx = renderContext.device;
       ctx.save();
       ctx.translate(this.get_x(), this.get_y());
@@ -33058,7 +29095,7 @@ window.wwtlib = function(){
       ctx.stroke();
       ctx.restore();
     },
-    _drawRectGeometry$1: function(renderContext) {
+    _createRectGeometry$1: function(renderContext) {
       var ctx = renderContext.device;
       ctx.save();
       ctx.translate(this.get_x(), this.get_y());
@@ -33075,7 +29112,7 @@ window.wwtlib = function(){
       ctx.fill();
       ctx.restore();
     },
-    _drawStarGeometry$1: function(renderContext) {
+    _createStarGeometry$1: function(renderContext) {
       var ctx = renderContext.device;
       ctx.save();
       ctx.translate(this.get_x(), this.get_y());
@@ -33105,7 +29142,7 @@ window.wwtlib = function(){
       ctx.fill();
       ctx.restore();
     },
-    _drawArrowGeometry$1: function(renderContext) {
+    _createArrowGeometry$1: function(renderContext) {
       var ctx = renderContext.device;
       ctx.save();
       ctx.translate(this.get_x(), this.get_y());
@@ -33125,7 +29162,7 @@ window.wwtlib = function(){
       ctx.fill();
       ctx.restore();
     },
-    _drawDonutGeometry$1: function(renderContext) {
+    _createDonutGeometry$1: function(renderContext) {
       var ctx = renderContext.device;
       ctx.save();
       ctx.translate(this.get_x(), this.get_y());
@@ -33140,7 +29177,7 @@ window.wwtlib = function(){
       ctx.stroke();
       ctx.restore();
     },
-    _drawCircleGeometry$1: function(renderContext) {
+    _createCircleGeometry$1: function(renderContext) {
       var ctx = renderContext.device;
       ctx.save();
       ctx.scale(1, this.get_width() / this.get_height());
@@ -33154,6 +29191,8 @@ window.wwtlib = function(){
       ctx.globalAlpha = this.get_opacity();
       ctx.fill();
       ctx.restore();
+    },
+    initializeTexture: function() {
     },
     cleanUpGeometry: function() {
       Overlay.prototype.cleanUpGeometry.call(this);
@@ -33201,12 +29240,6 @@ window.wwtlib = function(){
     Overlay.call(this);
     this.isDesignTimeOnly = true;
   }
-  AudioOverlay.create = function(currentTourStop, filename) {
-    var ao = new AudioOverlay();
-    ao.set_owner(currentTourStop);
-    ao._filename$1 = filename;
-    return ao;
-  };
   var AudioOverlay$ = {
     get_mute: function() {
       return this._mute$1;
@@ -33533,17 +29566,6 @@ window.wwtlib = function(){
       }
       this.currentRotation = 0;
     }
-  };
-
-
-  // wwtlib.ToolStripSeparator
-
-  function ToolStripSeparator() {
-    ToolStripMenuItem.call(this);
-    this.name = '--------------------------------------';
-  }
-  var ToolStripSeparator$ = {
-
   };
 
 
@@ -34543,8 +30565,6 @@ window.wwtlib = function(){
       PositionTextureVertexBuffer: [ PositionTextureVertexBuffer, PositionTextureVertexBuffer$, null ],
       TimeSeriesLineVertexBuffer: [ TimeSeriesLineVertexBuffer, TimeSeriesLineVertexBuffer$, null ],
       TimeSeriesPointVertexBuffer: [ TimeSeriesPointVertexBuffer, TimeSeriesPointVertexBuffer$, null ],
-      PositionColoredTexturedVertexBuffer: [ PositionColoredTexturedVertexBuffer, PositionColoredTexturedVertexBuffer$, null ],
-      Sprite2d: [ Sprite2d, Sprite2d$, null ],
       Table: [ Table, Table$, null ],
       TileCache: [ TileCache, TileCache$, null ],
       DistanceCalc: [ DistanceCalc, DistanceCalc$, null ],
@@ -34579,11 +30599,8 @@ window.wwtlib = function(){
       AudioType: AudioType,
       ShapeType: ShapeType,
       LoopTypes: LoopTypes,
-      SelectionAnchor: SelectionAnchor,
       TextBorderStyle: TextBorderStyle,
       UserLevel: UserLevel,
-      Keys: Keys,
-      DialogResult: DialogResult,
       StateType: StateType,
       SolarSystemObjects: SolarSystemObjects,
       InterpolationType: InterpolationType,
@@ -34599,7 +30616,6 @@ window.wwtlib = function(){
       Classification: Classification,
       IUIServicesCallbacks: [ IUIServicesCallbacks ],
       ISettings: [ ISettings ],
-      IUndoStep: [ IUndoStep ],
       IThumbnail: [ IThumbnail ],
       IPlace: [ IPlace ],
       IUiController: [ IUiController ],
@@ -34682,8 +30698,6 @@ window.wwtlib = function(){
       LineShaderNormalDates: [ LineShaderNormalDates, LineShaderNormalDates$, null ],
       TimeSeriesPointSpriteShader: [ TimeSeriesPointSpriteShader, TimeSeriesPointSpriteShader$, null ],
       TileShader: [ TileShader, TileShader$, null ],
-      SpriteShader: [ SpriteShader, SpriteShader$, null ],
-      ShapeSpriteShader: [ ShapeSpriteShader, ShapeSpriteShader$, null ],
       TextShader: [ TextShader, TextShader$, null ],
       Tessellator: [ Tessellator, Tessellator$, null ],
       Texture: [ Texture, Texture$, null ],
@@ -34714,41 +30728,16 @@ window.wwtlib = function(){
       Tour: [ Tour, Tour$, null, IThumbnail ],
       SettingParameter: [ SettingParameter, SettingParameter$, null ],
       Overlay: [ Overlay, Overlay$, null ],
-      Selection: [ Selection, Selection$, null ],
       TextObject: [ TextObject, TextObject$, null ],
       TourDocument: [ TourDocument, TourDocument$, null ],
-      TourEditTab: [ TourEditTab, TourEditTab$, null ],
-      TourEditor: [ TourEditor, TourEditor$, null, IUiController ],
-      OverlayList: [ OverlayList, OverlayList$, null ],
-      TourEdit: [ TourEdit, TourEdit$, null ],
-      SoundEditor: [ SoundEditor, SoundEditor$, null ],
-      TourStopList: [ TourStopList, TourStopList$, null ],
-      TimeLine: [ TimeLine, TimeLine$, null ],
       TourPlayer: [ TourPlayer, TourPlayer$, null, IUiController ],
       MasterTime: [ MasterTime, MasterTime$, null ],
       TourStop: [ TourStop, TourStop$, null, ISettings ],
       LayerInfo: [ LayerInfo, LayerInfo$, null ],
-      UndoTourStopChange: [ UndoTourStopChange, UndoTourStopChange$, null, IUndoStep ],
-      Undo: [ Undo, Undo$, null ],
-      UndoStep: [ UndoStep, UndoStep$, null, IUndoStep ],
-      UndoTourSlidelistChange: [ UndoTourSlidelistChange, UndoTourSlidelistChange$, null, IUndoStep ],
-      UndoTourPropertiesChange: [ UndoTourPropertiesChange, UndoTourPropertiesChange$, null, IUndoStep ],
       UiTools: [ UiTools, UiTools$, null ],
       Rectangle: [ Rectangle, Rectangle$, null ],
       Guid: [ Guid, Guid$, null ],
       Mouse: [ Mouse, null, null ],
-      Language: [ Language, Language$, null ],
-      Cursor: [ Cursor, Cursor$, null ],
-      Cursors: [ Cursors, Cursors$, null ],
-      SimpleInput: [ SimpleInput, SimpleInput$, null ],
-      SelectLink: [ SelectLink, SelectLink$, null ],
-      PopupVolume: [ PopupVolume, PopupVolume$, null ],
-      PopupColorPicker: [ PopupColorPicker, PopupColorPicker$, null ],
-      OverlayProperties: [ OverlayProperties, OverlayProperties$, null ],
-      ColorPicker: [ ColorPicker, ColorPicker$, null ],
-      ContextMenuStrip: [ ContextMenuStrip, ContextMenuStrip$, null ],
-      ToolStripMenuItem: [ ToolStripMenuItem, ToolStripMenuItem$, null ],
-      TagMe: [ TagMe, TagMe$, null ],
       VizLayer: [ VizLayer, VizLayer$, null ],
       DataItem: [ DataItem, DataItem$, null ],
       WebFile: [ WebFile, WebFile$, null ],
@@ -34794,7 +30783,6 @@ window.wwtlib = function(){
       ShapeOverlay: [ ShapeOverlay, ShapeOverlay$, Overlay ],
       AudioOverlay: [ AudioOverlay, AudioOverlay$, Overlay ],
       FlipbookOverlay: [ FlipbookOverlay, FlipbookOverlay$, Overlay ],
-      ToolStripSeparator: [ ToolStripSeparator, ToolStripSeparator$, ToolStripMenuItem ],
       Circle: [ Circle, Circle$, Annotation ],
       Poly: [ Poly, Poly$, Annotation ],
       PolyLine: [ PolyLine, PolyLine$, Annotation ],
@@ -34980,16 +30968,6 @@ window.wwtlib = function(){
   TileShader.textureLoc = 0;
   TileShader.initialized = false;
   TileShader._prog = null;
-  SpriteShader.vertLoc = 0;
-  SpriteShader.textureLoc = 0;
-  SpriteShader.colorLoc = 0;
-  SpriteShader.initialized = false;
-  SpriteShader._prog = null;
-  ShapeSpriteShader.vertLoc = 0;
-  ShapeSpriteShader.textureLoc = 0;
-  ShapeSpriteShader.colorLoc = 0;
-  ShapeSpriteShader.initialized = false;
-  ShapeSpriteShader._prog = null;
   TextShader.vertLoc = 0;
   TextShader.textureLoc = 0;
   TextShader.initialized = false;
@@ -35022,7 +31000,6 @@ window.wwtlib = function(){
   Planets._lastUpdate = new Date();
   Planets._ringsTriangleLists = new Array(2);
   Planets._ringImage = null;
-  RenderContext.useGl = false;
   RenderContext.back = 0;
   RenderTriangle.width = 1024;
   RenderTriangle.height = 768;
@@ -35073,19 +31050,13 @@ window.wwtlib = function(){
   TileCache.maxReadyToRenderSize = 200;
   TileCache.accessID = 0;
   TileCache._maxTotalToPurge = 0;
-  Overlay.defaultAnchor = 1;
   Overlay.clipboardFormat = 'WorldWideTelescope.Overlay';
   Overlay.nextId = 11231;
   Overlay.RC = 3.1415927 / 180;
-  Selection._points = new Array(9 * 3 * 2);
-  TourEditor.capturing = false;
-  TourEditor.currentEditor = null;
   TourPlayer._playing = false;
   TourPlayer._switchedToFullScreen = false;
   TourPlayer.noRestoreUIOnStop = false;
   TourStop.clipboardFormat = 'WorldWideTelescope.Slide';
-  Undo._undoStack = new ss.Stack();
-  Undo._redoStack = new ss.Stack();
   UiTools.kilometersPerAu = 149598000;
   UiTools.auPerParsec = 206264.806;
   UiTools.auPerLightYear = 63239.6717;

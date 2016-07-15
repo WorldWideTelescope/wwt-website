@@ -5,7 +5,6 @@
 //-----------------------------------------------------------------------
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -14,13 +13,11 @@ using System.ServiceModel.Web;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.UI.WebControls;
 using Microsoft.Live;
 using Newtonsoft.Json;
 using WWTMVC5.Extensions;
 using WWTMVC5.Models;
 using WWTMVC5.Properties;
-using WWTMVC5.Services;
 using WWTMVC5.Services.Interfaces;
 using WWTMVC5.WebServices;
 
@@ -49,13 +46,7 @@ namespace WWTMVC5.Controllers
         /// <summary>
         /// Gets the current user ID
         /// </summary>
-        public long CurrentUserId
-        {
-            get
-            {
-                return SessionWrapper.Get<long?>("CurrentUserID") ?? 0;
-            }
-        }
+        public long CurrentUserId => SessionWrapper.Get<long?>("CurrentUserID") ?? 0;
 
         /// <summary>
         /// Gets a value indicating whether the current user is site admin or not
@@ -81,7 +72,7 @@ namespace WWTMVC5.Controllers
                         {
                             // If the user is signed but not accepted TOC, profile will not be created. In that case, repeated call
                             // to the DB to be avoided.
-                            SessionWrapper.Set<bool>("IsSiteAdmin", false);
+                            SessionWrapper.Set("IsSiteAdmin", false);
                         }
                     }
                 }
@@ -103,21 +94,43 @@ namespace WWTMVC5.Controllers
 
         protected async Task<ProfileDetails> TryAuthenticateFromAuthCode(string authCode)
         {
-            var svc = new LiveIdAuth();
-            string result = "";
-            if (Request.Cookies["refresh_token"] != null && Request.Cookies["refresh_token"].Value.Length > 1)
+            if (SessionWrapper.Get<ProfileDetails>("ProfileDetails") != null)
             {
-                result = await svc.RefreshTokens();
+                return SessionWrapper.Get<ProfileDetails>("ProfileDetails");
             }
-            else
+            var svc = new LiveIdAuth();
+            var profile = await TryRefreshToken(svc);
+            if (profile == null && authCode.Length > 1)
             {
-                result = await svc.GetTokens(authCode);
+                profile = await UserFromToken(await svc.GetTokens(authCode), svc);
+            }
+            return profile;
+        }
+
+        private async Task<ProfileDetails> UserFromToken(string tokenResult, LiveIdAuth svc)
+        {
+            if (string.IsNullOrEmpty(tokenResult))
+            {
+                return null;
             }
             var tokens = new { access_token = "", refresh_token = "" };
-            var json = JsonConvert.DeserializeAnonymousType(result, tokens);
+            var json = JsonConvert.DeserializeAnonymousType(tokenResult, tokens);
             var userId = await svc.GetUserId(json.access_token);
+            if (string.IsNullOrEmpty(userId))
+            {
+                return null;
+            }
+            return await InitUserProfile(userId, json.access_token);
+        }
 
-            return await InitUserProfile(userId,json.access_token);
+        private async Task<ProfileDetails> TryRefreshToken(LiveIdAuth svc)
+        {
+            if (Request.Cookies["refresh_token"] != null && Request.Cookies["refresh_token"].Value.Length > 1)
+            {
+                var result = await svc.RefreshTokens();
+                return await UserFromToken(result, svc);
+            }
+            return null;
         }
 
         private async Task<ProfileDetails> InitUserProfile(string liveId, string accessToken)
@@ -136,7 +149,7 @@ namespace WWTMVC5.Controllers
                 var svc = new LiveIdAuth();
 
                 var getResult = await svc.GetMeInfo(accessToken);
-                var jsonResult = getResult as dynamic;
+                var jsonResult = getResult;
                 profileDetails = new ProfileDetails(jsonResult)
                 {
                     IsSubscribed = true,
@@ -170,8 +183,8 @@ namespace WWTMVC5.Controllers
                     HttpContext.Request.Url.GetServerLink());
             }
 
-            SessionWrapper.Set<long>("CurrentUserID", profileDetails.ID);
-            SessionWrapper.Set<string>("CurrentUserProfileName",
+            SessionWrapper.Set("CurrentUserID", profileDetails.ID);
+            SessionWrapper.Set("CurrentUserProfileName",
                 profileDetails.FirstName + " " + profileDetails.LastName);
             SessionWrapper.Set("ProfileDetails", profileDetails);
             
@@ -184,32 +197,26 @@ namespace WWTMVC5.Controllers
             {
                 return SessionWrapper.Get<ProfileDetails>("ProfileDetails");
             }
+
+            var svc = new LiveIdAuth();
+
+            var profile = await TryRefreshToken(svc);
+            if (profile != null)
+            {
+                return profile;
+            }
+            var result = await svc.Authenticate();
             
-                var svc = new LiveIdAuth();
-            
-            var result =  await svc.Authenticate();
             string userId = null;
             if (result.Status != LiveConnectSessionStatus.Connected)
             {
-                var resultstring = await svc.RefreshTokens();
-                if (string.IsNullOrEmpty(resultstring))
-                {
-                    return null;
-                }
-                var tokens = new { access_token = "", refresh_token = "" };
-                var json = JsonConvert.DeserializeAnonymousType(resultstring, tokens);
-                userId = await svc.GetUserId(tokens.access_token);
-                if (string.IsNullOrEmpty(userId))
-                {
-                    return null;
-                }
-                return await InitUserProfile(userId, json.access_token);
+                return await UserFromToken(await svc.RefreshTokens(),svc);
             }
 
             var client = new LiveConnectClient(result.Session);
             dynamic jsonResult = null;
             var getResult = await client.GetAsync("me");
-            jsonResult = getResult.Result as dynamic;
+            jsonResult = getResult.Result;
             foreach (KeyValuePair<string,object> item in jsonResult)
             {
                 if (item.Key.ToLower() == "id")
@@ -228,7 +235,7 @@ namespace WWTMVC5.Controllers
         /// </summary>
         protected static void CheckIfSiteAdmin()
         {
-            if (!SessionWrapper.Get<bool>("IsSiteAdmin", false))
+            if (!SessionWrapper.Get("IsSiteAdmin", false))
             {
                 throw new HttpException(401, Resources.NoPermissionAdminScreenMessage);
             }
@@ -244,11 +251,11 @@ namespace WWTMVC5.Controllers
 
             if (HttpContext.Request.IsAjaxRequest())
             {
-                pageName = HttpContext.Request.UrlReferrer.AbsolutePath.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault();
+                pageName = HttpContext.Request.UrlReferrer.AbsolutePath.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault();
             }
             else
             {
-                pageName = HttpContext.Request.Url.AbsolutePath.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault();
+                pageName = HttpContext.Request.Url.AbsolutePath.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault();
             }
 
             if (highlightType == HighlightType.None)
@@ -257,7 +264,7 @@ namespace WWTMVC5.Controllers
             }
             else
             {
-                ViewData["PrefixId"] = string.Format(CultureInfo.InvariantCulture, "{0}_{1}_", pageName, highlightType.ToString());
+                ViewData["PrefixId"] = string.Format(CultureInfo.InvariantCulture, "{0}_{1}_", pageName, highlightType);
             }
         }
 

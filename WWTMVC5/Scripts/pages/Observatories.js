@@ -108,21 +108,39 @@
         wwt.triggerResize();
     };
 
-    var loadWtml = function(callback) {
-        var wtmlPath = "/Content/GreatObservatories.xml";
-        ctl.add_collectionLoaded(function() {
-            $.ajax({
-                url: wtmlPath,
-                crossDomain: false,
-                dataType: 'xml',
-                cache:false,
-                success: callback,
-                error: function(a,b,c) {
-                    console.log({ a: a, b: b, c: c });
-                }
+    var loadWtml = function (callback) {
+        var hasLoaded = false;
+
+        var getXml = function(err) {
+            if (hasLoaded){return;}
+            hasLoaded = true;
+                $.ajax({
+                    url: wtmlPath,
+                    crossDomain: false,
+                    dataType: 'xml',
+                    cache:false,
+                    success: function(xml){
+                        if (err) {
+                            console.log(xml)
+                            wwt.WebControl.parseWtml($(xml));
+                        }
+                        callback(xml)
+                    },
+                    error: function(a,b,c) {
+                        console.log({ a: a, b: b, c: c });
+                    }
+                });
+            }
+        
+            var wtmlPath = "/Content/GreatObservatories.xml";
+            ctl.add_collectionLoaded(function () {
+                getXml(false);
+            
             });
-        });
-        ctl.loadImageCollection(wtmlPath);
+            ctl.loadImageCollection(wtmlPath);
+            setTimeout(function () {
+                getXml(true);
+            }, 1500);
     };
     //#endregion
 

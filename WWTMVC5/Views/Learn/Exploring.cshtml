@@ -227,6 +227,7 @@
                 </div>
             </div>
         </div>
+        
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4 class="panel-title">
@@ -715,25 +716,25 @@
                 <div class="panel-body">
 
                     <p>Panoramas are wide field of view images taken with either wide-angle fish-eye lenses or stitched together from individual images take of a wide field of view scene.</p>
-                    
+
                     <p>This tutorial will walk through how to process these data so that they can be TOAST projected into a multi-resolution format that can be hosted in the Cloud.</p>
-                    
+
                     <p><strong>If you have a collection of images</strong>.</p>
-                    
+
                     <p>Many high resolution panoramas, especially ones obtained by remote space craft, are taken as a collection of individual images.&nbsp; In the case where you have a collection the first step is to stitch them together to create a single panorama image that can be processed for WWT (see below).</p>
-                    
+
                     <p>There are several programs that</p>
                     <ol>
                         <li>PTAssembler - <a target="external" href="http://www.tawbaware.com/ptasmblr.htm">http://www.tawbaware.com/ptasmblr.htm</a></li>
                         <li>Auto Stitch - <a target="external" href="http://matthewalunbrown.com/autostitch/autostitch.html">http://matthewalunbrown.com/autostitch/autostitch.html</a></li>
-                        <li>GigaPan (hardware mount + software) - <a  target="external" href="http://www.gigapan.com/">http://www.gigapan.com/</a></li>
+                        <li>GigaPan (hardware mount + software) - <a target="external" href="http://www.gigapan.com/">http://www.gigapan.com/</a></li>
                         <li>Image Composite Editor - <a target="external" href="http://research.microsoft.com/en-us/um/redmond/projects/ice/">http://research.microsoft.com/en-us/um/redmond/projects/ice/</a></li>
                     </ol>
-                    
+
                     <p>This tutorial uses Image Composite Editor (ICE).</p>
-                    
+
                     <p>Collect the images that cover as much of your field of view as possible. They do not need to be in any specific order or have any naming convention.&nbsp;</p>
-                    
+
                     <ol>
                         <li>Startup ICE.</li>
                         <li>Click "New Panorama From Images".</li>
@@ -744,15 +745,15 @@
                         <li>In the upper menu, click "Crop". You should probably not apply any crops.</li>
                         <li>In the upper menu, click "Export". In the upper right don't change any of the parameters, and click "Export to disk&hellip;"</li>
                     </ol>
-                    
+
                     <p><strong>If you have a panoramic image already.</strong></p>
 
-    @*<div class="embed-responsive embed-responsive-16by9">
-        <iframe class="embed-responsive-item" src="//www.youtube.com/embed/NNBVB2QlADE"></iframe>
-    </div>*@
-                    
+                    @*<div class="embed-responsive embed-responsive-16by9">
+                            <iframe class="embed-responsive-item" src="//www.youtube.com/embed/NNBVB2QlADE"></iframe>
+                        </div>*@
+
                     <p>Many cameras can obtain panoramic images directly. Examples are Ricoh Theta - <a target="external" href="https://theta360.com/en/">https://theta360.com/en/</a> and Kodak Pixpro - <a target="external" href="http://kodakpixpro.com/Americas/cameras/actioncamera/sp360.php">http://kodakpixpro.com/Americas/cameras/actioncamera/sp360.php</a> cameras.&nbsp; Even smart phones can capture panoramic images with software such as Microsoft's Photosynth - <a target="external" href="https://photosynth.net/">https://photosynth.net/</a> of the built-in camera app on iOS.&nbsp; This could be useful in capturing panoramic views of observatories or observational locations.&nbsp; Of course another important type of data are panoramic views of surfaces of other bodies of the Solar System.&nbsp; However the panoramic image was obtained, this image is the input to the next step, which is to use the SphereToaster tool.</p>
-                    
+
                     <ol>
                         <li>
                             Open the panorama and make sure that it is of the correct size. The input panorama file should be in equi-rectangular (aka cylindrical equidistant) projection.&nbsp; In this projection the panorama should be twice as wide as it is tall and should cover the entire 360 field of view.&nbsp; If the image is projected correctly but isn't the entire size, I recommend that you pad the image with black space.&nbsp; In this example, we will use a free Windows program called Irfanview (<a target="external" href="http://www.irfanview.com/">http://www.irfanview.com/</a>).&nbsp; You can open the image and the image dimensions are shown in the lower left corner.&nbsp; In this example, the image is 7872 x 1752 pixels.&nbsp;
@@ -763,9 +764,9 @@
                         <li>
                             If you need to pad the image to be 2:1 then in Irfanview, under the Image menu, select "Change canvas size". In this example, the width of the image is 360 degrees but it covers the middle part and does not go to the top and bottom. Given that the width is 7872 the final height should be half that or 3936 pixels.&nbsp; Since the image is actually 1752 pixels high we have to pad 3936-1752=2184 pixels.&nbsp; This padding needs to be split equally to be added to the top and bottom; that is, 1092 to top and bottom and 0 to left and right.
 
-                            <br/>
-                                <img src="https://cloud.githubusercontent.com/assets/9676722/12967832/adee49ce-d02f-11e5-8a08-1c7811e427a8.jpg" class="img-responsive">
-                            
+                            <br />
+                            <img src="https://cloud.githubusercontent.com/assets/9676722/12967832/adee49ce-d02f-11e5-8a08-1c7811e427a8.jpg" class="img-responsive">
+
                         </li>
                         <li>Then save the image and it should now have the dimensions 7872 x 2936.</li>
                         <li>Download the WWT SDK, available here: On the Tools page: <a href="http://www.worldwidetelescope.org/Download/Tools">http://www.worldwidetelescope.org/Download/Tools</a> click on "SDK with data pipeline and original ADK tools" which should link to: <a href="http://wwtweb.blob.core.windows.net/drops/WWTSDK.msi">http://wwtweb.blob.core.windows.net/drops/WWTSDK.msi</a>.</li>
@@ -775,22 +776,25 @@
 
                             <img src="https://cloud.githubusercontent.com/assets/9676722/12967829/adec5a1a-d02f-11e5-9183-266d27b603f8.jpg" class="img-responsive">
                         </li>
-                    
+
                         <li>Under the Output tab, select a folder where the processed files will be created. Note, that the total size of the processed data can be much more than the original, especially if the input image is compressed with much black, so make sure the output drive has sufficient space.&nbsp; The default Project Name is taken from the input file name, which you can change.&nbsp; This is the name of the output WTML file.</li>
                         <li>Under Type, choose "Panorama". In order to preserve transparency, keep the output format as PNG and do not select JPEG.</li>
                         <li>
                             Since you have padded the image in the previous step, under "Fill Option" select "No fill".
-                            <br/>
-                            <img src="https://cloud.githubusercontent.com/assets/9676722/12967830/adec5dd0-d02f-11e5-8b38-e9aaffe1001f.jpg" class="img-responsive"/>
+                            <br />
+                            <img src="https://cloud.githubusercontent.com/assets/9676722/12967830/adec5dd0-d02f-11e5-8b38-e9aaffe1001f.jpg" class="img-responsive" />
                         </li>
-                    
-                        <li>Under the WTML tab, you can give the descriptive information for the image.&nbsp; Under Title, you should give a descriptive (and short) title that will show up in WWT.&nbsp; Under Credits, you can put the caption information, including the credit to the person or organization who owns the copyright of the image.&nbsp; You can specify the URL (Credits URL) which points to web page that described the image or data.&nbsp; Assuming you are going to make this panorama available on-line you can specify the URL to the web server that will serve the panorama data (Storage URL).&nbsp; Note this can be changed easily if you don&rsquo;t set this now or change the location of the server later.
-                            <br/>
-                            <img src="https://cloud.githubusercontent.com/assets/9676722/12967828/adec3a4e-d02f-11e5-98e9-957b082eb8fd.jpg" class="img-responsive"/></li>
-                    
+
+                        <li>
+                            Under the WTML tab, you can give the descriptive information for the image.&nbsp; Under Title, you should give a descriptive (and short) title that will show up in WWT.&nbsp; Under Credits, you can put the caption information, including the credit to the person or organization who owns the copyright of the image.&nbsp; You can specify the URL (Credits URL) which points to web page that described the image or data.&nbsp; Assuming you are going to make this panorama available on-line you can specify the URL to the web server that will serve the panorama data (Storage URL).&nbsp; Note this can be changed easily if you don&rsquo;t set this now or change the location of the server later.
+                            <br />
+                            <img src="https://cloud.githubusercontent.com/assets/9676722/12967828/adec3a4e-d02f-11e5-98e9-957b082eb8fd.jpg" class="img-responsive" />
+                        </li>
+
                         <li>When you are finished entering this metadata, go back to the Output tab and click on: "Generate Pyramid + WTML".&nbsp; This will take a while.&nbsp; For this example (7,872 x 3,936) it took about 40 minutes on a reasonably fast PC.&nbsp; Note, that while it is working the GUI doesn't get updated and the window banner will show "WWT SphereToaster (Alpha) (Not Responding."&nbsp; It is actually running so don&rsquo;t close the window. It will report some progress in the Messages window in the lower right of the Output tab.&nbsp; When you first load the image it will report that it found the input image (&ldquo;Loaded C:\Users\docto\Downloads\Chang&rsquo;e 3.jpg&rdquo; in this example).&nbsp; You can check on it with the task manager or by looking at the properties of the output folder; the total output size should be increasing as the process runs and generates more files.&nbsp; When it is finished SphereToaster will report the number of tiles created and time to process the data.</li>
-                        <li>When this is complete, the process will create the following:
-                        <ul>
+                        <li>
+                            When this is complete, the process will create the following:
+                            <ul>
                                 <li>Folder full of tiles, e.g., &ldquo;Chang&rsquo;e 3&rdquo;</li>
                                 <li>WTML file to use locally, &ldquo;Chang&rsquo;e 3LOCAL.wtml&rdquo;. This is only used for local testing and cannot be shared outside the machine you are working on.</li>
                                 <li>WTML file to use when the data are on a web server, &ldquo;Chang&rsquo;e 3.wtml&rdquo;. Once the data are processed and moved to the specified server, sharing this file will provide access to it.</li>
@@ -800,9 +804,9 @@
                         <li>You can view the generated panorama by starting WorldWide Telescope and then double-clicking on the local version of the WTML file. In this example it is "Chang'e 3LOCAL.wtml".&nbsp; Note, that this points to the specific location on disk where you specified the output, so if you move that folder you have to edit this local WTML file.</li>
                         <li>The other version of the WTML file (Chang'e 3.wtml) is setup to point to a data on a web server. In the WTML file, you should review the location of (Url="[Storage Url]/Chang'e 3 Pano/{1}/{3}/{3}_{2}.jpg", &ldquo;Storage URL&rdquo; was specified in the WTML tab).&nbsp; After the image pyramid is created, you can move it to the web server and then use the &ldquo;Chang&rsquo;e 3.wtml&rdquo; to access the data over the web. If you move the data to a different web server, you need to change the server address in the Url tag in the WTML file.</li>
                     </ol>
-                    
+
                     <p>You can find additional information on how to use SphereToaster tool in the SDK (as well as the other tools) here: <a href="http://wwtstaging.azurewebsites.net/Developers/DataToolsGuide#WWTSphereToaster">http://www.worldwidetelescope.org/docs/WorldWideTelescopeDataToolsGuide.html#WWTSphereToaster</a></p>
-                    
+
 
                 </div>
             </div>
@@ -820,8 +824,8 @@
                 <div class="panel-body">
 
                     <p>All-sky images are acquired by a variety of surveys and are usually created by combining together individual images into a full-sky mosaic.&nbsp; The process described below assumes that you are starting with an all-sky image and will walk through how to process these data so that they can be TOAST projected into a multi-resolution format that can be hosted in the Cloud.</p>
-                    
-                    
+
+
                     <ol>
                         <li>Download the WWT SDK, available here: On the Tools page: <a href="http://www.worldwidetelescope.org/Download/Tools">http://www.worldwidetelescope.org/Download/Tools</a> click on "SDK with data pipeline and original ADK tools" which should link to: <a href="http://wwtweb.blob.core.windows.net/drops/WWTSDK.msi">http://wwtweb.blob.core.windows.net/drops/WWTSDK.msi</a>.</li>
                         <li>Install the SDK. It will install a folder: C:\Program Files (x86)\Microsoft Research\WorldWide Telescope SDK.&nbsp; Go into that folder and then into "Sphere Toaster" and then execute the program: "SphereToaster.exe".</li>
@@ -847,18 +851,19 @@
                             <br />
                             <img src="https://cloud.githubusercontent.com/assets/9676722/12994469/93838470-d0e6-11e5-9bd4-c157c2e06c1d.jpg" class="img-responsive" />
                         </li>
-                        <li>When this is complete, the process will create the following
+                        <li>
+                            When this is complete, the process will create the following
                             <ul>
                                 <li>Folder full of tiles, g., &ldquo;Milky Way CO&rdquo;</li>
                                 <li>WTML file to use locally, &ldquo;Milky Way COLOCAL.wtml&rdquo;. This is only used for local testing and cannot be shared outside the machine you are working on.</li>
                                 <li>WTML file to use when the data are on a web server, &ldquo;Milky Way CO.wtml&rdquo;. Once the data are processed and moved to the specified server, sharing this file will provide access to it.</li>
                                 <li>Thumbnail; the name is a lower case version of the title with spaces replaced with underscores (e.g.,, &ldquo;milky_way_co.jpg&rdquo;)</li>
                             </ul>
-                    
+
                         <li>You can view the generated all-sky image by starting WorldWide Telescope and then double-clicking on the local version of the WTML file. In this example it is "Milky Way COLOCAL.wtml".&nbsp; Note, that this points to the specific location on disk where you specified the output, so if you move that folder you have to edit this local WTML file.</li>
                         <li>The other version of the WTML file without appended &ldquo;LOCAL&rdquo; (in this example, &ldquo;Milky Way CO.wtml&rdquo;) is setup to point to a data on a web server. In the WTML file, you should review the location of (Url="[Storage URL]/Milky Way CO/{1}/{3}/{3}_{2}.jpg", &ldquo;Storage URL&rdquo; was specified in the WTML tab).&nbsp; After the image pyramid is created, you can move it to the web server and then use the &ldquo;Milky Way CO.wtml&rdquo; to access the data over the web. If you move the data to a different web server, you need to change the server address in the Url tag in the WTML file.</li>
                     </ol>
-                    
+
                     <p>You can find additional information on how to use SphereToaster tool in the SDK (as well as the other tools) here:</p>
                     <p><a href="http://wwtstaging.azurewebsites.net/Developers/DataToolsGuide#WWTSphereToaster">http://www.worldwidetelescope.org/Developers/DataToolsGuide#WWTSphereToaster</a></p>
                 </div>
