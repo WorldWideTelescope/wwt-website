@@ -124,7 +124,7 @@ if (top === self) {
 
 	    function signIn() {
 	        var signedIn = $('#signinContainer').attr('loggedIn') === 'true';
-	        if (signedIn) {
+	        if (signedIn || location.host.indexOf('localhost') > -1) {
 	            return;
 	        }
 	        wwt.signingIn = true;

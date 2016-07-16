@@ -94,6 +94,9 @@ namespace WWTMVC5.Controllers
 
         protected async Task<ProfileDetails> TryAuthenticateFromAuthCode(string authCode)
         {
+            if (Request.Headers.Get("host").Contains("localhost")) {
+                return null;
+            }
             if (SessionWrapper.Get<ProfileDetails>("ProfileDetails") != null)
             {
                 return SessionWrapper.Get<ProfileDetails>("ProfileDetails");
@@ -193,6 +196,10 @@ namespace WWTMVC5.Controllers
 
         protected async Task<ProfileDetails> TryAuthenticateFromHttpContext()
         {
+            if (Request.Headers.Get("host").Contains("localhost"))
+            {
+                return null;
+            }
             if (SessionWrapper.Get<ProfileDetails>("ProfileDetails") != null)
             {
                 return SessionWrapper.Get<ProfileDetails>("ProfileDetails");

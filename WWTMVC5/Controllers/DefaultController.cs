@@ -94,6 +94,24 @@ namespace WWTMVC5.Controllers
         [Route("LiveId/AuthenticateFromCode/{code}")]
         public async Task<ActionResult> AuthenticateFromCode(string code)
         {
+            if (Request.Headers.Get("host").Contains("localhost"))
+            {
+                SessionWrapper.Clear();
+                var refreshTokenCookie = Response.Cookies["refresh_token"];
+                var accessTokenCookie = Response.Cookies["access_token"];
+                if (refreshTokenCookie != null && !string.IsNullOrEmpty(refreshTokenCookie.Value))
+                {
+                    refreshTokenCookie.Expires = DateTime.Now.AddDays(-1);
+                    Response.Cookies.Add(refreshTokenCookie);
+                }
+                if (accessTokenCookie != null && !string.IsNullOrEmpty(accessTokenCookie.Value))
+                {
+                    accessTokenCookie.Expires = DateTime.Now.AddDays(-1);
+                    Response.Cookies.Add(accessTokenCookie);
+                }
+
+                return Redirect("/home");
+            }
             var user = await TryAuthenticateFromAuthCode(code);
             _baseModel.User = user;
             string url = Uri.UnescapeDataString(Request.QueryString["returnUrl"]).ToLower();
@@ -183,6 +201,8 @@ namespace WWTMVC5.Controllers
         {
             model.IsOpenWwtKiosk = Request.Headers.Get("host").ToLower().Contains("openwwt.org");
 
+            
+
             if (model.IsOpenWwtKiosk && group.ToLower() != "openwwt")
             {
                 group = "openwwt";
@@ -210,7 +230,9 @@ namespace WWTMVC5.Controllers
                 }
             }
             if (group == string.Empty) {
-                return Redirect("webclient");
+                var homeCookie = Request.Cookies["homepage"];
+                var rootDir = homeCookie == null || string.IsNullOrEmpty(homeCookie.Value) ? "webclient" : homeCookie.Value;
+                return Redirect(rootDir);
             }
             return group.ToLower() == "home" ? View("~/Views/index.cshtml", model) : View("~/Views/" + group + "/" + page + ".cshtml", model);
         }
