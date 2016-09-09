@@ -10,6 +10,6 @@
     "angular-strap": "~2.1.6"
   },
   "resolutions": {
-    "angular": "1.4.5"
+    "angular": "1.5.7"
   }
 }
