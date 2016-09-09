@@ -52,6 +52,7 @@
 		$('a.input-group-addon').on('click', function() {
 			location.href = '#' + $('#txtImportImage').val();
 		});
+		
 	};
 
 	var modalState = {

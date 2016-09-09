@@ -4,8 +4,8 @@
 @section leftnav{
 	@Html.Partial("~/Views/Developers/LeftNav.cshtml")
 }
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-route.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-route.min.js"></script>
 <style>
 	.embed-form label {
 		font-weight: normal;
@@ -55,7 +55,7 @@
 					WTML File
 				</label>
 			</div>
-			<div class="indent" ng-show="control.imports == 'wtml'">
+			<div class="indent" ng-if="control.imports == 'wtml'">
 				<div class="row">
 					<div class="col-md-8">
 						<div class="form-group">
@@ -139,7 +139,7 @@
 	//$(document).on('load', function() {
 	var wwtng = angular.module('wwt', []);
 	wwtng.controller('embeddedcode', function ($scope) {
-		$scope.control = {
+	    $scope.control = {
 			tourUrl: '',
 			imports: 'nothing',
 			settings: {},

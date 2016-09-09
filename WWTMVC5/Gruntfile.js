@@ -1,3 +1,4 @@
+/// <binding ProjectOpened='watch' />
 /**!
 Gruntfile to perform wwt  less compilation and
 script  component updates (using bower install)

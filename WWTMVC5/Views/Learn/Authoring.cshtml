@@ -5,9 +5,132 @@
 	@Html.Partial("~/Views/Learn/LeftNav.cshtml")
 }
 <section>
-	<h1>Authoring</h1>
-	<p>Choose a topic below. (click to view)</p>
+    <h1>Authoring</h1>
+    <p>Choose a topic below. (click to view)</p>
     <div class="panel-group" id="accordion">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#webauthoring">
+                        Web-based Tour Authoring 
+                    </a>
+                </h4>
+            </div>
+            <div id="webauthoring" class="panel-collapse collapse ">
+                <div class="panel-body">
+                    
+                    
+                    <p>While you are exploring the universe you can create tours that capture your exploration and share them easily with your friends.&nbsp; This can all be done easily in the new and improved web client.&nbsp; The new web client is built upon WebGL which enables desktop-like performance and graphics functionality from within a web browser.&nbsp; Web-based tours use Slides, which are similar to those in PowerPoint. &nbsp;Tours authored in the Web Client can be played back on any device that support WebGL, including smart phones, tablets and PCs with any operating system.&nbsp; The tours can also be loaded into the Windows Desktop client used in planetariums or other complex visualization facilities.</p>
+                    <h4>Creating your first tour</h4>
+                    <ol>
+                        <li>To start open the web client on the WorldWide Telescope Site <a href="/webclient/">http://www.worldwidetelescope.org/webclient/</a>). Although you can play the tour you create on the web on small mobile devices you probably want a desktop or laptop with a mouse (with left, right buttons and scroll wheel) or modern track pad (with similar gestures).</li>
+                        <li>
+                            Throughout this tutorial, we will have you change initial views which require you to navigate the view.
+                            <ol>
+                                <li>The left-mouse click and drag &ndash; moves the camera&rsquo;s view of the sky.</li>
+                                <li>Control-left-mouse click and drag &ndash; rotates the view around the center point.</li>
+                                <li><strong>When editing at tour</strong>, the right-mouse click on an object brings up a context menu where you can select items like &ldquo;Properties&rdquo;. <strong>When not editing</strong>, the right click brings up a finder scope where you can find more information about an object.</li>
+                                <li>Scroll wheel zooms in-and-out.</li>
+                            </ol>
+                        </li>
+                        <li>
+                            Now, let&rsquo;s actually build the tour. Under the &ldquo;Guided Tours&rdquo; tab at the top, select &ldquo;Create New Tour&rdquo;.&nbsp; This will create a tab entitled &ldquo;New Tour&rdquo; to the right of &ldquo;Setting&rdquo; tab.<br />
+                            <img class="img-responsive img-border" src="@Model.ImgDir/learn/Create New Tour.jpg" alt="Create New Tour" />
+                        </li>
+
+                        <li>
+                            Let&rsquo;s now bring up a Tour Properties box. You must provide a Tour Title, but all other fields are optional. The Tour Title also changes the title of the tour in the menu bar at the top.&nbsp; Here you can see the tile in both palaces is &ldquo;My First Tour&rdquo;.<br />
+                            <img class="img-responsive img-border" src="@Model.ImgDir/learn/Tour Properties.jpg" alt="Tour Properties" />
+                        </li>
+                        <li>
+                            Let&rsquo;s setup the initial view for the Tour. For this tour we will be creating a tour of the Sky.&nbsp; It is the default but make sure that Sky is selected in the <strong>Look At</strong> menu in the lower left. Move the screen around until you have a view of the sky you like and then click &ldquo;Add New Slide&rdquo; button in the slide bar at the top.<br />
+                            <img class="img-responsive img-border" src="@Model.ImgDir/learn/Add New Slide.jpg" alt="Add New Slide" />
+                        </li>
+                        <li>
+                            This will create your fist slide and capture a thumbnail image for it from the current view. It will also setup a default duration for the slide, which is 10 seconds.&nbsp; You can adjust this by clicking in the time field and directly typing the time or using the little up and down arrows on either side of the time.<br />
+                            <img class="img-responsive img-border" src="@Model.ImgDir/learn/Slide Duration.jpg" alt="Slide Duration" />
+                        </li>
+                        <li>
+                            It is useful to show slide numbers to keep track of where you are. Do to that under &ldquo;Guided Tours&rdquo; tab select &ldquo;Show Slide Numbers.&nbsp; This will put a numeric slide number at the top of each slide.<br />
+                            <img class="img-responsive img-border" src="@Model.ImgDir/learn/Show Slide Numbers.jpg" alt="Show Slide Numbers" />
+                        </li>
+                        <li>
+                            You now have a slide with an initial view. You now should set an ending viewpoint for the slide.&nbsp; When you play the tour the viewpoint will smoothly change between the beginning and ending camera positions.&nbsp; To set the end slide position, change the view, using the mouse controls explained in item 2 above.&nbsp; Then right-click on the slide and select &ldquo;Set End Camera Position.&rdquo;&nbsp; Note, there is a yellow ear on the top left of the slide when you are looking at the start position and on the right hand part of the slide when looking at the end camera position.<br />
+                            <img class="img-responsive img-border" src="@Model.ImgDir/learn/Set End Camera Position.jpg" alt="Set End Camera Position" />
+                        </li>
+                        <li>Now you have a 10-second tour consisting of one slide. Go ahead and press the Play button to see how it works.</li>
+                        <li>When the tour is finished playing, click &ldquo;Add New Slide&rdquo; again. This will add a second slide using the end camera position as the starting position for the new slide.&nbsp; If a sequence of slides is intended to show contiguous motion, you should make sure that the end camera position of one slide is the same as the beginning camera position of the next one.</li>
+                        <li>You can continue these steps to create a sequence of slides.</li>
+                        <li>
+                            Between every two slides there are various transition options, shown below. Note that some transitions take time which is taken out of the start time for the second slide (Slide B).&nbsp; Note that the transitions can be thought of as being added on top of camera motion defined by the slides.&nbsp;<br />
+                            <img class="img-responsive img-border" src="@Model.ImgDir/learn/Slide Transitions.jpg" alt="Slide Transitions" />
+
+                            <ol>
+                                <li>The default arrow means that the slide moves from the end of one slide to the next without pause. This is used for contiguous motion.</li>
+                                <li>The A\B transition is a cross-fade between two viewpoints.</li>
+                                <li>The A|B transition is a hard cut between two viewpoints.</li>
+                                <li>The A\/B transition is one that fades through black between two viewpoints.</li>
+                                <li>The /B transition is a hard cut from A to black and then fades in B</li>
+                                <li>The A\ transition fades out to black and then does a hard cut to B.</li>
+                            </ol>
+                        </li>
+                        <li>
+                            At the upper right-hand side is an interface that allows you to add overlay elements to slides: Text, Shapes and Pictures.<br />
+                            <img class="img-responsive img-border" src="@Model.ImgDir/learn/Overlays.jpg" alt="Overlays" />
+
+                            <ol>
+                                <li>Clicking &ldquo;Text&rdquo; shows a text dialog box where you can enter text, select font and font-size, foreground color, background color, style (bold, italics, underline), text and background colors.</li>
+                                <li>You can add built-in shapes, such as circle, rectangle etc.</li>
+                                <li>Finally, you can add pictures. Clicking this opens a dialog box where you can browse for local images to add.</li>
+                                <li>
+                                    By default, all objects that are added stay in the same place on the screen throughout the slide. However, once added, you can right-click on an object and click &ldquo;Animate.&rdquo;&nbsp; This enables you to specify how the object should look at the beginning and also the end of the slide. Once an object is animated, you can right click on the slide and &ldquo;Show Start Camera Position&rdquo; and then change the location, size etc. of the object and the right-click and &ldquo;Set Start Camera Position.&rdquo;&nbsp; You can do this again for the end positions changing the end characteristics of animated objects.&nbsp; You can also turn off animation.&nbsp; It will default to whatever slide position is showing (Start or End). For instance, the example below shows the galaxy cluster Abell 521.&nbsp; A ring and text label have been added to identify the object, which is at the upper left at the Slide Start position.&nbsp; The camera was moved such that the object was in the lower right at the Slide End.&nbsp; The text and ring overlay objects were animated (right-click, select &ldquo;Animate&rdquo;).&nbsp; They were positioned over the object at the slide start and moved to where the object was at the slide end.&nbsp; Below are screenshots of the slide start and end.&nbsp; When you play the slide the object and text move smoothly from start to end.<br />
+                                    <img class="img-responsive pull-left img-border" src="@Model.ImgDir/learn/Animation Start.jpg" alt="Animation Start" style="max-width:48%;margin-right:3px;" /><img class="img-responsive pull-left img-border" src="@Model.ImgDir/learn/Animation End.jpg" alt="Animation End" style="max-width:48%" />
+                                    <div class="clear"></div>
+                                </li>
+                            </ol>
+                        </li>
+                        <li>If you have a long tour it is time-consuming to watch the entire tour to see the effect of a change near the end. You can right-click in any slide and select &ldquo;Preview Tour From Here&rdquo; and the tour will play from that location.</li>
+                        <li>
+                            You can add an audio soundtrack (Music and/or Voiceover). The files must be MP3. The volume of each audio file is controlled by a slider and are mixed together during playback. Each slide can have its own audio tracks.&nbsp; This is helpful when you change the timing of a slide you don&rsquo;t have to re-record the entire narration.&nbsp; Audio will end at the end of the slide unless slide is a master slide (see below)<br />
+                            <img class="img-responsive img-border" src="@Model.ImgDir/learn/Music.jpg" alt="Music" />
+                        </li>
+                        <li>
+                            There is special type of slide called a Master Slide. You make a slide a Master slide by right-clicking and selecting &ldquo;Master Slide.&rdquo; Overlay elements (Text, Shapes and Pictures) remain on all subsequent slides until another Maser Slide is encountered. This also affects audio.&nbsp; Audio on a master slide continues to play through subsequent slides.&nbsp; Per-slide audio can be added on slides after the master slide and both audio tracks will be mixed.&nbsp; Objects on a master slide (Text, Shape, Picture and Audio) remain until the tour ends or encounters another Master Slide.<br />
+                            <img class="img-responsive img-border" src="@Model.ImgDir/learn/Master Slide.jpg" alt="Master Slide" />
+                        </li>
+                        <li>You can reorder the slides by clicking a slide and moving it to a new location in the slide set. You can select multiple slides by holding down Control while clicking on slides; selected slides will be outlines in yellow.</li>
+                        <li>
+                            When you are want to save the tour, you can click the Save button in the upper right. Currently, saving the file saves a local .wtt file in your Downloads folder.<br />
+                            <img class="img-responsive img-border" src="@Model.ImgDir/learn/Save.jpg" alt="Save" />
+                        </li>
+                    </ol>
+                    
+                    <h4>Advanced Tour Authoring</h4>
+                    <p>Since the Windows Desktop Client was created first, there is extensive documentation on the use of that client.&nbsp; The web client has been created to be very similar to the Windows Desktop Client, much of that information is relevant for the web client.&nbsp; Also, the web client is under active development and is increasingly similar and closer in functionality to the Desktop Client. Below are links to documentation created for the Desktop Client that are relevant to the Web Client.</p>
+                    <ul>
+                        <li><a href="/Learn/Authoring#dealingwithaudio">Dealing with Audio</a></li>
+                        <li><a href="/Learn/Authoring#editingaudio">Editing Audio</a></li>
+                        <li><a href="/Learn/Authoring#videoabstracts">Making Video Abstracts with WWT</a></li>
+                        <li><a href="/Learn/Exploring#AstroImageData">Adding Astronomical Image Data</a> &ndash; Currently only Loading of Remotely-served AVM-tagged Images is supported (no local images or FITS files)</li>
+                        <li><a href="/Learn/Exploring#processingallskyimages">Processing All-Sky Images</a></li>
+                    </ul>
+                    <h4>How is Web-based Authoring Different from Authoring with the Windows Desktop Client?</h4>
+                    <p>For those familiar with the Windows Desktop Client, it is instructive to show how the Web Client differs from the Desktop one.</p>
+                    <ol>
+                        <li>No Timeline-based tours that have Keyframes.</li>
+                        <li>Audio Files must be MP3.</li>
+                        <li>3D models are not currently supported.</li>
+                        <li>Web Client cannot be used in a dome or cluster installation.</li>
+                        <li>Web Client cannot now render to video (but it may be coming in 2017).</li>
+                        <li>No VR capability.</li>
+                    </ol>
+                    <h4>Keeping in Touch about Web Client Development</h4>
+                    <p>The Web Client is under active development in 2016-17 and functionality (both feature parity with Windows Desktop client as well as new features) is being added.&nbsp; This new capability will show up when you use the Web Client in the future without you having to do anything. We will try to keep this documentation current but when you use the Web Client in the future you will notice subtle changes as features are added.&nbsp; We will announce big additions in news items. We also recommend that you connect with the WWT project with Twitter, Facebook and Email links using the WWT home page.<br />
+<img class="img-responsive img-border" src="@Model.ImgDir/learn/Connect with WWT.jpg" alt="Connect with WWT" />
+                        </p>
+                </div>
+            </div>
+        </div>
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4 class="panel-title">
@@ -786,205 +909,211 @@
             </div>
         </div>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#videoabstracts">
-                    Making Video Abstracts with WWT
-                </a>
-            </h4>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#videoabstracts">
+                        Making Video Abstracts with WWT
+                    </a>
+                </h4>
+            </div>
+            <div id="videoabstracts" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <h3>Pre-flight Question:</h3>
+                    <p>Can one or more images be used as a primary way to communicate the main science result?</p>
+                    <p>&nbsp;</p>
+                    <p>If the answer is no, it will be difficult to make a video abstract completely with WWT.&nbsp; It will take more time and WWT could be used for parts, but final abstract would have most of the visuals created outside of WWT and edited together.</p>
+                    <p>&nbsp;</p>
+                    <p>If yes, keep reading.</p>
+                    <h3>Overview</h3>
+                    <p>Total Time about 6 - 14 hr</p>
+                    <ol>
+                        <li>Prepare data: 0 - 4 hr</li>
+                        <li>Make story board: 0.5 hr</li>
+                        <li>Write draft script: 1 hr</li>
+                        <li>Record draft narration: 0.5 hr</li>
+                        <li>Create draft tour: 1 - 3 hr</li>
+                        <li>Create draft video [OPTIONAL]: 0.5 hr</li>
+                        <li>Sharing and feedback: 1.0 hr</li>
+                        <li>Record final narration: 0.5 -1.5 hr</li>
+                        <li>Refine tour: 1 - 2 hr</li>
+                        <li>Create final video [OPTIONAL]: 0.5 hr</li>
+                    </ol>
+                    <p>Appendix A: Limitation of the web-based tour player</p>
+                    <p>Appendix B: Using Communities</p>
+                    <p>&nbsp;</p>
+                    <h3>1 Prepare data</h3>
+                    <h4>Estimated Time: 0-4 hr</h4>
+                    <h4>Tools: FITS Liberator (<a href="http://www.spacetelescope.org/projects/fits_liberator/">http://www.spacetelescope.org/projects/fits_liberator/</a>), Adobe Photoshop, Adobe Illustrator</h4>
+                    <p>Some abstracts can be presented with the data in WWT, adding only text and image overlays.&nbsp; Other, more complex tours will want to represent the original new data presented in the paper.&nbsp; In these cases, significant time might have to be taken to import FITS or other data formats into WWT.</p>
+                    <p>
+                        Below is one representative workflow used to get the data into WWT necessary for a video abstract.&nbsp; This workflow assumes that the data that will be added to WWT in order to present the abstract are in the form of FITS files.&nbsp; More detailed instructions on loading images are available here: <a href="http://www.worldwidetelescope.org/Learn/Exploring#AstroImageData">http://www.worldwidetelescope.org/Learn/Exploring#AstroImageData</a>.&nbsp;
+                    </p>
+                    <ol>
+                        <li>
+                            Use FITS Liberator (<a href="http://www.spacetelescope.org/projects/fits_liberator/">http://www.spacetelescope.org/projects/fits_liberator/</a>) to make TIFF from original FITS file.
+                            <ol>
+                                <li>Had to select "No Flip" (which controls vertical flips)</li>
+                                <li>The image was still flipped horizontally, so&hellip;</li>
+                                <li>Loaded output TIFF into Photoshop and did a horizontal flip and resaved</li>
+                            </ol>
+                        </li>
+                        <li>Test by loading large TIFF into WWT</li>
+                        <li>When final TIFFs are made, post TIF on website e.g., <a href="http://jansky.phys.northwestern.edu/wwt/Sgr_A_West-Ka.tif">http://jansky.phys.northwestern.edu/wwt/Sgr_A_West-Ka.tif</a>. Note that since the TIF file was derived from a very large image, the output TIF file is also large &ndash; 450 MB.</li>
+                        <li>Import the image into WWT (i.e., process TIFF to create a multiresolution version of the data in TOAST format), <a href="http://worldwidetelescope.org/interact/embed">http://worldwidetelescope.org/interact/embed</a></li>
+                        <li>Return collection (WTML file) which has reference to new tiled images that can now be used in a tour.</li>
+                    </ol>
+                    <p>&nbsp;</p>
+                    <p>In the example, this was done for two images.&nbsp; One was the astronomical VLA image &ldquo;Sgr_A_West-Ka&rdquo; and the second was a line plot.&nbsp; For the plot, the coordinates were copied from an image at the same scale. The plot was exported from Illustrator as a PNG with transparency everywhere except where the lines of the plot were to be drawn.</p>
+                    <p>&nbsp;</p>
+                    <p>You can also add other types of data:</p>
+                    <ul>
+                        <li>Pointed images (i.e., FITS, see above): <a href="http://www.worldwidetelescope.org/Learn/Exploring#AstroImageData">http://www.worldwidetelescope.org/Learn/Exploring#AstroImageData</a></li>
+                        <li>Web Map Service (mostly for layer data on the surface of the Earth) <a href="http://www.worldwidetelescope.org/Learn/Exploring#AddingWMSData">http://www.worldwidetelescope.org/Learn/Exploring#AddingWMSData</a></li>
+                        <li>Catalogs and tabular information: <a href="http://www.worldwidetelescope.org/Learn/Exploring#UsingVOTables">http://www.worldwidetelescope.org/Learn/Exploring#UsingVOTables</a></li>
+                        <li>Panoramic images (e.g., panorama of observatory): <a href="http://www.worldwidetelescope.org/Learn/Exploring#processingpanoramas">http://www.worldwidetelescope.org/Learn/Exploring#processingpanoramas</a></li>
+                        <li>All-sky images (e.g., any all-sky map not already in WWT): <a href="http://www.worldwidetelescope.org/Learn/Exploring#processingallskyimages">http://www.worldwidetelescope.org/Learn/Exploring#processingallskyimages</a></li>
+                    </ul>
+                    <p>&nbsp;</p>
+                    <h3>2 Make story board</h3>
+                    <h4>Estimated Time: 0.5 hr</h4>
+                    <p>The story board is a sequence of draft visuals representing what will be on screen.&nbsp; It can be in the form of descriptions of what is to be shown or a list of figures (from WWT as well as those in the paper).&nbsp; In the case of the example Proplyd paper, it was a list of figures, selecting those from the paper that directly supporting the words of the written abstract (script of the tour).</p>
+                    <p>&nbsp;</p>
+                    <h3>3 Write draft script</h3>
+                    <h3>Estimated Time: 1 hr</h3>
+                    <p>
+                        Drafting a script in either bullet or written form is the first step in the process.&nbsp; The simplest way to do this is to read the written abstract with modest revisions for acronyms, jargon and detailed numerical data.&nbsp; In an example, reading the text of the abstract verbatim took about 2:15.&nbsp; It is probably easier to start by using a template for script and story board.&nbsp; A template is available here: <strong>Tour Template.docx</strong> and an example script is available here: <strong>Video Abstract - Proplyd - v1.1.docx.</strong>
+                    </p>
+                    <p>&nbsp;</p>
+                    <h3>4 Record draft narration</h3>
+                    <h4>Estimated Time: 0.5 hr</h4>
+                    <h4>Tools: Audacity (<a href="http://audacity.sourceforge.net">http://audacity.sourceforge.net</a>)</h4>
+                    <p>
+                        Record draft narration for timing.&nbsp; Don&rsquo;t worry about flubs or mistakes as long as they don&rsquo;t change the time appreciably.&nbsp; It is suggested to use Audacity (<a href="http://audacity.sourceforge.net">http://audacity.sourceforge.net</a>), which is a free tool available on Mac OS, Linux or Windows to record and edit audio.&nbsp; However, feel free to use any program that can create a high-quality MP3 file.&nbsp; There are on-line tutorials on how to create audio:
+                    </p>
+                    <ul>
+                        <li><a href="http://www.worldwidetelescope.org/Learn/Authoring#dealingwithaudio">http://www.worldwidetelescope.org/Learn/Authoring#dealingwithaudio</a></li>
+                        <li><a href="http://www.worldwidetelescope.org/Learn/Authoring#editingaudio">http://www.worldwidetelescope.org/Learn/Authoring#editingaudio</a></li>
+                    </ul>
+                    <p>&nbsp;</p>
+                    <h3>5 Create draft tour</h3>
+                    <h4>Estimated Time: 1-3 hr</h4>
+                    <h4>Tools: WorldWide Telescope (<a href="http://www.worldwidetelescope.org">http://www.worldwidetelescope.org</a>)</h4>
+                    <p>
+                        Create a draft tour showing visuals timed to draft narration.&nbsp; Work is on-going to enable creation of tours in the web client, but for now, you must use the Microsoft Windows Desktop client (<a href="http://www.worldwidetelescope.org">http://www.worldwidetelescope.org</a>) to author your tour.&nbsp; Note that there are two type of tours. The simplest is a &ldquo;slide-based tour&rdquo; which is composed of a sequence of slides, each with a begin and end position.&nbsp; The visualizations are interpolated between the beginning and end of each slide.&nbsp; Slide-based tours can be played back in the web tour player or the Windows Desktop client.&nbsp;
+                    </p>
+                    <p>There is a more advanced type of tour called a keyframe-based (or timeline).&nbsp; Keyframe-based tours provide fine-grained control over the tour with the ability to specify any parameter at any time (down to 1/30 of a second).&nbsp; Timeline based tours can provide more cinematic tours but cannot be played back in the web tour player and can only be shared on-line in the form of videos.&nbsp; Since much of the power of WWT-based video abstracts comes from comparing data supporting the journal article with other data, you should create your tour as a slide-based tour.&nbsp; After this is created for your paper, you can convert a slide-based tour into a timeline one in order to make a more polished video but the tour directly related to your paper would be the slide-based, web-playable version.</p>
+                    <p>
+                        There is more information on creating slide-based tours here: <a href="http://www.worldwidetelescope.org/Learn/Authoring#slidebasedtours">http://www.worldwidetelescope.org/Learn/Authoring#slidebasedtours</a>
+                    </p>
+                    <p>When you are finished with the tour, make sure to save your tours with good naming and versioning information to help organize your files as you refine in the later steps.</p>
+                    <p>&nbsp;</p>
+                    <h3>6 Create draft video (optional)</h3>
+                    <h4>Estimated Time: 0.5 hr</h4>
+                    <h4>Tools: Adobe Premiere, Apple QuickTime or FFmpeg (http://ffmpeg.org/)</h4>
+                    <p>&nbsp;</p>
+                    <p>You have to use the Windows Desktop client to render the tour to a sequence of image frames (PNG).&nbsp; Instructions on that are available here:</p>
+                    <ul>
+                        <li><a href="http://www.worldwidetelescope.org/Learn/Authoring#rendertovideo">http://www.worldwidetelescope.org/Learn/Authoring#rendertovideo</a></li>
+                    </ul>
+                    <p>Once you have the frames, you need to use a program to take that and the audio narration and encode them as a video.&nbsp; This is straightforward to do with a modern video encoder, such as Adobe Premiere.&nbsp; It is also possible to use the cheap Apple QuickTime program to do this.&nbsp; This process may take a while to complete, but user interaction time is modest.&nbsp; When complete, you will likely want to post your video YouTube or similar video sharing service to share with your colleagues for feedback.&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <h3>7 Sharing &amp; Feedback</h3>
+                    <h4>Estimated Time: 1.0 hr</h4>
+                    <p>Share your tour with colleagues (e.g., co-authors on paper) to get feedback.&nbsp; Sharing the tour can be done in one of a few ways:</p>
+                    <ol>
+                        <li>If they have a Windows PC with WWT installed, you can share the tour file itself, which should be small unless you have many high-resolution images included.</li>
+                        <li>You can also share the YouTube video link if you did the optional step of making a video from the tour (see Section 6 above). This of course can be viewed on most desktop and mobile devices.</li>
+                        <li>You can also create a community (<a href="http://worldwidetelescope.org/Learn/Authoring#usingcommunities">http://worldwidetelescope.org/Learn/Authoring#usingcommunities</a> &ndash; also included as Appendix B below).&nbsp; From here you can share a link directly or you can have your colleagues join the community.</li>
+                    </ol>
+                    <p>Organize the responses and make clear choices about what you will change to address them.&nbsp; This is likely to be in form that you assumed the viewer would know something and need to add descriptive text on screen or in narration for those that don&rsquo;t.&nbsp; This will likely require changes to the script as well as tour (timing and adding text labels, data etc.).</p>
+                    <h3>8 Record final narration</h3>
+                    <h4>Estimated Time: 0.5 &ndash; 1.5 hr</h4>
+                    <p>Refine script and record new audio based on feedback.&nbsp; You will use the same tools as you did to record the draft narration.&nbsp; However, you will want to get a high a quality recording as possible (good microphone, quiet room, a fresh voice).&nbsp; You may want to embellish the narration with a music or ambient sound bed.&nbsp; If you do add music, make sure that is low in volume, compared to the narration.</p>
+
+                    <p>&nbsp;</p>
+                    <h3>9 Refine tour</h3>
+                    <h4>Tools: WorldWide Telescope (<a href="http://www.worldwidetelescope.org">http://www.worldwidetelescope.org</a>)</h4>
+                    <h4>Estimated Time: 1 - 2 hr</h4>
+                    <p>Refine tour base on feedback.&nbsp; Use the final audio for final timings.&nbsp; Slide lengths may need be changed to accommodate changes in narration timing.&nbsp; Also</p>
+                    <p>&nbsp;</p>
+                    <h3>10 Create final video (optional)</h3>
+                    <h4>Tools: Audacity (<a href="http://audacity.sourceforge.net">http://audacity.sourceforge.net</a>)</h4>
+                    <h4>Estimated Time: 0.5 hr</h4>
+                    <p>Using the same work flow as you did to create the draft video, create the final one.&nbsp;&nbsp; The steps are essentially the same.</p>
+
+                    <p>&nbsp;</p>
+                    <hr />
+                    <p>&nbsp;</p>
+                    <h3>Appendix A: Limitation of the web-based tour player</h3>
+                    <p>
+                        Some tours can be played back in a web-based Tour player.&nbsp; You can put your tour on some website (e.g., <a href="http://jansky.phys.northwestern.edu/Video_Abtract-Proplyd.wtt">http://jansky.phys.northwestern.edu/Video_Abtract-Proplyd.wtt</a>) and then point embed the code to play the tour in the web-based Tour player here:
+                    </p>
+                    <ul>
+                        <li><a href="http://worldwidetelescope.org/interact/embed">http://worldwidetelescope.org/interact/embed</a></li>
+                    </ul>
+                    <p>You can try to play the tour by embedding this code into a web-site and viewing the page.</p>
+                    <p>Below is a non-exhaustive list of issues about Tours in the web player:</p>
+                    <ul>
+                        <li>Audio must be one audio file for complete tour (can&rsquo;t be separate ones per slide and can&rsquo;t be separate music and narration)</li>
+                        <li>Audio must be in MP3 format.</li>
+                        <li>Only sky mode is allowed.</li>
+                        <li>Can&rsquo;t use layered data.</li>
+                        <li>Can&rsquo;t use timeline.</li>
+                    </ul>
+
+                </div>
+            </div>
         </div>
-        <div id="videoabstracts" class="panel-collapse collapse">
-            <div class="panel-body">
-                <h3>Pre-flight Question:</h3>
-                <p>Can one or more images be used as a primary way to communicate the main science result?</p>
-                <p>&nbsp;</p>
-                <p>If the answer is no, it will be difficult to make a video abstract completely with WWT.&nbsp; It will take more time and WWT could be used for parts, but final abstract would have most of the visuals created outside of WWT and edited together.</p>
-                <p>&nbsp;</p>
-                <p>If yes, keep reading.</p>
-                <h3>Overview</h3>
-                <p>Total Time about 6 - 14 hr</p>
-                <ol>
-                    <li>Prepare data: 0 - 4 hr</li>
-                    <li>Make story board: 0.5 hr</li>
-                    <li>Write draft script: 1 hr</li>
-                    <li>Record draft narration: 0.5 hr</li>
-                    <li>Create draft tour: 1 - 3 hr</li>
-                    <li>Create draft video [OPTIONAL]: 0.5 hr</li>
-                    <li>Sharing and feedback: 1.0 hr</li>
-                    <li>Record final narration: 0.5 -1.5 hr</li>
-                    <li>Refine tour: 1 - 2 hr</li>
-                    <li>Create final video [OPTIONAL]: 0.5 hr</li>
-                </ol>
-                <p>Appendix A: Limitation of the web-based tour player</p>
-                <p>Appendix B: Using Communities</p>
-                <p>&nbsp;</p>
-                <h3>1 Prepare data</h3>
-                <h4>Estimated Time: 0-4 hr</h4>
-                <h4>Tools: FITS Liberator (<a href="http://www.spacetelescope.org/projects/fits_liberator/">http://www.spacetelescope.org/projects/fits_liberator/</a>), Adobe Photoshop, Adobe Illustrator</h4>
-                <p>Some abstracts can be presented with the data in WWT, adding only text and image overlays.&nbsp; Other, more complex tours will want to represent the original new data presented in the paper.&nbsp; In these cases, significant time might have to be taken to import FITS or other data formats into WWT.</p>
-                <p>Below is one representative workflow used to get the data into WWT necessary for a video abstract.&nbsp; This workflow assumes that the data that will be added to WWT in order to present the abstract are in the form of FITS files.&nbsp; More detailed instructions on loading images are available here: <a href="http://www.worldwidetelescope.org/Learn/Exploring#AstroImageData">http://www.worldwidetelescope.org/Learn/Exploring#AstroImageData</a>.&nbsp;
-                </p>
-                <ol>
-                    <li>
-                        Use FITS Liberator (<a href="http://www.spacetelescope.org/projects/fits_liberator/">http://www.spacetelescope.org/projects/fits_liberator/</a>) to make TIFF from original FITS file.
-                        <ol>
-                            <li>Had to select "No Flip" (which controls vertical flips)</li>
-                            <li>The image was still flipped horizontally, so&hellip;</li>
-                            <li>Loaded output TIFF into Photoshop and did a horizontal flip and resaved</li>
-                        </ol>
-                    </li>
-                    <li>Test by loading large TIFF into WWT</li>
-                    <li>When final TIFFs are made, post TIF on website e.g., <a href="http://jansky.phys.northwestern.edu/wwt/Sgr_A_West-Ka.tif">http://jansky.phys.northwestern.edu/wwt/Sgr_A_West-Ka.tif</a>. Note that since the TIF file was derived from a very large image, the output TIF file is also large &ndash; 450 MB.</li>
-                    <li>Import the image into WWT (i.e., process TIFF to create a multiresolution version of the data in TOAST format), <a href="http://worldwidetelescope.org/interact/embed">http://worldwidetelescope.org/interact/embed</a></li>
-                    <li>Return collection (WTML file) which has reference to new tiled images that can now be used in a tour.</li>
-                </ol>
-                <p>&nbsp;</p>
-                <p>In the example, this was done for two images.&nbsp; One was the astronomical VLA image &ldquo;Sgr_A_West-Ka&rdquo; and the second was a line plot.&nbsp; For the plot, the coordinates were copied from an image at the same scale. The plot was exported from Illustrator as a PNG with transparency everywhere except where the lines of the plot were to be drawn.</p>
-                <p>&nbsp;</p>
-                <p>You can also add other types of data:</p>
-                <ul>
-                    <li>Pointed images (i.e., FITS, see above): <a href="http://www.worldwidetelescope.org/Learn/Exploring#AstroImageData">http://www.worldwidetelescope.org/Learn/Exploring#AstroImageData</a></li>
-                    <li>Web Map Service (mostly for layer data on the surface of the Earth) <a href="http://www.worldwidetelescope.org/Learn/Exploring#AddingWMSData">http://www.worldwidetelescope.org/Learn/Exploring#AddingWMSData</a></li>
-                    <li>Catalogs and tabular information: <a href="http://www.worldwidetelescope.org/Learn/Exploring#UsingVOTables">http://www.worldwidetelescope.org/Learn/Exploring#UsingVOTables</a></li>
-                    <li>Panoramic images (e.g., panorama of observatory): <a href="http://www.worldwidetelescope.org/Learn/Exploring#processingpanoramas">http://www.worldwidetelescope.org/Learn/Exploring#processingpanoramas</a></li>
-                    <li>All-sky images (e.g., any all-sky map not already in WWT): <a href="http://www.worldwidetelescope.org/Learn/Exploring#processingallskyimages">http://www.worldwidetelescope.org/Learn/Exploring#processingallskyimages</a></li>
-                </ul>
-                <p>&nbsp;</p>
-                <h3>2 Make story board</h3>
-                <h4>Estimated Time: 0.5 hr</h4>
-                <p>The story board is a sequence of draft visuals representing what will be on screen.&nbsp; It can be in the form of descriptions of what is to be shown or a list of figures (from WWT as well as those in the paper).&nbsp; In the case of the example Proplyd paper, it was a list of figures, selecting those from the paper that directly supporting the words of the written abstract (script of the tour).</p>
-                <p>&nbsp;</p>
-                <h3>3 Write draft script</h3>
-                <h3>Estimated Time: 1 hr</h3>
-                <p>
-                    Drafting a script in either bullet or written form is the first step in the process.&nbsp; The simplest way to do this is to read the written abstract with modest revisions for acronyms, jargon and detailed numerical data.&nbsp; In an example, reading the text of the abstract verbatim took about 2:15.&nbsp; It is probably easier to start by using a template for script and story board.&nbsp; A template is available here: <strong>Tour Template.docx</strong> and an example script is available here: <strong>Video Abstract - Proplyd - v1.1.docx.</strong>
-                </p>
-                <p>&nbsp;</p>
-                <h3>4 Record draft narration</h3>
-                <h4>Estimated Time: 0.5 hr</h4>
-                <h4>Tools: Audacity (<a href="http://audacity.sourceforge.net">http://audacity.sourceforge.net</a>)</h4>
-                <p>Record draft narration for timing.&nbsp; Don&rsquo;t worry about flubs or mistakes as long as they don&rsquo;t change the time appreciably.&nbsp; It is suggested to use Audacity (<a href="http://audacity.sourceforge.net">http://audacity.sourceforge.net</a>), which is a free tool available on Mac OS, Linux or Windows to record and edit audio.&nbsp; However, feel free to use any program that can create a high-quality MP3 file.&nbsp; There are on-line tutorials on how to create audio:
-                </p>
-                <ul>
-                    <li><a href="http://www.worldwidetelescope.org/Learn/Authoring#dealingwithaudio">http://www.worldwidetelescope.org/Learn/Authoring#dealingwithaudio</a></li>
-                    <li><a href="http://www.worldwidetelescope.org/Learn/Authoring#editingaudio">http://www.worldwidetelescope.org/Learn/Authoring#editingaudio</a></li>
-                </ul>
-                <p>&nbsp;</p>
-                <h3>5 Create draft tour</h3>
-                <h4>Estimated Time: 1-3 hr</h4>
-                <h4>Tools: WorldWide Telescope (<a href="http://www.worldwidetelescope.org">http://www.worldwidetelescope.org</a>)</h4>
-                <p>Create a draft tour showing visuals timed to draft narration.&nbsp; Work is on-going to enable creation of tours in the web client, but for now, you must use the Microsoft Windows Desktop client (<a href="http://www.worldwidetelescope.org">http://www.worldwidetelescope.org</a>) to author your tour.&nbsp; Note that there are two type of tours. The simplest is a &ldquo;slide-based tour&rdquo; which is composed of a sequence of slides, each with a begin and end position.&nbsp; The visualizations are interpolated between the beginning and end of each slide.&nbsp; Slide-based tours can be played back in the web tour player or the Windows Desktop client.&nbsp;
-                </p>
-                <p>There is a more advanced type of tour called a keyframe-based (or timeline).&nbsp; Keyframe-based tours provide fine-grained control over the tour with the ability to specify any parameter at any time (down to 1/30 of a second).&nbsp; Timeline based tours can provide more cinematic tours but cannot be played back in the web tour player and can only be shared on-line in the form of videos.&nbsp; Since much of the power of WWT-based video abstracts comes from comparing data supporting the journal article with other data, you should create your tour as a slide-based tour.&nbsp; After this is created for your paper, you can convert a slide-based tour into a timeline one in order to make a more polished video but the tour directly related to your paper would be the slide-based, web-playable version.</p>
-                <p>There is more information on creating slide-based tours here: <a href="http://www.worldwidetelescope.org/Learn/Authoring#slidebasedtours">http://www.worldwidetelescope.org/Learn/Authoring#slidebasedtours</a>
-                </p>
-                <p>When you are finished with the tour, make sure to save your tours with good naming and versioning information to help organize your files as you refine in the later steps.</p>
-                <p>&nbsp;</p>
-                <h3>6 Create draft video (optional)</h3>
-                <h4>Estimated Time: 0.5 hr</h4>
-                <h4>Tools: Adobe Premiere, Apple QuickTime or FFmpeg (http://ffmpeg.org/)</h4>
-                <p>&nbsp;</p>
-                <p>You have to use the Windows Desktop client to render the tour to a sequence of image frames (PNG).&nbsp; Instructions on that are available here:</p>
-                <ul>
-                    <li><a href="http://www.worldwidetelescope.org/Learn/Authoring#rendertovideo">http://www.worldwidetelescope.org/Learn/Authoring#rendertovideo</a></li>
-                </ul>
-                <p>Once you have the frames, you need to use a program to take that and the audio narration and encode them as a video.&nbsp; This is straightforward to do with a modern video encoder, such as Adobe Premiere.&nbsp; It is also possible to use the cheap Apple QuickTime program to do this.&nbsp; This process may take a while to complete, but user interaction time is modest.&nbsp; When complete, you will likely want to post your video YouTube or similar video sharing service to share with your colleagues for feedback.&nbsp;</p>
-                <p>&nbsp;</p>
-                <h3>7 Sharing &amp; Feedback</h3>
-                <h4>Estimated Time: 1.0 hr</h4>
-                <p>Share your tour with colleagues (e.g., co-authors on paper) to get feedback.&nbsp; Sharing the tour can be done in one of a few ways:</p>
-                <ol>
-                    <li>If they have a Windows PC with WWT installed, you can share the tour file itself, which should be small unless you have many high-resolution images included.</li>
-                    <li>You can also share the YouTube video link if you did the optional step of making a video from the tour (see Section 6 above). This of course can be viewed on most desktop and mobile devices.</li>
-                    <li>You can also create a community (<a href="http://worldwidetelescope.org/Learn/Authoring#usingcommunities">http://worldwidetelescope.org/Learn/Authoring#usingcommunities</a> &ndash; also included as Appendix B below).&nbsp; From here you can share a link directly or you can have your colleagues join the community.</li>
-                </ol>
-                <p>Organize the responses and make clear choices about what you will change to address them.&nbsp; This is likely to be in form that you assumed the viewer would know something and need to add descriptive text on screen or in narration for those that don&rsquo;t.&nbsp; This will likely require changes to the script as well as tour (timing and adding text labels, data etc.).</p>
-                <h3>8 Record final narration</h3>
-                <h4>Estimated Time: 0.5 &ndash; 1.5 hr</h4>
-                <p>Refine script and record new audio based on feedback.&nbsp; You will use the same tools as you did to record the draft narration.&nbsp; However, you will want to get a high a quality recording as possible (good microphone, quiet room, a fresh voice).&nbsp; You may want to embellish the narration with a music or ambient sound bed.&nbsp; If you do add music, make sure that is low in volume, compared to the narration.</p>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#usingcommunities">
+                        Using Communities
+                    </a>
+                </h4>
+            </div>
+            <div id="usingcommunities" class="panel-collapse collapse">
+                <div class="panel-body">
 
-                <p>&nbsp;</p>
-                <h3>9 Refine tour</h3>
-                <h4>Tools: WorldWide Telescope (<a href="http://www.worldwidetelescope.org">http://www.worldwidetelescope.org</a>)</h4>
-                <h4>Estimated Time: 1 - 2 hr</h4>
-                <p>Refine tour base on feedback.&nbsp; Use the final audio for final timings.&nbsp; Slide lengths may need be changed to accommodate changes in narration timing.&nbsp; Also</p>
-                <p>&nbsp;</p>
-                <h3>10 Create final video (optional)</h3>
-                <h4>Tools: Audacity (<a href="http://audacity.sourceforge.net">http://audacity.sourceforge.net</a>)</h4>
-                <h4>Estimated Time: 0.5 hr</h4>
-                <p>Using the same work flow as you did to create the draft video, create the final one.&nbsp;&nbsp; The steps are essentially the same.</p>
+                    <p>Content in WorldWide Telescope can be organized, curated and shared using the Communities feature.&nbsp; Communities replaces the Layerscape functionality.&nbsp; To get started with Communities, you first have to create an account.&nbsp;</p>
+                    <ol>
+                        <li>Open <a href="http://www.worldwidetelescope.org">http://www.worldwidetelescope.org</a></li>
+                        <li>
+                            In the upper right click on &ldquo;Sign-In&rdquo;.
+                            <br /><img class="img-responsive img-border" src="@Model.ContentDir/learn/wwt_signin.jpg" alt="Sign into WWT" />
+                        </li>
+                        <li>
+                            If this is the first time you logged in you will see a dialog box where you can create a new or login to an existing account.
+                            <br /><img class="img-responsive" src="@Model.ContentDir/learn/signin_dialog.jpg" alt="Sign in dialog" />
+                        </li>
+                        <li>Once you have logged into your account, you will see &ldquo;My Profile&rdquo; in the left navigation. Clicking on this will take you to a page showing your profile and the communities and content you have uploaded to WorldWide Telescope.</li>
+                        <li>
+                            You will a tab for uploaded items, such as tours. Another tab shows all of the communities you have created.&nbsp; The last tab shows requests submitted to you as the owner of your communities.&nbsp; Here you can approve requests to join a community.&nbsp;
+                            <br /><img class="img-responsive img-border" src="@Model.ContentDir/learn/myprofile.jpg" alt="Community Profile Page" />
+                        </li>
+                        <li>
+                            You can create new communities, sub-communities and upload files to communities from the &ldquo;My Profile&rdquo;. When you upload a tour, the Tour Properties are used to populate the descriptive fields on the website.&nbsp; You can provide a thumbnail (wide aspect ratio of 2:1) as well.
+                            <br /><br />Similarly, you can access communities from within the Desktop Client.
+                        </li>
 
-                <p>&nbsp;</p>
-                <hr/>
-                <p>&nbsp;</p>
-                <h3>Appendix A: Limitation of the web-based tour player</h3>
-                <p>Some tours can be played back in a web-based Tour player.&nbsp; You can put your tour on some website (e.g., <a href="http://jansky.phys.northwestern.edu/Video_Abtract-Proplyd.wtt">http://jansky.phys.northwestern.edu/Video_Abtract-Proplyd.wtt</a>) and then point embed the code to play the tour in the web-based Tour player here:
-                </p>
-                <ul>
-                    <li><a href="http://worldwidetelescope.org/interact/embed">http://worldwidetelescope.org/interact/embed</a></li>
-                </ul>
-                <p>You can try to play the tour by embedding this code into a web-site and viewing the page.</p>
-                <p>Below is a non-exhaustive list of issues about Tours in the web player:</p>
-                <ul>
-                    <li>Audio must be one audio file for complete tour (can&rsquo;t be separate ones per slide and can&rsquo;t be separate music and narration)</li>
-                    <li>Audio must be in MP3 format.</li>
-                    <li>Only sky mode is allowed.</li>
-                    <li>Can&rsquo;t use layered data.</li>
-                    <li>Can&rsquo;t use timeline.</li>
-                </ul>
-                
+                        <li>
+                            Once you have signed in (upper right) you can click on the Community tab to show the same community structure as the web site.
+                            <br /><img class="img-responsive img-border" src="@Model.ContentDir/learn/communitytab.jpg" alt="Community Feature in WWT" />
+                        </li>
+                        <li>
+                            Clicking on &ldquo;My Communities&rdquo; and then &ldquo;My WWT Folder&rdquo; and then you can drill down to see your tours organized by community.
+                            <br /><img class="img-responsive img-border" src="@Model.ContentDir/learn/mywwtfolder.jpg" alt="My WWT Folder" />
+                        </li>
+                        <li>
+                            You can also Browse all tours you have access to, which includes your communities (the ones you own and the ones you are a member of) as well as the stock tours available in WWT.
+                            <br /><img class="img-responsive img-border" src="@Model.ContentDir/learn/browsealltours.jpg" alt="Browse All Tours" />
+                        </li>
+                        <li>Note that all administration of your community content is done through the Community section of the <a href="http://www.worldwidetelescope.org">worldwidetelescope.org</a> website.</li>
+                    </ol>
+                </div>
             </div>
         </div>
     </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#usingcommunities">
-                    Using Communities
-                </a>
-            </h4>
-        </div>
-        <div id="usingcommunities" class="panel-collapse collapse">
-            <div class="panel-body">
-                    
-                <p>Content in WorldWide Telescope can be organized, curated and shared using the Communities feature.&nbsp; Communities replaces the Layerscape functionality.&nbsp; To get started with Communities, you first have to create an account.&nbsp;</p>
-                <ol>
-                    <li>Open <a href="http://www.worldwidetelescope.org">http://www.worldwidetelescope.org</a></li>
-                    <li>
-                        In the upper right click on &ldquo;Sign-In&rdquo;.
-                        <br /><img class="img-responsive img-border" src="@Model.ContentDir/learn/wwt_signin.jpg" alt="Sign into WWT" />
-                    </li>
-                    <li>
-                        If this is the first time you logged in you will see a dialog box where you can create a new or login to an existing account.
-                        <br /><img class="img-responsive" src="@Model.ContentDir/learn/signin_dialog.jpg" alt="Sign in dialog" />
-                    </li>
-                    <li>Once you have logged into your account, you will see &ldquo;My Profile&rdquo; in the left navigation. Clicking on this will take you to a page showing your profile and the communities and content you have uploaded to WorldWide Telescope.</li>
-                    <li>
-                        You will a tab for uploaded items, such as tours. Another tab shows all of the communities you have created.&nbsp; The last tab shows requests submitted to you as the owner of your communities.&nbsp; Here you can approve requests to join a community.&nbsp;
-                        <br /><img class="img-responsive img-border" src="@Model.ContentDir/learn/myprofile.jpg" alt="Community Profile Page" />
-                    </li>
-                    <li>You can create new communities, sub-communities and upload files to communities from the &ldquo;My Profile&rdquo;. When you upload a tour, the Tour Properties are used to populate the descriptive fields on the website.&nbsp; You can provide a thumbnail (wide aspect ratio of 2:1) as well.
-                        <br /><br />Similarly, you can access communities from within the Desktop Client.
-                    </li>
-                
-                    <li>
-                        Once you have signed in (upper right) you can click on the Community tab to show the same community structure as the web site.
-                        <br /><img class="img-responsive img-border" src="@Model.ContentDir/learn/communitytab.jpg" alt="Community Feature in WWT" />
-                    </li>
-                    <li>
-                        Clicking on &ldquo;My Communities&rdquo; and then &ldquo;My WWT Folder&rdquo; and then you can drill down to see your tours organized by community.
-                        <br /><img class="img-responsive img-border" src="@Model.ContentDir/learn/mywwtfolder.jpg" alt="My WWT Folder" />
-                    </li>
-                    <li>
-                        You can also Browse all tours you have access to, which includes your communities (the ones you own and the ones you are a member of) as well as the stock tours available in WWT.
-                        <br /><img class="img-responsive img-border" src="@Model.ContentDir/learn/browsealltours.jpg" alt="Browse All Tours" />
-                    </li>
-                    <li>Note that all administration of your community content is done through the Community section of the <a href="http://www.worldwidetelescope.org">worldwidetelescope.org</a> website.</li>
-                </ol>
-            </div>
-        </div>
-    </div>
-</div>
-<p>&nbsp;</p>
+    <p>&nbsp;</p>
 </section>

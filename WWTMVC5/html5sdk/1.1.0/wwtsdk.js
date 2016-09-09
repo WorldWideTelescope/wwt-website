@@ -1837,6 +1837,18 @@ window.wwtlib = function(){
   };
 
 
+  // wwtlib.TransitionType
+
+  var TransitionType = {
+    slew: 0, 
+    crossFade: 1, 
+    crossCut: 2, 
+    fadeOutIn: 3, 
+    fadeIn: 4, 
+    fadeOut: 5
+  };
+
+
   // wwtlib.Keys
 
   var Keys = {
@@ -2041,6 +2053,13 @@ window.wwtlib = function(){
 
   var DialogResult = {
     OK: 1
+  };
+
+
+  // wwtlib.Formatting
+
+  var Formatting = {
+    indented: 1
   };
 
 
@@ -8082,7 +8101,7 @@ window.wwtlib = function(){
         var $enum2 = ss.enumerate(this._pointBuffers);
         while ($enum2.moveNext()) {
           var pointBuffer = $enum2.current;
-          TimeSeriesPointSpriteShader.use(renderContext, pointBuffer.vertexBuffer, this._starTexture.texture2d, Color.fromArgb(255, 255, 255, 255), this.depthBuffered, this.jNow, this.decay, renderContext.cameraPosition, this.scale);
+          TimeSeriesPointSpriteShader.use(renderContext, pointBuffer.vertexBuffer, this._starTexture.texture2d, Color.fromArgb(255, 255, 255, 255), this.depthBuffered, this.jNow, this.decay, renderContext.cameraPosition, (this.scale * (renderContext.height / 960)));
           renderContext.gl.drawArrays(0, 0, pointBuffer.count);
         }
       }
@@ -8289,7 +8308,7 @@ window.wwtlib = function(){
   TimeSeriesPointSpriteShader.init = function(renderContext) {
     var gl = renderContext.gl;
     var fragShaderText = '    precision mediump float;                                                            \n' + '    uniform vec4 lineColor;                                                             \n' + '    varying lowp vec4 vColor;                                                           \n' + '    uniform sampler2D uSampler;                                                         \n' + '    void main(void)                                                                     \n' + '    {                                                                                   \n' + '        vec4 texColor;                                                                  \n' + '        texColor = texture2D(uSampler, gl_PointCoord);                                  \n' + '                                                                                        \n' + '                                                                                        \n' + '        gl_FragColor = lineColor * vColor * texColor;                                   \n' + '    }                                                                                   \n';
-    var vertexShaderText = '    attribute vec3 aVertexPosition;                                                     \n' + '    attribute vec4 aVertexColor;                                                        \n' + '    attribute vec2 aTime;                                                               \n' + '    attribute float aPointSize;                                                         \n' + '    uniform mat4 uMVMatrix;                                                             \n' + '    uniform mat4 uPMatrix;                                                              \n' + '    uniform float jNow;                                                                 \n' + '    uniform vec3 cameraPosition;                                                        \n' + '    uniform float decay;                                                                \n' + '    uniform float scale;                                                                \n' + '                                                                                        \n' + '    varying lowp vec4 vColor;                                                           \n' + '                                                                                        \n' + '    void main(void)                                                                     \n' + '    {                                                                                   \n' + '        float dist = distance(aVertexPosition, cameraPosition);                                \n' + '        gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);                \n' + '        float dAlpha = 1.0;                                                             \n' + '        if ( decay > 0.0)                                                               \n' + '        {                                                                               \n' + '             dAlpha = 1.0 - ((jNow - aTime.y) / decay);                                 \n ' + '             if (dAlpha > 1.0 )                                                         \n' + '             {                                                                          \n' + '                  dAlpha = 1.0;                                                         \n' + '             }                                                                          \n' + '        }                                                                               \n' + '        if (jNow < aTime.x && decay > 0.0)                                              \n' + '        {                                                                               \n' + '            vColor = vec4(0.0, 0.0, 0.0, 0.0);                                          \n' + '        }                                                                               \n' + '        else                                                                            \n' + '        {                                                                               \n' + '           vColor = vec4(1,1,1,1);       \n' + '        }                                                                               \n' + '        gl_PointSize = max(1.0, (scale * ( aPointSize ) / dist));                     \n' + '    }                                                                                   \n' + '                                                                                        \n';
+    var vertexShaderText = '    attribute vec3 aVertexPosition;                                                     \n' + '    attribute vec4 aVertexColor;                                                        \n' + '    attribute vec2 aTime;                                                               \n' + '    attribute float aPointSize;                                                         \n' + '    uniform mat4 uMVMatrix;                                                             \n' + '    uniform mat4 uPMatrix;                                                              \n' + '    uniform float jNow;                                                                 \n' + '    uniform vec3 cameraPosition;                                                        \n' + '    uniform float decay;                                                                \n' + '    uniform float scale;                                                                \n' + '                                                                                        \n' + '    varying lowp vec4 vColor;                                                           \n' + '                                                                                        \n' + '    void main(void)                                                                     \n' + '    {                                                                                   \n' + '        float dist = distance(aVertexPosition, cameraPosition);                                \n' + '        gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);                \n' + '        float dAlpha = 1.0;                                                             \n' + '        if ( decay > 0.0)                                                               \n' + '        {                                                                               \n' + '             dAlpha = 1.0 - ((jNow - aTime.y) / decay);                                 \n ' + '             if (dAlpha > 1.0 )                                                         \n' + '             {                                                                          \n' + '                  dAlpha = 1.0;                                                         \n' + '             }                                                                          \n' + '        }                                                                               \n' + '        if (jNow < aTime.x && decay > 0.0)                                              \n' + '        {                                                                               \n' + '            vColor = vec4(0.0, 0.0, 0.0, 0.0);                                          \n' + '        }                                                                               \n' + '        else                                                                            \n' + '        {                                                                               \n' + '           vColor = vec4(aVertexColor.r, aVertexColor.g, aVertexColor.b, dAlpha);       \n' + '        }                                                                               \n' + '        gl_PointSize = max(2.0, (scale * ( aPointSize ) / dist));                     \n' + '    }                                                                                   \n' + '                                                                                        \n';
     TimeSeriesPointSpriteShader._frag = gl.createShader(35632);
     gl.shaderSource(TimeSeriesPointSpriteShader._frag, fragShaderText);
     gl.compileShader(TimeSeriesPointSpriteShader._frag);
@@ -8373,7 +8392,7 @@ window.wwtlib = function(){
   }
   TileShader.init = function(renderContext) {
     var gl = renderContext.gl;
-    var fragShaderText = ' precision mediump float;                                                              \n' + '                                                                                       \n' + '   varying vec2 vTextureCoord;                                                         \n' + '                                                                                       \n' + '   uniform sampler2D uSampler;                                                         \n' + '                                                                                       \n' + '   void main(void) {                                                                   \n' + '   gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));         \n' + '   }                                                                                   \n';
+    var fragShaderText = ' precision mediump float;                                                              \n' + '                                                                                       \n' + '   varying vec2 vTextureCoord;                                                         \n' + '                                                                                       \n' + '   uniform sampler2D uSampler;                                                         \n' + '   uniform float opacity;                                                              \n' + '                                                                                       \n' + '   void main(void) {                                                                   \n' + '   vec4 col = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));             \n' + '   gl_FragColor = col * opacity;                                                       \n' + '   }                                                                                   \n';
     var vertexShaderText = '     attribute vec3 aVertexPosition;                                              \n' + '     attribute vec2 aTextureCoord;                                                \n' + '                                                                                  \n' + '     uniform mat4 uMVMatrix;                                                      \n' + '     uniform mat4 uPMatrix;                                                       \n' + '                                                                                  \n' + '     varying vec2 vTextureCoord;                                                  \n' + '                                                                                  \n' + '                                                                                  \n' + '     void main(void) {                                                            \n' + '         gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);         \n' + '         vTextureCoord = aTextureCoord;                                           \n' + '     }                                                                            \n' + '                                                                                  \n';
     TileShader._frag = gl.createShader(35632);
     gl.shaderSource(TileShader._frag, fragShaderText);
@@ -8394,13 +8413,14 @@ window.wwtlib = function(){
     TileShader.projMatLoc = gl.getUniformLocation(TileShader._prog, 'uPMatrix');
     TileShader.mvMatLoc = gl.getUniformLocation(TileShader._prog, 'uMVMatrix');
     TileShader.sampLoc = gl.getUniformLocation(TileShader._prog, 'uSampler');
+    TileShader.opacityLoc = gl.getUniformLocation(TileShader._prog, 'opacity');
     Tile.uvMultiple = 1;
     Tile.demEnabled = true;
     gl.enable(3042);
     gl.blendFunc(770, 771);
     TileShader.initialized = true;
   };
-  TileShader.use = function(renderContext, vertex, index, texture) {
+  TileShader.use = function(renderContext, vertex, index, texture, opacity) {
     var gl = renderContext.gl;
     if (gl != null) {
       if (!TileShader.initialized) {
@@ -8408,6 +8428,7 @@ window.wwtlib = function(){
       }
       gl.useProgram(TileShader._prog);
       var mvMat = Matrix3d.multiplyMatrix(renderContext.get_world(), renderContext.get_view());
+      gl.uniform1f(TileShader.opacityLoc, opacity);
       gl.uniformMatrix4fv(TileShader.mvMatLoc, false, mvMat.floatArray());
       gl.uniformMatrix4fv(TileShader.projMatLoc, false, renderContext.get_projection().floatArray());
       gl.uniform1i(TileShader.sampLoc, 0);
@@ -8478,12 +8499,7 @@ window.wwtlib = function(){
       gl.uniformMatrix4fv(SpriteShader.mvMatLoc, false, mvMat.floatArray());
       gl.uniformMatrix4fv(SpriteShader.projMatLoc, false, renderContext.get_projection().floatArray());
       gl.uniform1i(SpriteShader.sampLoc, 0);
-      if (renderContext.space) {
-        gl.disable(2929);
-      }
-      else {
-        gl.enable(2929);
-      }
+      gl.disable(2929);
       gl.enableVertexAttribArray(SpriteShader.vertLoc);
       gl.enableVertexAttribArray(SpriteShader.textureLoc);
       gl.enableVertexAttribArray(SpriteShader.colorLoc);
@@ -8528,7 +8544,7 @@ window.wwtlib = function(){
     ShapeSpriteShader.colorLoc = gl.getAttribLocation(ShapeSpriteShader._prog, 'aColor');
     ShapeSpriteShader.projMatLoc = gl.getUniformLocation(ShapeSpriteShader._prog, 'uPMatrix');
     ShapeSpriteShader.mvMatLoc = gl.getUniformLocation(ShapeSpriteShader._prog, 'uMVMatrix');
-    gl.enable(3042);
+    gl.disable(2929);
     gl.blendFunc(770, 771);
     ShapeSpriteShader.initialized = true;
   };
@@ -8543,12 +8559,7 @@ window.wwtlib = function(){
       gl.uniformMatrix4fv(ShapeSpriteShader.mvMatLoc, false, mvMat.floatArray());
       gl.uniformMatrix4fv(ShapeSpriteShader.projMatLoc, false, renderContext.get_projection().floatArray());
       gl.uniform1i(ShapeSpriteShader.sampLoc, 0);
-      if (renderContext.space) {
-        gl.disable(2929);
-      }
-      else {
-        gl.enable(2929);
-      }
+      gl.disable(2929);
       gl.enableVertexAttribArray(ShapeSpriteShader.vertLoc);
       gl.enableVertexAttribArray(ShapeSpriteShader.textureLoc);
       gl.enableVertexAttribArray(ShapeSpriteShader.colorLoc);
@@ -9637,7 +9648,26 @@ window.wwtlib = function(){
       }
       return value;
     },
+    getTypeName: function() {
+      return 'TerraViewer.Layer';
+    },
     saveToXml: function(xmlWriter) {
+      xmlWriter._writeStartElement('Layer');
+      xmlWriter._writeAttributeString('Id', this.id.toString());
+      xmlWriter._writeAttributeString('Type', this.getTypeName());
+      xmlWriter._writeAttributeString('Name', this.get_name());
+      xmlWriter._writeAttributeString('ReferenceFrame', this.referenceFrame);
+      xmlWriter._writeAttributeString('Color', this.color.save());
+      xmlWriter._writeAttributeString('Opacity', this.opacity.toString());
+      xmlWriter._writeAttributeString('StartTime', Util.xmlDate(this.get_startTime()));
+      xmlWriter._writeAttributeString('EndTime', Util.xmlDate(this.get_endTime()));
+      xmlWriter._writeAttributeString('FadeSpan', this.get_fadeSpan().toString());
+      xmlWriter._writeAttributeString('FadeType', this.get_fadeType().toString());
+      this.writeLayerProperties(xmlWriter);
+      xmlWriter._writeEndElement();
+    },
+    writeLayerProperties: function(xmlWriter) {
+      return;
     },
     initializeFromXml: function(node) {
     },
@@ -9676,8 +9706,19 @@ window.wwtlib = function(){
       }
       this.initializeFromXml(node);
     },
-    loadData: function(path) {
+    loadData: function(blob) {
       return;
+    },
+    addFilesToCabinet: function(fc) {
+      return;
+    },
+    getStringFromGzipBlob: function(blob, dataReady) {
+      var reader = new FileReader();
+      reader.onloadend = function(e) {
+        var result = pako.inflate(e.target.result, { to: 'string' });
+        dataReady(result);
+      };
+      reader.readAsArrayBuffer(blob);
     }
   };
 
@@ -10582,6 +10623,7 @@ window.wwtlib = function(){
   // wwtlib.ReferenceFrame
 
   function ReferenceFrame() {
+    this._systemGenerated = false;
     this.meanAnomoly = 0;
     this.orbitalYears = 0;
     this.reference = 18;
@@ -10676,86 +10718,50 @@ window.wwtlib = function(){
     },
     importTrajectory: function(filename) {
     },
+    saveToXml: function(xmlWriter) {
+      xmlWriter._writeStartElement('ReferenceFrame');
+      xmlWriter._writeAttributeString('Name', this.name);
+      xmlWriter._writeAttributeString('Parent', this.parent);
+      xmlWriter._writeAttributeString('ReferenceFrameType', Enums.toXml('ReferenceFrameTypes', this.referenceFrameType));
+      xmlWriter._writeAttributeString('Reference', Enums.toXml('ReferenceFrames', this.reference));
+      xmlWriter._writeAttributeString('ParentsRoationalBase', this.parentsRoationalBase.toString());
+      xmlWriter._writeAttributeString('MeanRadius', this.meanRadius.toString());
+      xmlWriter._writeAttributeString('Oblateness', this.oblateness.toString());
+      xmlWriter._writeAttributeString('Heading', this.heading.toString());
+      xmlWriter._writeAttributeString('Pitch', this.pitch.toString());
+      xmlWriter._writeAttributeString('Roll', this.roll.toString());
+      xmlWriter._writeAttributeString('Scale', this.scale.toString());
+      xmlWriter._writeAttributeString('Tilt', this.tilt.toString());
+      xmlWriter._writeAttributeString('Translation', this.translation.toString());
+      if (!this.referenceFrameType) {
+        xmlWriter._writeAttributeString('Lat', this.lat.toString());
+        xmlWriter._writeAttributeString('Lng', this.lng.toString());
+        xmlWriter._writeAttributeString('Altitude', this.altitude.toString());
+      }
+      xmlWriter._writeAttributeString('RotationalPeriod', this.rotationalPeriod.toString());
+      xmlWriter._writeAttributeString('ZeroRotationDate', this.zeroRotationDate.toString());
+      xmlWriter._writeAttributeString('RepresentativeColor', this.get_representativeColor().save());
+      xmlWriter._writeAttributeString('ShowAsPoint', this.showAsPoint.toString());
+      xmlWriter._writeAttributeString('ShowOrbitPath', this.showOrbitPath.toString());
+      xmlWriter._writeAttributeString('StationKeeping', this.stationKeeping.toString());
+      if (this.referenceFrameType === 1) {
+        xmlWriter._writeAttributeString('SemiMajorAxis', this.semiMajorAxis.toString());
+        xmlWriter._writeAttributeString('SemiMajorAxisScale', Enums.toXml('AltUnits', this.semiMajorAxisUnits));
+        xmlWriter._writeAttributeString('Eccentricity', this.eccentricity.toString());
+        xmlWriter._writeAttributeString('Inclination', this.inclination.toString());
+        xmlWriter._writeAttributeString('ArgumentOfPeriapsis', this.argumentOfPeriapsis.toString());
+        xmlWriter._writeAttributeString('LongitudeOfAscendingNode', this.longitudeOfAscendingNode.toString());
+        xmlWriter._writeAttributeString('MeanAnomolyAtEpoch', this.meanAnomolyAtEpoch.toString());
+        xmlWriter._writeAttributeString('MeanDailyMotion', this.meanDailyMotion.toString());
+        xmlWriter._writeAttributeString('Epoch', this.epoch.toString());
+      }
+      xmlWriter._writeEndElement();
+    },
     initializeFromXml: function(node) {
       this.name = node.attributes.getNamedItem('Name').nodeValue;
       this.parent = node.attributes.getNamedItem('Parent').nodeValue;
-      switch (node.attributes.getNamedItem('ReferenceFrameType').nodeValue) {
-        case 'FixedSherical':
-          this.referenceFrameType = 0;
-          break;
-        case 'Orbital':
-          this.referenceFrameType = 1;
-          break;
-        case 'Trajectory':
-          this.referenceFrameType = 2;
-          break;
-        default:
-          break;
-      }
-      switch (node.attributes.getNamedItem('Reference').nodeValue) {
-        case 'Sky':
-          this.reference = 0;
-          break;
-        case 'Ecliptic':
-          this.reference = 1;
-          break;
-        case 'Galactic':
-          this.reference = 2;
-          break;
-        case 'Sun':
-          this.reference = 3;
-          break;
-        case 'Mercury':
-          this.reference = 4;
-          break;
-        case 'Venus':
-          this.reference = 5;
-          break;
-        case 'Earth':
-          this.reference = 6;
-          break;
-        case 'Mars':
-          this.reference = 7;
-          break;
-        case 'Jupiter':
-          this.reference = 8;
-          break;
-        case 'Saturn':
-          this.reference = 9;
-          break;
-        case 'Uranus':
-          this.reference = 10;
-          break;
-        case 'Neptune':
-          this.reference = 11;
-          break;
-        case 'Pluto':
-          this.reference = 12;
-          break;
-        case 'Moon':
-          this.reference = 13;
-          break;
-        case 'Io':
-          this.reference = 14;
-          break;
-        case 'Europa':
-          this.reference = 15;
-          break;
-        case 'Ganymede':
-          this.reference = 16;
-          break;
-        case 'Callisto':
-          this.reference = 17;
-          break;
-        case 'Custom':
-          this.reference = 18;
-          break;
-        case 'Identity':
-          this.reference = 19;
-          break;
-        default:
-          break;
-      }
+      this.referenceFrameType = Enums.parse('ReferenceFrameTypes', node.attributes.getNamedItem('ReferenceFrameType').nodeValue);
+      this.reference = Enums.parse('ReferenceFrames', node.attributes.getNamedItem('Reference').nodeValue);
       this.parentsRoationalBase = ss.boolean(node.attributes.getNamedItem('ParentsRoationalBase').nodeValue);
       this.meanRadius = parseFloat(node.attributes.getNamedItem('MeanRadius').nodeValue);
       this.oblateness = parseFloat(node.attributes.getNamedItem('Oblateness').nodeValue);
@@ -10780,40 +10786,7 @@ window.wwtlib = function(){
       if (this.referenceFrameType === 1) {
         this.showOrbitPath = ss.boolean(node.attributes.getNamedItem('ShowOrbitPath').nodeValue);
         this.semiMajorAxis = parseFloat(node.attributes.getNamedItem('SemiMajorAxis').nodeValue);
-        switch (node.attributes.getNamedItem('SemiMajorAxisScale').nodeValue) {
-          case 'Meters':
-            this.semiMajorAxisUnits = 1;
-            break;
-          case 'Feet':
-            this.semiMajorAxisUnits = 2;
-            break;
-          case 'Inches':
-            this.semiMajorAxisUnits = 3;
-            break;
-          case 'Miles':
-            this.semiMajorAxisUnits = 4;
-            break;
-          case 'Kilometers':
-            this.semiMajorAxisUnits = 5;
-            break;
-          case 'AstronomicalUnits':
-            this.semiMajorAxisUnits = 6;
-            break;
-          case 'LightYears':
-            this.semiMajorAxisUnits = 7;
-            break;
-          case 'Parsecs':
-            this.semiMajorAxisUnits = 8;
-            break;
-          case 'MegaParsecs':
-            this.semiMajorAxisUnits = 9;
-            break;
-          case 'Custom':
-            this.semiMajorAxisUnits = 10;
-            break;
-          default:
-            break;
-        }
+        this.semiMajorAxisUnits = Enums.parse('AltUnits', node.attributes.getNamedItem('SemiMajorAxisScale').nodeValue);
         this.eccentricity = parseFloat(node.attributes.getNamedItem('Eccentricity').nodeValue);
         this.inclination = parseFloat(node.attributes.getNamedItem('Inclination').nodeValue);
         this.argumentOfPeriapsis = parseFloat(node.attributes.getNamedItem('ArgumentOfPeriapsis').nodeValue);
@@ -10962,6 +10935,40 @@ window.wwtlib = function(){
     },
     unlock: function() {
       this.locked = false;
+    },
+    save: function() {
+      var data = '';
+      var first = true;
+      var $enum1 = ss.enumerate(this.header);
+      while ($enum1.moveNext()) {
+        var col = $enum1.current;
+        if (!first) {
+          data += '\t';
+        }
+        else {
+          first = false;
+        }
+        data += col;
+      }
+      data += '\r\n';
+      var $enum2 = ss.enumerate(this.rows);
+      while ($enum2.moveNext()) {
+        var row = $enum2.current;
+        first = true;
+        var $enum3 = ss.enumerate(row);
+        while ($enum3.moveNext()) {
+          var col = $enum3.current;
+          if (!first) {
+            data += '\t';
+          }
+          else {
+            first = false;
+          }
+          data += col;
+        }
+        data += '\r\n';
+      }
+      return data;
     },
     loadFromString: function(data, isUpdate, purge, hasHeader) {
       var count = 0;
@@ -11599,6 +11606,32 @@ window.wwtlib = function(){
       ctx.restore();
     }
     else {
+      var count = Planets._orbitalSampleRate;
+      var planetDropped = false;
+      var viewPoint = renderContext.get_viewPoint();
+      var point = new Vector3d();
+      var pointTest = new Vector3d();
+      var lastPoint = new Vector3d();
+      var firstPoint = true;
+      var list = new SimpleLineList();
+      for (var i = 0; i < count; i++) {
+        var pnt = Planets._orbits[id][i];
+        var angle = (Math.atan2(Planets._orbits[id][i].z, Planets._orbits[id][i].x) + Math.PI * 2 - startAngle) % (Math.PI * 2);
+        var alpha = ss.truncate((angle / (Math.PI * 2) * 255));
+        var alphaD = alpha / 255;
+        if (alpha < 2 && !planetDropped) {
+          pnt = planetNow;
+          alphaD = 1;
+        }
+        if (firstPoint) {
+          firstPoint = false;
+        }
+        else {
+          list.addLine(lastPoint, pnt);
+        }
+        lastPoint = pnt;
+      }
+      list.drawLines(renderContext, 1, Colors.get_white());
     }
   };
   Planets.isPlanetInFrustum = function(renderContext, rad) {
@@ -12112,6 +12145,10 @@ window.wwtlib = function(){
       this._world = value;
       this._frustumDirty = true;
       return value;
+    },
+    _getScreenTexture: function() {
+      var tex = null;
+      return tex;
     },
     get_worldBase: function() {
       return this._worldBase;
@@ -13551,6 +13588,9 @@ window.wwtlib = function(){
       return value;
     },
     getSetting: function(type) {
+      if (type === 17) {
+        return new SettingParameter(true, 0, !!0, null);
+      }
       return new SettingParameter(false, 1, false, null);
     }
   };
@@ -14469,7 +14509,7 @@ window.wwtlib = function(){
         }
       }
       else {
-        TileShader.use(renderContext, this._vertexBuffer, this.getIndexBuffer(part, this.accomidation), this.texture2d);
+        TileShader.use(renderContext, this._vertexBuffer, this.getIndexBuffer(part, this.accomidation), this.texture2d, opacity);
         renderContext.gl.drawElements(4, this.triangleCount * 3, 5123, 0);
       }
     },
@@ -15045,118 +15085,7 @@ window.wwtlib = function(){
       temp.description = child.attributes.getNamedItem('Description').nodeValue;
     }
     if (child.attributes.getNamedItem('Classification') != null) {
-      switch (child.attributes.getNamedItem('Classification').nodeValue) {
-        case 'Star':
-          temp.classification = 1;
-          break;
-        case 'Supernova':
-          temp.classification = 2;
-          break;
-        case 'BlackHole':
-          temp.classification = 4;
-          break;
-        case 'NeutronStar':
-          temp.classification = 8;
-          break;
-        case 'DoubleStar':
-          temp.classification = 16;
-          break;
-        case 'MultipleStars':
-          temp.classification = 32;
-          break;
-        case 'Asterism':
-          temp.classification = 64;
-          break;
-        case 'Constellation':
-          temp.classification = 128;
-          break;
-        case 'OpenCluster':
-          temp.classification = 256;
-          break;
-        case 'GlobularCluster':
-          temp.classification = 512;
-          break;
-        case 'NebulousCluster':
-          temp.classification = 1024;
-          break;
-        case 'Nebula':
-          temp.classification = 2048;
-          break;
-        case 'EmissionNebula':
-          temp.classification = 4096;
-          break;
-        case 'PlanetaryNebula':
-          temp.classification = 8192;
-          break;
-        case 'ReflectionNebula':
-          temp.classification = 16384;
-          break;
-        case 'DarkNebula':
-          temp.classification = 32768;
-          break;
-        case 'GiantMolecularCloud':
-          temp.classification = 65536;
-          break;
-        case 'SupernovaRemnant':
-          temp.classification = 131072;
-          break;
-        case 'InterstellarDust':
-          temp.classification = 262144;
-          break;
-        case 'Quasar':
-          temp.classification = 524288;
-          break;
-        case 'Galaxy':
-          temp.classification = 1048576;
-          break;
-        case 'SpiralGalaxy':
-          temp.classification = 2097152;
-          break;
-        case 'IrregularGalaxy':
-          temp.classification = 4194304;
-          break;
-        case 'EllipticalGalaxy':
-          temp.classification = 8388608;
-          break;
-        case 'Knot':
-          temp.classification = 16777216;
-          break;
-        case 'PlateDefect':
-          temp.classification = 33554432;
-          break;
-        case 'ClusterOfGalaxies':
-          temp.classification = 67108864;
-          break;
-        case 'OtherNGC':
-          temp.classification = 134217728;
-          break;
-        case 'Unidentified':
-          temp.classification = 268435456;
-          break;
-        case 'SolarSystem':
-          temp.classification = 536870912;
-          break;
-        case 'Unfiltered':
-          temp.classification = 1073741823;
-          break;
-        case 'Stellar':
-          temp.classification = 63;
-          break;
-        case 'StellarGroupings':
-          temp.classification = 2032;
-          break;
-        case 'Nebulae':
-          temp.classification = 523264;
-          break;
-        case 'Galactic':
-          temp.classification = 133693440;
-          break;
-        case 'Other':
-          temp.classification = 436207616;
-          break;
-        default:
-          break;
-      }
+      temp.classification = Enums.parse('Classification', child.attributes.getNamedItem('Classification').nodeValue);
     }
     if (child.attributes.getNamedItem('AuthorEmail') != null) {
       temp.authorEmail = child.attributes.getNamedItem('AuthorEmail').nodeValue;
@@ -15256,6 +15185,202 @@ window.wwtlib = function(){
   };
 
 
+  // wwtlib.FileEntry
+
+  function FileEntry(filename, size) {
+    this.size = 0;
+    this.offset = 0;
+    this.filename = filename;
+    this.size = size;
+  }
+  var FileEntry$ = {
+    toString: function() {
+      return this.filename;
+    }
+  };
+
+
+  // wwtlib.FileCabinet
+
+  function FileCabinet() {
+    this._currentOffset = 0;
+    this._packageID = '';
+    this.url = '';
+    this.clearFileList();
+  }
+  FileCabinet.fromUrl = function(url, callMe) {
+    var temp = new FileCabinet();
+    temp.url = url;
+    temp._callMe = callMe;
+    temp._webFile = new WebFile(url);
+    temp._webFile.responseType = 'blob';
+    temp._webFile.onStateChange = ss.bind('_loadCabinet', temp);
+    temp._webFile.send();
+    return temp;
+  };
+  var FileCabinet$ = {
+    get_packageID: function() {
+      return this._packageID;
+    },
+    set_packageID: function(value) {
+      this._packageID = value;
+      return value;
+    },
+    addFile: function(filename, data) {
+      if (data == null) {
+        return;
+      }
+      if (!ss.keyExists(this._fileDirectory, filename)) {
+        var fe = new FileEntry(filename, data.size);
+        fe.offset = this._currentOffset;
+        fe.blob = data;
+        this.fileList.push(fe);
+        this._fileDirectory[filename] = fe;
+        this._currentOffset += fe.size;
+      }
+    },
+    clearFileList: function() {
+      if (this.fileList == null) {
+        this.fileList = [];
+      }
+      if (this._fileDirectory == null) {
+        this._fileDirectory = {};
+      }
+      this.fileList.length = 0;
+      ss.clearKeys(this._fileDirectory);
+      this._currentOffset = 0;
+    },
+    packageFiles: function() {
+      var xmlWriter = new XmlTextWriter();
+      xmlWriter.formatting = 1;
+      xmlWriter._writeProcessingInstruction('xml', "version='1.0' encoding='UTF-8'");
+      xmlWriter._writeStartElement('FileCabinet');
+      xmlWriter._writeAttributeString('HeaderSize', '0x0BADFOOD');
+      xmlWriter._writeStartElement('Files');
+      var $enum1 = ss.enumerate(this.fileList);
+      while ($enum1.moveNext()) {
+        var entry = $enum1.current;
+        xmlWriter._writeStartElement('File');
+        xmlWriter._writeAttributeString('Name', entry.filename);
+        xmlWriter._writeAttributeString('Size', entry.size.toString());
+        xmlWriter._writeAttributeString('Offset', entry.offset.toString());
+        xmlWriter._writeEndElement();
+      }
+      xmlWriter._writeEndElement();
+      xmlWriter._writeFullEndElement();
+      xmlWriter._close();
+      var data = xmlWriter.body;
+      var blob = new Blob([ data ]);
+      var sizeText = ss.format('0x{0:x8}', blob.size);
+      data = ss.replaceString(data, '0x0BADFOOD', sizeText);
+      blob = new Blob([ data ]);
+      var blobs = [];
+      blobs.push(blob);
+      var $enum2 = ss.enumerate(this.fileList);
+      while ($enum2.moveNext()) {
+        var entry = $enum2.current;
+        blobs.push(entry.blob);
+      }
+      var cabBlob = new Blob(blobs, {type : 'application/x-wtt'});;
+      return cabBlob;
+    },
+    _loadCabinet: function() {
+      var $this = this;
+
+      if (this._webFile.get_state() === 2) {
+        alert(this._webFile.get_message());
+      }
+      else if (this._webFile.get_state() === 1) {
+        this._mainBlob = this._webFile.getBlob();
+        var chunck = new FileReader();
+        chunck.onloadend = function(e) {
+          var offset = $this._getSize(chunck.result);
+          var header = new FileReader();
+          header.onloadend = function(ee) {
+            var data = ss.safeCast(header.result, String);
+            var xParser = new DOMParser();
+            $this.extract(xParser.parseFromString(data, 'text/xml'), offset);
+            $this._callMe();
+          };
+          header.readAsText($this._mainBlob.slice(0, offset));
+        };
+        chunck.readAsText(this._mainBlob.slice(0, 255));
+      }
+    },
+    _getSize: function(data) {
+      var start = data.indexOf('0x');
+      if (start === -1) {
+        return 0;
+      }
+      return parseInt(data.substring(start, start + 10), 16);
+    },
+    extract: function(doc, offset) {
+      try {
+        var cab = Util.selectSingleNode(doc, 'FileCabinet');
+        var files = Util.selectSingleNode(cab, 'Files');
+        this.fileList.length = 0;
+        var $enum1 = ss.enumerate(files.childNodes);
+        while ($enum1.moveNext()) {
+          var child = $enum1.current;
+          if (child.nodeName === 'File') {
+            var fe = new FileEntry(child.attributes.getNamedItem('Name').nodeValue, parseInt(child.attributes.getNamedItem('Size').nodeValue));
+            fe.offset = offset;
+            offset += fe.size;
+            this.fileList.push(fe);
+          }
+        }
+      }
+      catch ($e2) {
+      }
+    },
+    getFileBlob: function(filename) {
+      var fe = this.getFileEntry(filename);
+      if (fe != null) {
+        var ext = filename.substr(filename.lastIndexOf('.')).toLowerCase();
+        var type = null;
+        switch (ext) {
+          case '.png':
+            type = 'image/png';
+            break;
+          case '.jpg':
+          case '.jpeg':
+            type = 'image/jpeg';
+            break;
+          case '.mp3':
+            type = 'audio/mpeg3';
+            break;
+        }
+        return this._mainBlob.slice(fe.offset, fe.offset + fe.size, type);
+      }
+      return null;
+    },
+    getFileEntry: function(filename) {
+      var $enum1 = ss.enumerate(this.fileList);
+      while ($enum1.moveNext()) {
+        var entry = $enum1.current;
+        if (entry.filename === filename) {
+          return entry;
+        }
+      }
+      return null;
+    },
+    get_masterFile: function() {
+      if (this.fileList.length > 0) {
+        return this.fileList[0].filename;
+      }
+      else {
+        return null;
+      }
+    },
+    clearTempFiles: function() {
+      var $enum1 = ss.enumerate(this.fileList);
+      while ($enum1.moveNext()) {
+        var entry = $enum1.current;
+      }
+    }
+  };
+
+
   // wwtlib.SettingParameter
 
   function SettingParameter(edgeTrigger, opacity, targetState, filter) {
@@ -15277,6 +15402,7 @@ window.wwtlib = function(){
   function Overlay() {
     this.isDynamic = false;
     this.isDesignTimeOnly = false;
+    this._name = '';
     this.id = (Overlay.nextId++).toString();
     this._owner = null;
     this._url = '';
@@ -15295,7 +15421,7 @@ window.wwtlib = function(){
     this._endWidth = 0;
     this._endHeight = 0;
     this._endRotationAngle = 0;
-    this._anchor = 0;
+    this._anchor = 1;
     this._x = 0;
     this._y = 0;
     this._width = 0;
@@ -15421,6 +15547,7 @@ window.wwtlib = function(){
       if (this.texture != null) {
         this.texture = null;
       }
+      this.texture2d = null;
     },
     initializeTexture: function() {
     },
@@ -15663,6 +15790,40 @@ window.wwtlib = function(){
       this._interpolationType = value;
       return value;
     },
+    saveToXml: function(xmlWriter, saveKeys) {
+      xmlWriter._writeStartElement('Overlay');
+      xmlWriter._writeAttributeString('Id', this.id);
+      xmlWriter._writeAttributeString('Type', this.getTypeName());
+      xmlWriter._writeAttributeString('Name', this.get_name());
+      xmlWriter._writeAttributeString('X', this._x.toString());
+      xmlWriter._writeAttributeString('Y', this._y.toString());
+      xmlWriter._writeAttributeString('Width', this._width.toString());
+      xmlWriter._writeAttributeString('Height', this._height.toString());
+      xmlWriter._writeAttributeString('Rotation', this._rotationAngle.toString());
+      xmlWriter._writeAttributeString('Color', this._color.save());
+      xmlWriter._writeAttributeString('Url', this._url);
+      xmlWriter._writeAttributeString('LinkID', this._linkID);
+      xmlWriter._writeAttributeString('Animate', this._animate.toString());
+      if (this._animate) {
+        xmlWriter._writeAttributeString('EndX', this._endX.toString());
+        xmlWriter._writeAttributeString('EndY', this._endY.toString());
+        xmlWriter._writeAttributeString('EndWidth', this._endWidth.toString());
+        xmlWriter._writeAttributeString('EndHeight', this._endHeight.toString());
+        xmlWriter._writeAttributeString('EndRotation', this._endRotationAngle.toString());
+        xmlWriter._writeAttributeString('EndColor', this._endColor.save());
+        xmlWriter._writeAttributeString('InterpolationType', Enums.toXml('InterpolationType', this._interpolationType));
+      }
+      xmlWriter._writeAttributeString('Anchor', Enums.toXml('OverlayAnchor', this._anchor));
+      this.writeOverlayProperties(xmlWriter);
+      xmlWriter._writeEndElement();
+    },
+    getTypeName: function() {
+      return 'TerraViewer.Overlay';
+    },
+    addFilesToCabinet: function(fc) {
+    },
+    writeOverlayProperties: function(xmlWriter) {
+    },
     _initOverlayFromXml: function(node) {
       this.id = node.attributes.getNamedItem('Id').nodeValue;
       this.set_name(node.attributes.getNamedItem('Name').nodeValue);
@@ -15688,28 +15849,7 @@ window.wwtlib = function(){
           this._endHeight = parseFloat(node.attributes.getNamedItem('EndHeight').nodeValue);
           this._endRotationAngle = parseFloat(node.attributes.getNamedItem('EndRotation').nodeValue);
           if (node.attributes.getNamedItem('InterpolationType') != null) {
-            switch (node.attributes.getNamedItem('InterpolationType').nodeValue) {
-              case 'Linear':
-                this.set_interpolationType(0);
-                break;
-              case 'EaseIn':
-                this.set_interpolationType(1);
-                break;
-              case 'EaseOut':
-                this.set_interpolationType(2);
-                break;
-              case 'EaseInOut':
-                this.set_interpolationType(3);
-                break;
-              case 'Exponential':
-                this.set_interpolationType(4);
-                break;
-              case 'Default':
-                this.set_interpolationType(5);
-                break;
-              default:
-                break;
-            }
+            this.set_interpolationType(Enums.parse('InterpolationType', node.attributes.getNamedItem('InterpolationType').nodeValue));
           }
         }
       }
@@ -15934,7 +16074,7 @@ window.wwtlib = function(){
     temp.underline = underline;
     temp.fontSize = fontSize;
     temp.fontName = fontName;
-    temp.forgroundColor = forgroundColor;
+    temp.foregroundColor = forgroundColor;
     temp.backgroundColor = backgroundColor;
     temp.borderStyle = borderStyle;
     return temp;
@@ -15948,34 +16088,29 @@ window.wwtlib = function(){
     newTextObject.underline = ss.boolean(node.attributes.getNamedItem('Underline').nodeValue);
     newTextObject.fontSize = parseFloat(node.attributes.getNamedItem('FontSize').nodeValue);
     newTextObject.fontName = node.attributes.getNamedItem('FontName').nodeValue;
-    newTextObject.forgroundColor = Color.load(node.attributes.getNamedItem('ForgroundColor').nodeValue);
+    newTextObject.foregroundColor = Color.load(node.attributes.getNamedItem('ForgroundColor').nodeValue);
     newTextObject.backgroundColor = Color.load(node.attributes.getNamedItem('BackgroundColor').nodeValue);
     if (node.attributes.getNamedItem('BorderStyle') != null) {
-      switch (node.attributes.getNamedItem('BorderStyle').nodeValue) {
-        case 'None':
-          newTextObject.borderStyle = 0;
-          break;
-        case 'Tight':
-          newTextObject.borderStyle = 1;
-          break;
-        case 'Small':
-          newTextObject.borderStyle = 2;
-          break;
-        case 'Medium':
-          newTextObject.borderStyle = 3;
-          break;
-        case 'Large':
-          newTextObject.borderStyle = 4;
-          break;
-        default:
-          break;
-      }
+      newTextObject.borderStyle = Enums.parse('TextBorderStyle', node.attributes.getNamedItem('BorderStyle').nodeValue);
     }
     return newTextObject;
   };
   var TextObject$ = {
     toString: function() {
       return this.text;
+    },
+    _saveToXml: function(xmlWriter) {
+      xmlWriter._writeStartElement('TextObject');
+      xmlWriter._writeAttributeString('Bold', this.bold.toString());
+      xmlWriter._writeAttributeString('Italic', this.italic.toString());
+      xmlWriter._writeAttributeString('Underline', this.underline.toString());
+      xmlWriter._writeAttributeString('FontSize', this.fontSize.toString());
+      xmlWriter._writeAttributeString('FontName', this.fontName);
+      xmlWriter._writeAttributeString('ForgroundColor', this.foregroundColor.save());
+      xmlWriter._writeAttributeString('BackgroundColor', this.backgroundColor.save());
+      xmlWriter._writeAttributeString('BorderStyle', Enums.toXml('TextBorderStyle', this.borderStyle));
+      xmlWriter._writeString(this.text);
+      xmlWriter._writeEndElement();
     }
   };
 
@@ -15986,12 +16121,28 @@ window.wwtlib = function(){
     this._tourDirty = 0;
     this._workingDirectory = '';
     this.url = '';
+    this._tagId = '';
     this._representativeThumbnailTourstop = 0;
+    this._id = '';
+    this._title = '';
     this._runTime = 0;
     this._lastDirtyCheck = 0;
+    this._description = '';
+    this._attributesAndCredits = '';
+    this._authorEmailOther = '';
+    this._authorEmail = '';
+    this._authorUrl = '';
+    this._authorPhone = '';
+    this._authorContactText = '';
     this._orgName = 'None';
+    this._orgUrl = '';
+    this._author = '';
+    this._authorImageUrl = '';
+    this._authorImage = null;
+    this._organizationUrl = '';
+    this._filename = '';
     this._level = 0;
-    this._type = 0;
+    this._type = 268435456;
     this._taxonomy = '';
     this._keywords = '';
     this._objects = '';
@@ -16000,6 +16151,9 @@ window.wwtlib = function(){
     this.implicitTourLinks = [];
     this._tourStops = [];
     this._currentTourstopIndex = -1;
+    this._textureList = {};
+    this._textureList2d = {};
+    this._fileCache = {};
     this.dontCleanUpTempFiles = false;
     this._id = Guid.newGuid().toString();
   }
@@ -16010,9 +16164,7 @@ window.wwtlib = function(){
     var temp = new TourDocument();
     temp.url = url;
     temp._callMe = callMe;
-    temp._webFile = new WebFile(Util.getTourComponent(url, 'master'));
-    temp._webFile.onStateChange = ss.bind('_loadXmlDocument', temp);
-    temp._webFile.send();
+    temp._cabinet = FileCabinet.fromUrl(url, ss.bind('_loadXmlDocument', temp));
     return temp;
   };
   var TourDocument$ = {
@@ -16039,13 +16191,17 @@ window.wwtlib = function(){
       return value;
     },
     _loadXmlDocument: function() {
-      if (this._webFile.get_state() === 2) {
-        alert(this._webFile.get_message());
-      }
-      else if (this._webFile.get_state() === 1) {
-        this.fromXml(this._webFile.getXml());
-        this._callMe();
-      }
+      var $this = this;
+
+      var master = this._cabinet.get_masterFile();
+      var doc = new FileReader();
+      doc.onloadend = function(ee) {
+        var data = ss.safeCast(doc.result, String);
+        var xParser = new DOMParser();
+        $this.fromXml(xParser.parseFromString(data, 'text/xml'));
+        $this._callMe();
+      };
+      doc.readAsText(this._cabinet.getFileBlob(master));
     },
     fromXml: function(doc) {
       var root = Util.selectSingleNode(doc, 'Tour');
@@ -16065,137 +16221,8 @@ window.wwtlib = function(){
         this.set_orgName(root.attributes.getNamedItem('OrganizationName').nodeValue);
       }
       this._organizationUrl = root.attributes.getNamedItem('OrganizationUrl').nodeValue;
-      switch (root.attributes.getNamedItem('UserLevel').nodeValue) {
-        case 'Beginner':
-          this._level = 0;
-          break;
-        case 'Intermediate':
-          this._level = 1;
-          break;
-        case 'Advanced':
-          this._level = 2;
-          break;
-        case 'Educator':
-          this._level = 3;
-          break;
-        case 'Professional':
-          this._level = 4;
-          break;
-        default:
-          break;
-      }
-      switch (root.attributes.getNamedItem('Classification').nodeValue) {
-        case 'Star':
-          this._type = 1;
-          break;
-        case 'Supernova':
-          this._type = 2;
-          break;
-        case 'BlackHole':
-          this._type = 4;
-          break;
-        case 'NeutronStar':
-          this._type = 8;
-          break;
-        case 'DoubleStar':
-          this._type = 16;
-          break;
-        case 'MultipleStars':
-          this._type = 32;
-          break;
-        case 'Asterism':
-          this._type = 64;
-          break;
-        case 'Constellation':
-          this._type = 128;
-          break;
-        case 'OpenCluster':
-          this._type = 256;
-          break;
-        case 'GlobularCluster':
-          this._type = 512;
-          break;
-        case 'NebulousCluster':
-          this._type = 1024;
-          break;
-        case 'Nebula':
-          this._type = 2048;
-          break;
-        case 'EmissionNebula':
-          this._type = 4096;
-          break;
-        case 'PlanetaryNebula':
-          this._type = 8192;
-          break;
-        case 'ReflectionNebula':
-          this._type = 16384;
-          break;
-        case 'DarkNebula':
-          this._type = 32768;
-          break;
-        case 'GiantMolecularCloud':
-          this._type = 65536;
-          break;
-        case 'SupernovaRemnant':
-          this._type = 131072;
-          break;
-        case 'InterstellarDust':
-          this._type = 262144;
-          break;
-        case 'Quasar':
-          this._type = 524288;
-          break;
-        case 'Galaxy':
-          this._type = 1048576;
-          break;
-        case 'SpiralGalaxy':
-          this._type = 2097152;
-          break;
-        case 'IrregularGalaxy':
-          this._type = 4194304;
-          break;
-        case 'EllipticalGalaxy':
-          this._type = 8388608;
-          break;
-        case 'Knot':
-          this._type = 16777216;
-          break;
-        case 'PlateDefect':
-          this._type = 33554432;
-          break;
-        case 'ClusterOfGalaxies':
-          this._type = 67108864;
-          break;
-        case 'OtherNGC':
-          this._type = 134217728;
-          break;
-        case 'Unidentified':
-          this._type = 268435456;
-          break;
-        case 'SolarSystem':
-          this._type = 536870912;
-          break;
-        case 'Unfiltered':
-          this._type = 1073741823;
-          break;
-        case 'Stellar':
-          this._type = 63;
-          break;
-        case 'StellarGroupings':
-          this._type = 2032;
-          break;
-        case 'Nebulae':
-          this._type = 523264;
-          break;
-        case 'Galactic':
-          this._type = 133693440;
-          break;
-        case 'Other':
-          this._type = 436207616;
-          break;
-        default:
-          break;
-      }
+      this._level = Enums.parse('UserLevel', root.attributes.getNamedItem('UserLevel').nodeValue);
+      this._type = Enums.parse('Classification', root.attributes.getNamedItem('Classification').nodeValue);
       this._taxonomy = root.attributes.getNamedItem('Taxonomy').nodeValue;
       var TourStops = Util.selectSingleNode(root, 'TourStops');
       var $enum1 = ss.enumerate(TourStops.childNodes);
@@ -16238,7 +16265,7 @@ window.wwtlib = function(){
               }
               try {
                 newLayer.loadedFromTour = true;
-                newLayer.loadData(this.getFileStream(fileName));
+                newLayer.loadData(this.getFileBlob(fileName));
                 LayerManager.add(newLayer, false);
               }
               catch ($e4) {
@@ -16249,6 +16276,115 @@ window.wwtlib = function(){
         LayerManager.loadTree();
       }
       this._tourDirty = 0;
+    },
+    saveToDataUrl: function() {
+      return URL.createObjectURL(this.saveToBlob());;
+    },
+    saveToBlob: function() {
+      var excludeAudio = false;
+      this.cleanUp();
+      var tourXml = this.getTourXML();
+      var fc = new FileCabinet();
+      fc.set_packageID(this.get_id());
+      fc.addFile('Tour.wwtxml', new Blob([ tourXml ]));
+      if (this._authorImage != null) {
+      }
+      var $enum1 = ss.enumerate(this.get_tourStops());
+      while ($enum1.moveNext()) {
+        var stop = $enum1.current;
+        stop._addFilesToCabinet(fc, excludeAudio);
+      }
+      var masterList = this._createLayerMasterList();
+      var $enum2 = ss.enumerate(masterList);
+      while ($enum2.moveNext()) {
+        var id = $enum2.current;
+        if (ss.keyExists(LayerManager.get_layerList(), id)) {
+          LayerManager.get_layerList()[id].addFilesToCabinet(fc);
+        }
+      }
+      this.set_tourDirty(false);
+      return fc.packageFiles();
+    },
+    getTourXML: function() {
+      var xmlWriter = new XmlTextWriter();
+      xmlWriter.formatting = 1;
+      xmlWriter._writeProcessingInstruction('xml', "version='1.0' encoding='UTF-8'");
+      xmlWriter._writeStartElement('Tour');
+      xmlWriter._writeAttributeString('ID', this._id);
+      xmlWriter._writeAttributeString('Title', this._title);
+      xmlWriter._writeAttributeString('Descirption', this.get_description());
+      xmlWriter._writeAttributeString('Description', this.get_description());
+      xmlWriter._writeAttributeString('RunTime', (this.get_runTime() / 1000).toString());
+      xmlWriter._writeAttributeString('Author', this._author);
+      xmlWriter._writeAttributeString('AuthorEmail', this._authorEmail);
+      xmlWriter._writeAttributeString('OrganizationUrl', this._organizationUrl);
+      xmlWriter._writeAttributeString('OrganizationName', this.get_orgName());
+      xmlWriter._writeAttributeString('Keywords', this.get_keywords());
+      xmlWriter._writeAttributeString('UserLevel', Enums.toXml('UserLevel', this._level));
+      xmlWriter._writeAttributeString('Classification', Enums.toXml('Classification', this._type));
+      xmlWriter._writeAttributeString('Taxonomy', this._taxonomy);
+      var timeLineTour = this._isTimelineTour();
+      xmlWriter._writeAttributeString('TimeLineTour', timeLineTour.toString());
+      xmlWriter._writeStartElement('TourStops');
+      var $enum1 = ss.enumerate(this.get_tourStops());
+      while ($enum1.moveNext()) {
+        var stop = $enum1.current;
+        stop._saveToXml(xmlWriter, true);
+      }
+      xmlWriter._writeEndElement();
+      var masterList = this._createLayerMasterList();
+      var referencedFrames = this._getReferenceFrameList();
+      xmlWriter._writeStartElement('ReferenceFrames');
+      var $enum2 = ss.enumerate(referencedFrames);
+      while ($enum2.moveNext()) {
+        var item = $enum2.current;
+        item.saveToXml(xmlWriter);
+      }
+      xmlWriter._writeEndElement();
+      xmlWriter._writeStartElement('Layers');
+      var $enum3 = ss.enumerate(masterList);
+      while ($enum3.moveNext()) {
+        var id = $enum3.current;
+        if (ss.keyExists(LayerManager.get_layerList(), id)) {
+          LayerManager.get_layerList()[id].saveToXml(xmlWriter);
+        }
+      }
+      xmlWriter._writeEndElement();
+      xmlWriter._writeFullEndElement();
+      xmlWriter._close();
+      return xmlWriter.body;
+    },
+    _getReferenceFrameList: function() {
+      var list = [];
+      var $enum1 = ss.enumerate(ss.keys(LayerManager.get_allMaps()));
+      while ($enum1.moveNext()) {
+        var key = $enum1.current;
+        var lm = LayerManager.get_allMaps()[key];
+        if ((lm.frame.reference === 18 || lm.frame.reference === 19) && !(list.indexOf(lm.frame) >= 0) && !lm.frame._systemGenerated) {
+          list.push(lm.frame);
+        }
+      }
+      return list;
+    },
+    _createLayerMasterList: function() {
+      var masterList = [];
+      var $enum1 = ss.enumerate(this.get_tourStops());
+      while ($enum1.moveNext()) {
+        var stop = $enum1.current;
+        var $enum2 = ss.enumerate(ss.keys(stop.layers));
+        while ($enum2.moveNext()) {
+          var id = $enum2.current;
+          if (!(masterList.indexOf(id) >= 0)) {
+            if (ss.keyExists(LayerManager.get_layerList(), id)) {
+              masterList.push(id);
+            }
+          }
+        }
+      }
+      return masterList;
+    },
+    _isTimelineTour: function() {
+      return false;
     },
     get_tagId: function() {
       return this._tagId;
@@ -16510,11 +16646,11 @@ window.wwtlib = function(){
                 totalTime += slew.get_moveTime() * 1000;
               }
               break;
-            case 1:
-              break;
             case 2:
               break;
-            case 3:
+            case 1:
+              break;
+            case 5:
               break;
             default:
               break;
@@ -16539,11 +16675,11 @@ window.wwtlib = function(){
                 totalTime += slew.get_moveTime() * 1000;
               }
               break;
-            case 1:
-              break;
             case 2:
               break;
-            case 3:
+            case 1:
+              break;
+            case 5:
               break;
             default:
               break;
@@ -16573,11 +16709,11 @@ window.wwtlib = function(){
                 totalTime += slew.get_moveTime() * 1000;
               }
               break;
-            case 1:
-              break;
             case 2:
               break;
-            case 3:
+            case 1:
+              break;
+            case 5:
               break;
             default:
               break;
@@ -16614,14 +16750,6 @@ window.wwtlib = function(){
       return -1;
     },
     cleanUp: function() {
-      var $enum1 = ss.enumerate(this.get_tourStops());
-      while ($enum1.moveNext()) {
-        var stop = $enum1.current;
-        stop.cleanUp();
-      }
-      if (this._textureList != null) {
-        ss.clearKeys(this._textureList);
-      }
     },
     getCachedTexture: function(filename, callMe) {
       if (this._textureList == null) {
@@ -16631,13 +16759,19 @@ window.wwtlib = function(){
         callMe();
         return this._textureList[filename];
       }
-      var texture = document.createElement('img');
-      texture.src = this.getFileStream(filename);
-      texture.addEventListener('load', function() {
-        callMe();
-      }, false);
-      this._textureList[filename] = texture;
-      return texture;
+      var url = this.getFileStream(filename);
+      if (!ss.whitespace(url)) {
+        var texture = document.createElement('img');
+        texture.src = this.getFileStream(filename);
+        texture.addEventListener('load', function() {
+          callMe();
+        }, false);
+        this._textureList[filename] = texture;
+        return texture;
+      }
+      else {
+        return null;
+      }
     },
     getCachedTexture2d: function(filename) {
       if (this._textureList2d == null) {
@@ -16651,8 +16785,32 @@ window.wwtlib = function(){
       this._textureList2d[filename] = texture;
       return texture;
     },
+    addCachedFile: function(filename, file) {
+      this._fileCache[filename] = file;
+      if (ss.keyExists(this._textureList2d, filename)) {
+        delete this._textureList2d[filename];
+      }
+      if (ss.keyExists(this._textureList, filename)) {
+        delete this._textureList[filename];
+      }
+    },
     getFileStream: function(filename) {
-      return Util.getTourComponent(this.url, filename);
+      var blob = this.getFileBlob(filename);
+      if (blob == null) {
+        return null;
+      }
+      return URL.createObjectURL(blob);;
+    },
+    getFileBlob: function(filename) {
+      if (ss.keyExists(this._fileCache, filename)) {
+        return this._fileCache[filename];
+      }
+      else if (this._cabinet != null) {
+        return this._cabinet.getFileBlob(this.get_workingDirectory() + filename);
+      }
+      else {
+        return null;
+      }
     },
     get_currentTourStop: function() {
       if (this._currentTourstopIndex > -1) {
@@ -16669,7 +16827,6 @@ window.wwtlib = function(){
         var stop = $enum1.current;
         if (stop === value) {
           if (this._currentTourstopIndex > -1) {
-            this.get_tourStops()[this._currentTourstopIndex].cleanUp();
           }
           this._currentTourstopIndex = i;
           break;
@@ -16718,8 +16875,11 @@ window.wwtlib = function(){
       this.setEditMode(this._tour.get_editMode());
       return value;
     },
-    tour_CurrentTourstopChanged: function(sender, e) {
+    tour_CurrentTourstopChanged: function() {
       OverlayList._updateOverlayList(this._tour.get_currentTourStop(), this.tourEditorUI.selection);
+      if (this.tourEditorUI != null) {
+        this.tourEditorUI.clearSelection();
+      }
       this.tourStopList.refresh();
     },
     setFocusedChild: function() {
@@ -16810,6 +16970,7 @@ window.wwtlib = function(){
         this._contextMenu.items.push(sep1);
         this._contextMenu.items.push(cutMenu);
         this._contextMenu.items.push(copyMenu);
+        pasteMenu.enabled = this.tourEditorUI.clipboardType === 'WorldWideTelescope.Slide';
         this._contextMenu.items.push(pasteMenu);
         this._contextMenu.items.push(deleteMenu);
         this._contextMenu._show(Cursor.get_position());
@@ -16827,6 +16988,7 @@ window.wwtlib = function(){
         pasteMenu.click = ss.bind('_pasteMenu_Click', this);
         selectAllMenu.click = ss.bind('_selectAllMenu_Click', this);
         insertSlide.click = ss.bind('_addNewSlide_Click', this);
+        pasteMenu.enabled = this.tourEditorUI.clipboardType === 'WorldWideTelescope.Slide';
         this._contextMenu.items.push(selectAllMenu);
         this._contextMenu.items.push(sep1);
         this._contextMenu.items.push(pasteMenu);
@@ -16959,6 +17121,7 @@ window.wwtlib = function(){
         this._contextMenu.items.push(sep7);
         this._contextMenu.items.push(cutMenu);
         this._contextMenu.items.push(copyMenu);
+        pasteMenu.enabled = this.tourEditorUI.clipboardType === 'WorldWideTelescope.Slide';
         this._contextMenu.items.push(pasteMenu);
         this._contextMenu.items.push(deleteMenu);
         this._contextMenu.items.push(sep1);
@@ -16976,12 +17139,6 @@ window.wwtlib = function(){
         this._contextMenu.items.push(sep5);
         this._contextMenu.items.push(captureThumbnail);
         this._contextMenu.items.push(sep6);
-        if (!this._tour.get_currentTourStop().get_keyFramed()) {
-          this._contextMenu.items.push(makeTimeline);
-        }
-        else {
-          this._contextMenu.items.push(showTimeline);
-        }
         this._contextMenu.items.push(masterSlide);
         this._contextMenu.items.push(setNextSlide);
         this._contextMenu.items.push(fadeInOverlays);
@@ -17000,6 +17157,29 @@ window.wwtlib = function(){
     _setNextSlide_Click: function(sender, e) {
     },
     _insertDuplicate_Click: function(sender, e) {
+      Undo.push(new UndoTourSlidelistChange(Language.getLocalizedText(530, 'Duplicate Slide at End Position'), this._tour));
+      var ts = this._tour.get_currentTourStop().copy();
+      if (ts == null) {
+        return;
+      }
+      if (ts.get_endTarget() != null) {
+        ts.get_endTarget().set_backgroundImageset(ts.get_target().get_backgroundImageset());
+        ts.get_endTarget().set_studyImageset(ts.get_target().get_studyImageset());
+        ts.set_target(ts.get_endTarget());
+        ts.set_startTime(ts.get_endTime());
+        ts.set_endTarget(null);
+      }
+      var $enum1 = ss.enumerate(ts.get_overlays());
+      while ($enum1.moveNext()) {
+        var overlay = $enum1.current;
+        overlay.set_tweenFactor(1);
+        overlay.set_animate(!overlay.get_animate());
+        overlay.set_animate(!overlay.get_animate());
+      }
+      ts.set_tweenPosition(0);
+      ts.set_fadeInOverlays(false);
+      this._tour.insertAfterTourStop(ts);
+      this.tourStopList.refresh();
     },
     _fadeInOverlays_Click: function(sender, e) {
       this._tour.get_currentTourStop().set_fadeInOverlays(!this._tour.get_currentTourStop().get_fadeInOverlays());
@@ -17057,7 +17237,7 @@ window.wwtlib = function(){
     _setEndSkyPosition_Click: function(sender, e) {
       if (this._tour.get_currentTourStop() != null) {
         Undo.push(new UndoTourStopChange(Language.getLocalizedText(435, 'Set End Camera Position'), this._tour));
-        var newPlace = Place.createCameraParams('End Place', WWTControl.singleton.renderContext.viewCamera, 268435456, WWTControl.singleton.constellation, WWTControl.singleton.renderContext.get_backgroundImageset().get_dataSetType(), WWTControl.singleton.renderContext.get_solarSystemTrack());
+        var newPlace = Place.createCameraParams('End Place', WWTControl.singleton.renderContext.viewCamera.copy(), 268435456, WWTControl.singleton.constellation, WWTControl.singleton.renderContext.get_backgroundImageset().get_dataSetType(), WWTControl.singleton.renderContext.get_solarSystemTrack());
         this._tour.get_currentTourStop().set_endTarget(newPlace);
         this._tour.get_currentTourStop().get_endTarget().set_constellation(WWTControl.singleton.constellation);
         this._tour.get_currentTourStop().set_endTime(SpaceTimeController.get_now());
@@ -17082,7 +17262,7 @@ window.wwtlib = function(){
         Undo.push(new UndoTourStopChange(Language.getLocalizedText(434, 'Set Start Camera Position'), this._tour));
         this._tour.get_currentTourStop().get_target().set_target(WWTControl.singleton.renderContext.get_solarSystemTrack());
         this._tour.get_currentTourStop().get_target().set_type(WWTControl.singleton.renderContext.get_backgroundImageset().get_dataSetType());
-        this._tour.get_currentTourStop().get_target().set_camParams(WWTControl.singleton.renderContext.viewCamera);
+        this._tour.get_currentTourStop().get_target().set_camParams(WWTControl.singleton.renderContext.viewCamera.copy());
         this._tour.get_currentTourStop().get_target().set_constellation(WWTControl.singleton.constellation);
         this._tour.get_currentTourStop().get_target().set_studyImageset(WWTControl.singleton.renderContext.get_foregroundImageset());
         this._tour.get_currentTourStop().get_target().set_type(WWTControl.singleton.renderContext.get_backgroundImageset().get_dataSetType());
@@ -17097,9 +17277,19 @@ window.wwtlib = function(){
     },
     _captureThumbnail_Click: function(sender, e) {
       if (this._tour.get_currentTourStop() != null) {
-        this._tour.get_currentTourStop().set_thumbnail(WWTControl.singleton.captureThumbnail());
-        this.tourStopList.refresh();
+        this._captureThumbnail(this._tour.get_currentTourStop());
       }
+    },
+    _captureThumbnail: function(tourStop) {
+      var $this = this;
+
+      WWTControl.singleton.captureThumbnail(function(blob) {
+        var filename = ss.format('{0}.thumb.png', tourStop.get_id());
+        $this._tour.addCachedFile(filename, blob);
+        tourStop.set_thumbnail($this._tour.getCachedTexture(filename, function() {
+          $this.tourStopList.refresh();
+        }));
+      });
     },
     _properties_Click: function(sender, e) {
       throw new Error('The method or operation is not implemented.');
@@ -17119,7 +17309,7 @@ window.wwtlib = function(){
       Undo.push(new UndoTourSlidelistChange(Language.getLocalizedText(426, 'Add New Slide'), this._tour));
       Cursor.set_current(Cursors.get_waitCursor());
       var placeName = 'Current Screen';
-      var newPlace = Place.createCameraParams(placeName, WWTControl.singleton.renderContext.viewCamera, 268435456, WWTControl.singleton.constellation, WWTControl.singleton.renderContext.get_backgroundImageset().get_dataSetType(), WWTControl.singleton.renderContext.get_solarSystemTrack());
+      var newPlace = Place.createCameraParams(placeName, WWTControl.singleton.renderContext.viewCamera.copy(), 268435456, WWTControl.singleton.constellation, WWTControl.singleton.renderContext.get_backgroundImageset().get_dataSetType(), WWTControl.singleton.renderContext.get_solarSystemTrack());
       newPlace.set_studyImageset(WWTControl.singleton.renderContext.get_foregroundImageset());
       newPlace.set_backgroundImageset(WWTControl.singleton.renderContext.get_backgroundImageset().get_stockImageSet());
       var newTourStop = TourStop.create(newPlace);
@@ -17138,7 +17328,7 @@ window.wwtlib = function(){
         this.voiceTrack.target = null;
       }
       this._tour.get_currentTourStop().layers = LayerManager._getVisibleLayerList(this._tour.get_currentTourStop().layers);
-      newTourStop.set_thumbnail(newPlace.set_thumbnail(WWTControl.singleton.captureThumbnail()));
+      this._captureThumbnail(newTourStop);
       this.tourStopList.selectedItem = this.tourStopList.findItem(newTourStop);
       this.tourStopList.refresh();
       this.tourEditorUI.clearSelection();
@@ -17162,8 +17352,45 @@ window.wwtlib = function(){
       this.tourEditorUI.clearSelection();
     },
     _pasteMenu_Click: function(sender, e) {
+      if (this.tourEditorUI.clipboardType === 'WorldWideTelescope.Slide') {
+        Undo.push(new UndoTourSlidelistChange(Language.getLocalizedText(535, 'Paste Slide'), this._tour));
+        var xParser = new DOMParser();
+        var doc = xParser.parseFromString(this.tourEditorUI.clipboardData, 'text/xml');
+        var node = Util.selectSingleNode(doc, 'TourStops');
+        var pasteStack = new ss.Stack();
+        var $enum1 = ss.enumerate(node.childNodes);
+        while ($enum1.moveNext()) {
+          var child = $enum1.current;
+          if (child.nodeName === 'TourStop') {
+            var ts = TourStop._fromXml(this._tour, child);
+            ts.set_id(Guid.newGuid().toString());
+            pasteStack.push(ts);
+          }
+        }
+        ss.clearKeys(this.tourStopList.selectedItems);
+        var curIndex = this.tourStopList.selectedItem + pasteStack.count - 1;
+        while (pasteStack.count > 0) {
+          var ts = pasteStack.pop();
+          this._tour.insertTourStop(ts);
+          this.tourStopList.selectedItems[curIndex--] = ts;
+        }
+        this.tourStopList.refresh();
+        this.tourEditorUI.clearSelection();
+      }
     },
     _copyMenu_Click: function(sender, e) {
+      var writer = new XmlTextWriter();
+      writer._writeProcessingInstruction('xml', "version='1.0' encoding='UTF-8'");
+      writer._writeStartElement('TourStops');
+      var $enum1 = ss.enumerate(ss.keys(this.tourStopList.selectedItems));
+      while ($enum1.moveNext()) {
+        var key = $enum1.current;
+        var item = this.tourStopList.selectedItems[key];
+        item._saveToXml(writer, true);
+      }
+      writer._writeEndElement();
+      this.tourEditorUI.clipboardType = 'WorldWideTelescope.Slide';
+      this.tourEditorUI.clipboardData = writer.body;
     },
     _cutMenu_Click: function(sender, e) {
       Undo.push(new UndoTourSlidelistChange(Language.getLocalizedText(536, 'Cut Slide'), this._tour));
@@ -17208,7 +17435,6 @@ window.wwtlib = function(){
             this._player.stop(false);
           }
           this._player = null;
-          WWTControl.singleton.uiController = null;
           WWTControl.singleton.set__mover(null);
           this.tourStopList.showAddButton = this._tour.get_editMode();
         }
@@ -17395,6 +17621,9 @@ window.wwtlib = function(){
     this._contextPoint = new Vector2d();
     this._dragCopying = false;
     this._brokeThreshold = false;
+    this.clipboardData = '';
+    this.clipboardType = '';
+    this.editTextCallback = null;
     this._defaultColor = Colors.get_white();
   }
   var TourEditor$ = {
@@ -17809,6 +18038,10 @@ window.wwtlib = function(){
         return;
       }
       this._contextMenu = new ContextMenuStrip();
+      var pasteMenu = ToolStripMenuItem.create(Language.getLocalizedText(425, 'Paste'));
+      pasteMenu.enabled = this.clipboardType === 'WorldWideTelescope.Overlay';
+      pasteMenu.click = ss.bind('_pasteMenu_Click', this);
+      this._contextMenu.items.push(pasteMenu);
       var AddCircle = ToolStripMenuItem.create(Language.getLocalizedText(444, 'Circle'));
       var AddRectangle = ToolStripMenuItem.create(Language.getLocalizedText(445, 'Rectangle'));
       var AddOpenRectangle = ToolStripMenuItem.create(Language.getLocalizedText(446, 'Open Rectangle'));
@@ -18274,6 +18507,20 @@ window.wwtlib = function(){
       return sorted;
     },
     _copyMenu_Click: function(sender, e) {
+      if (this._tour == null || this._tour.get_currentTourStop() == null) {
+        return;
+      }
+      var writer = new XmlTextWriter();
+      writer._writeProcessingInstruction('xml', "version='1.0' encoding='UTF-8'");
+      writer._writeStartElement('Overlays');
+      var $enum1 = ss.enumerate(this.selection.selectionSet);
+      while ($enum1.moveNext()) {
+        var overlay = $enum1.current;
+        overlay.saveToXml(writer, true);
+      }
+      writer._writeEndElement();
+      this.clipboardData = writer.body;
+      this.clipboardType = 'WorldWideTelescope.Overlay';
     },
     _cutMenu_Click: function(sender, e) {
       if (this._tour == null || this._tour.get_currentTourStop() == null) {
@@ -18291,6 +18538,42 @@ window.wwtlib = function(){
       OverlayList._updateOverlayList(this._tour.get_currentTourStop(), this.selection);
     },
     _pasteMenu_Click: function(sender, e) {
+      Undo.push(new UndoTourSlidelistChange(Language.getLocalizedText(544, 'Paste Object'), this._tour));
+      if (this.clipboardType === 'WorldWideTelescope.Overlay') {
+        var xParser = new DOMParser();
+        var doc = xParser.parseFromString(this.clipboardData, 'text/xml');
+        this.clearSelection();
+        var parent = Util.selectSingleNode(doc, 'Overlays');
+        var $enum1 = ss.enumerate(parent.childNodes);
+        while ($enum1.moveNext()) {
+          var child = $enum1.current;
+          if (child.nodeName === 'Overlay') {
+            var copy = Overlay._fromXml(this._tour.get_currentTourStop(), child);
+            var found = false;
+            var maxX = 0;
+            var maxY = 0;
+            var $enum2 = ss.enumerate(this._tour.get_currentTourStop().get_overlays());
+            while ($enum2.moveNext()) {
+              var item = $enum2.current;
+              if (item.id === copy.id && ss.typeOf(item) === ss.typeOf(copy)) {
+                found = true;
+                if (maxY < item.get_y() || maxX < item.get_x()) {
+                  maxX = item.get_x();
+                  maxY = item.get_y();
+                }
+              }
+            }
+            if (found) {
+              copy.set_x(maxX + 20);
+              copy.set_y(maxY + 20);
+            }
+            this._tour.get_currentTourStop().addOverlay(copy);
+            this.set_focus(copy);
+            this.selection.addSelection(this.get_focus());
+            OverlayList._updateOverlayList(this._tour.get_currentTourStop(), this.selection);
+          }
+        }
+      }
     },
     mouseClick: function(sender, e) {
       if (TourEditor.currentEditor != null) {
@@ -18322,7 +18605,16 @@ window.wwtlib = function(){
       }
       return true;
     },
+    _doneEditing: function() {
+      Undo.push(new UndoTourStopChange(Language.getLocalizedText(545, 'Text Edit'), this._tour));
+      (this.get_focus()).set_width(0);
+      (this.get_focus()).set_height(0);
+      this.get_focus().set_color((this.get_focus()).textObject.foregroundColor);
+      this.get_focus().cleanUp();
+    },
     _editText: function() {
+      var textObj = (this.get_focus()).textObject;
+      this.editTextCallback(textObj, ss.bind('_doneEditing', this));
     },
     keyDown: function(sender, e) {
       if (TourEditor.currentEditor != null) {
@@ -18552,12 +18844,12 @@ window.wwtlib = function(){
       }
       return false;
     },
-    addPicture: function(filename) {
+    addPicture: function(file) {
       if (this._tour == null || this._tour.get_currentTourStop() == null) {
         return false;
       }
       Undo.push(new UndoTourStopChange(Language.getLocalizedText(546, 'Insert Picture'), this._tour));
-      var bmp = BitmapOverlay.create(this._tour.get_currentTourStop(), filename);
+      var bmp = BitmapOverlay.create(this._tour.get_currentTourStop(), file);
       bmp.set_x(960);
       bmp.set_y(600);
       this._tour.get_currentTourStop().addOverlay(bmp);
@@ -18567,14 +18859,19 @@ window.wwtlib = function(){
     addFlipbook: function(filename) {
       return false;
     },
-    addAudio: function(filename) {
+    addAudio: function(file, music) {
       if (this._tour == null || this._tour.get_currentTourStop() == null) {
         return false;
       }
-      var audio = AudioOverlay.create(this._tour.get_currentTourStop(), filename);
+      var audio = AudioOverlay.create(this._tour.get_currentTourStop(), file);
       audio.set_x(900);
       audio.set_y(600);
-      this._tour.get_currentTourStop().addOverlay(audio);
+      if (music) {
+        this._tour.get_currentTourStop().set_musicTrack(audio);
+      }
+      else {
+        this._tour.get_currentTourStop().set_voiceTrack(audio);
+      }
       return true;
     },
     addVideo: function(filename) {
@@ -18585,7 +18882,7 @@ window.wwtlib = function(){
         return false;
       }
       var text = TextOverlay.create(textObject);
-      text.set_color(textObject._foregroundColor);
+      text.set_color(textObject.foregroundColor);
       text.set_x(960);
       text.set_y(600);
       Undo.push(new UndoTourStopChange(Language.getLocalizedText(547, 'Insert Text'), this._tour));
@@ -18722,11 +19019,17 @@ window.wwtlib = function(){
   }
   TourEdit._ensureSelectedVisible = function() {
   };
-  TourEdit._redoStep = function() {
-  };
   TourEdit._selectCurrent = function() {
   };
   TourEdit._undoStep = function() {
+    if (Undo.peekAction()) {
+      Undo.stepBack();
+    }
+  };
+  TourEdit._redoStep = function() {
+    if (Undo.peekRedoAction()) {
+      Undo.stepForward();
+    }
   };
   var TourEdit$ = {
 
@@ -18756,6 +19059,10 @@ window.wwtlib = function(){
   }
   var TourStopList$ = {
     selectAll: function() {
+      this.selectedItems = {};
+      for (var i = 0; i < this.tour.get_tourStops().length; i++) {
+        this.selectedItems[i] = this.tour.get_tourStops()[i];
+      }
     },
     refresh: function() {
       if (this.refreshCallback != null) {
@@ -18850,6 +19157,7 @@ window.wwtlib = function(){
             }
             overlay.play();
           }
+          LayerManager.setVisibleLayerList(this._tour.get_currentTourStop().layers);
           if (this._tour.get_currentTourStop().get_endTarget() != null && this._tour.get_currentTourStop().get_endTarget().get_zoomLevel() !== -1) {
             if (this._tour.get_currentTourStop().get_target().get_type() === 4) {
             }
@@ -19055,52 +19363,70 @@ window.wwtlib = function(){
           this._currentMasterSlide = this._tour.get_currentTourStop();
         }
       }
-      if (this._tour.get_currentTourstopIndex() < (this._tour.get_tourStops().length - 1)) {
+      if (this._tour.get_currentTourstopIndex() < (this._tour.get_tourStops().length - 1) || this._tour.get_currentTourStop().get_isLinked()) {
         if (this._tour.get_currentTourStop().get_endTarget() != null) {
           WWTControl.singleton.gotoTargetFull(false, true, this._tour.get_currentTourStop().get_endTarget().get_camParams(), this._tour.get_currentTourStop().get_target().get_studyImageset(), this._tour.get_currentTourStop().get_target().get_backgroundImageset());
           WWTControl.singleton.set__mover(null);
         }
         this._onTarget = false;
         if (this._tour.get_currentTourStop().get_isLinked()) {
-          switch (this._tour.get_currentTourStop().get_nextSlide()) {
-            case 'Return':
-              if (this._callStack.count > 0) {
-                this._playFromTourstop(this._tour.get_tourStops()[this._callStack.pop()]);
-              }
-              else {
-                this._tour.set_currentTourstopIndex(this._tour.get_tourStops().length - 1);
-              }
-              break;
-            default:
-              this._playFromTourstop(this._tour.get_tourStops()[this._tour.getTourStopIndexByID(this._tour.get_currentTourStop().get_nextSlide())]);
-              break;
+          try {
+            switch (this._tour.get_currentTourStop().get_nextSlide()) {
+              case 'Return':
+                if (this._callStack.count > 0) {
+                  this._playFromTourstop(this._tour.get_tourStops()[this._callStack.pop()]);
+                }
+                else {
+                  this._tour.set_currentTourstopIndex(this._tour.get_tourStops().length - 1);
+                }
+                break;
+              default:
+                this._playFromTourstop(this._tour.get_tourStops()[this._tour.getTourStopIndexByID(this._tour.get_currentTourStop().get_nextSlide())]);
+                break;
+            }
+          }
+          catch ($e2) {
+            if ((this._tour.get_currentTourstopIndex() < (this._tour.get_tourStops().length - 1))) {
+              this._tour.set_currentTourstopIndex(this._tour.get_currentTourstopIndex() + 1) - 1;
+            }
           }
         }
         else {
           this._tour.set_currentTourstopIndex(this._tour.get_currentTourstopIndex() + 1) - 1;
         }
         if (this._currentMasterSlide != null && this._tour.get_currentTourStop().get_masterSlide()) {
-          if (this._currentMasterSlide.get_musicTrack() != null) {
-            this._currentMasterSlide.get_musicTrack().stop();
-          }
-          if (this._currentMasterSlide.get_voiceTrack() != null) {
-            this._currentMasterSlide.get_voiceTrack().stop();
-          }
-          var $enum2 = ss.enumerate(this._currentMasterSlide.get_overlays());
-          while ($enum2.moveNext()) {
-            var overlay = $enum2.current;
-            overlay.stop();
-          }
-          this._currentMasterSlide = null;
+          this._stopCurrentMaster();
         }
-        WWTControl.singleton.gotoTarget(this._tour.get_currentTourStop().get_target(), false, false, false);
+        var instant = false;
+        switch (this._tour.get_currentTourStop().get__transition()) {
+          case 0:
+            break;
+          case 1:
+            instant = true;
+            break;
+          case 2:
+            instant = true;
+            break;
+          case 3:
+            instant = true;
+            break;
+          case 5:
+            instant = true;
+            break;
+          case 4:
+            instant = true;
+            break;
+          default:
+            break;
+        }
+        WWTControl.singleton.gotoTarget(this._tour.get_currentTourStop().get_target(), false, instant, false);
         this._slideStartTime = ss.now();
         Settings.tourSettings = this._tour.get_currentTourStop();
         SpaceTimeController.set_now(this._tour.get_currentTourStop().get_startTime());
         SpaceTimeController.set_syncToClock(false);
       }
       else {
-        this._stopMaster();
+        this._stopCurrentMaster();
         TourPlayer._playing = false;
         if (Settings.get_current().autoRepeatTour) {
           this._tour.set_currentTourstopIndex(-1);
@@ -19117,7 +19443,7 @@ window.wwtlib = function(){
         }
       }
     },
-    _stopMaster: function() {
+    _stopCurrentMaster: function() {
       if (this._currentMasterSlide != null) {
         if (this._currentMasterSlide.get_musicTrack() != null) {
           this._currentMasterSlide.get_musicTrack().stop();
@@ -19218,12 +19544,75 @@ window.wwtlib = function(){
       WWTControl.scriptInterface._fireTourEnded();
     },
     updateSlideStates: function() {
+      var slideChanging = false;
       var slideElapsedTime = ss.now() - this._slideStartTime;
       if (slideElapsedTime > this._tour.get_currentTourStop().get_duration() && TourPlayer._playing) {
         this.nextSlide();
+        slideChanging = true;
       }
       slideElapsedTime = ss.now() - this._slideStartTime;
-      this._tour.get_currentTourStop().set_tweenPosition((slideElapsedTime / this._tour.get_currentTourStop().get_duration()));
+      if (this._tour.get_currentTourStop() != null) {
+        this._tour.get_currentTourStop().set_tweenPosition(Math.min(1, (slideElapsedTime / this._tour.get_currentTourStop().get_duration())));
+      }
+      if (this._tour.get_currentTourStop() != null) {
+        this._tour.get_currentTourStop().faderOpacity = 0;
+        var elapsedSeconds = this._tour.get_currentTourStop().get_tweenPosition() * this._tour.get_currentTourStop().get_duration() / 1000;
+        if (slideChanging) {
+          WWTControl.singleton.set_crossFadeFrame(false);
+        }
+        switch (this._tour.get_currentTourStop().get__transition()) {
+          case 0:
+            this._tour.get_currentTourStop().faderOpacity = 0;
+            WWTControl.singleton.set_crossFadeFrame(false);
+            break;
+          case 2:
+            if (slideChanging) {
+            }
+            if (elapsedSeconds < (elapsedSeconds - this._tour.get_currentTourStop().get__transitionHoldTime())) {
+              WWTControl.singleton.set_crossFadeFrame(true);
+              this._tour.get_currentTourStop().faderOpacity = 1;
+            }
+            else {
+              this._tour.get_currentTourStop().faderOpacity = 0;
+              WWTControl.singleton.set_crossFadeFrame(false);
+            }
+            break;
+          case 1:
+            WWTControl.singleton.set_crossFadeFrame(true);
+            var opacity = Math.max(0, 1 - Math.min(1, (elapsedSeconds - this._tour.get_currentTourStop().get__transitionHoldTime()) / this._tour.get_currentTourStop().get__transitionTime()));
+            this._tour.get_currentTourStop().faderOpacity = opacity;
+            if (slideChanging) {
+            }
+            break;
+          case 3:
+          case 4:
+            WWTControl.singleton.set_crossFadeFrame(false);
+            var opacity = Math.max(0, 1 - Math.max(0, elapsedSeconds - this._tour.get_currentTourStop().get__transitionHoldTime()) / this._tour.get_currentTourStop().get__transitionTime());
+            this._tour.get_currentTourStop().faderOpacity = opacity;
+            break;
+          case 5:
+            WWTControl.singleton.set_crossFadeFrame(false);
+            break;
+          default:
+            break;
+        }
+        if (!this._tour.get_currentTourStop().get_isLinked() && this._tour.get_currentTourstopIndex() < (this._tour.get_tourStops().length - 1)) {
+          var nextTrans = this._tour.get_tourStops()[this._tour.get_currentTourstopIndex() + 1].get__transition();
+          var nextTransTime = this._tour.get_tourStops()[this._tour.get_currentTourstopIndex() + 1].get__transitionOutTime();
+          switch (nextTrans) {
+            case 5:
+            case 3:
+              if (!this._tour.get_currentTourStop().faderOpacity) {
+                WWTControl.singleton.set_crossFadeFrame(false);
+                var opacity = Math.max(0, 1 - Math.min(1, ((this._tour.get_currentTourStop().get_duration() / 1000) - elapsedSeconds) / nextTransTime));
+                this._tour.get_currentTourStop().faderOpacity = opacity;
+              }
+              break;
+            default:
+              break;
+          }
+        }
+      }
     },
     updateTweenPosition: function(tween) {
       var slideElapsedTime = ss.now() - this._slideStartTime;
@@ -19405,11 +19794,18 @@ window.wwtlib = function(){
     this._tourStopType = 0;
     this._keyFramed = false;
     this._tweenPosition = 0;
+    this.faderOpacity = 0;
     this._owner = null;
     this._transition = 0;
+    this._transitionTime = 2;
+    this._transitionHoldTime = 4;
+    this._transitionOutTime = 2;
     this._nextSlide = 'Next';
     this._fadeInOverlays = false;
     this._masterSlide = false;
+    this._id = '';
+    this._description = '';
+    this._name = '';
     this._duration = 10000;
     this._interpolationType = 0;
     this._hasLocation = true;
@@ -19489,6 +19885,13 @@ window.wwtlib = function(){
     ts._target = target;
     return ts;
   };
+  TourStop.getXmlText = function(ts) {
+    var writer = new XmlTextWriter();
+    writer._writeProcessingInstruction('xml', "version='1.0' encoding='UTF-8'");
+    ts._saveToXml(writer, true);
+    writer._close();
+    return writer.body;
+  };
   TourStop._fromXml = function(owner, tourStop) {
     var newTourStop = new TourStop();
     newTourStop._owner = owner;
@@ -19504,51 +19907,14 @@ window.wwtlib = function(){
       newTourStop._nextSlide = tourStop.attributes.getNamedItem('NextSlide').nodeValue;
     }
     if (tourStop.attributes.getNamedItem('InterpolationType') != null) {
-      switch (tourStop.attributes.getNamedItem('InterpolationType').nodeValue) {
-        case 'Linear':
-          newTourStop.set_interpolationType(0);
-          break;
-        case 'EaseIn':
-          newTourStop.set_interpolationType(1);
-          break;
-        case 'EaseOut':
-          newTourStop.set_interpolationType(2);
-          break;
-        case 'EaseInOut':
-          newTourStop.set_interpolationType(3);
-          break;
-        case 'Exponential':
-          newTourStop.set_interpolationType(4);
-          break;
-        case 'Default':
-          newTourStop.set_interpolationType(5);
-          break;
-        default:
-          newTourStop.set_interpolationType(0);
-          break;
-      }
+      newTourStop.set_interpolationType(Enums.parse('InterpolationType', tourStop.attributes.getNamedItem('InterpolationType').nodeValue));
     }
     newTourStop._fadeInOverlays = true;
     if (tourStop.attributes.getNamedItem('FadeInOverlays') != null) {
       newTourStop._fadeInOverlays = ss.boolean(tourStop.attributes.getNamedItem('FadeInOverlays').nodeValue);
     }
     if (tourStop.attributes.getNamedItem('Transition') != null) {
-      switch (tourStop.attributes.getNamedItem('Transition').nodeValue) {
-        case 'Slew':
-          newTourStop._transition = 0;
-          break;
-        case 'Instant':
-          newTourStop._transition = 1;
-          break;
-        case 'CrossFade':
-          newTourStop._transition = 2;
-          break;
-        case 'FadeToBlack':
-          newTourStop._transition = 3;
-          break;
-        default:
-          break;
-      }
+      newTourStop._transition = Enums.parse('TransitionType', tourStop.attributes.getNamedItem('Transition').nodeValue);
     }
     if (tourStop.attributes.getNamedItem('HasLocation') != null) {
       newTourStop._hasLocation = ss.boolean(tourStop.attributes.getNamedItem('HasLocation').nodeValue);
@@ -19777,7 +20143,9 @@ window.wwtlib = function(){
     var $enum1 = ss.enumerate(overlays.childNodes);
     while ($enum1.moveNext()) {
       var overlay = $enum1.current;
-      newTourStop.addOverlay(Overlay._fromXml(newTourStop, overlay));
+      if (overlay.nodeName === 'Overlay') {
+        newTourStop.addOverlay(Overlay._fromXml(newTourStop, overlay));
+      }
     }
     var musicNode = Util.selectSingleNode(tourStop, 'MusicTrack');
     if (musicNode != null) {
@@ -19786,6 +20154,10 @@ window.wwtlib = function(){
     var voiceNode = Util.selectSingleNode(tourStop, 'VoiceTrack');
     if (voiceNode != null) {
       newTourStop._voiceTrack = Overlay._fromXml(newTourStop, Util.selectSingleNode(voiceNode, 'Overlay'));
+    }
+    var layerNode = Util.selectSingleNode(tourStop, 'VisibleLayers');
+    if (layerNode != null) {
+      newTourStop._loadLayerList(layerNode);
     }
     newTourStop._thumbnail = owner.getCachedTexture(ss.format('{0}.thumb.png', newTourStop._id), function() {
       var c = 0;
@@ -19827,6 +20199,22 @@ window.wwtlib = function(){
       if (this.get_keyFramed()) {
       }
     },
+    copy: function() {
+      var writer = new XmlTextWriter();
+      writer._writeProcessingInstruction('xml', "version='1.0' encoding='UTF-8'");
+      this._saveToXml(writer, true);
+      try {
+        var xParser = new DOMParser();
+        var doc = xParser.parseFromString(writer.body, 'text/xml');
+        var node = Util.selectSingleNode(doc, 'TourStop');
+        var ts = TourStop._fromXml(this.get_owner(), node);
+        ts.set_id(Guid.newGuid().toString());
+        return ts;
+      }
+      catch ($e1) {
+      }
+      return null;
+    },
     get_owner: function() {
       return this._owner;
     },
@@ -19840,6 +20228,42 @@ window.wwtlib = function(){
     set__transition: function(value) {
       if (this._transition !== value) {
         this._transition = value;
+        if (this._owner != null) {
+          this._owner.set_tourDirty(true);
+        }
+      }
+      return value;
+    },
+    get__transitionTime: function() {
+      return this._transitionTime;
+    },
+    set__transitionTime: function(value) {
+      if (this._transitionTime !== value) {
+        this._transitionTime = value;
+        if (this._owner != null) {
+          this._owner.set_tourDirty(true);
+        }
+      }
+      return value;
+    },
+    get__transitionHoldTime: function() {
+      return this._transitionHoldTime;
+    },
+    set__transitionHoldTime: function(value) {
+      if (this._transitionHoldTime !== value) {
+        this._transitionHoldTime = value;
+        if (this._owner != null) {
+          this._owner.set_tourDirty(true);
+        }
+      }
+      return value;
+    },
+    get__transitionOutTime: function() {
+      return this._transitionOutTime;
+    },
+    set__transitionOutTime: function(value) {
+      if (this._transitionOutTime !== value) {
+        this._transitionOutTime = value;
         if (this._owner != null) {
           this._owner.set_tourDirty(true);
         }
@@ -20380,6 +20804,159 @@ window.wwtlib = function(){
     get_tourStopThumbnailFilename: function() {
       return ss.format('{0}.thumb.png', this._id);
     },
+    _saveToXml: function(xmlWriter, saveContent) {
+      if (saveContent) {
+        if (this._thumbnail != null) {
+        }
+      }
+      xmlWriter._writeStartElement('TourStop');
+      xmlWriter._writeAttributeString('Id', this._id);
+      xmlWriter._writeAttributeString('Name', this._name);
+      xmlWriter._writeAttributeString('Description', this._description);
+      xmlWriter._writeAttributeString('Thumbnail', this._thumbnailString);
+      xmlWriter._writeAttributeString('Duration', Util.xmlDuration(this._duration));
+      xmlWriter._writeAttributeString('Master', this._masterSlide.toString());
+      xmlWriter._writeAttributeString('TransitionType', Enums.toXml('TransitionType', this._transition));
+      xmlWriter._writeAttributeString('TransitionTime', this._transitionTime.toString());
+      xmlWriter._writeAttributeString('TransitionOutTime', this._transitionOutTime.toString());
+      xmlWriter._writeAttributeString('TransitionHoldTime', this._transitionHoldTime.toString());
+      xmlWriter._writeAttributeString('NextSlide', this._nextSlide);
+      xmlWriter._writeAttributeString('InterpolationType', Enums.toXml('InterpolationType', this._interpolationType));
+      xmlWriter._writeAttributeString('HasLocation', this._hasLocation.toString());
+      if (this._hasLocation) {
+        xmlWriter._writeAttributeString('LocationAltitude', this._locationAltitude.toString());
+        xmlWriter._writeAttributeString('LocationLat', this._locationLat.toString());
+        xmlWriter._writeAttributeString('LocationLng', this._locationLng.toString());
+      }
+      xmlWriter._writeAttributeString('HasTime', this._hasTime.toString());
+      if (this._hasTime) {
+        xmlWriter._writeAttributeString('StartTime', Util.xmlDate(this._startTime));
+        xmlWriter._writeAttributeString('EndTime', Util.xmlDate(this._endTime));
+      }
+      xmlWriter._writeAttributeString('ActualPlanetScale', this._actualPlanetScale.toString());
+      xmlWriter._writeAttributeString('ShowClouds', this._showClouds.toString());
+      xmlWriter._writeAttributeString('EarthCutawayView', this._earthCutawayView.toString());
+      xmlWriter._writeAttributeString('ShowConstellationBoundries', this._showConstellationBoundries.toString());
+      xmlWriter._writeAttributeString('ShowConstellationFigures', this._showConstellationFigures.toString());
+      xmlWriter._writeAttributeString('ShowConstellationSelection', this._showConstellationSelection.toString());
+      xmlWriter._writeAttributeString('ShowEcliptic', this._showEcliptic.toString());
+      xmlWriter._writeAttributeString('ShowElevationModel', this._showElevationModel.toString());
+      this._showFieldOfView = false;
+      xmlWriter._writeAttributeString('ShowFieldOfView', this._showFieldOfView.toString());
+      xmlWriter._writeAttributeString('ShowGrid', this._showGrid.toString());
+      xmlWriter._writeAttributeString('ShowHorizon', this._showHorizon.toString());
+      xmlWriter._writeAttributeString('ShowHorizonPanorama', this._showHorizonPanorama.toString());
+      xmlWriter._writeAttributeString('ShowMoonsAsPointSource', this._showMoonsAsPointSource.toString());
+      xmlWriter._writeAttributeString('ShowSolarSystem', this._showSolarSystem.toString());
+      xmlWriter._writeAttributeString('FovTelescope', this._fovTelescope.toString());
+      xmlWriter._writeAttributeString('FovEyepiece', this._fovEyepiece.toString());
+      xmlWriter._writeAttributeString('FovCamera', this._fovCamera.toString());
+      xmlWriter._writeAttributeString('LocalHorizonMode', this._localHorizonMode.toString());
+      xmlWriter._writeAttributeString('GalacticMode', this._galacticMode.toString());
+      xmlWriter._writeAttributeString('FadeInOverlays', this._fadeInOverlays.toString());
+      xmlWriter._writeAttributeString('SolarSystemStars', this._solarSystemStars.toString());
+      xmlWriter._writeAttributeString('SolarSystemMilkyWay', this._solarSystemMilkyWay.toString());
+      xmlWriter._writeAttributeString('SolarSystemCosmos', this._solarSystemCosmos.toString());
+      xmlWriter._writeAttributeString('SolarSystemCMB', this._solarSystemCMB.toString());
+      xmlWriter._writeAttributeString('SolarSystemOrbits', this._solarSystemOrbits.toString());
+      xmlWriter._writeAttributeString('SolarSystemMinorOrbits', this._solarSystemMinorOrbits.toString());
+      xmlWriter._writeAttributeString('SolarSystemOverlays', this._solarSystemOverlays.toString());
+      xmlWriter._writeAttributeString('SolarSystemLighting', this._solarSystemLighting.toString());
+      xmlWriter._writeAttributeString('ShowISSModel', this._showISSModel.toString());
+      xmlWriter._writeAttributeString('SolarSystemScale', this._solarSystemScale.toString());
+      xmlWriter._writeAttributeString('MinorPlanetsFilter', this._minorPlanetsFilter.toString());
+      xmlWriter._writeAttributeString('PlanetOrbitsFilter', this._planetOrbitsFilter.toString());
+      xmlWriter._writeAttributeString('SolarSystemMultiRes', this._solarSystemMultiRes.toString());
+      xmlWriter._writeAttributeString('SolarSystemMinorPlanets', this._solarSystemMinorPlanets.toString());
+      xmlWriter._writeAttributeString('SolarSystemPlanets', this._solarSystemPlanets.toString());
+      xmlWriter._writeAttributeString('ShowEarthSky', this._showEarthSky.toString());
+      xmlWriter._writeAttributeString('ShowEquatorialGridText', this.get_showEquatorialGridText().toString());
+      xmlWriter._writeAttributeString('ShowGalacticGrid', this.get_showGalacticGrid().toString());
+      xmlWriter._writeAttributeString('ShowGalacticGridText', this.get_showGalacticGridText().toString());
+      xmlWriter._writeAttributeString('ShowEclipticGrid', this.get_showEclipticGrid().toString());
+      xmlWriter._writeAttributeString('ShowEclipticGridText', this.get_showEclipticGridText().toString());
+      xmlWriter._writeAttributeString('ShowEclipticOverviewText', this.get_showEclipticOverviewText().toString());
+      xmlWriter._writeAttributeString('ShowAltAzGrid', this.get_showAltAzGrid().toString());
+      xmlWriter._writeAttributeString('ShowAltAzGridText', this.get_showAltAzGridText().toString());
+      xmlWriter._writeAttributeString('ShowPrecessionChart', this.get_showPrecessionChart().toString());
+      xmlWriter._writeAttributeString('ConstellationPictures', this.get_showConstellationPictures().toString());
+      xmlWriter._writeAttributeString('ConstellationsEnabled', this.get_constellationsEnabled());
+      xmlWriter._writeAttributeString('ShowConstellationLabels', this.get_showConstellationLabels().toString());
+      xmlWriter._writeAttributeString('ShowSkyOverlays', this.get_showSkyOverlays().toString());
+      xmlWriter._writeAttributeString('ShowConstellations', this.get_showConstellations().toString());
+      xmlWriter._writeAttributeString('ShowSkyNode', this.get_showSkyNode().toString());
+      xmlWriter._writeAttributeString('ShowSkyGrids', this.get_showSkyGrids().toString());
+      xmlWriter._writeAttributeString('SkyOverlaysIn3d', this.get_showSkyOverlaysIn3d().toString());
+      xmlWriter._writeAttributeString('ConstellationFiguresFilter', this._constellationFiguresFilter.toString());
+      xmlWriter._writeAttributeString('ConstellationBoundariesFilter', this._constellationBoundariesFilter.toString());
+      xmlWriter._writeAttributeString('ConstellationNamesFilter', this._constellationNamesFilter.toString());
+      xmlWriter._writeAttributeString('ConstellationArtFilter', this._constellationArtFilter.toString());
+      this._target._saveToXml(xmlWriter, 'Place');
+      if (this._endTarget != null) {
+        this._endTarget._saveToXml(xmlWriter, 'EndTarget');
+      }
+      xmlWriter._writeStartElement('Overlays');
+      var $enum1 = ss.enumerate(this._overlays);
+      while ($enum1.moveNext()) {
+        var overlay = $enum1.current;
+        overlay.saveToXml(xmlWriter, false);
+      }
+      xmlWriter._writeEndElement();
+      if (this._musicTrack != null) {
+        xmlWriter._writeStartElement('MusicTrack');
+        this._musicTrack.saveToXml(xmlWriter, false);
+        xmlWriter._writeEndElement();
+      }
+      if (this._voiceTrack != null) {
+        xmlWriter._writeStartElement('VoiceTrack');
+        this._voiceTrack.saveToXml(xmlWriter, false);
+        xmlWriter._writeEndElement();
+      }
+      this._writeLayerList(xmlWriter);
+      xmlWriter._writeEndElement();
+    },
+    _writeLayerList: function(xmlWriter) {
+      if (ss.keyCount(this.layers) > 0) {
+        xmlWriter._writeStartElement('VisibleLayers');
+        var $enum1 = ss.enumerate(ss.keys(this.layers));
+        while ($enum1.moveNext()) {
+          var key = $enum1.current;
+          var info = this.layers[key];
+          xmlWriter._writeStartElement('Layer');
+          xmlWriter._writeAttributeString('StartOpacity', info.startOpacity.toString());
+          xmlWriter._writeAttributeString('EndOpacity', info.endOpacity.toString());
+          var len = info.startParams.length;
+          xmlWriter._writeAttributeString('ParamCount', len.toString());
+          for (var i = 0; i < len; i++) {
+            xmlWriter._writeAttributeString(ss.format('StartParam{0}', i), info.startParams[i].toString());
+            xmlWriter._writeAttributeString(ss.format('EndParam{0}', i), info.endParams[i].toString());
+          }
+          xmlWriter._writeValue(info.id.toString());
+          xmlWriter._writeEndElement();
+        }
+        xmlWriter._writeEndElement();
+      }
+    },
+    _addFilesToCabinet: function(fc, excludeAudio) {
+      if (this._thumbnail != null) {
+        var filename = ss.format('{0}.thumb.png', this._id);
+        var blob = this._owner.getFileBlob(filename);
+        fc.addFile(this._owner.get_workingDirectory() + filename, blob);
+      }
+      if (!excludeAudio) {
+        if (this._musicTrack != null) {
+          this._musicTrack.addFilesToCabinet(fc);
+        }
+        if (this._voiceTrack != null) {
+          this._voiceTrack.addFilesToCabinet(fc);
+        }
+      }
+      var $enum1 = ss.enumerate(this._overlays);
+      while ($enum1.moveNext()) {
+        var overlay = $enum1.current;
+        overlay.addFilesToCabinet(fc);
+      }
+    },
     getNextDefaultName: function(baseName) {
       var suffixId = 1;
       var $enum1 = ss.enumerate(this._overlays);
@@ -20398,6 +20975,32 @@ window.wwtlib = function(){
         }
       }
       return ss.format('{0} {1}', baseName, suffixId);
+    },
+    _loadLayerList: function(layersNode) {
+      var $enum1 = ss.enumerate(layersNode.childNodes);
+      while ($enum1.moveNext()) {
+        var layer = $enum1.current;
+        if (layer.nodeName === 'Layer') {
+          var info = new LayerInfo();
+          var id = layer.innerHTML;
+          info.id = Guid.fromString(id);
+          info.startOpacity = parseFloat(layer.attributes.getNamedItem('StartOpacity').nodeValue);
+          info.endOpacity = parseFloat(layer.attributes.getNamedItem('EndOpacity').nodeValue);
+          var len = 0;
+          if (layer.attributes.getNamedItem('ParamCount') != null) {
+            len = parseInt(layer.attributes.getNamedItem('ParamCount').nodeValue);
+          }
+          info.startParams = new Array(len);
+          info.endParams = new Array(len);
+          info.frameParams = new Array(len);
+          for (var i = 0; i < len; i++) {
+            info.startParams[i] = parseFloat(layer.attributes.getNamedItem(ss.format('StartParam{0}', i)).nodeValue);
+            info.endParams[i] = parseFloat(layer.attributes.getNamedItem(ss.format('EndParam{0}', i)).nodeValue);
+            info.frameParams[i] = info.startParams[i];
+          }
+          this.layers[info.id] = info;
+        }
+      }
     },
     _updateLayerOpacity: function() {
       if (!this.get_keyFramed()) {
@@ -20624,6 +21227,9 @@ window.wwtlib = function(){
       return value;
     },
     getSetting: function(type) {
+      if (type === 17) {
+        return new SettingParameter(true, this.faderOpacity, !!this.faderOpacity, null);
+      }
       return new SettingParameter(false, 1, false, null);
     }
   };
@@ -20653,6 +21259,11 @@ window.wwtlib = function(){
     this._currentIndex = 0;
     this._actionText = '';
     this._targetTour = null;
+    this._currentIndex = tour.get_currentTourstopIndex();
+    this._actionText = text;
+    this._targetTour = tour;
+    this._undoXml = TourStop.getXmlText(tour.get_currentTourStop());
+    this._targetTour.set_tourDirty(true);
   }
   var UndoTourStopChange$ = {
     get_actionText: function() {
@@ -20663,8 +21274,24 @@ window.wwtlib = function(){
       return value;
     },
     undo: function() {
+      var tsRedo = this._targetTour.get_tourStops()[this._currentIndex];
+      var parser = new DOMParser();
+      var doc = parser.parseFromString(this._undoXml, 'text/xml');
+      var node = Util.selectSingleNode(doc, 'TourStop');
+      this._targetTour.get_tourStops()[this._currentIndex] = TourStop._fromXml(this._targetTour, node);
+      this._targetTour.set_currentTourstopIndex(this._currentIndex);
+      if (ss.emptyString(this._redoXml)) {
+        this._redoXml = TourStop.getXmlText(tsRedo);
+      }
+      this._targetTour.set_tourDirty(true);
     },
     redo: function() {
+      var parser = new DOMParser();
+      var doc = parser.parseFromString(this._redoXml, 'text/xml');
+      var node = Util.selectSingleNode(doc, 'TourStop');
+      this._targetTour.get_tourStops()[this._currentIndex] = TourStop._fromXml(this._targetTour, node);
+      this._targetTour.set_currentTourstopIndex(this._currentIndex);
+      this._targetTour.set_tourDirty(true);
     },
     toString: function() {
       return this._actionText;
@@ -20914,6 +21541,9 @@ window.wwtlib = function(){
 
   function UiTools() {
   }
+  UiTools.gamma = function(val, gamma) {
+    return Math.min(255, ss.truncate(((255 * Math.pow(val / 255, 1 / gamma)) + 0.5)));
+  };
   UiTools.getNamesStringFromArray = function(array) {
     var names = '';
     var delim = '';
@@ -21107,8 +21737,24 @@ window.wwtlib = function(){
     }
     return val;
   };
+  Util.xmlDuration = function(duration) {
+    var s = duration / 1000;
+    var hours = Math.floor(s / 3600);
+    var min = Math.floor(s / 60) - (hours * 60);
+    var sec = s - ((hours * 3600) + min * 60);
+    return ss.format('{0}:{1}:{2}', hours, min, sec);
+  };
   Util.getTourComponent = function(url, name) {
     return 'http://www.worldwidetelescope.org/GetTourFile.aspx?targeturl=' + encodeURIComponent(url) + '&filename=' + name;
+  };
+  Util.xmlDate = function(d) {
+    var hours = d.getHours();
+    var amPm = 'AM';
+    if (hours > 12) {
+      hours -= 12;
+      amPm = 'PM';
+    }
+    return (d.getMonth() + 1).toString() + '/' + d.getDate().toString() + '/' + d.getFullYear().toString() + ' ' + hours.toString() + ':' + d.getMinutes().toString() + ':' + d.getSeconds().toString() + ' ' + amPm;
   };
   Util.selectSingleNode = function(parent, name) {
     var node = null;
@@ -21133,22 +21779,7 @@ window.wwtlib = function(){
   };
   Util.getWrappedText = function(ctx, text, width) {
     var lines = [];
-    var words = text.split(' ');
-    var currentLine = '';
-    for (var i = 0; i < words.length; i++) {
-      if (!ss.emptyString(words[i])) {
-        if (!currentLine || ctx.measureText(currentLine + ' ' + words[i]).width < width) {
-          currentLine += ' ' + words[i];
-        }
-        else {
-          lines.push(currentLine);
-          currentLine = words[i];
-        }
-      }
-    }
-    if (!!currentLine) {
-      lines.push(currentLine);
-    }
+    lines.push(text);
     return lines;
   };
   Util.toHex = function(number) {
@@ -21289,6 +21920,38 @@ window.wwtlib = function(){
     toString: function() {
       return this._guid;
     }
+  };
+
+
+  // wwtlib.Enums
+
+  function Enums() {
+  }
+  Enums.parse = function(enumType, value) {
+    if (value === 'Default') {
+      value = 'DefaultV';
+    }
+    if (value === '0') {
+      return 0;
+    }
+    var val = value.substr(0, 1).toLowerCase() + value.substr(1);
+    return wwtlib[enumType][val];
+  };
+  Enums.toXml = function(enumType, value) {
+     var x = "0"; var p = Object.keys(wwtlib[enumType]); for (var i in p)
+ { if ( wwtlib[enumType][p[i]] == value ) {
+ x = p[i]; break; 
+}
+ };
+    var val =  x;
+    var enumString = val.substr(0, 1).toUpperCase() + val.substr(1);
+    if (enumString === 'DefaultV') {
+      enumString = 'Default';
+    }
+    return enumString;
+  };
+  var Enums$ = {
+
   };
 
 
@@ -21602,7 +22265,7 @@ window.wwtlib = function(){
         var item = $enum1.current;
         if (item.visible) {
           var md = document.createElement('div');
-          md.className = 'contextmenuitem';
+          md.className = (item.checked) ? 'contextmenuitem checkedmenu' : 'contextmenuitem';
           md.innerText = item.name;
           var it = md;
           it.itemTag = item;
@@ -21639,6 +22302,109 @@ window.wwtlib = function(){
   }
   var TagMe$ = {
 
+  };
+
+
+  // wwtlib.XmlTextWriter
+
+  function XmlTextWriter() {
+    this.body = "<?xml version='1.0' encoding='UTF-8'?>\r\n";
+    this.formatting = 1;
+    this._elementStack = new ss.Stack();
+    this._pending = false;
+    this._currentName = '';
+    this._attributes = {};
+    this._value = '';
+  }
+  var XmlTextWriter$ = {
+    _pushNewElement: function(name) {
+      this._writePending(false);
+      this._elementStack.push(name);
+      this._pending = true;
+      this._currentName = name;
+    },
+    _writePending: function(fullClose) {
+      var closed = true;
+      if (this._pending) {
+        for (var i = 1; i < this._elementStack.count; i++) {
+          this.body += '  ';
+        }
+        this.body += '<' + this._currentName;
+        if (ss.keyCount(this._attributes) > 0) {
+          var $enum1 = ss.enumerate(ss.keys(this._attributes));
+          while ($enum1.moveNext()) {
+            var key = $enum1.current;
+            this.body += ss.format(' {0}="{1}"', key, this._attributes[key]);
+          }
+        }
+        if (!ss.emptyString(this._value)) {
+          this.body += '>';
+          closed = false;
+          if (!ss.emptyString(this._value)) {
+            this.body += this._value;
+          }
+        }
+        else {
+          if (fullClose) {
+            this.body += ' />\r\n';
+            closed = true;
+          }
+          else {
+            this.body += '>\r\n';
+          }
+        }
+        this._pending = false;
+        this._currentName = '';
+        this._value = '';
+        this._attributes = {};
+        return closed;
+      }
+      return false;
+    },
+    _writeProcessingInstruction: function(v1, v2) {
+    },
+    _writeStartElement: function(name) {
+      this._pushNewElement(name);
+    },
+    _writeAttributeString: function(key, value) {
+      if (value != null) {
+        this._attributes[key] = ss.replaceString(value.toString(), '&', '&amp;');
+      }
+    },
+    _writeEndElement: function() {
+      if (!this._writePending(true)) {
+        for (var i = 1; i < this._elementStack.count; i++) {
+          this.body += '  ';
+        }
+        this.body += ss.format('</{0}>\r\n', this._elementStack.pop());
+      }
+      else {
+        this._elementStack.pop();
+      }
+    },
+    _writeString: function(text) {
+      this._value = ss.replaceString(text, '&', '&amp;');
+    },
+    _writeFullEndElement: function() {
+      this._writePending(false);
+      for (var i = 1; i < this._elementStack.count; i++) {
+        this.body += '  ';
+      }
+      this.body += ss.format('</{0}>\r\n', this._elementStack.pop());
+    },
+    _close: function() {
+    },
+    _writeElementString: function(name, value) {
+      this._writeStartElement(name);
+      this._writeValue(ss.replaceString(value, '&', '&amp;'));
+      this._writeEndElement();
+    },
+    _writeValue: function(val) {
+      this._value = ss.replaceString(val, '&', '&amp;');
+    },
+    _writeCData: function(htmlDescription) {
+      this._value = ss.format('<![CDATA[{0}]]>', htmlDescription);
+    }
   };
 
 
@@ -21742,6 +22508,7 @@ window.wwtlib = function(){
 
   function WebFile(url) {
     this._state = 0;
+    this.responseType = '';
     this._url = url;
   }
   var WebFile$ = {
@@ -21772,6 +22539,10 @@ window.wwtlib = function(){
       this._data = textReceived;
       this.set_state(1);
     },
+    _loadBlob: function(blob) {
+      this._blobdata = blob;
+      this.set_state(1);
+    },
     _error: function() {
       this._message = ss.format('Error encountered loading {0}', this._url);
       this.set_state(2);
@@ -21798,9 +22569,17 @@ window.wwtlib = function(){
       this._xhr = new XMLHttpRequest();
       try {
         this._xhr.open('GET', this._url);
+        if (this.responseType != null) {
+          this._xhr.responseType = this.responseType;
+        }
         this._xhr.onreadystatechange = function() {
           if ($this._xhr.readyState === 4) {
-            $this._loadData($this._xhr.responseText);
+            if (!$this.responseType) {
+              $this._loadData($this._xhr.responseText);
+            }
+            else {
+              $this._loadBlob($this._xhr.response);
+            }
           }
         };
         this._xhr.send();
@@ -21813,6 +22592,9 @@ window.wwtlib = function(){
     },
     getText: function() {
       return this._data;
+    },
+    getBlob: function() {
+      return ss.safeCast(this._blobdata, Blob);
     },
     getXml: function() {
       var xParser = new DOMParser();
@@ -21879,6 +22661,11 @@ window.wwtlib = function(){
     this._zoomMin = 0.001373291015625;
     this._zoomMinSolarSystem = 0.0001;
     this.constellation = 'UMA';
+    this._fadePoints = null;
+    this.fader = BlendState.create(true, 2000);
+    this._crossFadeFrame = false;
+    this._crossFadeTexture = null;
+    this._sprite = new Sprite2d();
     this.renderType = 2;
     this._milkyWayBackground = null;
     this._foregroundCanvas = null;
@@ -21960,9 +22747,15 @@ window.wwtlib = function(){
     navigator.geolocation.getCurrentPosition(WWTControl._getLocation, WWTControl._getLocationError);
   };
   WWTControl._getLocation = function(pos) {
-    Settings.get_globalSettings().set_locationLat(pos.coords.latitude);
-    Settings.get_globalSettings().set_locationLng(pos.coords.longitude);
-    Settings.get_globalSettings().set_locationAltitude(pos.coords.altitude);
+    if (!!pos.coords.latitude) {
+      Settings.get_globalSettings().set_locationLat(pos.coords.latitude);
+    }
+    if (!!pos.coords.longitude) {
+      Settings.get_globalSettings().set_locationLng(pos.coords.longitude);
+    }
+    if (!!pos.coords.altitude) {
+      Settings.get_globalSettings().set_locationAltitude(pos.coords.altitude);
+    }
   };
   WWTControl._getLocationError = function(pos) {
     if (pos != null && pos.coords != null) {
@@ -22033,6 +22826,73 @@ window.wwtlib = function(){
       return value;
     },
     _notifyMoveComplete: function() {
+    },
+    get_crossFadeFrame: function() {
+      return this._crossFadeFrame;
+    },
+    set_crossFadeFrame: function(value) {
+      if (value && this._crossFadeFrame !== value) {
+        if (this._crossFadeTexture != null) {
+        }
+        this._crossFadeTexture = this.renderContext._getScreenTexture();
+      }
+      this._crossFadeFrame = value;
+      if (!value) {
+        if (this._crossFadeTexture != null) {
+          this._crossFadeTexture = null;
+        }
+      }
+      return value;
+    },
+    _fadeFrame: function() {
+      if (this.renderContext.gl != null) {
+        var sp = Settings.get_active().getSetting(17);
+        if ((sp.opacity > 0)) {
+          var color = Color._fromArgbColor(255 - UiTools.gamma(255 - ss.truncate((sp.opacity * 255)), 1 / 2.2), Colors.get_black());
+          if (!(sp.opacity > 0)) {
+            color = Color._fromArgbColor(255 - UiTools.gamma(255 - ss.truncate((sp.opacity * 255)), 1 / 2.2), Colors.get_black());
+          }
+          if (this._crossFadeFrame) {
+            color = Color._fromArgbColor(UiTools.gamma(ss.truncate((sp.opacity * 255)), 1 / 2.2), Colors.get_white());
+          }
+          else {
+            if (this._crossFadeTexture != null) {
+              this._crossFadeTexture = null;
+            }
+          }
+          if (this._fadePoints == null) {
+            this._fadePoints = new Array(4);
+            for (var i = 0; i < 4; i++) {
+              this._fadePoints[i] = new PositionColoredTextured();
+            }
+          }
+          this._fadePoints[0].position.x = -this.renderContext.width / 2;
+          this._fadePoints[0].position.y = this.renderContext.height / 2;
+          this._fadePoints[0].position.z = 1347;
+          this._fadePoints[0].tu = 0;
+          this._fadePoints[0].tv = 1;
+          this._fadePoints[0].color = color;
+          this._fadePoints[1].position.x = -this.renderContext.width / 2;
+          this._fadePoints[1].position.y = -this.renderContext.height / 2;
+          this._fadePoints[1].position.z = 1347;
+          this._fadePoints[1].tu = 0;
+          this._fadePoints[1].tv = 0;
+          this._fadePoints[1].color = color;
+          this._fadePoints[2].position.x = this.renderContext.width / 2;
+          this._fadePoints[2].position.y = this.renderContext.height / 2;
+          this._fadePoints[2].position.z = 1347;
+          this._fadePoints[2].tu = 1;
+          this._fadePoints[2].tv = 1;
+          this._fadePoints[2].color = color;
+          this._fadePoints[3].position.x = this.renderContext.width / 2;
+          this._fadePoints[3].position.y = -this.renderContext.height / 2;
+          this._fadePoints[3].position.z = 1347;
+          this._fadePoints[3].tu = 1;
+          this._fadePoints[3].tv = 0;
+          this._fadePoints[3].color = color;
+          this._sprite.draw(this.renderContext, this._fadePoints, 4, this._crossFadeTexture, true, 1);
+        }
+      }
     },
     render: function() {
       var $this = this;
@@ -22201,10 +23061,15 @@ window.wwtlib = function(){
           }
         }
       }
+      this.renderContext.setupMatricesOverlays();
+      this._fadeFrame();
       this._frameCount++;
       TileCache.decimateQueue();
       TileCache.processQueue(this.renderContext);
       Tile.currentRenderGeneration++;
+      if (!TourPlayer.get_playing()) {
+        this.set_crossFadeFrame(false);
+      }
       var now = ss.now();
       var ms = now - this._lastUpdate;
       if (ms > 1000) {
@@ -23091,14 +23956,14 @@ window.wwtlib = function(){
       this.tour = new TourDocument();
       this.tour.set_title(name);
       this.setupTour();
-      this.tourEdit.addSlide(false);
+      this.tour.set_editMode(true);
       return this.tour;
     },
     setupTour: function() {
       this.tourEdit = new TourEditTab();
       this.tourEdit.set_tour(this.tour);
       this.tour.set_currentTourstopIndex(0);
-      this.tour.set_editMode(true);
+      this.tour.set_editMode(false);
       this.uiController = this.tourEdit.tourEditorUI;
     },
     playTour: function(url) {
@@ -23110,6 +23975,7 @@ window.wwtlib = function(){
       }
       this.tour = TourDocument.fromUrl(url, function() {
         $this.setupTour();
+        $this.tourEdit.playNow(true);
         WWTControl.scriptInterface._fireTourReady();
       });
     },
@@ -23170,11 +24036,30 @@ window.wwtlib = function(){
         ctx.restore();
       }
     },
-    captureThumbnail: function() {
+    captureThumbnail: function(blobReady) {
       this.render();
       var image = document.createElement('img');
+      image.addEventListener('load', function(e) {
+        var imageAspect = (image.width) / image.height;
+        var clientAspect = 96 / 45;
+        var cw = 96;
+        var ch = 45;
+        if (imageAspect < clientAspect) {
+          ch = ss.truncate((cw / imageAspect));
+        }
+        else {
+          cw = ss.truncate((ch * imageAspect));
+        }
+        var cx = (96 - cw) / 2;
+        var cy = (45 - ch) / 2;
+        var temp = document.createElement('canvas');
+        temp.height = 45;
+        temp.width = 96;
+        var ctx = temp.getContext('2d');
+        ctx.drawImage(image, cx, cy, cw, ch);
+        if ( typeof temp.msToBlob == 'function') { var blob = temp.msToBlob(); blobReady(blob); } else { temp.toBlob(blobReady, 'image/jpeg'); };
+      }, false);
       image.src = WWTControl.singleton.canvas.toDataURL();
-      return image;
     }
   };
 
@@ -23505,6 +24390,14 @@ window.wwtlib = function(){
     temp.r = r;
     temp.g = g;
     temp.b = b;
+    return temp;
+  };
+  Color._fromArgbColor = function(a, col) {
+    var temp = new Color();
+    temp.a = a;
+    temp.r = col.r;
+    temp.g = col.g;
+    temp.b = col.b;
     return temp;
   };
   Color.fromName = function(name) {
@@ -23913,6 +24806,14 @@ window.wwtlib = function(){
       }
       else {
         return this.name;
+      }
+    },
+    save: function() {
+      if (!ss.emptyString(this.name)) {
+        return ss.format('{0}:{1}', 0, this.name);
+      }
+      else {
+        return ss.format('{0}:{1}:{2}:{3}:{4}', 1, this.a, this.r, this.g, this.b);
       }
     },
     toString: function() {
@@ -24908,6 +25809,13 @@ window.wwtlib = function(){
       return '';
     }
   };
+  Coordinates.twoPlaces = function(val) {
+    var num = val.toString();
+    if (num.length < 2) {
+      num = '0' + num;
+    }
+    return num;
+  };
   Coordinates.formatDMS = function(angle) {
     try {
       angle += (((angle < 0) ? -1 : 1) * 0.0001388888888889);
@@ -24915,7 +25823,7 @@ window.wwtlib = function(){
       var minutes = ((angle - ss.truncate(angle)) * 60);
       var seconds = ((minutes - ss.truncate(minutes)) * 60);
       var sign = (angle < 0) ? '-' : '';
-      return ss.format('{3}{0}:{1}:{2}', Math.abs(degrees), Math.abs(ss.truncate(minutes)), Math.abs(ss.truncate(seconds)), sign);
+      return ss.format('{3}{0}:{1}:{2}', Math.abs(degrees), Coordinates.twoPlaces(Math.abs(ss.truncate(minutes))), Coordinates.twoPlaces(Math.abs(ss.truncate(seconds))), sign);
     }
     catch ($e1) {
       return '';
@@ -27673,85 +28581,16 @@ window.wwtlib = function(){
       var type = 2;
       var projection = 2;
       if (node.attributes.getNamedItem('DataSetType') != null) {
-        switch (node.attributes.getNamedItem('DataSetType').nodeValue.toLowerCase()) {
-          case 'earth':
-            type = 0;
-            break;
-          case 'planet':
-            type = 1;
-            break;
-          case 'sky':
-            type = 2;
-            break;
-          case 'panorama':
-            type = 3;
-            break;
-          case 'solarsystem':
-            type = 4;
-            break;
-        }
+        type = Enums.parse('ImageSetType', node.attributes.getNamedItem('DataSetType').nodeValue);
       }
       var bandPass = 3;
-      switch (node.attributes.getNamedItem('BandPass').nodeValue) {
-        case 'Gamma':
-          bandPass = 0;
-          break;
-        case 'XRay':
-          bandPass = 1;
-          break;
-        case 'Ultraviolet':
-          bandPass = 2;
-          break;
-        case 'Visible':
-          bandPass = 3;
-          break;
-        case 'HydrogenAlpha':
-          bandPass = 4;
-          break;
-        case 'IR':
-          bandPass = 4;
-          break;
-        case 'Microwave':
-          bandPass = 5;
-          break;
-        case 'Radio':
-          bandPass = 6;
-          break;
-        case 'VisibleNight':
-          bandPass = 6;
-          break;
-        default:
-          break;
-      }
+      bandPass = Enums.parse('BandPass', node.attributes.getNamedItem('BandPass').nodeValue);
       var wf = 1;
       if (node.attributes.getNamedItem('WidthFactor') != null) {
         wf = parseInt(node.attributes.getNamedItem('WidthFactor').nodeValue);
       }
       if (node.attributes.getNamedItem('Generic') == null || !ss.boolean(node.attributes.getNamedItem('Generic').nodeValue)) {
-        switch (node.attributes.getNamedItem('Projection').nodeValue.toLowerCase()) {
-          case 'tan':
-          case 'tangent':
-            projection = 2;
-            break;
-          case 'mercator':
-            projection = 0;
-            break;
-          case 'equirectangular':
-            projection = 1;
-            break;
-          case 'toast':
-            projection = 3;
-            break;
-          case 'spherical':
-            projection = 4;
-            break;
-          case 'plotted':
-            projection = 6;
-            break;
-          case 'skyimage':
-            projection = 5;
-            break;
-        }
+        projection = Enums.parse('ProjectionType', node.attributes.getNamedItem('Projection').nodeValue);
         var fileType = node.attributes.getNamedItem('FileType').nodeValue;
         if (!ss.startsWith(fileType, '.')) {
           fileType = '.' + fileType;
@@ -27862,6 +28701,47 @@ window.wwtlib = function(){
     catch ($e1) {
       return null;
     }
+  };
+  Imageset.saveToXml = function(xmlWriter, imageset, alternateUrl) {
+    xmlWriter._writeStartElement('ImageSet');
+    xmlWriter._writeAttributeString('Generic', imageset.get_generic().toString());
+    xmlWriter._writeAttributeString('DataSetType', Enums.toXml('ImageSetType', imageset.get_dataSetType()));
+    xmlWriter._writeAttributeString('BandPass', Enums.toXml('BandPass', imageset.get_bandPass()));
+    if (!imageset.get_generic()) {
+      xmlWriter._writeAttributeString('Name', imageset.get_name());
+      if (ss.emptyString(alternateUrl)) {
+        xmlWriter._writeAttributeString('Url', imageset.get_url());
+      }
+      else {
+        xmlWriter._writeAttributeString('Url', alternateUrl);
+      }
+      xmlWriter._writeAttributeString('DemUrl', imageset.get_demUrl());
+      xmlWriter._writeAttributeString('BaseTileLevel', imageset.get_baseLevel().toString());
+      xmlWriter._writeAttributeString('TileLevels', imageset.get_levels().toString());
+      xmlWriter._writeAttributeString('BaseDegreesPerTile', imageset.get_baseTileDegrees().toString());
+      xmlWriter._writeAttributeString('FileType', imageset.get_extension());
+      xmlWriter._writeAttributeString('BottomsUp', imageset.get_bottomsUp().toString());
+      xmlWriter._writeAttributeString('Projection', Enums.toXml('ProjectionType', imageset.get_projection()));
+      xmlWriter._writeAttributeString('QuadTreeMap', imageset.get_quadTreeTileMap());
+      xmlWriter._writeAttributeString('CenterX', imageset.get_centerX().toString());
+      xmlWriter._writeAttributeString('CenterY', imageset.get_centerY().toString());
+      xmlWriter._writeAttributeString('OffsetX', imageset.get_offsetX().toString());
+      xmlWriter._writeAttributeString('OffsetY', imageset.get_offsetY().toString());
+      xmlWriter._writeAttributeString('Rotation', imageset.get_rotation().toString());
+      xmlWriter._writeAttributeString('Sparse', imageset.get_sparse().toString());
+      xmlWriter._writeAttributeString('ElevationModel', imageset.get_elevationModel().toString());
+      xmlWriter._writeAttributeString('StockSet', imageset.get_defaultSet().toString());
+      xmlWriter._writeAttributeString('WidthFactor', imageset.get_widthFactor().toString());
+      xmlWriter._writeAttributeString('MeanRadius', imageset.get_meanRadius().toString());
+      xmlWriter._writeAttributeString('ReferenceFrame', imageset.get_referenceFrame());
+      if (ss.emptyString(alternateUrl)) {
+        xmlWriter._writeElementString('ThumbnailUrl', imageset.get_thumbnailUrl());
+      }
+      else {
+        xmlWriter._writeElementString('ThumbnailUrl', imageset.get_url());
+      }
+    }
+    xmlWriter._writeEndElement();
   };
   Imageset.createGeneric = function(dataSetType, bandPass) {
     var temp = new Imageset();
@@ -28490,29 +29370,13 @@ window.wwtlib = function(){
   Place._fromXml = function(place) {
     var newPlace = new Place();
     newPlace._name = place.attributes.getNamedItem('Name').nodeValue;
-    if (place.attributes.getNamedItem('MSRComponentId') != null && place.attributes.getNamedItem('Permission') != null) {
+    if (place.attributes.getNamedItem('MSRComponentId') != null && place.attributes.getNamedItem('Permission') != null && place.attributes.getNamedItem('Url') != null) {
       newPlace.set_url(place.attributes.getNamedItem('Url').nodeValue);
       newPlace.set_thumbnailUrl(place.attributes.getNamedItem('Thumbnail').nodeValue);
       return newPlace;
     }
     if (place.attributes.getNamedItem('DataSetType') != null) {
-      switch (place.attributes.getNamedItem('DataSetType').nodeValue.toLowerCase()) {
-        case 'earth':
-          newPlace._type = 0;
-          break;
-        case 'planet':
-          newPlace._type = 1;
-          break;
-        case 'sky':
-          newPlace._type = 2;
-          break;
-        case 'panorama':
-          newPlace._type = 3;
-          break;
-        case 'solarsystem':
-          newPlace._type = 4;
-          break;
-      }
+      newPlace._type = Enums.parse('ImageSetType', place.attributes.getNamedItem('DataSetType').nodeValue);
     }
     if (newPlace.get_type() === 2) {
       newPlace._camParams.set_RA(parseFloat(place.attributes.getNamedItem('RA').nodeValue));
@@ -28526,118 +29390,7 @@ window.wwtlib = function(){
       newPlace._constellation = place.attributes.getNamedItem('Constellation').nodeValue;
     }
     if (place.attributes.getNamedItem('Classification') != null) {
-      switch (place.attributes.getNamedItem('Classification').nodeValue) {
-        case 'Star':
-          newPlace._classification = 1;
-          break;
-        case 'Supernova':
-          newPlace._classification = 2;
-          break;
-        case 'BlackHole':
-          newPlace._classification = 4;
-          break;
-        case 'NeutronStar':
-          newPlace._classification = 8;
-          break;
-        case 'DoubleStar':
-          newPlace._classification = 16;
-          break;
-        case 'MultipleStars':
-          newPlace._classification = 32;
-          break;
-        case 'Asterism':
-          newPlace._classification = 64;
-          break;
-        case 'Constellation':
-          newPlace._classification = 128;
-          break;
-        case 'OpenCluster':
-          newPlace._classification = 256;
-          break;
-        case 'GlobularCluster':
-          newPlace._classification = 512;
-          break;
-        case 'NebulousCluster':
-          newPlace._classification = 1024;
-          break;
-        case 'Nebula':
-          newPlace._classification = 2048;
-          break;
-        case 'EmissionNebula':
-          newPlace._classification = 4096;
-          break;
-        case 'PlanetaryNebula':
-          newPlace._classification = 8192;
-          break;
-        case 'ReflectionNebula':
-          newPlace._classification = 16384;
-          break;
-        case 'DarkNebula':
-          newPlace._classification = 32768;
-          break;
-        case 'GiantMolecularCloud':
-          newPlace._classification = 65536;
-          break;
-        case 'SupernovaRemnant':
-          newPlace._classification = 131072;
-          break;
-        case 'InterstellarDust':
-          newPlace._classification = 262144;
-          break;
-        case 'Quasar':
-          newPlace._classification = 524288;
-          break;
-        case 'Galaxy':
-          newPlace._classification = 1048576;
-          break;
-        case 'SpiralGalaxy':
-          newPlace._classification = 2097152;
-          break;
-        case 'IrregularGalaxy':
-          newPlace._classification = 4194304;
-          break;
-        case 'EllipticalGalaxy':
-          newPlace._classification = 8388608;
-          break;
-        case 'Knot':
-          newPlace._classification = 16777216;
-          break;
-        case 'PlateDefect':
-          newPlace._classification = 33554432;
-          break;
-        case 'ClusterOfGalaxies':
-          newPlace._classification = 67108864;
-          break;
-        case 'OtherNGC':
-          newPlace._classification = 134217728;
-          break;
-        case 'Unidentified':
-          newPlace._classification = 268435456;
-          break;
-        case 'SolarSystem':
-          newPlace._classification = 536870912;
-          break;
-        case 'Unfiltered':
-          newPlace._classification = 1073741823;
-          break;
-        case 'Stellar':
-          newPlace._classification = 63;
-          break;
-        case 'StellarGroupings':
-          newPlace._classification = 2032;
-          break;
-        case 'Nebulae':
-          newPlace._classification = 523264;
-          break;
-        case 'Galactic':
-          newPlace._classification = 133693440;
-          break;
-        case 'Other':
-          newPlace._classification = 436207616;
-          break;
-        default:
-          break;
-      }
+      newPlace._classification = Enums.parse('Classification', place.attributes.getNamedItem('Classification').nodeValue);
     }
     if (place.attributes.getNamedItem('Magnitude') != null) {
       newPlace._magnitude = parseFloat(place.attributes.getNamedItem('Magnitude').nodeValue);
@@ -28662,76 +29415,7 @@ window.wwtlib = function(){
     }
     newPlace.set_target(65536);
     if (place.attributes.getNamedItem('Target') != null) {
-      switch (place.attributes.getNamedItem('Target').nodeValue) {
-        case 'Sun':
-          newPlace.set_target(0);
-          break;
-        case 'Mercury':
-          newPlace.set_target(1);
-          break;
-        case 'Venus':
-          newPlace.set_target(2);
-          break;
-        case 'Mars':
-          newPlace.set_target(3);
-          break;
-        case 'Jupiter':
-          newPlace.set_target(4);
-          break;
-        case 'Saturn':
-          newPlace.set_target(5);
-          break;
-        case 'Uranus':
-          newPlace.set_target(6);
-          break;
-        case 'Neptune':
-          newPlace.set_target(7);
-          break;
-        case 'Pluto':
-          newPlace.set_target(8);
-          break;
-        case 'Moon':
-          newPlace.set_target(9);
-          break;
-        case 'Io':
-          newPlace.set_target(10);
-          break;
-        case 'Europa':
-          newPlace.set_target(11);
-          break;
-        case 'Ganymede':
-          newPlace.set_target(12);
-          break;
-        case 'Callisto':
-          newPlace.set_target(13);
-          break;
-        case 'IoShadow':
-          newPlace.set_target(14);
-          break;
-        case 'EuropaShadow':
-          newPlace.set_target(15);
-          break;
-        case 'GanymedeShadow':
-          newPlace.set_target(16);
-          break;
-        case 'CallistoShadow':
-          newPlace.set_target(17);
-          break;
-        case 'SunEclipsed':
-          newPlace.set_target(18);
-          break;
-        case 'Earth':
-          newPlace.set_target(19);
-          break;
-        case 'Custom':
-          newPlace.set_target(20);
-          break;
-        case 'Undefined':
-          newPlace.set_target(65536);
-          break;
-        default:
-          break;
-      }
+      newPlace.set_target(Enums.parse('SolarSystemObjects', place.attributes.getNamedItem('Target').nodeValue));
     }
     if (place.attributes.getNamedItem('ViewTarget') != null) {
       newPlace._camParams.viewTarget = Vector3d.parse(place.attributes.getNamedItem('ViewTarget').nodeValue);
@@ -28960,6 +29644,43 @@ window.wwtlib = function(){
     toString: function() {
       return this._name;
     },
+    _saveToXml: function(xmlWriter, elementName) {
+      xmlWriter._writeStartElement(elementName);
+      xmlWriter._writeAttributeString('Name', this._name);
+      xmlWriter._writeAttributeString('DataSetType', Enums.toXml('ImageSetType', this._type));
+      if (this.get_type() === 2) {
+        xmlWriter._writeAttributeString('RA', this._camParams.get_RA().toString());
+        xmlWriter._writeAttributeString('Dec', this._camParams.get_dec().toString());
+      }
+      else {
+        xmlWriter._writeAttributeString('Lat', this.get_lat().toString());
+        xmlWriter._writeAttributeString('Lng', this.get_lng().toString());
+      }
+      xmlWriter._writeAttributeString('Constellation', this._constellation);
+      xmlWriter._writeAttributeString('Classification', Enums.toXml('Classification', this._classification));
+      xmlWriter._writeAttributeString('Magnitude', this._magnitude.toString());
+      xmlWriter._writeAttributeString('Distance', this._distnace.toString());
+      xmlWriter._writeAttributeString('AngularSize', this.angularSize.toString());
+      xmlWriter._writeAttributeString('ZoomLevel', this.get_zoomLevel().toString());
+      xmlWriter._writeAttributeString('Rotation', this._camParams.rotation.toString());
+      xmlWriter._writeAttributeString('Angle', this._camParams.angle.toString());
+      xmlWriter._writeAttributeString('Opacity', this._camParams.opacity.toString());
+      xmlWriter._writeAttributeString('Target', Enums.toXml('SolarSystemObjects', this.get_target()));
+      xmlWriter._writeAttributeString('ViewTarget', this._camParams.viewTarget.toString());
+      xmlWriter._writeAttributeString('TargetReferenceFrame', this._camParams.targetReferenceFrame);
+      xmlWriter._writeStartElement('Description');
+      xmlWriter._writeCData(this.htmlDescription);
+      xmlWriter._writeEndElement();
+      if (this._backgroundImageSet != null) {
+        xmlWriter._writeStartElement('BackgroundImageSet');
+        Imageset.saveToXml(xmlWriter, this._backgroundImageSet, '');
+        xmlWriter._writeEndElement();
+      }
+      if (this._studyImageset != null) {
+        Imageset.saveToXml(xmlWriter, this._studyImageset, '');
+      }
+      xmlWriter._writeEndElement();
+    },
     get_bounds: function() {
       return this._bounds;
     },
@@ -29017,6 +29738,9 @@ window.wwtlib = function(){
     Layer.call(this);
   }
   var GreatCirlceRouteLayer$ = {
+    getTypeName: function() {
+      return 'TerraViewer.GreatCirlceRouteLayer';
+    },
     cleanUp: function() {
       if (this._triangleList$1 != null) {
         this._triangleList$1.clear();
@@ -29142,6 +29866,14 @@ window.wwtlib = function(){
         this.version++;
       }
       return value;
+    },
+    writeLayerProperties: function(xmlWriter) {
+      xmlWriter._writeAttributeString('LatStart', this.get_latStart().toString());
+      xmlWriter._writeAttributeString('LngStart', this.get_lngStart().toString());
+      xmlWriter._writeAttributeString('LatEnd', this.get_latEnd().toString());
+      xmlWriter._writeAttributeString('LngEnd', this.get_lngEnd().toString());
+      xmlWriter._writeAttributeString('Width', this.get_width().toString());
+      xmlWriter._writeAttributeString('PercentComplete', this.get_percentComplete().toString());
     },
     initializeFromXml: function(node) {
       this._latStart$1 = parseFloat(node.attributes.getNamedItem('LatStart').nodeValue);
@@ -29269,6 +30001,9 @@ window.wwtlib = function(){
     return SpreadSheetLayer._circleTexture$1;
   };
   var SpreadSheetLayer$ = {
+    getTypeName: function() {
+      return 'TerraViewer.SpreadSheetLayer';
+    },
     get_header: function() {
       return this._table$1.header;
     },
@@ -29292,24 +30027,27 @@ window.wwtlib = function(){
       this._dataDirty$1 = true;
       return true;
     },
-    loadData: function(path) {
+    loadData: function(blob) {
       var $this = this;
 
       this._table$1 = new Table();
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', path);
-      xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4) {
-          $this._table$1.loadFromString(xhr.responseText, false, true, true);
-          $this.computeDateDomainRange(-1, -1);
-          if ($this.get_dynamicData() && $this.get_autoUpdate()) {
-            $this.dynamicUpdate();
-          }
-          $this._dataDirty$1 = true;
-          $this.dirty = true;
+      this.getStringFromGzipBlob(blob, function(data) {
+        $this._table$1.loadFromString(data, false, true, true);
+        $this.computeDateDomainRange(-1, -1);
+        if ($this.get_dynamicData() && $this.get_autoUpdate()) {
+          $this.dynamicUpdate();
         }
-      };
-      xhr.send();
+        $this._dataDirty$1 = true;
+        $this.dirty = true;
+      });
+    },
+    addFilesToCabinet: function(fc) {
+      this._fileName$1 = fc.tempDirectory + ss.format('{0}\\{1}.txt', fc.get_packageID(), this.id.toString());
+      var dir = this._fileName$1.substring(0, this._fileName$1.lastIndexOf('\\'));
+      var data = this._table$1.save();
+      var blob = new Blob([ data ]);
+      fc.addFile(this._fileName$1, blob);
+      Layer.prototype.addFilesToCabinet.call(this, fc);
     },
     guessHeaderAssignments: function() {
       var index = 0;
@@ -29629,7 +30367,8 @@ window.wwtlib = function(){
                 case 1:
                   var size = 0;
                   try {
-                    pointSize = parseFloat(row[this.altColumn]);
+                    pointSize = parseFloat(row[this.sizeColumn]);
+                    pointSize = Math.pow(2, pointSize);
                   }
                   catch ($e3) {
                     pointSize = 0;
@@ -29951,8 +30690,46 @@ window.wwtlib = function(){
       this._table$1.unlock();
       this.dirty = true;
     },
-    initFromXml: function(node) {
-      Layer.prototype.initFromXml.call(this, node);
+    writeLayerProperties: function(xmlWriter) {
+      xmlWriter._writeAttributeString('TimeSeries', this.get_timeSeries().toString());
+      xmlWriter._writeAttributeString('BeginRange', Util.xmlDate(this.get_beginRange()));
+      xmlWriter._writeAttributeString('EndRange', Util.xmlDate(this.get_endRange()));
+      xmlWriter._writeAttributeString('Decay', this.get_decay().toString());
+      xmlWriter._writeAttributeString('CoordinatesType', Enums.toXml('CoordinatesTypes', this.get_coordinatesType()));
+      xmlWriter._writeAttributeString('LatColumn', this.get_latColumn().toString());
+      xmlWriter._writeAttributeString('LngColumn', this.get_lngColumn().toString());
+      xmlWriter._writeAttributeString('GeometryColumn', this.get_geometryColumn().toString());
+      xmlWriter._writeAttributeString('AltType', Enums.toXml('AltTypes', this.get_altType()));
+      xmlWriter._writeAttributeString('MarkerMix', Enums.toXml('MarkerMixes', this.get_markerMix()));
+      xmlWriter._writeAttributeString('ColorMap', Enums.toXml('ColorMaps', this.get__colorMap()));
+      xmlWriter._writeAttributeString('MarkerColumn', this.get_markerColumn().toString());
+      xmlWriter._writeAttributeString('ColorMapColumn', this.get_colorMapColumn().toString());
+      xmlWriter._writeAttributeString('PlotType', Enums.toXml('PlotTypes', this.get_plotType()));
+      xmlWriter._writeAttributeString('MarkerIndex', this.get_markerIndex().toString());
+      xmlWriter._writeAttributeString('MarkerScale', Enums.toXml('MarkerScales', this.get_markerScale()));
+      xmlWriter._writeAttributeString('AltUnit', this.get_altUnit().toString());
+      xmlWriter._writeAttributeString('AltColumn', this.get_altColumn().toString());
+      xmlWriter._writeAttributeString('StartDateColumn', this.get_startDateColumn().toString());
+      xmlWriter._writeAttributeString('EndDateColumn', this.get_endDateColumn().toString());
+      xmlWriter._writeAttributeString('SizeColumn', this.get_sizeColumn().toString());
+      xmlWriter._writeAttributeString('HyperlinkFormat', this.get_hyperlinkFormat());
+      xmlWriter._writeAttributeString('HyperlinkColumn', this.get_hyperlinkColumn().toString());
+      xmlWriter._writeAttributeString('ScaleFactor', this.get_scaleFactor().toString());
+      xmlWriter._writeAttributeString('PointScaleType', Enums.toXml('PointScaleTypes', this.get_pointScaleType()));
+      xmlWriter._writeAttributeString('ShowFarSide', this.get_showFarSide().toString());
+      xmlWriter._writeAttributeString('RaUnits', Enums.toXml('RAUnits', this.get_raUnits()));
+      xmlWriter._writeAttributeString('HoverTextColumn', this.get_nameColumn().toString());
+      xmlWriter._writeAttributeString('XAxisColumn', this.get_xAxisColumn().toString());
+      xmlWriter._writeAttributeString('XAxisReverse', this.get_xAxisReverse().toString());
+      xmlWriter._writeAttributeString('YAxisColumn', this.get_yAxisColumn().toString());
+      xmlWriter._writeAttributeString('YAxisReverse', this.get_yAxisReverse().toString());
+      xmlWriter._writeAttributeString('ZAxisColumn', this.get_zAxisColumn().toString());
+      xmlWriter._writeAttributeString('ZAxisReverse', this.get_zAxisReverse().toString());
+      xmlWriter._writeAttributeString('CartesianScale', Enums.toXml('AltUnits', this.get_cartesianScale()));
+      xmlWriter._writeAttributeString('CartesianCustomScale', this.get_cartesianCustomScale().toString());
+      xmlWriter._writeAttributeString('DynamicData', this.get_dynamicData().toString());
+      xmlWriter._writeAttributeString('AutoUpdate', this.get_autoUpdate().toString());
+      xmlWriter._writeAttributeString('DataSourceUrl', this.get_dataSourceUrl());
     },
     get_dynamicData: function() {
       return this._dynamicData$1;
@@ -30010,19 +30787,7 @@ window.wwtlib = function(){
       this.set_beginRange(new Date(node.attributes.getNamedItem('BeginRange').nodeValue));
       this.set_endRange(new Date(node.attributes.getNamedItem('EndRange').nodeValue));
       this.set_decay(parseFloat(node.attributes.getNamedItem('Decay').nodeValue));
-      switch (node.attributes.getNamedItem('CoordinatesType').nodeValue) {
-        case 'Spherical':
-          this.set_coordinatesType(0);
-          break;
-        case 'Rectangular':
-          this.set_coordinatesType(1);
-          break;
-        case 'Orbital':
-          this.set_coordinatesType(2);
-          break;
-        default:
-          break;
-      }
+      this.set_coordinatesType(Enums.parse('CoordinatesTypes', node.attributes.getNamedItem('CoordinatesType').nodeValue));
       if (this.get_coordinatesType() < 0) {
         this.set_coordinatesType(0);
       }
@@ -30031,102 +30796,15 @@ window.wwtlib = function(){
       if (node.attributes.getNamedItem('GeometryColumn') != null) {
         this.set_geometryColumn(parseInt(node.attributes.getNamedItem('GeometryColumn').nodeValue));
       }
-      switch (node.attributes.getNamedItem('AltType').nodeValue) {
-        case 'Depth':
-          this.set_altType(0);
-          break;
-        case 'Altitude':
-          this.set_altType(1);
-          break;
-        case 'Distance':
-          this.set_altType(2);
-          break;
-        case 'SeaLevel':
-          this.set_altType(3);
-          break;
-        case 'Terrain':
-          this.set_altType(4);
-          break;
-        default:
-          break;
-      }
+      this.set_altType(Enums.parse('AltTypes', node.attributes.getNamedItem('AltType').nodeValue));
       this.set_markerMix(0);
-      switch (node.attributes.getNamedItem('ColorMap').nodeValue) {
-        case 'Same_For_All':
-          this.set__colorMap(0);
-          break;
-        case 'Group_by_Values':
-          this.set__colorMap(2);
-          break;
-        case 'Per_Column_Literal':
-          this.set__colorMap(3);
-          break;
-        default:
-          break;
-      }
+      this.set__colorMap(Enums.parse('ColorMaps', node.attributes.getNamedItem('ColorMap').nodeValue));
       this.set_markerColumn(parseInt(node.attributes.getNamedItem('MarkerColumn').nodeValue));
       this.set_colorMapColumn(parseInt(node.attributes.getNamedItem('ColorMapColumn').nodeValue));
-      switch (node.attributes.getNamedItem('PlotType').nodeValue) {
-        case 'Gaussian':
-          this.set_plotType(0);
-          break;
-        case 'Point':
-          this.set_plotType(1);
-          break;
-        case 'Circle':
-          this.set_plotType(2);
-          break;
-        case 'PushPin':
-          this.set_plotType(3);
-          break;
-        default:
-          break;
-      }
+      this.set_plotType(Enums.parse('PlotTypes', node.attributes.getNamedItem('PlotType').nodeValue));
       this.set_markerIndex(parseInt(node.attributes.getNamedItem('MarkerIndex').nodeValue));
-      switch (node.attributes.getNamedItem('MarkerScale').nodeValue) {
-        case 'Screen':
-          this.set_markerScale(0);
-          break;
-        case 'World':
-          this.set_markerScale(1);
-          break;
-        default:
-          break;
-      }
-      switch (node.attributes.getNamedItem('AltUnit').nodeValue) {
-        case 'Meters':
-          this.set_altUnit(1);
-          break;
-        case 'Feet':
-          this.set_altUnit(2);
-          break;
-        case 'Inches':
-          this.set_altUnit(3);
-          break;
-        case 'Miles':
-          this.set_altUnit(4);
-          break;
-        case 'Kilometers':
-          this.set_altUnit(5);
-          break;
-        case 'AstronomicalUnits':
-          this.set_altUnit(6);
-          break;
-        case 'LightYears':
-          this.set_altUnit(7);
-          break;
-        case 'Parsecs':
-          this.set_altUnit(8);
-          break;
-        case 'MegaParsecs':
-          this.set_altUnit(9);
-          break;
-        case 'Custom':
-          this.set_altUnit(10);
-          break;
-        default:
-          break;
-      }
+      this.set_markerScale(Enums.parse('MarkerScales', node.attributes.getNamedItem('MarkerScale').nodeValue));
+      this.set_altUnit(Enums.parse('AltUnits', node.attributes.getNamedItem('AltUnit').nodeValue));
       this.set_altColumn(parseInt(node.attributes.getNamedItem('AltColumn').nodeValue));
       this.set_startDateColumn(parseInt(node.attributes.getNamedItem('StartDateColumn').nodeValue));
       this.set_endDateColumn(parseInt(node.attributes.getNamedItem('EndDateColumn').nodeValue));
@@ -30134,37 +30812,12 @@ window.wwtlib = function(){
       this.set_hyperlinkFormat(node.attributes.getNamedItem('HyperlinkFormat').nodeValue);
       this.set_hyperlinkColumn(parseInt(node.attributes.getNamedItem('HyperlinkColumn').nodeValue));
       this.set_scaleFactor(parseFloat(node.attributes.getNamedItem('ScaleFactor').nodeValue));
-      switch (node.attributes.getNamedItem('PointScaleType').nodeValue) {
-        case 'Linear':
-          this.set_pointScaleType(0);
-          break;
-        case 'Power':
-          this.set_pointScaleType(1);
-          break;
-        case 'Log':
-          this.set_pointScaleType(2);
-          break;
-        case 'Constant':
-          this.set_pointScaleType(3);
-          break;
-        case 'StellarMagnitude':
-          this.set_pointScaleType(4);
-          break;
-        default:
-          break;
-      }
+      this.set_pointScaleType(Enums.parse('PointScaleTypes', node.attributes.getNamedItem('PointScaleType').nodeValue));
       if (node.attributes.getNamedItem('ShowFarSide') != null) {
         this.set_showFarSide(ss.boolean(node.attributes.getNamedItem('ShowFarSide').nodeValue));
       }
       if (node.attributes.getNamedItem('RaUnits') != null) {
-        switch (node.attributes.getNamedItem('RaUnits').nodeValue) {
-          case 'Hours':
-            this.set_raUnits(0);
-            break;
-          case 'Degrees':
-            this.set_raUnits(1);
-            break;
-        }
+        this.set_raUnits(Enums.parse('RAUnits', node.attributes.getNamedItem('RaUnits').nodeValue));
       }
       if (node.attributes.getNamedItem('HoverTextColumn') != null) {
         this.set_nameColumn(parseInt(node.attributes.getNamedItem('HoverTextColumn').nodeValue));
@@ -30176,40 +30829,7 @@ window.wwtlib = function(){
         this.set_yAxisReverse(ss.boolean(node.attributes.getNamedItem('YAxisReverse').nodeValue));
         this.set_zAxisColumn(parseInt(node.attributes.getNamedItem('ZAxisColumn').nodeValue));
         this.set_zAxisReverse(ss.boolean(node.attributes.getNamedItem('ZAxisReverse').nodeValue));
-        switch (node.attributes.getNamedItem('CartesianScale').nodeValue) {
-          case 'Meters':
-            this.set_cartesianScale(1);
-            break;
-          case 'Feet':
-            this.set_cartesianScale(2);
-            break;
-          case 'Inches':
-            this.set_cartesianScale(3);
-            break;
-          case 'Miles':
-            this.set_cartesianScale(4);
-            break;
-          case 'Kilometers':
-            this.set_cartesianScale(5);
-            break;
-          case 'AstronomicalUnits':
-            this.set_cartesianScale(6);
-            break;
-          case 'LightYears':
-            this.set_cartesianScale(7);
-            break;
-          case 'Parsecs':
-            this.set_cartesianScale(8);
-            break;
-          case 'MegaParsecs':
-            this.set_cartesianScale(9);
-            break;
-          case 'Custom':
-            this.set_cartesianScale(10);
-            break;
-          default:
-            break;
-        }
+        this.set_cartesianScale(Enums.parse('AltUnits', node.attributes.getNamedItem('CartesianScale').nodeValue));
         this.set_cartesianCustomScale(parseFloat(node.attributes.getNamedItem('CartesianCustomScale').nodeValue));
       }
       if (node.attributes.getNamedItem('DynamicData') != null) {
@@ -30739,19 +31359,7 @@ window.wwtlib = function(){
       this.set_beginRange(new Date(node.attributes.getNamedItem('BeginRange').nodeValue));
       this.set_endRange(new Date(node.attributes.getNamedItem('EndRange').nodeValue));
       this.set_decay(parseFloat(node.attributes.getNamedItem('Decay').nodeValue));
-      switch (node.attributes.getNamedItem('CoordinatesType').nodeValue) {
-        case 'Spherical':
-          this.set_coordinatesType(0);
-          break;
-        case 'Rectangular':
-          this.set_coordinatesType(1);
-          break;
-        case 'Orbital':
-          this.set_coordinatesType(2);
-          break;
-        default:
-          break;
-      }
+      this.set_coordinatesType(Enums.parse('CoordinatesTypes', node.attributes.getNamedItem('CoordinatesType').nodeValue));
       if (this.get_coordinatesType() < 0) {
         this.set_coordinatesType(0);
       }
@@ -32513,16 +33121,20 @@ window.wwtlib = function(){
     this._sprite$1 = new Sprite2d();
     Overlay.call(this);
   }
-  BitmapOverlay.create = function(owner, filename) {
+  BitmapOverlay.create = function(owner, file) {
     var temp = new BitmapOverlay();
     temp.set_owner(owner);
-    temp._filename$1 = (Overlay.nextId++).toString() + '.png';
+    temp._filename$1 = file.name;
     temp.set_name(owner.getNextDefaultName('Image'));
     temp.set_x(0);
     temp.set_y(0);
+    owner.get_owner().addCachedFile(file.name, file);
     return temp;
   };
   var BitmapOverlay$ = {
+    getTypeName: function() {
+      return 'TerraViewer.BitmapOverlay';
+    },
     copy: function(owner) {
       var newBmpOverlay = new BitmapOverlay();
       newBmpOverlay.set_owner(owner);
@@ -32557,8 +33169,6 @@ window.wwtlib = function(){
             $this._textureReady$1 = true;
           });
         }
-        if (!this.get_width() && !this.get_height()) {
-        }
       }
       catch ($e1) {
       }
@@ -32567,6 +33177,10 @@ window.wwtlib = function(){
       if (RenderContext.useGl) {
         if (this.texture2d == null) {
           this.initializeTexture();
+        }
+        if (!this.get_width() && !this.get_height()) {
+          this.set_width(this.texture2d.imageElement.width);
+          this.set_height(this.texture2d.imageElement.height);
         }
         this.initiaizeGeometry();
         this.updateRotation();
@@ -32579,6 +33193,10 @@ window.wwtlib = function(){
         if (!this._textureReady$1) {
           return;
         }
+        if (!this.get_width() && !this.get_height()) {
+          this.set_width(this.texture.width);
+          this.set_height(this.texture.height);
+        }
         var ctx = renderContext.device;
         ctx.save();
         ctx.translate(this.get_x(), this.get_y());
@@ -32587,6 +33205,14 @@ window.wwtlib = function(){
         ctx.drawImage(this.texture, -this.get_width() / 2, -this.get_height() / 2, this.get_width(), this.get_height());
         ctx.restore();
       }
+    },
+    addFilesToCabinet: function(fc) {
+      fc.addFile(this.get_owner().get_owner().get_workingDirectory() + this._filename$1, this.get_owner().get_owner().getFileBlob(this._filename$1));
+    },
+    writeOverlayProperties: function(xmlWriter) {
+      xmlWriter._writeStartElement('Bitmap');
+      xmlWriter._writeAttributeString('Filename', this._filename$1);
+      xmlWriter._writeEndElement();
     },
     initializeFromXml: function(node) {
       var bitmap = Util.selectSingleNode(node, 'Bitmap');
@@ -32606,15 +33232,19 @@ window.wwtlib = function(){
   TextOverlay.create = function(textObject) {
     var to = new TextOverlay();
     to.textObject = textObject;
+    to._calculateTextSize$1();
     return to;
   };
   var TextOverlay$ = {
+    getTypeName: function() {
+      return 'TerraViewer.TextOverlay';
+    },
     get_color: function() {
       return Overlay.prototype.get_color.call(this);
     },
     set_color: function(value) {
-      if (this.textObject.forgroundColor !== value) {
-        this.textObject.forgroundColor = value;
+      if (this.textObject.foregroundColor !== value) {
+        this.textObject.foregroundColor = value;
         Overlay.prototype.set_color.call(this, value);
         this.cleanUp();
       }
@@ -32638,7 +33268,7 @@ window.wwtlib = function(){
       }
     },
     _drawCanvasText$1: function(ctx) {
-      ctx.fillStyle = this.textObject.forgroundColor.toString();
+      ctx.fillStyle = this.textObject.foregroundColor.toString();
       ctx.font = ((this.textObject.italic) ? 'italic' : 'normal') + ' ' + ((this.textObject.bold) ? 'bold' : 'normal') + ' ' + Math.round(this.textObject.fontSize * 1.2).toString() + 'px ' + this.textObject.fontName;
       ctx.textBaseline = 'top';
       var text = this.textObject.text;
@@ -32673,8 +33303,54 @@ window.wwtlib = function(){
         }
       }
     },
+    _calculateTextSize$1: function() {
+      if (this._ctx$1 == null || this._ce$1 == null) {
+        this._ce$1 = document.createElement('canvas');
+        this._ce$1.height = 100;
+        this._ce$1.width = 100;
+        this._ctx$1 = this._ce$1.getContext('2d');
+      }
+      this._ctx$1.fillStyle = this.textObject.foregroundColor.toString();
+      this._ctx$1.font = ((this.textObject.italic) ? 'italic' : 'normal') + ' ' + ((this.textObject.bold) ? 'bold' : 'normal') + ' ' + Math.round(this.textObject.fontSize * 1.2).toString() + 'px ' + this.textObject.fontName;
+      this._ctx$1.textBaseline = 'top';
+      var text = this.textObject.text;
+      if (text.indexOf('{$') > -1) {
+        if (text.indexOf('{$DATE}') > -1) {
+          var date = ss.format('{0:yyyy/MM/dd}', SpaceTimeController.get_now());
+          text = ss.replaceString(text, '{$DATE}', date);
+        }
+        if (text.indexOf('{$TIME}') > -1) {
+          var time = ss.format('{0:HH:mm:ss}', SpaceTimeController.get_now());
+          text = ss.replaceString(text, '{$TIME}', time);
+        }
+        text = ss.replaceString(text, '{$DIST}', UiTools.formatDistance(WWTControl.singleton.renderContext.get_solarSystemCameraDistance()));
+        text = ss.replaceString(text, '{$LAT}', Coordinates.formatDMS(WWTControl.singleton.renderContext.viewCamera.lat));
+        text = ss.replaceString(text, '{$LNG}', Coordinates.formatDMS(WWTControl.singleton.renderContext.viewCamera.lat));
+        text = ss.replaceString(text, '{$RA}', Coordinates.formatDMS(WWTControl.singleton.renderContext.viewCamera.get_RA()));
+        text = ss.replaceString(text, '{$DEC}', Coordinates.formatDMS(WWTControl.singleton.renderContext.viewCamera.get_dec()));
+        text = ss.replaceString(text, '{$FOV}', Coordinates.formatDMS(WWTControl.singleton.renderContext.get_fovAngle()));
+      }
+      var lines = text.split('\n');
+      var baseline = 0;
+      var lineSpace = this.textObject.fontSize * 1.7;
+      var maxWidth = 0;
+      var $enum1 = ss.enumerate(lines);
+      while ($enum1.moveNext()) {
+        var line = $enum1.current;
+        var width = this._ctx$1.measureText(line).width;
+        maxWidth = Math.max(width, maxWidth);
+        baseline += lineSpace;
+      }
+      this.set_width(maxWidth * 1.01);
+      this.set_height(baseline);
+      this._ce$1 = null;
+      this._ctx$1 = null;
+    },
     initializeTexture: function() {
-      if (this.texture2d == null) {
+      if (this.texture2d == null || (this.textObject.text.indexOf('{$') > -1)) {
+        if (!this.get_height() || !this.get_width()) {
+          this._calculateTextSize$1();
+        }
         if (this._ctx$1 == null || this._ce$1 == null) {
           this._ce$1 = document.createElement('canvas');
           this._ce$1.height = ss.truncate(this.get_height());
@@ -32687,7 +33363,14 @@ window.wwtlib = function(){
         this.texture2d = new Texture();
         this.texture2d.imageElement = this._ce$1;
         this.texture2d.makeTexture();
+        this._ce$1 = null;
+        this._ctx$1 = null;
       }
+    },
+    writeOverlayProperties: function(xmlWriter) {
+      xmlWriter._writeStartElement('Text');
+      this.textObject._saveToXml(xmlWriter);
+      xmlWriter._writeEndElement();
     },
     initializeFromXml: function(node) {
       var text = Util.selectSingleNode(node, 'Text');
@@ -32716,6 +33399,9 @@ window.wwtlib = function(){
     return overlay;
   };
   var ShapeOverlay$ = {
+    getTypeName: function() {
+      return 'TerraViewer.ShapeOverlay';
+    },
     get_shapeType: function() {
       return this._shapeType$1;
     },
@@ -33159,32 +33845,14 @@ window.wwtlib = function(){
       Overlay.prototype.cleanUpGeometry.call(this);
       this.cleanUp();
     },
+    writeOverlayProperties: function(xmlWriter) {
+      xmlWriter._writeStartElement('Shape');
+      xmlWriter._writeAttributeString('ShapeType', Enums.toXml('ShapeType', this._shapeType$1));
+      xmlWriter._writeEndElement();
+    },
     initializeFromXml: function(node) {
       var shape = Util.selectSingleNode(node, 'Shape');
-      switch (shape.attributes.getNamedItem('ShapeType').nodeValue) {
-        case 'Circle':
-          this._shapeType$1 = 0;
-          break;
-        case 'Rectagle':
-          this._shapeType$1 = 1;
-          break;
-        case 'Star':
-          this._shapeType$1 = 2;
-          break;
-        case 'Donut':
-          this._shapeType$1 = 3;
-          break;
-        case 'Arrow':
-          this._shapeType$1 = 4;
-          break;
-        case 'Line':
-          this._shapeType$1 = 5;
-          break;
-        case 'OpenRectagle':
-        default:
-          this._shapeType$1 = 6;
-          break;
-      }
+      this._shapeType$1 = Enums.parse('ShapeType', shape.attributes.getNamedItem('ShapeType').nodeValue);
     }
   };
 
@@ -33201,13 +33869,17 @@ window.wwtlib = function(){
     Overlay.call(this);
     this.isDesignTimeOnly = true;
   }
-  AudioOverlay.create = function(currentTourStop, filename) {
+  AudioOverlay.create = function(currentTourStop, file) {
     var ao = new AudioOverlay();
     ao.set_owner(currentTourStop);
-    ao._filename$1 = filename;
+    ao._filename$1 = file.name;
+    ao.get_owner().get_owner().addCachedFile(file.name, file);
     return ao;
   };
   var AudioOverlay$ = {
+    getTypeName: function() {
+      return 'TerraViewer.AudioOverlay';
+    },
     get_mute: function() {
       return this._mute$1;
     },
@@ -33226,6 +33898,9 @@ window.wwtlib = function(){
       }
       return value;
     },
+    addFilesToCabinet: function(fc) {
+      fc.addFile(this.get_owner().get_owner().get_workingDirectory() + this._filename$1, this.get_owner().get_owner().getFileBlob(this._filename$1));
+    },
     play: function() {
       if (this._audio$1 == null) {
         this.initializeTexture();
@@ -33233,6 +33908,7 @@ window.wwtlib = function(){
       if (this._audio$1 != null && this._audioReady$1) {
         this._audio$1.play();
         this.set_volume(this.get_volume());
+        this._audio$1.currentTime = this._position$1;
       }
     },
     pause: function() {
@@ -33272,9 +33948,11 @@ window.wwtlib = function(){
         this._audio$1 = document.createElement('audio');
         this._audio$1.src = this.get_owner().get_owner().getFileStream(this._filename$1);
         this._audio$1.addEventListener('canplaythrough', function() {
-          $this._audioReady$1 = true;
-          $this._audio_MediaOpened$1();
-          $this._audio$1.play();
+          if (!$this._audioReady$1) {
+            $this._audioReady$1 = true;
+            $this._audio_MediaOpened$1();
+            $this._audio$1.play();
+          }
         }, false);
       }
     },
@@ -33297,6 +33975,14 @@ window.wwtlib = function(){
       this._trackType$1 = value;
       return value;
     },
+    writeOverlayProperties: function(xmlWriter) {
+      xmlWriter._writeStartElement('Audio');
+      xmlWriter._writeAttributeString('Filename', this._filename$1);
+      xmlWriter._writeAttributeString('Volume', this._volume$1.toString());
+      xmlWriter._writeAttributeString('Mute', this._mute$1.toString());
+      xmlWriter._writeAttributeString('TrackType', Enums.toXml('AudioType', this._trackType$1));
+      xmlWriter._writeEndElement();
+    },
     initializeFromXml: function(node) {
       var audio = Util.selectSingleNode(node, 'Audio');
       this._filename$1 = audio.attributes.getNamedItem('Filename').nodeValue;
@@ -33307,15 +33993,7 @@ window.wwtlib = function(){
         this._mute$1 = ss.boolean(audio.attributes.getNamedItem('Mute').nodeValue);
       }
       if (audio.attributes.getNamedItem('TrackType') != null) {
-        switch (audio.attributes.getNamedItem('TrackType').nodeValue) {
-          case 'Music':
-            this._trackType$1 = 0;
-            break;
-          case 'Voice':
-          default:
-            this._trackType$1 = 1;
-            break;
-        }
+        this._trackType$1 = Enums.parse('AudioType', audio.attributes.getNamedItem('TrackType').nodeValue);
       }
     }
   };
@@ -33339,6 +34017,9 @@ window.wwtlib = function(){
     Overlay.call(this);
   }
   var FlipbookOverlay$ = {
+    getTypeName: function() {
+      return 'TerraViewer.FlipbookOverlay';
+    },
     get_loopType: function() {
       return this._loopType$1;
     },
@@ -33432,35 +34113,27 @@ window.wwtlib = function(){
       catch ($e1) {
       }
     },
+    addFilesToCabinet: function(fc) {
+      fc.addFile(this.get_owner().get_owner().get_workingDirectory() + this._filename$1, this.get_owner().get_owner().getFileBlob(this._filename$1));
+    },
+    writeOverlayProperties: function(xmlWriter) {
+      xmlWriter._writeStartElement('Flipbook');
+      xmlWriter._writeAttributeString('Filename', this._filename$1);
+      xmlWriter._writeAttributeString('Frames', this._frames$1.toString());
+      xmlWriter._writeAttributeString('Loop', Enums.toXml('LoopTypes', this._loopType$1));
+      xmlWriter._writeAttributeString('FramesX', this._framesX$1.toString());
+      xmlWriter._writeAttributeString('FramesY', this._framesY$1.toString());
+      xmlWriter._writeAttributeString('StartFrame', this._startFrame$1.toString());
+      if (!ss.emptyString(this._frameSequence$1)) {
+        xmlWriter._writeAttributeString('FrameSequence', this._frameSequence$1);
+      }
+      xmlWriter._writeEndElement();
+    },
     initializeFromXml: function(node) {
       var flipbook = Util.selectSingleNode(node, 'Flipbook');
       this._filename$1 = flipbook.attributes.getNamedItem('Filename').nodeValue;
       this._frames$1 = parseInt(flipbook.attributes.getNamedItem('Frames').nodeValue);
-      switch (flipbook.attributes.getNamedItem('Loop').nodeValue) {
-        case 'Loop':
-          this._loopType$1 = 0;
-          break;
-        case 'UpDown':
-          this._loopType$1 = 1;
-          break;
-        case 'Down':
-          this._loopType$1 = 2;
-          break;
-        case 'UpDownOnce':
-          this._loopType$1 = 3;
-          break;
-        case 'Once':
-          this._loopType$1 = 4;
-          break;
-        case 'Begin':
-          this._loopType$1 = 5;
-          break;
-        case 'End':
-          this._loopType$1 = 6;
-          break;
-        default:
-          break;
-      }
+      this._loopType$1 = Enums.parse('LoopTypes', flipbook.attributes.getNamedItem('Loop').nodeValue);
       if (flipbook.attributes.getNamedItem('FramesX') != null) {
         this.set_framesX(parseInt(flipbook.attributes.getNamedItem('FramesX').nodeValue));
       }
@@ -34582,8 +35255,10 @@ window.wwtlib = function(){
       SelectionAnchor: SelectionAnchor,
       TextBorderStyle: TextBorderStyle,
       UserLevel: UserLevel,
+      TransitionType: TransitionType,
       Keys: Keys,
       DialogResult: DialogResult,
+      Formatting: Formatting,
       StateType: StateType,
       SolarSystemObjects: SolarSystemObjects,
       InterpolationType: InterpolationType,
@@ -34712,6 +35387,8 @@ window.wwtlib = function(){
       Star: [ Star, Star$, null ],
       Tile: [ Tile, Tile$, null ],
       Tour: [ Tour, Tour$, null, IThumbnail ],
+      FileEntry: [ FileEntry, FileEntry$, null ],
+      FileCabinet: [ FileCabinet, FileCabinet$, null ],
       SettingParameter: [ SettingParameter, SettingParameter$, null ],
       Overlay: [ Overlay, Overlay$, null ],
       Selection: [ Selection, Selection$, null ],
@@ -34736,6 +35413,7 @@ window.wwtlib = function(){
       UiTools: [ UiTools, UiTools$, null ],
       Rectangle: [ Rectangle, Rectangle$, null ],
       Guid: [ Guid, Guid$, null ],
+      Enums: [ Enums, Enums$, null ],
       Mouse: [ Mouse, null, null ],
       Language: [ Language, Language$, null ],
       Cursor: [ Cursor, Cursor$, null ],
@@ -34749,6 +35427,7 @@ window.wwtlib = function(){
       ContextMenuStrip: [ ContextMenuStrip, ContextMenuStrip$, null ],
       ToolStripMenuItem: [ ToolStripMenuItem, ToolStripMenuItem$, null ],
       TagMe: [ TagMe, TagMe$, null ],
+      XmlTextWriter: [ XmlTextWriter, XmlTextWriter$, null ],
       VizLayer: [ VizLayer, VizLayer$, null ],
       DataItem: [ DataItem, DataItem$, null ],
       WebFile: [ WebFile, WebFile$, null ],

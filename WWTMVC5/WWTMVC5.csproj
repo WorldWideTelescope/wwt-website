@@ -561,7 +561,6 @@
     <Content Include="Content\Views\TestResources.html" />
     <Content Include="Content\Views\TourAdmin.html" />
     <Content Include="Content\Views\tours.xml" />
-    <Content Include="COPYING.txt" />
     <Content Include="Docs\conversionTutorial.htm" />
     <Content Include="Docs\domespecs.html" />
     <Content Include="Docs\Samples\displaycode.htm" />
@@ -661,7 +660,14 @@
     <Content Include="GetTourFile2.aspx" />
     <Content Include="hello.aspx" />
     <Content Include="hello2.aspx" />
+    <Content Include="html5sdk\1.0.1\wwtsdk.js" />
+    <Content Include="html5sdk\1.0.1\wwtsdk.min.js" />
+    <Content Include="html5sdk\1.1.0\wwtsdk.js" />
+    <Content Include="html5sdk\1.1.0\wwtsdk.min.js" />
+    <Content Include="images\StarProfile.png" />
     <Content Include="msshrtmi.dll" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\controllers\modals\editfolder.js" />
     <Content Include="Scripts\controllers\modals\edittour.js" />
     <Content Include="Scripts\controllers\touradmin.js" />
@@ -721,20 +727,6 @@
     <Content Include="App_Readme\wurfl-latest.zip" />
     <Content Include="App_Readme\WURFL Quick Guide_v1_5.pdf" />
     <Content Include="App_Data\wurfl-latest.zip" />
-    <None Include="compilerconfig.json" />
-    <None Include="compilerconfig.json.defaults">
-      <DependentUpon>compilerconfig.json</DependentUpon>
-    </None>
-    <None Include="Properties\PublishProfiles\wwt.thewebkid.com.pubxml" />
-    <None Include="Properties\PublishProfiles\wwtstaging - FTP %282%29.pubxml" />
-    <None Include="Properties\PublishProfiles\wwtstaging - FTP.pubxml" />
-    <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy %283%29.pubxml" />
-    <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy.pubxml" />
-    <None Include="Properties\PublishProfiles\wwt.thewebkid.com.pubxml" />
-    <None Include="Properties\PublishProfiles\wwtstaging - FTP.pubxml" />
-    <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy %282%29.pubxml" />
-    <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy.pubxml" />
-    <Content Include="Content\Views\alltours.wtml" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
@@ -810,6 +802,24 @@
     <Content Include="Content\bootstrap\bootstrap.less" />
     <Content Include="Content\bootstrap\badges.less" />
     <Content Include="Content\bootstrap\alerts.less" />
+    <Content Include="Localization\lang_en.tdf" />
+    <None Include="Properties\PublishProfiles\wwt.thewebkid.com.pubxml" />
+    <None Include="Properties\PublishProfiles\wwtstaging - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy.pubxml" />
+    <None Include="compilerconfig.json" />
+    <None Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </None>
+    <None Include="Properties\PublishProfiles\wwt.thewebkid.com.pubxml" />
+    <None Include="Properties\PublishProfiles\wwtstaging - FTP %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\wwtstaging - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy %283%29.pubxml" />
+    <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\wwt.thewebkid.com.pubxml" />
+    <None Include="Properties\PublishProfiles\wwtstaging - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy.pubxml" />
+    <Content Include="Content\Views\alltours.wtml" />
     <None Include="Properties\PublishProfiles\wwt.thewebkid.com.pubxml" />
     <None Include="Properties\PublishProfiles\wwtstaging - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy.pubxml" />
@@ -871,9 +881,12 @@
     <Content Include="webclient\controllers\modals\ObservingTimeController.js" />
     <Content Include="webclient\controllers\modals\OpenItemController.js" />
     <Content Include="webclient\controllers\modals\ShareController.js" />
+    <Content Include="webclient\controllers\modals\SlideSelectionController.js" />
+    <Content Include="webclient\controllers\modals\TourSlideText.js" />
     <Content Include="webclient\controllers\popovers\ObservingTimeController.js" />
     <Content Include="webclient\controllers\tabs\AdsController.js" />
     <Content Include="webclient\controllers\tabs\CommunityController.js" />
+    <Content Include="webclient\controllers\tabs\CurrentTourController.js" />
     <Content Include="webclient\controllers\tabs\ExploreController.js" />
     <Content Include="webclient\controllers\tabs\SearchController.js" />
     <Content Include="webclient\controllers\tabs\SettingsController.js" />
@@ -885,6 +898,14 @@
     <Content Include="webclient\css\angular-motion.css" />
     <Content Include="webclient\css\bootstrap.css" />
     <Content Include="webclient\css\bootstrap.min.css" />
+    <Content Include="webclient\css\fonts\tinymce-small.svg" />
+    <Content Include="webclient\css\fonts\tinymce.svg" />
+    <Content Include="webclient\css\img\anchor.gif" />
+    <Content Include="webclient\css\img\loader.gif" />
+    <Content Include="webclient\css\img\object.gif" />
+    <Content Include="webclient\css\img\trans.gif" />
+    <Content Include="webclient\css\mcecontent.css" />
+    <Content Include="webclient\css\skin.min.css" />
     <Content Include="webclient\css\webclient.css" />
     <Content Include="webclient\css\webclient.min.css" />
     <Content Include="webclient\dataproxy\Astrometry.js" />
@@ -894,7 +915,9 @@
     <Content Include="webclient\dataproxy\Tours.js" />
     <Content Include="webclient\Default.aspx" />
     <Content Include="webclient\directives\ContextMenu.js" />
+    <Content Include="webclient\directives\editslidevalues.js" />
     <Content Include="webclient\directives\Localize.js" />
+    <Content Include="webclient\directives\movable.js" />
     <Content Include="webclient\directives\Scroll.js" />
     <Content Include="webclient\earth.jpg" />
     <Content Include="webclient\ext\angular-animate.js" />
@@ -921,6 +944,7 @@
     <Content Include="webclient\factories\FinderScope.js" />
     <Content Include="webclient\factories\HashManager.js" />
     <Content Include="webclient\factories\Localization.js" />
+    <Content Include="webclient\factories\mediafile.js" />
     <Content Include="webclient\factories\SearchUtil.js" />
     <Content Include="webclient\factories\Skyball.js" />
     <Content Include="webclient\factories\ThumbList.js" />
@@ -965,12 +989,16 @@
     <Content Include="webclient\images\button_previous_top_normal.png" />
     <Content Include="webclient\images\button_previous_top_pressed.png" />
     <Content Include="webclient\images\callisto.jpg" />
+    <Content Include="webclient\images\ColorPickerHex.png" />
     <Content Include="webclient\images\context-menu-arrow.png" />
     <Content Include="webclient\images\dragInsertMarker.png" />
     <Content Include="webclient\images\earth.jpg" />
     <Content Include="webclient\images\europa.jpg" />
     <Content Include="webclient\images\finder-scope.png" />
+    <Content Include="webclient\images\FocusHandles.png" />
     <Content Include="webclient\images\ganymede.jpg" />
+    <Content Include="webclient\images\glyphs1.png" />
+    <Content Include="webclient\images\glyphs1.xml" />
     <Content Include="webclient\images\io.jpg" />
     <Content Include="webclient\images\jupiter.jpg" />
     <Content Include="webclient\images\layersButton.png" />
@@ -978,11 +1006,13 @@
     <Content Include="webclient\images\mars.jpg" />
     <Content Include="webclient\images\mercury.jpg" />
     <Content Include="webclient\images\moon.jpg" />
+    <Content Include="webclient\images\MultiSelhand.bmp" />
     <Content Include="webclient\images\neptune.jpg" />
     <Content Include="webclient\images\pluto.jpg" />
     <Content Include="webclient\images\saturn.png" />
     <Content Include="webclient\images\SaturnRings.png" />
     <Content Include="webclient\images\SaturnRingsShadow.png" />
+    <Content Include="webclient\images\Selhand.bmp" />
     <Content Include="webclient\images\StarProfile.png" />
     <Content Include="webclient\images\sun.jpg" />
     <Content Include="webclient\images\sunCorona.png" />
@@ -1023,14 +1053,20 @@
     <Content Include="webclient\views\popovers\property-panel.html" />
     <Content Include="webclient\views\popovers\share.html" />
     <Content Include="webclient\views\popovers\shareplace.html" />
+    <Content Include="webclient\views\popovers\slide-overlays.html" />
     <Content Include="webclient\views\popovers\thumbnail-template.html" />
     <Content Include="webclient\views\popovers\tour-info.html" />
+    <Content Include="webclient\views\popovers\tour-properties.html" />
     <Content Include="webclient\views\popovers\tour-template.html" />
+    <Content Include="webclient\views\popovers\tour-text.html" />
+    <Content Include="webclient\views\popovers\transition-type.html" />
     <Content Include="webclient\views\research-menu.html" />
     <Content Include="webclient\views\search.html" />
     <Content Include="webclient\views\thumbnail.html" />
     <Content Include="webclient\views\tours.html" />
     <Content Include="webclient\views\tree-node.html" />
+    <Content Include="webclient\WebClient\Images\glyphs1.png" />
+    <Content Include="webclient\WebClient\Images\glyphs1.xml" />
     <Content Include="webclient\wwtlib.js" />
     <Content Include="webclient\wwtlib.min.js" />
     <Content Include="webclient\wwtsdk.js" />
@@ -1046,7 +1082,6 @@
     <Content Include="Views\Community\Index.cshtml" />
     <Content Include="Views\Community\Profile.cshtml" />
     <Content Include="Views\Shared\_CommunityLayout.cshtml" />
-    <Content Include="WURFL AGPL License.txt" />
     <Content Include="WWTMVC5.csproj.DotSettings" />
     <Content Include="Views\Upgrade\Index.cshtml" />
     <Content Include="Views\Planetariums\QuickStart.cshtml" />
@@ -1061,6 +1096,9 @@
     <Content Include="Views\Developers\Embed.cshtml" />
     <Content Include="Views\Developers\WebDevelopment.cshtml" />
     <Content Include="Views\News\Eclipse2017.cshtml" />
+    <Content Include="Views\News\wwtprize.cshtml" />
+    <Content Include="Views\News\2016wwtprize.cshtml" />
+    <Content Include="Views\News\onlinetraining.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
@@ -1088,6 +1126,15 @@
     <Content Include="webclient\ext\angular.min.js.map" />
     <Content Include="webclient\Hubble.wtml" />
     <Content Include="webclient\Wise.wtml" />
+    <Content Include="webclient\css\fonts\readme.md" />
+    <Content Include="webclient\css\fonts\tinymce-small.eot" />
+    <Content Include="webclient\css\fonts\tinymce-small.json" />
+    <Content Include="webclient\css\fonts\tinymce-small.ttf" />
+    <Content Include="webclient\css\fonts\tinymce-small.woff" />
+    <Content Include="webclient\css\fonts\tinymce.eot" />
+    <Content Include="webclient\css\fonts\tinymce.json" />
+    <Content Include="webclient\css\fonts\tinymce.ttf" />
+    <Content Include="webclient\css\fonts\tinymce.woff" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Home\" />
@@ -1241,7 +1288,6 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
-  <Import Project="..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets')" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
