@@ -5,31 +5,72 @@
 @section leftnav{
 	@Html.Partial("~/Views/Planetariums/LeftNav.cshtml")
 }
+<section>
+    <h1>Planetariums</h1>
+    <p>A powerful tool for planetariums large and small, WorldWide Telescope provides a comprehensive set of features to help you create seamless displays on single-projector domes or complex, multi-projector domes.</p>
+    <p>WWT provides native support for a variety of planetarium systems and is scalable for simple and complex systems. In the simplest planetarium setup, WWT can run on a single computer running Windows, with one monitor for the control interface. In this scenario, WWT outputs the presentation to a single, full-dome channel so that you can project the visualization by using a spherical mirror dome or a fisheye lens. <br /> <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/configuration.html#single-projector-planetarium">Learn more...</a></p>
 
-	<h1>Planetariums</h1>
-	<p>A powerful tool for planetariums large and small, WorldWide Telescope (WWT) provides a comprehensive set of features to help you create seamless displays on single-projector domes or complex, multi-projector domes.</p>
-	<p>WWT provides native support for a variety of planetarium systems and is scalable for simple and complex systems. In the simplest planetarium setup, WWT can run on a single computer running Windows, with one monitor for the control interface. In this scenario, WWT outputs the presentation to a single, full-dome channel so that you can project the visualization by using a spherical mirror dome or a fisheye lens. </p>
-	
-	<p>For more advanced planetariums, WWT can drive a cluster of servers to create a multi-channel dome projection. In this cluster mode, WWT synchronizes the display video and the data across servers, and manages the status of the WWT server power for each server in the cluster. </p>
-	<p>WWT handles warping and blending for the dome and comes with tools to solve for this calibration from within the application. Performance has been optimized to enable smooth real-time playback on modern graphics hardware with control for limiting computational demands such as frame rates and anti-aliasing. </p>
-	<p>The following features in WWT 5.0 make it an even more powerful tool for planetarium shows:</p>
-	<ul>
-		<li>Full-dome tour authoring and instant full-dome playback of desktop tours with overlays and images</li>
-		<li>New MIDI controller support, enabling you to customize control panels by using inexpensive but powerful MIDI performance controllers</li>
-		<li>Controls that let you manage projector nodes, check status, and render performance from the WWT console</li>
-		<li>Screen Broadcast feature, which allows any application on the console to display as a window in Full Dome mode</li>
-	</ul>
-	<p>WWT requires a Windows operating system. You can install it on existing Windows-powered digital domes and it is compatible with a variety of software. Like any real-time graphics application, it runs better on higher-performance graphics cards. </p>
-	<p><img src="@Model.ImgDir/WTTU.jpg" alt="People viewing the cosmos inside a planetarium" class="img-responsive" /></p>
-	<h3>Presenting WorldWide Telescope in the Planetarium</h3>
-	<p>Planetariums are using WorldWide Telescope in three general presentation formats:</p>
-	<p><strong>Real-time, interactive presentation:</strong> a live operator can change the WWT display by using various controls during real-time, interactive presentations. Control options include:</p>
-	<ul>
-		<li>A desktop application interface, including programmable custom buttons</li>
-		<li>An Xbox controller, which can be used by the presenter or audience members to change views, select locations to visit, and more</li>
-		<li>A variety of MIDI controllers are compatible with WWT, enabling you to customize control panels with sliders, knobs, and buttons for complex presentations</li>
-	</ul>
-	<p><strong>Real-time, push-button shows:</strong> you can use WWT to create and present tours (real-time shows) that are timed to music and to pre-recorded or live narration. WWT can output a SMPTE track for timing control of external audio sources. Just push a button and the show runs.</p>
-	<p><strong>Pre-rendered movie for playback and distribution:</strong> WWT can directly render uncompressed dome master frame sequences at up to 8k resolution. Planetariums can use this capability to render an entire full-dome movie that is then loaded and presented by using an external video playback system. You could package this movie for distribution as a pre-rendered show or as a real-time, push-button show. </p>
-	<p>Pre-rendered digital video sequences also can be used as part of a pre-rendered production, either as layers with additional visual effects composited in, or for a specific visual sequence of a longer production. This enables producers to use their own visual-effects tools to integrate WWT-created assets with those from other sources.</p>
-	<p>&nbsp;</p>
+    <p>For more advanced planetariums, WWT can drive a cluster of servers to create a multi-channel dome projection. In this cluster mode, WWT synchronizes the display video and the data across servers, and manages the status of the WWT server power for each server in the cluster. </p>
+    <p>WWT handles warping and blending for the dome and comes with tools to solve for this calibration from within the application. Performance has been optimized to enable smooth real-time playback on modern graphics hardware with control for limiting computational demands such as frame rates and anti-aliasing.<br /> <a href="https://www.gitbook.com/book/worldwidetelescope/worldwide-telescope-multi-channel-dome-setup/details">Learn more...</a>  </p>
+    <p>The following features in WWT 5.0 make it an even more powerful tool for planetarium shows:</p>
+    <ul>
+        <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-advanced-guides/content/domeauthoring.html">Full-dome tour authoring</a> and instant full-dome playback of desktop tours with overlays and images</li>
+        <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-advanced-guides/content/controllers.html">New MIDI controller support</a> enabling you to customize control panels by using inexpensive but powerful MIDI performance controllers</li>
+        <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-multi-channel-dome-setup/content/">Controls </a> that let you manage projector nodes, check status, and render performance from the WWT console</li>
+        <li>Screen Broadcast feature, which allows any application on the console to display as a window in Full Dome mode</li>
+    </ul>
+    <p>WWT for planetariums requires a Windows operating system. You can install it on existing Windows-powered digital domes and it is compatible with a variety of software. Like any real-time graphics application, it runs better on higher-performance graphics cards. </p>
+    <p><img src="@Model.ImgDir/WTTU.jpg" alt="People viewing the cosmos inside a planetarium" class="img-responsive" /></p>
+    <h3>Presenting WorldWide Telescope in the Planetarium</h3>
+    <p>Planetariums are using WorldWide Telescope in three general presentation formats:</p>
+    <p><strong>Real-time, interactive presentation:</strong> a live operator can change the WWT display by using various controls during real-time, interactive presentations. Control options include:</p>
+    <ul>
+        <li>A desktop application interface, including programmable custom buttons</li>
+        <li>An Xbox controller, which can be used by the presenter or audience members to change views, select locations to visit, and more</li>
+        <li>A variety of MIDI controllers are compatible with WWT, enabling you to customize control panels with sliders, knobs, and buttons for complex presentations</li>
+    </ul>
+    <p><strong>Real-time, push-button shows:</strong> you can use WWT to create and present tours (real-time shows) that are timed to music and to pre-recorded or live narration. WWT can output a SMPTE track for timing control of external audio sources. Just push a button and the show runs.</p>
+    <p><strong>Pre-rendered movie for playback and distribution:</strong> WWT can directly render uncompressed dome master frame sequences at up to 8k resolution. Planetariums can use this capability to render an entire full-dome movie that is then loaded and presented by using an external video playback system. You could package this movie for distribution as a pre-rendered show or as a real-time, push-button show. </p>
+    <p>Pre-rendered digital video sequences also can be used as part of a pre-rendered production, either as layers with additional visual effects composited in, or for a specific visual sequence of a longer production. This enables producers to use their own visual-effects tools to integrate WWT-created assets with those from other sources.</p>
+    <p>&nbsp;</p>
+</section>
+<section>
+    <h1>Planetarium Resources</h1>
+    <p>The following resources provide information to help you use WorldWide Telescope in your planetarium:</p>
+
+    <ul>
+        <li><a href="@Model.ResLoc/Content/Planetariums/Tour Template.docx">Tour Template</a>: download the storyboard template for designing and building WWT tours</li>
+        <li><a href="/Planetariums/DomeProject">WorldWide Telescope Dome Projects</a>: learn how a small, on-site domes can provide an affordable, high-quality planetarium experience for educational settings</li>
+        <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-multi-channel-dome-setup/content/">Multi Channel Setup</a>: read how to set up a multi-channel display for use in a dome or frustum environment</li>
+        <li><a href="@Model.ResLoc/Content/Planetariums/Controller Mapping.pdf">Xbox Controller Resources</a>: see how users can run WWT with an Xbox controller</li>
+        <li><a href="https://wwtweb.blob.core.windows.net/drops/WWTRemote.5.0.0.msi">WWT Remote Control</a>: this utility enables remote operations of WWT and helps you control multiple machine clusters and multi-monitor configurations for multi-channel domes and powerwall high-resolution displays</li>
+    </ul>
+</section>
+<section>
+    <h1>WorldWide Telescope Dome Projects</h1>
+    <p>
+        Not only for large public planetariums with state-of-the-art multi-monitor projection systems,
+        <img class="pull-right" style="margin: 8px 0 8px 8px" src="@Model.ResLoc/Content/Images/Planetariums/wwt-dome-exterior.png">
+        the WorldWide Telescope Windows Client can be configured for immersive displays of the night skies in small on-site or portable domes for schools or educational events.
+    </p>
+
+    <h4>WorldWide Telescope Micro-Dome</h4>
+
+
+    <p>Many children never have a chance to go to a bricks-and-mortar planetarium to learn astronomy, so we created a virtual planetarium on your computer with WorldWide Telescope (WWT). However, the universe is still best experienced in an immersive environment like a dome, so we have published a set of plans that enable schools to build their own small planetarium for use with WWT. </p>
+    <p><a href="/Planetariums/WWTPlanetarium">The WorldWide Telescope Micro-Dome</a> is a low-cost, do-it-yourself option for creating a planetarium. You can construct one for less than US$1,000 by using supplies from local office and hardware stores and a first-surface spherical mirror. To complete your planetarium, you will need a projector and a laptop with WorldWide Telescope installed. Because a number of the construction tasks involve the use of power saws, cutting tools, and precise measurement, responsible adult involvement is essential.</p>
+    <p>The completed dome will allow 15 to 30 children at a time to experience a high-quality digital projection of space, powered by WorldWide Telescope. Additionally, WWT allows students to create their own tours of the universe to share what they have learned with classmates—extending the learning cycle.</p>
+
+    <h4><img class="pull-left" src="@Model.ResLoc/Content/Images/Planetariums/go-dome.png" style="margin:8px 8px 8px 0"> Using Worldwide Telescope in mobile planetariums</h4>
+    <p>
+
+        You can easily configure WorldWide Telescope (WWT) to work in mobile planetariums, such as the inflatable Go-Dome. By using a laptop or desktop computer with a projector and either a fisheye lens or spherical mirror, you can project WWT onto the inflated dome, resulting in an immersive, 3D environment for exploration of the universe at schools, museums, science centers, and public venues of all kinds.
+    </p>
+    <p>The Go-Dome pictured here is a portable 13 feet in diameter by 9 feet high (4 meters diameter by 3 meters high). It is small enough to ship as luggage and easy to assemble. Portable domes as large as 30 feet in diameter (9 meters) are also available.</p>
+    <p>
+        <a target="_blank" href="http://www.go-domes.com">Learn more about Go-Domes products</a> <br />
+        (<strong>Note</strong>: Go-Domes is not affiliated with WorldWide Telescope.)
+    </p>
+
+    <p>&nbsp;</p>
+</section>

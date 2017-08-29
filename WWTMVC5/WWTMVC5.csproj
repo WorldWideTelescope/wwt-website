@@ -528,11 +528,6 @@
     <Compile Include="ViewModels\VideoDataViewModel.cs" />
     <Compile Include="webclient\Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="webclient\login.aspx.cs">
-      <DependentUpon>login.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WebServices\IResourceService.cs" />
     <Compile Include="WebServices\LiveIdAuth.svc.cs">
@@ -803,6 +798,9 @@
     <Content Include="Content\bootstrap\badges.less" />
     <Content Include="Content\bootstrap\alerts.less" />
     <Content Include="Localization\lang_en.tdf" />
+    <Content Include="Docs\worldwide-telescope-user-manual.epub" />
+    <Content Include="Docs\worldwide-telescope-user-manual.mobi" />
+    <Content Include="Docs\worldwide-telescope-user-manual.pdf" />
     <None Include="Properties\PublishProfiles\wwt.thewebkid.com.pubxml" />
     <None Include="Properties\PublishProfiles\wwtstaging - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy.pubxml" />
@@ -1023,7 +1021,6 @@
     <Content Include="webclient\images\uranus.jpg" />
     <Content Include="webclient\images\venus.jpg" />
     <Content Include="webclient\images\wwtlogo.png" />
-    <Content Include="webclient\login.aspx" />
     <Content Include="webclient\sdk.js" />
     <Content Include="webclient\sdk\wwtsdk.js" />
     <Content Include="webclient\sdk\wwtsdk.min.js" />
@@ -1099,6 +1096,16 @@
     <Content Include="Views\News\wwtprize.cshtml" />
     <Content Include="Views\News\2016wwtprize.cshtml" />
     <Content Include="Views\News\onlinetraining.cshtml" />
+    <Content Include="Views\GetInvolved\Index.cshtml" />
+    <Content Include="Views\GetInvolved\JoinUs.cshtml" />
+    <Content Include="Views\GetInvolved\ShareWWT.cshtml" />
+    <Content Include="Views\GetInvolved\Develop.cshtml" />
+    <Content Include="Views\GetInvolved\HelpOthers.cshtml" />
+    <Content Include="Views\About\WhoWeAre.cshtml" />
+    <Content Include="Views\Learn\UserGuide.cshtml" />
+    <Content Include="Views\Learn\Advanced.cshtml" />
+    <Content Include="Views\Learn\DevGuide.cshtml" />
+    <Content Include="Views\Learn\Videos.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
