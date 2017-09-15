@@ -1,0 +1,98 @@
+﻿@{
+    Layout = "~/Views/Shared/_ContentPage.cshtml";
+}
+@section leftnav{
+    @Html.Partial("~/Views/GetInvolved/LeftNav.cshtml")
+}
+<h2>Join Us!</h2>
+
+<p>There are many ways to join the WorldWide Telescope community, you can follow the links at the top of the page to connect with us on Facebook or twitter, or click below to learn how to create a tour, and then upload it to Communities. If you would like to and help others learn WWT, or make the software better, please follow the links on the left.</p>
+
+<div class="panel-group" id="accordion">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#sharewwt">
+                    Share WWT
+                </a>
+            </h4>
+        </div>
+        <div id="sharewwt" class="panel-collapse collapse ">
+            <div class="panel-body">
+                <p>
+                    TODO Social media links; 
+                    TODO Instructions on the share button on the web client.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#creatingtours">
+                    Creating Tours
+                </a>
+            </h4>
+        </div>
+        <div id="creatingtours" class="panel-collapse collapse ">
+            <div class="panel-body">
+                <p>What you can do: You can create a variety of tours with WWT. The tour-authoring interface allows tour creators to guide tour viewers through the Universe by positioning a virtual camera in various slides, and WWT animates the between-slide transitions automatically. Tour creators can also add their own images, data, text, music, voice over and other media to enhance the message. Buttons, images and other elements can link to other Tours, ultimately allowing tour viewers to control their own paths.</p> <p>Tour functionality can be used to create Kiosks, menu-driven multimedia content, presentations, training and quizzing interactives and self-service data exploration. In addition to their educational value, tours can be particularly useful in collaborative research projects, where researchers can narrate and/or annotate various views of data.  Tour files are typically small enough to be exchanged easily by email or cloud services. Tours that follow a linear storyline can also be output to high quality video frames for professional quality video production at any resolution desired. Tours can also be hosted in a website to create interactive web content.</p>
+
+                <p>Skills Required: WWT tours are one of the most powerful aspects of WWT, and creating them doesn’t require any programing skills. You should know what story you want to tell and understand presentation and layout skills. If you can make a PowerPoint presentation then you should be able to make a WWT tour.</p>
+
+                <p>TO DO Add tour making instruction links</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#usingcommunities">
+                    Using Communities
+                </a>
+            </h4>
+        </div>
+        <div id="usingcommunities" class="panel-collapse collapse">
+            <div class="panel-body">
+
+                <p>Content in WorldWide Telescope can be organized, curated and shared using the Communities feature.&nbsp; Communities replaces the Layerscape functionality.&nbsp; To get started with Communities, you first have to create an account.&nbsp;</p>
+                <ol>
+                    <li>Open <a href="http://www.worldwidetelescope.org">http://www.worldwidetelescope.org</a></li>
+                    <li>
+                        In the upper right click on &ldquo;Sign-In&rdquo;.
+                        <br /><img class="img-responsive img-border" src="@Model.ContentDir/learn/wwt_signin.jpg" alt="Sign into WWT" />
+                    </li>
+                    <li>
+                        If this is the first time you logged in you will see a dialog box where you can create a new or login to an existing account.
+                        <br /><img class="img-responsive" src="@Model.ContentDir/learn/signin_dialog.jpg" alt="Sign in dialog" />
+                    </li>
+                    <li>Once you have logged into your account, you will see &ldquo;My Profile&rdquo; in the left navigation. Clicking on this will take you to a page showing your profile and the communities and content you have uploaded to WorldWide Telescope.</li>
+                    <li>
+                        You will a tab for uploaded items, such as tours. Another tab shows all of the communities you have created.&nbsp; The last tab shows requests submitted to you as the owner of your communities.&nbsp; Here you can approve requests to join a community.&nbsp;
+                        <br /><img class="img-responsive img-border" src="@Model.ContentDir/learn/myprofile.jpg" alt="Community Profile Page" />
+                    </li>
+                    <li>
+                        You can create new communities, sub-communities and upload files to communities from the &ldquo;My Profile&rdquo;. When you upload a tour, the Tour Properties are used to populate the descriptive fields on the website.&nbsp; You can provide a thumbnail (wide aspect ratio of 2:1) as well.
+                        <br /><br />Similarly, you can access communities from within the Desktop Client.
+                    </li>
+
+                    <li>
+                        Once you have signed in (upper right) you can click on the Community tab to show the same community structure as the web site.
+                        <br /><img class="img-responsive img-border" src="@Model.ContentDir/learn/communitytab.jpg" alt="Community Feature in WWT" />
+                    </li>
+                    <li>
+                        Clicking on &ldquo;My Communities&rdquo; and then &ldquo;My WWT Folder&rdquo; and then you can drill down to see your tours organized by community.
+                        <br /><img class="img-responsive img-border" src="@Model.ContentDir/learn/mywwtfolder.jpg" alt="My WWT Folder" />
+                    </li>
+                    <li>
+                        You can also Browse all tours you have access to, which includes your communities (the ones you own and the ones you are a member of) as well as the stock tours available in WWT.
+                        <br /><img class="img-responsive img-border" src="@Model.ContentDir/learn/browsealltours.jpg" alt="Browse All Tours" />
+                    </li>
+                    <li>Note that all administration of your community content is done through the Community section of the <a href="http://www.worldwidetelescope.org">worldwidetelescope.org</a> website.</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>

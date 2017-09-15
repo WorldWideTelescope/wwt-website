@@ -1,0 +1,139 @@
+﻿@{
+    Layout = "~/Views/Shared/_ContentPage.cshtml";
+    ViewBag.Title = "Develop - WorldWide Telescope";
+    ViewBag.HideTranslateWidget = 1;
+}
+@section leftnav{
+    @Html.Partial("~/Views/GetInvolved/LeftNav.cshtml")
+}
+<h1>Developers Overview</h1>
+<p> The WorldWide Telescope has seveal ways for developers to engage with the software. Web developers can embed a WWT control on their website, windows developers can access and control layers in the windows client, and convert images to formats WWT can render. Expert developers can contribute directly to the WWT code base, the open source home of WWT is <a href="https://github.com/WorldWideTelescope/wwt-home"> the wwt-home metarepository on GitHub.</a></p>
+
+
+<h2> Windows Developers</h2>
+<div class="panel-group" id="accordion">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#sdks">
+                    The WWT Software Development Kit (SDK) and Academic Development Kit (ADK)
+                </a>
+            </h4>
+        </div>
+        <div id="sdks" class="panel-collapse collapse ">
+            <div class="panel-body">
+                <h4>
+                    <a href="@Model.ContentDir/drops/WWTSDK.msi">Click here to download WWT SDK, ADK Installer</a>
+</h4>
+                <h5>Features</h5>
+                <ol>
+                    <li>Tile Pyramid SDK, Samples and Documentation</li>
+                    <li>Tile Generator Tool</li>
+                    <li>LCAPI Sample</li>
+                    <li>Tile Service Sample</li>
+                    <li>Community Service Sample</li>
+                    <li>Sphere Toaster Tool</li>
+                    <li>Study Chopper Tool</li>
+                </ol>
+
+                <p>What you can do:</p>
+                <ul>
+                    <li>Reproject image data into tile pyramids suitable for visualization in WorldWide Telescope.</li>
+                    <li>Turn global or local xyz data into image tile pyramids.</li>
+                    <li>Process Digital Elevation Models (DEM) into WWT compatible DEM tile pyramids.</li>
+                    <li>Share the tile pyramids with your colleagues.</li>
+                    <li>Create your own community containing tours, data and links that your colleagues can easily access.</li>
+                    <li> Use the Sherical Toaster and the Study Chopper to TOAST images to view in WWT.</li>
+                        <li>Add custom data to the Layer Manager of WorldWide Telescope.</li>
+                        <li>Connect your database and application specific processing with WorldWide Telescopes Visualization.</li>
+                        <li>Remotely control WWT from other applications.</li>
+                   
+
+                </ul>
+
+
+                <h5>Software Requirements</h5>
+                <ul>
+                    <li>Windows 7 (Ultimate or Enterprise recommended), Windows Server 2008 R2 (Older versions of Windows are not recommended)</li>
+                    <li>WorldWide Telescope Windows Client (Version 3.0.1 or above)</li>
+                    <li>.NET Framework 4.0</li>
+                    <li>Visual Studio 2010</li>
+                    <li>Web Deploy Tool (this is required if the Sharing Service tool is to be deployed)</li>
+                    <li>IIS with default web site and default app pool configured to use .Net 4.0</li>
+                </ul>
+
+                <h5>Hardware Requirements</h5>
+                <ul>
+                    <li>A 64-bit dual-core processor is recommended, though a 32-bit is sufficient.</li>
+                    <li>4 GB of physical memory</li>
+                </ul>
+
+                <h5>Documenation </h5>
+                TODO: Add LCAPI and other gitbook docs.
+
+                <h5>Known Issues</h5>
+                <ol>
+                    <li>
+                        The SDK currently provides samples for the tiling of image files (.png,.jpg,.jpeg,.tif,.tiff) and xyz files (comma separated containing lat, long and depth values).</br>
+                        The SDK source code is provided so it can be extended to support other input file formats.
+                    </li>
+                    <li>Processing large sets of data is dependent on the amount of memory available in your system. For larger datasets consider increasing the available memory on your system.</li>
+                    <li>
+                        When using the Sharing Service with a Community folder that is configured on a remote network location WorldWide Telescope might time-out before the whole payload file is loaded.</br>
+                        In this case reselecting the Community thumbnail in WorldWide Telescope should load the community payload file in stages - several iterations of this may be necessary for a large payload file.
+                    </li>
+                    <li>In LCAPI Sample, when loading a file, "Data visualization Layer" dialog shown by WWT will be hidden behind the LCAPI sample window and will need to be activated manually.</li>
+                    <li>The Tile Generator tool only supports images with longitude values increasing from left to right and latitude values decreasing from top to bottom.</li>
+                </ol>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#windowsclient">
+                    Modifying and extending the WWT Windows Client
+                </a>
+            </h4>
+        </div>
+        <div id="windowsclient" class="panel-collapse collapse ">
+            <div class="panel-body">
+                <h4><a href="https://github.com/WorldWideTelescope/wwt-windows-client">Click here to go to the WWT Webclient GitHub Repository</a></h4>
+                <p>
+                    The Windows client is the most powerful component, and the most complex. It can power desktop visualizations, power walls, or even full dome multi-projector clusters.  For developers with the right set of skills, WWT in Windows can be adapted to an even wider set of requirements.
+                </p>
+                <p>
+                    Skills Required: The WWT Windows Client is built in Visual Studio 2013 with the .net framework 4.5x. It uses custom Winforms controls for the user interface, and DirectX11 for the 3D rendering. The interface between the C# .NET code and DirectX11 is the SharpDX library, another open source component. The client also has significant amounts of HLSL Shader code for both rendering and GP/GPU computation (such as orbits, temporal animation, lighting, etc.). There is a significant amount of TCP/IP networking code, as well as a full HTTP server implementation. To modify the core rendering code you need to know advanced 3D & spherical math and 3D rendering techniques similar to that of 3D Game engines. You also need to understand astronomical mathematics.
+                </p>
+                <p>
+                    There is a layer class model that can be derived from to allow new layer types to be defines without having to modify much of the core WWT codebase. This will be the most popular way of extending WWT, and will probably be exposed as a plug-in model for allowing the main-line installations to take 3rd party WWT layers without having to compile them into the mainline code.
+                </p>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2> Web Developers</h2>
+<div class="panel-group" id="accordion">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#webcontrl">
+                    HTML5 Web Control Reference
+                </a>
+            </h4>
+        </div>
+        <div id="webcontrl" class="panel-collapse collapse ">
+            <div class="panel-body">
+                <p>WorldWide Telescope Web Control API allows you to integrate WWT into any web data portal, or build mashups to display your own interface and WorldWide Telescope.</p>
+                <p>TODO: View the Web Control Script Reference documentation.</a></p>
+
+                <h4>Web control examples</h4>
+                <a href="/Developers/ImportImage">Import and Image to WWT</a>
+
+            </div>
+        </div>
+    </div>
+</div>

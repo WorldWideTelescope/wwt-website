@@ -1,0 +1,57 @@
+﻿@{
+    Layout = "~/Views/Shared/_ContentPage.cshtml";
+    ViewBag.Title = "User Guide - WorldWide Telescope";
+    ViewBag.HideTranslateWidget = 1;
+}
+@section leftnav{
+    @Html.Partial("~/Views/Learn/LeftNav.cshtml")
+}
+
+<section>
+    <h1>WorldWide Telescope User Guide</h1>
+    <p>The WWT User Guide is aimed at newcomers to WWT as well as exerienced users who would like a more detailed overview of the WWT features.</p>
+
+    <p>You can read the most updated version of our user guide <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/">online</a>, or download it in pdf, ePub, or Mobi format by following the download link on the <a href="https://www.gitbook.com/book/worldwidetelescope/worldwide-telescope-user-manual/details">gitbook page</a>.</p>
+
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="row home-features">
+                <div class="col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-3 col-xs-12">
+                    <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/">
+                        <img src="/Content/images/gbox.png" class="img-responsive">
+                        <i class="fa fa-book"></i>
+                        <h4>Read Online</h4>
+                    </a>
+                </div>
+
+                <div class="col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-3 col-xs-12">
+                    <a href="~/Docs/worldwide-telescope-user-manual.pdf">
+                        <img src="/Content/images/gbox.png" class="img-responsive">
+                        <i class="fa fa-file-pdf-o"></i>
+                        <h4>Download .pdf</h4>
+                    </a>
+                </div>
+
+                <div class="col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-3 col-xs-12">
+                    <a href="~/Docs/worldwide-telescope-user-manual.mobi">
+                        <img src="/Content/images/gbox.png" class="img-responsive">
+                        <i class="fa fa-file-text-o"></i>
+                        <h4>Download .mobi</h4>
+                    </a>
+                </div>
+
+                <div class="col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-3 col-xs-12">
+                    <a href="~/Docs/worldwide-telescope-user-manual.epub">
+                        <img src="/Content/images/gbox.png" class="img-responsive">
+                        <i class="fa fa-file-text"></i>
+                        <h4>Download .epub</h4>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p>For more details on the inner workings of WWT, see <a href="/Learn/Advanced/">the advanced user guide</a></p>
+
+
+</section>

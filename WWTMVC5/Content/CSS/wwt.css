@@ -213,6 +213,7 @@ th {
   a[href^="javascript:"]:after {
     content: "";
   }
+
   pre,
   blockquote {
     border: 1px solid #999;
