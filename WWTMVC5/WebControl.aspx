@@ -18,7 +18,7 @@
 	<title>WorldWide Telescope Embedded Control</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="<%= ConfigurationManager.AppSettings["ResourcesLocation"] %>/Content/CSS/wwt.min.css?v=<%= ConfigurationManager.AppSettings["ResourcesVersion"] %>" rel="stylesheet" />
-	<link href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 	<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>

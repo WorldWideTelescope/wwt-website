@@ -1,6 +1,5 @@
 @import '../bootstrap/bootstrap.less';
 
-
 // SpaceLab colors
 @import "bootswatch.less";
 
@@ -47,16 +46,38 @@ body.wwt {
 
 }
 
-#newsDiv{
-	#gradient > .vertical-three-colors(rgba(3,20,34,.5), rgba(3,20,34,.4), 20%, rgba(3,20,34,.3));
-	padding:14px 10px;
-	a{
-		color:@hover-color;
-		&:hover{
-			color:white;
-		}
-	}
+.home-features {
+    margin-bottom: 15px;
+    a {
+    position: relative;
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    color: white; 
+    i.fa {
+    font-size: 60px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 100%;
+    margin: 20% auto;
+    color: white;
+    }
+    h4 {
+    margin-bottom: 0;
+    }   
+    h5 {
+    font-weight: normal;
+    margin-top: 6px;
+    }
+
 }
+    a:hover {
+        text-decoration: underline;
+    }
+}
+
 body.wwt .navbar.hero-nav {
 	#gradient > .vertical-three-colors(rgba(3,20,34,.7), rgba(3,20,34,.7), 20%, rgba(3,20,34,.7));
 	border-radius: 0;

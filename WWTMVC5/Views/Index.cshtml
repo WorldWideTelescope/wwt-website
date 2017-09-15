@@ -1,9 +1,7 @@
 ﻿@using System.Configuration
-
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 
 @section Head{
     <script src="@Model.JsDir/pages/home.js?v=@Model.ResVer"></script>
@@ -15,197 +13,84 @@
         });
     </script>
 }
+<div class="row" style="margin-top:125px;">
+    <div class="col-md-10 col-md-offset-1">
+        <h2>WorldWide Telescope Resources</h2>
 
-<div class="row">
-    <div class="col-md-12 home-install">
+        <div class="row home-features">
 
-        <div id="heroDiv" style="margin-top:62px;">
-            <div class="carousel slide" id="carousel" data-ride="carousel" data-interval="8000">
-
-                <ol class="carousel-indicators">
-                    <li data-target="#carousel" data-slide-to="0" title="2016 WWT Prize Competition" class="active"></li>
-                    <li data-target="#carousel" data-slide-to="1" title="WWT and Planet Nine"></li>
-                    <li data-target="#carousel" data-slide-to="2" title="WorldWide Telescope Stories"></li>
-                    <li data-target="#carousel" data-slide-to="3" title="WWT Ambassadors"></li>
-                    <li data-target="#carousel" data-slide-to="4" title="WorldWide Telescope features Bing 3D Cities"></li>
-                    <li data-target="#carousel" data-slide-to="5" title="Mars"></li>
-                    <li data-target="#carousel" data-slide-to="6" title="Explore Earth with WorldWide Telescope"></li>
-                    <li data-target="#carousel" data-slide-to="7" title="IMPACTS - a virtual reality experience"></li>
-                </ol>
-
-                <div class="carousel-inner">
-                    <div class="item active">
-                        <img alt="WorldWide Telescope Stories" src="https://wwtweb.blob.core.windows.net/images/2016-WWT-Prize-Hero-Image.png" class="img-responsive" id="heroBg" />
-                        <div class="hero-backdrop lighter right">
-                            <h1 class="text-white">2016 WWT Prize Competition</h1>
-                            <p class="text-white"><a href="/news/2016wwtprize">See the award-winning tours!</a></p>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <img alt="WorldWide Telescope Stories" src="https://cloud.githubusercontent.com/assets/9676722/12996674/9264f1e4-d0f7-11e5-86b1-23c0cd3e2a12.jpg" class="img-responsive" id="heroBg" />
-                        <div class="hero-backdrop lighter left">
-                            <h1 class="text-white">WWT and Planet Nine</h1>
-                            <p class="text-white">WorldWide Telescope used to visualize orbit for possible new Planet Nine.</p>
-                            <p class="text-white"><a href="/news/planet9">Learn more and find out to include these visualizations</a></p>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <img alt="WorldWide Telescope Stories" src="@Model.ImgDir/WWTStoriesImage.jpg" class="img-responsive" id="heroBg" />
-                        <div class="hero-backdrop left">
-                            <h1 class="text-white">WorldWide Telescope Stories</h1>
-                            <p class="text-white">Stories of how WorldWide Telescope is used in outreach, education, and research</p>
-                            <p class="text-white"><a href="http://wwtstories.org">wwtstories.org</a></p>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <img alt="WWT Ambassadors" src="@Model.ImgDir/AmbassaorsSlideImage.jpg" class="img-responsive" id="heroBg" />
-                        <div class="hero-backdrop left">
-                            <h1 class="text-white">WWT Ambassadors</h1>
-                            <p class="text-white">WWT Ambassadors use WWT to educate the public about astronomy and science.</p>
-                            <p class="text-white"><a href="http://wwtambassadors.org">wwtambassadors.org</a></p>
-                        </div>
-                    </div>
-                    @*<div class="item">
-                        <img alt="Visit the horsehead nebula with WorldWide Telescope" src="@Model.ImgDir/horsehead.jpg" class="img-responsive" id="heroBg" />
-                        <div class="hero-backdrop right">
-                            <h1 class="text-white">Horsehead and Flame Nebula</h1>
-                            <p class="text-white">Now you can visit the horsehead nebula at lunch, and still be home in time for dinner.</p>
-                            <p class="text-white"><a href="/webclient/#/place=59.18&ra=5.66500&dec=-2.40056&fov=2.65720">View it in the WWT Web Client.</a></p>
-                        </div>
-                    </div>*@
-                    <div class="item">
-                        <img alt="WorldWide Telescope features Bing 3D Cities" src="@Model.ImgDir/seattle.jpg" class="img-responsive" id="heroBg" />
-                        <div class="hero-backdrop right">
-                            <h1 class="text-white">Explore our world in 3D using WorldWide Telescope.</h1>
-                            <p class="text-white"><a href="/Download/" style="text-decoration: underline">Download WorldWide Telescope.</a></p>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <img alt="Mars" src="@Model.ImgDir/mars.jpg" id="heroBg" class="img-responsive" />
-
-                        <div class="hero-backdrop left">
-                            <h1 class="text-white">HiRISE: Mars High Resolution Imagery </h1>
-                            <p class="text-white">Explore the surface of our nearest neighbor.</p>
-                            <p class="text-white"><a href="/webclient/#/place=Mars.HIRISE_Spotlight.16&lookAt=Planet&ra=3.55100&dec=-14.23470&fov=1.21484">View it here.</a></p>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <img alt="Explore Earth with WorldWide Telescope" src="@Model.ImgDir/earth.jpg" class="img-responsive" id="heroBg" />
-
-                        <div class="hero-backdrop left">
-                            <h1 class="text-white" style="line-height: 1.5">Take a virtual tour of our world without leaving your desk.</h1>
-                            <p class="text-white"><a href="/Download">Download it now!</a></p>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <img alt="IMPACTS - a virtual reality experience" src="@Model.ImgDir/IPS-hero.jpg" class="img-responsive" id="heroBg" />
-
-                        <div class="hero-backdrop left">
-                            <h4 class="text-white" style="line-height: 2">From the International Space Station to flights over craters on Earth, the Moon, Mars and Mercury - you will <a href="/Planetariums/Impacts">learn how impacts have shaped our Solar System.</a></h4>
-                        </div>
-                    </div>
-                </div>
-
-
-                <a class="left carousel-control" href="#carousel" data-slide="prev">
-                    <span class="fa fa-angle-left"></span>
+            <div class="col-md-4">
+                <a href="/Use/Educators">
+                    <img src="~/images/educators.png" class="img-responsive" />
+                    <i class="fa fa-graduation-cap"></i>
+                    <h4>Resources for Educators</h4>
                 </a>
-                <a class="right carousel-control" href="#carousel" data-slide="next">
-                    <span class="fa fa-angle-right"></span>
+            </div>
+            <div class="col-md-4">
+                <a href="/GetInvolved/Develop">
+                    <img src="~/images/develop.png" class="img-responsive" />
+                    <i class="fa fa-laptop"></i>
+                    <h4>Resources for Developers</h4>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a href="/Use/Researchers">
+                    <img src="~/images/astronomers.png" class="img-responsive" />
+                    <i class="fa fa-wpexplorer"></i>
+                    <h4>Resources for Astronomers</h4>
                 </a>
             </div>
 
-
         </div>
-    </div>
-
-</div>
-
-
-<div class="row">
-    <div class="col-md-10 col-md-offset-1">
         <div class="row home-features">
-            <div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-3 col-xs-12">
+            <div class="col-md-4">
+                <a href="/Use/Planetariums">
+                    <img src="~/images/planetariums.png" class="img-responsive" />
+                    <i class="fa fa-institution"></i>
+                    <h4>Resources for Planetariums and Museums</h4>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a href="/Learn/">
+                    <img src="~/images/installwwt.png" class="img-responsive" />
+                    <i class="fa fa-book"></i>
+                    <h4>Getting Started</h4>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a href="https://www.youtube.com/channel/UCjx-BjxGX6vvxALi9ziBfjA/featured" target="_blank">
+                    <img src="@Model.ImgDir/youtube-channel.jpg" class="img-responsive" />
+                    <i class="fa fa-youtube-play"></i>
+                    <h4>Check out our Videos</h4>
+                </a>
+            </div>
+        </div>
+        <div class="row home-features">
+
+            <div class="col-md-4">
                 <a href="/Download/">
                     <img src="@Model.ImgDir/webclient-thumbnails.jpg" class="img-responsive" />
                     <i class="fa fa-download"></i>
-                    <h4>Install WorldWide Telescope</h4>
-                    <h5>Free Windows<sup>&reg;</sup> Application</h5>
+                    <h4>Install WorldWide Telescope for Windows</h4>
                 </a>
             </div>
-            <div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-3 col-xs-12">
+            <div class="col-md-4">
                 <a href="javascript:location.href = wwt.wcLink">
+                    <img src="~/images/exploreweb.png" class="img-responsive" />
+                    <i class="fa fa-rocket"></i>
+                    <h4>Explore WorldWide Telescope on the Web</h4>
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                <a href="/GetInvolved/">
                     <img src="@Model.ImgDir/starz2.jpg" class="img-responsive" />
-                    <i class="fa fa-arrow-circle-o-right"></i>
-                    <h4>Explore WWT on the Web</h4>
-                    <h5>Try the HTML5 Web Application</h5>
+                    <i class="fa fa-users"></i>
+                    <h4>Get Involved</h4>
                 </a>
             </div>
-            <div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-3 col-xs-12">
-                <a href="https://www.youtube.com/channel/UCjx-BjxGX6vvxALi9ziBfjA/featured" target="_blank">
-                    <img src="@Model.ImgDir/youtube-channel.jpg" class="img-responsive" />
-                    <i class="fa fa-caret-square-o-right"></i>
-                    <h4>Check out our videos</h4>
-                    <h5>Learn more about WWT's world</h5>
-                </a>
-            </div>
-
         </div>
-        @*<div class="row">
-                <section class="col-md-8" style="vertical-align: top">
-
-
-
-                </section>
-                @if (ConfigurationManager.AppSettings["twitterId"] != "xxx")
-                {
-                    // need a valid twitter id
-                    <style>
-                        .row .twitter-widget-section iframe {
-                            height: 1012px !important;
-                        }
-                    </style>
-                    <section class="col-md-4 twitter-widget-section">
-                        <h3 style="margin-bottom: 7px">Twitter</h3>
-                        <hr style="margin: 0"/>
-                        <a class="twitter-timeline" href="https://twitter.com/WWTelescope" data-widget-id="443201388147789827">Tweets by @@WWTelescope</a>
-                        <script>
-                            !function(d, s, id) {
-                                var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
-                                if (!d.getElementById(id)) {
-                                    js = d.createElement(s);
-                                    js.id = id;
-                                    js.src = p + "://platform.twitter.com/widgets.js";
-                                    fjs.parentNode.insertBefore(js, fjs);
-                                }
-                            }(document, "script", "twitter-wjs");
-                        </script>
-
-                    </section>
-                }
-            </div>*@
     </div>
 </div>
 
-<div class="row">
-    <section class="col-md-12" style="vertical-align: top">
-
-        <h3>Watch WWT Videos</h3>
-    </section>
-    <section class="col-md-6" style="vertical-align: top">
-        <div class="embed-responsive embed-responsive-16by9">
-            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/_FMmOjjlI8o" allowfullscreen></iframe>
-        </div>
-
-
-    </section>
-    <section class="col-md-6" style="vertical-align: top">
-        <div class="embed-responsive embed-responsive-16by9">
-            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/d36Ix0uQ1hg" allowfullscreen></iframe>
-        </div>
-
-
-    </section>
-</div>
-<br /><br />
-        
+    <br /><br />

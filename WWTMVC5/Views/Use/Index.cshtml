@@ -1,0 +1,124 @@
+﻿@{
+    Layout = "~/Views/Shared/_ContentPage.cshtml";
+}
+@section leftnav{
+    @Html.Partial("~/Views/Use/LeftNav.cshtml")
+}
+
+<script>
+	$(function () {
+		if (navigator.platform == 'Win32' || navigator.platform == 'Win64') {
+			var ua = navigator.userAgent;
+			if (ua.indexOf('Windows NT 6') > -1 || ua.indexOf('Windows NT 6.0') > -1 || ua.indexOf('Windows NT 10.') > -1) {
+				setTimeout(function () {
+					//location.href = '@Model.DownloadUrl';
+				}, 3000);
+			} else {
+				$('#modalSpawner').click();
+			}
+
+		}
+	})
+</script>
+
+<h1>Install the WWT Windows App</h1>
+<div class="panel-group" id="accordion">
+    <i>Click the title below to expand or collapse the panel.</i>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#v55">
+                    Latest Version: WorldWide Telescope 5.5 for Windows
+                </a>
+            </h4>
+        </div>
+        <div id="v55" class="panel-collapse collapse ">
+            <div class="panel-body">
+                <p>WorldWide Telescope 5.5 is the latest version of WorldWide Telescope (WWT). This feature-rich application is now available to everyone as a free download.</p>
+
+                <h3><a href="@Model.DownloadUrl">Download WWT 5.5</a></h3>
+                <p>WWT 5.5 runs on Windows 7/8/8.1/10, in either 32- or 64-bit mode, depending on your operating system. It also supports native DirectX 11, DirectX 10, and has some support for down-level DirectX 9 hardware running through the DirectX 11 API.</p>
+
+
+                <h3>Minimum System Requirements</h3>
+                <ul>
+                    <li>Windows 7/8/8.1/10 (older versions of Windows are not supported)</li>
+                    <li>Intel 5<sup>th</sup> generation (Broadwell) or 6<sup>th</sup> generation (Skylake) Core i CPU</li>
+                    <li>4 GB system memory</li>
+                    <li>Intel Integrated graphics associated with 5<sup>th</sup> generation (Broadwell) or 6<sup>th</sup> generation (Skylake) chipsets</li>
+                </ul>
+                <h3>Recommended System Requirements</h3>
+                <ul>
+                    <li>Intel 5<sup>th</sup> generation (Broadwell) or 6<sup>th</sup> generation (Skylake) Core i7 CPU</li>
+                    <li>8+ GB system memory</li>
+                    <li>Discrete graphics card with 1+ GB VRAM, DirectX 10 or DirectX 11 compatibility, such as NVIDIA GTX 480 or ATI Radeon HD 5850 or better.</li>
+                </ul>
+                <p>Do not attempt to install WWT 5.0 or higher on Windows XP. It will not run and can potentially prevent the legacy version from running.</p>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#legacy">
+                    WWT Legacy for Windows
+                </a>
+            </h4>
+        </div>
+        <div id="legacy" class="panel-collapse collapse ">
+            <div class="panel-body">
+                <p>The WorldWide Telescope legacy version (WWT 3.1) supports Windows XP, Windows Vista, and DirectX 9.0c hardware running as a 32-bit application. Do not attempt to install WWT 5.0+ on Windows XP. It will not run and can potentially prevent the legacy version from running.</p>
+
+                <h3><a href="@Model.LegacyUrl">Install the legacy version.</a></h3>
+
+                <h4>System Requirements for Legacy version</h4>
+
+                <p>To run this software, you’ll need the following:</p>
+                <ul>
+                    <li>Windows XP or Vista</li>
+                    <li>Discrete graphics card w/ 512MB VRAM, High End GTX480 class or better w/ 1GB VRAM recommended</li>
+                    <li><a href="@Model.LegacyUrl">WorldWide Telescope Legacy</a></li>
+                    <li><a href="http://www.microsoft.com/en-us/download/details.aspx?id=17718" target="_blank"> Microsoft .NET Framework 4.0</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#excel">
+                    WWT Add-in for Excel
+                </a>
+            </h4>
+        </div>
+        <div id="excel" class="panel-collapse collapse ">
+            <div class="panel-body">
+                The add-in enables you to use the familiar capabilities of Microsoft Excel to efficiently highlight, organize, and import your data into the WorldWide Telescope visualization environment.
+                <h3><a href="@Model.ContentDir/drops/WWTExcelAddin.msi">Install Excel Add-in for WWT</a></h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<a id="modalSpawner" class="hide" href="javascript:void(0)" data-toggle="modal" data-target="#legacyWindowsModal">
+    Legacy Windows Modal
+</a>
+
+<div class="modal fade" id="legacyWindowsModal" tabindex="-1" role="dialog" aria-labelledby="legacyWindowsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="legacyWindowsModalLabel">Windows Version</h4>
+            </div>
+            <div class="modal-body">
+                <p>We’ve detected you may be running an older version of Windows.  Please review the Legacy option if you are installing on a version of Windows prior to Windows 7. </p>
+                <br /><br />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+    </div>

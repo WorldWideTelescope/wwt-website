@@ -1,0 +1,231 @@
+﻿@{
+	Layout = "~/Views/Shared/_ContentPage.cshtml";
+}
+@section leftnav{
+	@Html.Partial("~/Views/GetInvolved/LeftNav.cshtml")
+}
+
+
+<script src="@Model.JsDir/pages/Spectroscopy.js?v=@Model.ResVer"></script>
+
+<script>$(window).on('load', function() {
+	wwt.Spectroscopy.init({
+		surveys: [
+			{
+				band: 'Microwave',
+				name: 'WMAP Ka (Non-Linear) 33 GHz',
+				ref:'microwave',
+				creditLink: 'http://lambda.gsfc.nasa.gov/product/map/current/',
+				credit: 'Courtesy WMAP Science Team.',
+				description:'This image was obtained in the microwave part of the electromagnetic spectrum but a spacecraft called WMAP.  The color scale is distorted to show both the faint variations in the Cosmic Microwave Background (CMB) and the much brighter variations in the emissions from our own Milky Way galaxy.'
+			},
+			{
+				band: 'Infrared',
+				ref:'ir1',
+				name: 'SFD Dust Map (Infrared)',
+				creditLink: 'http://astro.berkeley.edu/~marc/dust/',
+				credit: 'Data provided by two NASA satellites, the Infrared Astronomy Satellite (RIAS) and the Cosmic Background Explorer (COBE). Processing by David J. Schlengel, Douglas P. Finkbeiner and Marc Davis, Princeton University and the University of California, Berkeley.',
+				description: 'Most of the emission is thermal, from interstellar dust warmed by absorbed starlight, including star-forming regions embedded in interstellar clouds. '
+			},
+			{
+				band: 'Infrared',
+				ref: 'ir2',
+				name: 'WISE All Sky (Infrared)',
+				creditLink: 'http://wise.ssl.berkeley.edu/',
+				credit: 'NASA/JPL/Caltech/UCLA',
+				description: 'NASA\'s Wide-field Infrared Survey Explorer (WISE) mapped the sky at 3.4, 4.6, 12, and 22 μm. This combined image shows those bands combined together as color to represent an infrared view of the sky.'
+			},
+			{
+				band: 'HydrogenAlpha',
+				ref: 'hydrogenAlpha',
+				name: 'Hydrogen Alpha Full Sky Map',
+				creditLink: 'http://astrometry.fas.harvard.edu/skymaps/halpha',
+				credit: 'Image Courtesy of Douglas Finkbeiner.  The full-sky H-alpha map (6\' FWHM resolution) is a composite of the Virginia Tech Spectral Line Survey (VTSS) in the north and the Southern H-Alpha Sky Survey Atlas (SHASSA) in the south. ',
+				description: 'The full-sky H-alpha map (6\' FWHM resolution) is a composite of the Virginia Tech Spectral Line Survey (VTSS) in the north and the Southern H-Alpha Sky Survey Atlas (SHASSA) in the south.  The Wisconsin H-Alpha Mapper (WHAM) survey provides additional information to construct the image.'
+			},
+			{
+				band: 'Visible',
+				ref:'vis',
+				name: 'Digitized Sky Survey (Color)',
+				creditLink: 'http://gsss.stsci.edu/Acknowledgements/DataCopyrights.htm',
+				credit: '',
+				description: 'Due to the strong obscuring effect of interstellar dust, the light is primarily from stars within a few thousand light-years of the Sun, nearby on the scale of the Milky Way. The widespread bright red regions are produced by glowing, low-density gas. Dark patches are due to absorbing clouds of gas and dust, which are evident in the Molecular hydrogen and Infrared maps as emission regions. Stars differ from one another in color, as well as mass, size and luminosity. Interstellar dust scatters blue light preferentially, reddening the starlight somewhat relative to its true color and producing a diffuse bluish glow. This scattering, as well as absorption of some of the light by dust, also leaves the light diminished in brightness. '
+			},
+			{
+				band: 'Xray',
+				ref: 'xray',
+				name: 'RASS: ROSAT All Sky Survey (X-ray)',
+				creditLink: 'http://www.xray.mpe.mpg.de/cgi-bin/rosat',
+				credit: 'This is a composite of three RASS3 surveys from the ROSAT data Archive of the Max-Planck-Institut fur extraterrestrische Physik (MPE) at Garching, German.  TOAST-formatted data was obtained from NASA\'s SkyView Virtual Telescope.  Red is soft band (RASSsb), Green is broadband...[NOTE, MORE]',
+				description: 'In the Milky Way, extended soft X-ray emission is detected from hot, shocked gas. At the lower energies especially, the interstellar medium strongly absorbs X-rays, and cold clouds of interstellar gas are seen as shadows against background X-ray emission. Color variations indicate variations of absorption or of the temperatures of the emitting regions. '
+			},
+			{
+				band: 'Gamma',
+				ref:'gamma',
+				name: 'Fermi Year Three (Gamma)',
+				creditLink: 'http://www.nasa.gov/mission_pages/GLAST/main/index.html',
+				credit: 'NASA and the Fermi-LAT Team.',
+				description: 'At these extreme energies, most of the celestial gamma rays originate in collisions of cosmic rays with hydrogen nuclei in interstellar clouds.'
+			}
+		],
+		resLoc: '@Model.ResLoc',
+		defaultTour: '@Model.ContentDir/WebControlTours/SpectraIntro.xml'
+	});
+});
+
+</script>
+
+<section>
+	<h1>Spectroscopy in Astronomy</h1>
+	
+	<p id="txtIntro">
+		One of the ways that modern telescopes observe the sky is by using spectroscopy to measure the brightness of an object in separate colors or wavelengths.  Spectra of objects can reveal chemical composition, temperature and density.  Spectral observations can also learn about the material between us and distant objects.
+
+	</p>
+	
+
+	<div id="WorldWideTelescopeControlHost">
+	   
+		<div class="canvas-overlay">
+			<a href="javascript:void(0)" class="row" data-mode="tour">
+				<span class="col-xs-3 col-sm-6">
+					<img src="@Model.ImgDir/spectra-tour-preview.png" alt="Spectroscopy Overview" class="img-responsive" />
+				</span>
+				<span class="col-xs-9 col-sm-6">
+					<i class="fa fa-play-circle pull-left"></i>
+					<h3>Spectroscopy Overview</h3>
+					<p>Learn  about the power of spectroscopy and its role in the history of astronomy by watching the introductory tour on spectroscopy.</p>
+				</span>
+			</a>
+			<a href="javascript:void(0)" class="row"  data-mode="interactive">
+				<span class="col-xs-3 col-sm-6">
+					<img src="@Model.ImgDir/spectrum-preview.png" alt="Spectroscopy Interactive" class="img-responsive" />
+				</span>
+				<span class="col-xs-9 col-sm-6">
+					<i class="fa fa-play-circle pull-left"></i>
+					<h3>Spectroscopy Interactive</h3>
+
+					<p>After learning about spectroscopy in the overview tour, you can explore the night sky and see how it looks in different wavelengths of light using the Spectroscopy Interactive.  </p>
+
+				</span>
+			</a>
+		</div>
+	</div>
+	<p class="tour-trouble hide">Having trouble viewing this tour in your browser?  <a href="@Model.ContentDir/tours/Spectroscopy.wtt">Watch this tour</a> in WorldWide Telescope Windows Client. (Required WWT Windows Application - <a href="/Download/">download here</a>).  </p>
+	<div class="spectrum-slider hide">
+		<a class="slider-bar btn btn-sm btn-info">&nbsp;</a>
+		<div class="band-container"></div>
+	</div>
+	<div id="spectrumInfo" class="hide row">
+		<div class="col-md-6">
+		<p>
+			<strong>
+				Electromagnetic Spectrum
+				<a class="btn btn-info btn-xs" href="javascript:void(0)" data-toggle="modal" data-target="#spectrumModal">
+					&nbsp;<i class="fa fa-info"></i>&nbsp;
+				</a>
+			</strong>
+			
+		</p>
+		<p>
+			<strong>
+				Spectroscopy Overview
+				<a class="btn btn-info btn-xs" href="javascript:void(0)" id="btnSpectroscopyOverview">
+					<i class="fa fa-play"></i>
+				</a>
+			</strong>
+		</p>
+		<p>
+			<strong>Foreground</strong>: <span id="surveyFg"></span>
+			<div class="imagery-info">
+				<span id="fgOpacity"></span>
+			</div>
+		</p>
+		<p>
+			<strong>Background</strong>: <span id="surveyBg"></span>
+			<div class="imagery-info">
+				<span id="bgOpacity"></span>
+			</div>
+		</p>
+		</div>
+		<div class="col-md-6">
+			<ul>
+				<li>Use your mouse or touch screen to pan around the Sky</li>
+				<li>Hold control to rotate the Sky</li>
+				<li>Move the slider to see frequencies</li>
+				<li>Use full screen for the best viewing experience</li>
+				<li>
+					<a href="javascript:void(0)" data-toggle="modal" data-target="#imageryDetailModal">
+						Imagery Detail and Credit
+						<i class="fa fa-info-circle"></i>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	
+	<div class="modal fade" id="spectrumModal" tabindex="-1" role="dialog" aria-labelledby="spectrumModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h4 class="modal-title" id="spectrumModalLabel">Electromagnetic Spectrum</h4>
+		  </div>
+		  <div class="modal-body">
+			<p>An image depicting the full electromagnetic spectrum.</p>
+			  
+			  <img src="@Model.ImgDir/VisibleLightSpectrum.jpg" alt="full electromagnetic spectrum" class="img-responsive" />
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+		  </div>
+		</div>
+	  </div>
+	</div>
+
+	<div class="modal fade" id="imageryDetailModal" tabindex="-1" role="dialog" aria-labelledby="imageryDetailModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h4 class="modal-title" id="imageryDetailModalLabel">Spectrum Imagery Details and Credit</h4>
+		  </div>
+		  <div class="modal-body">
+			  <p>Spectroscopy Interactive content adapted from materials produced at the Adler Planetarium. </p><p>See information about the survey imagery by clicking the sections below.</p>
+			<div class="panel-group" id="accordion">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" class="smdl-spectrum-title">
+					   
+							</a>
+						</h4>
+					</div>
+					<div class="panel-collapse collapse smdl-spectrum-id">
+						<div class="panel-body">
+							<h4>Credit</h4>
+							<a class="smdl-spectrum-creditlink"></a>
+							<p class="smdl-spectrum-credit"></p>
+							<div class="smdl-desc-div">
+								<h4>Description</h4>
+								<p class="smdl-spectrum-desc"></p>
+
+							</div>
+						</div>
+					</div>
+				</div>
+		
+				
+			</div>
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	
+</section>
+
+
+   

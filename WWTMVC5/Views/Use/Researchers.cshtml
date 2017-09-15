@@ -1,0 +1,154 @@
+﻿@{
+    Layout = "~/Views/Shared/_ContentPage.cshtml";
+}
+@section leftnav{
+    @Html.Partial("~/Views/Use/LeftNav.cshtml")
+}
+
+
+<h1>Researcher Resources</h1>
+
+<p> WorldWide Telescope enables new ways of visualization of observational data. Click to expand each section below to learn of ways to incorporate WWT in your research.</p>
+
+<div class="panel-group" id="accordion">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#webtour">
+                    Create a WWT Tour on the Web
+                </a>
+            </h4>
+        </div>
+        <div id="webtour" class="panel-collapse collapse ">
+            <div class="panel-body">
+                <p>Please follow our <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-advanced-guides/content/webauthoring.html">guide</a> or check out <a href="https://www.youtube.com/watch?v=DE0pAh9gdmk">this YouTube video</a> for information on how to create WWT tours using the web client. </p>
+                <p>Tours created on the web will have both a download and share link to view the tour in WWT.</p>
+                 <p>A tour is most easily embedded in presentation software as a video. The WWT Web Client does not yet support video export of tours, however the QuickTime player (as well as other programs) can capture HD video of the screen while you play the tour.
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#vas">
+                    Make a Video Abstract with WWT
+                </a>
+            </h4>
+        </div>
+        <div id="vas" class="panel-collapse collapse ">
+            <div class="panel-body">
+
+                <p>If you are interested is using WWT to make a Video Abstract for an upcoming publication please see <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-advanced-guides/content/videoabstracts.html#videoabstracts">our guide.</a></p>
+                <p>Example Video Abstracts that have used WWT:</p>
+                <ul>
+                    <li>
+                        <a href="http://iopscience.iop.org/article/10.1088/2041-8205/807/1/L7/meta#artAbst">
+                            Direct Imaging and Spectroscopy of a Young Extrasolar Kuiper Belt in the Nearest OB Association
+                        </a>
+
+                        Thayne Currie, Carey M. Lisse, Marc Kuchner, Nikku Madhusudhan, Scott J. Kenyon, Christian Thalmann, Joseph Carson, and John Debes, 2015 <em>ApJL</em> <b>807</b> L7
+                    </li>
+                    <li>
+                        <a href="http://iopscience.iop.org/article/10.1088/2041-8205/801/2/L26/meta#artAbst">
+                            Radio Continuum Observations of the Galactic Center: Photoevaporative Proplyd-like Objects Near Sgr A*
+                        </a>
+                        F. Yusef-Zadeh, D. A. Roberts, M. Wardle, W. Cotton, R. Schödel, and M. J. Royster, 2015 <em>ApJL</em> <b>801</b> L26
+                    </li>
+                    <li>
+                        <a href="http://iopscience.iop.org/article/10.3847/0004-6256/151/2/22/meta" class="art-list-item-title">
+                            Evidence for a Distant Giant Planet in the Solar System
+                        </a>
+                        Konstantin Batygin and Michael E. Brown, 2016 <em>AJ</em> <b>151</b> 22
+                    </li>
+                    <li>
+                        <a href="http://iopscience.iop.org/article/10.1088/1538-3873/aa5456/meta" class="art-list-item-title">
+                            The Application of the Montage Image Mosaic Engine To The Visualization Of Astronomical Images
+                        </a>
+                        G. Bruce Berriman and J. C. Good, 2017 <em>PASP</em> <b>129</b> 058006
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#astrolabe">
+                    The Astrolabe Project
+                </a>
+            </h4>
+        </div>
+        <div id="astrolabe" class="panel-collapse collapse ">
+            <div class="panel-body">
+                <p>The <a href="http://astrolabe.arizona.edu/">Astrolabe Project</a> is creating a new open-access repository for previously uncurated astronomical datasets, building on existing CyVerse infrastructure with robust cloud-based resources for managing, linking, processing and sharing research data. </p>
+                <p> Astrolabe will be using WWT as the visualization engine for the project.</p>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#phot">
+                    Import Images to WWT
+                </a>
+            </h4>
+        </div>
+        <div id="phot" class="panel-collapse collapse ">
+            <div class="panel-body">
+
+                There are several mechanisms to import astronomical images to WWT, and we are working to on more:
+                <ul>
+                    <li><a href="http://montage.ipac.caltech.edu/">Montage</a> has a guide to import FITS files into WWT.</li>
+                    <li>We have a <a href="http://localhost/Developers/ImportImage">web uploader</a> (FITS not currently supported), which also serves the JavaScript inclined as an example call to the ShowImage control.</li>
+                    <li><a href="https://github.com/ChrisBeaumont/toasty">Toasty</a> can prepare images for viewing in WWT.</li>
+                    <li>Images uploaded to <a href="http://nova.astrometry.net/">Astrometry.net</a> are able to be seen in WWT by clicking on the "view in WWT" link.</li>
+                    <li>The <a href="/Use/">WWT Windows application</a> natively supports FITS and AVM tagged images.</li>
+                    <li>Once your images are AVM tagged or TOASTed, you can share them as <a href="GetInvolved/#usingcommunities">community content as a Community Member</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#glue">
+                    WWT Plug-in for Glue
+                </a>
+            </h4>
+        </div>
+        <div id="glue" class="panel-collapse collapse ">
+            <div class="panel-body">
+                Analyze your data using the <a href="http://glueviz.org/en/stable/whatsnew/0.11.html?highlight=wwt#experimental-worldwide-telescope-plugin">WWT plug-in for Glue</a>
+                <a href="http://glueviz.org/en/stable/whatsnew/0.11.html?highlight=wwt#experimental-worldwide-telescope-plugin"><img src="http://glueviz.org/en/stable/_images/plugin_wwt.jpg" alt="Screen shot of WWT in Glue" class="img-responsive"></a>
+</div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#researchex">
+                    Examples of WWT in Astronomy Research Related Sites
+                </a>
+            </h4>
+        </div>
+        <div id="researchex" class="panel-collapse collapse ">
+            <div class="panel-body">
+                <ul>
+                    <li><a href="http://www.spitzer.caltech.edu/glimpse360/wwt">Glimpse360</a> WWT Viewer uses the Webcontrol API</li>
+                    <li><a href="http://planck.ipac.caltech.edu/wwt/">Plank</a> Interactive Data Viewer uses the Webcontrol API</li>
+                    <li><a href="http://www.adsass.org/wwt/">ADS All Sky Survey</a> uses the Webcontrol API</li>
+                    <li><a href="http://milkyway3d.org">Milky Way 3D</a> uses the Webcontrol API</li>
+                    <li><a href="http://astropix.ipac.caltech.edu/">AstroPix</a> (click an image and follow the link on the upper right to "View in WorldWide Telescope")</li>
+                    <li><a href="https://www.authorea.com/users/23/articles/8762-the-paper-of-the-future/_show_article">The Paper of the Future</a>   (see Figure 7)</li>
+                    <li><a href="https://www.zooniverse.org/projects/zooniverse/astronomy-rewind/">Zoonizerse's Astronomy Rewind</a> (after classifying figures of the sky with labeled axes)</li>
+                </ul>
+                    </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+

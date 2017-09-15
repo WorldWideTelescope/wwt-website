@@ -1,0 +1,12 @@
+﻿@{
+	Layout = "~/Views/Shared/_ContentPage.cshtml";
+}
+@section leftnav{
+	@Html.Partial("~/Views/Planetariums/LeftNav.cshtml")
+}
+<script src="@Model.JsDir/controls/sdk.js?v=@Model.ResVer"></script>
+<script src="@Model.JsDir/controls/move.js?v=@Model.ResVer"></script>
+<script src="@Model.JsDir/controls/util.js?v=@Model.ResVer"></script>
+<link  href="@Model.CssDir/SDK_style.css" rel="stylesheet" />
+<iframe id='sdkFrame' src="/Docs/worldwidetelescopeplanetarium.html"></iframe>
+<div class="rightContentContainer"></div>

@@ -1,0 +1,125 @@
+﻿@{
+	Layout = "~/Views/Shared/_ContentPage.cshtml";
+}
+@section leftnav{
+	@Html.Partial("~/Views/Interact/LeftNav.cshtml")
+}
+
+<script src="@Model.JsDir/pages/PlanetExplorer.js?v=@Model.ResVer"></script>
+
+
+<script>
+	$(window).on('load', function() {
+		wwt.PlanetExplorer.init({
+			resLoc: '@Model.ResLoc',
+			webGl: false
+		});
+	});
+
+</script>
+<style>
+	.thumbnail {
+		margin-bottom: 8px;
+	}
+	.thumbnail label {
+		font-weight: normal;
+		color: white;
+		margin-bottom: 1px;
+	}
+	
+</style>
+<section>
+	<h1>Planet Explorer</h1>
+	
+	<p>
+		Explore the planets of our Solar System.  Planets fall into two categories: gas giants and terrestrial planets.  Terrestrial planets are rocky with thin atmospheres and include Mercury, Venus, Mars and the Earth.  The outer four planets Jupiter, Saturn, Uranus and Neptune are gas giants.  They are also called Jovian planets, since they all share characteristics with Jupiter.  Tiny Pluto is the best known dwarf planet; these smaller bodies inhabit a region of the Solar System called the Kuiper Belt beyond the orbit of Neptune.
+	</p>
+	<div id="WorldWideTelescopeControlHost"></div>
+	<hr/>
+	<div class="row" style="margin-top:16px" id="planetThumbs">
+	</div>
+	<br/>
+	<div class="hide" id="planetInfo">
+		<div id="mdlMercury" imgUrl="http://solarsystem.nasa.gov/multimedia/gallery/True_Mercury.jpg" imgHover="Mercury's Subtle Colors taken from MESSENGER's Wide Angle Camera" credits="NASA/Johns Hopkins University Applied Physics Laboratory/Carnegie Institution of Washington">
+			
+			<h2>Mercury</h2>
+			<p>Mercury is the closest planet to the Sun and is the smallest planet of our Solar System. Mercury is a planet of extreme environments; its relative close proximity to Sun results in extreme daytime surface temperatures of up to 700K (800˚F/427˚C) and cold nighttime temperatures around 100K (-280˚F/-173˚C).</p>
+			<p>Mercury&rsquo;s eccentric orbit* takes the planet around the Sun about every 88 Earth days. Until 2011, we had very little detailed information about Mercury, but that is changing with the arrival of the spacecraft <a href="http://messenger.jhuapl.edu/" target="_blank">MESSENGER</a>, a spacecraft designed specifically to study Mercury.</p>
+			<p>Mercury is basically absent of atmosphere, contributing to the extreme temperature gradients found between its equator and poles. Mercury&rsquo;s surface is often compared to the surface of our Moon with its abundance of craters and fault lines.</p>
+			<p><small>* Orbital eccentricity refers to the amount by which an object&rsquo;s orbit around another body deviates from a perfect circle.</small></p>
+		   
+
+		</div>
+		<div id="mdlVenus" imgUrl="http://www.jpl.nasa.gov/spaceimages/images/wallpaper/PIA00270-1024x768.jpg" imgHover="Venus - Computer Simulated Global View Centered at 90 Degrees East Longitude" credits="NASA/JPL">
+			<h2>Venus</h2>
+			<p>As the brightest planet in the night sky, Venus has been called both the evening star and the morning star!</p>
+			<p>Venus&rsquo; orbit around the Sun takes 224 Earth days, but Venus takes 243 Earth days to complete a single rotation. In other words, Venus rotates so slowly that it completes its journey around the Sun in less time than it takes to rotate on its axis.</p>
+			<p>Venus has an atmosphere, complete with carbon dioxide and clouds. However, its environment is far from welcoming&mdash;the surface-level atmospheric pressure of Venus is 92 times that of Earth&rsquo;s and the abundance of carbon dioxide in the dense atmosphere creates a greenhouse effect that maintains extremely high temperatures of 735K (863˚F/462˚C).</p>
+			
+		</div>
+		<div id="mdlEarth" imgUrl="" imgHover="" credits="">
+			<h2>Earth</h2>
+			<p>Our planet, Earth, is the third planet from the Sun. Its orbit is 365.26 days and rotates on its axis approximately every 24 hours (23.934 hours). Earth is tilted on its axis at 23.45˚ which allows Earth to experience our four seasons. During half of the year, the northern hemisphere is pointed towards the sun, experiencing summer, while the southern hemisphere is pointed away, experiencing winter. Six months later, the situation is reversed.</p>
+			<p>Earth&rsquo;s atmosphere consists of mostly nitrogen and oxygen&mdash;other elements make up the remainder in small percentages. The atmosphere protects Earth and its diverse life from the harmful radiation coming from the Sun.</p>
+			<p>Unlike the other planets in our Solar System which are named after Greek/Roman deities, Earth is named after the English/German word for ground: eor(th)e and ertha (Old English) and erde (German).</p>
+		</div>
+		<div id="mdlMars" imgUrl="http://solarsystem.nasa.gov/multimedia/gallery/First_data_via_Malarguee_station_Mars_as_seen_by_VMC.jpg" imgHover="Mars from the Mars Express space exploration mission being conducted by the European Space Agency (ESA)" credits="ESA">
+			<h2>Mars</h2>
+<p>Mars is known as the Red Planet due to the abundant iron oxide. Mars orbits the Sun in about 687 Earth days and completes a rotation on its axis very similar to Earth&rsquo;s (24hours 37mins 22 secs).</p>
+<p>Mars does have a thin atmosphere and has epic dust storms that span thousands of kilometers across and sometimes engulf the entire planet in a haze of dust. This haze traps extra heat from the sun and temporarily raises surface temperatures.</p>
+<p>Mars&rsquo; topography is far from ordinary. Olympus Mons, a massive shield volcano, rises to roughly three times the height of Mt. Everest (above sea level), and is the second highest mountain that we know of in our Solar System. Valles Marineris is a gigantic canyon system that dwarfs our Grand Canyon in comparison.&nbsp;&nbsp; Its main canyons run roughly the length of the entire continental United States (roughly 4000km), reaching depths of up to 7km (~4.3mi).</p>
+
+
+		</div>
+		<div id="mdlJupiter" imgUrl="http://solarsystem.nasa.gov/multimedia/gallery/Full_Disk_Jupiter1.jpg" imgHover="A true-color simulated view of Jupiter is composed of four images taken by NASA's Cassini spacecraft. Jupiter's moon Europa is casting the shadow on the planet." credits="NASA/JPL/University of Arizona">
+			<h2>Jupiter</h2>
+<p>The largest planet in our Solar System is Jupiter. It has the shortest rotational period of all the planets in the solar system, completing its rotation in just under 10 hours (9h 55m), and completes its orbit about the Sun in approximately 11 Earth years 315 Earth days.</p>
+<p>Jupiter has a very thick atmosphere and is continuously covered with clouds. The banded appearance of &ldquo;belts and zones&rdquo; are rising or falling gases in elevation parallel to Jupiter&rsquo;s equator. (Dark bands are descending gases while light bands are rising gases.)</p>
+<p>The Great Red Spot, perhaps Jupiter&rsquo;s most famous feature, is a giant anticyclonic* storm that varies in size (24-40,000 km east-to-west by 12-14,000 km north-to-south). Observations show that this storm may be slowly reducing in size over time.</p>
+<p>Jupiter&rsquo;s system of moons is impressive; latest count of Jupiter&rsquo;s natural satellites is 67. Io, Europa, Ganymede and Callisto are the four largest and well-known moons.</p>
+<p><small>* a circulation of winds around a central region of high atmospheric pressure</small></p>
+
+		</div>
+		<div id="mdlSaturn" imgUrl="http://solarsystem.nasa.gov/multimedia/gallery/2013_sfad_target_3_saturn_v1.jpg" imgHover="Jewel of the Solar System: high above Saturn, NASA's Cassini spacecraft revealed this stately view of the golden-hued planet and its main rings." credits="NASA/JPL">
+			<h2>Saturn</h2>
+<p>Another of our Solar System&rsquo;s gas giants, Saturn is the second largest planet in our Solar System. It takes Saturn a whopping 10,759 Earth days (~29.5 Earth years) to complete its orbit about the Sun. Saturn has a similar rotational period to Jupiter completing its rotation in roughly 10 hours.</p>
+<p>Saturn&rsquo;s famous rings extend out to 102,000 km above Saturn&rsquo;s equator and are composed of mostly water ice. The rings are made up of particles ranging vastly in size (from very small particles to the size of large boulders).&nbsp;&nbsp; Several hypotheses have been made about how the rings have been formed, but astronomers don&rsquo;t know with certainty how the rings initially formed.</p>
+<p>There are at least 150 moons and moonlets* identified orbiting Saturn, of which are named. Titan is Saturn&rsquo;s largest moon by far; Rhea, the second largest, may even have its own ring system!</p>
+<p><small>*moonlets = small natural or artificial satellite, as one of a number of natural satellites thought to be embedded in the ring system of Saturn</small></p>
+
+		</div>
+		<div id="mdlUranus" imgUrl="http://solarsystem.nasa.gov/multimedia/gallery/uranus_true732X520.jpg" imgHover="Uranus by Voyager 2: NASA's Voyager 2 spacecraft flew closely past distant Uranus, the seventh planet from the sun, in January 1986." credits="NASA">
+			<h2>Uranus</h2>
+<p>Uranus appears to us as an almost featureless planet, composed primarily of hydrogen and helium. Uranus&rsquo; orbit around the Sun takes 84 Earth years and Uranus completes a rotation on its axis every 17.9 hours. &nbsp;&nbsp;&nbsp;</p>
+<p>Uranus is unique in that its axis is tilted to 97.77˚ making its rotation roughly perpendicular to the other planets&rsquo; axial tilts. As a result of this unusual tilt, the planet&rsquo;s 20-year seasons experiences extreme variations in sunlight.</p>
+
+		</div>
+		<div id="mdlNeptune" imgUrl="http://solarsystem.nasa.gov/multimedia/gallery/neptune1.jpg" imgHover="Neptune by Voyager 2." credits="NASA">
+			<h2>Neptune</h2>
+			<p>Neptune is the farthest planet in the Solar System, and like its neighbors is a gaseous planet. Its orbit is a staggering 164.79 Earth years and it rotates on its axis roughly every 16 hours.</p>
+			<p>There are 14 known moons that orbit Neptune, the largest being Triton, which is suggested have been a Kuiper Belt* object that was captured by Neptune&rsquo;s gravitational field.</p>
+			<p><small>* A region of our Solar System beyond Neptune made up of small icy worlds, similar to the asteroid belt between Mars and Jupiter.</small></p>
+		</div>
+		<div id="mdlPluto" imgUrl="http://nssdc.gsfc.nasa.gov/image/planetary/pluto/hst_pluto_charon.jpg" imgHover="Pluto and its satellite Charon as taken with ESA's Faint Object Camera on Hubble Space Telescope." credits="Dr. R. Albrecht, ESA/ESO Space Telescope European Coordinating Facility; NASA">
+			<h2>Pluto</h2>
+<p>Pluto, once thought to be a planet in our Solar System, is the largest object in the Kuiper Belt* and is classified as a dwarf planet. It takes 248 Earth years to complete its orbit about the Sun; Pluto rotates much more slowly on its axis than Earth, taking 6.39 Earth days to complete a rotation. &nbsp;</p>
+<p>Pluto has five known moons, but Charon, its largest moon, is almost half Pluto&rsquo;s size&mdash;very large relative to typical planet-moon size ratios. This circumstance creates several interesting relationships in the Pluto-Charon system. The two objects are tidally locked and as such Pluto always presents the same face to Charon and vice versa. Their rotational periods are also equal. &nbsp;</p>
+<p><small>* A region of our Solar System beyond Neptune made up of small icy worlds, similar to the asteroid belt between Mars and Jupiter.</small></p>
+
+			
+		</div>
+		
+
+
+
+
+
+
+
+	</div>
+	
+	
+</section>
+
+
+   

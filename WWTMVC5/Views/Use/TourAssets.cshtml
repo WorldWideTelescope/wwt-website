@@ -1,0 +1,241 @@
+﻿@{
+	Layout = "~/Views/Shared/_ContentPage.cshtml";
+}
+@section leftnav{
+	@Html.Partial("~/Views/Use/LeftNav.cshtml")
+}
+
+<script>
+	$(function () {
+
+		$.ajax({
+			//type:'GET',
+			url: '/Models/wwtmusic.xml',
+			success: function (x, status, xhr) {
+				var tmpl = $('.music-row.hide'), track, row,
+					populate = function (sel, node) {
+						row.find(sel).html(track.find(node).text());
+					}
+				$(x).find('MusicTrack').each(function (i,item) {
+					track = $(this);
+					row = tmpl.clone(true);
+					row.removeClass('hide');
+					var title = track.find('Folder').text() === 'IMPACTS' ?
+					(i < 9 ? '0' + (i + 1) : i + 1) + ' - ' + track.find('Title').text():
+						track.find('Title').text();
+					row.find('a.music-link').attr('href',
+						'https:' + '@Model.ContentDir/wwtmusic/' +
+						track.find('Folder').text() + '/' +
+						title + '.' +
+						track.find('Type').text());
+					populate('a.music-link .track-title', 'Title');
+					populate('.track-length', 'Length');
+					populate('.track-artist', 'Artist');
+					populate('.track-details', 'Details');
+					populate('.track-copyright', 'Copyright');
+					$('#tracksTarget').append(row);
+				});
+			}
+		});
+
+		$.ajax({
+			url: '/Models/images.xml',
+			success: function (x, status, xhr) {
+				var tmpl = $('.img-row.hide'), img, row,
+					populate = function (sel, node) {
+						row.find(sel).html(img.find(node).text());
+					}
+				$(x).find('Row').each(function () {
+					img = $(this);
+					row = tmpl.clone(true);
+					row.removeClass('hide');
+					row.find('a.thumb-link').attr('href',
+						'@Model.ImgDir/resources/' +
+						img.find('filename').text() + '.jpg')
+					.find('img').attr({
+						src: '@Model.ImgDir/resources/' +
+							img.find('filename').text() + ' thumb.jpg',
+						alt: row.find('description').text(),
+						title: row.find('description').text()
+					});
+					populate('.img-description','description');
+					populate('.img-credit','credit');
+					row.find('.img-credit').attr('href', img.find('link').text());
+					$('#imagesTarget').append(row);
+				});
+			}
+		});
+
+		var modelJson = [
+			{
+				img: 'Hubble.png',
+				title: 'Hubble Space Telescope',
+				credit: 'Celestial Motherlode',
+				creditLink: 'http://www.celestiamotherlode.net/catalog/show_addon_details.php?addon_id=287'
+			},
+			{
+				img: 'emu.jpg',
+				title: 'Extravehicular Mobility Unit (EMU)',
+				credit: 'Michael Carbajal, NASA Headquarters',
+				creditLink: 'http://www.nasa.gov/centers/hq/'
+			},
+			{
+				img: 'corot.jpg',
+				title: 'Corot',
+				credit: 'Celestial Motherlode',
+				creditLink: 'http://www.celestiamotherlode.net/catalog/show_addon_details.php?addon_id=1039'
+			},
+			{
+				img: 'shuttle.jpg',
+				title: 'Space Shuttle Orbiter',
+				credit: 'DigitalSpace Corporation',
+				creditLink: 'http://www.digitalspace.com'
+			},
+			{
+				img: 'Gemini.jpg',
+				title: 'Gemini',
+				credit: 'Michael Carbajal, NASA Headquarters',
+				creditLink: 'http://www.nasa.gov/centers/hq/'
+			}
+		];
+
+		var imgPath = '@(Model.ImgDir.ToLower())/3d/';
+		var assetPath = '@Model.ContentDir/assets/3d/';
+		$.each(modelJson, function () {
+			var row = $($('#3dAsset').html());
+			row.find('.3d-preview img').attr({
+				src: imgPath + this.img,
+				alt: this.title
+			});
+
+			row.find('.3d-title a').attr({
+				href: assetPath + this.img.split('.')[0] + '.wwtl',
+				title: 'Download WWTL File'
+			}).text(this.title);
+			row.find('.3d-credit a').attr({
+				href: this.creditLink,
+				title: 'Credit'
+			}).text(this.credit);
+			$('#models').append('<hr/>');
+			$('#models').append(row);
+		});
+		$('#models hr').first().after($('#learnMore3d'));
+
+		$('ul.nav-tabs li').on('click', wwt.triggerResize);
+
+		$('#musicAssets .music-links').each(function () {
+			$(this).text($(this).text().replace(/_/g, ' '));
+		});
+	});
+
+
+
+</script>
+<h1>Tour Assets</h1>
+<p>
+We are working with partners to develop new resources that help you create immersive and compelling tours. All of the resources on this page are ready for you to download and use within your WorldWide Telescope tours. These resources are protected by copyright and may be used solely for the purpose of creating tours in WorldWide Telescope. 
+</p>
+<p>
+	Creating your own tour can be as simple as annotating a few images that display deep sky objects or locations on Earth. Alternatively, you can make a more immersive tour by combining images with art, music, and narration to examine and illustrate a complex theory or experience. Learn more about authoring tours in WorldWide Telescope using <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-advanced-guides/content/webauthoring.html"> the Web client</a> or <a href="https://www.youtube.com/watch?v=fb4RHKQCsfc&t=3s"> the Windows application</a>.
+</p>
+
+<!-- Nav tabs -->
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#music" data-toggle="tab">Music</a></li>
+  <li><a href="#images" data-toggle="tab">Images</a></li>
+  <li><a href="#models" data-toggle="tab">3D Models</a></li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+  <div class="tab-pane active" id="music">
+	  <div class="row" style="margin:18px 0 3px">
+		  <div class="col-md-4"><strong>Title</strong></div>
+		  <div class="col-md-3"><strong>Artist</strong></div>
+		  <div class="col-md-5"><strong>Details</strong></div>
+	  </div>
+	  <div class="music-row hide">
+		  <hr />
+		  <div class="row" id="musicAssets">
+			  <div class="col-md-4">
+				  <a class="music-link iblock">
+					  <i class="fa fa-download"></i>
+					  <span class=track-title></span>
+				  </a>
+				  <br />
+				  (<span class=track-length></span>)
+			  </div>
+			  <div class="col-md-3">
+				  <span class=track-artist></span>
+			  </div>
+			  <div class="col-md-5">
+				  <span class=track-details></span><br />
+				  <span class=track-copyright></span>
+			  </div>
+		  </div>
+	  </div>
+	  <div id="tracksTarget"></div>
+	
+  </div>
+  <div class="tab-pane" id="images">
+	  <div class="row" style="margin:18px 0 3px">
+		  <div class="col-md-3"><strong>Preview</strong></div>
+		  <div class="col-md-5"><strong>Description</strong></div>
+		  <div class="col-md-4"><strong>Credits</strong></div>
+	  </div>
+
+	  <div class="img-row hide">
+		  <hr />
+		  <div class="row">
+			  <div class="col-md-3">
+				  <a href='' class=thumb-link>
+					  <img class="img-responsive" src=' thumb.jpg'
+					       title=""
+					       alt="" />
+				  </a>
+			  </div>
+			  <div class="col-md-5">
+				  <span class=img-description></span>
+			  </div>
+			  <div class="col-md-4">
+				  <a class=img-credit href='http://' target="_blank">
+
+				  </a>
+			  </div>
+		  </div>
+	  </div>
+	  <div id="imagesTarget"></div>
+  </div>
+	<div class="tab-pane" id="models" style="padding-bottom:20px;">
+		<div class="row" style="margin:18px 0 3px">
+			<div class="col-md-5"><strong>Preview</strong></div>
+			<div class="col-md-3"><strong>Description</strong></div>
+			<div class="col-md-4"><strong>Credits</strong></div>
+		</div>
+		<p id="learnMore3d">
+			<a href="/Learn/?Authoring#wwt3dmodels">
+				<i class="fa fa-info-circle"></i>
+				3D Models in WorldWide Telescope
+			</a>
+		</p>
+		<div class="hide" id="3dAsset">
+			<div class="row">
+				<div class="col-md-5 3d-preview">
+					<img src="@Model.ImgDir/hubble.jpg" alt="Hubble 3d Model" class="img-responsive" />
+				</div>
+				<div class="col-md-3 3d-title">
+					<a href="">Hubble Space Telescope 3D Model</a>
+				</div>
+				<div class="col-md-4 3d-credit">
+					<a href="http://www.nasa.gov/centers/goddard/" target="_blank">NASA Goddard Space Flight Center</a>
+				</div>
+			</div>
+		</div>
+		
+	  
+		  
+	  
+	</div>
+</div>
+
+
