@@ -527,9 +527,6 @@
     <Compile Include="ViewModels\UploadAssetViewModel.cs" />
     <Compile Include="ViewModels\VideoDataViewModel.cs" />
     <Compile Include="Views\Test.cs" />
-    <Compile Include="webclient\Default.aspx.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WebServices\IResourceService.cs" />
     <Compile Include="WebServices\LiveIdAuth.svc.cs">
       <DependentUpon>LiveIdAuth.svc</DependentUpon>
@@ -904,7 +901,6 @@
     <Content Include="webclient\dataproxy\Places.js" />
     <Content Include="webclient\dataproxy\SearchData.js" />
     <Content Include="webclient\dataproxy\Tours.js" />
-    <Content Include="webclient\Default.aspx" />
     <Content Include="webclient\directives\ContextMenu.js" />
     <Content Include="webclient\directives\editslidevalues.js" />
     <Content Include="webclient\directives\Localize.js" />
