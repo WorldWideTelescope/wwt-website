@@ -1,227 +1,57 @@
 ﻿@{
-	Layout = "~/Views/Shared/_ContentPage.cshtml";
-	ViewBag.Title = "User Guide - WorldWide Telescope";
-	ViewBag.HideTranslateWidget = 1;
+    Layout = "~/Views/Shared/_ContentPage.cshtml";
+    ViewBag.Title = "User Guide - WorldWide Telescope";
+    ViewBag.HideTranslateWidget = 1;
 }
 @section leftnav{
-	@Html.Partial("~/Views/Learn/LeftNav.cshtml")
+    @Html.Partial("~/Views/Learn/LeftNav.cshtml")
 }
 
 <section>
     <h1>WorldWide Telescope User Guide</h1>
     <p>The WWT User Guide is aimed at newcomers to WWT as well as exerienced users who would like a more detailed overview of the WWT features.</p>
-    
+
     <p>You can read the most updated version of our user guide <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/">online</a>, or download it in pdf, ePub, or Mobi format by following the download link on the <a href="https://www.gitbook.com/book/worldwidetelescope/worldwide-telescope-user-manual/details">gitbook page</a>.</p>
 
-    <h2>Table Of Contents</h2>
-    <ul>
-        <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/README.html">Introduction</a></li>
-        <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/screenlayout.html">Screen Layout</a></li>
-        <li>
-            <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/explore.html">Exploring</a>
-            <ul>
-                <li>
-                    <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/explore.html#earth">Earth</a>
-                    <ul>
-                        <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/explore.html#tutorial-comparing-night-and-day">Tutorial: Comparing Night and Day</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/explore.html#planet">Planet</a>
-                    <ul>
-                        <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/explore.html#tutorial-locating-olympus-mons">Tutorial: Locating Olympus Mons</a></li>
-                        <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/explore.html#tutorial-comparing-surface-features-of-the-solar-system">Tutorial: Comparing Surface Features of the Solar System</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/explore.html#sky">Sky</a>
-                    <ul>
-                        <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/explore.html#tutorial-tracking-a-conjunction">Tutorial: Tracking a Conjunction</a></li>
-                        <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/explore.html#tutorial-visiting-the-neighbors">Tutorial: Visiting the Neighbors</a></li>
-                        <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/explore.html#tutorial-the-sky-tonight">Tutorial: The Sky Tonight</a></li>
-                        <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/explore.html#northern-hemisphere">Northern Hemisphere</a></li>
-                        <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/explore.html#southern-hemisphere">Southern Hemisphere</a></li>
-                        <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/explore.html#tutorial-astronomy-terminology">Tutorial: Astronomy Terminology</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/explore.html#panorama">Panorama</a>
-                    <ul>
-                        <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/explore.html#tutorial-comparing-styles-of-panorama">Tutorial: Comparing Styles of Panorama</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/explore.html#solar-system">Solar System</a>
-                    <ul>
-                        <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/explore.html#tutorial-tracking-a-solar-eclipse">Tutorial: Tracking a Solar Eclipse</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/explore.html#sandbox">Sandbox</a>
-                    <ul>
-                        <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/explore.html#adding-your-own-3d-models">Adding your Own 3D Models</a></li>
-                    </ul>
-                </li>
-                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/explore.html#keyboard-shortcuts">Keyboard Shortcuts</a></li>
-                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/explore.html#xbox-controller">Xbox Controller</a></li>
-                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/explore.html#explore-menu-entries">Explore Menu Entries</a></li>
-            </ul>
-        </li>
-        <li>
-            <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/guidedtours.html">Guided Tours</a>
-            <ul>
-                <li>
-                    <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/guidedtours.html#playing-a-tour">Playing a Tour</a>
-                    <ul>
-                        <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/guidedtours.html#notes">Notes</a></li>
-                        <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/guidedtours.html#playing-tours-in-demo-mode">Playing Tours in Demo Mode</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/guidedtours.html#creating-a-tour">Creating a Tour</a>
-                    <ul>
-                        <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/guidedtours.html#tour-properties-dialog">Tour Properties Dialog</a></li>
-                        <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/guidedtours.html#tour-editing-pane">Tour Editing Pane</a></li>
-                        <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/guidedtours.html#slide-editing-menu">Slide Editing Menu</a></li>
-                        <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/guidedtours.html#master-slides">Master Slides</a></li>
-                        <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/guidedtours.html#slide-title">Slide Title</a></li>
-                        <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/guidedtours.html#control-views-and-settings">Control Views and Settings</a></li>
-                        <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/guidedtours.html#completing-the-tour">Completing the Tour</a></li>
-                        <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/guidedtours.html#sharing-the-tour">Sharing the Tour</a></li>
-                    </ul>
-                </li>
-                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/guidedtours.html#creating-an-interactive-tour">Creating an Interactive Tour</a></li>
-                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/guidedtours.html#tour-menu-selection">Tour Menu Selection</a></li>
-                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/guidedtours.html#guided-tours-menu-entries">Guided Tours Menu Entries</a></li>
-            </ul>
-        </li>
-        <li>
-            <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/communities.html">Communities</a>
-            <ul>
-                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/communities.html#joining-a-community">Joining a Community</a></li>
-                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/communities.html#creating-a-community">Creating a Community</a></li>
-            </ul>
-        </li>
-        <li>
-            <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/searchpanel.html">The Search Panel</a>
-            <ul>
-                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/searchpanel.html#the-search-panel">The Search Panel</a></li>
-                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/searchpanel.html#search-menu-entries">Search Menu Entries</a></li>
-            </ul>
-        </li>
-        <li>
-            <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/viewmenu.html">The View Menu</a>
-            <ul>
-                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/viewmenu.html#observing-location">Observing Location</a></li>
-                <li>
-                    <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/viewmenu.html#viewing-from-a-new-location">Viewing From a New Location</a>
-                    <ul>
-                        <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/viewmenu.html#set-observing-time-for-a-new-location">Set observing time for a new location</a></li>
-                        <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/viewmenu.html#observing-time">Observing Time</a></li>
-                    </ul>
-                </li>
-                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/viewmenu.html#view-menu-entries">View Menu Entries</a></li>
-            </ul>
-        </li>
-        <li>
-            <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/settingsmenu.html">The Settings Menu</a>
-            <ul>
-                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/settingsmenu.html#constellation-lines">Constellation Lines</a></li>
-                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/settingsmenu.html#experience">Experience</a></li>
-                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/settingsmenu.html#settings-menu-entries">Settings Menu Entries</a></li>
-            </ul>
-        </li>
-        <li>
-            <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/telescopemenu.html">The Telescope Menu</a>
-            <ul>
-                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/telescopemenu.html#connecting-and-controlling-a-telescope">Connecting and Controlling a Telescope</a></li>
-                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/telescopemenu.html#the-telescope-panel">The Telescope Panel</a></li>
-                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/telescopemenu.html#telescope-menu-entries">Telescope Menu Entries</a></li>
-            </ul>
-        </li>
-        <li>
-            <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/astronomicalresearch.html">Astronomical Research</a>
-            <ul>
-                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/astronomicalresearch.html#creating-a-new-collection">Creating a New Collection</a></li>
-                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/astronomicalresearch.html#comparing-foreground-and-background-images">Comparing Foreground and Background Images</a></li>
-                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/astronomicalresearch.html#the-finder-scope">The Finder Scope</a></li>
-                <li>
-                    <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/astronomicalresearch.html#virtual-observatory-tables">Virtual Observatory Tables</a>
-                    <ul>
-                        <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/astronomicalresearch.html#vo-cone-search">VO Cone Search</a></li>
-                    </ul>
-                </li>
-                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/astronomicalresearch.html#fits-images">FITS Images</a></li>
-                <li>
-                    <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/astronomicalresearch.html#sky-surveys">Sky Surveys</a>
-                    <ul>
-                        <li>
-                            <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/astronomicalresearch.html#imagery-data">Imagery Data</a>
-                            <ul>
-                                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/astronomicalresearch.html#digitized-sky-survey">Digitized Sky Survey</a></li>
-                                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/astronomicalresearch.html#hipparcos-catalog">Hipparcos Catalog</a></li>
-                                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/astronomicalresearch.html#vlss-vla-low-frequency-sky-survey-radio">VLSS: VLA Low Frequency Sky Survey (Radio)</a></li>
-                                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/astronomicalresearch.html#wmap-ilc-5-year-cosmic-microwave-background">WMAP ILC 5-Year Cosmic Microwave Background</a></li>
-                                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/astronomicalresearch.html#sfd-dust-map">SFD Dust Map</a></li>
-                                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/astronomicalresearch.html#iris-improved-imaging-of-iras-survey-infrared">IRIS: Improved Imaging of IRAS Survey (Infrared)</a></li>
-                                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/astronomicalresearch.html#2mass-two-micron-all-sky-survey-synthetic">2MASS Two Micron All Sky Survey (Synthetic)</a></li>
-                                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/astronomicalresearch.html#hydrogen-alpha-full-sky-map">Hydrogen Alpha Full Sky Map</a></li>
-                                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/astronomicalresearch.html#sdss-sloan-digital-sky-survey">SDSS: Sloan Digital Sky Survey</a></li>
-                                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/astronomicalresearch.html#tycho-synthetic-optical">Tycho (Synthetic, Optical)</a></li>
-                                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/astronomicalresearch.html#usnob-us-naval-observatory-b10-synthetic-optical">USNOB: US Naval Observatory B1.0 (Synthetic, Optical)</a></li>
-                                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/astronomicalresearch.html#galex-ultraviolet">GALEX (Ultraviolet)</a></li>
-                                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/astronomicalresearch.html#rass-rosat-all-sky-survey-x-ray">RASS: ROSAT All Sky Survey (X-Ray)</a></li>
-                                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/astronomicalresearch.html#fermi-gamma">Fermi (Gamma)</a></li>
-                                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/astronomicalresearch.html#black-sky-background">Black Sky Background</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/astronomicalresearch.html#browse">Browse</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/astronomicalresearch.html#context-search">Context Search</a>
-                    <ul>
-                        <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/astronomicalresearch.html#context-search-filter">Context Search Filter</a></li>
-                    </ul>
-                </li>
-                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/astronomicalresearch.html#stellar-brightness">Stellar Brightness</a></li>
-            </ul>
-        </li>
-        <li>
-            <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/earthplanetresearch.html">Earth and Planetary Research</a>
-            <ul>
-                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/earthplanetresearch.html#time-series-data">Time Series Data</a></li>
-                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/earthplanetresearch.html#setting-time-series-data-running">Setting Time Series Data Running</a></li>
-            </ul>
-        </li>
-        <li>
-            <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/configuration.html">Configuration</a>
-            <ul>
-                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/configuration.html#regional-data-cache">Regional Data Cache</a></li>
-                <li>
-                    <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/configuration.html#multi-monitor-cluster">Multi-Monitor Cluster</a>
-                    <ul>
-                        <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/configuration.html#restrictions">Restrictions</a></li>
-                    </ul>
-                </li>
-                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/configuration.html#single-slave-computer">Single Slave Computer</a></li>
-                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/configuration.html#remote-starting-of-the-multi-monitor-cluster">Remote Starting of the Multi-Monitor Cluster</a></li>
-                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/configuration.html#single-projector-planetarium">Single-Projector Planetarium</a></li>
-                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/configuration.html#custom-warp-files">Custom Warp Files</a></li>
-                <li>
-                    <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/configuration.html#multi-projector-planetarium">Multi-Projector Planetarium</a>
-                    <ul>
-                        <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/configuration.html#projection-designer-configuration">Projection Designer Configuration</a></li>
-                        <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/configuration.html#external-blending-configuration">External Blending Configuration</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </li>
-        <li>
-            <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/support.html">Support</a>
-            <ul>
-                <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/support.html#see-also">See Also</a></li>
-            </ul>
-        </li>
-    </ul>
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="row home-features">
+                <div class="col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-3 col-xs-12">
+                    <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/">
+                        <img src="/Content/images/gbox.png" class="img-responsive">
+                        <i class="fa fa-book"></i>
+                        <h4>Read Online</h4>
+                    </a>
+                </div>
+
+                <div class="col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-3 col-xs-12">
+                    <a href="~/Docs/worldwide-telescope-user-manual.pdf">
+                        <img src="/Content/images/gbox.png" class="img-responsive">
+                        <i class="fa fa-file-pdf-o"></i>
+                        <h4>Download .pdf</h4>
+                    </a>
+                </div>
+
+                <div class="col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-3 col-xs-12">
+                    <a href="~/Docs/worldwide-telescope-user-manual.mobi">
+                        <img src="/Content/images/gbox.png" class="img-responsive">
+                        <i class="fa fa-file-text-o"></i>
+                        <h4>Download .mobi</h4>
+                    </a>
+                </div>
+
+                <div class="col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-3 col-xs-12">
+                    <a href="~/Docs/worldwide-telescope-user-manual.epub">
+                        <img src="/Content/images/gbox.png" class="img-responsive">
+                        <i class="fa fa-file-text"></i>
+                        <h4>Download .epub</h4>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p>For more details on the inner workings of WWT, see <a href="/Learn/Advanced/">the advanced user guide</a></p>
+
+
 </section>

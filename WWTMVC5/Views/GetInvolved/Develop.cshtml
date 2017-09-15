@@ -1,71 +1,139 @@
 ﻿@{
-	Layout = "~/Views/Shared/_ContentPage.cshtml";
-	ViewBag.Title = "What's New - WorldWide Telescope";
-	ViewBag.HideTranslateWidget = 1;
+    Layout = "~/Views/Shared/_ContentPage.cshtml";
+    ViewBag.Title = "Develop - WorldWide Telescope";
+    ViewBag.HideTranslateWidget = 1;
 }
 @section leftnav{
-	@Html.Partial("~/Views/Learn/LeftNav.cshtml")
+    @Html.Partial("~/Views/GetInvolved/LeftNav.cshtml")
 }
+<h1>Developers Overview</h1>
+<p> The WorldWide Telescope has seveal ways for developers to engage with the software. Web developers can embed a WWT control on their website, windows developers can access and control layers in the windows client, and convert images to formats WWT can render. Expert developers can contribute directly to the WWT code base, the open source home of WWT is <a href="https://github.com/WorldWideTelescope/wwt-home"> the wwt-home metarepository on GitHub.</a></p>
 
-<section>
-    <h1>What&rsquo;s New in the American Astronomical Society WorldWide Telescope (September 2016)</h1>
 
-    <h4>New and improved Web Client including web authoring</h4>
-    <p>Most of the work under the AAS has been to migrate the advanced visualization functionality and tour authoring capability of the Windows Desktop Client to the Web Client, powered by WebGL.&nbsp; This new web architecture uses the native graphics horsepower of your PC to produce sophisticated visualizations, all within a web browser independent of the operating system or browser. Tours authored in the web can be played back on the Windows Desktop Client on dome or other advanced visualization system as well as shared easily on-line.&nbsp; You can try it out for yourself.&nbsp; Just open the link: <a href="/webclient/">http://www.worldwidetelescope.org/webclient/</a> and make your own tour!</p>
-    <p><img src="@Model.ImgDir/learn/whatsnew/WebClient.jpg" alt="Figure 1 - Screenshot of new Web Client showing on-line authoring of a tour." bs-tooltip="Figure 1 - Screenshot of new Web Client showing on-line authoring of a tour." class="img-responsive img-border" /></p>
-    <p>Additional information on making tours using the new Web Client is available here: <a href="/Learn/Authoring#webauthoring">http://www.worldwidetelescope.org/Learn/Authoring#webauthoring</a>.</p>
-    <h4>The Windows Desktop Client version 5.5 builds on previous version 5 releases with improvements in functionality and performance.&nbsp; </h4>
-    <p>This new version of WWT includes many bug fixes improving rendering quality and performance as well as including new branding of WWT under the American Astronomical Society (AAS).&nbsp; Functionally WWT 5.5 includes much more controllable orbits of bodies.&nbsp; This is easily done by connecting to IAU&rsquo;s Minor Planet Center (MPC).&nbsp; This allows queries by name to MPC that can be retrieved as orbits which can be finely controlled in the timeline editor.&nbsp; It also allows for queries to be retrieved as reference frames; this allows 3D models of the objects to be added to the scene.&nbsp; This functionality enables the new WWT tours explaining the exciting results of a potential ninth planet, much larger than the Earth very far out in the Solar System.&nbsp; For more information on this scientific result including WWT tours see: <a href="/news/planet9">http://www.worldwidetelescope.org/news/planet9</a>.</p>
-    <p><img src="@Model.ImgDir/learn/whatsnew/Planet 9.jpg" alt="Figure 2 - Minor planet and predicted orbit of Planet Nine." bs-tooltip="Figure 2 - Minor planet and predicted orbit of Planet Nine." class="img-responsive img-border" /></p>
-    <p>In the same way you can add the orbits of minor bodies or spacecraft with orbital elements, you can also add the obits of satellites using Two-Line Element set (TLE) representations of orbits.</p>
-    <p><img src="@Model.ImgDir/learn/whatsnew/Clipboard03.jpg" alt="Figure 3 - Satellite obits around the Earth." bs-tooltip="Figure 3 - Satellite obits around the Earth." class="img-responsive img-border" /></p>
-    
-    <p>For more information on adding orbits of satellites and minor planets see: <a href="/Learn/Authoring#AddingMinorPlanetOrbits">http://www.worldwidetelescope.org/Learn/Authoring#AddingMinorPlanetOrbits</a>.</p>
-</section>
-<hr />
-<section>
-	<h3>What's New in WWT 5.1 (November 2014)</h3>
-	<p>WorldWide Telescope version 5.1 builds on the features of 5.0 with improvements in functionality and performance. </p>
-	<div class="large-video-player autoresize" style="margin:16px 0">      
-		<iframe width="560" height="315" src="//www.youtube.com/embed/rfUFXE1xVcc" frameborder="0" allowfullscreen></iframe>
-	</div>
-	<br />
-	<p>As you zoom into mapped cities 3D data will be automatically shown.  You can explore on your own or take a look at this tour: <a href="@Model.ContentDir/Tours/Flight over San Francisco v1.0.wtt">Flight over San Francisco v1.0.wtt</a>. Note, this tour and the Neuron one below look great in Virtual Reality.</p>
-	<img src="@Model.ImgDir/learn/3dcities.jpg" alt="Bing 3D Maps" class="img-responsive img-border" />
-	<p><em>Sandbox Mode for Exploring Arbitrary 3D Models</em></p>
-	<br />
-	<p>Load arbitrary 3D models from various sources and explore them in a Sandbox Mode to view only imported models and dynamic lighting.  For example, explore neurons in the retina of a mouse from the <a href="https://eyewire.org">Eyewire project</a> in <a href="@Model.ContentDir/Tours/Neuron v1.1.wtt">this tour</a>.</p>
-	<img src="@Model.ImgDir/learn/neurons.jpg" alt="Eyewire" class="img-responsive img-border" />
-	<br />
-	<p><em>Prepare and print three-dimensional terrain with 3D Printing Support</em></p>
-	<img src="@Model.ImgDir/learn/3dprinting.jpg" alt="3D printing" class="img-responsive img-border" />
-	<br />
-</section>
-<hr />
-<section>
-	<h3>What's New in WWT 5.0 (January 2014)</h3>
-	<p>WorldWide Telescope 5.0 is the latest version and is already in production use in some of the world’s premiere planetariums. This feature-rich application is now available to everyone as a <a href="/Download">free download</a>.</p>
-	<p><em>The timeline editor gives you true cinematic control for optimal animations and transitions.</em></p>
-	<img src="@Model.ImgDir/TimelineEditor.png" alt="Timeline Editor" class="img-responsive img-border" />
-	<br />
-	<p><em>Display new, highly detailed models of the International Space Station and the Gemini Observatory, or import your own 3D models.</em></p>
-	<img src="@Model.ImgDir/ISS.png" alt="International Space Station" class="img-responsive img-border" />
-	<br/>
-	<p><em>Deeply detailed Mars imagery from the <a href="http://hirise.lpl.arizona.edu/">HiRISE</a> Mars Reconnaissance Orbiter</em></p>
-	<img src="@Model.ImgDir/learn/Mars-hirise.jpg" alt="HIRISE Mars" class="img-responsive img-border" />
-	<br />
-	<p><em>Atmospheric and lighting controls help you visualize Earth and other planets more realistically.</em></p>
-	<img src="@Model.ImgDir/Earthmoon2crop.png" alt="Earth Lighting" class="img-responsive img-border" />
-	<br />
-	<p><em>Tilt and rotate controls let you explore planet surfaces in Solar System mode.</em></p>
-	<img src="@Model.ImgDir/Saturn.png" alt="Saturn" class="img-responsive img-border" />
-	<br />
-	<br />
-	<p><em>A comprehensive set of planetarium and dome features help you create seamless displays on complex single- or multi-projector domes.</em></p>
-	<ul>
-		<li>Experience full-dome tour authoring and instant full-dome playback of desktop tours with overlays and images</li>
-		<li>For easier control of your displays, new MIDI controller support enables you to customize control panels by using inexpensive but powerful MIDI performance controllers</li>
-		<li>You can now manage projector nodes, check status, and render performance—all from the WWT console</li>
-		<li>The new Screen Broadcast feature allows any application on the console to display as a window in Full Dome mode</li>
-	</ul>
-</section>
+<h2> Windows Developers</h2>
+<div class="panel-group" id="accordion">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#sdks">
+                    The WWT Software Development Kit (SDK) and Academic Development Kit (ADK)
+                </a>
+            </h4>
+        </div>
+        <div id="sdks" class="panel-collapse collapse ">
+            <div class="panel-body">
+                <h4>
+                    <a href="@Model.ContentDir/drops/WWTSDK.msi">Click here to download WWT SDK, ADK Installer</a>
+</h4>
+                <h5>Features</h5>
+                <ol>
+                    <li>Tile Pyramid SDK, Samples and Documentation</li>
+                    <li>Tile Generator Tool</li>
+                    <li>LCAPI Sample</li>
+                    <li>Tile Service Sample</li>
+                    <li>Community Service Sample</li>
+                    <li>Sphere Toaster Tool</li>
+                    <li>Study Chopper Tool</li>
+                </ol>
+
+                <p>What you can do:</p>
+                <ul>
+                    <li>Reproject image data into tile pyramids suitable for visualization in WorldWide Telescope.</li>
+                    <li>Turn global or local xyz data into image tile pyramids.</li>
+                    <li>Process Digital Elevation Models (DEM) into WWT compatible DEM tile pyramids.</li>
+                    <li>Share the tile pyramids with your colleagues.</li>
+                    <li>Create your own community containing tours, data and links that your colleagues can easily access.</li>
+                    <li> Use the Sherical Toaster and the Study Chopper to TOAST images to view in WWT.</li>
+                        <li>Add custom data to the Layer Manager of WorldWide Telescope.</li>
+                        <li>Connect your database and application specific processing with WorldWide Telescopes Visualization.</li>
+                        <li>Remotely control WWT from other applications.</li>
+                   
+
+                </ul>
+
+
+                <h5>Software Requirements</h5>
+                <ul>
+                    <li>Windows 7 (Ultimate or Enterprise recommended), Windows Server 2008 R2 (Older versions of Windows are not recommended)</li>
+                    <li>WorldWide Telescope Windows Client (Version 3.0.1 or above)</li>
+                    <li>.NET Framework 4.0</li>
+                    <li>Visual Studio 2010</li>
+                    <li>Web Deploy Tool (this is required if the Sharing Service tool is to be deployed)</li>
+                    <li>IIS with default web site and default app pool configured to use .Net 4.0</li>
+                </ul>
+
+                <h5>Hardware Requirements</h5>
+                <ul>
+                    <li>A 64-bit dual-core processor is recommended, though a 32-bit is sufficient.</li>
+                    <li>4 GB of physical memory</li>
+                </ul>
+
+                <h5>Documenation </h5>
+                TODO: Add LCAPI and other gitbook docs.
+
+                <h5>Known Issues</h5>
+                <ol>
+                    <li>
+                        The SDK currently provides samples for the tiling of image files (.png,.jpg,.jpeg,.tif,.tiff) and xyz files (comma separated containing lat, long and depth values).</br>
+                        The SDK source code is provided so it can be extended to support other input file formats.
+                    </li>
+                    <li>Processing large sets of data is dependent on the amount of memory available in your system. For larger datasets consider increasing the available memory on your system.</li>
+                    <li>
+                        When using the Sharing Service with a Community folder that is configured on a remote network location WorldWide Telescope might time-out before the whole payload file is loaded.</br>
+                        In this case reselecting the Community thumbnail in WorldWide Telescope should load the community payload file in stages - several iterations of this may be necessary for a large payload file.
+                    </li>
+                    <li>In LCAPI Sample, when loading a file, "Data visualization Layer" dialog shown by WWT will be hidden behind the LCAPI sample window and will need to be activated manually.</li>
+                    <li>The Tile Generator tool only supports images with longitude values increasing from left to right and latitude values decreasing from top to bottom.</li>
+                </ol>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#windowsclient">
+                    Modifying and extending the WWT Windows Client
+                </a>
+            </h4>
+        </div>
+        <div id="windowsclient" class="panel-collapse collapse ">
+            <div class="panel-body">
+                <h4><a href="https://github.com/WorldWideTelescope/wwt-windows-client">Click here to go to the WWT Webclient GitHub Repository</a></h4>
+                <p>
+                    The Windows client is the most powerful component, and the most complex. It can power desktop visualizations, power walls, or even full dome multi-projector clusters.  For developers with the right set of skills, WWT in Windows can be adapted to an even wider set of requirements.
+                </p>
+                <p>
+                    Skills Required: The WWT Windows Client is built in Visual Studio 2013 with the .net framework 4.5x. It uses custom Winforms controls for the user interface, and DirectX11 for the 3D rendering. The interface between the C# .NET code and DirectX11 is the SharpDX library, another open source component. The client also has significant amounts of HLSL Shader code for both rendering and GP/GPU computation (such as orbits, temporal animation, lighting, etc.). There is a significant amount of TCP/IP networking code, as well as a full HTTP server implementation. To modify the core rendering code you need to know advanced 3D & spherical math and 3D rendering techniques similar to that of 3D Game engines. You also need to understand astronomical mathematics.
+                </p>
+                <p>
+                    There is a layer class model that can be derived from to allow new layer types to be defines without having to modify much of the core WWT codebase. This will be the most popular way of extending WWT, and will probably be exposed as a plug-in model for allowing the main-line installations to take 3rd party WWT layers without having to compile them into the mainline code.
+                </p>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2> Web Developers</h2>
+<div class="panel-group" id="accordion">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#webcontrl">
+                    HTML5 Web Control Reference
+                </a>
+            </h4>
+        </div>
+        <div id="webcontrl" class="panel-collapse collapse ">
+            <div class="panel-body">
+                <p>WorldWide Telescope Web Control API allows you to integrate WWT into any web data portal, or build mashups to display your own interface and WorldWide Telescope.</p>
+                <p>TODO: View the Web Control Script Reference documentation.</a></p>
+
+                <h4>Web control examples</h4>
+                <a href="/Developers/ImportImage">Import and Image to WWT</a>
+
+            </div>
+        </div>
+    </div>
+</div>
