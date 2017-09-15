@@ -1,7 +1,8 @@
 using System;
 using Microsoft.Practices.Unity;
+using Microsoft.Practices.Unity.Configuration;
 
-namespace WWTMVC5
+namespace WWTMVC5.App_Start
 {
     /// <summary>
     /// Specifies the Unity configuration for the main container.
