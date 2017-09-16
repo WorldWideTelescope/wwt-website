@@ -52,6 +52,7 @@ namespace WWTMVC5.Controllers
             "support",
             "terms",
             "upgrade",
+            "use",
             "wwtinaction",
             "wwtstories"
         };
