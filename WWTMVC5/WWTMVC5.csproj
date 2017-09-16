@@ -543,6 +543,7 @@
     <Compile Include="ViewModels\UploadAssetViewModel.cs" />
     <Compile Include="ViewModels\VideoDataViewModel.cs" />
     <Compile Include="Views\Test.cs" />
+    <Compile Include="Views\UseWWT.cs" />
     <Compile Include="WebServices\IResourceService.cs" />
     <Compile Include="WebServices\LiveIdAuth.svc.cs">
       <DependentUpon>LiveIdAuth.svc</DependentUpon>
@@ -1126,8 +1127,15 @@
     <Content Include="Views\Learn\Videos.cshtml" />
     <Content Include="Views\GetInvolved\LeftNav.cshtml" />
     <Content Include="Views\GetInvolved\Index.cshtml" />
-    <Content Include="Scripts\jquery-3.2.1.slim.min.map" />
-    <Content Include="Scripts\jquery-3.2.1.min.map" />
+    <Content Include="Views\Download\Embed.cshtml" />
+    <Content Include="Views\Use\Beta.cshtml" />
+    <Content Include="Views\Use\Embed.cshtml" />
+    <Content Include="Views\Use\Index.cshtml" />
+    <Content Include="Views\Use\LeftNav.cshtml" />
+    <Content Include="Views\Use\Tools.cshtml" />
+    <Content Include="Views\Use\TourAssets.cshtml" />
+    <Content Include="Views\Use\Educators.cshtml" />
+    <Content Include="Views\Use\Researchers.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
@@ -1343,7 +1351,7 @@
     </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>cd $(TargetDir)  
+    <PreBuildEvent>cd $(TargetDir)
 setlocal enableDelayedExpansion
 (
   xcopy ..\References\msshrtmi.dll $(TargetDir)

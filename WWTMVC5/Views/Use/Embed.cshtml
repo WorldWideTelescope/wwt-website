@@ -1,0 +1,226 @@
+﻿@{
+	Layout = "~/Views/Shared/_ContentPage.cshtml";
+}
+@section leftnav{
+	@Html.Partial("~/Views/Use/LeftNav.cshtml")
+}
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-route.min.js"></script>
+<style>
+	.embed-form label {
+		font-weight: normal;
+	}
+
+	.embed-form textarea {
+		font-size: 11px;
+		font-family: 'Lucida Console', 'Courier New', 'Courier';
+		box-sizing: border-box;
+	}
+</style>
+<h1>Embed The WWT Web Control on Your Site</h1>
+<p>Choose from the following options. The code will be generated in the text box below.</p>
+<div data-ng-app="wwt" ng-controller="embeddedcode" class="embed-form">
+
+	<div>
+		<h4>Import</h4>
+
+		<div class="row indent">
+			<div class="radio">
+				<label>
+					<input type="radio" name="import" value="nothing" ng-model="control.imports" /> Nothing (Sky browser only)
+				</label>
+			</div>
+		</div>
+		<div class="row indent">
+			<div class="radio">
+				<label>
+					<input type="radio" name="import" value="tour" ng-model="control.imports" /> Tour
+				</label>
+			</div>
+
+			<div class="indent" ng-show="control.imports == 'tour'">
+
+				<div class="col-md-8">
+					<div class="form-group">
+						<label for="tourUrl">Tour Url</label><br />
+						<input id="tourUrl"  ng-model="control.tourUrl" class="form-control" placeholder="Tour Url" />
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row indent">
+			<div class="radio">
+				<label>
+					<input type="radio" name="import" value="wtml" ng-model="control.imports" />
+					WTML File
+				</label>
+			</div>
+			<div class="indent" ng-if="control.imports == 'wtml'">
+				<div class="row">
+					<div class="col-md-8">
+						<div class="form-group">
+							<label for="wtmlUrl">WTML Url</label><br />
+							<input id="wtmlUrl" ng-model="control.wtmlUrl" class="form-control" placeholder="WTML File Url" />
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label for="wtmlDisplay">Display as</label><br />
+							<select id="wtmlDisplay" ng-model="control.display" ng-options="d for d in displayTypes" class="form-control"></select>
+						</div>
+					</div>
+				</div>
+
+
+			</div>
+		</div>
+		<div class="row indent">
+			<div class="radio">
+				<label>
+					<input type="radio" name="import" value="avm" ng-model="control.imports" />
+					Image (must be <a href="http://virtualastronomy.org/avm_metadata.php" target="avm">AVM-tagged</a>)
+				</label>
+			</div>
+			<div class="indent">
+				<div class="form-group" ng-show="control.imports == 'avm'">
+					<label for="wtmlUrl">Image Url</label><br />
+					<input id="wtmlUrl" ng-model="control.avmImageUrl" class="form-control" placeholder="AVM-tagged Image Url" />
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+	<h4 style="margin:12px 0 5px 0">Settings</h4>
+	<div class="indent row" ng-if="control.imports != 'tour'">
+		<div class="col-md-4" ng-repeat="(key,val) in defaults" style="/*width:45%;display:inline-block*/">
+			<div class="checkbox">
+				<label>
+					<input type="checkbox" ng-change="changeSetting(key,val[0])" ng-model="val[0]" />
+					{{val[1]}}
+				</label>
+			</div>
+		</div>
+
+	</div>
+	<div class="form-group ">
+
+		<div class="row indent">
+			<div class="col-sm-4">
+				<label>
+					Aspect Ratio (width:height)
+				</label>
+				<select ng-model="control.aspect" ng-options="ar for ar in aspectChoices" class="form-control"></select>
+			</div>
+			<div class="col-xs-2" ng-show="control.aspect == 'custom'">
+				<label>&nbsp;</label>
+				<input ng-model="aspectWidth" type="number" class="form-control" placeholder="Width" />
+			</div>
+			<div class="col-xs-2" ng-show="control.aspect == 'custom'">
+				<label>&nbsp;</label>
+				<input ng-model="aspectHeight" type="number" class="form-control" placeholder="Height" />
+			</div>
+		</div>
+
+
+	</div>
+	<br />
+	<h4>Code To Embed</h4>
+
+<textarea class="form-control" onfocus="this.select()" spellcheck='false'>
+&lt;div id="wwtControl"@(Model.Staging ? " data-host=\"http://wwtstaging.azurewebsites.net/\"" : ""){{tourLocation()}}{{wtmlLocation()}}{{settingsString()}}{{aspectString()}}&gt;&lt;/div&gt;
+&lt;script src="@(!Model.Staging ? "http://worldwidetelescope.org" : "http://wwtstaging.azurewebsites.net")/embedded-webcontrol.js"&gt;&lt;/script&gt;</textarea>
+	<p class="small">Copy the above html code to your clipboard and paste it in your site where you want your embedded web control to display. The control will fill the width of the containing element and will automatically resize and maintain aspect ratio.</p>
+</div>
+
+
+
+<script>
+	//$(document).on('load', function() {
+	var wwtng = angular.module('wwt', []);
+	wwtng.controller('embeddedcode', function ($scope) {
+	    $scope.control = {
+			tourUrl: '',
+			imports: 'nothing',
+			settings: {},
+			wtmlUrl: '',
+			avmImageUrl: '',
+			display: 'Dropdown',
+			aspect: '16:9'
+		};
+		$scope.aspectChoices = ['16:9', '8:5', '4:3', 'custom'];
+		$scope.aspectHeight = 9;
+		$scope.aspectWidth = 16;
+		$scope.getAspect = function () {
+			if ($scope.control.aspect === 'custom') {
+				return $scope.aspectWidth + ':' + $scope.aspectHeight;
+			} else {
+				return $scope.control.aspect;
+			}
+		}
+
+		$scope.changeSetting = function (k, v) {
+			$scope.control.settings[k] = v;
+
+		}
+		$scope.tourLocation = function () {
+			if ($scope.control.imports === 'tour') {
+				return '\n    data-tour-location="' + $scope.control.tourUrl + '"';
+			} else return '';
+		}
+		$scope.wtmlLocation = function () {
+			if ($scope.control.imports === 'wtml') {
+				return '\n    data-wtml="' + $scope.control.wtmlUrl + '"\n    data-display="' + $scope.control.display + '"';
+			}
+			else if ($scope.control.imports === 'avm') {
+				return '\n    data-import-image="' + $scope.control.avmImageUrl + '"';
+			}
+			else return '';
+		}
+		$scope.aspectString = function () {
+			setTimeout(function () {
+				var cssValPx = function (attr) {
+					return parseFloat($('textarea').css(attr).replace(/px/, ''));
+				}
+				var ta = $('textarea');
+				var xHeight = cssValPx('paddingTop')
+				 + cssValPx('paddingBottom')
+				 + cssValPx('borderTop') + cssValPx('borderBottom');
+				var height = ta.height() + xHeight;
+				if (ta[0].scrollHeight <= height) {
+					ta.height(50);
+				}
+				ta.height((ta[0].scrollHeight - xHeight) + 5);
+			}, 100);
+			if ($scope.getAspect() !== '16:9') {
+				return '\n    data-aspect-ratio="' + $scope.getAspect() + '"';
+			} else return '';
+		}
+
+		$scope.settingsString = function () {
+			var values = '';
+			$.each($scope.control.settings, function (k, v) {
+				if (values.length) { values += ','; }
+				values += k + '=' + v;
+			});
+			if (values.length && $scope.control.imports !== 'tour') {
+				return '\n    data-settings="' + values + '"';
+			} else return '';
+		}
+
+		$scope.defaults = {
+			crosshairs: [true, 'Show Crosshairs'],
+			ecliptic: [false, 'Show Ecliptic'],
+			eclipticGrid: [false, 'Show Ecliptic Grid'],
+			altAzGrid: [false, 'Show Alt/Az Grid'],
+			galacticGrid: [false, 'Show Galactic Grid'],
+			equatorialGrid: [false, 'Show Equatorial Grid'],
+			figures: [true, 'Show Constellation Figures'],
+			boundaries: [false, 'Show Constellation Boundaries'],
+			pictures: [false, 'Show Constellation Pictures'],
+			galacticPlaneMode: [false, 'Galactic Plane Display Mode']
+		};
+		$scope.displayTypes = ['Cross fade', 'Dropdown'];
+	});
+	//});
+</script>

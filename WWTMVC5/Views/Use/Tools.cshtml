@@ -1,0 +1,23 @@
+﻿@{
+	Layout = "~/Views/Shared/_ContentPage.cshtml";
+}
+@section leftnav{
+	@Html.Partial("~/Views/Download/LeftNav.cshtml")
+}
+
+<section>
+    <h1><a href="http://www.layerscape.org/Home/ExcelAddInWelcome" target="ls">WorldWide Telescope Add-in for Excel</a></h1>
+    <p>The add-in enables you to use the familiar capabilities of Microsoft Excel to efficiently highlight, organize, and import your data into the WorldWide Telescope visualization environment. </p>
+</section>
+<hr />
+<section>
+    <h2>Planetarium Tools</h2>
+    <p>The WWT Remote Control utility assists with multiple machine cluster/multi monitor configurations of WorldWide Telescope and remotely operating the application.</p>
+    <p><a href="@Model.ContentDir/drops/WWTRemote.2.1.1.msi">WWTRemote to control WWT display clusters (Legacy Version 2.1.1)</a></p>
+    <p><a href="@Model.ContentDir/drops/WWTRemote.5.0.0.msi">WWTRemote to control WWT display clusters (Latest Version 5.0)</a></p>
+    <h2>Developer Tools</h2>
+    <p><a href="@Model.ContentDir/drops/WWTSDK.msi">SDK with data pipeline and original ADK tools</a></p>
+    <p>The SDK primarily enables applications to be written to transmit data to WorldWide Telescope.</p>
+    <h2>Excel Add-in</h2>
+    <p><a href="@Model.ContentDir/drops/WWTExcelAddin.msi">Excel Add-in for WWT</a></p>
+</section>
