@@ -8,7 +8,25 @@
 @section leftnav{
     @Html.Partial("~/Views/Use/LeftNav.cshtml")
 }
+
+<h1>Planetarium and Museum Resources</h1>
+
 <div class="panel-group" id="accordion">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#museum">
+                    Museums Overview
+                </a>
+            </h4>
+        </div>
+        <div id="museum" class="panel-collapse collapse ">
+            <div class="panel-body">
+                WorldWide Telescope transforms the museum experience. From self-running tours to interactive branching educational tours, WorldWide Telescope promises an eye-catching and immersive showpiece for museum audiences. WorldWide Telescope has native support for a variety of systems, and enables kiosk-mode controls for maintenance-free operation. WWT requires a Windows operating system and like any real-time graphics application runs better on higher-performance graphics cards.
+                <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-advanced-guides/content/kiosk.html">Learn more...</a>
+            </div>
+        </div>
+    </div>
     <div class="panel panel-default">
         <div class="panel-heading">
             <h4 class="panel-title">
@@ -251,7 +269,7 @@
                 <h3>Resources</h3>
                 <ul>
                     <li>
-                        <a href="/Download/">WWT 5.1 Gold for Windows&reg;</a>. This release - or the final 5.1 or later official release - has several <a href="/Lern/WhatsNew/">new features</a> needed by the  <a href="@ViewBag.contentDir/Impacts - VR v2.1.wtt">IMPACTS tour</a> created for IPS, Beijing 2014.
+                        <a href="/Download/">WWT 5.1 Gold for Windows&reg;</a>. This release - or the final 5.1 or later official release - has several new features needed by the  <a href="@ViewBag.contentDir/Impacts - VR v2.1.wtt">IMPACTS tour</a> created for IPS, Beijing 2014.
                         Please be aware this is in beta. We value your feedback, if you discover a bug or have any issues <a href="/Support/IssuesAndBugs">please report them here</a>.
                     </li>
                     <li>
