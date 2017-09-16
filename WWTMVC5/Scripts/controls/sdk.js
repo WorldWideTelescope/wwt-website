@@ -214,6 +214,7 @@ $(document).ready(function () {
                 location.href = '#' + anchorName;
         }
     }
+    
     $("#sdkFrame").load(function () {
 
         $('div.rightContentContainer').last().append(pager.tempContainer);
@@ -264,10 +265,12 @@ var pager = {
     control: $('<div class="pager-div"><div class=btn-group><a title="First Page" class="first-page btn btn-info" href="javascript:pager.gotoPage(0)"><i class="fa fa-angle-double-left"></i></a>&nbsp;&nbsp;<a title="Previous Page" class="prev-page btn btn-info" href="javascript:pager.prev()"><i class="fa fa-angle-left"></i><div class=page-num-links></div><a class="next-page btn btn-info" title="Next Page" href="javascript:pager.next()"><i class="fa fa-angle-right"></i></a>&nbsp;&nbsp;<a href="javascript:pager.gotoPage(pager.pageCount-1)" class="last-page btn btn-info" title="Last Page"><i class="fa fa-angle-double-right"></i></a></div><div class=right><input class=search value="' + getQSValue('q') + '"/> &nbsp;&nbsp;&nbsp;<div class=print><i class="fa fa-print"></i>&nbsp;Printable View<br><a href=javascript:pager.printSDK()>This page</a> &nbsp; <a href=javascript:pager.printAll()>All</a></div></div></div>'),
     init: function (opts) {
         pager.options = opts;
+       
     },
     slicePages: function () {
         pager.tempContainer.append(pager.control);
         pager.frame = $('#sdkFrame').contents();
+       
         /*if ($.browser.msie) {
             pager.frame.find('body').contents().filter(function () {
                 if (this.nodeType != 1) {
@@ -279,7 +282,7 @@ var pager = {
                 }
             });
         }*/
-
+        
         pager.frame.find('img').first().css('display', 'none');
         pager.makeDiv(pager.frame.find('h1').first().text(), 0);
         seps = pager.frame.find('hr');
@@ -311,6 +314,8 @@ var pager = {
                 img.attr('src', "/Docs/" + img.attr('src'));
 
         });
+
+        
         var htmlString = new String();
         htmlString = pager.frame.find('body').html();
 

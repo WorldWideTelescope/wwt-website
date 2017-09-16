@@ -1,4 +1,4 @@
-/**
+﻿/**
 * WorldWide Telescope Web Client
 * Copyright 2014-2015 WorldWide Telescope
 * Licensed under MIT (https://github.com/WorldWideTelescope/wwt-web-client/blob/master/LICENSE.md)
@@ -2639,9 +2639,6 @@ window.wwtlib = function(){
   };
   CT.dmS2Dp = function(Degrees, Minutes, Seconds, bPositive) {
     if (!bPositive) {
-      console.assert(Degrees >= 0);
-      console.assert(Minutes >= 0);
-      console.assert(Seconds >= 0);
     }
     if (bPositive) {
       return Degrees + Minutes / 60 + Seconds / 3600;
@@ -2738,7 +2735,6 @@ window.wwtlib = function(){
     return JD - DT.dateToJD(Year, 1, 1, bGregorianCalendar) + 1;
   };
   DT.daysInMonthForMonth = function(Month, bLeap) {
-    console.assert(Month >= 1 && Month <= 12);
     var MonthLength = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31, 0 ];
     if (bLeap) {
       MonthLength[1]++;
@@ -2903,7 +2899,6 @@ window.wwtlib = function(){
     }
     else if (y < 1998) {
       var Index = ss.truncate(((y - 1620) / 2));
-      console.assert(Index < GFX.deltaTTable.length);
       y = y / 2 - Index - 810;
       Delta = (GFX.deltaTTable[Index] + (GFX.deltaTTable[Index + 1] - GFX.deltaTTable[Index]) * y);
     }
@@ -3860,7 +3855,6 @@ window.wwtlib = function(){
           R = CAAPluto.radiusVector(JD0);
           break;
         default:
-          console.assert(false);
           break;
       }
       if (!bFirstRecalc) {
@@ -3955,7 +3949,7 @@ window.wwtlib = function(){
     var x = r * a * Math.sin(A + w + v);
     var y = r * b * Math.sin(B + w + v);
     var z = r * c * Math.sin(C + w + v);
-    return Vector3d.create(x, y, z);
+    return v3d.create(x, y, z);
   };
   ELL.calculateRectangular = function(elements, meanAnomoly) {
     var omega = CT.d2R(elements.omega);
@@ -3988,7 +3982,7 @@ window.wwtlib = function(){
     var x = r * a * Math.sin(A + w + v);
     var y = r * b * Math.sin(B + w + v);
     var z = r * c * Math.sin(C + w + v);
-    return Vector3d.create(x, y, z);
+    return v3d.create(x, y, z);
   };
   ELL.calculateElements = function(JD, elements) {
     var Epsilon = CAANutation.meanObliquityOfEcliptic(elements.jdEquinox);
@@ -5317,7 +5311,6 @@ window.wwtlib = function(){
     var A3 = CT.m360(313.45 + 481266.484 * T);
     A3 = CT.d2R(A3);
     var nLCoefficients = GFX.g_MoonCoefficients1.length;
-    console.assert(GFX.g_MoonCoefficients2.length === nLCoefficients);
     var SigmaL = 0;
     for (var i = 0; i < nLCoefficients; i++) {
       var ThisSigma = GFX.g_MoonCoefficients2[i].a * Math.sin(GFX.g_MoonCoefficients1[i].d * D + GFX.g_MoonCoefficients1[i].m * M + GFX.g_MoonCoefficients1[i].mdash * Mdash + GFX.g_MoonCoefficients1[i].f * F);
@@ -5352,7 +5345,6 @@ window.wwtlib = function(){
     var A3 = CT.m360(313.45 + 481266.484 * T);
     A3 = CT.d2R(A3);
     var nBCoefficients = GFX.g_MoonCoefficients3.length;
-    console.assert(GFX.g_MoonCoefficients4.length === nBCoefficients);
     var SigmaB = 0;
     for (var i = 0; i < nBCoefficients; i++) {
       var ThisSigma = GFX.g_MoonCoefficients4[i] * Math.sin(GFX.g_MoonCoefficients3[i].d * D + GFX.g_MoonCoefficients3[i].m * M + GFX.g_MoonCoefficients3[i].mdash * Mdash + GFX.g_MoonCoefficients3[i].f * F);
@@ -5389,7 +5381,6 @@ window.wwtlib = function(){
     var A3 = CT.m360(313.45 + 481266.484 * T);
     A3 = CT.d2R(A3);
     var nRCoefficients = GFX.g_MoonCoefficients1.length;
-    console.assert(GFX.g_MoonCoefficients2.length === nRCoefficients);
     var SigmaR = 0;
     for (var i = 0; i < nRCoefficients; i++) {
       var ThisSigma = GFX.g_MoonCoefficients2[i].b * Math.cos(GFX.g_MoonCoefficients1[i].d * D + GFX.g_MoonCoefficients1[i].m * M + GFX.g_MoonCoefficients1[i].mdash * Mdash + GFX.g_MoonCoefficients1[i].f * F);
@@ -5706,7 +5697,6 @@ window.wwtlib = function(){
       JD += DeltaJD;
     }
     else {
-      console.assert(false);
     }
     var DeltaJD2 = 0.000325 * Math.sin(A1) + 0.000165 * Math.sin(A2) + 0.000164 * Math.sin(A3) + 0.000126 * Math.sin(A4) + 0.00011 * Math.sin(A5) + 6.2E-05 * Math.sin(A6) + 6E-05 * Math.sin(A7) + 5.6E-05 * Math.sin(A8) + 4.7E-05 * Math.sin(A9) + 4.2E-05 * Math.sin(A10) + 4E-05 * Math.sin(A11) + 3.7E-05 * Math.sin(A12) + 3.5E-05 * Math.sin(A13) + 2.3E-05 * Math.sin(A14);
     JD += DeltaJD2;
@@ -7743,7 +7733,7 @@ window.wwtlib = function(){
       this._initLineBuffer(renderContext);
       var count = this._linePoints.length;
       if (renderContext.gl == null) {
-        var viewPoint = Vector3d._transformCoordinate(renderContext.get_viewPoint(), this.viewTransform);
+        var viewPoint = v3d._transformCoordinate(renderContext.get_viewPoint(), this.viewTransform);
         var ctx = renderContext.device;
         ctx.save();
         ctx.strokeStyle = color.toString();
@@ -7809,7 +7799,7 @@ window.wwtlib = function(){
               counter = 0;
             }
             if (this.useLocalCenters) {
-              temp = Vector3d.subtractVectors(point, this._localCenter);
+              temp = v3d.subtractVectors(point, this._localCenter);
               linePointList[counter] = temp;
             }
             else {
@@ -7911,7 +7901,7 @@ window.wwtlib = function(){
               counter = 0;
             }
             if (this.useLocalCenters) {
-              temp = Vector3d.subtractVectors(point, this._localCenter);
+              temp = v3d.subtractVectors(point, this._localCenter);
               linePointList[counter] = new PositionColored(temp, this._lineColors[index]);
             }
             else {
@@ -8078,9 +8068,9 @@ window.wwtlib = function(){
         var v12;
         var v23;
         var v31;
-        v12 = Vector3d.midPointByLength(v1, v2);
-        v23 = Vector3d.midPointByLength(v2, v3);
-        v31 = Vector3d.midPointByLength(v3, v1);
+        v12 = v3d.midpointByLength(v1, v2);
+        v23 = v3d.midpointByLength(v2, v3);
+        v31 = v3d.midpointByLength(v3, v1);
         this.addSubdividedTriangles(v1, v12, v31, color, date, subdivisions);
         this.addSubdividedTriangles(v12, v23, v31, color, date, subdivisions);
         this.addSubdividedTriangles(v12, v2, v23, color, date, subdivisions);
@@ -8298,7 +8288,7 @@ window.wwtlib = function(){
         ctx.globalAlpha = 0.4;
         var width = renderContext.width;
         var height = renderContext.height;
-        var viewPoint = Vector3d.makeCopy(renderContext.get_viewPoint());
+        var viewPoint = v3d.makeCopy(renderContext.get_viewPoint());
         var scaleFactor = renderContext.get_fovScale() / 100;
         var $enum1 = ss.enumerate(this.items);
         while ($enum1.moveNext()) {
@@ -9156,7 +9146,7 @@ window.wwtlib = function(){
     _isLeftOfHalfSpace: function(pntA, pntB, pntTest) {
       pntA.normalize();
       pntB.normalize();
-      var cross = Vector3d.cross(pntA, pntB);
+      var cross = v3d.cross(pntA, pntB);
       var dot = Vector3d.dot(cross, pntTest);
       return dot > 0;
     },
@@ -9178,11 +9168,11 @@ window.wwtlib = function(){
       var b = poly[verts[v]].copy();
       var c = poly[verts[w]].copy();
       var P;
-      var d = Vector3d.subtractVectors(b, a);
+      var d = v3d.subtractVectors(b, a);
       d.normalize();
-      var e = Vector3d.subtractVectors(b, c);
+      var e = v3d.subtractVectors(b, c);
       e.normalize();
-      var g = Vector3d.cross(d, e);
+      var g = v3d.cross(d, e);
       var bn = b.copy();
       bn.normalize();
       if (Vector3d.dot(g, bn) > 0) {
@@ -9372,7 +9362,7 @@ window.wwtlib = function(){
           lng = lngMax;
         }
         index = y1 * (subdivs + 1) + x1;
-        point = Vector3d.create(lng * scaleFactor, 0, (lat - 28) * scaleFactor);
+        point = v3d.create(lng * scaleFactor, 0, (lat - 28) * scaleFactor);
         point.rotateY(213 / 180 * Math.PI);
         point.rotateZ((-62.87175) / 180 * Math.PI);
         point.rotateY((-192.8595083) / 180 * Math.PI);
@@ -9721,7 +9711,7 @@ window.wwtlib = function(){
             width = 0.01;
           }
           var dd = d;
-          Grids._eclipticOverviewLineList.addLine(Vector3d._transformCoordinate(Vector3d.create(Math.cos((dd * Math.PI * 2) / 360), width, Math.sin((dd * Math.PI * 2) / 360)), mat), Vector3d._transformCoordinate(Vector3d.create(Math.cos((dd * Math.PI * 2) / 360), -width, Math.sin((dd * Math.PI * 2) / 360)), mat));
+          Grids._eclipticOverviewLineList.addLine(v3d._transformCoordinate(v3d.create(Math.cos((dd * Math.PI * 2) / 360), width, Math.sin((dd * Math.PI * 2) / 360)), mat), v3d._transformCoordinate(v3d.create(Math.cos((dd * Math.PI * 2) / 360), -width, Math.sin((dd * Math.PI * 2) / 360)), mat));
           index++;
           jYear += 1;
         }
@@ -9765,8 +9755,8 @@ window.wwtlib = function(){
           d = sunEcliptic.x;
           var dd = d;
           if (i === Math.floor(daysThisMonth / 2)) {
-            var center = Vector3d._transformCoordinate(Vector3d.create(Math.cos((dd * Math.PI * 2) / 360), 0.025, Math.sin((dd * Math.PI * 2) / 360)), mat);
-            var up = Vector3d._transformCoordinate(Vector3d.create(Math.cos((dd * Math.PI * 2) / 360), 0.045, Math.sin((dd * Math.PI * 2) / 360)), mat);
+            var center = v3d._transformCoordinate(v3d.create(Math.cos((dd * Math.PI * 2) / 360), 0.025, Math.sin((dd * Math.PI * 2) / 360)), mat);
+            var up = v3d._transformCoordinate(v3d.create(Math.cos((dd * Math.PI * 2) / 360), 0.045, Math.sin((dd * Math.PI * 2) / 360)), mat);
             up.subtract(center);
             up.normalize();
             Grids._eclipOvTextBatch.add(new Text3d(center, up, Grids._monthNames[m], 80, 0.000159375));
@@ -9794,12 +9784,12 @@ window.wwtlib = function(){
       Grids._precLineList.set_depthBuffered(false);
       for (var l = 0; l < 360; l++) {
         var b = 90 - obliquity;
-        Grids._precLineList.addLine(Vector3d._transformCoordinate(Coordinates.raDecTo3dAu(l / 15, b, 1), mat), Vector3d._transformCoordinate(Coordinates.raDecTo3dAu((l + 1) / 15, b, 1), mat));
+        Grids._precLineList.addLine(v3d._transformCoordinate(Coordinates.raDecTo3dAu(l / 15, b, 1), mat), v3d._transformCoordinate(Coordinates.raDecTo3dAu((l + 1) / 15, b, 1), mat));
       }
       for (var l = -12000; l < 13000; l += 2000) {
         var b = 90 - obliquity;
         var p = -((l - 2000) / 25772 * 24) - 6;
-        Grids._precLineList.addLine(Vector3d._transformCoordinate(Coordinates.raDecTo3dAu(p, b - 0.5, 1), mat), Vector3d._transformCoordinate(Coordinates.raDecTo3dAu(p, b + 0.5, 1), mat));
+        Grids._precLineList.addLine(v3d._transformCoordinate(Coordinates.raDecTo3dAu(p, b - 0.5, 1), mat), v3d._transformCoordinate(Coordinates.raDecTo3dAu(p, b + 0.5, 1), mat));
       }
     }
     if (Grids._precTextBatch == null) {
@@ -9822,7 +9812,7 @@ window.wwtlib = function(){
         if (text.length === 9) {
           text = '   ' + text;
         }
-        Grids._precTextBatch.add(new Text3d(Vector3d._transformCoordinate(Coordinates.raDecTo3dAu(p, b, 1), mat), Vector3d._transformCoordinate(Coordinates.raDecTo3dAu(p + 0.01, b, 1), mat), text, 75, 0.00015));
+        Grids._precTextBatch.add(new Text3d(v3d._transformCoordinate(Coordinates.raDecTo3dAu(p, b, 1), mat), v3d._transformCoordinate(Coordinates.raDecTo3dAu(p + 0.01, b, 1), mat), text, 75, 0.00015));
       }
     }
     return;
@@ -9960,12 +9950,12 @@ window.wwtlib = function(){
       var mat = Matrix3d._rotationX((-obliquity / 360 * (Math.PI * 2)));
       for (var l = 0; l < 360; l += 10) {
         for (var b = -80; b < 80; b += 2) {
-          Grids._eclipticLineList.addLine(Vector3d._transformCoordinate(Coordinates.raDecTo3dAu(l / 15, b, 1), mat), Vector3d._transformCoordinate(Coordinates.raDecTo3dAu(l / 15, b + 2, 1), mat));
+          Grids._eclipticLineList.addLine(v3d._transformCoordinate(Coordinates.raDecTo3dAu(l / 15, b, 1), mat), v3d._transformCoordinate(Coordinates.raDecTo3dAu(l / 15, b + 2, 1), mat));
         }
       }
       for (var b = -80; b <= 80; b += 10) {
         for (var l = 0; l < 360; l += 5) {
-          Grids._eclipticLineList.addLine(Vector3d._transformCoordinate(Coordinates.raDecTo3dAu(l / 15, b, 1), mat), Vector3d._transformCoordinate(Coordinates.raDecTo3dAu((l + 5) / 15, b, 1), mat));
+          Grids._eclipticLineList.addLine(v3d._transformCoordinate(Coordinates.raDecTo3dAu(l / 15, b, 1), mat), v3d._transformCoordinate(Coordinates.raDecTo3dAu((l + 5) / 15, b, 1), mat));
         }
       }
       var counter = 0;
@@ -9980,7 +9970,7 @@ window.wwtlib = function(){
             break;
         }
         counter++;
-        Grids._eclipticLineList.addLine(Vector3d._transformCoordinate(Coordinates.raDecTo3dAu(l / 15, b, 1), mat), Vector3d._transformCoordinate(Coordinates.raDecTo3dAu(l / 15, -b, 1), mat));
+        Grids._eclipticLineList.addLine(v3d._transformCoordinate(Coordinates.raDecTo3dAu(l / 15, b, 1), mat), v3d._transformCoordinate(Coordinates.raDecTo3dAu(l / 15, -b, 1), mat));
       }
       counter = 0;
       for (var l = 0; l < 360; l += 90) {
@@ -9996,7 +9986,7 @@ window.wwtlib = function(){
               break;
           }
           counter++;
-          Grids._eclipticLineList.addLine(Vector3d._transformCoordinate(Coordinates.raDecTo3dAu((l + width) / 15, b, 1), mat), Vector3d._transformCoordinate(Coordinates.raDecTo3dAu((l - width) / 15, b, 1), mat));
+          Grids._eclipticLineList.addLine(v3d._transformCoordinate(Coordinates.raDecTo3dAu((l + width) / 15, b, 1), mat), v3d._transformCoordinate(Coordinates.raDecTo3dAu((l - width) / 15, b, 1), mat));
         }
       }
     }
@@ -10022,7 +10012,7 @@ window.wwtlib = function(){
         else if (l < 100) {
           text = '     ' + l.toString();
         }
-        Grids._eclipticTextBatch.add(new Text3d(Vector3d._transformCoordinate(Coordinates.raDecTo3dAu(l / 15, 0.4, 1), mat), Vector3d._transformCoordinate(Coordinates.raDecTo3dAu(l / 15, 0.5, 1), mat), text, 75, 0.00018));
+        Grids._eclipticTextBatch.add(new Text3d(v3d._transformCoordinate(Coordinates.raDecTo3dAu(l / 15, 0.4, 1), mat), v3d._transformCoordinate(Coordinates.raDecTo3dAu(l / 15, 0.5, 1), mat), text, 75, 0.00018));
       }
       for (var l = 0; l < 360; l += 90) {
         for (var b = -80; b <= 80; b += 10) {
@@ -10032,11 +10022,11 @@ window.wwtlib = function(){
           var text = b.toString();
           if (b > 0) {
             text = '  +' + b.toString();
-            Grids._eclipticTextBatch.add(new Text3d(Vector3d._transformCoordinate(Coordinates.raDecTo3dAu(l / 15, b - 0.4, 1), mat), Vector3d._transformCoordinate(Coordinates.raDecTo3dAu(l / 15, b - 0.3, 1), mat), text, 75, 0.00018));
+            Grids._eclipticTextBatch.add(new Text3d(v3d._transformCoordinate(Coordinates.raDecTo3dAu(l / 15, b - 0.4, 1), mat), v3d._transformCoordinate(Coordinates.raDecTo3dAu(l / 15, b - 0.3, 1), mat), text, 75, 0.00018));
           }
           else {
             text = '  - ' + text.substr(1);
-            Grids._eclipticTextBatch.add(new Text3d(Vector3d._transformCoordinate(Coordinates.raDecTo3dAu(l / 15, b + 0.4, 1), mat), Vector3d._transformCoordinate(Coordinates.raDecTo3dAu(l / 15, b + 0.5, 1), mat), text, 75, 0.00018));
+            Grids._eclipticTextBatch.add(new Text3d(v3d._transformCoordinate(Coordinates.raDecTo3dAu(l / 15, b + 0.4, 1), mat), v3d._transformCoordinate(Coordinates.raDecTo3dAu(l / 15, b + 0.5, 1), mat), text, 75, 0.00018));
           }
         }
       }
@@ -10945,7 +10935,7 @@ window.wwtlib = function(){
             }
             var matSaved = renderContext.get_world();
             renderContext.set_world(Matrix3d.multiplyMatrix(thisMap.frame.worldMatrix, renderContext.get_worldBaseNonRotating()));
-            map.frame.get_orbit().draw3D(renderContext, 1 * 0.25, Vector3d.create(0, 0, 0));
+            map.frame.get_orbit().draw3D(renderContext, 1 * 0.25, v3d.create(0, 0, 0));
             renderContext.set_world(matSaved);
           }
           else if (map.frame.referenceFrameType === 2) {
@@ -11590,7 +11580,7 @@ window.wwtlib = function(){
       this.roll = parseFloat(node.attributes.getNamedItem('Roll').nodeValue);
       this.scale = parseFloat(node.attributes.getNamedItem('Scale').nodeValue);
       this.tilt = parseFloat(node.attributes.getNamedItem('Tilt').nodeValue);
-      this.translation = Vector3d.parse(node.attributes.getNamedItem('Translation').nodeValue);
+      this.translation = v3d.parse(node.attributes.getNamedItem('Translation').nodeValue);
       if (!this.referenceFrameType) {
         this.lat = parseFloat(node.attributes.getNamedItem('Lat').nodeValue);
         this.lng = parseFloat(node.attributes.getNamedItem('Lng').nodeValue);
@@ -11674,7 +11664,7 @@ window.wwtlib = function(){
       var ee = this.get_elements();
       var point = ELL.calculateRectangularJD(SpaceTimeController.get_jNow(), ee);
       var pointInstantLater = ELL.calculateRectangular(ee, this.meanAnomoly + 0.001);
-      var direction = Vector3d.subtractVectors(point, pointInstantLater);
+      var direction = v3d.subtractVectors(point, pointInstantLater);
       direction.normalize();
       var up = point;
       up.normalize();
@@ -11717,17 +11707,17 @@ window.wwtlib = function(){
       }
       scaleFactor *= 1 / renderContext.get_nominalRadius();
       this.worldMatrix = Matrix3d.get_identity();
-      var look = Matrix3d.lookAtLH(Vector3d.create(0, 0, 0), direction, up);
+      var look = Matrix3d.lookAtLH(v3d.create(0, 0, 0), direction, up);
       look.invert();
       this.worldMatrix = Matrix3d.get_identity();
       var localScale = (1 / renderContext.get_nominalRadius()) * this.scale * this.meanRadius;
-      this.worldMatrix.scale(Vector3d.create(localScale, localScale, localScale));
+      this.worldMatrix.scale(v3d.create(localScale, localScale, localScale));
       var mat = Matrix3d.multiplyMatrix(Matrix3d.multiplyMatrix(Matrix3d._rotationY(this.heading), Matrix3d._rotationX(this.pitch)), Matrix3d._rotationZ(this.roll));
       if (!!this.rotationalPeriod) {
         var rotationCurrent = (((SpaceTimeController.get_jNow() - this.zeroRotationDate) / this.rotationalPeriod) * 360) % (360);
         this.worldMatrix._multiply(Matrix3d._rotationX(-rotationCurrent));
       }
-      point = Vector3d.scale(point, scaleFactor);
+      point = v3d.scale(point, scaleFactor);
       this.worldMatrix.translate(point);
       if (this.stationKeeping) {
         this.worldMatrix = Matrix3d.multiplyMatrix(look, this.worldMatrix);
@@ -11948,10 +11938,10 @@ window.wwtlib = function(){
       }
       return;
     }
-    var offset = Matrix3d.translation(Vector3d.negate(centerPoint));
+    var offset = Matrix3d.translation(v3d.negate(centerPoint));
     var world = Matrix3d.multiplyMatrix(renderContext.get_world(), offset);
     var matrixWV = Matrix3d.multiplyMatrix(world, renderContext.get_view());
-    var cam = Vector3d._transformCoordinate(renderContext.cameraPosition, Matrix3d.invertMatrix(renderContext.get_world()));
+    var cam = v3d._transformCoordinate(renderContext.cameraPosition, Matrix3d.invertMatrix(renderContext.get_world()));
     if (MinorPlanets._mpcVertexBuffer != null) {
       for (var i = 0; i < 7; i++) {
         MinorPlanets._mpcBlendStates[i].set_targetState(true);
@@ -12035,7 +12025,7 @@ window.wwtlib = function(){
     }
     catch ($e1) {
     }
-    return Vector3d.create(0, 0, 0);
+    return v3d.create(0, 0, 0);
   };
   Planets.getPlanet3dSufaceAltitude = function(target) {
     try {
@@ -12064,7 +12054,7 @@ window.wwtlib = function(){
       var centerRaDec = AstroCalc.getPlanet(jNow, 0, 0, 0, -6378149);
       var center = Coordinates.raDecTo3dAu(centerRaDec.RA, centerRaDec.dec, centerRaDec.distance);
       if (target === 19) {
-        result = Vector3d.create(-center.x, -center.y, -center.z);
+        result = v3d.create(-center.x, -center.y, -center.z);
       }
       else {
         var planet = AstroCalc.getPlanet(jNow, target, 0, 0, -6378149);
@@ -12096,7 +12086,7 @@ window.wwtlib = function(){
       return result;
     }
     catch ($e1) {
-      return Vector3d.create(0, 0, 0);
+      return v3d.create(0, 0, 0);
     }
   };
   Planets.getPlanetLocation = function(name) {
@@ -12347,7 +12337,7 @@ window.wwtlib = function(){
       var centerRaDec = AstroCalc.getPlanet(Planets._jNow, planetCenter, (threeDee) ? 0 : SpaceTimeController.get_location().get_lat(), (threeDee) ? 0 : SpaceTimeController.get_location().get_lng(), (threeDee) ? -6378149 : SpaceTimeController.get_altitude());
       center = Coordinates.raDecTo3dAu(centerRaDec.RA, centerRaDec.dec, centerRaDec.distance);
     }
-    Planets._planet3dLocations[19] = Vector3d.create(-center.x, -center.y, -center.z);
+    Planets._planet3dLocations[19] = v3d.create(-center.x, -center.y, -center.z);
     Planets._planet3dLocations[19].rotateX(Planets._obliquity);
     for (var i = 0; i < 18; i++) {
       Planets._planetLocations[i] = AstroCalc.getPlanet(Planets._jNow, i, (threeDee) ? 0 : SpaceTimeController.get_location().get_lat(), (threeDee) ? 0 : SpaceTimeController.get_location().get_lng(), (threeDee) ? -6378149 : SpaceTimeController.get_altitude());
@@ -12451,7 +12441,7 @@ window.wwtlib = function(){
                   Planets._orbits[i][j].subtract(center);
                 }
                 else {
-                  Planets._orbits[i][j] = Vector3d.create(-center.x, -center.y, -center.z);
+                  Planets._orbits[i][j] = v3d.create(-center.x, -center.y, -center.z);
                 }
                 Planets._orbits[i][j].rotateX(Planets._obliquity);
               }
@@ -12548,13 +12538,13 @@ window.wwtlib = function(){
     var camera = renderContext.cameraPosition.copy();
     for (var planetId = 0; planetId < 14; planetId++) {
       if (!Planets._planetLocations[planetId].eclipsed) {
-        var distVector = Vector3d.subtractVectors(camera, Vector3d.subtractVectors(Planets._planet3dLocations[planetId], centerPoint));
+        var distVector = v3d.subtractVectors(camera, v3d.subtractVectors(Planets._planet3dLocations[planetId], centerPoint));
         if (!ss.keyExists(Planets._drawOrder, distVector.length())) {
           Planets._drawOrder[distVector.length()] = planetId;
         }
       }
     }
-    var distVectorEarth = Vector3d.subtractVectors(camera, Vector3d.subtractVectors(Planets._planet3dLocations[19], centerPoint));
+    var distVectorEarth = v3d.subtractVectors(camera, v3d.subtractVectors(Planets._planet3dLocations[19], centerPoint));
     if (!ss.keyExists(Planets._drawOrder, distVectorEarth.length())) {
       Planets._drawOrder[distVectorEarth.length()] = 19;
     }
@@ -12585,7 +12575,7 @@ window.wwtlib = function(){
       var pointTest = new Vector3d();
       var lastPoint = new Vector3d();
       var firstPoint = true;
-      var translate = Matrix3d.translation(Vector3d.negate(centerPoint));
+      var translate = Matrix3d.translation(v3d.negate(centerPoint));
       var mat = Matrix3d.multiplyMatrix(translate, renderContext.WVP);
       var matWV = Matrix3d.multiplyMatrix(translate, renderContext.WV);
       for (var i = 0; i < count; i++) {
@@ -12632,7 +12622,7 @@ window.wwtlib = function(){
         var alphaD = alpha / 255;
         var color = Color.fromArgb(alpha, eclipticColor.r, eclipticColor.g, eclipticColor.b);
         if (alpha < 2 && !planetDropped && !firstPoint) {
-          pnt = Vector3d.subtractVectors(planetNow, centerPoint);
+          pnt = v3d.subtractVectors(planetNow, centerPoint);
           alphaD = 1;
           alpha = 255;
           color.a = 255;
@@ -12643,7 +12633,7 @@ window.wwtlib = function(){
           pnt = Planets._orbits[id][i].copy();
           planetDropped = true;
         }
-        pnt = Vector3d.subtractVectors(pnt, centerPoint);
+        pnt = v3d.subtractVectors(pnt, centerPoint);
         if (firstPoint) {
           firstPoint = false;
         }
@@ -12659,7 +12649,7 @@ window.wwtlib = function(){
   };
   Planets.isPlanetInFrustum = function(renderContext, rad) {
     var frustum = renderContext.get_frustum();
-    var center = Vector3d.create(0, 0, 0);
+    var center = v3d.create(0, 0, 0);
     var centerV4 = new Vector4d(0, 0, 0, 1);
     for (var i = 0; i < 6; i++) {
       if (frustum[i].dot(centerV4) + rad < 0) {
@@ -12686,12 +12676,12 @@ window.wwtlib = function(){
     var matOldNonRotating = renderContext.get_worldBaseNonRotating();
     var matLocal = renderContext.get_world().clone();
     var matLocalNR = renderContext.get_world().clone();
-    var translation = Vector3d.subtractVectors(Planets._planet3dLocations[planetID], centerPoint);
-    matLocal.scale(Vector3d.create(radius, radius, radius));
+    var translation = v3d.subtractVectors(Planets._planet3dLocations[planetID], centerPoint);
+    matLocal.scale(v3d.create(radius, radius, radius));
     matLocal._multiply(Matrix3d._rotationY(-rotationCurrent));
     matLocal._multiply(Matrix3d._rotationX((Planets._planetTilts[planetID] * Planets.RC)));
     matLocal._multiply(Matrix3d.translation(translation));
-    matLocalNR.scale(Vector3d.create(radius, radius, radius));
+    matLocalNR.scale(v3d.create(radius, radius, radius));
     matLocalNR._multiply(Matrix3d._rotationX((Planets._planetTilts[planetID] * Planets.RC)));
     matLocalNR._multiply(Matrix3d.translation(translation));
     renderContext.set_world(matLocal);
@@ -12707,10 +12697,10 @@ window.wwtlib = function(){
       var planet = Planets._planet3dLocations[planetID].copy();
       sun = matOld.transform(sun);
       planet = matOld.transform(planet);
-      var sunPosition = Vector3d.subtractVectors(sun, planet);
+      var sunPosition = v3d.subtractVectors(sun, planet);
       sunPosition.normalize();
       renderContext.set_sunPosition(sunPosition);
-      var loc = Vector3d.subtractVectors(Planets._planet3dLocations[planetID], centerPoint);
+      var loc = v3d.subtractVectors(Planets._planet3dLocations[planetID], centerPoint);
       loc.subtract(renderContext.cameraPosition);
       var dist = loc.length();
       var sizeIndexParam = (2 * Math.atan(0.5 * (radius / dist))) / Math.PI * 180;
@@ -12785,15 +12775,15 @@ window.wwtlib = function(){
       Planets._ringsTriangleLists[0] = [];
       Planets._ringsTriangleLists[1] = [];
       var ringSize = 2.25;
-      var TopLeft = Vector3d.create(-ringSize, 0, -ringSize);
-      var TopRight = Vector3d.create(ringSize, 0, -ringSize);
-      var BottomLeft = Vector3d.create(-ringSize, 0, ringSize);
-      var BottomRight = Vector3d.create(ringSize, 0, ringSize);
-      var center = Vector3d.create(0, 0, 0);
-      var leftCenter = Vector3d.create(-ringSize, 0, 0);
-      var topCenter = Vector3d.create(0, 0, -ringSize);
-      var bottomCenter = Vector3d.create(0, 0, ringSize);
-      var rightCenter = Vector3d.create(ringSize, 0, 0);
+      var TopLeft = v3d.create(-ringSize, 0, -ringSize);
+      var TopRight = v3d.create(ringSize, 0, -ringSize);
+      var BottomLeft = v3d.create(-ringSize, 0, ringSize);
+      var BottomRight = v3d.create(ringSize, 0, ringSize);
+      var center = v3d.create(0, 0, 0);
+      var leftCenter = v3d.create(-ringSize, 0, 0);
+      var topCenter = v3d.create(0, 0, -ringSize);
+      var bottomCenter = v3d.create(0, 0, ringSize);
+      var rightCenter = v3d.create(ringSize, 0, 0);
       var level = 6;
       var vertexList;
       vertexList = [];
@@ -12834,8 +12824,8 @@ window.wwtlib = function(){
       var wvp = Matrix3d.multiplyMatrix(wv, renderContext.get_projection());
       var Width = renderContext.width;
       var Height = renderContext.height;
-      wvp.scale(Vector3d.create(Width / 2, -Height / 2, 1));
-      wvp.translate(Vector3d.create(Width / 2, Height / 2, 0));
+      wvp.scale(v3d.create(Width / 2, -Height / 2, 1));
+      wvp.translate(v3d.create(Width / 2, Height / 2, 0));
       var td = 0;
       for (var i = 0; i < 2; i++) {
         var $enum3 = ss.enumerate(Planets._ringsTriangleLists[0]);
@@ -12879,22 +12869,22 @@ window.wwtlib = function(){
       var rads1 = x * radStep;
       var rads2 = (x + 1) * radStep;
       verts[index] = new PositionTexture();
-      verts[index].position = Vector3d.create((Math.cos(rads1) * inner), 0, (Math.sin(rads1) * inner));
+      verts[index].position = v3d.create((Math.cos(rads1) * inner), 0, (Math.sin(rads1) * inner));
       verts[index].tu = 1;
       verts[index].tv = 0;
       index++;
       verts[index] = new PositionTexture();
-      verts[index].position = Vector3d.create((Math.cos(rads1) * outer), 0, (Math.sin(rads1) * outer));
+      verts[index].position = v3d.create((Math.cos(rads1) * outer), 0, (Math.sin(rads1) * outer));
       verts[index].tu = 0;
       verts[index].tv = 0;
       index++;
       verts[index] = new PositionTexture();
-      verts[index].position = Vector3d.create((Math.cos(rads2) * inner), 0, (Math.sin(rads2) * inner));
+      verts[index].position = v3d.create((Math.cos(rads2) * inner), 0, (Math.sin(rads2) * inner));
       verts[index].tu = 1;
       verts[index].tv = 1;
       index++;
       verts[index] = new PositionTexture();
-      verts[index].position = Vector3d.create((Math.cos(rads2) * outer), 0, (Math.sin(rads2) * outer));
+      verts[index].position = v3d.create((Math.cos(rads2) * outer), 0, (Math.sin(rads2) * outer));
       verts[index].tu = 0;
       verts[index].tv = 1;
       index++;
@@ -13364,10 +13354,10 @@ window.wwtlib = function(){
         this._targetHeight = 1;
       }
       var rotLocal = this.viewCamera.rotation;
-      this.cameraPosition = Vector3d.create((Math.sin(rotLocal) * Math.sin(this.viewCamera.angle) * distance), (Math.cos(rotLocal) * Math.sin(this.viewCamera.angle) * distance), (-this._targetHeight - (Math.cos(this.viewCamera.angle) * distance)));
-      var cameraTarget = Vector3d.create(0, 0, -this._targetHeight);
+      this.cameraPosition = v3d.create((Math.sin(rotLocal) * Math.sin(this.viewCamera.angle) * distance), (Math.cos(rotLocal) * Math.sin(this.viewCamera.angle) * distance), (-this._targetHeight - (Math.cos(this.viewCamera.angle) * distance)));
+      var cameraTarget = v3d.create(0, 0, -this._targetHeight);
       var camHeight = this.cameraPosition.length();
-      var lookUp = Vector3d.create(Math.sin(rotLocal) * Math.cos(this.viewCamera.angle), Math.cos(rotLocal) * Math.cos(this.viewCamera.angle), Math.sin(this.viewCamera.angle));
+      var lookUp = v3d.create(Math.sin(rotLocal) * Math.cos(this.viewCamera.angle), Math.cos(rotLocal) * Math.cos(this.viewCamera.angle), Math.sin(this.viewCamera.angle));
       this.set_view(Matrix3d.lookAtLH(this.cameraPosition, cameraTarget, lookUp));
       this.set_viewBase(this.get_view());
       var back = Math.sqrt((distance + 1) * (distance + 1) - 1);
@@ -13436,8 +13426,8 @@ window.wwtlib = function(){
       this.set_worldBase(WorldMatrix.clone());
       var localZoomFactor = this.viewCamera.zoom;
       var FovAngle = (localZoomFactor / 343.774) / Math.PI * 180;
-      this.cameraPosition = Vector3d.create(0, 0, 0);
-      this.set_view(Matrix3d.lookAtLH(this.cameraPosition, Vector3d.create(0, 0, -1), Vector3d.create(Math.sin(camLocal), Math.cos(camLocal), 0)));
+      this.cameraPosition = v3d.create(0, 0, 0);
+      this.set_view(Matrix3d.lookAtLH(this.cameraPosition, v3d.create(0, 0, -1), v3d.create(Math.sin(camLocal), Math.cos(camLocal), 0)));
       this.set_viewBase(this.get_view().clone());
       var m_nearPlane = 0.1;
       this.nearPlane = 0.1;
@@ -13478,9 +13468,9 @@ window.wwtlib = function(){
     setupMatricesOverlays: function() {
       this.set_world(Matrix3d.get_identity());
       var lookAtAdjust = Matrix3d.get_identity();
-      var lookFrom = Vector3d.create(0, 0, 0);
-      var lookAt = Vector3d.create(0, 0, 1);
-      var lookUp = Vector3d.create(0, 1, 0);
+      var lookFrom = v3d.create(0, 0, 0);
+      var lookAt = v3d.create(0, 0, 1);
+      var lookUp = v3d.create(0, 1, 0);
       var view;
       view = Matrix3d.lookAtLH(lookFrom, lookAt, lookUp);
       view._multiply(Matrix3d._scaling(1, -1, 1));
@@ -13519,26 +13509,26 @@ window.wwtlib = function(){
           var val = Math.min(1.903089987, Util.log10(cameraDistance) + 5) / 1.903089987;
           angle = angle * Math.max(0, 1 - val);
         }
-        this.cameraPosition = Vector3d.create((Math.sin(-this.viewCamera.rotation) * Math.sin(angle) * cameraDistance), (Math.cos(-this.viewCamera.rotation) * Math.sin(angle) * cameraDistance), (Math.cos(angle) * cameraDistance));
-        lookUp = Vector3d.create(Math.sin(-this.viewCamera.rotation), Math.cos(-this.viewCamera.rotation), 1E-05);
+        this.cameraPosition = v3d.create((Math.sin(-this.viewCamera.rotation) * Math.sin(angle) * cameraDistance), (Math.cos(-this.viewCamera.rotation) * Math.sin(angle) * cameraDistance), (Math.cos(angle) * cameraDistance));
+        lookUp = v3d.create(Math.sin(-this.viewCamera.rotation), Math.cos(-this.viewCamera.rotation), 1E-05);
       }
       else {
-        this.cameraPosition = Vector3d.create(0, 0, cameraDistance);
-        lookUp = Vector3d.create(Math.sin(-this.viewCamera.rotation), Math.cos(-this.viewCamera.rotation), 0.0001);
+        this.cameraPosition = v3d.create(0, 0, cameraDistance);
+        lookUp = v3d.create(Math.sin(-this.viewCamera.rotation), Math.cos(-this.viewCamera.rotation), 0.0001);
       }
       this.cameraPosition = viewAdjust.transform(this.cameraPosition);
       this._cameraOffset = this.cameraPosition.copy();
       var tmp = trackingMatrix.clone();
       tmp.invert();
-      this._cameraOffset = Vector3d._transformCoordinate(this._cameraOffset, tmp);
+      this._cameraOffset = v3d._transformCoordinate(this._cameraOffset, tmp);
       lookUp = viewAdjust.transform(lookUp);
       this.set_world(Matrix3d.get_identity());
       this.set_worldBase(this.get_world().clone());
       this.set_view(Matrix3d.multiplyMatrix(Matrix3d.multiplyMatrix(trackingMatrix, Matrix3d.lookAtLH(this.cameraPosition, lookAt, lookUp)), lookAtAdjust));
       this.set_viewBase(this.get_view().clone());
-      var temp = Vector3d.subtractVectors(lookAt, this.cameraPosition);
+      var temp = v3d.subtractVectors(lookAt, this.cameraPosition);
       temp.normalize();
-      temp = Vector3d._transformCoordinate(temp, trackingMatrix);
+      temp = v3d._transformCoordinate(temp, trackingMatrix);
       temp.normalize();
       this._viewPoint = temp;
       var radius = Planets.getAdjustedPlanetRadius(this.get_solarSystemTrack());
@@ -13609,8 +13599,8 @@ window.wwtlib = function(){
         this._frustum[i].normalize();
       }
       this._frustumDirty = false;
-      this.WVP.scale(Vector3d.create(this.width / 2, -this.height / 2, 1));
-      this.WVP.translate(Vector3d.create(this.width / 2, this.height / 2, 0));
+      this.WVP.scale(v3d.create(this.width / 2, -this.height / 2, 1));
+      this.WVP.translate(v3d.create(this.width / 2, this.height / 2, 0));
       this._setMatrixes();
     },
     _initGL: function() {
@@ -13755,13 +13745,13 @@ window.wwtlib = function(){
       var x = a.x + b.x + c.x;
       var y = a.y + b.y + c.y;
       var z = a.z + b.z + c.z;
-      this.normal = Vector3d.create(x / 3, y / 3, z / 3);
+      this.normal = v3d.create(x / 3, y / 3, z / 3);
       this.normal.normalize();
     },
     _checkBackface: function() {
-      var ab = Vector3d.subtractVectors(this._ta, this._tb);
-      var ac = Vector3d.subtractVectors(this._ta, this._tc);
-      var cp = Vector3d.cross(ab, ac);
+      var ab = v3d.subtractVectors(this._ta, this._tb);
+      var ac = v3d.subtractVectors(this._ta, this._tc);
+      var cp = v3d.cross(ab, ac);
       cp.normalize();
       return cp.z >= 0;
     },
@@ -14715,7 +14705,7 @@ window.wwtlib = function(){
     },
     draw: function(renderContext, opacity, color) {
       if (renderContext.gl == null) {
-        var viewPoint = Vector3d._transformCoordinate(renderContext.get_viewPoint(), this.viewTransform);
+        var viewPoint = v3d._transformCoordinate(renderContext.get_viewPoint(), this.viewTransform);
         var drawHeight = (this.height / renderContext.get_fovAngle()) * renderContext.height / 180;
         var $enum1 = ss.enumerate(this.items);
         while ($enum1.moveNext()) {
@@ -14971,7 +14961,7 @@ window.wwtlib = function(){
     this.up = up;
     this.center = center;
     this.scale = scale;
-    this.top = Vector3d.addVectors(center, Vector3d.scale(up, scale));
+    this.top = v3d.addVectors(center, v3d.scale(up, scale));
     if (fontsize < 0) {
       this.sky = false;
     }
@@ -14982,12 +14972,12 @@ window.wwtlib = function(){
       for (var i = 0; i < 6; i++) {
         points[i] = new PositionTexture();
       }
-      var left = Vector3d.cross(this.center, this.up);
-      var right = Vector3d.cross(this.up, this.center);
+      var left = v3d.cross(this.center, this.up);
+      var right = v3d.cross(this.up, this.center);
       left.normalize();
       right.normalize();
       this.up.normalize();
-      var upTan = Vector3d.cross(this.center, right);
+      var upTan = v3d.cross(this.center, right);
       upTan.normalize();
       if (!this.alignment) {
         left.multiply(this.width - position.get_left() * 2);
@@ -14998,7 +14988,7 @@ window.wwtlib = function(){
         right.multiply(position.get_right() * 2);
       }
       var top = upTan.copy();
-      var bottom = Vector3d.subtractVectors(Vector3d.get_empty(), upTan);
+      var bottom = v3d.subtractVectors(v3d.get_empty(), upTan);
       top.multiply(this.height - position.get_top() * 2);
       bottom.multiply(this.height - ((this.height * 2) - position.get_bottom() * 2));
       var ul = this.center.copy();
@@ -15060,7 +15050,7 @@ window.wwtlib = function(){
           this._matInit = true;
         }
         for (var i = 0; i < 6; i++) {
-          points[i].position = Vector3d._transformCoordinate(points[i].position, this._rtbMat);
+          points[i].position = v3d._transformCoordinate(points[i].position, this._rtbMat);
         }
       }
       var $enum1 = ss.enumerate(points);
@@ -15572,7 +15562,7 @@ window.wwtlib = function(){
     },
     geoTo3dWithAltitude: function(lat, lng, altitude, useLocalCenter) {
       var radius = 1 + (altitude / this.get__demScaleFactor());
-      var retVal = Vector3d.create((Math.cos(lng * Tile.RC) * Math.cos(lat * Tile.RC) * radius), (Math.sin(lat * Tile.RC) * radius), (Math.sin(lng * Tile.RC) * Math.cos(lat * Tile.RC) * radius));
+      var retVal = v3d.create((Math.cos(lng * Tile.RC) * Math.cos(lat * Tile.RC) * radius), (Math.sin(lat * Tile.RC) * radius), (Math.sin(lng * Tile.RC) * Math.cos(lat * Tile.RC) * radius));
       if (useLocalCenter) {
         retVal.subtract(this.localCenter);
       }
@@ -15916,12 +15906,12 @@ window.wwtlib = function(){
     },
     geoTo3d: function(lat, lng, useLocalCenter) {
       if (this.dataset.get_dataSetType() === 3) {
-        var retVal = Vector3d.create(-(Math.cos(lng * Tile.RC) * Math.cos(lat * Tile.RC) * this.radius), (Math.sin(lat * Tile.RC) * this.radius), (Math.sin(lng * Tile.RC) * Math.cos(lat * Tile.RC) * this.radius));
+        var retVal = v3d.create(-(Math.cos(lng * Tile.RC) * Math.cos(lat * Tile.RC) * this.radius), (Math.sin(lat * Tile.RC) * this.radius), (Math.sin(lng * Tile.RC) * Math.cos(lat * Tile.RC) * this.radius));
         return retVal;
       }
       else {
         lng -= 180;
-        var retVal = Vector3d.create((Math.cos(lng * Tile.RC) * Math.cos(lat * Tile.RC) * this.radius), (Math.sin(lat * Tile.RC) * this.radius), (Math.sin(lng * Tile.RC) * Math.cos(lat * Tile.RC) * this.radius));
+        var retVal = v3d.create((Math.cos(lng * Tile.RC) * Math.cos(lat * Tile.RC) * this.radius), (Math.sin(lat * Tile.RC) * this.radius), (Math.sin(lng * Tile.RC) * Math.cos(lat * Tile.RC) * this.radius));
         return retVal;
       }
     },
@@ -16157,10 +16147,10 @@ window.wwtlib = function(){
         var key = $enum1.current;
         var t = TileCache._queue[key];
         if (!t.requestPending && t.inViewFrustum) {
-          var vectTemp = Vector3d.makeCopy(t.get_sphereCenter());
+          var vectTemp = Vv3d.makeCopy(t.get_sphereCenter());
           vectTemp._transformByMatrics(renderContext.get_world());
           if (renderContext.space) {
-            vectTemp.subtract(Vector3d.create(0, 0, -1));
+            vectTemp.subtract(v3d.create(0, 0, -1));
           }
           else {
             vectTemp.subtract(renderContext.cameraPosition);
@@ -16328,9 +16318,9 @@ window.wwtlib = function(){
   function DistanceCalc() {
   }
   DistanceCalc.lineToPoint = function(l0, l1, p) {
-    var v = Vector3d.subtractVectors(l1, l0);
-    var w = Vector3d.subtractVectors(p, l0);
-    var dist = Vector3d.cross(w, v).length() / v.length();
+    var v = v3d.subtractVectors(l1, l0);
+    var w = v3d.subtractVectors(p, l0);
+    var dist = v3d.cross(w, v).length() / v.length();
     return dist;
   };
   DistanceCalc.getUVFromInnerPoint = function(ul, ur, ll, lr, pnt) {
@@ -16810,15 +16800,15 @@ window.wwtlib = function(){
     makePosition: function(centerX, centerY, offsetX, offsetY, angle) {
       centerX -= 960;
       centerY -= 558;
-      var point = Vector3d.create(centerX + offsetX, centerY + offsetY, 1347);
+      var point = v3d.create(centerX + offsetX, centerY + offsetY, 1347);
       if (!!this._domeMatX || !!this._domeMatY || this._domeAngle !== angle) {
         this._domeMatX = centerX;
         this._domeMatY = centerY;
-        this._domeMatrix = Matrix3d.translation(Vector3d.create(-centerX, -centerY, 0));
+        this._domeMatrix = Matrix3d.translation(v3d.create(-centerX, -centerY, 0));
         this._domeMatrix._multiply(Matrix3d._rotationZ((angle / 180 * Math.PI)));
-        this._domeMatrix._multiply(Matrix3d.translation(Vector3d.create(centerX, centerY, 0)));
+        this._domeMatrix._multiply(Matrix3d.translation(v3d.create(centerX, centerY, 0)));
       }
-      point = Vector3d._transformCoordinate(point, this._domeMatrix);
+      point = v3d._transformCoordinate(point, this._domeMatrix);
       return point;
     },
     draw3D: function(renderContext, designTime) {
@@ -22777,9 +22767,9 @@ window.wwtlib = function(){
   };
   var Triangle$ = {
     subDivide: function(triList, vertexList) {
-      var a1 = Vector3d.lerp(vertexList[this.b].position, vertexList[this.c].position, 0.5);
-      var b1 = Vector3d.lerp(vertexList[this.c].position, vertexList[this.a].position, 0.5);
-      var c1 = Vector3d.lerp(vertexList[this.a].position, vertexList[this.b].position, 0.5);
+      var a1 = v3d.lerp(vertexList[this.b].position, vertexList[this.c].position, 0.5);
+      var b1 = v3d.lerp(vertexList[this.c].position, vertexList[this.a].position, 0.5);
+      var c1 = v3d.lerp(vertexList[this.a].position, vertexList[this.b].position, 0.5);
       var a1uv = Vector2d.lerp(Vector2d.create(vertexList[this.b].tu, vertexList[this.b].tv), Vector2d.create(vertexList[this.c].tu, vertexList[this.c].tv), 0.5);
       var b1uv = Vector2d.lerp(Vector2d.create(vertexList[this.c].tu, vertexList[this.c].tv), Vector2d.create(vertexList[this.a].tu, vertexList[this.a].tv), 0.5);
       var c1uv = Vector2d.lerp(Vector2d.create(vertexList[this.a].tu, vertexList[this.a].tv), Vector2d.create(vertexList[this.b].tu, vertexList[this.b].tv), 0.5);
@@ -22798,9 +22788,9 @@ window.wwtlib = function(){
       triList.push(Triangle.create(aIndex, bIndex, cIndex));
     },
     subDivideNoNormalize: function(triList, vertexList) {
-      var a1 = Vector3d.lerp(vertexList[this.b].position, vertexList[this.c].position, 0.5);
-      var b1 = Vector3d.lerp(vertexList[this.c].position, vertexList[this.a].position, 0.5);
-      var c1 = Vector3d.lerp(vertexList[this.a].position, vertexList[this.b].position, 0.5);
+      var a1 = v3d.lerp(vertexList[this.b].position, vertexList[this.c].position, 0.5);
+      var b1 = v3d.lerp(vertexList[this.c].position, vertexList[this.a].position, 0.5);
+      var c1 = v3d.lerp(vertexList[this.a].position, vertexList[this.b].position, 0.5);
       var a1uv = Vector2d.lerp(Vector2d.create(vertexList[this.b].tu, vertexList[this.b].tv), Vector2d.create(vertexList[this.c].tu, vertexList[this.c].tv), 0.5);
       var b1uv = Vector2d.lerp(Vector2d.create(vertexList[this.c].tu, vertexList[this.c].tv), Vector2d.create(vertexList[this.a].tu, vertexList[this.a].tv), 0.5);
       var c1uv = Vector2d.lerp(Vector2d.create(vertexList[this.a].tu, vertexList[this.a].tv), Vector2d.create(vertexList[this.b].tu, vertexList[this.b].tv), 0.5);
@@ -23865,7 +23855,7 @@ window.wwtlib = function(){
       ctx.globalAlpha = 0.4;
       var width = renderContext.width;
       var height = renderContext.height;
-      var viewPoint = Vector3d.makeCopy(renderContext.get_viewPoint());
+      var viewPoint = v3d.makeCopy(renderContext.get_viewPoint());
       var scaleFactor = renderContext.get_fovScale() / 100;
       var $enum1 = ss.enumerate(this.items);
       while ($enum1.moveNext()) {
@@ -24392,7 +24382,7 @@ window.wwtlib = function(){
         var matOld = this.renderContext.get_world();
         var matLocal = this.renderContext.get_world();
         matLocal._multiply(Matrix3d.translation(this.renderContext.viewCamera.viewTarget));
-        this.renderContext.cameraPosition = Vector3d.subtractVectors(this.renderContext.cameraPosition, this.renderContext.viewCamera.viewTarget);
+        this.renderContext.cameraPosition = v3d.subtractVectors(this.renderContext.cameraPosition, this.renderContext.viewCamera.viewTarget);
         this.renderContext.set_world(matLocal);
         this.renderContext.makeFrustum();
         if (Settings.get_active().get_solarSystemCosmos()) {
@@ -24406,7 +24396,7 @@ window.wwtlib = function(){
         }
         matLocal = matOld;
         var pnt = this.renderContext.viewCamera.viewTarget;
-        var vt = Vector3d.create(-pnt.x, -pnt.y, -pnt.z);
+        var vt = v3d.create(-pnt.x, -pnt.y, -pnt.z);
         this.renderContext.cameraPosition = oldCamera;
         matLocal._multiply(Matrix3d.translation(vt));
         this.renderContext.set_world(matLocal);
@@ -25135,7 +25125,7 @@ window.wwtlib = function(){
               var vect = Coordinates.raDecTo3dAu(place.get_RA(), place.get_dec(), place.get_distance());
               var ecliptic = Coordinates.meanObliquityOfEcliptic(SpaceTimeController.get_jNow()) / 180 * Math.PI;
               vect.rotateX(ecliptic);
-              camTo.viewTarget = Vector3d.negate(camTo.viewTarget);
+              camTo.viewTarget = v3d.negate(camTo.viewTarget);
             }
             else {
               camTo.viewTarget = Planets.getPlanet3dLocationJD(target, SpaceTimeController.getJNowForFutureTime(jumpTime));
@@ -25202,7 +25192,7 @@ window.wwtlib = function(){
             var toVector = camTo.viewTarget;
             toVector.subtract(fromParams.viewTarget);
             if (place.get_classification() === 1) {
-              toVector = Vector3d.negate(toVector);
+              toVector = v3d.negate(toVector);
             }
             if (!!toVector.length()) {
               var raDec = toVector.toRaDec();
@@ -25670,7 +25660,7 @@ window.wwtlib = function(){
     temp.angle = angle;
     temp.raDec = false;
     temp.opacity = opactity;
-    temp.viewTarget = Vector3d.create(0, 0, 0);
+    temp.viewTarget = v3d.create(0, 0, 0);
     temp.target = 20;
     temp.targetReferenceFrame = '';
     return temp;
@@ -25698,7 +25688,7 @@ window.wwtlib = function(){
     }
     result.zoom = Math.pow(2, CameraParameters.logN(to.zoom, 2) * alpha + CameraParameters.logN(from.zoom, 2) * (1 - alpha));
     result.opacity = (to.opacity * alpha + from.opacity * (1 - alpha));
-    result.viewTarget = Vector3d.lerp(from.viewTarget, to.viewTarget, alpha);
+    result.viewTarget = v3d.lerp(from.viewTarget, to.viewTarget, alpha);
     result.targetReferenceFrame = to.targetReferenceFrame;
     if (to.target === from.target) {
       result.target = to.target;
@@ -25717,13 +25707,13 @@ window.wwtlib = function(){
     result.rotation = to.rotation * alpha + from.rotation * (1 - alpha);
     var left = Coordinates.geoTo3dDouble(from.lat, from.lng);
     var right = Coordinates.geoTo3dDouble(to.lat, to.lng);
-    var mid = Vector3d.slerp(left, right, alpha);
+    var mid = v3d.slerp(left, right, alpha);
     var midV2 = Coordinates.cartesianToLatLng(mid);
     result.lat = midV2.y;
     result.lng = midV2.x;
     result.zoom = Math.pow(2, CameraParameters.logN(to.zoom, 2) * alpha + CameraParameters.logN(from.zoom, 2) * (1 - alpha));
     result.opacity = (to.opacity * alpha + from.opacity * (1 - alpha));
-    result.viewTarget = Vector3d.lerp(from.viewTarget, to.viewTarget, alpha);
+    result.viewTarget = v3d.lerp(from.viewTarget, to.viewTarget, alpha);
     result.targetReferenceFrame = to.targetReferenceFrame;
     if (to.target === from.target) {
       result.target = to.target;
@@ -26366,7 +26356,7 @@ window.wwtlib = function(){
       var key = $enum1.current;
       var centroid = Constellations.constellationCentroids[key];
       var center = Coordinates.raDecTo3dAu(centroid.get_RA(), centroid.get_dec(), 1);
-      var up = Vector3d.create(0, 1, 0);
+      var up = v3d.create(0, 1, 0);
       var name = centroid.get_name();
       if (centroid.get_name() === 'Triangulum Australe') {
         name = ss.replaceString(name, ' ', '\n   ');
@@ -27049,30 +27039,30 @@ window.wwtlib = function(){
     this._declination = declination;
   }
   Coordinates.geoTo3d = function(lat, lng) {
-    return Vector3d.create((Math.cos(lng * Coordinates.RC) * Math.cos(lat * Coordinates.RC) * 1), (Math.sin(lat * Coordinates.RC) * 1), (Math.sin(lng * Coordinates.RC) * Math.cos(lat * Coordinates.RC) * 1));
+    return v3d.create((Math.cos(lng * Coordinates.RC) * Math.cos(lat * Coordinates.RC) * 1), (Math.sin(lat * Coordinates.RC) * 1), (Math.sin(lng * Coordinates.RC) * Math.cos(lat * Coordinates.RC) * 1));
   };
   Coordinates.geoTo3dDouble = function(lat, lng) {
-    return Vector3d.create(Math.cos(lng * Coordinates.RC) * Math.cos(lat * Coordinates.RC) * 1, Math.sin(lat * Coordinates.RC) * 1, Math.sin(lng * Coordinates.RC) * Math.cos(lat * Coordinates.RC) * 1);
+    return v3d.create(Math.cos(lng * Coordinates.RC) * Math.cos(lat * Coordinates.RC) * 1, Math.sin(lat * Coordinates.RC) * 1, Math.sin(lng * Coordinates.RC) * Math.cos(lat * Coordinates.RC) * 1);
   };
   Coordinates.geoTo3dDoubleRad = function(lat, lng, radius) {
     lng -= 180;
-    return Vector3d.create(Math.cos(lng * Coordinates.RC) * Math.cos(lat * Coordinates.RC) * radius, Math.sin(lat * Coordinates.RC) * radius, Math.sin(lng * Coordinates.RC) * Math.cos(lat * Coordinates.RC) * radius);
+    return v3d.create(Math.cos(lng * Coordinates.RC) * Math.cos(lat * Coordinates.RC) * radius, Math.sin(lat * Coordinates.RC) * radius, Math.sin(lng * Coordinates.RC) * Math.cos(lat * Coordinates.RC) * radius);
   };
   Coordinates.geoTo3dRad = function(lat, lng, radius) {
-    return Vector3d.create((Math.cos(lng * Coordinates.RC) * Math.cos(lat * Coordinates.RC) * radius), (Math.sin(lat * Coordinates.RC) * radius), (Math.sin(lng * Coordinates.RC) * Math.cos(lat * Coordinates.RC) * radius));
+    return v3d.create((Math.cos(lng * Coordinates.RC) * Math.cos(lat * Coordinates.RC) * radius), (Math.sin(lat * Coordinates.RC) * radius), (Math.sin(lng * Coordinates.RC) * Math.cos(lat * Coordinates.RC) * radius));
   };
   Coordinates.raDecTo3d = function(ra, dec) {
-    return Vector3d.create((Math.cos(ra * Coordinates.RCRA) * Math.cos(dec * Coordinates.RC) * 1), (Math.sin(dec * Coordinates.RC) * 1), (Math.sin(ra * Coordinates.RCRA) * Math.cos(dec * Coordinates.RC) * 1));
+    return v3d.create((Math.cos(ra * Coordinates.RCRA) * Math.cos(dec * Coordinates.RC) * 1), (Math.sin(dec * Coordinates.RC) * 1), (Math.sin(ra * Coordinates.RCRA) * Math.cos(dec * Coordinates.RC) * 1));
   };
   Coordinates.raDecTo3dAu = function(ra, dec, au) {
-    return Vector3d.create((Math.cos(ra * Coordinates.RCRA) * Math.cos(dec * Coordinates.RC) * au), (Math.sin(dec * Coordinates.RC) * au), (Math.sin(ra * Coordinates.RCRA) * Math.cos(dec * Coordinates.RC) * au));
+    return v3d.create((Math.cos(ra * Coordinates.RCRA) * Math.cos(dec * Coordinates.RC) * au), (Math.sin(dec * Coordinates.RC) * au), (Math.sin(ra * Coordinates.RCRA) * Math.cos(dec * Coordinates.RC) * au));
   };
   Coordinates.raDecTo3dMat = function(ra, dec, mat) {
-    return Vector3d._transformCoordinate(Vector3d.create((Math.cos(ra * Coordinates.RCRA) * Math.cos(dec * Coordinates.RC) * 1), (Math.sin(dec * Coordinates.RC) * 1), (Math.sin(ra * Coordinates.RCRA) * Math.cos(dec * Coordinates.RC) * 1)), mat);
+    return v3d._transformCoordinate(v3d.create((Math.cos(ra * Coordinates.RCRA) * Math.cos(dec * Coordinates.RC) * 1), (Math.sin(dec * Coordinates.RC) * 1), (Math.sin(ra * Coordinates.RCRA) * Math.cos(dec * Coordinates.RC) * 1)), mat);
   };
   Coordinates.raDecTo3dPointRad = function(point, radius) {
     point.set_dec(-point.get_dec());
-    return Vector3d.create((Math.cos(point.get_RA() * Coordinates.RCRA) * Math.cos(point.get_dec() * Coordinates.RC) * radius), (Math.sin(point.get_dec() * Coordinates.RC) * radius), (Math.sin(point.get_RA() * Coordinates.RCRA) * Math.cos(point.get_dec() * Coordinates.RC) * radius));
+    return v3d.create((Math.cos(point.get_RA() * Coordinates.RCRA) * Math.cos(point.get_dec() * Coordinates.RC) * radius), (Math.sin(point.get_dec() * Coordinates.RC) * radius), (Math.sin(point.get_RA() * Coordinates.RCRA) * Math.cos(point.get_dec() * Coordinates.RC) * radius));
   };
   Coordinates.sterographicTo3d = function(x, y, radius, standardLat, meridean, falseEasting, falseNorthing, scale, north) {
     var lat = 90;
@@ -27412,7 +27402,7 @@ window.wwtlib = function(){
     distance3d: function(pointB) {
       var pnt1 = Coordinates.geoTo3dDouble(pointB.get_lat(), pointB.get_lng());
       var pnt2 = Coordinates.geoTo3dDouble(this.get_lat(), this.get_lng());
-      var pntDiff = Vector3d.subtractVectors(pnt1, pnt2);
+      var pntDiff = v3d.subtractVectors(pnt1, pnt2);
       return pntDiff.length() / Coordinates.RC;
     },
     angle: function(pointB) {
@@ -27506,7 +27496,7 @@ window.wwtlib = function(){
   };
   PositionTexture.create = function(xvalue, yvalue, zvalue, u, v) {
     var temp = new PositionTexture();
-    temp.position = Vector3d.create(xvalue, yvalue, zvalue);
+    temp.position = v3d.create(xvalue, yvalue, zvalue);
     temp.tu = u * Tile.uvMultiple;
     temp.tv = v * Tile.uvMultiple;
     return temp;
@@ -27514,7 +27504,7 @@ window.wwtlib = function(){
   var PositionTexture$ = {
     copy: function() {
       var temp = new PositionTexture();
-      temp.position = Vector3d.makeCopy(this.position);
+      temp.position = v3d.makeCopy(this.position);
       temp.tu = this.tu;
       temp.tv = this.tv;
       return temp;
@@ -27556,7 +27546,7 @@ window.wwtlib = function(){
   };
   PositionColoredTextured.create = function(xvalue, yvalue, zvalue, u, v) {
     var temp = new PositionTexture();
-    temp.position = Vector3d.create(xvalue, yvalue, zvalue);
+    temp.position = v3d.create(xvalue, yvalue, zvalue);
     temp.tu = u * Tile.uvMultiple;
     temp.tv = v * Tile.uvMultiple;
     return temp;
@@ -27564,7 +27554,7 @@ window.wwtlib = function(){
   var PositionColoredTextured$ = {
     copy: function() {
       var temp = new PositionTexture();
-      temp.position = Vector3d.makeCopy(this.position);
+      temp.position = v3d.makeCopy(this.position);
       temp.tu = this.tu;
       temp.tv = this.tv;
       return temp;
@@ -27594,221 +27584,210 @@ window.wwtlib = function(){
 
 
   // wwtlib.Vector3d
+  function Vector3d(x, y, z) {
+      this.x = x;
+      this.y = y;
+      this.z = z;
+  };
+  Vector3d.prototype = {
 
-  function Vector3d() {
-    this.x = 0;
-    this.y = 0;
-    this.z = 0;
+      round: function () {
+          this.x = ss.truncate((this.x * 65536)) / 65536;
+          this.y = ss.truncate((this.y * 65536)) / 65536;
+          this.z = ss.truncate((this.z * 65536)) / 65536;
+      },
+      add: function (source) {
+          this.x += source.x;
+          this.y += source.y;
+          this.z += source.z;
+      },
+      length: function () {
+          return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+      },
+      lengthSq: function () {
+          return this.x * this.x + this.y * this.y + this.z * this.z;
+      },
+      multiply: function (s) {
+          this.x *= s;
+          this.y *= s;
+          this.z *= s;
+      },
+      normalize: function () {
+          var length = this.length();
+          if (!!length) {
+              this.x /= length;
+              this.y /= length;
+              this.z /= length;
+          }
+      },
+      rotateX: function (radians) {
+          var zTemp;
+          var yTemp;
+          yTemp = this.y * Math.cos(radians) - this.z * Math.sin(radians);
+          zTemp = this.y * Math.sin(radians) + this.z * Math.cos(radians);
+          this.z = zTemp;
+          this.y = yTemp;
+      },
+      rotateZ: function (radians) {
+          var xTemp;
+          var yTemp;
+          xTemp = this.x * Math.cos(radians) - this.y * Math.sin(radians);
+          yTemp = this.x * Math.sin(radians) + this.y * Math.cos(radians);
+          this.y = yTemp;
+          this.x = xTemp;
+      },
+      rotateY: function (radians) {
+          var zTemp;
+          var xTemp;
+          zTemp = this.z * Math.cos(radians) - this.x * Math.sin(radians);
+          xTemp = this.z * Math.sin(radians) + this.x * Math.cos(radians);
+          this.x = xTemp;
+          this.z = zTemp;
+      },
+      subtract: function (source) {
+          this.x -= source.x;
+          this.y -= source.y;
+          this.z -= source.z;
+      },
+      toString: function () {
+          return ss.format('{0}, {1}, {2}', this.x, this.y, this.z);
+      },
+      toSpherical: function () {
+          var ascention;
+          var declination;
+          var radius = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+          var XZ = Math.sqrt(this.x * this.x + this.z * this.z);
+          declination = Math.asin(this.y / radius);
+          if (!XZ) {
+              ascention = 0;
+          }
+          else if (0 <= this.x) {
+              ascention = Math.asin(this.z / XZ);
+          }
+          else {
+              ascention = Math.PI - Math.asin(this.z / XZ);
+          }
+          return Vector2d.create(((ascention + Math.PI) % (2 * Math.PI)), (declination + (Math.PI / 2)));
+      },
+      toRaDec: function () {
+          var point = this.toSpherical();
+          point.x = point.x / Math.PI * 12;
+          point.y = (point.y / Math.PI * 180) - 90;
+          return point;
+      },
+      distanceToLine: function (x1, x2) {
+          var t1 = v3d.subtractVectors(x2, x1);
+          var t2 = v3d.subtractVectors(x1, this);
+          var t3 = v3d.cross(t1, t2);
+          var d1 = t3.length();
+          var t4 = subtractVectors(x2, x1);
+          var d2 = t4.length();
+          return d1 / d2;
+      },
+      _transformByMatrics: function (lookAtAdjust) {
+          var temp = lookAtAdjust.transform(this);
+          this.x = temp.x;
+          this.y = temp.y;
+          this.z = temp.z;
+      }
   }
-  Vector3d.create = function(valueX, valueY, valueZ) {
-    var temp = new Vector3d();
-    temp.x = valueX;
-    temp.y = valueY;
-    temp.z = valueZ;
-    return temp;
-  };
-  Vector3d.makeCopy = function(value) {
-    var temp = new Vector3d();
-    temp.x = value.x;
-    temp.y = value.y;
-    temp.z = value.z;
-    return temp;
-  };
-  Vector3d.negate = function(vec) {
-    return Vector3d.create(-vec.x, -vec.y, -vec.z);
-  };
-  Vector3d.midPoint = function(left, right) {
-    var result = Vector3d.create((left.x + right.x) / 2, (left.y + right.y) / 2, (left.z + right.z) / 2);
-    result.normalize();
-    return result;
-  };
-  Vector3d.midPointByLength = function(left, right) {
-    var result = Vector3d.create((left.x + right.x) / 2, (left.y + right.y) / 2, (left.z + right.z) / 2);
-    result.normalize();
-    result.multiply(left.length());
-    return result;
-  };
-  Vector3d.get_empty = function() {
-    return Vector3d.create(0, 0, 0);
-  };
-  Vector3d.addVectors = function(left, right) {
-    return Vector3d.create(left.x + right.x, left.y + right.y, left.z + right.z);
-  };
-  Vector3d.cross = function(left, right) {
-    return Vector3d.create(left.y * right.z - left.z * right.y, left.z * right.x - left.x * right.z, left.x * right.y - left.y * right.x);
-  };
-  Vector3d.dot = function(left, right) {
-    return left.x * right.x + left.y * right.y + left.z * right.z;
-  };
-  Vector3d.getLength = function(source) {
-    return Math.sqrt(source.x * source.x + source.y * source.y + source.z * source.z);
-  };
-  Vector3d.getLengthSq = function(source) {
-    return source.x * source.x + source.y * source.y + source.z * source.z;
-  };
-  Vector3d.lerp = function(left, right, interpolater) {
-    return Vector3d.create(left.x * (1 - interpolater) + right.x * interpolater, left.y * (1 - interpolater) + right.y * interpolater, left.z * (1 - interpolater) + right.z * interpolater);
-  };
-  Vector3d.midpoint = function(left, right) {
-    var tmp = Vector3d.create(left.x * (0.5) + right.x * 0.5, left.y * (0.5) + right.y * 0.5, left.z * (0.5) + right.z * 0.5);
-    tmp.normalize();
-    return tmp;
-  };
-  Vector3d.slerp = function(left, right, interpolater) {
-    var dot = Vector3d.dot(left, right);
-    while (dot < 0.98) {
-      var middle = Vector3d.midpoint(left, right);
-      if (interpolater > 0.5) {
-        left = middle;
-        interpolater -= 0.5;
-        interpolater *= 2;
+
+  var v3d = function () {
+      return {
+          create: function (x, y, z) {
+              return new Vector3d(x, y, z);
+          },
+          makeCopy: function (v) {
+              return new Vector3d(v.x, v.y, v.z);
+          },
+          copy: function (v) { return this.makeCopy(v) },
+          negate: function (vec) {
+              return new Vector3d(-vec.x, -vec.y, -vec.z);
+          },
+          midPoint: function (left, right) {
+              var result = v3d.create((left.x + right.x) / 2, (left.y + right.y) / 2, (left.z + right.z) / 2);
+              result.normalize();
+              return result;
+          },
+          midPointByLength: function (left, right) {
+              var result = v3d.create((left.x + right.x) / 2, (left.y + right.y) / 2, (left.z + right.z) / 2);
+              result.normalize();
+              result.multiply(left.length());
+              return result;
+          },
+          get_empty: function () {
+              return new Vector3d(0, 0, 0);
+          },
+          addVectors: function (left, right) {
+              return new Vector3d(left.x + right.x, left.y + right.y, left.z + right.z);
+          },
+          cross: function (left, right) {
+              return v3d.create(left.y * right.z - left.z * right.y, left.z * right.x - left.x * right.z, left.x * right.y - left.y * right.x);
+          },
+          dot: function (left, right) {
+              return left.x * right.x + left.y * right.y + left.z * right.z;
+          }, getLength: function (source) {
+              return Math.sqrt(source.x * source.x + source.y * source.y + source.z * source.z);
+          },
+          getLengthSq = function (source) {
+              return source.x * source.x + source.y * source.y + source.z * source.z;
+          },
+          lerp: function (left, right, interpolater) {
+              return v3d.create(left.x * (1 - interpolater) + right.x * interpolater, left.y * (1 - interpolater) + right.y * interpolater, left.z * (1 - interpolater) + right.z * interpolater);
+          },
+          midpoint: function (left, right) {
+              var tmp = v3d.create(left.x * (0.5) + right.x * 0.5, left.y * (0.5) + right.y * 0.5, left.z * (0.5) + right.z * 0.5);
+              tmp.normalize();
+              return tmp;
+          },
+          slerp: function (left, right, interpolater) {
+              var dot = Vector3d.dot(left, right);
+              while (dot < 0.98) {
+                  var middle = v3d.midpoint(left, right);
+                  if (interpolater > 0.5) {
+                      left = middle;
+                      interpolater -= 0.5;
+                      interpolater *= 2;
+                  }
+                  else {
+                      right = middle;
+                      interpolater *= 2;
+                  }
+                  dot = Vector3d.dot(left, right);
+              }
+              var tmp = v3d.lerp(left, right, interpolater);
+              tmp.normalize();
+              return tmp;
+          },
+          multiplyScalar: function (source, f) {
+              var result = source.copy();
+              result.multiply(f);
+              return result;
+          },
+          scale: function (source, scalingFactor) {
+              var result = source;
+              result.multiply(scalingFactor);
+              return result;
+          },
+          subtractVectors: function (left, right) {
+              var result = left.copy();
+              result.subtract(right);
+              return result;
+          },
+          parse: function (data) {
+              var list = data.split(',');
+              return list.length === 3 ? new Vector3d(
+                  parseFloat(list[0]),
+                  parseFloat(list[1]),
+                  parseFloat(list[2])
+              ) : new Vector3d(0, 0, 0);
+
+          },
+          _transformCoordinate: function (vector3d, mat) {
+              return mat.transform(vector3d);
+          }
       }
-      else {
-        right = middle;
-        interpolater *= 2;
-      }
-      dot = Vector3d.dot(left, right);
-    }
-    var tmp = Vector3d.lerp(left, right, interpolater);
-    tmp.normalize();
-    return tmp;
-  };
-  Vector3d.multiplyScalar = function(source, f) {
-    var result = source.copy();
-    result.multiply(f);
-    return result;
-  };
-  Vector3d.scale = function(source, scalingFactor) {
-    var result = source;
-    result.multiply(scalingFactor);
-    return result;
-  };
-  Vector3d.subtractVectors = function(left, right) {
-    var result = left.copy();
-    result.subtract(right);
-    return result;
-  };
-  Vector3d.parse = function(data) {
-    var newVector = new Vector3d();
-    var list = data.split(',');
-    if (list.length === 3) {
-      newVector.x = parseFloat(list[0]);
-      newVector.y = parseFloat(list[1]);
-      newVector.z = parseFloat(list[2]);
-    }
-    return newVector;
-  };
-  Vector3d._transformCoordinate = function(vector3d, mat) {
-    return mat.transform(vector3d);
-  };
-  var Vector3d$ = {
-    copy: function() {
-      var temp = new Vector3d();
-      temp.x = this.x;
-      temp.y = this.y;
-      temp.z = this.z;
-      return temp;
-    },
-    round: function() {
-      this.x = ss.truncate((this.x * 65536)) / 65536;
-      this.y = ss.truncate((this.y * 65536)) / 65536;
-      this.z = ss.truncate((this.z * 65536)) / 65536;
-    },
-    add: function(source) {
-      this.x += source.x;
-      this.y += source.y;
-      this.z += source.z;
-    },
-    length: function() {
-      return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
-    },
-    lengthSq: function() {
-      return this.x * this.x + this.y * this.y + this.z * this.z;
-    },
-    multiply: function(s) {
-      this.x *= s;
-      this.y *= s;
-      this.z *= s;
-    },
-    normalize: function() {
-      var length = this.length();
-      if (!!length) {
-        this.x /= length;
-        this.y /= length;
-        this.z /= length;
-      }
-    },
-    rotateX: function(radians) {
-      var zTemp;
-      var yTemp;
-      yTemp = this.y * Math.cos(radians) - this.z * Math.sin(radians);
-      zTemp = this.y * Math.sin(radians) + this.z * Math.cos(radians);
-      this.z = zTemp;
-      this.y = yTemp;
-    },
-    rotateZ: function(radians) {
-      var xTemp;
-      var yTemp;
-      xTemp = this.x * Math.cos(radians) - this.y * Math.sin(radians);
-      yTemp = this.x * Math.sin(radians) + this.y * Math.cos(radians);
-      this.y = yTemp;
-      this.x = xTemp;
-    },
-    rotateY: function(radians) {
-      var zTemp;
-      var xTemp;
-      zTemp = this.z * Math.cos(radians) - this.x * Math.sin(radians);
-      xTemp = this.z * Math.sin(radians) + this.x * Math.cos(radians);
-      this.x = xTemp;
-      this.z = zTemp;
-    },
-    subtract: function(source) {
-      this.x -= source.x;
-      this.y -= source.y;
-      this.z -= source.z;
-    },
-    toString: function() {
-      return ss.format('{0}, {1}, {2}', this.x, this.y, this.z);
-    },
-    toSpherical: function() {
-      var ascention;
-      var declination;
-      var radius = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
-      var XZ = Math.sqrt(this.x * this.x + this.z * this.z);
-      declination = Math.asin(this.y / radius);
-      if (!XZ) {
-        ascention = 0;
-      }
-      else if (0 <= this.x) {
-        ascention = Math.asin(this.z / XZ);
-      }
-      else {
-        ascention = Math.PI - Math.asin(this.z / XZ);
-      }
-      return Vector2d.create(((ascention + Math.PI) % (2 * Math.PI)), (declination + (Math.PI / 2)));
-    },
-    toRaDec: function() {
-      var point = this.toSpherical();
-      point.x = point.x / Math.PI * 12;
-      point.y = (point.y / Math.PI * 180) - 90;
-      return point;
-    },
-    distanceToLine: function(x1, x2) {
-      var t1 = Vector3d.subtractVectors(x2, x1);
-      var t2 = Vector3d.subtractVectors(x1, this);
-      var t3 = Vector3d.cross(t1, t2);
-      var d1 = t3.length();
-      var t4 = Vector3d.subtractVectors(x2, x1);
-      var d2 = t4.length();
-      return d1 / d2;
-    },
-    _transformByMatrics: function(lookAtAdjust) {
-      var temp = lookAtAdjust.transform(this);
-      this.x = temp.x;
-      this.y = temp.y;
-      this.z = temp.z;
-    }
-  };
+  }();
 
 
   // wwtlib.Vector2d
@@ -27829,7 +27808,7 @@ window.wwtlib = function(){
   Vector2d.average3d = function(left, right) {
     var pntLeft = Coordinates.geoTo3dDouble(left.y, left.x);
     var pntRight = Coordinates.geoTo3dDouble(right.y, right.x);
-    var pntOut = Vector3d.addVectors(pntLeft, pntRight);
+    var pntOut = v3d.addVectors(pntLeft, pntRight);
     pntOut.multiply(0.5);
     pntOut.normalize();
     return Vector2d.cartesianToSpherical2(pntOut);
@@ -27850,7 +27829,7 @@ window.wwtlib = function(){
     distance3d: function(pointB) {
       var pnt1 = Coordinates.geoTo3dDouble(pointB.y, pointB.x);
       var pnt2 = Coordinates.geoTo3dDouble(this.y, this.x);
-      var pntDiff = Vector3d.subtractVectors(pnt1, pnt2);
+      var pntDiff = v3d.subtractVectors(pnt1, pnt2);
       return pntDiff.length() / Math.PI * 180;
     },
     get_length: function() {
@@ -27927,11 +27906,11 @@ window.wwtlib = function(){
     return Matrix3d.create((((matrix1._m11 * matrix2._m11) + (matrix1._m12 * matrix2._m21)) + (matrix1._m13 * matrix2._m31)) + (matrix1._m14 * matrix2._offsetX), (((matrix1._m11 * matrix2._m12) + (matrix1._m12 * matrix2._m22)) + (matrix1._m13 * matrix2._m32)) + (matrix1._m14 * matrix2._offsetY), (((matrix1._m11 * matrix2._m13) + (matrix1._m12 * matrix2._m23)) + (matrix1._m13 * matrix2._m33)) + (matrix1._m14 * matrix2._offsetZ), (((matrix1._m11 * matrix2._m14) + (matrix1._m12 * matrix2._m24)) + (matrix1._m13 * matrix2._m34)) + (matrix1._m14 * matrix2._m44), (((matrix1._m21 * matrix2._m11) + (matrix1._m22 * matrix2._m21)) + (matrix1._m23 * matrix2._m31)) + (matrix1._m24 * matrix2._offsetX), (((matrix1._m21 * matrix2._m12) + (matrix1._m22 * matrix2._m22)) + (matrix1._m23 * matrix2._m32)) + (matrix1._m24 * matrix2._offsetY), (((matrix1._m21 * matrix2._m13) + (matrix1._m22 * matrix2._m23)) + (matrix1._m23 * matrix2._m33)) + (matrix1._m24 * matrix2._offsetZ), (((matrix1._m21 * matrix2._m14) + (matrix1._m22 * matrix2._m24)) + (matrix1._m23 * matrix2._m34)) + (matrix1._m24 * matrix2._m44), (((matrix1._m31 * matrix2._m11) + (matrix1._m32 * matrix2._m21)) + (matrix1._m33 * matrix2._m31)) + (matrix1._m34 * matrix2._offsetX), (((matrix1._m31 * matrix2._m12) + (matrix1._m32 * matrix2._m22)) + (matrix1._m33 * matrix2._m32)) + (matrix1._m34 * matrix2._offsetY), (((matrix1._m31 * matrix2._m13) + (matrix1._m32 * matrix2._m23)) + (matrix1._m33 * matrix2._m33)) + (matrix1._m34 * matrix2._offsetZ), (((matrix1._m31 * matrix2._m14) + (matrix1._m32 * matrix2._m24)) + (matrix1._m33 * matrix2._m34)) + (matrix1._m34 * matrix2._m44), (((matrix1._offsetX * matrix2._m11) + (matrix1._offsetY * matrix2._m21)) + (matrix1._offsetZ * matrix2._m31)) + (matrix1._m44 * matrix2._offsetX), (((matrix1._offsetX * matrix2._m12) + (matrix1._offsetY * matrix2._m22)) + (matrix1._offsetZ * matrix2._m32)) + (matrix1._m44 * matrix2._offsetY), (((matrix1._offsetX * matrix2._m13) + (matrix1._offsetY * matrix2._m23)) + (matrix1._offsetZ * matrix2._m33)) + (matrix1._m44 * matrix2._offsetZ), (((matrix1._offsetX * matrix2._m14) + (matrix1._offsetY * matrix2._m24)) + (matrix1._offsetZ * matrix2._m34)) + (matrix1._m44 * matrix2._m44));
   };
   Matrix3d.lookAtLH = function(cameraPosition, cameraTarget, cameraUpVector) {
-    var zaxis = Vector3d.subtractVectors(cameraTarget, cameraPosition);
+    var zaxis = v3d.subtractVectors(cameraTarget, cameraPosition);
     zaxis.normalize();
-    var xaxis = Vector3d.cross(cameraUpVector, zaxis);
+    var xaxis = v3d.cross(cameraUpVector, zaxis);
     xaxis.normalize();
-    var yaxis = Vector3d.cross(zaxis, xaxis);
+    var yaxis = v3d.cross(zaxis, xaxis);
     var mat = Matrix3d.create(xaxis.x, yaxis.x, zaxis.x, 0, xaxis.y, yaxis.y, zaxis.y, 0, xaxis.z, yaxis.z, zaxis.z, 0, -Vector3d.dot(xaxis, cameraPosition), -Vector3d.dot(yaxis, cameraPosition), -Vector3d.dot(zaxis, cameraPosition), 1);
     return mat;
   };
@@ -28955,13 +28934,13 @@ window.wwtlib = function(){
       temp.nz = nzvalue;
       temp.tu = u;
       temp.tv = v;
-      var result = Coordinates.cartesianToSpherical2(Vector3d.create(this.nx, this.ny, this.nz));
+      var result = Coordinates.cartesianToSpherical2(v3d.create(this.nx, this.ny, this.nz));
       temp.tu1 = ((result.get_lng() + 180) / 360);
       temp.tv1 = (1 - ((result.get_lat() + 90) / 180));
       return temp;
     },
     get_normal: function() {
-      return Vector3d.create(this.nx, this.ny, this.nz);
+      return v3d.create(this.nx, this.ny, this.nz);
     },
     set_normal: function(value) {
       this.nx = value.x;
@@ -28970,7 +28949,7 @@ window.wwtlib = function(){
       return value;
     },
     get_position: function() {
-      return Vector3d.create(this.x, this.y, this.y);
+      return v3d.create(this.x, this.y, this.y);
     },
     set_position: function(value) {
       this.x = value.x;
@@ -30781,7 +30760,7 @@ window.wwtlib = function(){
 
   function Place() {
     this._camParams = CameraParameters.create(0, 0, -1, 0, 0, 100);
-    this._location3d = Vector3d.create(0, 0, 0);
+    this._location3d = v3d.create(0, 0, 0);
     this.htmlDescription = '';
     this._constellation = '';
     this._classification = 1048576;
@@ -30872,7 +30851,7 @@ window.wwtlib = function(){
       newPlace.set_target(Enums.parse('SolarSystemObjects', place.attributes.getNamedItem('Target').nodeValue));
     }
     if (place.attributes.getNamedItem('ViewTarget') != null) {
-      newPlace._camParams.viewTarget = Vector3d.parse(place.attributes.getNamedItem('ViewTarget').nodeValue);
+      newPlace._camParams.viewTarget = v3d.parse(place.attributes.getNamedItem('ViewTarget').nodeValue);
     }
     var descriptionNode = Util.selectSingleNode(place, 'Description');
     if (descriptionNode != null) {
@@ -31220,12 +31199,12 @@ window.wwtlib = function(){
       var steps = 500;
       var start = Coordinates.geoTo3dDouble(this._latStart$1, this._lngStart$1);
       var end = Coordinates.geoTo3dDouble(this._latEnd$1, this._lngEnd$1);
-      var dir = Vector3d.subtractVectors(end, start);
+      var dir = v3d.subtractVectors(end, start);
       dir.normalize();
       var startNormal = start;
       startNormal.normalize();
-      var left = Vector3d.cross(startNormal, dir);
-      var right = Vector3d.cross(dir, startNormal);
+      var left = v3d.cross(startNormal, dir);
+      var right = v3d.cross(dir, startNormal);
       left.normalize();
       right.normalize();
       left.multiply(0.001 * this._width$1);
@@ -31234,7 +31213,7 @@ window.wwtlib = function(){
       var lastRight = new Vector3d();
       var firstTime = true;
       for (var i = 0; i <= steps; i++) {
-        var v = Vector3d.lerp(start, end, i / steps);
+        var v = v3d.lerp(start, end, i / steps);
         v.normalize();
         var cl = v;
         var cr = v;
@@ -31792,7 +31771,7 @@ window.wwtlib = function(){
               if (this.get_zAxisReverse()) {
                 Zcoord = -Zcoord;
               }
-              position = Vector3d.create((Xcoord * xyzScale), (Zcoord * xyzScale), (Ycoord * xyzScale));
+              position = v3d.create((Xcoord * xyzScale), (Zcoord * xyzScale), (Ycoord * xyzScale));
               this.positions.push(position);
             }
             switch (this.get__colorMap()) {
@@ -33567,7 +33546,7 @@ window.wwtlib = function(){
     _isLeftOfHalfSpace$1: function(pntA, pntB, pntTest) {
       pntA.normalize();
       pntB.normalize();
-      var cross = Vector3d.cross(pntA, pntB);
+      var cross = v3d.cross(pntA, pntB);
       var dot = Vector3d.dot(cross, pntTest);
       return dot < 0;
     },
@@ -33638,7 +33617,7 @@ window.wwtlib = function(){
       }
     },
     _midpoint$1: function(positionNormalTextured, positionNormalTextured_2) {
-      var a1 = Vector3d.lerp(positionNormalTextured.position, positionNormalTextured_2.position, 0.5);
+      var a1 = v3d.lerp(positionNormalTextured.position, positionNormalTextured_2.position, 0.5);
       var a1uv = Vector2d.lerp(Vector2d.create(positionNormalTextured.tu, positionNormalTextured.tv), Vector2d.create(positionNormalTextured_2.tu, positionNormalTextured_2.tv), 0.5);
       a1.normalize();
       return PositionTexture.createPos(a1, a1uv.x, a1uv.y);
@@ -33717,7 +33696,7 @@ window.wwtlib = function(){
       lng = -lng;
       var fac1 = this.dataset.get_baseTileDegrees();
       var factor = Math.tan(fac1 * Tile.RC);
-      return this.matrix.transform(Vector3d.create(1, (lat / fac1 * factor), (lng / fac1 * factor)));
+      return this.matrix.transform(v3d.create(1, (lat / fac1 * factor), (lng / fac1 * factor)));
     },
     createGeometry: function(renderContext) {
       Tile.prototype.createGeometry.call(this, renderContext);
@@ -33739,11 +33718,11 @@ window.wwtlib = function(){
       this.bottomRight = this.geoTo3dTan(latMax, lngMax);
       this.topRight = this.geoTo3dTan(latMin, lngMax);
       this.bottomLeft = this.geoTo3dTan(latMax, lngMin);
-      var topCenter = Vector3d.lerp(this.topLeft, this.topRight, 0.5);
-      var bottomCenter = Vector3d.lerp(this.bottomLeft, this.bottomRight, 0.5);
-      var center = Vector3d.lerp(topCenter, bottomCenter, 0.5);
-      var rightCenter = Vector3d.lerp(this.topRight, this.bottomRight, 0.5);
-      var leftCenter = Vector3d.lerp(this.topLeft, this.bottomLeft, 0.5);
+      var topCenter = v3d.lerp(this.topLeft, this.topRight, 0.5);
+      var bottomCenter = v3d.lerp(this.bottomLeft, this.bottomRight, 0.5);
+      var center = v3d.lerp(topCenter, bottomCenter, 0.5);
+      var rightCenter = v3d.lerp(this.topRight, this.bottomRight, 0.5);
+      var leftCenter = v3d.lerp(this.topLeft, this.bottomLeft, 0.5);
       if (renderContext.gl == null) {
         this._vertexList$1 = [];
         this._vertexList$1.push(PositionTexture.createPosSize(this.topLeft, 0, 0, this.width, this.height));
@@ -33888,7 +33867,7 @@ window.wwtlib = function(){
       lng = -lng;
       var fac1 = this.dataset.get_baseTileDegrees() / 2;
       var factor = Math.tan(fac1 * Tile.RC);
-      return this.dataset.get_matrix().transform(Vector3d.create(1, (lat / fac1 * factor), (lng / fac1 * factor)));
+      return this.dataset.get_matrix().transform(v3d.create(1, (lat / fac1 * factor), (lng / fac1 * factor)));
     },
     computeBoundingSphereBottomsUp: function() {
       var tileDegrees = this.dataset.get_baseTileDegrees() / (Math.pow(2, this.level));
@@ -33927,11 +33906,11 @@ window.wwtlib = function(){
       this.bottomLeft = this.geoTo3dTan(latMax, lngMin);
       var latCenter = (latMin + latMax) / 2;
       var lngCenter = (lngMin + lngMax) / 2;
-      var center = Vector3d.midPoint(this.topLeft, this.bottomRight);
-      var leftCenter = Vector3d.midPoint(this.topLeft, this.bottomLeft);
-      var rightCenter = Vector3d.midPoint(this.topRight, this.bottomRight);
-      var topCenter = Vector3d.midPoint(this.topLeft, this.topRight);
-      var bottomCenter = Vector3d.midPoint(this.bottomLeft, this.bottomRight);
+      var center = v3d.midpoint(this.topLeft, this.bottomRight);
+      var leftCenter = v3d.midpoint(this.topLeft, this.bottomLeft);
+      var rightCenter = v3d.midpoint(this.topRight, this.bottomRight);
+      var topCenter = v3d.midpoint(this.topLeft, this.topRight);
+      var bottomCenter = v3d.midpoint(this.bottomLeft, this.bottomRight);
       if (renderContext.gl == null) {
         this._renderTriangleLists[0].push(RenderTriangle.create(PositionTexture.createPos(this.topLeft, 0, 0), PositionTexture.createPos(leftCenter, 0, 0.5), PositionTexture.createPos(topCenter, 0.5, 0), this.texture, this.level));
         this._renderTriangleLists[0].push(RenderTriangle.create(PositionTexture.createPos(leftCenter, 0, 0.5), PositionTexture.createPos(center, 0.5, 0.5), PositionTexture.createPos(topCenter, 0.5, 0), this.texture, this.level));
@@ -34198,7 +34177,7 @@ window.wwtlib = function(){
     _isLeftOfHalfSpace$1: function(pntA, pntB, pntTest) {
       pntA.normalize();
       pntB.normalize();
-      var cross = Vector3d.cross(pntA, pntB);
+      var cross = v3d.cross(pntA, pntB);
       var dot = Vector3d.dot(cross, pntTest);
       return dot < 0;
     },
@@ -34223,7 +34202,7 @@ window.wwtlib = function(){
       Tile.tileTargetX = this.tileX;
       Tile.tileTargetY = this.tileY;
       var testPoint = Coordinates.geoTo3dDouble(-lat, lng);
-      testPoint = Vector3d.subtractVectors(new Vector3d(), testPoint);
+      testPoint = v3d.subtractVectors(new Vector3d(), testPoint);
       var uv = DistanceCalc.getUVFromInnerPoint(this.topLeft.copy(), this.topRight.copy(), this.bottomLeft.copy(), this.bottomRight.copy(), testPoint.copy());
       var uud = Math.max(0, Math.min(16, (uv.x * 16)));
       var vvd = Math.max(0, Math.min(16, (uv.y * 16)));
@@ -34356,7 +34335,7 @@ window.wwtlib = function(){
       }
     },
     _midpoint$1: function(positionNormalTextured, positionNormalTextured_2) {
-      var a1 = Vector3d.lerp(positionNormalTextured.position, positionNormalTextured_2.position, 0.5);
+      var a1 = v3d.lerp(positionNormalTextured.position, positionNormalTextured_2.position, 0.5);
       var a1uv = Vector2d.lerp(Vector2d.create(positionNormalTextured.tu, positionNormalTextured.tv), Vector2d.create(positionNormalTextured_2.tu, positionNormalTextured_2.tv), 0.5);
       a1.normalize();
       return PositionTexture.createPos(a1, a1uv.x, a1uv.y);
@@ -36300,12 +36279,12 @@ window.wwtlib = function(){
       this.topRight = this.geoTo3d(this._latMin$1, this._lngMax$1, false);
       this.bottomLeft = this.geoTo3d(this._latMax$1, this._lngMin$1, false);
       if (!this.tileY) {
-        this.topLeft = Vector3d.create(0, 1, 0);
-        this.topRight = Vector3d.create(0, 1, 0);
+        this.topLeft = v3d.create(0, 1, 0);
+        this.topRight = v3d.create(0, 1, 0);
       }
       if (this.tileY === Math.pow(2, this.level) - 1) {
-        this.bottomRight = Vector3d.create(0, -1, 0);
-        this.bottomLeft = Vector3d.create(0, -1, 0);
+        this.bottomRight = v3d.create(0, -1, 0);
+        this.bottomLeft = v3d.create(0, -1, 0);
       }
       var distVect = this.topLeft;
       distVect.subtract(this.sphereCenter);
@@ -36444,14 +36423,14 @@ window.wwtlib = function(){
         y1 = this._subDivisionLevel$1;
         for (x1 = 0; x1 <= this._subDivisionLevel$1; x1++) {
           index = y1 * (this._subDivisionLevel$1 + 1) + x1;
-          verts[index].position = Vector3d.create(0, 1, 0);
+          verts[index].position = v3d.create(0, 1, 0);
         }
       }
       if (this.tileY === Math.pow(2, this.level) - 1) {
         y1 = 0;
         for (x1 = 0; x1 <= this._subDivisionLevel$1; x1++) {
           index = y1 * (this._subDivisionLevel$1 + 1) + x1;
-          verts[index].position = Vector3d.create(0, -1, 0);
+          verts[index].position = v3d.create(0, -1, 0);
         }
       }
       this.triangleCount = this._subDivisionLevel$1 * this._subDivisionLevel$1 * 2;
@@ -36909,7 +36888,7 @@ window.wwtlib = function(){
       PositionTexture: [ PositionTexture, PositionTexture$, null ],
       PositionColoredTextured: [ PositionColoredTextured, PositionColoredTextured$, null ],
       PositionColored: [ PositionColored, PositionColored$, null ],
-      Vector3d: [ Vector3d, Vector3d$, null ],
+      Vector3d: [ Vector3d, v3d, null ],
       Vector2d: [ Vector2d, Vector2d$, null ],
       Matrix3d: [ Matrix3d, Matrix3d$, null ],
       Matrix2d: [ Matrix2d, Matrix2d$, null ],

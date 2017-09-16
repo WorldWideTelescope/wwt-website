@@ -129,5 +129,6 @@ namespace WWTMVC5.Services.Interfaces
         /// Collection of IDs.
         /// </returns>
         IEnumerable<long> GetLatestContentIDs(int count);
+        Guid GetAzureId(long contentId);
     }
 }

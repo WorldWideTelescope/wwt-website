@@ -4,7 +4,7 @@
     <meta charset="utf-8" content="chrome=1, IE=edge" http-equiv="X-UA-Compatible" />
   
     <title>WWT Web Client Fov</title>
-    <script src="http://www.worldwidetelescope.org/scripts/wwtsdk.aspx"></script>	
+    <script src="/html5sdk/1.0.1/wwtsdk.js"></script>	
     <script>
 
     // Create the WorldWide telescope object variable
@@ -26,16 +26,16 @@
 	}
 
 	function FovInc() {
-	    var newFov = 1.1 * wwt.get_fov();
+	    var newFov = 1.5 * wwt.get_fov();
 	    if (newFov <= 60) {
-	        wwt.gotoRaDecZoom(wwt.getRA(), wwt.getDec(), newFov, false);
+	        wwt.zoom(1.5);
 	    }
 	}
 
 	function FovDec() {
-	    var newFov = wwt.get_fov() / 1.1;
+	    var newFov = wwt.get_fov() / 1.5;
 	    if (wwt.get_fov() >= 0.00022910934437488727) {
-	        wwt.gotoRaDecZoom(wwt.getRA(), wwt.getDec(), newFov, false);
+            wwt.zoom(.66666667);
 	    }
 	}
 

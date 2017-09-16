@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -15,7 +15,7 @@
     <AssemblyName>WWTMVC5</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -40,6 +40,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -72,6 +73,10 @@
     </Reference>
     <Reference Include="Microsoft.Practices.Unity.Mvc, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Unity.Mvc.3.5.1404.0\lib\net45\Microsoft.Practices.Unity.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Configuration, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.WindowsAzure.ConfigurationManager.3.2.3\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.WindowsAzure.Diagnostics, Version=2.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
@@ -182,14 +187,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\WebActivatorEx.2.0.6\lib\net40\WebActivatorEx.dll</HintPath>
     </Reference>
-    <Reference Include="Wurfl, Version=1.7.1.1, Culture=neutral, PublicKeyToken=816aeec277aa13b9, processorArchitecture=MSIL">
+    <Reference Include="Wurfl, Version=1.8.4.0, Culture=neutral, PublicKeyToken=816aeec277aa13b9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\WURFL_Official_API.1.7.1.1\lib\Wurfl.dll</HintPath>
+      <HintPath>..\..\packages\WURFL_Official_API.1.8.4.0\lib\Wurfl.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Wurfl.Aspnet.Extensions, Version=1.7.1.1, Culture=neutral, PublicKeyToken=816aeec277aa13b9, processorArchitecture=MSIL">
+    <Reference Include="Wurfl.Aspnet.Extensions, Version=1.8.4.0, Culture=neutral, PublicKeyToken=816aeec277aa13b9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\WURFL_Official_API.1.7.1.1\lib\Wurfl.Aspnet.Extensions.dll</HintPath>
+      <HintPath>..\..\packages\WURFL_Official_API.1.8.4.0\lib\Wurfl.Aspnet.Extensions.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -666,8 +671,6 @@
     <Content Include="html5sdk\1.1.0\wwtsdk.min.js" />
     <Content Include="images\StarProfile.png" />
     <Content Include="msshrtmi.dll" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\controllers\modals\editfolder.js" />
     <Content Include="Scripts\controllers\modals\edittour.js" />
     <Content Include="Scripts\controllers\touradmin.js" />
@@ -723,9 +726,7 @@
     <Content Include="Content\CSS\sprites.less" />
     <Content Include="Content\CSS\multiselect.less" />
     <Content Include="Content\OpenWWT\OpenWWT_Development.pdf" />
-    <Content Include="App_Readme\WURFL.chm" />
-    <Content Include="App_Readme\wurfl-latest.zip" />
-    <Content Include="App_Readme\WURFL Quick Guide_v1_5.pdf" />
+    <Content Include="COPYING.evaluation" />
     <Content Include="App_Data\wurfl-latest.zip" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
@@ -941,11 +942,14 @@
     <Content Include="webclient\ext\introjs.min.css" />
     <Content Include="webclient\ext\jquery.js" />
     <Content Include="webclient\factories\AppState.js" />
+    <Content Include="webclient\factories\autohidepanels.js" />
     <Content Include="webclient\factories\FinderScope.js" />
+    <Content Include="webclient\factories\FinderScope_v3dhack.js" />
     <Content Include="webclient\factories\HashManager.js" />
     <Content Include="webclient\factories\Localization.js" />
     <Content Include="webclient\factories\mediafile.js" />
     <Content Include="webclient\factories\SearchUtil.js" />
+    <Content Include="webclient\factories\SearchUtil_v3dhack.js" />
     <Content Include="webclient\factories\Skyball.js" />
     <Content Include="webclient\factories\ThumbList.js" />
     <Content Include="webclient\factories\UILibrary.js" />
@@ -1027,6 +1031,7 @@
     <Content Include="webclient\sdk.js" />
     <Content Include="webclient\sdk\wwtsdk.js" />
     <Content Include="webclient\sdk\wwtsdk.min.js" />
+    <Content Include="webclient\sdk\wwtsdk_v3dhack.js" />
     <Content Include="webclient\searchdata.js" />
     <Content Include="webclient\searchdata.min.js" />
     <Content Include="webclient\searchdata2.js" />
@@ -1039,6 +1044,7 @@
     <Content Include="webclient\views\modals\finder-scope.html" />
     <Content Include="webclient\views\modals\intro.html" />
     <Content Include="webclient\views\modals\loading.html" />
+    <Content Include="webclient\views\modals\message.html" />
     <Content Include="webclient\views\modals\mobile-explore.html" />
     <Content Include="webclient\views\modals\mobile-layer-manager.html" />
     <Content Include="webclient\views\modals\mobile-nearby-objects.html" />
@@ -1049,6 +1055,8 @@
     <Content Include="webclient\views\modals\nearby-objects-mobile.html" />
     <Content Include="webclient\views\modals\open-item.html" />
     <Content Include="webclient\views\modals\share.html" />
+    <Content Include="webclient\views\modals\userconfirm.html" />
+    <Content Include="webclient\views\modals\userprompt.html" />
     <Content Include="webclient\views\popovers\observing-time.html" />
     <Content Include="webclient\views\popovers\property-panel.html" />
     <Content Include="webclient\views\popovers\share.html" />
@@ -1096,9 +1104,9 @@
     <Content Include="Views\Developers\Embed.cshtml" />
     <Content Include="Views\Developers\WebDevelopment.cshtml" />
     <Content Include="Views\News\Eclipse2017.cshtml" />
-    <Content Include="Views\News\wwtprize.cshtml" />
     <Content Include="Views\News\2016wwtprize.cshtml" />
     <Content Include="Views\News\onlinetraining.cshtml" />
+    <Content Include="Views\Interact\Debug.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
@@ -1194,7 +1202,7 @@
     <Content Include="Views\Explorers\Index.cshtml" />
     <Content Include="Views\Explorers\WWTA.cshtml" />
     <Content Include="Views\Eyewire\Index.cshtml" />
-    <Content Include="Views\Interact\Debug.cshtml" />
+    <Content Include="Views\Interact\Test.cshtml" />
     <Content Include="Views\Interact\GreatObservatories.cshtml" />
     <Content Include="Views\Interact\MilkyWay.cshtml" />
     <Content Include="Views\Interact\MoreNessies.cshtml" />
@@ -1274,16 +1282,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
-          <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>4675</DevelopmentServerPort>
-          <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/</IISUrl>
-          <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>
-          </CustomServerUrl>
-          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+          <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
     </VisualStudio>
