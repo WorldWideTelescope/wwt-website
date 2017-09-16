@@ -4,12 +4,16 @@
   "version": "5.2.5",
   "private": "true",
   "dependencies": {
-    "jquery": "~2.1.3",
-    "bootstrap": "~3.3.2",
-    "angular": "~1.3.10",
-    "angular-strap": "~2.1.6"
+    "jquery": "3.2.1",
+    "bootstrap": "v4.0.0-beta",
+    "angular": "v1.6.7-build.5460+sha.8f61cf6",
+    "angular-strap": "v2.3.12",
+    "angular-animate": "v1.6.7-build.5460+sha.8f61cf6"
   },
   "resolutions": {
-    "angular": "1.6.6"
+    "angular": "v1.6.7-build.5460+sha.8f61cf6",
+    "bootstrap": "v4.0.0-beta",
+    "jquery": "3.2.1",
+    "angular-strap": "v2.3.12"
   }
 }
