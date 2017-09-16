@@ -823,6 +823,7 @@
     <Content Include="App_Readme\wurfl-latest.zip" />
     <Content Include="App_Data\wurfl-latest.zip" />
     <None Include="Properties\PublishProfiles\wwt.thewebkid.com.pubxml" />
+    <None Include="Properties\PublishProfiles\WWTMVC5rosenfield - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\wwtstaging - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy.pubxml" />
     <None Include="compilerconfig.json" />
