@@ -1136,6 +1136,10 @@
     <Content Include="Views\Use\TourAssets.cshtml" />
     <Content Include="Views\Use\Educators.cshtml" />
     <Content Include="Views\Use\Researchers.cshtml" />
+    <Content Include="Views\Use\Planetariums.cshtml" />
+    <Content Include="Views\Use\WWTPlanetarium.cshtml" />
+    <Content Include="Views\Use\DomeProject.cshtml" />
+    <Content Include="Views\Use\Impacts.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
@@ -1253,7 +1257,6 @@
     <Content Include="Views\Planetariums\Index.cshtml" />
     <Content Include="Views\Planetariums\Impacts.cshtml" />
     <Content Include="Views\Planetariums\Resources.cshtml" />
-    <Content Include="Views\Planetariums\WWTPlanetarium.cshtml" />
     <Content Include="Views\Researchers\Index.cshtml" />
     <Content Include="Views\Researchers\Resources.cshtml" />
     <Content Include="Views\About\LeftNav.cshtml" />

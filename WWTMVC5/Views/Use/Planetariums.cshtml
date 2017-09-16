@@ -1,0 +1,451 @@
+﻿@{
+    Layout = "~/Views/Shared/_ContentPage.cshtml";
+    ViewBag.Title = "Planetariums - WorldWide Telescope";
+    ViewBag.contentDir = Model.ResLoc + "/Content/Planetariums";
+    ViewBag.slidesDir = ViewBag.contentDir + "/Impacts Slides";
+    ViewBag.imgDir = Model.ResLoc + "/Content/Images/Planetariums";
+}
+@section leftnav{
+    @Html.Partial("~/Views/Use/LeftNav.cshtml")
+}
+
+<h1>Planetarium and Museum Resources</h1>
+
+<div class="panel-group" id="accordion">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#museum">
+                    Museums Overview
+                </a>
+            </h4>
+        </div>
+        <div id="museum" class="panel-collapse collapse ">
+            <div class="panel-body">
+                WorldWide Telescope transforms the museum experience. From self-running tours to interactive branching educational tours, WorldWide Telescope promises an eye-catching and immersive showpiece for museum audiences. WorldWide Telescope has native support for a variety of systems, and enables kiosk-mode controls for maintenance-free operation. WWT requires a Windows operating system and like any real-time graphics application runs better on higher-performance graphics cards.
+                <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-advanced-guides/content/kiosk.html">Learn more...</a>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#overview">
+                    Planetariums Overview
+                </a>
+            </h4>
+        </div>
+        <div id="overview" class="panel-collapse collapse ">
+            <div class="panel-body">
+                <p>A powerful tool for planetariums large and small, WorldWide Telescope provides a comprehensive set of features to help you create seamless displays on single-projector domes or complex, multi-projector domes.</p>
+                <p>WWT provides native support for a variety of planetarium systems and is scalable for simple and complex systems. In the simplest planetarium setup, WWT can run on a single computer running Windows, with one monitor for the control interface. In this scenario, WWT outputs the presentation to a single, full-dome channel so that you can project the visualization by using a spherical mirror dome or a fisheye lens. <br /> <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/configuration.html#single-projector-planetarium">Learn more...</a></p>
+
+                <p>For more advanced planetariums, WWT can drive a cluster of servers to create a multi-channel dome projection. In this cluster mode, WWT synchronizes the display video and the data across servers, and manages the status of the WWT server power for each server in the cluster. </p>
+                <p>WWT handles warping and blending for the dome and comes with tools to solve for this calibration from within the application. Performance has been optimized to enable smooth real-time playback on modern graphics hardware with control for limiting computational demands such as frame rates and anti-aliasing.<br /> <a href="https://www.gitbook.com/book/worldwidetelescope/worldwide-telescope-multi-channel-dome-setup/details">Learn more...</a>  </p>
+                <p>The following features in WWT 5.0 make it an even more powerful tool for planetarium shows:</p>
+                <ul>
+                    <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-advanced-guides/content/domeauthoring.html">Full-dome tour authoring</a> and instant full-dome playback of desktop tours with overlays and images</li>
+                    <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-advanced-guides/content/controllers.html">New MIDI controller support</a> enabling you to customize control panels by using inexpensive but powerful MIDI performance controllers</li>
+                    <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-multi-channel-dome-setup/content/">Controls </a> that let you manage projector nodes, check status, and render performance from the WWT console</li>
+                    <li>Screen Broadcast feature, which allows any application on the console to display as a window in Full Dome mode</li>
+                </ul>
+                <p>WWT for planetariums requires a Windows operating system. You can install it on existing Windows-powered digital domes and it is compatible with a variety of software. Like any real-time graphics application, it runs better on higher-performance graphics cards. </p>
+                <p><img src="@Model.ImgDir/WTTU.jpg" alt="People viewing the cosmos inside a planetarium" class="img-responsive" /></p>
+                <h3>Presenting WorldWide Telescope in the Planetarium</h3>
+                <p>Planetariums are using WorldWide Telescope in three general presentation formats:</p>
+                <p><strong>Real-time, interactive presentation:</strong> a live operator can change the WWT display by using various controls during real-time, interactive presentations. Control options include:</p>
+                <ul>
+                    <li>A desktop application interface, including programmable custom buttons</li>
+                    <li>An Xbox controller, which can be used by the presenter or audience members to change views, select locations to visit, and more</li>
+                    <li>A variety of MIDI controllers are compatible with WWT, enabling you to customize control panels with sliders, knobs, and buttons for complex presentations</li>
+                </ul>
+                <p><strong>Real-time, push-button shows:</strong> you can use WWT to create and present tours (real-time shows) that are timed to music and to pre-recorded or live narration. WWT can output a SMPTE track for timing control of external audio sources. Just push a button and the show runs.</p>
+                <p><strong>Pre-rendered movie for playback and distribution:</strong> WWT can directly render uncompressed dome master frame sequences at up to 8k resolution. Planetariums can use this capability to render an entire full-dome movie that is then loaded and presented by using an external video playback system. You could package this movie for distribution as a pre-rendered show or as a real-time, push-button show. </p>
+                <p>Pre-rendered digital video sequences also can be used as part of a pre-rendered production, either as layers with additional visual effects composited in, or for a specific visual sequence of a longer production. This enables producers to use their own visual-effects tools to integrate WWT-created assets with those from other sources.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#resources">
+                    Planetarium Resources
+                </a>
+            </h4>
+        </div>
+        <div id="resources" class="panel-collapse collapse ">
+            <div class="panel-body">
+                <p>The following resources provide information to help you use WorldWide Telescope in your planetarium:</p>
+
+                <ul>
+                    <li><a href="@Model.ResLoc/Content/Planetariums/Tour Template.docx">Tour Template</a>: download the storyboard template for designing and building WWT tours</li>
+                    <li><a href="/Use/DomeProject">WorldWide Telescope Dome Projects</a>: learn how a small, on-site domes can provide an affordable, high-quality planetarium experience for educational settings</li>
+                    <li><a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-multi-channel-dome-setup/content/">Multi Channel Setup</a>: read how to set up a multi-channel display for use in a dome or frustum environment</li>
+                    <li><a href="@Model.ResLoc/Content/Planetariums/Controller Mapping.pdf">Xbox Controller Layout PDF</a>: see how users can run WWT with an Xbox controller</li>
+                    <li><a href="https://wwtweb.blob.core.windows.net/drops/WWTRemote.5.0.0.msi">Install WWT Remote Control</a>: this utility enables remote operations of WWT and helps you control multiple machine clusters and multi-monitor configurations for multi-channel domes and powerwall high-resolution displays</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#fulldome">
+                    Full Dome Projects
+                </a>
+            </h4>
+        </div>
+        <div id="fulldome" class="panel-collapse collapse ">
+            <div class="panel-body">
+                <p>
+                    Not only for large public planetariums with state-of-the-art multi-monitor projection systems,
+                    <img class="pull-right" style="margin: 8px 0 8px 8px" src="@Model.ResLoc/Content/Images/Planetariums/wwt-dome-exterior.png">
+                    the WorldWide Telescope Windows Client can be configured for immersive displays of the night skies in small on-site or portable domes for schools or educational events.
+                </p>
+
+                <h4>WorldWide Telescope Micro-Dome</h4>
+
+
+                <p>Many children never have a chance to go to a bricks-and-mortar planetarium to learn astronomy, so we created a virtual planetarium on your computer with WorldWide Telescope (WWT). However, the universe is still best experienced in an immersive environment like a dome, so we have published a set of plans that enable schools to build their own small planetarium for use with WWT. </p>
+                <p>The WorldWide Telescope Micro-Dome is a low-cost, do-it-yourself option for creating a planetarium. You can construct one for less than US$1,000 by using supplies from local office and hardware stores and a first-surface spherical mirror. To complete your planetarium, you will need a projector and a laptop with WorldWide Telescope installed. Because a number of the construction tasks involve the use of power saws, cutting tools, and precise measurement, responsible adult involvement is essential.</p>
+                <p>The completed dome will allow 15 to 30 children at a time to experience a high-quality digital projection of space, powered by WorldWide Telescope. Additionally, WWT allows students to create their own tours of the universe to share what they have learned with classmates—extending the learning cycle.</p>
+
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        <div class="row home-features">
+                            <div class="col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-3 col-xs-12">
+                                <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-planetarium/content/">
+                                    <img src="/Content/images/gbox.png" class="img-responsive">
+                                    <i class="fa fa-book"></i>
+                                    <h4>Read Online</h4>
+                                </a>
+                            </div>
+
+                            <div class="col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-3 col-xs-12">
+                                <a href="~/Docs/worldwide-telescope-planetarium.pdf">
+                                    <img src="/Content/images/gbox.png" class="img-responsive">
+                                    <i class="fa fa-file-pdf-o"></i>
+                                    <h4>Download .pdf</h4>
+                                </a>
+                            </div>
+
+                            <div class="col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-3 col-xs-12">
+                                <a href="~/Docs/worldwide-telescope-planetarium.mobi">
+                                    <img src="/Content/images/gbox.png" class="img-responsive">
+                                    <i class="fa fa-file-text-o"></i>
+                                    <h4>Download .mobi</h4>
+                                </a>
+                            </div>
+
+                            <div class="col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-3 col-xs-12">
+                                <a href="~/Docs/worldwide-telescope-planetarium.epub">
+                                    <img src="/Content/images/gbox.png" class="img-responsive">
+                                    <i class="fa fa-file-text"></i>
+                                    <h4>Download .epub</h4>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h4><img class="pull-left" src="@Model.ResLoc/Content/Images/Planetariums/go-dome.png" style="margin:8px 8px 8px 0"> Using Worldwide Telescope in mobile planetariums</h4>
+                <p>
+
+                    You can easily configure WorldWide Telescope (WWT) to work in mobile planetariums, such as the inflatable Go-Dome. By using a laptop or desktop computer with a projector and either a fisheye lens or spherical mirror, you can project WWT onto the inflated dome, resulting in an immersive, 3D environment for exploration of the universe at schools, museums, science centers, and public venues of all kinds.
+                </p>
+                <p>The Go-Dome pictured here is a portable 13 feet in diameter by 9 feet high (4 meters diameter by 3 meters high). It is small enough to ship as luggage and easy to assemble. Portable domes as large as 30 feet in diameter (9 meters) are also available.</p>
+                <p>
+                    <a target="_blank" href="http://www.go-domes.com">Learn more about Go-Domes products</a> <br />
+                    (<strong>Note</strong>: Go-Domes is not affiliated with WorldWide Telescope.)
+                </p>
+
+                <p>&nbsp;</p>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#impacts">
+                    Full Dome and VR Tour: Impacts
+                </a>
+            </h4>
+        </div>
+        <div id="impacts" class="panel-collapse collapse ">
+            <div class="panel-body">
+
+                <script>
+	$(function() {
+		$('#btnPlay').on('click', function() {
+			$('#splash').hide();
+			$('.large-video-player').show();
+			$('#impactsTrailer')[0].play();
+			$('#impactsTrailer').on('ended', function() {
+				$('#splash').show();
+				$('.large-video-player').hide();
+			});
+		});
+		var tutorialInit = false;
+		$('#btnShowTutorials').on('click', function() {
+			if (tutorialInit) return;
+
+			var playlist = [
+				'Master', 'Title', 'ISS', 'Zing', 'Impacts 2000-13'
+			];
+			playlist[8] = 'Mars - Gale Crater';
+			playlist[10] = 'Asteroid Belt';
+			playlist[11] = 'Credits';
+			var video = $('#tutorialPlayer video')[0];
+			$.each(playlist, function(i, vid) {
+				if (vid) {
+					var linkText = (i < 10 ? '0' + i : i) + ' - ' + vid;
+					var link = $('<a href=javascript:void(0)></a>')
+						.css('display', 'block')
+						.html('<i class="fa fa-play"></i> ' + linkText)
+						.data('video',linkText)
+						.on('click', function() {
+							try {
+								video.pause();
+							} catch (er) {
+							}
+							$('#tutorialPlayer source').each(function() {
+								var source = $(this);
+								source.attr('src', '@Model.ResLoc/Videos/Impacts/' + link.data('video') + '.' + source.data('format'));
+						});
+						$('#tutorialPlayer').show();
+						video.load();
+						setTimeout(video.play,3333);
+
+					});
+					$('#tutorials').append(link);
+				}
+			});
+			tutorialInit = true;
+			$('#tutorials').removeClass('hide');
+		});
+	});
+                </script>
+                <h1 class="hide">Impacts - A virtual Reality Experience</h1>
+                <div class="rel" id="splash">
+                    <img src="@Model.ImgDir/planetariums/impacts_tour_splash.jpg" class="img-responsive" alt="Impacts - A virtual Reality Experience" />
+                    <div style="position: absolute;bottom:10px;right:10px;">
+                        <a class="btn btn-info btn-lg" id="btnPlay">
+                            <i class="fa fa-play"></i>
+                            Watch Trailer
+                        </a>
+                    </div>
+                </div>
+
+                <div class="large-video-player" style="margin:16px 0;display: none">
+                    <video id="impactsTrailer" controls width="100%" class="img-responsive">
+                        <source src="@Model.ContentDir/videos/impacts/Impacts -TRAILER.ogv" type='video/ogg; codecs="theora, vorbis"' />
+                        <source src="@Model.ContentDir/videos/impacts/Impacts -TRAILER.webm" type='video/webm' />
+                        <source src="@Model.ContentDir/videos/impacts/Impacts -TRAILER.mp4" type='video/mp4' />
+                        <p>Video is not visible, most likely your browser does not support HTML5 video</p>
+                    </video>
+                </div>
+                <br />
+                <h2>Free Planetarium Dome and Virtual Reality Show!</h2>
+                <p>The WorldWide Telescope team has produced a virtual reality and dome experience on the subject of impacts in our Solar System.  This show can be used for free in virtual reality (VR) systems - currently Oculus Rift, domes running WWT and flat screens.  The show includes a narration and original music soundtrack and brings your audiences to the locations of impacts in the past several billion years.   Made for VR and domes, the show creates new levels of immersion to bring the visitor to the surfaces of bodies in our Solar System as well as a tour of the International Space Station.  The senses of immersion and physical presence in the virtual environments are especially powerful using Oculus Rift VR device.  Moreover, the show illustrates how WorldWide Telescope can be used in high level production.  Additionally, the components of the show are made available for adaptation, customization and re-use.</p>
+                <p>The presentation can be done using the voice of the recorded narrator or you can have a presenter deliver the narration live. The script has been translated into several languages. If you can help out with other language translations we'd love to host the translated script with proper translation accreditation.</p>
+                <p>Each scene is a separate slide and many can be used as a standalone module on specific topics:</p>
+                <ul>
+                    <li>International Space Station</li>
+                    <li>Asteroid impacts on Earth from 2000-2013</li>
+                    <li>Flights over various impact craters</li>
+                    <li>Asteroid distribution and belts</li>
+                </ul>
+                <p>These slides are broken out and provided below.</p>
+                <p><br /> <br />Soon the team will be publishing specific how-to guides on how to use some of the new, advanced features of WWT to do:</p>
+                <ul>
+                    <li>3d model importing and animation</li>
+                    <li>Advanced uses of timeline editor</li>
+                    <li>Authoring in VR</li>
+                </ul>
+                @*<h3>Using the Show</h3>
+                    <p>If you use the show in whole or in part all we ask is that you register your facility running WorldWide Telescope <a href="/Planetariums/WWTinYourDome">here</a>. We also would ask that you send some of your audiences <a href="http://www.instant.ly/s/AfJcS">here</a> for an evaluation of their experience. Of course we hope this sparks creative activity using WWT and the WWT team would love to hear and help out!</p>*@
+                <h3>Resources</h3>
+                <ul>
+                    <li>
+                        <a href="/Download/">WWT 5.1 Gold for Windows&reg;</a>. This release - or the final 5.1 or later official release - has several new features needed by the  <a href="@ViewBag.contentDir/Impacts - VR v2.1.wtt">IMPACTS tour</a> created for IPS, Beijing 2014.
+                        Please be aware this is in beta. We value your feedback, if you discover a bug or have any issues <a href="/Support/IssuesAndBugs">please report them here</a>.
+                    </li>
+                    <li>
+                        Video Tutorials.
+                        <ul>
+                            <li><a href="http://www.youtube.com/playlist?list=PLozhKWk-h8YC6UXUzQ29o7yspTEtPewOV" target="youtube"><i class="fa fa-youtube-play"></i> Watch on YouTube</a></li>
+                            <li>
+                                <a href="javascript:void(0)" id="btnShowTutorials">Watch here (below)</a>
+                                <div id="tutorials" class="hide">
+
+                                </div>
+                            </li>
+                        </ul>
+
+                        <div class="large-video-player" style="margin:16px 0;display: none" id="tutorialPlayer">
+                            <video controls width="100%" class="img-responsive">
+                                <source data-format="ogv" src="@Model.ContentDir/videos/impacts/Impacts -TRAILER.ogv" type='video/ogg; codecs="theora, vorbis"' />
+                                <source data-format="webm" src="@Model.ContentDir/videos/impacts/Impacts -TRAILER.webm" type='video/webm'>
+                                <source data-format="mp4" src="@Model.ContentDir/videos/impacts/Impacts -TRAILER.mp4" type='video/mp4'>
+                            </video>
+                        </div>
+                    </li>
+                    <li><a href="@ViewBag.contentDir/Impacts - VR v2.1.wtt">Full Tour - VR</a></li>
+                    <li><a href="@ViewBag.contentDir/Impacts - FULL DOME v2.1.wtt">Full Tour - Dome</a></li>
+                    <li><a href="@ViewBag.contentDir/Impacts - FLAT SCREEN v2.1.wtt">Full Tour - Flat Screen (for use on desktop/laptops, stereo/mono theaters, and kiosks)</a></li>
+                    <li><a href="@ViewBag.contentDir/Impacts-Tour-Script_English.doc">Script - English</a></li>
+                    <li><a href="@ViewBag.contentDir/Impacts-Tour-Script_Chinese.doc">Script - Chinese</a></li>
+
+                    <li>Script – Dutch (coming soon)</li>
+                    <li>Script – Spanish (coming soon)</li>
+                    <li>Script – Arabic (coming soon)</li>
+                    <li>Script – Japanese (coming soon)</li>
+                    <li>Script – Russian (coming soon)</li>
+                    <li><a href="@ViewBag.contentDir/Earth Impacts - 2000-2013 - All - v3.0.xlsx">Excel Spreadsheet of asteroid impacts locations</a></li>
+                    <li><a href="@ViewBag.contentDir/Impacts_Tracks_MP3.zip">Narration MP3</a> - Single file of English narration for entire show.</li>
+                    <li>Single track of music for entire show - <a href="@ViewBag.contentDir/Impacts Music.mp3">MP3</a>, <a href="@ViewBag.contentDir/Impacts Music.wav">WAV</a></li>
+                    <li><a href="http://www.instant.ly/s/AfJcS">Show Survey</a></li>
+                </ul>
+
+
+                <h3>Show Credits</h3>
+                <p>
+                    Produced, Written and Directed by <br />
+                    <span class="text-lblue">Doug Roberts, Ph.D. </span>
+                </p>
+                <p>
+                    Original Music Composed and Performed by<br />
+                    <span class="text-lblue">Chris Richko</span>
+                </p>
+                <p>
+                    English Narrator<br />
+                    <span class="text-lblue">Jonathan Fay</span>
+                </p>
+                <p>
+                    Science Advisor<br />
+                    <span class="text-lblue">Brett W. Denevi, Ph.D.</span>
+                </p>
+                <p>
+                    3D Modeling<br />
+                    <span class="text-lblue">Patrick McPike</span>
+                </p>
+                <p>
+                    WorldWide Telescope Team<br />
+                    <span class="text-lblue">
+                        Dan Fay<br />
+                        Jonathan Fay<br />
+                        Jessika Gebauer<br />
+                        Ron Gilchrist<br />
+                        Henry Honig<br />
+                        Nils Kock<br />
+                        Ben Kunz<br />
+                        Curtis Wong
+                    </span>
+                </p>
+                <h3>Data</h3>
+                <p>
+                    All-Sky Background<br />
+                    <span class="text-lblue">Digitized Sky Survey (Color), Copyright DSS Consortium</span>
+                </p>
+                <p>
+                    Asteroid 433 Eros<br />
+                    <span class="text-lblue">NASA, Near Earth Asteroid Rendezvous (NEAR) Mission</span>
+                </p>
+                <p>International Space Station (ISS)<br /><span class="text-lblue">Toshiyuki Takahei</span></p>
+                <p>
+                    Earth<br />
+                    <span class="text-lblue">Bing Maps</span>
+                </p>
+                <p>
+                    Asteroid Impacts 2000-2013<br />
+                    <span class="text-lblue">B612 Foundation<br />160</span>
+                </p>
+                <p>
+                    Moon<br />
+                    <span class="text-lblue">NASA, Lunar Reconnaissance Orbiter (LRO) Mission</span>
+                </p>
+                <p>
+                    Mars<br />
+                    <span class="text-lblue">NASA/USGS/Malin Space Science System/JPL, Mars Reconnaissance Orbiter (MRO) Mission</span>
+                </p>
+                <p>
+                    Mercury<br />
+                    <span class="text-lblue">NASA/Johns Hopkins University APL/Carnegie Institution, MESSENGER Mission</span>
+                </p>
+                <p>
+                    Asteroids<br />
+                    <span class="text-lblue">International Astronomical Union (IAU) <br />Minor Planets Center (MPC)</span>
+                </p>
+
+                <h3>Single-Topic Slides</h3>
+                <p>When the full Impacts tour was produced it was created in a way that would enable reuse of components of the show.  We have broken out most of the slides here with their own narration and music audio.  In some cases – ISS and Asteroid Impacts on Earth 2000-2013 – we have made versions specific for specific display environments (e.g., VR vs. flat screen).  For the other topics the same slide can be used in any venue.  The narration for all slides is the same as for the show and you can refer to the complete script for more details.</p>
+
+                <h4>International Space Station</h4>
+                <p>
+                    <img src="@ViewBag.imgDir/Impacts_ISS.png" class="img-border img-responsive" alt="International Space Station Slide" />
+                </p>
+                <ul>
+                    <li><a href="@ViewBag.slidesDir/ISS Exploration - Flat Screen.wtt">ISS Exploration - Flat Screen</a></li>
+                    <li><a href="@ViewBag.slidesDir/ISS Exploration - Full Dome.wtt">ISS Exploration - Full Dome</a></li>
+                    <li><a href="@ViewBag.slidesDir/ISS Exploration - VR.wtt">ISS Exploration - VR</a></li>
+                </ul>
+
+                <h4>Asteroid Impacts on Earth 2000-2013</h4>
+                <p>
+                    <img src="@ViewBag.imgDir/Impacts_asteroids.png" class="img-border img-responsive" alt="Asteroid Impacts on Earth 2000-2013 Slide" />
+                </p>
+                <ul>
+                    <li><a href="@ViewBag.slidesDir/Asteroid Impacts on Earth 2000-2013 - Flat Screen.wtt">Asteroid Impacts on Earth 2000-2013 - Flat Screen</a></li>
+                    <li><a href="@ViewBag.slidesDir/Asteroid Impacts on Earth 2000-2013 - VR and Fulldome.wtt">Asteroid Impacts on Earth 2000-2013 - Full Dome, VR</a></li>
+                </ul>
+                <h4>Meteor Crater Flyover</h4>
+                <p>
+                    <img src="@ViewBag.imgDir/Impacts_craters.png" class="img-border img-responsive" alt="Meteor Crater Flyover Slide" />
+                </p>
+                <ul>
+                    <li><a href="@ViewBag.slidesDir/Meteor Crater Flyover.wtt">Meteor Crater Flyover - Flat Screen, Full Dome, VR</a></li>
+                </ul>
+                <h4>Manicouagan Crater Flyover</h4>
+                <p>
+                    <img src="@ViewBag.imgDir/Impacts_manicouagan.png" class="img-border img-responsive" alt="Manicouagan Crater Flyover Slide" />
+                </p>
+                <ul>
+                    <li><a href="@ViewBag.slidesDir/Manicouagan Crater Flyover.wtt">Manicouagan Crater Flyover - Flat Screen, Full Dome, VR</a></li>
+                </ul>
+                <h4>Moon - Tycho Crater Flyover</h4>
+                <p>
+                    <img src="@ViewBag.imgDir/Impacts_tycho.png" class="img-border img-responsive" alt="Moon - Tycho Crater Flyover Slide" />
+                </p>
+                <ul>
+                    <li><a href="@ViewBag.slidesDir/Moon - Tycho Crater Flyover.wtt">Moon - Tycho Crater Flyover - Flat Screen, Full Dome, VR</a></li>
+                </ul>
+                <h4>Mars - Gale Crater Flyover</h4>
+                <p>
+                    <img src="@ViewBag.imgDir/Impacts_gale.png" class="img-border img-responsive" alt="Mars - Gale Crater Flyover Slide" />
+                </p>
+                <ul>
+                    <li><a href="@ViewBag.slidesDir/Mars - Gale Crater Flyover.wtt">Mars - Gale Crater Flyover - Flat Screen, Full Dome, VR</a></li>
+                </ul>
+                <h4>Mercury – Caloris Basin Flyover</h4>
+                <p>
+                    <img src="@ViewBag.imgDir/Impacts_calorisbasin.png" class="img-border img-responsive" alt="Mercury – Caloris Basin Flyover Slide" />
+                </p>
+                <ul>
+                    <li><a href="@ViewBag.slidesDir/Mercury - Caloris Basin Flyover.wtt">Mercury – Caloris Basin Flyover - Flat Screen, Full Dome, VR</a></li>
+                </ul>
+
+                <h4>Asteroid Belts Exploration</h4>
+                <p>
+                    <img src="@ViewBag.imgDir/Impacts_AsteroidBelts.png" class="img-border img-responsive" alt="Asteroid Belts Exploration Slide" />
+                </p>
+                <ul>
+                    <li><a href="@ViewBag.slidesDir/Asteroid Belts Exploration.wtt">Asteroid Belts Exploration - Flat Screen, Full Dome, VR</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+</div>

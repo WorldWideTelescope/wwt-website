@@ -1,16 +1,15 @@
 ﻿@{
-	Layout = "~/Views/Shared/_ContentPage.cshtml";
+    Layout = "~/Views/Shared/_ContentPage.cshtml";
 }
 @section leftnav{
-	@Html.Partial("~/Views/Use/LeftNav.cshtml")
+    @Html.Partial("~/Views/Use/LeftNav.cshtml")
 }
 
 
 <h1>Researcher Resources</h1>
-<i>The following resources are Windows only, similar features will be available in the Web Client soon.</i>
 
-TODO: Astrolabe Project, Montage, toasty, Glue, VA guide.
-<p> WorldWide Telescope enables new ways of visualization of observational data.  WWT can be used at all stages of research including observational analysis and exploration, as well as presentation.</p>
+
+<p> WorldWide Telescope enables new ways of visualization of observational data. Expand each section below to learn of ways to incorporate WWT in your research.</p>
 <div class="panel-group" id="accordion">
     <div class="panel panel-default">
         <div class="panel-heading">
@@ -66,61 +65,52 @@ TODO: Astrolabe Project, Montage, toasty, Glue, VA guide.
         </div>
         <div id="astrolabe" class="panel-collapse collapse ">
             <div class="panel-body">
-                TODO
+
+                <p>The <a href="http://astrolabe.arizona.edu/">Astrolabe Project</a> is creating a new open-access repository for previously uncurated astronomical datasets, building on existing CyVerse infrastructure with robust cloud-based resources for managing, linking, processing and sharing research data. </p>
+                <p> Astrolabe will be using WWT as the visualization engine for the project.</p>
+
             </div>
         </div>
     </div>
     <div class="panel panel-default">
         <div class="panel-heading">
             <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#astrolabe">
-                    Montage and Toasty
+                <a data-toggle="collapse" data-parent="#accordion" href="#phot">
+                    Import Images to WWT
                 </a>
             </h4>
         </div>
-        <div id="astrolabe" class="panel-collapse collapse ">
+        <div id="phot" class="panel-collapse collapse ">
             <div class="panel-body">
-                TODO
+
+                There are several mechanisms to import astronomical images to WWT, and we are working to on more:
+                <ul>
+                    <li><a href="http://montage.ipac.caltech.edu/">Montage</a> has a guide to import FITS files into WWT.</li>
+                    <li>We have a <a href="http://localhost/Developers/ImportImage">web uploader</a> (FITS not currently supported), which also serves the JavaScript inclined as an example call to the ShowImage control.</li>
+                    <li><a href="https://github.com/ChrisBeaumont/toasty">Toasty</a> can prepare images for viewing in WWT.</li>
+                    <li>Images uploaded to <a href="http://nova.astrometry.net/">Astrometry.net</a> are able to be seen in WWT by clicking on the "view in WWT" link.</li>
+                    <li>The <a href="/Use/">WWT Windows application</a> nativly supports FITS and AVM tagged images.</li>
+                    <li>Once your images are AVM tagged or TOASTed, you can share them as <a href="GetInvolved/#usingcommunities">community content as a Community Member</a></li>
+                </ul>
             </div>
         </div>
     </div>
     <div class="panel panel-default">
         <div class="panel-heading">
             <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#astrolabe">
-                    Glue with WWT
+                <a data-toggle="collapse" data-parent="#accordion" href="#glue">
+                    WWT Plug-in for Glue
                 </a>
             </h4>
         </div>
-        <div id="astrolabe" class="panel-collapse collapse ">
+        <div id="glue" class="panel-collapse collapse ">
             <div class="panel-body">
-                TODO
-            </div>
+                Analyze your data using the <a href="http://glueviz.org/en/stable/whatsnew/0.11.html?highlight=wwt#experimental-worldwide-telescope-plugin">WWT plug-in for Glue</a>
+                <a href="http://glueviz.org/en/stable/whatsnew/0.11.html?highlight=wwt#experimental-worldwide-telescope-plugin"><img src="http://glueviz.org/en/stable/_images/plugin_wwt.jpg" alt="Screen shot of WWT in Glue" class="img-responsive"></a>
+</div>
         </div>
     </div>
 
 
 
-    </div>
-
-
-
-    <h4>Tile Pipeline Tools</h4>
-    <p>Tile Pipeline Tools allow:</p>
-    <ul>
-        <li>Reproject image data into tile pyramids suitable for visualization in WorldWide Telescope.</li>
-        <li>Turn global or local xyz data into image tile pyramids.</li>
-        <li>Process Digital Elevation Models (DEM) into WWT compatible DEM tile pyramids.</li>
-        <li>Share the tile pyramids with your colleagues.</li>
-        <li>Create your own community containing tours, data and links that your colleagues can easily access.</li>
-        <li>Access the original ADK tools, i.e. the Sphere Toaster and the Study Chopper.</li>
-    </ul>
-    <p>
-        Further Reading and Reference documentation
-    </p>
-    <ul>
-        <li><a href="/Developers/DataFilesReference">Data Files Reference documentation</a> </li>
-        <li><a href="/Developers/ProjectionReference">Projection Reference documentation</a> </li>
-    </ul>
-
-
+</div>
