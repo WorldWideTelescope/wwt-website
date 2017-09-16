@@ -120,6 +120,17 @@ namespace WWTMVC5.Services
             return contentDetails;
         }
 
+        public Guid GetAzureId(long contentId)
+        {
+            var content = _contentRepository.GetContent(contentId);
+            if (content != null)
+            {
+                return content.ContentAzureID;
+            }
+
+            return Guid.Empty;
+        }
+
         public ContentDetails GetContentDetails(Guid azureId)
         {
             return GetContentDetails(azureId, false);

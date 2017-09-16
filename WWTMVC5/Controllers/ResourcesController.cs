@@ -216,6 +216,21 @@ namespace WWTMVC5.Controllers
         }
         [AllowAnonymous]
         [HttpPost]
+        [Route("Resource/Service/Content/PublishTour/{name}")]
+        public async Task<string> PublishTour(string name)
+        {
+            var profileDetails = await ValidateAuthentication();
+            if (profileDetails != null )
+            {
+                var contentId = await PublishContent(name + ".wtt", Request.InputStream);
+                var azureId = _contentService.GetAzureId(contentId);
+                return azureId.ToString();
+            }
+            return null;
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
         [Route("Resource/Service/Content/Publish/{filename}")]
         public async Task<long> PublishContent(string filename, Stream fileContent)
         {
