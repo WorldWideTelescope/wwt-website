@@ -1090,8 +1090,6 @@
     <Content Include="Views\GetInvolved\HelpOthers.cshtml" />
     <Content Include="Views\About\WhoWeAre.cshtml" />
     <Content Include="Views\Learn\UserGuide.cshtml" />
-    <Content Include="Views\Learn\Advanced.cshtml" />
-    <Content Include="Views\Learn\DevGuide.cshtml" />
     <Content Include="Views\Learn\Videos.cshtml" />
     <Content Include="Views\GetInvolved\LeftNav.cshtml" />
     <Content Include="Views\GetInvolved\Index.cshtml" />
@@ -1108,6 +1106,10 @@
     <Content Include="Views\Use\WWTPlanetarium.cshtml" />
     <Content Include="Views\Use\DomeProject.cshtml" />
     <Content Include="Views\Use\Impacts.cshtml" />
+    <Content Include="Views\GetInvolved\Spectrum.cshtml" />
+    <Content Include="Views\GetInvolved\PlanetExplorer.cshtml" />
+    <Content Include="Views\GetInvolved\GreatObservatories.cshtml" />
+    <Content Include="Views\GetInvolved\ImportImage.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>

@@ -1,0 +1,133 @@
+﻿@{
+	Layout = "~/Views/Shared/_ContentPage.cshtml";
+	ViewBag.Title = "Great Observatories - WorldWide Telescope";
+}
+@section leftnav{
+	@Html.Partial("~/Views/GetInvolved/LeftNav.cshtml")
+}
+<script src="@Model.JsDir/pages/Observatories.js?v=@Model.ResVer"></script>
+
+<script>
+	$(window).on('load', function() {
+		wwt.Observatories.init({
+			resLoc: '@Model.ResLoc',
+			defaultTour: '@Model.ContentDir/WebControlTours/SpectraIntro.xml'
+		});
+	});
+
+</script>
+
+<section>
+	<h1>The Great Observatories</h1>
+	<p>
+		NASA’s Great Observatories program is a series of space telescopes that study the cosmos across the electromagnetic spectrum. One central goal of the program was to overlap the operations phases of the missions to enable astronomers to make contemporaneous observations of objects at different spectral wavelengths. See some of the amazing images from these and other great telescopes.
+	</p>
+	
+
+	<div id="WorldWideTelescopeControlHost">
+		<div class="canvas-overlay">
+			<a href="javascript:void(0)" class="row" data-mode="overview">
+				<div class="col-xs-3 col-sm-6">
+					<img src="@Model.ImgDir/interact/great_observatories_overview1.jpg" alt="Great Observatories Overview" class="img-responsive" />
+				</div>
+				<div class="col-xs-9 col-sm-6">
+					<i class="fa fa-play-circle pull-left"></i>
+					<h3>Great Observatories Overview</h3>
+					<p>Learn about NASA's Great Observatories program.</p>
+				</div>
+			</a>
+			<a href="javascript:void(0)" class="row" data-mode="interact">
+				<div class="col-xs-3 col-sm-6">
+					<img src="@Model.ImgDir/interact/great_observatories_images.jpg" alt="Great Observatories Interactive" class="img-responsive" />
+				</div>
+				<div class="col-xs-9 col-sm-6">
+					<i class="fa fa-play-circle pull-left"></i>
+					<h3>The Images (Interactive)</h3>
+					<p>See a collection spectacular images from the Great Observatories.</p>
+				</div>
+			</a>
+		</div>
+	</div>
+	
+	<div id="divOverview" class="hide">
+		<hr/>
+		<div class="row">
+		<div id="divGASpectrum" class="obvs-div col-md-12">
+			<img src="@Model.ImgDir/interact/observatories_spectrum.png" alt="Electromagnetic Spectrum and Corresponding Great Observatories" class="img-border pull-left" style="height:50%;width:50%;margin:8px 16px 8px 0 !important"/>
+			
+			<p>
+				Until relatively recently in the history of astronomy all telescopes observed visible light, essentially the same form of light that our eyes see. However, visible light is only a small part of the entire electromagnetic spectrum.  Seeing astronomical sources in different wavelengths tells us different information about the objects.
+			</p>
+			<p>NASA launched a series of telescopes called “NASA’s Great Observatories” program to concurrently observe objects in various wavelengths. The Spitzer Space Telescope observes infrared or heat radiation. Because the Earth’s atmosphere absorbs this energy, this telescope was launched into space orbit.  The Hubble Space Telescope primarily observes in visual wavelengths.  The Chandra X-ray Observatory, another Earth-orbiting telescope, observes X-ray radiation, a high energy wavelength that is absorbed by our atmosphere. </p>
+			
+		</div>
+		<div id="divGAHubble" class="obvs-div col-md-12">
+			
+			<img src="@Model.ImgDir/interact/hubble.jpg" alt="Hubble Space Observatory" class="pull-left img-responsive img-border" data-nofs="true"/>
+			<h3>Hubble Space Telescope</h3>
+			<p>The famous Hubble Space Telescope (HST), named after the astronomer Edwin Hubble, continues to collect images of the sky in the near ultraviolet, visible, and near infrared spectra. Launched into space in 1990, this telescope has undergone several Space Shuttle mission repairs and upgrades. HST’s successor, the James Webb Space Telescope (JWST), is scheduled to be launched in 2018.</p>
+				<p><a href="@Model.ContentDir/Assets/3d/Hubble.wwtl">Hubble Space Telescope 3D Model</a><br/>(requires WWT Windows application)</p>
+
+			
+		</div>
+		<div id="divGAChandra" class="obvs-div col-md-12">
+			
+			<img src="@Model.ImgDir/interact/chandra.gif" alt="Chandra Space Observatory" class="pull-left img-responsive img-border" data-nofs="true"/>
+			<h3>Chandra Space Observatory</h3>
+			<p>The Chandra X-ray Observatory detects X-ray emissions from very hot regions of the Universe such as exploded stars, clusters of galaxies, and matter around black holes. Chandra is a space-based telescope, orbiting above Earth’s atmosphere to detect X-rays which would otherwise be absorbed by Earth's atmosphere.</p>
+
+			
+		</div>
+		<div id="divGASpitzer" class="obvs-div col-md-12">
+			<img src="@Model.ImgDir/interact/spitzer.jpg" alt="Spitzer Space Observatory" class="pull-left img-responsive img-border" data-nofs="true"/>
+			<h3>Spitzer Space Telescope</h3>
+			<p>
+				The Spitzer Space Telescope was launched in 2003 in an earth-trailing orbit. This telescope captures the infrared spectrum (primarily heat radiation). An onboard tank of liquid helium, or cryogen, cools the 85 cm telescope to only a few degrees above absolute zero (-459°F, -273°C).
+			</p>
+
+		</div>
+		</div>
+		<div class="clearfix"></div>
+		<hr/>
+		<div class="row" style="margin-top:16px">
+			<div class="col-xs-3 col-md-2">
+				<a href="javascript:void(0)" class="thumbnail" data-toggle-key="Spectrum">
+					<img src="@Model.ImgDir/interact/observatories_spectrum.png" alt="Electromagnetic Spectrum and Corresponding Great Observatories Thumbnail"/>
+				</a>
+			</div>
+			<div class="col-xs-3 col-md-2">
+				<a href="javascript:void(0)" class="thumbnail" data-toggle-key="Hubble">
+					<img src="@Model.ImgDir/interact/hubble.jpg" alt="Hubble Space Observatory Thumbnail"/>
+				</a>
+			</div>
+			<div class="col-xs-3 col-md-2">
+				<a href="javascript:void(0)" class="thumbnail" data-toggle-key="Chandra">
+					<img src="@Model.ImgDir/interact/chandra.gif" alt="Chandra Space Observatory Thumbnail"/>
+				</a>
+			</div>
+			<div class="col-xs-3 col-md-2">
+				<a href="javascript:void(0)" class="thumbnail" data-toggle-key="Spitzer">
+					<img src="@Model.ImgDir/interact/spitzer.jpg" alt="Spitzer Space Observatory Thumbnail"/>
+				</a>
+			</div>
+
+		</div><p><br/>
+		<a class="start-mode" href="javascript:void(0)" data-mode="interact">Interact with Imagery <i class="fa fa-arrow-right"></i></a></p>
+	</div>
+	
+	<div id="divInteractive" class="hide">
+		<div class="row" style="margin-top:16px">
+			
+			
+		</div>
+		<p><br/>
+		<a class="start-mode" href="javascript:void(0)" data-mode="overview">Great Observatories Overview <i class="fa fa-arrow-right"></i></a></p>
+	</div>
+	
+	
+	
+	
+</section>
+
+
+   

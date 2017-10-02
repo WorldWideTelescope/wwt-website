@@ -1,3 +1,15 @@
-﻿<li class="@(ViewBag.page == "JoinUs" ? "active" : "")"><a href="/GetInvolved/">Join Us</a></li>
+﻿@{
+    ViewBag.sdkUrl = Model.ResLoc + "/html5sdk/wwtsdk" + (Request.QueryString["debug"] == null ? ".min" : "") + ".js";
+}
+
+<script src="@ViewBag.sdkUrl"></script>
+<script src="@Model.JsDir/controls/WebControl.js?v=@Model.ResVer"></script>
+<script src="@Model.JsDir/controls/TourPlayer.js?v=@Model.ResVer"></script>
+<script src="@Model.JsDir/controls/move.js?v=@Model.ResVer"></script>
+<script src="@Model.JsDir/controls/pinch.js?v=@Model.ResVer"></script>
+<script src="@Model.JsDir/controls/util.js?v=@Model.ResVer"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+
+<li class="@(ViewBag.page == "JoinUs" ? "active" : "")"><a href="/GetInvolved/">Join Us</a></li>
 <li class="@(ViewBag.page == "HelpOthers" ? "active" : "")"><a href="/GetInvolved/HelpOthers">Help Others Learn WWT</a></li>
 <li class="@(ViewBag.page == "Develop" ? "active" : "")"><a href="/GetInvolved/Develop">Develop WWT</a></li>
