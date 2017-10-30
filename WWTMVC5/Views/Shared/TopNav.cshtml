@@ -1,147 +1,144 @@
-﻿@using System.Configuration
+﻿﻿@using System.Configuration
 <div class="navbar navbar-inverse navbar-fixed-top">
-	<div class="container">
-	    <div class="navbar-header">
-	        @if (!Model.IsOpenWwtKiosk)
-	        {
-	            <button data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggle" type="button">
-	                <span class="icon-bar"></span>
-	                <span class="icon-bar"></span>
-	                <span class="icon-bar"></span>
-	            </button>
-	        }
-	        <a class="navbar-brand" href="@(Model.IsOpenWwtKiosk ? "http://worldwidetelescope.org" : "/")">
-	            <span class="aas">American Astronomical Society</span>
-	            World<span class=text-info>Wide Telescope</span>
-	        </a>
-	    </div>
-@if (!Model.IsOpenWwtKiosk)
-{
-    <div class="navbar-collapse collapse">
-        <ul class="nav navbar-nav social">
-            <li class="social">
-                <a class="social" target="social" href="/Home" data-toggle="tooltip" data-placement="bottom"
-                   data-title="Back to home page">
-                    <i class="fa fa-home text-info" style="margin-top: 4px;"></i>
-                </a>
-            </li>
-            <li class="social">
-                @if (Model.User != null)
-                {
-                    <div id="signinContainer" loggedIn="true">
-
-                        <a class="social" href="/Community/#/MyProfile" id="username" data-toggle="tooltip" data-placement="bottom"
-                           data-title="@("Welcome, " +Model.User.FirstName + " " + Model.User.LastName). Click to view your WWT community profile">
-                            <i class="fa fa-user" style="color:#009cff"></i>
-                        </a>
-                    </div>
-                }
-                else
-                {
-                    <div id="signinContainer">
-                        <a class="social" href="javascript:void(0)" id="signin" data-toggle="tooltip" data-placement="bottom"
-                           data-title="Sign in to WWT">
-                            <i class="fa fa-sign-in"></i>
-                        </a>
-                    </div>
-                }
-
-            </li>
-            @if (ConfigurationManager.AppSettings["twitterId"] != "xxx")
+    <div class="container">
+        <div class="navbar-header">
+            @if (!Model.IsOpenWwtKiosk)
             {
-                // need a valid twitter id
-                <li class="social" style="width: 40px">
-                    <a class="social dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)">
-                        <i class="fa fa-twitter text-info" style="margin-top: 4px;"></i>
+                <button data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggle" type="button">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            }
+            <a class="navbar-brand" href="@(Model.IsOpenWwtKiosk ? "http://worldwidetelescope.org" : "/")">
+                <span class="aas">American Astronomical Society</span>
+                World<span class=text-info>Wide Telescope</span>
+            </a>
+        </div>
+        @if (!Model.IsOpenWwtKiosk)
+        {
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav social">
+                    <li class="social">
+                        <a class="social" target="social" href="/webclient" data-toggle="tooltip" data-placement="bottom"
+                           data-title="Run WWT on the Web">
+                            <i class="fa fa-rocket text-info" style="margin-top: 4px;"></i>
+                        </a>
+                    </li>
+                    <li class="social">
+                        <a class="social" target="social" href="/Home" data-toggle="tooltip" data-placement="bottom"
+                           data-title="Back to home page">
+                            <i class="fa fa-home text-info" style="margin-top: 4px;"></i>
+                        </a>
+                    </li>
+                    <li class="social">
+                        @if (Model.User != null)
+                {
+                            <div id="signinContainer" loggedIn="true">
+                                <a class="social" href="/Community/#/MyProfile" id="username" data-toggle="tooltip" data-placement="bottom"
+                                   data-title="@("Welcome, " +Model.User.FirstName + " " + Model.User.LastName). Click to view your WWT community profile">
+                                    <i class="fa fa-user" style="color:#009cff"></i>
+                                </a>
+                            </div>
+                        }
+                        else
+                        {
+                            <div id="signinContainer">
+                                <a class="social" href="javascript:void(0)" id="signin" data-toggle="tooltip" data-placement="bottom"
+                                   data-title="Sign in to WWT">
+                                    <i class="fa fa-sign-in"></i>
+                                </a>
+                            </div>
+                        }
+                    </li>
+                    @if (ConfigurationManager.AppSettings["twitterId"] != "xxx")
+                    {
+                        // need a valid twitter id
+                        <li class="social" style="width: 40px">
+                            <a class="social dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)">
+                                <i class="fa fa-twitter text-info" style="margin-top: 4px;"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a target="social" href="https://twitter.com/intent/follow?original_referer=http%3A%2F%2Fwww.worldwidetelescope.org%2FHome.aspx&region=follow_link&screen_name=WWTelescope&tw_p=followbutton&variant=2.0" data-toggle="tooltip" data-placement="bottom"
+                                       data-title="Follow WWTelescope on Twitter">
+                                        <i class="fa fa-twitter text-info"></i>
+                                        Follow WWTelescope on Twitter
+                                    </a>
+                                </li>
+                                <li>
+                                    <a target="social" href="https://twitter.com/intent/tweet?original_referer=http%3A%2F%2Fwww.worldwidetelescope.org&text=Check%20out%20WorldWide%20Telescope%20-%20the%203D%20universe&tw_p=tweetbutton&url=http%3A%2F%2Fwww.worldwidetelescope.org&via=WWTelescope
+" data-toggle="tooltip" data-placement="bottom"
+                                       data-title="Tweet WorldWide Telescope">
+                                        <i class="fa fa-twitter text-info"></i>
+                                        Tweet WorldWide Telescope
+                                    </a>
+                                </li>
+                            </ul>
+                            <span class="sep"></span>
+                        </li>
+                        <li class="social">
+                            <a class="social" target="social" href="https://www.facebook.com/WorldWideTelescope" data-toggle="tooltip" data-placement="bottom"
+                               data-title="Like us on Facebook">
+                                <i class="fa fa-facebook text-info" style="margin-top: 4px;"></i>
+                            </a>
+                        </li>
+                        <li class="social" style="width: 42px;cursor:pointer" data-toggle="tooltip" data-placement="bottom"
+                            data-title="Join Our Mailing List">
+                            <a class="social" data-toggle="modal" data-target="#mailChimp" data-height="500" style="position:relative;z-index:3">
+                                <i class="fa fa-envelope text-info" style="margin-left: -1px;"></i>
+                            </a>
+                        </li>
+                    }
+                    <li class="social" style="padding-left:0;">
+                        @*Inline styles to enable deploying these changes without other in-flight changes to wwt.less*@
+                    <a href="http://aas.org" target="_blank" style="position: relative;top: -28px;left: 15px;" data-toggle="tooltip" data-placement="bottom"
+                       data-title="Americian Astronomical Society">
+                        <img src="https://wwtweb.blob.core.windows.net/images/aas-white110.png" style="height:60px;width:60px;">
+                    </a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav">
+                <li class="dropdown" runat="server" id="topNav_Learn">
+                    <a href="javascript:void(0)" title="Learn" class="dropdown-toggle" data-toggle="dropdown">
+                        Learn <i class="fa fa-angle-down"></i>
                     </a>
                     <ul class="dropdown-menu">
-
-                        <li>
-                            <a target="social" href="https://twitter.com/intent/follow?original_referer=http%3A%2F%2Fwww.worldwidetelescope.org%2FHome.aspx&region=follow_link&screen_name=WWTelescope&tw_p=followbutton&variant=2.0"  data-toggle="tooltip" data-placement="bottom"
-                           data-title="Follow WWTelescope on Twitter">
-                                <i class="fa fa-twitter text-info"></i>
-                                Follow WWTelescope on Twitter
-                            </a>
-                        </li>
-                        <li>
-
-                            <a target="social" href="https://twitter.com/intent/tweet?original_referer=http%3A%2F%2Fwww.worldwidetelescope.org&text=Check%20out%20WorldWide%20Telescope%20-%20the%203D%20universe&tw_p=tweetbutton&url=http%3A%2F%2Fwww.worldwidetelescope.org&via=WWTelescope
-"  data-toggle="tooltip" data-placement="bottom"
-                           data-title="Tweet WorldWide Telescope">
-                                <i class="fa fa-twitter text-info"></i>
-                                Tweet WorldWide Telescope
-                            </a>
-                        </li>
+                        <li><a href="/Learn/">Getting Started</a></li>
+                        <li><a href="/Learn/UserGuide">User Guides</a></li>
                     </ul>
-                    <span class="sep"></span>
                 </li>
-                <li class="social">
-                    <a class="social" target="social" href="https://www.facebook.com/WorldWideTelescope"  data-toggle="tooltip" data-placement="bottom"
-                           data-title="Like us on Facebook">
-                        <i class="fa fa-facebook text-info" style="margin-top: 4px;"></i>
+                <li class="dropdown" runat="server" id="topNav_Interact">
+                    <a href="javascript:void(0)" title="Use" class="dropdown-toggle" data-toggle="dropdown">
+                        Use <i class="fa fa-angle-down"></i>
                     </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/webclient"><strong>Use WWT on the Web</strong></a></li>
+                        <li><a href="/Use/">Install the WWT Windows App</a></li>
+                        <li><a href="/Use/Embed">Embed WWT In Your Website</a></li>
+                        <li><a href="/Use/TourAssets">Add 3D Models, Music, and Images to your Tours</a></li>
+                        <li class="divider"></li>
+                        <li><a href="/Use/Planetariums" title="Planetariums">Museum and Planetarium Resources</a></li>
+                        <li><a href="/Use/Educators" title="Educators">Educators Resources</a></li>
+                        <li><a href="/Use/Researchers" title="Researchers">Researchers Resources</a></li>
+                    </ul>
                 </li>
-                <li class="social" style="width: 42px;cursor:pointer" data-toggle="tooltip" data-placement="bottom"
-                           data-title="Join Our Mailing List">
-                    <a class="social" data-toggle="modal" data-target="#mailChimp" data-height="500" style="position:relative;z-index:3">
-                        <i class="fa fa-envelope text-info" style="margin-left: -1px;"></i>
+                <li class="dropdown" runat="server" id="topNav_Develop">
+                    <a href="javascript:void(0)" title="Get Involved" class="dropdown-toggle" data-toggle="dropdown">
+                        Get Involved <i class="fa fa-angle-down"></i>
                     </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/GetInvolved/">Join Us!</a></li>
+                        <li><a href="/GetInvolved/HelpOthers">Help Others Learn WWT</a></li>
+                        <li><a href="/GetInvolved/Develop">Develop</a></li>
+                        <li class="divider"></li>
+                        <li><a href="/Community/">Community Content</a></li>
+                        <li id="profileMenuItem" class="@(Model.User == null ? "hide" : "")"><a href="/Community/Profile">My Profile</a></li>
+                    </ul>
                 </li>
-            }
-            <li class="social" style="padding-left:0;">@*Inline styles to enable deploying these changes without other in-flight changes to wwt.less*@
-                <a href="http://aas.org" target="_blank" style="position: relative;top: -28px;left: 15px;" data-toggle="tooltip" data-placement="bottom"
-                           data-title="Americian Astronomical Society">
-                    <img src="https://wwtweb.blob.core.windows.net/images/aas-white110.png"  style="height:60px;width:60px;">
-                </a>
-            </li>
-        </ul>
-        <ul class="nav navbar-nav">
-            <li class="dropdown" runat="server" id="topNav_Learn">
-                <a href="javascript:void(0)" title="Learn" class="dropdown-toggle" data-toggle="dropdown">
-                    Learn <i class="fa fa-angle-down"></i>
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a href="/Learn/">Getting Started</a></li>
-                    <li><a href="/Learn/UserGuide">User Guides</a></li>
+            </ul>
+        </div>
 
-                </ul>
-
-            </li>
-            <li class="dropdown" runat="server" id="topNav_Interact">
-                <a href="javascript:void(0)" title="Use" class="dropdown-toggle" data-toggle="dropdown">
-                    Use <i class="fa fa-angle-down"></i>
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a href="/webclient"><strong>Use WWT on the Web</strong></a></li>
-                    <li><a href="/Use/">Install the WWT Windows App</a></li>
-                    <li><a href="/Use/Embed">Embed WWT In Your Website</a></li>
-                    <li><a href="/Use/TourAssets">Add 3D Models, Music, and Images to your Tours</a></li>
-                    <li class="divider"></li>
-                    <li><a href="/Use/Planetariums" title="Planetariums">Museum and Planetarium Resources</a></li>
-                    <li><a href="/Use/Educators" title="Educators">Educators Resources</a></li>
-                    <li><a href="/Use/Researchers" title="Researchers">Researchers Resources</a></li>
-                </ul>
-
-            </li>
-
-            <li class="dropdown" runat="server" id="topNav_Develop">
-                <a href="javascript:void(0)" title="Get Involved" class="dropdown-toggle" data-toggle="dropdown">
-                    Get Involved <i class="fa fa-angle-down"></i>
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a href="/GetInvolved/">Join Us!</a></li>
-                    <li><a href="/GetInvolved/HelpOthers">Help Others Learn WWT</a></li>
-                    <li><a href="/GetInvolved/Develop">Develop</a></li>
-                    <li class="divider"></li>
-                    <li><a href="/Community/">Community Content</a></li>
-                    <li id="profileMenuItem" class="@(Model.User == null ? "hide" : "")"><a href="/Community/Profile">My Profile</a></li>
-                </ul>
-
-            </li>
-
-        </ul>
+        }
     </div>
-    
-}
-	</div>
 </div>

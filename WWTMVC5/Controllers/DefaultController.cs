@@ -31,30 +31,15 @@ namespace WWTMVC5.Controllers
         private static readonly string[] ViewGroups = new string[]
         {
             "about",
-            "blog",
-            "community",
-            "developers",
             "download",
-            "educators",
-            "explorers",
-            "eyewire",
             "getinvolved",
             "home",
-            "interact",
-            "layerscape",
             "learn",
-            "museums",
-            "news",
-            "openwwt",
-            "planetariums",
             "profile",
-            "researchers",
             "support",
             "terms",
             "upgrade",
-            "use",
-            "wwtinaction",
-            "wwtstories"
+            "use"
         };
     
         public async Task<ActionResult> Index()

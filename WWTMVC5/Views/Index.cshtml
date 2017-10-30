@@ -1,8 +1,7 @@
-﻿@using System.Configuration
+﻿﻿@using System.Configuration
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 @section Head{
     <script src="@Model.JsDir/pages/home.js?v=@Model.ResVer"></script>
     <script src="@Model.JsDir/controls/util.js?v=@Model.ResVer"></script>
@@ -16,21 +15,23 @@
 <div class="row" style="margin-top:125px;">
     <div class="col-md-10 col-md-offset-1">
         <h2>WorldWide Telescope Resources</h2>
-
         <div class="row home-features">
 
+
+
+
             <div class="col-md-4">
-                <a href="/Use/Educators">
-                    <img src="~/images/educators.png" class="img-responsive" />
-                    <i class="fa fa-graduation-cap"></i>
-                    <h4>Resources for Educators</h4>
+                <a href="javascript:location.href = wwt.wcLink">
+                    <img src="~/images/exploreweb.png" class="img-responsive" />
+                    <i class="fa fa-rocket"></i>
+                    <h4>Run WorldWide Telescope on the Web</h4>
                 </a>
             </div>
             <div class="col-md-4">
-                <a href="/GetInvolved/Develop">
-                    <img src="~/images/develop.png" class="img-responsive" />
-                    <i class="fa fa-laptop"></i>
-                    <h4>Resources for Developers</h4>
+                <a href="/Learn/">
+                    <img src="~/images/installwwt.png" class="img-responsive" />
+                    <i class="fa fa-book"></i>
+                    <h4>Learn To Use WorldWide Telescope</h4>
                 </a>
             </div>
             <div class="col-md-4">
@@ -40,21 +41,13 @@
                     <h4>Resources for Astronomers</h4>
                 </a>
             </div>
-
         </div>
         <div class="row home-features">
             <div class="col-md-4">
-                <a href="/Use/Planetariums">
-                    <img src="~/images/planetariums.png" class="img-responsive" />
-                    <i class="fa fa-institution"></i>
-                    <h4>Resources for Planetariums and Museums</h4>
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a href="/Learn/">
-                    <img src="~/images/installwwt.png" class="img-responsive" />
-                    <i class="fa fa-book"></i>
-                    <h4>Getting Started</h4>
+                <a href="/Download/">
+                    <img src="@Model.ImgDir/webclient-thumbnails.jpg" class="img-responsive" />
+                    <i class="fa fa-download"></i>
+                    <h4>Install WorldWide Telescope for Windows</h4>
                 </a>
             </div>
             <div class="col-md-4">
@@ -64,21 +57,23 @@
                     <h4>Check out our Videos</h4>
                 </a>
             </div>
-        </div>
-        <div class="row home-features">
-
             <div class="col-md-4">
-                <a href="/Download/">
-                    <img src="@Model.ImgDir/webclient-thumbnails.jpg" class="img-responsive" />
-                    <i class="fa fa-download"></i>
-                    <h4>Install WorldWide Telescope for Windows</h4>
+                <a href="/Use/Educators">
+                    <img src="~/images/educators.png" class="img-responsive" />
+                    <i class="fa fa-graduation-cap"></i>
+                    <h4>Resources for Educators</h4>
                 </a>
             </div>
+
+
+        </div>
+
+        <div class="row home-features">
             <div class="col-md-4">
-                <a href="javascript:location.href = wwt.wcLink">
-                    <img src="~/images/exploreweb.png" class="img-responsive" />
-                    <i class="fa fa-rocket"></i>
-                    <h4>Explore WorldWide Telescope on the Web</h4>
+                <a href="/Use/Planetariums">
+                    <img src="~/images/planetariums.png" class="img-responsive" />
+                    <i class="fa fa-institution"></i>
+                    <h4>Resources for Planetariums and Museums</h4>
                 </a>
             </div>
 
@@ -89,8 +84,14 @@
                     <h4>Get Involved</h4>
                 </a>
             </div>
+            <div class="col-md-4">
+                <a href="/GetInvolved/Develop">
+                    <img src="~/images/develop.png" class="img-responsive" />
+                    <i class="fa fa-laptop"></i>
+                    <h4>Resources for Developers</h4>
+                </a>
+            </div>
         </div>
     </div>
 </div>
-
-    <br /><br />
+<br /><br />
