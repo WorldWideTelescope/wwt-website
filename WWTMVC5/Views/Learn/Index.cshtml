@@ -1,30 +1,33 @@
-﻿@{
-	Layout = "~/Views/Shared/_ContentPage.cshtml";
+﻿﻿@{
+    Layout = "~/Views/Shared/_ContentPage.cshtml";
 }
 @section leftnav{
-	@Html.Partial("~/Views/Learn/LeftNav.cshtml")
+    @Html.Partial("~/Views/Learn/LeftNav.cshtml")
 }
-
 <section>
-	<h2>Getting Started with WorldWide Telescope</h2>
+    <h2>Getting Started with WorldWide Telescope</h2>
     <p>The WorldWide Telescope Ambassadors program has excellent resources to get started with WWT, start with <a href="https://wwtambassadors.org/learn-how-use-worldwide-telescope">"Learn How To User WorldWide Telescope"</a> and see below</p>
-	<p> You can use WorldWide Telescope by installing it on a Windows PC or using the Web Client </p>
+    <p> You can use WorldWide Telescope by installing it on a Windows PC or using the Web Client </p>
     <h4>Use the WorldWide Telescope Web Client</h4>
     After <a href="/webclient/">launching the WorldWide Telescope Web Client</a>, click the down arrow under the <strong>Explore</strong> tab and select <strong>Tour WWT Features</strong>.
-    <h4> Install WorldWide Telescope on a Windows PC </h4>
-    <p>After <a href="/Download/">downloading WorldWide Telescope</a>, install and launch the program.  Upon first opening the Home screen, you’ll find a dialogue box that tells you how to navigate in the WorldWide Telescope.</p>
 
-    <h4>Learn More</h4>
-    To learn more about WWT you can <a href="/Learn/UserGuide">check out the user guide</a>, the WorldWide Telescope Ambassadors' <a href="https://www.youtube.com/user/WWTAmbassadors">YouTube channel</a>, and our <a href="https://www.youtube.com/channel/UCjx-BjxGX6vvxALi9ziBfjA"> YouTube channel</a>, starting with the "Getting Started" video below:
-    <div class="large-video-player autoresize" style="margin:16px 0">
-        <iframe width="560" height="315" src="//www.youtube.com/embed/zooTDvbpdDQ" frameborder="0" allowfullscreen></iframe>
-    </div>
-    <br />
-    <p>This video was rendered from a WorldWide Telescope tour: <a href="@Model.ContentDir/tours/Getting Started with WWT - v1.2.wtt">Getting Started with WWT</a>.</p>
+    <p>Alternatively, below please see some annotated screen shots of the WWT Web Client user interface</p>
+    <p><img src="@Model.ImgDir/BasicUI.png" alt="WWT Web Client User Interface" class="img-responsive" /></p>
+    <p><img src="@Model.ImgDir/LookAt.png" alt="WWT Web Client User Interfaces" class="img-responsive" /></p>
+    <p><img src="@Model.ImgDir/Imagery.png" alt="WWT Web Client User Interface" class="img-responsive" /></p>
+    <p><img src="@Model.ImgDir/LayerManager.png" alt="WWT Web Client User Interface" class="img-responsive" /></p>
+    <p><img src="@Model.ImgDir/FinderScope.png" alt="WWT Web Client User Interface" class="img-responsive" /></p>
 
-    If you have questions, please <a href="/Support/IssuesAndBugs">contact us.</a>
-
-    <br/>    
+                <h4> Install WorldWide Telescope on a Windows PC </h4>
+                <p>After <a href="/Download/">downloading WorldWide Telescope</a>, install and launch the program.  Upon first opening the Home screen, you’ll find a dialogue box that tells you how to navigate in the WorldWide Telescope.</p>
+                <h4>Learn More</h4>
+                To learn more about WWT you can <a href="/Learn/UserGuide">check out the user guide</a>, the WorldWide Telescope Ambassadors' <a href="https://www.youtube.com/user/WWTAmbassadors">YouTube channel</a>, and our <a href="https://www.youtube.com/channel/UCjx-BjxGX6vvxALi9ziBfjA"> YouTube channel</a>, starting with the "Getting Started" video below:
+                <div class="large-video-player autoresize" style="margin:16px 0">
+                    <iframe width="560" height="315" src="//www.youtube.com/embed/zooTDvbpdDQ" frameborder="0" allowfullscreen></iframe>
+                </div>
+                <br />
+                <p>This video was rendered from a WorldWide Telescope tour: <a href="@Model.ContentDir/Tours/Getting Started with WWT - v1.2.wtt">Getting Started with WWT</a>.</p>
+                If you have questions, please <a href="/Support/IssuesAndBugs">contact us.</a>
+                <br />
 </section>
-
 
