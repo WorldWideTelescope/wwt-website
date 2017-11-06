@@ -7,117 +7,125 @@
     @Html.Partial("~/Views/Learn/LeftNav.cshtml")
 }
 
+
+<script>
+    $(function () {
+
+        $.ajax({
+            //type:'GET',
+            url: '/Models/wwtguides.xml',
+            success: function (x, status, xhr) {
+                var tmpl = $('.guide-row.hide'), track, row,
+                    populate = function (sel, node) {
+                        row.find(sel).html(track.find(node).text());
+                    }
+                $(x).find('Guide').each(function (i, item) {
+                    track = $(this);
+                    row = tmpl.clone(true);
+                    row.removeClass('hide');
+                    var title = track.find('Title').text();
+                    row.find('a.guide-link-pdf').attr('href',
+                        'https:' + '@Model.ContentDir/assets/guides/' +
+                        track.find('Filename').text() + '.pdf');
+                    row.find('a.guide-link-mobi').attr('href',
+						'https:' + '@Model.ContentDir/assets/guides/' +
+                        track.find('Filename').text() + '.mobi');
+                    row.find('a.guide-link-epub').attr('href',
+						'https:' + '@Model.ContentDir/assets/guides/' +
+                        track.find('Filename').text() + '.epub');
+                    row.find('a.guide-link-gitbook').attr('href',
+                        track.find('URL').text());
+                    row.find('a.guide-link-repo').attr('href',
+                        track.find('Repository').text());
+                    row.find('a.guide-createdbyurl').attr('href',
+                        track.find('CreatedByURL').text());
+                    row.find('a.guide-maintainedbyurl').attr('href',
+                        track.find('MaintainedByURL').text());
+                    populate('.guide-title', 'Title');
+                    populate('.guide-filename', 'Filepath');
+                    populate('.guide-createdby', 'CreatedBy');
+                    populate('.guide-description', 'Description');
+                    populate('.guide-audience', 'Audience');
+                    populate('.guide-repository', 'Repository');
+                    populate('.guide-maintainedby', 'MaintainedBy');
+                    populate('.guide-url', 'URL');
+					$('#guidesTarget').append(row);
+				});
+			}
+		});
+
+		$('#guideAssets .guide-links').each(function () {
+			$(this).text($(this).text().replace(/_/g, ' '));
+		});
+	});
+
+
+</script>
+
 <h2>User Guides</h2>
 <p>Below are our "living" written guides for users interested in learning more about WWT. The WorldWide Telescope Ambassadors program also has an excellent <a href="https://wwtambassadors.org/resources">resource page for learning WWT.</a> </p>
 <p>Besides reading, you can find help on YouTube, especially on <a href="https://www.youtube.com/channel/UCjx-BjxGX6vvxALi9ziBfjA">our</a> and <a href="https://www.youtube.com/user/WWTAmbassadors">WWTA's</a> YouTube channels.</p>
 
-<p>If you're still having trouble, please <a href="/Support/IssuesAndBugs">let us know.</a></p>
+<p>If you're having trouble, please <a href="/Support/IssuesAndBugs">let us know.</a></p>
 <br />
-<i>Click the title below to expand or collapse the panel.</i>
- 
 
-    <div class="panel-group" id="accordion">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#userguide">
-                        WorldWide Telescope User Guide
-                    </a>
-                </h4>
-            </div>
-            <div id="userguide" class="panel-collapse collapse ">
-                <div class="panel-body">
-
-                    <p>The WWT User Guide is aimed at newcomers to WWT as well as exerienced users who would like a more detailed overview of the WWT features.</p>
-                    <p>You can read the most updated version of our user guide <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/">online</a>, or download it in pdf, ePub, or Mobi format by following the download link on the <a href="https://www.gitbook.com/book/worldwidetelescope/worldwide-telescope-user-manual/details">gitbook page</a>.</p>
-                    <div class="row">
-                        <div class="col-md-10 col-md-offset-1">
-                            <div class="row home-features">
-                                <div class="col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-3 col-xs-12">
-                                    <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-user-manual/content/">
-                                        <img src="/Content/images/gbox.png" class="img-responsive">
-                                        <i class="fa fa-book"></i>
-                                        <h4>Read Online</h4>
-                                    </a>
-                                </div>
-                                <div class="col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-3 col-xs-12">
-                                    <a href="~/Docs/worldwide-telescope-user-manual.pdf">
-                                        <img src="/Content/images/gbox.png" class="img-responsive">
-                                        <i class="fa fa-file-pdf-o"></i>
-                                        <h4>Download .pdf</h4>
-                                    </a>
-                                </div>
-                                <div class="col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-3 col-xs-12">
-                                    <a href="~/Docs/worldwide-telescope-user-manual.mobi">
-                                        <img src="/Content/images/gbox.png" class="img-responsive">
-                                        <i class="fa fa-file-text-o"></i>
-                                        <h4>Download .mobi</h4>
-                                    </a>
-                                </div>
-                                <div class="col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-3 col-xs-12">
-                                    <a href="~/Docs/worldwide-telescope-user-manual.epub">
-                                        <img src="/Content/images/gbox.png" class="img-responsive">
-                                        <i class="fa fa-file-text"></i>
-                                        <h4>Download .epub</h4>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <p>For more details on the inner workings of WWT, see <a href="#advguide">the advanced user guide</a></p>
-
+<div class="tab-pane" id="models" style="padding-bottom:20px;">
+    <div class="tab-pane active" id="guides">
+        <div class="row" style="margin:18px 0 3px">
+            <div class="col-md-4"><strong>Title</strong></div>
+            <div class="col-md-5"><strong>Description</strong></div>
+            <div class="col-md-3"><strong>Links to the Guide</strong></div>
+        </div>
+        <div class="guide-row hide">
+            <hr />
+            <div class="row" id="guideAssets">
+                <div class="col-md-4">
+                    <strong>
+                        <span class=guide-title></span>
+                    </strong>
+                    <br />
+                    Created by: <a class="guide-createdbyurl iblock">
+                        <i class="fa fa-github-alt"></i>
+                        <span class=guide-createdby></span>
+                    </a><br />
+                    Maintained by: <a class="guide-maintainedbyurl iblock">
+                        <i class="fa fa-github-alt"></i>
+                        <span class=guide-maintainedby></span>
+                    </a><br />
+                </div>
+                <div class="col-md-5">
+                    <span class=guide-description></span> <br />
+                    <strong>Target Audience:</strong> <span class=guide-audience></span>
+                </div>
+                <div class="col-md-3">
+                    <a class="guide-link-gitbook iblock">
+                        <i class="fa fa-external-link"></i>
+                        Read Online</span>
+                    </a><br />
+                    <a class="guide-link-pdf iblock">
+                        <i class="fa fa-file-pdf-o"></i>
+                        <span class=guide-filepath></span> PDF document
+                    </a><br />
+                    <a class="guide-link-epub iblock">
+                        <i class="fa fa-file-text"></i>
+                        <span class=guide-filepath></span> eBook (.epub)
+                    </a><br />
+                    <a class="guide-link-mobi iblock">
+                        <i class="fa fa-file-text-o"></i>
+                        <span class=guide-filepath></span> eBook (.mobi)
+                    </a><br />
+                    <a class="guide-link-repo iblock">
+                        <i class="fa fa-github"></i>
+                        GitHub Repository
+                    </a><br />
                 </div>
             </div>
         </div>
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#advguide">
-                        Advanced WWT Topics
-                    </a>
-                </h4>
-            </div>
-            <div id="advguide" class="panel-collapse collapse ">
-                <div class="panel-body">
-                    <p>This guide has been stitched together from advanced users. If you would like to contribute to it, please see the <a href="/GetInvolved/HelpOthers">Help Others Use WWT</a> page</p>
-                    <p>You can read the most updated version of this guide <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-advanced-guides/content/">online</a>, or download it in pdf, ePub, or Mobi format by following the download link on the <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-advanced-guides/">gitbook page</a>.</p>
+        <div id="guidesTarget"></div>
 
-                    <div class="row">
-                        <div class="col-md-10 col-md-offset-1">
-                            <div class="row home-features">
-                                <div class="col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-3 col-xs-12">
-                                    <a href="https://worldwidetelescope.gitbooks.io/worldwide-telescope-advanced-guides/content/">
-                                        <img src="/Content/images/gbox.png" class="img-responsive">
-                                        <i class="fa fa-book"></i>
-                                        <h4>Read Online</h4>
-                                    </a>
-                                </div>
-                                <div class="col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-3 col-xs-12">
-                                    <a href="~/Docs/worldwide-telescope-advanced-guides.pdf">
-                                        <img src="/Content/images/gbox.png" class="img-responsive">
-                                        <i class="fa fa-file-pdf-o"></i>
-                                        <h4>Download .pdf</h4>
-                                    </a>
-                                </div>
-                                <div class="col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-3 col-xs-12">
-                                    <a href="~/Docs/worldwide-telescope-advanced-guides.mobi">
-                                        <img src="/Content/images/gbox.png" class="img-responsive">
-                                        <i class="fa fa-file-text-o"></i>
-                                        <h4>Download .mobi</h4>
-                                    </a>
-                                </div>
-                                <div class="col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-3 col-xs-12">
-                                    <a href="~/Docs/worldwide-telescope-advanced-guides.epub">
-                                        <img src="/Content/images/gbox.png" class="img-responsive">
-                                        <i class="fa fa-file-text"></i>
-                                        <h4>Download .epub</h4>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
     </div>
+
+
+
+
+</div>
