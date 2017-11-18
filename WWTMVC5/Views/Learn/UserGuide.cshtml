@@ -13,7 +13,8 @@
 
         $.ajax({
             //type:'GET',
-            url: '/Models/wwtguides.xml',
+            //url: '/Models/wwtguides.xml',
+            url: 'https://raw.githubusercontent.com/WorldWideTelescope/wwt-documentation/master/wwtguides.xml',
             success: function (x, status, xhr) {
                 var tmpl = $('.guide-row.hide'), track, row,
                     populate = function (sel, node) {
