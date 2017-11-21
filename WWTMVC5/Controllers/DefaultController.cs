@@ -31,6 +31,7 @@ namespace WWTMVC5.Controllers
         private static readonly string[] ViewGroups = new string[]
         {
             "about",
+            "community",
             "download",
             "getinvolved",
             "home",
