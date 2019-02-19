@@ -4,18 +4,18 @@
    Group = "Explorer"
    Searchable = "True"
    Type = "Planet"
-   Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Europa surface.jpg">
+   Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Europa surface.jpg">
 
    <Folder
       Name = "Zero Lat Lon"
       Group = "Explorer"
       Searchable = "True"
       Type = "Planet"
-      Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_ZeroLatLon.jpg">
+      Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_ZeroLatLon.jpg">
 
       <Place
          Name = "Zero Zero"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_ZeroLatLon.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_ZeroLatLon.jpg"
          DataSetType = "Planet"
          Lat = "0"
          Lng = "0"
@@ -30,18 +30,18 @@
       Group = "Explorer"
       Searchable = "True"
       Type = "Planet"
-      Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+      Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
 
       <Folder
          Name = "A - Crater"
          Group = "Explorer"
          Searchable = "True"
          Type = "Planet"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
 
          <Place
             Name = "Aine"
-            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
             DataSetType = "Planet"
             Lat = "-43"
             Lng = "-177"
@@ -51,7 +51,7 @@
 
          <Place
             Name = "Amergin"
-            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
             DataSetType = "Planet"
             Lat = "-14"
             Lng = "130"
@@ -61,7 +61,7 @@
 
          <Place
             Name = "Angus"
-            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
             DataSetType = "Planet"
             Lat = "-13"
             Lng = "-74"
@@ -71,7 +71,7 @@
 
          <Place
             Name = "Avagddu"
-            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
             DataSetType = "Planet"
             Lat = "1.2"
             Lng = "-170"
@@ -86,11 +86,11 @@
          Group = "Explorer"
          Searchable = "True"
          Type = "Planet"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
 
          <Place
             Name = "Balor"
-            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
             DataSetType = "Planet"
             Lat = "-53"
             Lng = "-94"
@@ -100,7 +100,7 @@
 
          <Place
             Name = "Brigid"
-            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
             DataSetType = "Planet"
             Lat = "11"
             Lng = "-80"
@@ -115,11 +115,11 @@
          Group = "Explorer"
          Searchable = "True"
          Type = "Planet"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
 
          <Place
             Name = "Camulus"
-            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
             DataSetType = "Planet"
             Lat = "-27"
             Lng = "-79"
@@ -129,7 +129,7 @@
 
          <Place
             Name = "Cilix"
-            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
             DataSetType = "Planet"
             Lat = "1.2"
             Lng = "178.1"
@@ -139,7 +139,7 @@
 
          <Place
             Name = "Cliodhna"
-            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
             DataSetType = "Planet"
             Lat = "-3"
             Lng = "-75"
@@ -149,7 +149,7 @@
 
          <Place
             Name = "Cormac"
-            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
             DataSetType = "Planet"
             Lat = "-37"
             Lng = "-86"
@@ -164,11 +164,11 @@
          Group = "Explorer"
          Searchable = "True"
          Type = "Planet"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
 
          <Place
             Name = "Deirdre"
-            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
             DataSetType = "Planet"
             Lat = "-65"
             Lng = "152"
@@ -178,7 +178,7 @@
 
          <Place
             Name = "Diarmuid"
-            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
             DataSetType = "Planet"
             Lat = "-61"
             Lng = "-97"
@@ -188,7 +188,7 @@
 
          <Place
             Name = "Dylan"
-            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
             DataSetType = "Planet"
             Lat = "-55"
             Lng = "-82"
@@ -203,11 +203,11 @@
          Group = "Explorer"
          Searchable = "True"
          Type = "Planet"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
 
          <Place
             Name = "Elathan"
-            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
             DataSetType = "Planet"
             Lat = "-31.6"
             Lng = "-78"
@@ -222,11 +222,11 @@
          Group = "Explorer"
          Searchable = "True"
          Type = "Planet"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
 
          <Place
             Name = "Govannan"
-            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
             DataSetType = "Planet"
             Lat = "-37.5"
             Lng = "57.3833333333333"
@@ -236,7 +236,7 @@
 
          <Place
             Name = "Grainne"
-            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
             DataSetType = "Planet"
             Lat = "-60"
             Lng = "-95"
@@ -246,7 +246,7 @@
 
          <Place
             Name = "Gwydion"
-            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
             DataSetType = "Planet"
             Lat = "-61"
             Lng = "-79"
@@ -261,11 +261,11 @@
          Group = "Explorer"
          Searchable = "True"
          Type = "Planet"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
 
          <Place
             Name = "Llyr"
-            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
             DataSetType = "Planet"
             Lat = "-1.7"
             Lng = "138.5"
@@ -280,11 +280,11 @@
          Group = "Explorer"
          Searchable = "True"
          Type = "Planet"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
 
          <Place
             Name = "Mael Duin"
-            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
             DataSetType = "Planet"
             Lat = "-17"
             Lng = "162.1"
@@ -294,7 +294,7 @@
 
          <Place
             Name = "Maeve"
-            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
             DataSetType = "Planet"
             Lat = "58"
             Lng = "-75"
@@ -304,7 +304,7 @@
 
          <Place
             Name = "Manannan"
-            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
             DataSetType = "Planet"
             Lat = "2"
             Lng = "120"
@@ -314,7 +314,7 @@
 
          <Place
             Name = "Math"
-            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
             DataSetType = "Planet"
             Lat = "-26"
             Lng = "177"
@@ -324,7 +324,7 @@
 
          <Place
             Name = "Morvran"
-            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
             DataSetType = "Planet"
             Lat = "-5.68333333333333"
             Lng = "-152.183333333333"
@@ -339,11 +339,11 @@
          Group = "Explorer"
          Searchable = "True"
          Type = "Planet"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
 
          <Place
             Name = "Niamh"
-            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
             DataSetType = "Planet"
             Lat = "21"
             Lng = "143"
@@ -358,11 +358,11 @@
          Group = "Explorer"
          Searchable = "True"
          Type = "Planet"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
 
          <Place
             Name = "Oisin"
-            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
             DataSetType = "Planet"
             Lat = "-52"
             Lng = "146"
@@ -377,11 +377,11 @@
          Group = "Explorer"
          Searchable = "True"
          Type = "Planet"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
 
          <Place
             Name = "Pryderi"
-            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
             DataSetType = "Planet"
             Lat = "-66"
             Lng = "-159"
@@ -391,7 +391,7 @@
 
          <Place
             Name = "Pwyll"
-            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
             DataSetType = "Planet"
             Lat = "-26"
             Lng = "89"
@@ -406,11 +406,11 @@
          Group = "Explorer"
          Searchable = "True"
          Type = "Planet"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
 
          <Place
             Name = "Rhiannon"
-            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
             DataSetType = "Planet"
             Lat = "-81.8"
             Lng = "160.3"
@@ -425,11 +425,11 @@
          Group = "Explorer"
          Searchable = "True"
          Type = "Planet"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
 
          <Place
             Name = "Taliesin"
-            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
             DataSetType = "Planet"
             Lat = "-23.2"
             Lng = "-137.383333333333"
@@ -439,7 +439,7 @@
 
          <Place
             Name = "Tegid"
-            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
             DataSetType = "Planet"
             Lat = "-0.5"
             Lng = "-164"
@@ -454,11 +454,11 @@
          Group = "Explorer"
          Searchable = "True"
          Type = "Planet"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg">
 
          <Place
             Name = "Uaithne"
-            Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
+            Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Crater.jpg"
             DataSetType = "Planet"
             Lat = "-49"
             Lng = "-88"
@@ -475,11 +475,11 @@
       Group = "Explorer"
       Searchable = "True"
       Type = "Planet"
-      Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Darkspot.jpg">
+      Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Darkspot.jpg">
 
       <Place
          Name = "Boeotia Macula"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Darkspot.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Darkspot.jpg"
          DataSetType = "Planet"
          Lat = "-54"
          Lng = "-166"
@@ -489,7 +489,7 @@
 
       <Place
          Name = "Castalia Macula"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Darkspot.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Darkspot.jpg"
          DataSetType = "Planet"
          Lat = "-1.5"
          Lng = "134.3"
@@ -499,7 +499,7 @@
 
       <Place
          Name = "Cyclades Macula"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Darkspot.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Darkspot.jpg"
          DataSetType = "Planet"
          Lat = "-64"
          Lng = "168"
@@ -509,7 +509,7 @@
 
       <Place
          Name = "Thera Macula"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Darkspot.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Darkspot.jpg"
          DataSetType = "Planet"
          Lat = "-47.7"
          Lng = "179.1"
@@ -519,7 +519,7 @@
 
       <Place
          Name = "Thrace Macula"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Darkspot.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Darkspot.jpg"
          DataSetType = "Planet"
          Lat = "-46.5833333333333"
          Lng = "-171.183333333333"
@@ -534,11 +534,11 @@
       Group = "Explorer"
       Searchable = "True"
       Type = "Planet"
-      Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Largecrater.jpg">
+      Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Largecrater.jpg">
 
       <Place
          Name = "Callanish"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Largecrater.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Largecrater.jpg"
          DataSetType = "Planet"
          Lat = "-16"
          Lng = "26.6"
@@ -548,7 +548,7 @@
 
       <Place
          Name = "Tyre"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Largecrater.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Largecrater.jpg"
          DataSetType = "Planet"
          Lat = "31.7"
          Lng = "-147"
@@ -563,11 +563,11 @@
       Group = "Explorer"
       Searchable = "True"
       Type = "Planet"
-      Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg">
+      Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg">
 
       <Place
          Name = "Adonis Linea"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
          DataSetType = "Planet"
          Lat = "-51.7833333333333"
          Lng = "-113.183333333333"
@@ -577,7 +577,7 @@
 
       <Place
          Name = "Agave Linea"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
          DataSetType = "Planet"
          Lat = "12.6"
          Lng = "87"
@@ -587,7 +587,7 @@
 
       <Place
          Name = "Agenor Linea"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
          DataSetType = "Planet"
          Lat = "-43.5833333333333"
          Lng = "151.8"
@@ -597,7 +597,7 @@
 
       <Place
          Name = "Alphesiboea Linea"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
          DataSetType = "Planet"
          Lat = "-28"
          Lng = "177.383333333333"
@@ -607,7 +607,7 @@
 
       <Place
          Name = "Androgeos Linea"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
          DataSetType = "Planet"
          Lat = "12.8"
          Lng = "81.2"
@@ -617,7 +617,7 @@
 
       <Place
          Name = "Argiope Linea"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
          DataSetType = "Planet"
          Lat = "-8.18333333333333"
          Lng = "157.8"
@@ -627,7 +627,7 @@
 
       <Place
          Name = "Asterius Linea"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
          DataSetType = "Planet"
          Lat = "17.7"
          Lng = "94.3833333333333"
@@ -637,7 +637,7 @@
 
       <Place
          Name = "Astypalaea Linea"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
          DataSetType = "Planet"
          Lat = "-76.5"
          Lng = "139.683333333333"
@@ -647,7 +647,7 @@
 
       <Place
          Name = "Autonoe Linea"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
          DataSetType = "Planet"
          Lat = "17"
          Lng = "-164.5"
@@ -657,7 +657,7 @@
 
       <Place
          Name = "Belus Linea"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
          DataSetType = "Planet"
          Lat = "11.8"
          Lng = "131.683333333333"
@@ -667,7 +667,7 @@
 
       <Place
          Name = "Cadmus Linea"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
          DataSetType = "Planet"
          Lat = "27.7833333333333"
          Lng = "-173.1"
@@ -677,7 +677,7 @@
 
       <Place
          Name = "Chthonius Linea"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
          DataSetType = "Planet"
          Lat = "0.1"
          Lng = "48.7"
@@ -687,7 +687,7 @@
 
       <Place
          Name = "Echion Linea"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
          DataSetType = "Planet"
          Lat = "-13.1"
          Lng = "175.683333333333"
@@ -697,7 +697,7 @@
 
       <Place
          Name = "Harmonia Linea"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
          DataSetType = "Planet"
          Lat = "27"
          Lng = "-168"
@@ -707,7 +707,7 @@
 
       <Place
          Name = "Hyperenor Linea"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
          DataSetType = "Planet"
          Lat = "-3.08333333333333"
          Lng = "45.2833333333333"
@@ -717,7 +717,7 @@
 
       <Place
          Name = "Ino Linea"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
          DataSetType = "Planet"
          Lat = "-5"
          Lng = "-163"
@@ -727,7 +727,7 @@
 
       <Place
          Name = "Katreus Linea"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
          DataSetType = "Planet"
          Lat = "-39.5"
          Lng = "144.5"
@@ -737,7 +737,7 @@
 
       <Place
          Name = "Libya Linea"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
          DataSetType = "Planet"
          Lat = "-56.2"
          Lng = "176.683333333333"
@@ -747,7 +747,7 @@
 
       <Place
          Name = "Minos Linea"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
          DataSetType = "Planet"
          Lat = "45.2833333333333"
          Lng = "164.3"
@@ -757,7 +757,7 @@
 
       <Place
          Name = "Onga Linea"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
          DataSetType = "Planet"
          Lat = "-38.7833333333333"
          Lng = "150.383333333333"
@@ -767,7 +767,7 @@
 
       <Place
          Name = "Pelagon Linea"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
          DataSetType = "Planet"
          Lat = "34"
          Lng = "-170"
@@ -777,7 +777,7 @@
 
       <Place
          Name = "Pelorus Linea"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
          DataSetType = "Planet"
          Lat = "-17.1"
          Lng = "-175.883333333333"
@@ -787,7 +787,7 @@
 
       <Place
          Name = "Phineus Linea"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
          DataSetType = "Planet"
          Lat = "-33"
          Lng = "90.7833333333333"
@@ -797,7 +797,7 @@
 
       <Place
          Name = "Phoenix Linea"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
          DataSetType = "Planet"
          Lat = "14.5"
          Lng = "175.3"
@@ -807,7 +807,7 @@
 
       <Place
          Name = "Rhadamanthys Linea"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
          DataSetType = "Planet"
          Lat = "18.5"
          Lng = "159.183333333333"
@@ -817,7 +817,7 @@
 
       <Place
          Name = "Sarpedon Linea"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
          DataSetType = "Planet"
          Lat = "-42.2"
          Lng = "-89.4"
@@ -827,7 +827,7 @@
 
       <Place
          Name = "Tectamus Linea"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
          DataSetType = "Planet"
          Lat = "17.8833333333333"
          Lng = "178.1"
@@ -837,7 +837,7 @@
 
       <Place
          Name = "Telephassa Linea"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
          DataSetType = "Planet"
          Lat = "-2.78333333333333"
          Lng = "-178.8"
@@ -847,7 +847,7 @@
 
       <Place
          Name = "Thasus Linea"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
          DataSetType = "Planet"
          Lat = "-68.6833333333333"
          Lng = "172.6"
@@ -857,7 +857,7 @@
 
       <Place
          Name = "Thynia Linea"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Linearfeature.jpg"
          DataSetType = "Planet"
          Lat = "-57.9"
          Lng = "-148.6"
@@ -872,11 +872,11 @@
       Group = "Explorer"
       Searchable = "True"
       Type = "Planet"
-      Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Lowridge.jpg">
+      Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Lowridge.jpg">
 
       <Place
          Name = "Cilicia Flexus"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Lowridge.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Lowridge.jpg"
          DataSetType = "Planet"
          Lat = "-47.5833333333333"
          Lng = "-142.6"
@@ -886,7 +886,7 @@
 
       <Place
          Name = "Delphi Flexus"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Lowridge.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Lowridge.jpg"
          DataSetType = "Planet"
          Lat = "-69.6833333333333"
          Lng = "-172.3"
@@ -896,7 +896,7 @@
 
       <Place
          Name = "Gortyna Flexus"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Lowridge.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Lowridge.jpg"
          DataSetType = "Planet"
          Lat = "-42.4"
          Lng = "-144.6"
@@ -906,7 +906,7 @@
 
       <Place
          Name = "Phocis Flexus"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Lowridge.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Lowridge.jpg"
          DataSetType = "Planet"
          Lat = "-48.5833333333333"
          Lng = "162.8"
@@ -916,7 +916,7 @@
 
       <Place
          Name = "Sidon Flexus"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Lowridge.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Lowridge.jpg"
          DataSetType = "Planet"
          Lat = "-64.5"
          Lng = "-170.383333333333"
@@ -931,11 +931,11 @@
       Group = "Explorer"
       Searchable = "True"
       Type = "Planet"
-      Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Region.jpg">
+      Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Region.jpg">
 
       <Place
          Name = "Annwn Regio"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Region.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Region.jpg"
          DataSetType = "Planet"
          Lat = "20"
          Lng = "-40"
@@ -945,7 +945,7 @@
 
       <Place
          Name = "Argadnel Regio"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Region.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Region.jpg"
          DataSetType = "Planet"
          Lat = "-14.6"
          Lng = "-151.5"
@@ -955,7 +955,7 @@
 
       <Place
          Name = "Balgatan Regio"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Region.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Region.jpg"
          DataSetType = "Planet"
          Lat = "-50"
          Lng = "30"
@@ -965,7 +965,7 @@
 
       <Place
          Name = "Dyfed Regio"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Region.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Region.jpg"
          DataSetType = "Planet"
          Lat = "10"
          Lng = "-110"
@@ -975,7 +975,7 @@
 
       <Place
          Name = "Falga Regio"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Region.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Region.jpg"
          DataSetType = "Planet"
          Lat = "30"
          Lng = "-150"
@@ -985,7 +985,7 @@
 
       <Place
          Name = "Moytura Regio"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Region.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Region.jpg"
          DataSetType = "Planet"
          Lat = "-50"
          Lng = "-65.7166666666667"
@@ -995,7 +995,7 @@
 
       <Place
          Name = "Powys Regio"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Region.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Region.jpg"
          DataSetType = "Planet"
          Lat = "0"
          Lng = "145"
@@ -1005,7 +1005,7 @@
 
       <Place
          Name = "Tara Regio"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Region.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Region.jpg"
          DataSetType = "Planet"
          Lat = "-10"
          Lng = "75"
@@ -1020,11 +1020,11 @@
       Group = "Explorer"
       Searchable = "True"
       Type = "Planet"
-      Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Roughterrain.jpg">
+      Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Roughterrain.jpg">
 
       <Place
          Name = "Arran Chaos"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Roughterrain.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Roughterrain.jpg"
          DataSetType = "Planet"
          Lat = "13.4"
          Lng = "80.5"
@@ -1034,7 +1034,7 @@
 
       <Place
          Name = "Conamara Chaos"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Roughterrain.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Roughterrain.jpg"
          DataSetType = "Planet"
          Lat = "9.5"
          Lng = "86.7"
@@ -1044,7 +1044,7 @@
 
       <Place
          Name = "Murias Chaos"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Roughterrain.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Roughterrain.jpg"
          DataSetType = "Planet"
          Lat = "22.3833333333333"
          Lng = "-83.9"
@@ -1054,7 +1054,7 @@
 
       <Place
          Name = "Narberth Chaos"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Roughterrain.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Roughterrain.jpg"
          DataSetType = "Planet"
          Lat = "-26"
          Lng = "-87"
@@ -1064,7 +1064,7 @@
 
       <Place
          Name = "Rathmore Chaos"
-         Thumbnail = "http://www.worldwidetelescope.org/docs/Images/T/T_Roughterrain.jpg"
+         Thumbnail = "//worldwidetelescope.org/docs/Images/T/T_Roughterrain.jpg"
          DataSetType = "Planet"
          Lat = "25.4"
          Lng = "75"

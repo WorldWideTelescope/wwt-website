@@ -5,7 +5,7 @@
 @section leftnav{
 	@Html.Partial("~/Views/GetInvolved/LeftNav.cshtml")
 }
-<script type="text/javascript" src="http://www.worldwidetelescope.org/scripts/wwtsdk.aspx"></script>
+<script type="text/javascript" src="//worldwidetelescope.org/scripts/wwtsdk.aspx"></script>
 <script src="@Model.JsDir/controls/WCSService.js?v=@Model.ResVer"></script>
 <script src="@Model.JsDir/pages/ImportImage.js?v=@Model.ResVer"></script>
 <script>$(window).on('load', function(){wwt.ImportImage.init('@Model.ResLoc');});

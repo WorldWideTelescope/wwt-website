@@ -7,7 +7,7 @@
       <ImageSet MSRCommunityId="0" MSRComponentId="0" Permission="0" Generic="False" DataSetType="Sky" BandPass="IR" Url="http://r{S:1}.ortho.tiles.virtualearth.net/tiles/wsa0000010231{Q}?g=131" TileLevels="5" WidthFactor="2" Sparse="True" Rotation="0.015915112700651" QuadTreeMap="0123" Projection="Tangent" Name="Orion Nebula" FileType=".png" CenterY="-5.59338109097" CenterX="83.6383655257" BottomsUp="False" StockSet="False" ElevationModel="False" OffsetX="-0.151262042234303" OffsetY="0.179267217168241" BaseTileLevel="0" BaseDegreesPerTile="0.682489467823981" MeanRadius="0">
         <Credits>NASA/JPL-Caltech/T. Megeath (University of Toledo), M. Robberto (STScI), HST</Credits>
         <CreditsUrl>http://www.spitzer.caltech.edu/images/1690-ssc2006-21a-Chaos-at-the-Heart-of-Orion</CreditsUrl>
-        <ThumbnailUrl>http://www.worldwidetelescope.org/wwtweb/thumbnail.aspx?name=1154245897</ThumbnailUrl>
+        <ThumbnailUrl>//worldwidetelescope.org/wwtweb/thumbnail.aspx?name=1154245897</ThumbnailUrl>
       </ImageSet>
     </ForegroundImageSet>
     <Description Title="Chaos at the Heart of Orion">
@@ -27,7 +27,7 @@
       <ImageSet MSRCommunityId="0" MSRComponentId="0" Permission="0" Generic="False" DataSetType="Sky" BandPass="IR" Url="http://r{S:3}.ortho.tiles.virtualearth.net/tiles/wsa0000011213{Q}?g=131" TileLevels="4" WidthFactor="2" Sparse="True" Rotation="-89.508107562815" QuadTreeMap="0123" Projection="Tangent" Name="M81;NGC 3031;Bode's Galaxy" FileType=".png" CenterY="69.0646109949804" CenterX="149.180016253303" BottomsUp="False" StockSet="False" ElevationModel="False" OffsetX="-0.00618503353352126" OffsetY="0.102537327780535" BaseTileLevel="0" BaseDegreesPerTile="0.426929655361101" MeanRadius="0">
         <Credits>Spitzer data: NASA/JPL/Caltech/S. Willner (Harvard-Smithsonian CfA);Hubble data: NASA, ESA, and A. Zezas (Harvard-Smithsonian CfA); GALEX data: NASA, JPL-Caltech, GALEX Team, J. Huchra et al. (Harvard-Smithsonian CfA)</Credits>
         <CreditsUrl>http://www.spitzer.caltech.edu/images/2126-sig07-009-Multiwavelength-M81</CreditsUrl>
-        <ThumbnailUrl>http://www.worldwidetelescope.org/wwtweb/thumbnail.aspx?name=892575158</ThumbnailUrl>
+        <ThumbnailUrl>//worldwidetelescope.org/wwtweb/thumbnail.aspx?name=892575158</ThumbnailUrl>
       </ImageSet>
     </ForegroundImageSet>
     <Description Title="Multiwavelength M81">
@@ -43,7 +43,7 @@
       <ImageSet MSRCommunityId="0" MSRComponentId="0" Permission="0" Generic="False" DataSetType="Sky" BandPass="XRay" Url="http://r{S:0}.ortho.tiles.virtualearth.net/tiles/wsa0000000110{Q}?g=131" TileLevels="3" WidthFactor="2" Sparse="True" Rotation="-89.9503358018785" QuadTreeMap="0123" Projection="Tangent" Name="Cartwheel Galaxy" FileType=".png" CenterY="-33.7183380127" CenterX="9.40680789948" BottomsUp="False" StockSet="False" ElevationModel="False" OffsetX="-0.0069164076586671" OffsetY="-0.0128921838757555" BaseTileLevel="0" BaseDegreesPerTile="0.0566592115398009" MeanRadius="0">
         <Credits>NASA/JPL/Caltech/P.Appleton et al. X-ray: NASA/CXC/A.Wolter &amp; G.Trinchieri et al.</Credits>
         <CreditsUrl>http://chandra.harvard.edu/photo/2006/cartwheel/</CreditsUrl>
-        <ThumbnailUrl>http://www.worldwidetelescope.org/wwtweb/thumbnail.aspx?name=3555282318</ThumbnailUrl>
+        <ThumbnailUrl>//worldwidetelescope.org/wwtweb/thumbnail.aspx?name=3555282318</ThumbnailUrl>
       </ImageSet>
     </ForegroundImageSet>
     
@@ -62,7 +62,7 @@
       <ImageSet DemUrl="" MSRCommunityId="0" MSRComponentId="0" Permission="0" Generic="False" DataSetType="Sky" BandPass="Visible" Url="http://r{S:2}.ortho.tiles.virtualearth.net/tiles/wsa0000002132{Q}?g=138" TileLevels="3" WidthFactor="2" Sparse="True" Rotation="177.823624213756" QuadTreeMap="0123" Projection="Tangent" Name="Light and Shadow in the Carina Nebula (NGC 3372)" FileType=".png" CenterY="-59.6484568272354" CenterX="161.178898367045" BottomsUp="False" StockSet="False" ElevationModel="False" OffsetX="0" OffsetY="0" BaseTileLevel="0" BaseDegreesPerTile="0.116951513885838" MeanRadius="0">
         <Credits>Image Credit: NASA, The Hubble Heritage Team (AURA/STScI)</Credits>
         <CreditsUrl>http://hubblesite.org/newscenter/newsdesk/archive/releases/2000/06/</CreditsUrl>
-        <ThumbnailUrl>http://www.worldwidetelescope.org/wwtweb/thumbnail.aspx?name=1353700001</ThumbnailUrl>
+        <ThumbnailUrl>//worldwidetelescope.org/wwtweb/thumbnail.aspx?name=1353700001</ThumbnailUrl>
       </ImageSet>
     </ForegroundImageSet>
     <Description Title="Light and Shadow in the Carina Nebula">
@@ -78,11 +78,11 @@
   <Place MSRCommunityId="0" MSRComponentId="0" Permission="0" Name="NGC 6543: The Cat's Eye Nebula Redux" DataSetType="Sky" RA="17.976111111111095" Dec="66.6319444444444" Constellation="DRA" Classification="PlanetaryNebula" Magnitude="0" Distance="0" ZoomLevel="0.703333333333333" Rotation="0" Angle="0" DomeAlt="0" DomeAz="0" Opacity="100" AngularSize="0.703333333333333">
     <Target>Undefined</Target>
     <ForegroundImageSet>
-      <ImageSet MSRCommunityId="0" MSRComponentId="0" Permission="0" Generic="False" DataSetType="Sky" BandPass="Visible" Url="http://www.worldwidetelescope.org/wwtweb/tiles.aspx?q={1},{2},{3},962869576" TileLevels="4" WidthFactor="2" Sparse="True" Rotation="-144.44702955079" QuadTreeMap="" Projection="Tangent" Name="NGC 6543: The Cat's Eye Nebula Redux;NGC 6543;Cat's Eye Nebula" FileType=".png" CenterY="66.6320819962155" CenterX="269.640136719" BottomsUp="False" StockSet="False" ElevationModel="False" OffsetX="-0.00132605936732667" OffsetY="-0.00056052475266126" BaseTileLevel="0" BaseDegreesPerTile="0.0229317608672014" MeanRadius="0">
+      <ImageSet MSRCommunityId="0" MSRComponentId="0" Permission="0" Generic="False" DataSetType="Sky" BandPass="Visible" Url="//worldwidetelescope.org/wwtweb/tiles.aspx?q={1},{2},{3},962869576" TileLevels="4" WidthFactor="2" Sparse="True" Rotation="-144.44702955079" QuadTreeMap="" Projection="Tangent" Name="NGC 6543: The Cat's Eye Nebula Redux;NGC 6543;Cat's Eye Nebula" FileType=".png" CenterY="66.6320819962155" CenterX="269.640136719" BottomsUp="False" StockSet="False" ElevationModel="False" OffsetX="-0.00132605936732667" OffsetY="-0.00056052475266126" BaseTileLevel="0" BaseDegreesPerTile="0.0229317608672014" MeanRadius="0">
         <Credits>X-ray: NASA/CXC/SAO; Optical: NASA/STScI
 A composite image of data from NASA’s Chandra X-ray Observatory (blue) and Hubble Space Telescope (red and purple) of NGC 6543 shows a phase that Sun-like stars undergo at the end of their lives. Material from the outer layers of the star in the Cat's Eye is flying away at about 4 million miles per hour. A hot core is left behind that eventually collapses to become a white dwarf star. The Chandra data reveal that the central star in NGC 6543 is surrounded by a cloud of multi-million-degree gas.</Credits>
         <CreditsUrl>http://chandra.harvard.edu/photo/2008/catseye/</CreditsUrl>
-        <ThumbnailUrl>http://www.worldwidetelescope.org/wwtweb/thumbnail.aspx?name=962869576</ThumbnailUrl>
+        <ThumbnailUrl>//worldwidetelescope.org/wwtweb/thumbnail.aspx?name=962869576</ThumbnailUrl>
       </ImageSet>
     </ForegroundImageSet>
     <Description Title="NGC 6543: The Cat's Eye Nebula Redux">
@@ -98,7 +98,7 @@ A composite image of data from NASA’s Chandra X-ray Observatory (blue) and Hub
       <ImageSet DemUrl="" MSRCommunityId="0" MSRComponentId="0" Permission="0" Generic="False" DataSetType="Sky" BandPass="Visible" Url="http://r{S:2}.ortho.tiles.virtualearth.net/tiles/wsa0000001212{Q}?g=138" TileLevels="3" WidthFactor="2" Sparse="True" Rotation="20.781199545066" QuadTreeMap="0123" Projection="Tangent" Name="Firestorm of Star Birth In Galaxy NGC 604" FileType=".png" CenterY="30.7842525381567" CenterX="23.6354980985943" BottomsUp="False" StockSet="False" ElevationModel="False" OffsetX="0" OffsetY="0" BaseTileLevel="0" BaseDegreesPerTile="0.0570308519546673" MeanRadius="0">
         <Credits>Image Credit: NASA and The Hubble Heritage Team (AURA/STScI) Acknowledgment: D. Garnett (U. Arizona), J. Hester (ASU), and J. Westphal (Caltech)</Credits>
         <CreditsUrl>http://hubblesite.org/newscenter/newsdesk/archive/releases/2003/30/</CreditsUrl>
-        <ThumbnailUrl>http://www.worldwidetelescope.org/wwtweb/thumbnail.aspx?name=1424292271</ThumbnailUrl>
+        <ThumbnailUrl>//worldwidetelescope.org/wwtweb/thumbnail.aspx?name=1424292271</ThumbnailUrl>
       </ImageSet>
     </ForegroundImageSet>
     <Description Title="Firestorm of Star Birth Seen in a Local Galaxy">

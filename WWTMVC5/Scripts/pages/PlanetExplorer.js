@@ -59,7 +59,7 @@
             });
         };
 
-        root.loadFromUrl('http://www.worldwidetelescope.org/wwtweb/catalog.aspx?W=ExploreRoot', function(){
+        root.loadFromUrl('//worldwidetelescope.org/wwtweb/catalog.aspx?W=ExploreRoot', function(){
             setTimeout(loadSSView,333);
         });
         

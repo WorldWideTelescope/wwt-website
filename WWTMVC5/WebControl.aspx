@@ -24,14 +24,14 @@
 	<script src="//cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
 	<script src="<%= ConfigurationManager.AppSettings["ResourcesLocation"] %>/Scripts/main.js?v=<%= ConfigurationManager.AppSettings["ResourcesVersion"] %>"></script>
 	<script src="<%= ConfigurationManager.AppSettings["ResourcesLocation"] %>/Scripts/controls/util.js?v=<%= ConfigurationManager.AppSettings["ResourcesVersion"] %>"></script>
-    <script src="/html5sdk/1.0.0/wwtsdk.min.js"></script>
+    <script src="/webclient/sdk/wwtsdk.min.js"></script>
 	<script src="<%= ConfigurationManager.AppSettings["ResourcesLocation"] %>/Scripts/controls/WebControl.js?v=<%= ConfigurationManager.AppSettings["ResourcesVersion"] %>"></script>
 	<script src="<%= ConfigurationManager.AppSettings["ResourcesLocation"] %>/Scripts/controls/move.js?v=<%= ConfigurationManager.AppSettings["ResourcesVersion"] %>"></script>
 	<script src="<%= ConfigurationManager.AppSettings["ResourcesLocation"] %>/Scripts/controls/TourPlayer.js?v=<%= ConfigurationManager.AppSettings["ResourcesVersion"] %>"></script>
 	<script>
 		var ctl;
 		$(window).on('load', function () {
-			var options = $.parseJSON(location.hash.replace(/#/, ''));
+			var options = JSON.parse(decodeURIComponent(location.hash.replace(/#/, '')));
 			if (options.tour) {
 				wwt.TourPlayer.init({ 
 					resLoc: '<%= ConfigurationManager.AppSettings["ResourcesLocation"] %>',

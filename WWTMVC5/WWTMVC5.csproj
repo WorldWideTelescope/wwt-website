@@ -15,7 +15,7 @@
     <AssemblyName>WWTMVC5</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -182,14 +182,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\WebActivatorEx.2.0.6\lib\net40\WebActivatorEx.dll</HintPath>
     </Reference>
-    <Reference Include="Wurfl, Version=1.7.1.1, Culture=neutral, PublicKeyToken=816aeec277aa13b9, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\WURFL_Official_API.1.7.1.1\lib\Wurfl.dll</HintPath>
+    <Reference Include="Wurfl">
+      <HintPath>..\..\packages\WURFL_Official_API.1.9.0.1\lib\Wurfl.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Wurfl.Aspnet.Extensions, Version=1.7.1.1, Culture=neutral, PublicKeyToken=816aeec277aa13b9, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\WURFL_Official_API.1.7.1.1\lib\Wurfl.Aspnet.Extensions.dll</HintPath>
+    <Reference Include="Wurfl.Aspnet.Extensions">
+      <HintPath>..\..\packages\WURFL_Official_API.1.9.0.1\lib\Wurfl.Aspnet.Extensions.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -544,6 +542,7 @@
       <DependentUpon>ResourceService.svc</DependentUpon>
     </Compile>
     <Compile Include="WebServices\ServiceBase.cs" />
+    <Content Include="App_Readme\Readme.txt" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\GreatObservatories.xml" />
     <Content Include="Content\images\addview.png" />
@@ -712,6 +711,14 @@
     <Content Include="Content\CSS\sprites.less" />
     <Content Include="Content\CSS\multiselect.less" />
     <Content Include="App_Data\wurfl-latest.zip" />
+    <Content Include="Introspector\Introspector.pdf" />
+    <Content Include="Introspector\Introspector.ashx" />
+    <Content Include="COPYING.evaluation" />
+    <Content Include="App_Readme\WURFL.chm" />
+    <Content Include="App_Readme\wurfl-latest.zip" />
+    <None Include="Properties\PublishProfiles\wwt.thewebkid.com.pubxml" />
+    <None Include="Properties\PublishProfiles\wwtstaging - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy.pubxml" />
     <Content Include="Docs\worldwide-telescope-advanced-guides.epub" />
     <Content Include="Docs\worldwide-telescope-advanced-guides.mobi" />
     <Content Include="Docs\worldwide-telescope-advanced-guides.pdf" />
@@ -1381,7 +1388,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>4675</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://wwtstaging.azurewebsites.net</IISUrl>
+          <IISUrl>http://localhost:4675/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

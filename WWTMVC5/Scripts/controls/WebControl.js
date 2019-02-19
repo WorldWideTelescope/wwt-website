@@ -150,7 +150,7 @@ wwt.WebControl = (function () {
 		if (initOptions.webGl) {
 			ctl = wwtlib.WWTControl.initControlParam("WWTCanvas", true);
 		} else {
-			ctl = wwtlib.WWTControl.initControl("WWTCanvas");
+			ctl = wwtlib.WWTControl.initControlParam("WWTCanvas", true);
 		}
 		ctl.settings.set_showConstellationBoundries(false);
 		if (remote && remote.galacticMode) {
@@ -161,7 +161,7 @@ wwt.WebControl = (function () {
 				uiControls.find('.btn').first().remove();
 				uiControls.find('.btn').first().remove();
 			});
-			ctl.loadImageCollection("http://www.worldwidetelescope.org/data/glimpse360.wtml");
+			ctl.loadImageCollection("//worldwidetelescope.org/data/glimpse360.wtml");
 		} else if (remote && remote.importImage) {
 			loadExternalImage(null, remote.importImage);
 		}
@@ -214,7 +214,7 @@ wwt.WebControl = (function () {
 		
 		uiControls = $('<div class="player-controls">' +
 			'<a id="wwtLogo" title="WorldWide Telescope Home Page" href="http://worldwidetelescope.org" class=pull-left target="wwt">' +
-			'<img src="' + resLoc + '/Content/Images/lens-logo-sm.png" alt="WorldWideTelescope Logo" style=max-height:32px /></a> ' +
+			'<img src="//wwtweb.blob.core.windows.net/images/lens-logo-sm.png" alt="WorldWideTelescope Logo" style=max-height:32px /></a> ' +
 			'<a class="btn play btn-sm"><i class="fa fa-play"></i></a> ' +
 			'<a href="javascript:void(0)" class="btn fs btn-sm" title="View Full Screen"><i class="fa fa-arrows-alt"></i></a></div>');
 
@@ -564,7 +564,7 @@ wwt.WebControl = (function () {
 
 	var loadExternalImage = function (manualData, imageUrl, callback) {
 		var url = imageUrl;
-		var encodedUrl = 'http://www.worldwidetelescope.org/WWTWeb/TileImage.aspx?imageurl=' + encodeURIComponent(url);
+		var encodedUrl = '//worldwidetelescope.org/WWTWeb/TileImage.aspx?imageurl=' + encodeURIComponent(url);
 		if (manualData && typeof manualData === "string") {
 			encodedUrl += manualData;
 		}

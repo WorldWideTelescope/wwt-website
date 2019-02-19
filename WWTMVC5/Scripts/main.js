@@ -37,13 +37,16 @@ if (top === self) {
 	    
 		
 		function init() {
-		    
-		    initLiveId();
-		    
-			wwt.resLoc = $('body').attr('resLoc');
+
+		    try {
+		        initLiveId();
+		    } catch (ex) {
+		    }
+
+		    wwt.resLoc = $('body').attr('resLoc');
 		    //console.log('init');
 		    bindEvents();
-		    var rememberSetting = wwt.user.get('rememberMe');
+            var rememberSetting = wwt.user&&wwt.user.get('rememberMe');
 		    wwt.autoSignin = rememberSetting && rememberSetting===true;
 			resize();
 			if (!isLoaded) {
@@ -146,7 +149,7 @@ if (top === self) {
 
         
         var cleanCookies = function() {
-            var hosts = ['.wwtstaging.azurewebsites.net', 'wwtstaging.azurewebsites.net', '.worldwidetelescope.org', 'www.worldwidetelescope.org', 'worldwidetelescope.org'];
+            var hosts = ['.wwtstaging.azurewebsites.net', 'wwtstaging.azurewebsites.net', '.worldwidetelescope.org', 'worldwidetelescope.org', 'worldwidetelescope.org'];
             document.cookie = 'wl_auth=; expires=Thu, 01-Jan-1970 00:00:01 GMT;';
             for (var i = 0; i < hosts.length; i++) {
                 document.cookie = 'wl_auth=; expires=Thu, 01-Jan-1970 00:00:01 GMT;domain=' + hosts[i] + ';path=/';

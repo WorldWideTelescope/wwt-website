@@ -3,7 +3,7 @@
 
 
 (function () {
-    var hostUrl = 'http://wwt.thewebkid.com';
+    var hostUrl = 'http://worldwidetelescope.org';
     var div = document.querySelector('div[data-wwt-tour-location]');
     var wid = div.offsetWidth;
     var tourLocation = div.getAttribute('data-wwt-tour-location');
