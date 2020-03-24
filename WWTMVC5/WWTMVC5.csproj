@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -68,11 +68,20 @@
     <Reference Include="Microsoft.Live.Web">
       <HintPath>..\packages\LiveSDKServer.5.6\lib\net45\Microsoft.Live.Web.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Practices.Unity">
-      <HintPath>..\packages\Unity.3.5.1404.0\lib\net45\Microsoft.Practices.Unity.dll</HintPath>
+    <Reference Include="Microsoft.Practices.Unity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Practices.Unity.Mvc, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Unity.Mvc.3.5.1404.0\lib\net45\Microsoft.Practices.Unity.Mvc.dll</HintPath>
+    <Reference Include="Microsoft.Practices.Unity.Configuration, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.Configuration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.Mvc.4.0.1\lib\net45\Microsoft.Practices.Unity.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.RegistrationByConvention, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.WindowsAzure.Diagnostics, Version=2.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
@@ -526,14 +535,6 @@
     <Compile Include="ViewModels\VideoDataViewModel.cs" />
     <Compile Include="Views\Test.cs" />
     <Compile Include="Views\UseWWT.cs" />
-    <Compile Include="webclient\Default.aspx.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="webclient\login.aspx.cs">
-      <DependentUpon>login.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
     <Compile Include="WebServices\IResourceService.cs" />
     <Compile Include="WebServices\LiveIdAuth.svc.cs">
       <DependentUpon>LiveIdAuth.svc</DependentUpon>
@@ -891,300 +892,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Support\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="webclient\adsass.wtml" />
-    <Content Include="webclient\app.js" />
-    <Content Include="webclient\App_Data\wurfl-latest.zip" />
-    <Content Include="webclient\App_Data\wurfl.zip" />
-    <Content Include="webclient\Bin\Microsoft.QualityTools.Testing.Fakes.dll" />
-    <Content Include="webclient\Bin\webclient.dll" />
-    <Content Include="webclient\Bin\webclient.dll.config" />
-    <Content Include="webclient\Bin\webclient.pdb" />
-    <Content Include="webclient\Bin\Wurfl.1.5.2.1.Fakes.dll" />
-    <Content Include="webclient\Bin\Wurfl.1.5.2.1.Fakes.fakesconfig" />
-    <Content Include="webclient\Bin\Wurfl.1.5.2.1.Fakes.xml" />
-    <Content Include="webclient\Bin\Wurfl.Aspnet.Extensions.1.5.2.1.Fakes.dll" />
-    <Content Include="webclient\Bin\Wurfl.Aspnet.Extensions.1.5.2.1.Fakes.fakesconfig" />
-    <Content Include="webclient\Bin\Wurfl.Aspnet.Extensions.1.5.2.1.Fakes.xml" />
-    <Content Include="webclient\Bin\Wurfl.Aspnet.Extensions.dll" />
-    <Content Include="webclient\Bin\Wurfl.Aspnet.Extensions.dll.refresh" />
-    <Content Include="webclient\Bin\Wurfl.dll" />
-    <Content Include="webclient\Bin\Wurfl.dll.refresh" />
-    <Content Include="webclient\Chandra.wtml" />
-    <Content Include="webclient\clientbin\WWTSL.xap" />
-    <Content Include="webclient\controllers\ContextPanelController.js" />
-    <Content Include="webclient\controllers\IntroController.js" />
-    <Content Include="webclient\controllers\LayerManagerController.js" />
-    <Content Include="webclient\controllers\LoginController.js" />
-    <Content Include="webclient\controllers\MainController.js" />
-    <Content Include="webclient\controllers\MobileNavController.js" />
-    <Content Include="webclient\controllers\modals\ObservingTimeController.js" />
-    <Content Include="webclient\controllers\modals\OpenItemController.js" />
-    <Content Include="webclient\controllers\modals\ShareController.js" />
-    <Content Include="webclient\controllers\modals\SlideSelectionController.js" />
-    <Content Include="webclient\controllers\modals\TourSlideText.js" />
-    <Content Include="webclient\controllers\modals\VoConeSearchController.js" />
-    <Content Include="webclient\controllers\popovers\ObservingTimeController.js" />
-    <Content Include="webclient\controllers\tabs\AdsController.js" />
-    <Content Include="webclient\controllers\tabs\CommunityController.js" />
-    <Content Include="webclient\controllers\tabs\CurrentTourController.js" />
-    <Content Include="webclient\controllers\tabs\ExploreController.js" />
-    <Content Include="webclient\controllers\tabs\SearchController.js" />
-    <Content Include="webclient\controllers\tabs\SettingsController.js" />
-    <Content Include="webclient\controllers\tabs\ToursController.js" />
-    <Content Include="webclient\controllers\tabs\ViewController.js" />
-    <Content Include="webclient\controllers\ThumbnailController.js" />
-    <Content Include="webclient\controls\move.js" />
-    <Content Include="webclient\controls\util.js" />
-    <Content Include="webclient\css\angular-motion.css" />
-    <Content Include="webclient\css\bootstrap.css" />
-    <Content Include="webclient\css\bootstrap.css.map" />
-    <Content Include="webclient\css\bootstrap.min.css" />
-    <Content Include="webclient\css\fonts\readme.md" />
-    <Content Include="webclient\css\fonts\tinymce-small.eot" />
-    <Content Include="webclient\css\fonts\tinymce-small.json" />
-    <Content Include="webclient\css\fonts\tinymce-small.svg" />
-    <Content Include="webclient\css\fonts\tinymce-small.ttf" />
-    <Content Include="webclient\css\fonts\tinymce-small.woff" />
-    <Content Include="webclient\css\fonts\tinymce.eot" />
-    <Content Include="webclient\css\fonts\tinymce.json" />
-    <Content Include="webclient\css\fonts\tinymce.svg" />
-    <Content Include="webclient\css\fonts\tinymce.ttf" />
-    <Content Include="webclient\css\fonts\tinymce.woff" />
-    <Content Include="webclient\css\img\anchor.gif" />
-    <Content Include="webclient\css\img\loader.gif" />
-    <Content Include="webclient\css\img\object.gif" />
-    <Content Include="webclient\css\img\trans.gif" />
-    <Content Include="webclient\css\mcecontent.css" />
-    <Content Include="webclient\css\skin.min.css" />
-    <Content Include="webclient\css\webclient.css" />
-    <Content Include="webclient\css\webclient.css.map" />
-    <Content Include="webclient\css\webclient.min.css" />
-    <Content Include="webclient\dataproxy\Astrometry.js" />
-    <Content Include="webclient\dataproxy\Community.js" />
-    <Content Include="webclient\dataproxy\Places.js" />
-    <Content Include="webclient\dataproxy\SearchData.js" />
-    <Content Include="webclient\dataproxy\Tours.js" />
-    <Content Include="webclient\Default.aspx" />
-    <Content Include="webclient\directives\ContextMenu.js" />
-    <Content Include="webclient\directives\CopyToClipboard.js" />
-    <Content Include="webclient\directives\editslidevalues.js" />
-    <Content Include="webclient\directives\Localize.js" />
-    <Content Include="webclient\directives\movable.js" />
-    <Content Include="webclient\directives\Scroll.js" />
-    <Content Include="webclient\earth.jpg" />
-    <Content Include="webclient\ESO.wtml" />
-    <Content Include="webclient\ext\angular-animate.js" />
-    <Content Include="webclient\ext\angular-animate.min.js.map" />
-    <Content Include="webclient\ext\angular-cookies.js" />
-    <Content Include="webclient\ext\angular-cookies.min.js.map" />
-    <Content Include="webclient\ext\angular-intro.js" />
-    <Content Include="webclient\ext\angular-route.js" />
-    <Content Include="webclient\ext\angular-route.min.js.map" />
-    <Content Include="webclient\ext\angular-strap.js" />
-    <Content Include="webclient\ext\angular-strap.min.js" />
-    <Content Include="webclient\ext\angular-strap.min.js.map" />
-    <Content Include="webclient\ext\angular-strap.tpl.js" />
-    <Content Include="webclient\ext\angular-strap.tpl.min.js" />
-    <Content Include="webclient\ext\angular-touch.js" />
-    <Content Include="webclient\ext\angular-touch.min.js.map" />
-    <Content Include="webclient\ext\angular.js" />
-    <Content Include="webclient\ext\angular.min.js.map" />
-    <Content Include="webclient\ext\bootstrap.js" />
-    <Content Include="webclient\ext\bootstrap.min.js" />
-    <Content Include="webclient\ext\context-menu.js" />
-    <Content Include="webclient\ext\intro.js" />
-    <Content Include="webclient\ext\intro.min.js" />
-    <Content Include="webclient\ext\introjs-rtl.css" />
-    <Content Include="webclient\ext\introjs-rtl.min.css" />
-    <Content Include="webclient\ext\introjs.css" />
-    <Content Include="webclient\ext\introjs.min.css" />
-    <Content Include="webclient\ext\jquery.js" />
-    <Content Include="webclient\factories\AppState.js" />
-    <Content Include="webclient\factories\autohidepanels.js" />
-    <Content Include="webclient\factories\FinderScope.js" />
-    <Content Include="webclient\factories\FinderScope_v3dhack.js" />
-    <Content Include="webclient\factories\HashManager.js" />
-    <Content Include="webclient\factories\Localization.js" />
-    <Content Include="webclient\factories\mediafile.js" />
-    <Content Include="webclient\factories\SearchUtil.js" />
-    <Content Include="webclient\factories\SearchUtil_v3dhack.js" />
-    <Content Include="webclient\factories\Skyball.js" />
-    <Content Include="webclient\factories\ThumbList.js" />
-    <Content Include="webclient\factories\UILibrary.js" />
-    <Content Include="webclient\factories\Util.js" />
-    <Content Include="webclient\favicon.ico" />
-    <Content Include="webclient\favicon.png" />
-    <Content Include="webclient\fblogin.js" />
-    <Content Include="webclient\gettours.xml" />
-    <Content Include="webclient\gettours_May16.xml" />
-    <Content Include="webclient\gettours_webclient.xml" />
-    <Content Include="webclient\Global.asax" />
-    <Content Include="webclient\Gruntfile.js" />
-    <Content Include="webclient\Hubble.wtml" />
-    <Content Include="webclient\images\bing-search-button.png" />
-    <Content Include="webclient\images\button_next_disabled.png" />
-    <Content Include="webclient\images\button_next_hover.png" />
-    <Content Include="webclient\images\button_next_normal.png" />
-    <Content Include="webclient\images\button_next_pressed.png" />
-    <Content Include="webclient\images\button_next_top_disabled.png" />
-    <Content Include="webclient\images\button_next_top_hover.png" />
-    <Content Include="webclient\images\button_next_top_normal.png" />
-    <Content Include="webclient\images\button_next_top_pressed.png" />
-    <Content Include="webclient\images\button_pause.png" />
-    <Content Include="webclient\images\button_pause_disabled.png" />
-    <Content Include="webclient\images\button_pause_hover.png" />
-    <Content Include="webclient\images\button_pause_normal.png" />
-    <Content Include="webclient\images\button_pause_pressed.png" />
-    <Content Include="webclient\images\button_play.png" />
-    <Content Include="webclient\images\button_play_disabled.png" />
-    <Content Include="webclient\images\button_play_hover.png" />
-    <Content Include="webclient\images\button_play_hover_left.png" />
-    <Content Include="webclient\images\button_play_normal.png" />
-    <Content Include="webclient\images\button_play_normal_left.png" />
-    <Content Include="webclient\images\button_play_pressed.png" />
-    <Content Include="webclient\images\button_play_pressed_left.png" />
-    <Content Include="webclient\images\button_previous_disabled.png" />
-    <Content Include="webclient\images\button_previous_hover.png" />
-    <Content Include="webclient\images\button_previous_normal.png" />
-    <Content Include="webclient\images\button_previous_pressed.png" />
-    <Content Include="webclient\images\button_previous_top_disabled.png" />
-    <Content Include="webclient\images\button_previous_top_hover.png" />
-    <Content Include="webclient\images\button_previous_top_normal.png" />
-    <Content Include="webclient\images\button_previous_top_pressed.png" />
-    <Content Include="webclient\images\callisto.jpg" />
-    <Content Include="webclient\images\callisto.png" />
-    <Content Include="webclient\images\ColorPickerHex.png" />
-    <Content Include="webclient\images\context-menu-arrow.png" />
-    <Content Include="webclient\images\dragInsertMarker.png" />
-    <Content Include="webclient\images\earth.jpg" />
-    <Content Include="webclient\images\earth.png" />
-    <Content Include="webclient\images\europa.jpg" />
-    <Content Include="webclient\images\europa.png" />
-    <Content Include="webclient\images\finder-scope.png" />
-    <Content Include="webclient\images\FocusHandles.png" />
-    <Content Include="webclient\images\ganymede.jpg" />
-    <Content Include="webclient\images\ganymede.png" />
-    <Content Include="webclient\images\glyphs1.png" />
-    <Content Include="webclient\images\glyphs1.xml" />
-    <Content Include="webclient\images\io.jpg" />
-    <Content Include="webclient\images\io.png" />
-    <Content Include="webclient\images\jupiter.jpg" />
-    <Content Include="webclient\images\jupiter.png" />
-    <Content Include="webclient\images\layersButton.png" />
-    <Content Include="webclient\images\layersButtonHover.png" />
-    <Content Include="webclient\images\mars.jpg" />
-    <Content Include="webclient\images\mars.png" />
-    <Content Include="webclient\images\mercury.jpg" />
-    <Content Include="webclient\images\mercury.png" />
-    <Content Include="webclient\images\moon.jpg" />
-    <Content Include="webclient\images\moon.png" />
-    <Content Include="webclient\images\moonshadow.png" />
-    <Content Include="webclient\images\MultiSelhand.bmp" />
-    <Content Include="webclient\images\neptune.jpg" />
-    <Content Include="webclient\images\neptune.png" />
-    <Content Include="webclient\images\pluto.jpg" />
-    <Content Include="webclient\images\pluto.png" />
-    <Content Include="webclient\images\saturn.png" />
-    <Content Include="webclient\images\SaturnRings.png" />
-    <Content Include="webclient\images\SaturnRingsShadow.png" />
-    <Content Include="webclient\images\Selhand.bmp" />
-    <Content Include="webclient\images\StarProfile.png" />
-    <Content Include="webclient\images\StarProfileAlpha.png" />
-    <Content Include="webclient\images\sun.jpg" />
-    <Content Include="webclient\images\sun.png" />
-    <Content Include="webclient\images\sunCorona.png" />
-    <Content Include="webclient\images\thumbBackground.png" />
-    <Content Include="webclient\images\thumbBackgroundHover.png" />
-    <Content Include="webclient\images\thumbBackgroundWide.png" />
-    <Content Include="webclient\images\thumbBackgroundWideHover.png" />
-    <Content Include="webclient\images\uranus.jpg" />
-    <Content Include="webclient\images\uranus.png" />
-    <Content Include="webclient\images\venus.jpg" />
-    <Content Include="webclient\images\venus.png" />
-    <Content Include="webclient\images\wwtlogo.png" />
-    <Content Include="webclient\login.aspx" />
-    <Content Include="webclient\sdk.js" />
-    <Content Include="webclient\sdk\wwtsdk.js" />
-    <Content Include="webclient\sdk\wwtsdk.min.js" />
-    <Content Include="webclient\sdk\wwtsdk_v3dhack.js" />
-    <Content Include="webclient\searchdata.js" />
-    <Content Include="webclient\searchdata.min.js" />
-    <Content Include="webclient\searchdata2.js" />
-    <Content Include="webclient\searchdataraw.js" />
-    <Content Include="webclient\simbad.js" />
-    <Content Include="webclient\sunCorona.png" />
-    <Content Include="webclient\v3d.aspx" />
-    <Content Include="webclient\views\copy-to-clipboard.html" />
-    <Content Include="webclient\views\explore.html" />
-    <Content Include="webclient\views\layer-manager.html" />
-    <Content Include="webclient\views\modals\centered-modal-template.html" />
-    <Content Include="webclient\views\modals\explore-collections.html" />
-    <Content Include="webclient\views\modals\finder-scope.html" />
-    <Content Include="webclient\views\modals\HtmlPage1.html" />
-    <Content Include="webclient\views\modals\intro.html" />
-    <Content Include="webclient\views\modals\loading.html" />
-    <Content Include="webclient\views\modals\login-before-edit.html" />
-    <Content Include="webclient\views\modals\login-beforeedit.html" />
-    <Content Include="webclient\views\modals\message.html" />
-    <Content Include="webclient\views\modals\mobile-explore.html" />
-    <Content Include="webclient\views\modals\mobile-layer-manager.html" />
-    <Content Include="webclient\views\modals\mobile-nearby-objects.html" />
-    <Content Include="webclient\views\modals\mobile-search.html" />
-    <Content Include="webclient\views\modals\mobile-settings.html" />
-    <Content Include="webclient\views\modals\mobile-tours.html" />
-    <Content Include="webclient\views\modals\mobile-view.html" />
-    <Content Include="webclient\views\modals\nearby-objects-mobile.html" />
-    <Content Include="webclient\views\modals\open-item.html" />
-    <Content Include="webclient\views\modals\set-next-slide.html" />
-    <Content Include="webclient\views\modals\setnextslide.html" />
-    <Content Include="webclient\views\modals\share.html" />
-    <Content Include="webclient\views\modals\tour-uploaded.html" />
-    <Content Include="webclient\views\modals\tour-uploader.html" />
-    <Content Include="webclient\views\modals\userconfirm.html" />
-    <Content Include="webclient\views\modals\userprompt.html" />
-    <Content Include="webclient\views\modals\vo-cone-search.html" />
-    <Content Include="webclient\views\popovers\observing-time.html" />
-    <Content Include="webclient\views\popovers\property-panel.html" />
-    <Content Include="webclient\views\popovers\share.html" />
-    <Content Include="webclient\views\popovers\shareplace.html" />
-    <Content Include="webclient\views\popovers\slide-overlays.html" />
-    <Content Include="webclient\views\popovers\thumbnail-template.html" />
-    <Content Include="webclient\views\popovers\tour-info.html" />
-    <Content Include="webclient\views\popovers\tour-properties.html" />
-    <Content Include="webclient\views\popovers\tour-template.html" />
-    <Content Include="webclient\views\popovers\tour-text.html" />
-    <Content Include="webclient\views\popovers\transition-type.html" />
-    <Content Include="webclient\views\research-menu.html" />
-    <Content Include="webclient\views\search.html" />
-    <Content Include="webclient\views\thumbnail.html" />
-    <Content Include="webclient\views\tours.html" />
-    <Content Include="webclient\views\tree-node.html" />
-    <Content Include="webclient\WebClient\Images\callisto.png" />
-    <Content Include="webclient\WebClient\Images\europa.png" />
-    <Content Include="webclient\WebClient\Images\ganymede.png" />
-    <Content Include="webclient\WebClient\Images\glyphs1.png" />
-    <Content Include="webclient\WebClient\Images\glyphs1.xml" />
-    <Content Include="webclient\WebClient\Images\io.png" />
-    <Content Include="webclient\WebClient\Images\jupiter.png" />
-    <Content Include="webclient\WebClient\Images\mars.png" />
-    <Content Include="webclient\WebClient\Images\mercury.png" />
-    <Content Include="webclient\WebClient\Images\moon.png" />
-    <Content Include="webclient\WebClient\Images\moonshadow.png" />
-    <Content Include="webclient\WebClient\Images\neptune.png" />
-    <Content Include="webclient\WebClient\Images\pluto.png" />
-    <Content Include="webclient\WebClient\Images\saturn.png" />
-    <Content Include="webclient\WebClient\Images\sun.png" />
-    <Content Include="webclient\WebClient\Images\sunCorona.png" />
-    <Content Include="webclient\WebClient\Images\uranus.png" />
-    <Content Include="webclient\WebClient\Images\venus.png" />
-    <Content Include="webclient\Wise.wtml" />
-    <Content Include="webclient\wwtlib.js" />
-    <Content Include="webclient\wwtlib.min.js" />
-    <Content Include="webclient\wwtsdk.js" />
-    <Content Include="webclient\wwtsdk.min.js" />
-    <Content Include="webclient\WWTSL.xap" />
-    <Content Include="webclient\wwtwebclient.js" />
-    <Content Include="webclient\wwtwebclient.min.js" />
     <Content Include="WebControl.aspx" />
     <Content Include="WebServices\LiveIdAuth.svc" />
     <Content Include="WebServices\ResourceService.svc" />
@@ -1239,12 +946,6 @@
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
-    <Content Include="webclient\css\conesearch.less" />
-    <Content Include="webclient\css\contextmenu.less" />
-    <Content Include="webclient\css\mixins.less" />
-    <Content Include="webclient\css\tours.less" />
-    <Content Include="webclient\css\variables.less" />
-    <Content Include="webclient\css\webclient.less" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\OpenWWT\" />
