@@ -86,7 +86,12 @@ module.exports = function(grunt) {
                     }, {
                         cwd: 'bower_components/bootstrap/less/',
                         src: '**/*',
-                        dest: 'bootstrap/less/',
+                        dest: 'Content/bootstrap/',
+                        expand: true
+                    }, {
+                        cwd: 'bower_components/bootstrap/fonts/',
+                        src: '**/*',
+                        dest: 'Content/fonts/',
                         expand: true
                     }
                 ]

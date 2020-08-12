@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WWTMVC5</RootNamespace>
     <AssemblyName>WWTMVC5</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
@@ -87,23 +87,22 @@
     <Reference Include="Microsoft.WindowsAzure.Diagnostics, Version=2.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.WindowsAzure.ServiceRuntime, Version=2.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.WindowsAzure.ServiceRuntime, Version=2.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Microsoft.WindowsAzure.Storage">
       <HintPath>..\packages\WindowsAzure.Storage.4.3.0\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.WindowsAzure.StorageClient">
-      <HintPath>..\..\OpenWWT-Website\WWTMVC5\bin\Microsoft.WindowsAzure.StorageClient.dll</HintPath>
     </Reference>
     <Reference Include="msshrtmi, Version=2.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>References\msshrtmi.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="RestSharp, Version=105.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\RestSharp.105.0.1\lib\net4\RestSharp.dll</HintPath>
+      <HintPath>..\packages\RestSharp.105.2.3\lib\net4\RestSharp.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Private>True</Private>
@@ -187,16 +186,19 @@
     <Reference Include="System.Xml.Linq">
       <Private>True</Private>
     </Reference>
+    <Reference Include="twoMassClassLibrary">
+      <HintPath>..\libs\twoMassClassLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\WebActivatorEx.2.0.6\lib\net40\WebActivatorEx.dll</HintPath>
+      <HintPath>..\packages\WebActivatorEx.2.2.0\lib\net40\WebActivatorEx.dll</HintPath>
     </Reference>
     <Reference Include="Wurfl">
-      <HintPath>..\..\packages\WURFL_Official_API.1.9.0.1\lib\Wurfl.dll</HintPath>
+      <HintPath>..\packages\WURFL_Official_API.1.9.0.1\lib\Wurfl.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Wurfl.Aspnet.Extensions">
-      <HintPath>..\..\packages\WURFL_Official_API.1.9.0.1\lib\Wurfl.Aspnet.Extensions.dll</HintPath>
+      <HintPath>..\packages\WURFL_Official_API.1.9.0.1\lib\Wurfl.Aspnet.Extensions.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -544,6 +546,79 @@
     </Compile>
     <Compile Include="WebServices\ServiceBase.cs" />
     <Content Include="App_Readme\Readme.txt" />
+    <Compile Include="WWTWeb\demmars.aspx.cs">
+      <DependentUpon>demmars.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WWTWeb\g360.aspx.cs">
+      <DependentUpon>g360.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WWTWeb\GetTourList.aspx.cs">
+      <DependentUpon>GetTourList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WWTWeb\GetTours.aspx.cs">
+      <DependentUpon>GetTours.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WWTWeb\Hirise.aspx.cs">
+      <DependentUpon>Hirise.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WWTWeb\HiriseDem2.aspx.cs">
+      <DependentUpon>HiriseDem2.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WWTWeb\isstle.aspx.cs">
+      <DependentUpon>isstle.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WWTWeb\login.aspx.cs">
+      <DependentUpon>login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WWTWeb\MarsHirise.aspx.cs">
+      <DependentUpon>MarsHirise.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WWTWeb\MarsMoc.aspx.cs">
+      <DependentUpon>MarsMoc.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WWTWeb\PostRatingFeedback.aspx.cs">
+      <DependentUpon>PostRatingFeedback.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WWTWeb\StarChart.aspx.cs">
+      <DependentUpon>StarChart.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WWTWeb\TileImage.aspx.cs">
+      <DependentUpon>TileImage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WWTWeb\weblogin.aspx.cs">
+      <DependentUpon>weblogin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WWTWeb\WMSEarthToday.aspx.cs">
+      <DependentUpon>WMSEarthToday.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WWTWeb\WMSMoon.aspx.cs">
+      <DependentUpon>WMSMoon.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WWTWeb\WMSToast.aspx.cs">
+      <DependentUpon>WMSToast.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WWTWeb\XML2WTT.aspx.cs">
+      <DependentUpon>XML2WTT.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <!-- <Content Include="App_Readme\Readme.txt" /> -->
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\GreatObservatories.xml" />
     <Content Include="Content\images\addview.png" />
@@ -662,6 +737,360 @@
     <Content Include="Scripts\controllers\touradmin.js" />
     <Content Include="Scripts\ext\hljsrazor.js" />
     <Content Include="Scripts\ext\ui-bootstrap-tpls-0.12.1.modified.js" />
+    <Content Include="WWTWeb\2MASSOct.aspx" />
+    <Content Include="WWTWeb\512\mag-0.1.png" />
+    <Content Include="WWTWeb\512\mag-0.2.png" />
+    <Content Include="WWTWeb\512\mag-0.3.png" />
+    <Content Include="WWTWeb\512\mag-0.4.png" />
+    <Content Include="WWTWeb\512\mag-0.5.png" />
+    <Content Include="WWTWeb\512\mag-0.6.png" />
+    <Content Include="WWTWeb\512\mag-0.7.png" />
+    <Content Include="WWTWeb\512\mag-0.8.png" />
+    <Content Include="WWTWeb\512\mag-0.9.png" />
+    <Content Include="WWTWeb\512\mag-1.0.png" />
+    <Content Include="WWTWeb\512\mag-1.1.png" />
+    <Content Include="WWTWeb\512\mag-1.2.png" />
+    <Content Include="WWTWeb\512\mag-1.3.png" />
+    <Content Include="WWTWeb\512\mag-1.4.png" />
+    <Content Include="WWTWeb\512\mag-1.5.png" />
+    <Content Include="WWTWeb\512\mag0.0.png" />
+    <Content Include="WWTWeb\512\mag0.1.png" />
+    <Content Include="WWTWeb\512\mag0.2.png" />
+    <Content Include="WWTWeb\512\mag0.3.png" />
+    <Content Include="WWTWeb\512\mag0.4.png" />
+    <Content Include="WWTWeb\512\mag0.5.png" />
+    <Content Include="WWTWeb\512\mag0.6.png" />
+    <Content Include="WWTWeb\512\mag0.7.png" />
+    <Content Include="WWTWeb\512\mag0.8.png" />
+    <Content Include="WWTWeb\512\mag0.9.png" />
+    <Content Include="WWTWeb\512\mag1.0.png" />
+    <Content Include="WWTWeb\512\mag1.1.png" />
+    <Content Include="WWTWeb\512\mag1.2.png" />
+    <Content Include="WWTWeb\512\mag1.3.png" />
+    <Content Include="WWTWeb\512\mag1.4.png" />
+    <Content Include="WWTWeb\512\mag1.5.png" />
+    <Content Include="WWTWeb\512\mag1.6.png" />
+    <Content Include="WWTWeb\512\mag1.7.png" />
+    <Content Include="WWTWeb\512\mag1.8.png" />
+    <Content Include="WWTWeb\512\mag1.9.png" />
+    <Content Include="WWTWeb\512\mag10.0.png" />
+    <Content Include="WWTWeb\512\mag10.1.png" />
+    <Content Include="WWTWeb\512\mag10.2.png" />
+    <Content Include="WWTWeb\512\mag10.3.png" />
+    <Content Include="WWTWeb\512\mag10.4.png" />
+    <Content Include="WWTWeb\512\mag10.5.png" />
+    <Content Include="WWTWeb\512\mag10.6.png" />
+    <Content Include="WWTWeb\512\mag10.7.png" />
+    <Content Include="WWTWeb\512\mag10.8.png" />
+    <Content Include="WWTWeb\512\mag10.9.png" />
+    <Content Include="WWTWeb\512\mag11.0.png" />
+    <Content Include="WWTWeb\512\mag11.1.png" />
+    <Content Include="WWTWeb\512\mag11.2.png" />
+    <Content Include="WWTWeb\512\mag11.3.png" />
+    <Content Include="WWTWeb\512\mag11.4.png" />
+    <Content Include="WWTWeb\512\mag11.5.png" />
+    <Content Include="WWTWeb\512\mag11.6.png" />
+    <Content Include="WWTWeb\512\mag11.7.png" />
+    <Content Include="WWTWeb\512\mag11.8.png" />
+    <Content Include="WWTWeb\512\mag11.9.png" />
+    <Content Include="WWTWeb\512\mag12.0.png" />
+    <Content Include="WWTWeb\512\mag12.1.png" />
+    <Content Include="WWTWeb\512\mag12.2.png" />
+    <Content Include="WWTWeb\512\mag12.3.png" />
+    <Content Include="WWTWeb\512\mag12.4.png" />
+    <Content Include="WWTWeb\512\mag12.5.png" />
+    <Content Include="WWTWeb\512\mag12.6.png" />
+    <Content Include="WWTWeb\512\mag12.7.png" />
+    <Content Include="WWTWeb\512\mag12.8.png" />
+    <Content Include="WWTWeb\512\mag12.9.png" />
+    <Content Include="WWTWeb\512\mag13.0.png" />
+    <Content Include="WWTWeb\512\mag13.1.png" />
+    <Content Include="WWTWeb\512\mag13.2.png" />
+    <Content Include="WWTWeb\512\mag13.3.png" />
+    <Content Include="WWTWeb\512\mag13.4.png" />
+    <Content Include="WWTWeb\512\mag13.5.png" />
+    <Content Include="WWTWeb\512\mag13.6.png" />
+    <Content Include="WWTWeb\512\mag13.7.png" />
+    <Content Include="WWTWeb\512\mag13.8.png" />
+    <Content Include="WWTWeb\512\mag13.9.png" />
+    <Content Include="WWTWeb\512\mag14.0.png" />
+    <Content Include="WWTWeb\512\mag14.1.png" />
+    <Content Include="WWTWeb\512\mag14.2.png" />
+    <Content Include="WWTWeb\512\mag14.3.png" />
+    <Content Include="WWTWeb\512\mag14.4.png" />
+    <Content Include="WWTWeb\512\mag14.5.png" />
+    <Content Include="WWTWeb\512\mag14.6.png" />
+    <Content Include="WWTWeb\512\mag14.7.png" />
+    <Content Include="WWTWeb\512\mag14.8.png" />
+    <Content Include="WWTWeb\512\mag14.9.png" />
+    <Content Include="WWTWeb\512\mag15.0.png" />
+    <Content Include="WWTWeb\512\mag15.1.png" />
+    <Content Include="WWTWeb\512\mag15.2.png" />
+    <Content Include="WWTWeb\512\mag15.3.png" />
+    <Content Include="WWTWeb\512\mag15.4.png" />
+    <Content Include="WWTWeb\512\mag15.5.png" />
+    <Content Include="WWTWeb\512\mag15.6.png" />
+    <Content Include="WWTWeb\512\mag15.7.png" />
+    <Content Include="WWTWeb\512\mag15.8.png" />
+    <Content Include="WWTWeb\512\mag15.9.png" />
+    <Content Include="WWTWeb\512\mag16.0.png" />
+    <Content Include="WWTWeb\512\mag16.1.png" />
+    <Content Include="WWTWeb\512\mag16.2.png" />
+    <Content Include="WWTWeb\512\mag16.3.png" />
+    <Content Include="WWTWeb\512\mag16.4.png" />
+    <Content Include="WWTWeb\512\mag16.5.png" />
+    <Content Include="WWTWeb\512\mag16.6.png" />
+    <Content Include="WWTWeb\512\mag16.7.png" />
+    <Content Include="WWTWeb\512\mag16.8.png" />
+    <Content Include="WWTWeb\512\mag16.9.png" />
+    <Content Include="WWTWeb\512\mag17.0.png" />
+    <Content Include="WWTWeb\512\mag17.1.png" />
+    <Content Include="WWTWeb\512\mag17.2.png" />
+    <Content Include="WWTWeb\512\mag17.3.png" />
+    <Content Include="WWTWeb\512\mag17.4.png" />
+    <Content Include="WWTWeb\512\mag17.5.png" />
+    <Content Include="WWTWeb\512\mag17.6.png" />
+    <Content Include="WWTWeb\512\mag17.7.png" />
+    <Content Include="WWTWeb\512\mag17.8.png" />
+    <Content Include="WWTWeb\512\mag17.9.png" />
+    <Content Include="WWTWeb\512\mag18.0.png" />
+    <Content Include="WWTWeb\512\mag18.1.png" />
+    <Content Include="WWTWeb\512\mag18.2.png" />
+    <Content Include="WWTWeb\512\mag18.3.png" />
+    <Content Include="WWTWeb\512\mag18.4.png" />
+    <Content Include="WWTWeb\512\mag18.5.png" />
+    <Content Include="WWTWeb\512\mag18.6.png" />
+    <Content Include="WWTWeb\512\mag18.7.png" />
+    <Content Include="WWTWeb\512\mag18.8.png" />
+    <Content Include="WWTWeb\512\mag18.9.png" />
+    <Content Include="WWTWeb\512\mag19.0.png" />
+    <Content Include="WWTWeb\512\mag19.1.png" />
+    <Content Include="WWTWeb\512\mag19.2.png" />
+    <Content Include="WWTWeb\512\mag19.3.png" />
+    <Content Include="WWTWeb\512\mag19.4.png" />
+    <Content Include="WWTWeb\512\mag19.5.png" />
+    <Content Include="WWTWeb\512\mag19.6.png" />
+    <Content Include="WWTWeb\512\mag19.7.png" />
+    <Content Include="WWTWeb\512\mag19.8.png" />
+    <Content Include="WWTWeb\512\mag19.9.png" />
+    <Content Include="WWTWeb\512\mag2.0.png" />
+    <Content Include="WWTWeb\512\mag2.1.png" />
+    <Content Include="WWTWeb\512\mag2.2.png" />
+    <Content Include="WWTWeb\512\mag2.3.png" />
+    <Content Include="WWTWeb\512\mag2.4.png" />
+    <Content Include="WWTWeb\512\mag2.5.png" />
+    <Content Include="WWTWeb\512\mag2.6.png" />
+    <Content Include="WWTWeb\512\mag2.7.png" />
+    <Content Include="WWTWeb\512\mag2.8.png" />
+    <Content Include="WWTWeb\512\mag2.9.png" />
+    <Content Include="WWTWeb\512\mag20.0.png" />
+    <Content Include="WWTWeb\512\mag20.1.png" />
+    <Content Include="WWTWeb\512\mag20.2.png" />
+    <Content Include="WWTWeb\512\mag20.3.png" />
+    <Content Include="WWTWeb\512\mag20.4.png" />
+    <Content Include="WWTWeb\512\mag20.5.png" />
+    <Content Include="WWTWeb\512\mag20.6.png" />
+    <Content Include="WWTWeb\512\mag20.7.png" />
+    <Content Include="WWTWeb\512\mag20.8.png" />
+    <Content Include="WWTWeb\512\mag20.9.png" />
+    <Content Include="WWTWeb\512\mag21.0.png" />
+    <Content Include="WWTWeb\512\mag21.1.png" />
+    <Content Include="WWTWeb\512\mag21.2.png" />
+    <Content Include="WWTWeb\512\mag21.3.png" />
+    <Content Include="WWTWeb\512\mag21.4.png" />
+    <Content Include="WWTWeb\512\mag21.5.png" />
+    <Content Include="WWTWeb\512\mag21.6.png" />
+    <Content Include="WWTWeb\512\mag21.7.png" />
+    <Content Include="WWTWeb\512\mag21.8.png" />
+    <Content Include="WWTWeb\512\mag21.9.png" />
+    <Content Include="WWTWeb\512\mag22.0.png" />
+    <Content Include="WWTWeb\512\mag22.1.png" />
+    <Content Include="WWTWeb\512\mag22.2.png" />
+    <Content Include="WWTWeb\512\mag22.3.png" />
+    <Content Include="WWTWeb\512\mag22.4.png" />
+    <Content Include="WWTWeb\512\mag22.5.png" />
+    <Content Include="WWTWeb\512\mag22.6.png" />
+    <Content Include="WWTWeb\512\mag22.7.png" />
+    <Content Include="WWTWeb\512\mag22.8.png" />
+    <Content Include="WWTWeb\512\mag22.9.png" />
+    <Content Include="WWTWeb\512\mag23.0.png" />
+    <Content Include="WWTWeb\512\mag23.1.png" />
+    <Content Include="WWTWeb\512\mag23.2.png" />
+    <Content Include="WWTWeb\512\mag23.3.png" />
+    <Content Include="WWTWeb\512\mag23.4.png" />
+    <Content Include="WWTWeb\512\mag23.5.png" />
+    <Content Include="WWTWeb\512\mag23.6.png" />
+    <Content Include="WWTWeb\512\mag23.7.png" />
+    <Content Include="WWTWeb\512\mag23.8.png" />
+    <Content Include="WWTWeb\512\mag23.9.png" />
+    <Content Include="WWTWeb\512\mag24.0.png" />
+    <Content Include="WWTWeb\512\mag24.1.png" />
+    <Content Include="WWTWeb\512\mag24.2.png" />
+    <Content Include="WWTWeb\512\mag24.3.png" />
+    <Content Include="WWTWeb\512\mag24.4.png" />
+    <Content Include="WWTWeb\512\mag24.5.png" />
+    <Content Include="WWTWeb\512\mag24.6.png" />
+    <Content Include="WWTWeb\512\mag24.7.png" />
+    <Content Include="WWTWeb\512\mag24.8.png" />
+    <Content Include="WWTWeb\512\mag24.9.png" />
+    <Content Include="WWTWeb\512\mag25.0.png" />
+    <Content Include="WWTWeb\512\mag3.0.png" />
+    <Content Include="WWTWeb\512\mag3.1.png" />
+    <Content Include="WWTWeb\512\mag3.2.png" />
+    <Content Include="WWTWeb\512\mag3.3.png" />
+    <Content Include="WWTWeb\512\mag3.4.png" />
+    <Content Include="WWTWeb\512\mag3.5.png" />
+    <Content Include="WWTWeb\512\mag3.6.png" />
+    <Content Include="WWTWeb\512\mag3.7.png" />
+    <Content Include="WWTWeb\512\mag3.8.png" />
+    <Content Include="WWTWeb\512\mag3.9.png" />
+    <Content Include="WWTWeb\512\mag4.0.png" />
+    <Content Include="WWTWeb\512\mag4.1.png" />
+    <Content Include="WWTWeb\512\mag4.2.png" />
+    <Content Include="WWTWeb\512\mag4.3.png" />
+    <Content Include="WWTWeb\512\mag4.4.png" />
+    <Content Include="WWTWeb\512\mag4.5.png" />
+    <Content Include="WWTWeb\512\mag4.6.png" />
+    <Content Include="WWTWeb\512\mag4.7.png" />
+    <Content Include="WWTWeb\512\mag4.8.png" />
+    <Content Include="WWTWeb\512\mag4.9.png" />
+    <Content Include="WWTWeb\512\mag5.0.png" />
+    <Content Include="WWTWeb\512\mag5.1.png" />
+    <Content Include="WWTWeb\512\mag5.2.png" />
+    <Content Include="WWTWeb\512\mag5.3.png" />
+    <Content Include="WWTWeb\512\mag5.4.png" />
+    <Content Include="WWTWeb\512\mag5.5.png" />
+    <Content Include="WWTWeb\512\mag5.6.png" />
+    <Content Include="WWTWeb\512\mag5.7.png" />
+    <Content Include="WWTWeb\512\mag5.8.png" />
+    <Content Include="WWTWeb\512\mag5.9.png" />
+    <Content Include="WWTWeb\512\mag6.0.png" />
+    <Content Include="WWTWeb\512\mag6.1.png" />
+    <Content Include="WWTWeb\512\mag6.2.png" />
+    <Content Include="WWTWeb\512\mag6.3.png" />
+    <Content Include="WWTWeb\512\mag6.4.png" />
+    <Content Include="WWTWeb\512\mag6.5.png" />
+    <Content Include="WWTWeb\512\mag6.6.png" />
+    <Content Include="WWTWeb\512\mag6.7.png" />
+    <Content Include="WWTWeb\512\mag6.8.png" />
+    <Content Include="WWTWeb\512\mag6.9.png" />
+    <Content Include="WWTWeb\512\mag7.0.png" />
+    <Content Include="WWTWeb\512\mag7.1.png" />
+    <Content Include="WWTWeb\512\mag7.2.png" />
+    <Content Include="WWTWeb\512\mag7.3.png" />
+    <Content Include="WWTWeb\512\mag7.4.png" />
+    <Content Include="WWTWeb\512\mag7.5.png" />
+    <Content Include="WWTWeb\512\mag7.6.png" />
+    <Content Include="WWTWeb\512\mag7.7.png" />
+    <Content Include="WWTWeb\512\mag7.8.png" />
+    <Content Include="WWTWeb\512\mag7.9.png" />
+    <Content Include="WWTWeb\512\mag8.0.png" />
+    <Content Include="WWTWeb\512\mag8.1.png" />
+    <Content Include="WWTWeb\512\mag8.2.png" />
+    <Content Include="WWTWeb\512\mag8.3.png" />
+    <Content Include="WWTWeb\512\mag8.4.png" />
+    <Content Include="WWTWeb\512\mag8.5.png" />
+    <Content Include="WWTWeb\512\mag8.6.png" />
+    <Content Include="WWTWeb\512\mag8.7.png" />
+    <Content Include="WWTWeb\512\mag8.8.png" />
+    <Content Include="WWTWeb\512\mag8.9.png" />
+    <Content Include="WWTWeb\512\mag9.0.png" />
+    <Content Include="WWTWeb\512\mag9.1.png" />
+    <Content Include="WWTWeb\512\mag9.2.png" />
+    <Content Include="WWTWeb\512\mag9.3.png" />
+    <Content Include="WWTWeb\512\mag9.4.png" />
+    <Content Include="WWTWeb\512\mag9.5.png" />
+    <Content Include="WWTWeb\512\mag9.6.png" />
+    <Content Include="WWTWeb\512\mag9.7.png" />
+    <Content Include="WWTWeb\512\mag9.8.png" />
+    <Content Include="WWTWeb\512\mag9.9.png" />
+    <Content Include="WWTWeb\BingDemTile.aspx" />
+    <Content Include="WWTWeb\BingDemTile2.aspx" />
+    <Content Include="WWTWeb\Catalog.aspx" />
+    <Content Include="WWTWeb\Catalog2.aspx" />
+    <Content Include="WWTWeb\dem.aspx" />
+    <Content Include="WWTWeb\dembath.aspx" />
+    <Content Include="WWTWeb\demmars.aspx" />
+    <Content Include="WWTWeb\demmarsEmpty.aspx" />
+    <Content Include="WWTWeb\demmars_new.aspx" />
+    <Content Include="WWTWeb\demTile.aspx" />
+    <Content Include="WWTWeb\DSS.aspx" />
+    <Content Include="WWTWeb\DSSToast.aspx" />
+    <Content Include="WWTWeb\DustToast.aspx" />
+    <Content Include="WWTWeb\EarthBlend.aspx" />
+    <Content Include="WWTWeb\EarthMerBath.aspx" />
+    <Content Include="WWTWeb\ExcelAddinUpdate.aspx" />
+    <Content Include="WWTWeb\FixedAltitudeDemTile.aspx" />
+    <Content Include="WWTWeb\g360.aspx" />
+    <Content Include="WWTWeb\Galex4Far.aspx" />
+    <Content Include="WWTWeb\Galex4Near.aspx" />
+    <Content Include="WWTWeb\GalexToast.aspx" />
+    <Content Include="WWTWeb\GetAuthorThumbnail.aspx" />
+    <Content Include="WWTWeb\GetHostName.aspx" />
+    <Content Include="WWTWeb\GetTile.aspx" />
+    <Content Include="WWTWeb\GetTour.aspx" />
+    <Content Include="WWTWeb\GetTourFile.aspx" />
+    <Content Include="WWTWeb\GetTourList.aspx" />
+    <Content Include="WWTWeb\GetTours.aspx" />
+    <Content Include="WWTWeb\GetTourThumbnail.aspx" />
+    <Content Include="WWTWeb\Glimpse.aspx" />
+    <Content Include="WWTWeb\Goto.aspx" />
+    <Content Include="WWTWeb\Goto2.aspx" />
+    <Content Include="WWTWeb\hAlphaToast.aspx" />
+    <Content Include="WWTWeb\Hirise.aspx" />
+    <Content Include="WWTWeb\HiriseDem.aspx" />
+    <Content Include="WWTWeb\HiriseDem2.aspx" />
+    <Content Include="WWTWeb\HiriseDem3.aspx" />
+    <Content Include="WWTWeb\isstle.aspx" />
+    <Content Include="WWTWeb\isstle2.aspx" />
+    <Content Include="WWTWeb\jupiter.aspx" />
+    <Content Include="WWTWeb\login.aspx" />
+    <Content Include="WWTWeb\Mandel.aspx" />
+    <Content Include="WWTWeb\mandel1.aspx" />
+    <Content Include="WWTWeb\mars.aspx" />
+    <Content Include="WWTWeb\marsdem.aspx" />
+    <Content Include="WWTWeb\MarsHirise.aspx" />
+    <Content Include="WWTWeb\MarsMoc.aspx" />
+    <Content Include="WWTWeb\MartianTile.aspx" />
+    <Content Include="WWTWeb\MartianTile2.aspx" />
+    <Content Include="WWTWeb\MartianTileEmpty.aspx" />
+    <Content Include="WWTWeb\MartianTileNew.aspx" />
+    <Content Include="WWTWeb\Mipsgal.aspx" />
+    <Content Include="WWTWeb\moondem.aspx" />
+    <Content Include="WWTWeb\moonOct.aspx" />
+    <Content Include="WWTWeb\moontoast.aspx" />
+    <Content Include="WWTWeb\moontoastdem.aspx" />
+    <Content Include="WWTWeb\postmars.aspx" />
+    <Content Include="WWTWeb\postmarsdem.aspx" />
+    <Content Include="WWTWeb\postmarsdem2.aspx" />
+    <Content Include="WWTWeb\PostRatingFeedback.aspx" />
+    <Content Include="WWTWeb\RassToast.aspx" />
+    <Content Include="WWTWeb\SDSSToast.aspx" />
+    <Content Include="WWTWeb\SDSSToast.offline.aspx" />
+    <Content Include="WWTWeb\SDSSToast2.aspx" />
+    <Content Include="WWTWeb\ShowImage.aspx" />
+    <Content Include="WWTWeb\ShowImage2.aspx" />
+    <Content Include="WWTWeb\StarChart.aspx" />
+    <Content Include="WWTWeb\test.aspx" />
+    <Content Include="WWTWeb\testfailover.aspx" />
+    <Content Include="WWTWeb\thumbnail.aspx" />
+    <Content Include="WWTWeb\TileImage.aspx" />
+    <Content Include="WWTWeb\tiles.aspx" />
+    <Content Include="WWTWeb\tiles2.aspx" />
+    <Content Include="WWTWeb\tilethumb.aspx" />
+    <Content Include="WWTWeb\TwoMassToast.aspx" />
+    <Content Include="WWTWeb\TychoOct.aspx" />
+    <Content Include="WWTWeb\veblend.aspx" />
+    <Content Include="WWTWeb\version.aspx" />
+    <Content Include="WWTWeb\versions.aspx" />
+    <Content Include="WWTWeb\vlssToast.aspx" />
+    <Content Include="WWTWeb\weblogin.aspx" />
+    <Content Include="WWTWeb\WebServiceProxy.aspx" />
+    <Content Include="WWTWeb\wmap.aspx" />
+    <Content Include="WWTWeb\WMSEarthToday.aspx" />
+    <Content Include="WWTWeb\WMSMoon.aspx" />
+    <Content Include="WWTWeb\WMSToast.aspx" />
+    <Content Include="WWTWeb\XML2WTT.aspx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="BingSiteAuth.xml" />
@@ -946,6 +1375,7 @@
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
+    <Content Include="WWTWeb\colors.map" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\OpenWWT\" />
@@ -1037,13 +1467,13 @@
     <Content Include="Views\Support\IssuesAndBugs.cshtml" />
     <Content Include="Views\Support\Index.cshtml" />
     <Content Include="Views\Support\LeftNav.cshtml" />
-    <Content Include="Views\Shared\webclient\IndexNYI.cshtml" />
+    <!-- <Content Include="Views\Shared\webclient\IndexNYI.cshtml" /> -->
     <Content Include="Views\Search\Index.cshtml" />
     <Content Include="Views\Download\Beta.cshtml" />
     <Content Include="Views\Index.cshtml" />
     <Content Include="Views\Support\Localization.cshtml" />
     <Content Include="Views\Learn\MobileTest.cshtml" />
-    <Content Include="Views\Shared\webclient\debughead.cshtml" />
+    <!-- <Content Include="Views\Shared\webclient\debughead.cshtml" /> -->
     <Content Include="Views\Support\Error500.cshtml" />
     <Content Include="Views\WWTinAction\Index.cshtml" />
     <Content Include="Views\WWTinAction\LeftNav.cshtml" />
@@ -1070,6 +1500,12 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WWTWebservices\WWTWebservices.csproj">
+      <Project>{1cf4d986-51ad-43f8-a84a-38b6ecba2172}</Project>
+      <Name>WWTWebservices</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -1105,9 +1541,7 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
-    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <PropertyGroup>
     <PostBuildEvent>
       cd $(TargetDir)
