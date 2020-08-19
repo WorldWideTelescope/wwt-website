@@ -6,8 +6,6 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using Microsoft.Practices.Unity;
-using WURFL;
-using WURFL.Config;
 using WWTMVC5.Models;
 using WWTMVC5.Repositories;
 using WWTMVC5.Repositories.Interfaces;
@@ -48,9 +46,6 @@ namespace WWTMVC5
 			//DateTime time = DateTime.Now;
 			var wurflDataFile = HttpContext.Current.Server.MapPath(WurflDataFilePath);
 
-			var configurer = new InMemoryConfigurer()
-				.MainFile(wurflDataFile);
-			WURFLManagerBuilder.Build(configurer);
 			//DateTime time2 = DateTime.Now;
 			//var wurfltime = time.Millisecond - time2.Millisecond;
 			//var breakhere = true;
