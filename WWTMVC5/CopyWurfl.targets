@@ -1,0 +1,14 @@
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Target Name="BeforeBuild">
+    <Message Importance="High" Text="Copying Wurfl files from $(PkgWURFL_Official_API)" />
+
+    <ItemGroup>
+      <WurflFiles Include="$(PkgWURFL_Official_API)\Content\**\*.*" />
+    </ItemGroup>
+    
+    <Copy
+      SourceFiles="@(WurflFiles)"
+      DestinationFiles="@(WurflFiles->'.\%(RecursiveDir)%(Filename)%(Extension)')"
+      SkipUnchangedFiles="true" />
+  </Target>
+</Project>

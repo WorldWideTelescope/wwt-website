@@ -8,7 +8,7 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  solution: 'WWTMVC5.sln'
+  solution: 'WWTWebSiteOnly.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 

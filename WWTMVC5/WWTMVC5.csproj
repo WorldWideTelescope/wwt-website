@@ -26,8 +26,6 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <WcfConfigValidationEnabled>True</WcfConfigValidationEnabled>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <UseGlobalApplicationHostFile />
@@ -52,99 +50,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="AutoMapper, Version=3.3.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.dll</HintPath>
-    </Reference>
-    <Reference Include="AutoMapper.Net4, Version=3.3.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.Net4.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
-    <Reference Include="LiveSDKHelper, Version=0.1.0.8, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\LiveSDKHelper.0.1.0.8\lib\portable-net45+sl40+wp71+win\LiveSDKHelper.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Azure.KeyVault.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Azure.KeyVault.Core.2.0.4\lib\net45\Microsoft.Azure.KeyVault.Core.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp">
       <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Data.Edm, Version=5.8.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Data.Edm.5.8.3\lib\net40\Microsoft.Data.Edm.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Data.OData, Version=5.8.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Data.OData.5.8.3\lib\net40\Microsoft.Data.OData.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Data.Services.Client, Version=5.8.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Data.Services.Client.5.8.3\lib\net40\Microsoft.Data.Services.Client.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.IdentityModel, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.IdentityModel.6.1.7600.16394\lib\net35\Microsoft.IdentityModel.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Live.Web, Version=5.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\LiveSDKServer.5.6\lib\net45\Microsoft.Live.Web.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.Unity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.Unity.Configuration, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.Configuration.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.Unity.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Unity.Mvc.4.0.1\lib\net45\Microsoft.Practices.Unity.Mvc.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.Unity.RegistrationByConvention, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Threading.Tasks.Extensions, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop, Version=1.0.168.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.WindowsAzure.Configuration, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.3.2.3\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAzure.Diagnostics, Version=2.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.WindowsAzure.ServiceRuntime, Version=2.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>False</Private>
-    </Reference>
-    <Reference Include="Microsoft.WindowsAzure.Storage, Version=4.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\WindowsAzure.Storage.4.3.0\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
-    </Reference>
-    <Reference Include="msshrtmi, Version=2.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>References\msshrtmi.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RestSharp.105.2.3\lib\net46\RestSharp.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Private>True</Private>
@@ -180,9 +93,6 @@
     <Reference Include="System.ComponentModel.DataAnnotations">
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Spatial, Version=5.8.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Spatial.5.8.3\lib\net40\System.Spatial.dll</HintPath>
-    </Reference>
     <Reference Include="System.Web">
       <Private>True</Private>
     </Reference>
@@ -193,29 +103,8 @@
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
-    </Reference>
     <Reference Include="System.Web.Routing">
       <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml">
       <Private>True</Private>
@@ -226,18 +115,6 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="twoMassClassLibrary">
       <HintPath>..\libs\twoMassClassLibrary.dll</HintPath>
-    </Reference>
-    <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
-      <HintPath>..\packages\WebActivatorEx.2.2.0\lib\net40\WebActivatorEx.dll</HintPath>
-    </Reference>
-    <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
-    </Reference>
-    <Reference Include="Wurfl, Version=1.9.0.1, Culture=neutral, PublicKeyToken=816aeec277aa13b9, processorArchitecture=MSIL">
-      <HintPath>..\packages\WURFL_Official_API.1.9.0.1\lib\Wurfl.dll</HintPath>
-    </Reference>
-    <Reference Include="Wurfl.Aspnet.Extensions, Version=1.9.0.0, Culture=neutral, PublicKeyToken=816aeec277aa13b9, processorArchitecture=MSIL">
-      <HintPath>..\packages\WURFL_Official_API.1.9.0.1\lib\Wurfl.Aspnet.Extensions.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -603,6 +480,7 @@
       <DependentUpon>ResourceService.svc</DependentUpon>
     </Compile>
     <Compile Include="WebServices\ServiceBase.cs" />
+    <Content Include="App_Readme\Readme.txt" />
     <Compile Include="WWTWeb\demmars.aspx.cs">
       <DependentUpon>demmars.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -675,13 +553,7 @@
       <DependentUpon>XML2WTT.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Content Include="App_Readme\Readme.txt" />
-    <Content Include="Content\bootstrap-theme.css" />
-    <Content Include="Content\bootstrap-theme.min.css" />
-    <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
-    <!-- <Content Include="App_Readme\Readme.txt" /> -->
     <Content Include="Content\GreatObservatories.xml" />
     <Content Include="Content\images\addview.png" />
     <Content Include="Content\images\layoutpage.png" />
@@ -791,8 +663,7 @@
     <Content Include="html5sdk\2.0\wwtsdk.js" />
     <Content Include="html5sdk\2.0\wwtsdk.min.js" />
     <Content Include="images\StarProfile.png" />
-    <Content Include="msshrtmi.dll" />
-    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.js" />	
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\controllers\modals\editfolder.js" />
     <Content Include="Scripts\controllers\modals\edittour.js" />
@@ -1181,7 +1052,6 @@
     <Content Include="HTML5TourPlayer.aspx" />
     <Content Include="Models\images.xml" />
     <Content Include="Models\wwtmusic.xml" />
-    <Content Include="References\msshrtmi.dll" />
     <Content Include="robots.txt" />
     <Content Include="Scripts\controllers\communitydetail.js" />
     <Content Include="Scripts\controllers\contentdetail.js" />
@@ -1219,92 +1089,7 @@
     <Content Include="App_Code\WWTToursDataset.xss">
       <DependentUpon>WWTToursDataset.xsd</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap.min.css.map" />
-    <Content Include="Content\bootstrap.css.map" />
-    <Content Include="Content\bootstrap-theme.min.css.map" />
-    <Content Include="Content\bootstrap-theme.css.map" />
-    <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Content\bootstrap\wells.less" />
-    <Content Include="Content\bootstrap\variables.less" />
-    <Content Include="Content\bootstrap\utilities.less" />
-    <Content Include="Content\bootstrap\type.less" />
-    <Content Include="Content\bootstrap\tooltip.less" />
-    <Content Include="Content\bootstrap\thumbnails.less" />
-    <Content Include="Content\bootstrap\theme.less" />
-    <Content Include="Content\bootstrap\tables.less" />
-    <Content Include="Content\bootstrap\scaffolding.less" />
-    <Content Include="Content\bootstrap\responsive-utilities.less" />
-    <Content Include="Content\bootstrap\responsive-embed.less" />
-    <Content Include="Content\bootstrap\progress-bars.less" />
-    <Content Include="Content\bootstrap\print.less" />
-    <Content Include="Content\bootstrap\popovers.less" />
-    <Content Include="Content\bootstrap\panels.less" />
-    <Content Include="Content\bootstrap\pagination.less" />
-    <Content Include="Content\bootstrap\pager.less" />
-    <Content Include="Content\bootstrap\normalize.less" />
-    <Content Include="Content\bootstrap\navs.less" />
-    <Content Include="Content\bootstrap\navbar.less" />
-    <Content Include="Content\bootstrap\modals.less" />
-    <Content Include="Content\bootstrap\mixins\vendor-prefixes.less" />
-    <Content Include="Content\bootstrap\mixins\text-overflow.less" />
-    <Content Include="Content\bootstrap\mixins\text-emphasis.less" />
-    <Content Include="Content\bootstrap\mixins\table-row.less" />
-    <Content Include="Content\bootstrap\mixins\tab-focus.less" />
-    <Content Include="Content\bootstrap\mixins\size.less" />
-    <Content Include="Content\bootstrap\mixins\responsive-visibility.less" />
-    <Content Include="Content\bootstrap\mixins\resize.less" />
-    <Content Include="Content\bootstrap\mixins\reset-text.less" />
-    <Content Include="Content\bootstrap\mixins\reset-filter.less" />
-    <Content Include="Content\bootstrap\mixins\progress-bar.less" />
-    <Content Include="Content\bootstrap\mixins\panels.less" />
-    <Content Include="Content\bootstrap\mixins\pagination.less" />
-    <Content Include="Content\bootstrap\mixins\opacity.less" />
-    <Content Include="Content\bootstrap\mixins\nav-vertical-align.less" />
-    <Content Include="Content\bootstrap\mixins\nav-divider.less" />
-    <Content Include="Content\bootstrap\mixins\list-group.less" />
-    <Content Include="Content\bootstrap\mixins\labels.less" />
-    <Content Include="Content\bootstrap\mixins\image.less" />
-    <Content Include="Content\bootstrap\mixins\hide-text.less" />
-    <Content Include="Content\bootstrap\mixins\grid.less" />
-    <Content Include="Content\bootstrap\mixins\grid-framework.less" />
-    <Content Include="Content\bootstrap\mixins\gradients.less" />
-    <Content Include="Content\bootstrap\mixins\forms.less" />
-    <Content Include="Content\bootstrap\mixins\clearfix.less" />
-    <Content Include="Content\bootstrap\mixins\center-block.less" />
-    <Content Include="Content\bootstrap\mixins\buttons.less" />
-    <Content Include="Content\bootstrap\mixins\border-radius.less" />
-    <Content Include="Content\bootstrap\mixins\background-variant.less" />
-    <Content Include="Content\bootstrap\mixins\alerts.less" />
-    <Content Include="Content\bootstrap\mixins.less" />
-    <Content Include="Content\bootstrap\media.less" />
-    <Content Include="Content\bootstrap\list-group.less" />
-    <Content Include="Content\bootstrap\labels.less" />
-    <Content Include="Content\bootstrap\jumbotron.less" />
-    <Content Include="Content\bootstrap\input-groups.less" />
-    <Content Include="Content\bootstrap\grid.less" />
-    <Content Include="Content\bootstrap\glyphicons.less" />
-    <Content Include="Content\bootstrap\forms.less" />
-    <Content Include="Content\bootstrap\dropdowns.less" />
-    <Content Include="Content\bootstrap\component-animations.less" />
-    <Content Include="Content\bootstrap\code.less" />
-    <Content Include="Content\bootstrap\close.less" />
-    <Content Include="Content\bootstrap\carousel.less" />
-    <Content Include="Content\bootstrap\buttons.less" />
-    <Content Include="Content\bootstrap\button-groups.less" />
-    <Content Include="Content\bootstrap\breadcrumbs.less" />
-    <Content Include="Content\bootstrap\bootstrap.less" />
-    <Content Include="Content\bootstrap\badges.less" />
-    <Content Include="Content\bootstrap\alerts.less" />
-    <Content Include="Introspector\Introspector.pdf" />
-    <Content Include="Introspector\Introspector.ashx" />
-    <Content Include="COPYING.evaluation" />
-    <Content Include="App_Readme\WURFL.chm" />
-    <Content Include="App_Readme\wurfl-latest.zip" />
-    <Content Include="App_Data\wurfl-latest.zip" />
-    <None Include="packages.config" />
+    <Content Include="CopyWurfl.targets" />
     <None Include="Properties\PublishProfiles\wwt.thewebkid.com.pubxml" />
     <None Include="Properties\PublishProfiles\wwtstaging - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy.pubxml" />
@@ -1351,6 +1136,81 @@
     <None Include="Properties\PublishProfiles\wwt.thewebkid.com.pubxml" />
     <None Include="Properties\PublishProfiles\wwtstaging - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy.pubxml" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />	
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />	
+    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />	
+    <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />	
+    <Content Include="Content\bootstrap\wells.less" />	
+    <Content Include="Content\bootstrap\variables.less" />	
+    <Content Include="Content\bootstrap\utilities.less" />	
+    <Content Include="Content\bootstrap\type.less" />	
+    <Content Include="Content\bootstrap\tooltip.less" />	
+    <Content Include="Content\bootstrap\thumbnails.less" />	
+    <Content Include="Content\bootstrap\theme.less" />	
+    <Content Include="Content\bootstrap\tables.less" />	
+    <Content Include="Content\bootstrap\scaffolding.less" />	
+    <Content Include="Content\bootstrap\responsive-utilities.less" />	
+    <Content Include="Content\bootstrap\responsive-embed.less" />	
+    <Content Include="Content\bootstrap\progress-bars.less" />	
+    <Content Include="Content\bootstrap\print.less" />	
+    <Content Include="Content\bootstrap\popovers.less" />	
+    <Content Include="Content\bootstrap\panels.less" />	
+    <Content Include="Content\bootstrap\pagination.less" />	
+    <Content Include="Content\bootstrap\pager.less" />	
+    <Content Include="Content\bootstrap\normalize.less" />	
+    <Content Include="Content\bootstrap\navs.less" />	
+    <Content Include="Content\bootstrap\navbar.less" />	
+    <Content Include="Content\bootstrap\modals.less" />	
+    <Content Include="Content\bootstrap\mixins\vendor-prefixes.less" />	
+    <Content Include="Content\bootstrap\mixins\text-overflow.less" />	
+    <Content Include="Content\bootstrap\mixins\text-emphasis.less" />	
+    <Content Include="Content\bootstrap\mixins\table-row.less" />	
+    <Content Include="Content\bootstrap\mixins\tab-focus.less" />	
+    <Content Include="Content\bootstrap\mixins\size.less" />	
+    <Content Include="Content\bootstrap\mixins\responsive-visibility.less" />	
+    <Content Include="Content\bootstrap\mixins\resize.less" />	
+    <Content Include="Content\bootstrap\mixins\reset-text.less" />	
+    <Content Include="Content\bootstrap\mixins\reset-filter.less" />	
+    <Content Include="Content\bootstrap\mixins\progress-bar.less" />	
+    <Content Include="Content\bootstrap\mixins\panels.less" />	
+    <Content Include="Content\bootstrap\mixins\pagination.less" />	
+    <Content Include="Content\bootstrap\mixins\opacity.less" />	
+    <Content Include="Content\bootstrap\mixins\nav-vertical-align.less" />	
+    <Content Include="Content\bootstrap\mixins\nav-divider.less" />	
+    <Content Include="Content\bootstrap\mixins\list-group.less" />	
+    <Content Include="Content\bootstrap\mixins\labels.less" />	
+    <Content Include="Content\bootstrap\mixins\image.less" />	
+    <Content Include="Content\bootstrap\mixins\hide-text.less" />	
+    <Content Include="Content\bootstrap\mixins\grid.less" />	
+    <Content Include="Content\bootstrap\mixins\grid-framework.less" />	
+    <Content Include="Content\bootstrap\mixins\gradients.less" />	
+    <Content Include="Content\bootstrap\mixins\forms.less" />	
+    <Content Include="Content\bootstrap\mixins\clearfix.less" />	
+    <Content Include="Content\bootstrap\mixins\center-block.less" />	
+    <Content Include="Content\bootstrap\mixins\buttons.less" />	
+    <Content Include="Content\bootstrap\mixins\border-radius.less" />	
+    <Content Include="Content\bootstrap\mixins\background-variant.less" />	
+    <Content Include="Content\bootstrap\mixins\alerts.less" />	
+    <Content Include="Content\bootstrap\mixins.less" />	
+    <Content Include="Content\bootstrap\media.less" />	
+    <Content Include="Content\bootstrap\list-group.less" />	
+    <Content Include="Content\bootstrap\labels.less" />	
+    <Content Include="Content\bootstrap\jumbotron.less" />	
+    <Content Include="Content\bootstrap\input-groups.less" />	
+    <Content Include="Content\bootstrap\grid.less" />	
+    <Content Include="Content\bootstrap\glyphicons.less" />	
+    <Content Include="Content\bootstrap\forms.less" />	
+    <Content Include="Content\bootstrap\dropdowns.less" />	
+    <Content Include="Content\bootstrap\component-animations.less" />	
+    <Content Include="Content\bootstrap\code.less" />	
+    <Content Include="Content\bootstrap\close.less" />	
+    <Content Include="Content\bootstrap\carousel.less" />	
+    <Content Include="Content\bootstrap\buttons.less" />	
+    <Content Include="Content\bootstrap\button-groups.less" />	
+    <Content Include="Content\bootstrap\breadcrumbs.less" />	
+    <Content Include="Content\bootstrap\bootstrap.less" />	
+    <Content Include="Content\bootstrap\badges.less" />	
+    <Content Include="Content\bootstrap\alerts.less" />
     <Content Include="Localization\lang_en.tdf" />
     <None Include="Properties\PublishProfiles\wwt.thewebkid.com.pubxml" />
     <None Include="Properties\PublishProfiles\WWTMVC5rosenfield - Web Deploy.pubxml" />
@@ -1588,6 +1448,83 @@
       <Name>WWTWebservices</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Antlr">
+      <Version>3.5.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="AutoMapper">
+      <Version>3.3.1</Version>
+    </PackageReference>
+    <PackageReference Include="bootstrap">
+      <Version>3.3.7</Version>
+    </PackageReference>
+    <PackageReference Include="bootstrap.less">
+      <Version>3.3.7</Version>
+    </PackageReference>
+    <PackageReference Include="EntityFramework">
+      <Version>6.1.3</Version>
+    </PackageReference>
+    <PackageReference Include="jQuery">
+      <Version>3.2.1</Version>
+    </PackageReference>
+    <PackageReference Include="LiveSDKHelper">
+      <Version>0.1.0.8</Version>
+    </PackageReference>
+    <PackageReference Include="LiveSDKServer">
+      <Version>5.6.0</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNet.Identity.EntityFramework">
+      <Version>2.2.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNet.Mvc">
+      <Version>5.2.3</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNet.Web.Optimization">
+      <Version>1.1.3</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Azure.KeyVault.Core">
+      <Version>2.0.4</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Bcl">
+      <Version>1.1.10</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Bcl.Async">
+      <Version>1.0.168</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Data.Services.Client">
+      <Version>5.8.3</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.IdentityModel">
+      <Version>6.1.7600.16394</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.WindowsAzure.ConfigurationManager">
+      <Version>3.2.3</Version>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>10.0.3</Version>
+    </PackageReference>
+    <PackageReference Include="RestSharp">
+      <Version>105.2.3</Version>
+    </PackageReference>
+    <PackageReference Include="Twitter.Bootstrap.Less">
+      <Version>3.3.6</Version>
+    </PackageReference>
+    <PackageReference Include="Unity.Mvc">
+      <Version>4.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="WebActivatorEx">
+      <Version>2.2.0</Version>
+    </PackageReference>
+    <PackageReference Include="WebGrease">
+      <Version>1.6.0</Version>
+    </PackageReference>
+    <PackageReference Include="WindowsAzure.Storage">
+      <Version>4.3.0</Version>
+    </PackageReference>
+    <PackageReference Include="WURFL_Official_API">
+      <Version>1.9.0.1</Version>
+    </PackageReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -1595,6 +1532,7 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Import Project="CopyWurfl.targets" />
   <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
     <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
   </Target>
@@ -1604,9 +1542,9 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>4675</DevelopmentServerPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:4675/</IISUrl>
+          <IISUrl>http://localhost:5923/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
@@ -1616,28 +1554,4 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
-  <PropertyGroup>
-    <PostBuildEvent>
-      cd $(TargetDir)
-      del msshrtmi.dll
-    </PostBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PreBuildEvent>cd $(TargetDir)  
-setlocal enableDelayedExpansion
-(
-  xcopy ..\References\msshrtmi.dll $(TargetDir)
-  set "errorlevel="
-  if !errorlevel! neq 0 (echo error level is non-zero)
-)
-</PreBuildEvent>
-  </PropertyGroup>
-  <Import Project="..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets')" />
-  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
-  </Target>
 </Project>

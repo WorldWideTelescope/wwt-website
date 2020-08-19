@@ -1,21 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30309.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WWTMVC5", "WWTMVC5\WWTMVC5.csproj", "{53EB6FD6-9D50-45D4-9987-328A7AE53E2C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7CBC010D-C36A-4DC9-8A61-9694818F4CB7}"
-	ProjectSection(SolutionItems) = preProject
-		WebEssentials-Settings.json = WebEssentials-Settings.json
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{2B24D816-00E4-4226-A4C5-9C3EA7B8FD91}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WWTWebservices", "WWTWebservices\WWTWebservices.csproj", "{1CF4D986-51AD-43F8-A84A-38B6ECBA2172}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,8 +28,23 @@ Global
 		{53EB6FD6-9D50-45D4-9987-328A7AE53E2C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{53EB6FD6-9D50-45D4-9987-328A7AE53E2C}.Release|Mixed Platforms.Deploy.0 = Release|Any CPU
 		{53EB6FD6-9D50-45D4-9987-328A7AE53E2C}.Release|x86.ActiveCfg = Release|Any CPU
+		{1CF4D986-51AD-43F8-A84A-38B6ECBA2172}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CF4D986-51AD-43F8-A84A-38B6ECBA2172}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CF4D986-51AD-43F8-A84A-38B6ECBA2172}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{1CF4D986-51AD-43F8-A84A-38B6ECBA2172}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{1CF4D986-51AD-43F8-A84A-38B6ECBA2172}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1CF4D986-51AD-43F8-A84A-38B6ECBA2172}.Debug|x86.Build.0 = Debug|Any CPU
+		{1CF4D986-51AD-43F8-A84A-38B6ECBA2172}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CF4D986-51AD-43F8-A84A-38B6ECBA2172}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CF4D986-51AD-43F8-A84A-38B6ECBA2172}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{1CF4D986-51AD-43F8-A84A-38B6ECBA2172}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{1CF4D986-51AD-43F8-A84A-38B6ECBA2172}.Release|x86.ActiveCfg = Release|Any CPU
+		{1CF4D986-51AD-43F8-A84A-38B6ECBA2172}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {80DABDD3-0D48-43AD-893B-B09A38FCFC72}
 	EndGlobalSection
 EndGlobal
