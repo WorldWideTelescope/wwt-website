@@ -180,7 +180,7 @@ namespace WWTMVC5.Services
         /// </summary>
         /// <param name="users">User profile ID list</param>
         /// <returns>ProfileDetails objects list</returns>
-        public async Task<IEnumerable<ProfileDetails>> GetProfilesAsync(IEnumerable<long> users)
+        public Task<IEnumerable<ProfileDetails>> GetProfilesAsync(IEnumerable<long> users)
         {
             var profileDetails = new List<ProfileDetails>();
             Expression<Func<User, bool>> condition = (user) => (users.Contains(user.UserID));
@@ -196,7 +196,7 @@ namespace WWTMVC5.Services
                 }
             }
 
-            return profileDetails;
+            return Task.FromResult(profileDetails.AsEnumerable());
         }
         public IEnumerable<ProfileDetails> GetProfiles(IEnumerable<long> users)
         {
@@ -222,7 +222,7 @@ namespace WWTMVC5.Services
         /// </summary>
         /// <param name="profile">Profile information.</param>
         /// <returns>True if the profile has been updated successfully; Otherwise false.</returns>
-        public async Task<bool> UpdateProfileAsync(ProfileDetails profile)
+        public Task<bool> UpdateProfileAsync(ProfileDetails profile)
         {
             var status = false;
             var userDetails = _userRepository.GetItem(user => user.UserID == profile.ID);
@@ -261,7 +261,7 @@ namespace WWTMVC5.Services
                 }
             }
 
-            return status;
+            return Task.FromResult(status);
         }
         public bool UpdateProfile(ProfileDetails profile)
         {
@@ -312,7 +312,7 @@ namespace WWTMVC5.Services
         /// <param name="pageDetails">Details about the pagination</param>
         /// <param name="onlyPublic">Whether to only retrieve public data</param>
         /// <returns>List of all communities</returns>
-        public async Task<IEnumerable<CommunityDetails>> GetCommunitiesAsync(long userId, PageDetails pageDetails, bool onlyPublic)
+        public Task<IEnumerable<CommunityDetails>> GetCommunitiesAsync(long userId, PageDetails pageDetails, bool onlyPublic)
         {
             this.CheckNotNull(() => new { userID = userId, pageDetails });
 
@@ -346,7 +346,7 @@ namespace WWTMVC5.Services
                 userCommunities.Add(communityDetails);
             }
 
-            return userCommunities;
+            return Task.FromResult(userCommunities.AsEnumerable());
         }
         public IEnumerable<CommunityDetails> GetCommunities(long userId, PageDetails pageDetails, bool onlyPublic)
         {
@@ -392,7 +392,7 @@ namespace WWTMVC5.Services
         /// <param name="pageDetails">Details about the pagination</param>
         /// <param name="onlyPublic">Whether to only retrieve public data</param>
         /// <returns>List of all contents</returns>
-        public async Task<IEnumerable<ContentDetails>> GetContentsAsync(long userId, PageDetails pageDetails, bool onlyPublic)
+        public Task<IEnumerable<ContentDetails>> GetContentsAsync(long userId, PageDetails pageDetails, bool onlyPublic)
         {
             IList<ContentDetails> contents = new List<ContentDetails>();
             Expression<Func<ContentsView, bool>> condition;
@@ -422,8 +422,9 @@ namespace WWTMVC5.Services
                 contents.Add(contentDetails);
             }
 
-            return contents;
+            return Task.FromResult(contents.AsEnumerable());
         }
+
         public IEnumerable<ContentDetails> GetContents(long userId, PageDetails pageDetails, bool onlyPublic)
         {
             IList<ContentDetails> contents = new List<ContentDetails>();
@@ -454,7 +455,7 @@ namespace WWTMVC5.Services
                 contents.Add(contentDetails);
             }
 
-            return contents;
+            return contents.AsEnumerable();
         }
 
         /// <summary>
@@ -463,12 +464,13 @@ namespace WWTMVC5.Services
         /// <param name="userId">Communities owner ID.</param>
         /// <param name="onlyPublic">Whether to only retrieve public data</param>
         /// <returns>total number of communities.</returns>
-        public async Task<int> GetCommunitiesCountAsync(long userId, bool onlyPublic)
+        public Task<int> GetCommunitiesCountAsync(long userId, bool onlyPublic)
         {
             this.CheckNotNull(() => new { userID = userId });
 
-            return _userRepository.GetUserCommunitiesForRole(userId, UserRole.Contributor, onlyPublic).Count();
+            return Task.FromResult(_userRepository.GetUserCommunitiesForRole(userId, UserRole.Contributor, onlyPublic).Count());
         }
+
         public int GetCommunitiesCount(long userId, bool onlyPublic)
         {
             this.CheckNotNull(() => new { userID = userId });
@@ -482,7 +484,7 @@ namespace WWTMVC5.Services
         /// <param name="userId">Contents Owner ID.</param>
         /// <param name="onlyPublic">Whether to only retrieve public data</param>
         /// <returns>total number of contents.</returns>
-        public async Task<int> GetContentsCountAsync(long userId, bool onlyPublic)
+        public Task<int> GetContentsCountAsync(long userId, bool onlyPublic)
         {
             this.CheckNotNull(() => new { userID = userId });
 
@@ -497,8 +499,9 @@ namespace WWTMVC5.Services
                 condition = c => c.CreatedByID == userId;
             }
 
-            return _contentsViewRepository.GetItemsCount(condition);
+            return Task.FromResult(_contentsViewRepository.GetItemsCount(condition));
         }
+
         public int GetContentsCount(long userId, bool onlyPublic)
         {
             this.CheckNotNull(() => new { userID = userId });
@@ -522,7 +525,7 @@ namespace WWTMVC5.Services
         /// </summary>
         /// <param name="profileDetails">ProfileDetails object</param>
         /// <returns>Profile ID</returns>
-        public async Task<long> CreateProfileAsync(ProfileDetails profileDetails)
+        public Task<long> CreateProfileAsync(ProfileDetails profileDetails)
         {
             // Make sure communityDetails is not null
             this.CheckNotNull(() => new { profileDetails });
@@ -532,7 +535,7 @@ namespace WWTMVC5.Services
 
             if (existingUser != null)
             {
-                return existingUser.UserID;
+                return Task.FromResult(existingUser.UserID);
             }
             else
             {
@@ -552,7 +555,7 @@ namespace WWTMVC5.Services
                 // Save all the changes made.
                 _userRepository.SaveChanges();
 
-                return user.UserID;
+                return Task.FromResult(user.UserID);
             }
         }
         public long CreateProfile(ProfileDetails profileDetails)
@@ -598,7 +601,7 @@ namespace WWTMVC5.Services
         /// <param name="pageDetails">Page for which permissions are fetched</param>
         /// <returns>List of permissions/user roles</returns>
         
-        public async Task<PermissionDetails> GetUserPemissions(long userId, long communityId, PageDetails pageDetails)
+        public Task<PermissionDetails> GetUserPemissions(long userId, long communityId, PageDetails pageDetails)
         {
             this.CheckNotNull(() => new { pageDetails });
 
@@ -639,7 +642,7 @@ namespace WWTMVC5.Services
                 }
             }
 
-            return permissionDetails;
+            return Task.FromResult(permissionDetails);
         }
 
         /// <summary>
@@ -650,7 +653,7 @@ namespace WWTMVC5.Services
         /// <param name="communityId">Community for which requests are fetched</param>
         /// <param name="pageDetails">Page for which requests are fetched</param>
         /// <returns>List of user role requests</returns>
-        public async Task<PermissionDetails> GetUserPemissionRequests(long userId, long? communityId, PageDetails pageDetails)
+        public Task<PermissionDetails> GetUserPemissionRequests(long userId, long? communityId, PageDetails pageDetails)
         {
             this.CheckNotNull(() => new { pageDetails });
 
@@ -701,7 +704,7 @@ namespace WWTMVC5.Services
                 }
             }
 
-            return permissionDetails;
+            return Task.FromResult(permissionDetails);
         }
 
         /// <summary>
@@ -711,7 +714,7 @@ namespace WWTMVC5.Services
         /// <param name="communityId">Community for which invite requests are fetched</param>
         /// <param name="pageDetails">Page for which invite requests are fetched</param>
         /// <returns>List of open invite requests for the community</returns>
-        public async Task<IEnumerable<InviteRequestItem>> GetInviteRequests(long userId, long communityId, PageDetails pageDetails)
+        public Task<IEnumerable<InviteRequestItem>> GetInviteRequests(long userId, long communityId, PageDetails pageDetails)
         {
             this.CheckNotNull(() => new { pageDetails });
 
@@ -737,7 +740,7 @@ namespace WWTMVC5.Services
                 }
             }
 
-            return inviteRequestItemList;
+            return Task.FromResult(inviteRequestItemList.AsEnumerable());
         }
 
         /// <summary>
@@ -746,7 +749,7 @@ namespace WWTMVC5.Services
         /// <param name="userId">User who is removing the invite request</param>
         /// <param name="inviteRequestId">Invite request to be removed</param>
         /// <returns>True if the invite request is removed, false otherwise</returns>
-        public async Task<OperationStatus> RemoveInviteRequest(long userId, int inviteRequestId)
+        public Task<OperationStatus> RemoveInviteRequest(long userId, int inviteRequestId)
         {
             var operationStatus = new OperationStatus();
 
@@ -782,7 +785,7 @@ namespace WWTMVC5.Services
                 operationStatus.ErrorMessage = Resources.UnknownErrorMessage;
             }
 
-            return operationStatus;
+            return Task.FromResult(operationStatus);
         }
 
         /// <summary>
@@ -826,7 +829,7 @@ namespace WWTMVC5.Services
         /// <param name="userId">User who is making the join request</param>
         /// <param name="inviteRequestToken">Token to be used for joining the community</param>
         /// <returns>Status of the operation. Success, if succeeded, failure message and exception details in case of exception.</returns>
-        public async Task<OperationStatus> JoinCommunity(long userId, Guid inviteRequestToken)
+        public Task<OperationStatus> JoinCommunity(long userId, Guid inviteRequestToken)
         {
             var operationStatus = new OperationStatus();
 
@@ -884,7 +887,7 @@ namespace WWTMVC5.Services
                 operationStatus.ErrorMessage = Resources.UnknownErrorMessage;
             }
 
-            return operationStatus;
+            return Task.FromResult(operationStatus);
         }
 
         /// <summary>
@@ -1022,7 +1025,7 @@ namespace WWTMVC5.Services
         /// </summary>
         /// <param name="userId">ID the of the current user.</param>
         /// <returns>List of all profile in database.</returns>
-        public async Task<IEnumerable<ProfileDetails>> GetAllProfiles(long userId)
+        public Task<IEnumerable<ProfileDetails>> GetAllProfiles(long userId)
         {
             var profiles = new List<ProfileDetails>();
             if (_userRepository.IsSiteAdmin(userId))
@@ -1037,7 +1040,7 @@ namespace WWTMVC5.Services
                 }
             }
 
-            return profiles;
+            return Task.FromResult(profiles.AsEnumerable());
         }
 
         
@@ -1050,7 +1053,7 @@ namespace WWTMVC5.Services
         /// <param name="updatedById">ID the of the current user.</param>
         /// <returns>True if the Users has been promoted.</returns>
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "TODO: Error handling")]
-        public async Task<OperationStatus> PromoteAsSiteAdmin(IEnumerable<long> adminUsers, long updatedById)
+        public Task<OperationStatus> PromoteAsSiteAdmin(IEnumerable<long> adminUsers, long updatedById)
         {
             OperationStatus operationStatus = null;
 
@@ -1093,7 +1096,7 @@ namespace WWTMVC5.Services
 
             operationStatus = operationStatus ?? OperationStatus.CreateSuccessStatus();
 
-            return operationStatus;
+            return Task.FromResult(operationStatus);
         }
         #endregion
 

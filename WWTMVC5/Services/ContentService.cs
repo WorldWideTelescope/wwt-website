@@ -597,7 +597,7 @@ namespace WWTMVC5.Services
         /// </summary>
         /// <param name="userId">User identity.</param>
         /// <returns>Payload details.</returns>
-        public async Task<PayloadDetails> GetUserContents(long userId)
+        public Task<PayloadDetails> GetUserContents(long userId)
         {
             PayloadDetails payloadDetails = null;
 
@@ -629,7 +629,8 @@ namespace WWTMVC5.Services
             payloadDetails.Name = "My Contents";
 
             payloadDetails.SetValuesFrom(contentDetailsList);
-            return payloadDetails;
+
+            return Task.FromResult(payloadDetails);
         }
 
         /// <summary>

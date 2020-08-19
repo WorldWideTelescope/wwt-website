@@ -113,7 +113,7 @@ namespace WWTMVC5.Services
         /// <param name="communityId">ID of the community which has to be retrieved</param>
         /// <param name="userId">Id of the user who is accessing</param>
         /// <returns>Instance of community details</returns>
-        public async Task<CommunityDetails> GetCommunityDetailsForEdit(long communityId, long userId)
+        public Task<CommunityDetails> GetCommunityDetailsForEdit(long communityId, long userId)
         {
             var community =  _communityRepository.GetItem(c => c.CommunityID == communityId && c.IsDeleted == false);
 
@@ -127,7 +127,8 @@ namespace WWTMVC5.Services
             }
 
             var communityDetails = CreateCommunityDetails(community, userId, true);
-            return communityDetails;
+
+            return Task.FromResult(communityDetails);
         }
 
         /// <summary>
@@ -232,9 +233,9 @@ namespace WWTMVC5.Services
         /// </summary>
         /// <param name="communityDetail">Details of the community</param>
         /// <returns>Id of the community created. Returns -1 is creation is failed.</returns>
-        public async Task<long> CreateCommunityAsync(CommunityDetails communityDetail)
+        public Task<long> CreateCommunityAsync(CommunityDetails communityDetail)
         {
-            return CreateCommunity(communityDetail);
+            return Task.FromResult(CreateCommunity(communityDetail));
         }
 
         public long CreateCommunity(CommunityDetails communityDetail)
@@ -360,7 +361,7 @@ namespace WWTMVC5.Services
         /// <param name="communityDetail">Details of the community</param>
         /// <param name="userId">User Identity</param>
         /// <returns>Id of the community created. Returns -1 is creation is failed.</returns>
-        public async void UpdateCommunity(CommunityDetails communityDetail, long userId)
+        public void UpdateCommunity(CommunityDetails communityDetail, long userId)
         {
             // Make sure communityDetails is not null
             this.CheckNotNull(() => new { communityDetails = communityDetail });
@@ -505,7 +506,7 @@ namespace WWTMVC5.Services
         /// <param name="communityId">Community Id</param>
         /// <param name="userId">User Identity</param>
         /// <returns>Status of the operation. Success, if succeeded. Failure message and exception details in case of exception.</returns>
-        public async Task<OperationStatus> UnDeleteOffensiveCommunity(long communityId, long userId)
+        public Task<OperationStatus> UnDeleteOffensiveCommunity(long communityId, long userId)
         {
             OperationStatus status = null;
 
@@ -536,7 +537,7 @@ namespace WWTMVC5.Services
                 status = OperationStatus.CreateFailureStatus(exception);
             }
 
-            return status;
+            return Task.FromResult(status);
         }
 
         /// <summary>
@@ -546,7 +547,7 @@ namespace WWTMVC5.Services
         /// <param name="userId">User Identity</param>
         /// <param name="accessType">Access type of the community.</param>
         /// <returns>Status of the operation. Success, if succeeded. Failure message and exception details in case of exception.</returns>
-        public async Task<OperationStatus> SetCommunityAccessType(long communityId, long userId, AccessType accessType)
+        public Task<OperationStatus> SetCommunityAccessType(long communityId, long userId, AccessType accessType)
         {
             OperationStatus status;
 
@@ -588,7 +589,7 @@ namespace WWTMVC5.Services
                 status = OperationStatus.CreateFailureStatus(exception);
             }
 
-            return status;
+            return Task.FromResult(status);
         }
 
         /// <summary>
@@ -700,7 +701,7 @@ namespace WWTMVC5.Services
         /// </summary>
         /// <param name="userId">User identity</param>
         /// <returns>Payload details.</returns>
-        public async Task<PayloadDetails> GetRootCommunities(long userId)
+        public Task<PayloadDetails> GetRootCommunities(long userId)
         {
             //var currentUserRole = _userRepository.GetUserRole(userId, null);this yields 0 results
             var userCommunityIds = _userRepository.GetUserCommunitiesForRole(userId, UserRole.Contributor, false);
@@ -715,7 +716,7 @@ namespace WWTMVC5.Services
             payloadDetails.Permission = Permission.Reader;
             payloadDetails.SetValuesFrom(communityDetailsList);
 
-            return payloadDetails;
+            return Task.FromResult(payloadDetails);
         }
 
         /// <summary>
@@ -723,12 +724,12 @@ namespace WWTMVC5.Services
         /// </summary>
         /// <param name="userId">user identification.</param>
         /// <returns>Default community details.</returns>
-        public async Task<CommunityDetails> GetDefaultCommunityAsync(long userId)
+        public Task<CommunityDetails> GetDefaultCommunityAsync(long userId)
         {
             CommunityDetails communityDetails = null;
             var community = _communityRepository.GetItem(c => c.CommunityTypeID == (int)CommunityTypes.User && c.CreatedByID == userId);
             communityDetails = CreateCommunityDetails(community, userId, false);
-            return communityDetails;
+            return Task.FromResult(communityDetails);
         }
         public CommunityDetails GetDefaultCommunity(long userId)
         {
@@ -755,7 +756,7 @@ namespace WWTMVC5.Services
         /// </summary>
         /// <param name="inviteRequestItem">Invite request with details</param>
         /// <returns>Returns the collection of invite request send along with their tokens.</returns>
-        public async Task<IEnumerable<InviteRequestItem>> InvitePeople(InviteRequestItem inviteRequestItem)
+        public Task<IEnumerable<InviteRequestItem>> InvitePeople(InviteRequestItem inviteRequestItem)
         {
             // Make sure inviteRequest is not null.
             this.CheckNotNull(() => new { inviteRequestItem });
@@ -800,7 +801,7 @@ namespace WWTMVC5.Services
                 _communityRepository.SaveChanges();
             }
 
-            return invitedPeople;
+            return Task.FromResult(invitedPeople.AsEnumerable());
         }
 
         #endregion Public Methods

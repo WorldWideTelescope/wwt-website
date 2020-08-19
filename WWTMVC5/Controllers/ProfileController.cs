@@ -210,7 +210,7 @@ namespace WWTMVC5.Controllers
         /// <param name="entityType">Entity type (Community/Content)</param>
         /// <param name="pageDetails">Details about the pagination</param>
         /// <returns>List of entity objects</returns>
-        private async Task<List<EntityViewModel>> GetEntities(long userId, EntityType entityType, PageDetails pageDetails)
+        private Task<List<EntityViewModel>> GetEntities(long userId, EntityType entityType, PageDetails pageDetails)
         {
             // TODO: Need to create a model for passing parameters to this controller
             var highlightEntities = new List<EntityViewModel>();
@@ -236,7 +236,7 @@ namespace WWTMVC5.Controllers
                 }
             }
 
-            return highlightEntities;
+            return Task.FromResult(highlightEntities);
         }
 
         /// <summary>

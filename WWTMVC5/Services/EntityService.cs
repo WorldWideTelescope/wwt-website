@@ -151,20 +151,20 @@ namespace WWTMVC5.Services
         /// <param name="entityHighlightFilter">Filters needed while retrieving collection of entities</param>
         /// <param name="pageDetails">Details about the pagination</param>
         /// <returns>List of all communities</returns>
-        public async Task<IEnumerable<CommunityDetails>> GetCommunities(EntityHighlightFilter entityHighlightFilter, PageDetails pageDetails)
+        public Task<IEnumerable<CommunityDetails>> GetCommunities(EntityHighlightFilter entityHighlightFilter, PageDetails pageDetails)
         {
             this.CheckNotNull(() => new { entityHighlightFilter, pageDetails });
 
             if (entityHighlightFilter.HighlightType == HighlightType.Featured)
             {
-                return  GetFeaturedCommunityDetails(entityHighlightFilter, pageDetails);
+                return Task.FromResult(GetFeaturedCommunityDetails(entityHighlightFilter, pageDetails));
             }
             if (entityHighlightFilter.HighlightType == HighlightType.Related)
             {
-                return  GetRelatedCommunityDetails(entityHighlightFilter, pageDetails);
+                return Task.FromResult(GetRelatedCommunityDetails(entityHighlightFilter, pageDetails));
             }
-            return  GetCommunityDetails(entityHighlightFilter, pageDetails);
-            
+
+            return Task.FromResult(GetCommunityDetails(entityHighlightFilter, pageDetails));
         }
 
         /// <summary>
@@ -173,7 +173,7 @@ namespace WWTMVC5.Services
         /// <param name="userId">Id of the user who is accessing</param>
         /// <param name="categoryId">Category ID for which communities to be fetched</param>
         /// <returns>List of all communities</returns>
-        public async Task<IEnumerable<CommunityDetails>> GetAllCommunities(long userId, int? categoryId)
+        public Task<IEnumerable<CommunityDetails>> GetAllCommunities(long userId, int? categoryId)
         {
             Func<AllCommunitiesView, object> orderBy = c => c.LastUpdatedDatetime;
             var communityDetails = new List<CommunityDetails>();
@@ -190,7 +190,7 @@ namespace WWTMVC5.Services
                     condition = ac => ac.CommunityTypeID != (int)CommunityTypes.User;
                 }
 
-                foreach (var community in  _allCommunitiesViewRepository.GetItems(condition, orderBy, true))
+                foreach (var community in _allCommunitiesViewRepository.GetItems(condition, orderBy, true))
                 {
                     var communityDetail = new CommunityDetails();
                     Mapper.Map(community, communityDetail);
@@ -198,7 +198,7 @@ namespace WWTMVC5.Services
                 }
             }
 
-            return communityDetails;
+            return Task.FromResult<IEnumerable<CommunityDetails>>(communityDetails);
         }
 
         /// <summary>
@@ -208,20 +208,20 @@ namespace WWTMVC5.Services
         /// <param name="entityHighlightFilter">Filters needed while retrieving collection of entities</param>
         /// <param name="pageDetails">Details about the pagination</param>
         /// <returns>List of all contents</returns>
-        public async Task<IEnumerable<ContentDetails>> GetContents(EntityHighlightFilter entityHighlightFilter, PageDetails pageDetails)
+        public Task<IEnumerable<ContentDetails>> GetContents(EntityHighlightFilter entityHighlightFilter, PageDetails pageDetails)
         {
             this.CheckNotNull(() => new { entityHighlightFilter, pageDetails });
 
             if (entityHighlightFilter.HighlightType == HighlightType.Featured)
             {
-                return  GetFeaturedContentDetails(entityHighlightFilter, pageDetails);
+                return Task.FromResult(GetFeaturedContentDetails(entityHighlightFilter, pageDetails));
             }
             if (entityHighlightFilter.HighlightType == HighlightType.Related)
             {
-                return  GetRelatedContentDetails(entityHighlightFilter, pageDetails);
+                return Task.FromResult(GetRelatedContentDetails(entityHighlightFilter, pageDetails));
             }
-            return  GetContentDetails(entityHighlightFilter, pageDetails);
-            
+
+            return Task.FromResult(GetContentDetails(entityHighlightFilter, pageDetails));
         }
 
         /// <summary>
@@ -230,7 +230,7 @@ namespace WWTMVC5.Services
         /// <param name="userId">Id of the user who is accessing</param>
         /// <param name="categoryId">Category ID for which contents to be fetched</param>
         /// <returns>List of all Contents</returns>
-        public async Task<IEnumerable<ContentDetails>> GetAllContents(long userId, int? categoryId)
+        public Task<IEnumerable<ContentDetails>> GetAllContents(long userId, int? categoryId)
         {
             Func<AllContentsView, object> orderBy = c => c.LastUpdatedDatetime;
             Expression<Func<AllContentsView, bool>> condition = null;
@@ -243,7 +243,7 @@ namespace WWTMVC5.Services
                     condition = content => content.CategoryID == categoryId;
                 }
 
-                foreach (var content in  _allContentsViewRepository.GetItems(condition, orderBy, true))
+                foreach (var content in _allContentsViewRepository.GetItems(condition, orderBy, true))
                 {
                     var contentDetail = new ContentDetails();
                     Mapper.Map(content, contentDetail);
@@ -251,7 +251,7 @@ namespace WWTMVC5.Services
                 }
             }
 
-            return contentDetails;
+            return Task.FromResult(contentDetails.AsEnumerable());
         }
 
         /// <summary>
@@ -260,17 +260,16 @@ namespace WWTMVC5.Services
         /// </summary>
         /// <param name="entityHighlightFilter">Filters needed while retrieving collection of entities</param>
         /// <returns>List of all communities</returns>
-        public async Task<IEnumerable<CommunityDetails>> GetCommunities(EntityHighlightFilter entityHighlightFilter)
+        public Task<IEnumerable<CommunityDetails>> GetCommunities(EntityHighlightFilter entityHighlightFilter)
         {
             this.CheckNotNull(() => new { entityHighlightFilter });
 
             if (entityHighlightFilter.HighlightType == HighlightType.Featured)
             {
-                return GetAllFeaturedCommunities(entityHighlightFilter);
+                return Task.FromResult(GetAllFeaturedCommunities(entityHighlightFilter));
             }
-            
-            return GetAllCommunities(entityHighlightFilter);
-            
+
+            return Task.FromResult(GetAllCommunities(entityHighlightFilter));
         }
 
         /// <summary>
@@ -279,17 +278,17 @@ namespace WWTMVC5.Services
         /// </summary>
         /// <param name="entityHighlightFilter">Filters needed while retrieving collection of entities</param>
         /// <returns>List of all contents</returns>
-        public async Task<IEnumerable<ContentDetails>> GetContents(EntityHighlightFilter entityHighlightFilter)
+        public Task<IEnumerable<ContentDetails>> GetContents(EntityHighlightFilter entityHighlightFilter)
         {
             this.CheckNotNull(() => new { entityHighlightFilter });
 
             if (entityHighlightFilter.HighlightType == HighlightType.Featured)
             {
-                return  GetAllFeaturedContents(entityHighlightFilter);
+                return Task.FromResult(GetAllFeaturedContents(entityHighlightFilter));
             }
             else
             {
-                return  GetAllContents(entityHighlightFilter);
+                return Task.FromResult(GetAllContents(entityHighlightFilter));
             }
         }
 
@@ -399,10 +398,10 @@ namespace WWTMVC5.Services
         /// Gets the top categories from the Layerscape database based on the number of contents which belongs to the category.
         /// </summary>
         /// <returns>List of top 6 categories</returns>
-        public async Task<IEnumerable<EntityDetails>> GetTopCategories()
+        public Task<IEnumerable<EntityDetails>> GetTopCategories()
         {
             IList<EntityDetails> topCategories = new List<EntityDetails>();
-            var topCategoryItems =  _topCategoryEntities.GetAll(t => t.CategoryID);
+            var topCategoryItems = _topCategoryEntities.GetAll(t => t.CategoryID);
             var contents = topCategoryItems.Where(t => t.EntityType == EntityType.Content.ToString());
             var communities = topCategoryItems.Where(t => t.EntityType == EntityType.Community.ToString());
             for (var i = 0; i < contents.Count(); i++)
@@ -463,7 +462,7 @@ namespace WWTMVC5.Services
                 }
             }
 
-            return topCategories.AsEnumerable();
+            return Task.FromResult(topCategories.AsEnumerable());
         }
 
         /// <summary>
@@ -573,7 +572,7 @@ namespace WWTMVC5.Services
             // with highlight type as Featured and category type as not "All"), condition to be set here.
             if (entityHighlightFilter.CategoryType != CategoryType.All && condition == null)
             {
-                condition = (ContentsView c) => c.CategoryID == (int)entityHighlightFilter.CategoryType && 
+                condition = (ContentsView c) => c.CategoryID == (int)entityHighlightFilter.CategoryType &&
                     c.AccessType == accessType &&
                     entityHighlightFilter.ContentType != ContentTypes.All ? c.TypeID == (int)entityHighlightFilter.ContentType : c.TypeID > -1;
             }
@@ -583,7 +582,7 @@ namespace WWTMVC5.Services
             }
             // Still if condition is not set, add a condition to get only public contents.
             return condition ?? ((ContentsView c) => c.AccessType == accessType);
-            
+
         }
 
         /// <summary>
@@ -732,7 +731,7 @@ namespace WWTMVC5.Services
                     condition = (ContentsView c) => c.AccessType == accessType
                                                     && c.AverageRating > 0
                                                     && c.RatedPeople >= Constants.MinRatedPeopleCount
-                                                    && c.TypeID == (int) entityHighlightFilter.ContentType;
+                                                    && c.TypeID == (int)entityHighlightFilter.ContentType;
                 }
                 else
                 {
@@ -745,20 +744,20 @@ namespace WWTMVC5.Services
             {
                 if (entityHighlightFilter.ContentType != ContentTypes.All)
                 {
-                    condition = (ContentsView c) => c.CategoryID == (int) entityHighlightFilter.CategoryType
+                    condition = (ContentsView c) => c.CategoryID == (int)entityHighlightFilter.CategoryType
                                                     && c.AccessType == accessType
                                                     && c.AverageRating > 0
                                                     && c.RatedPeople >= Constants.MinRatedPeopleCount
-                                                    && c.TypeID == (int)entityHighlightFilter.ContentType; 
+                                                    && c.TypeID == (int)entityHighlightFilter.ContentType;
                 }
                 else
                 {
-                    condition = (ContentsView c) => c.CategoryID == (int) entityHighlightFilter.CategoryType
+                    condition = (ContentsView c) => c.CategoryID == (int)entityHighlightFilter.CategoryType
                                                     && c.AccessType == accessType
                                                     && c.AverageRating > 0
                                                     && c.RatedPeople >= Constants.MinRatedPeopleCount;
                 }
-                
+
             }
             return condition;
         }
@@ -781,7 +780,7 @@ namespace WWTMVC5.Services
                 {
                     condition = c => c.AccessType == accessType &&
                                                     c.DownloadCount > 0 &&
-                                                    c.TypeID == (int) entityHighlightFilter.ContentType;
+                                                    c.TypeID == (int)entityHighlightFilter.ContentType;
                 }
                 else
                 {
@@ -793,14 +792,14 @@ namespace WWTMVC5.Services
             {
                 if (entityHighlightFilter.ContentType != ContentTypes.All)
                 {
-                    condition = c => c.CategoryID == (int)entityHighlightFilter.CategoryType && 
+                    condition = c => c.CategoryID == (int)entityHighlightFilter.CategoryType &&
                                                     c.AccessType == accessType &&
                                                     c.DownloadCount > 0 &&
-                                                    c.TypeID == (int) entityHighlightFilter.ContentType;
+                                                    c.TypeID == (int)entityHighlightFilter.ContentType;
                 }
                 else
                 {
-                    condition = (ContentsView c) => c.CategoryID == (int) entityHighlightFilter.CategoryType &&
+                    condition = (ContentsView c) => c.CategoryID == (int)entityHighlightFilter.CategoryType &&
                                                     c.AccessType == accessType && c.DownloadCount > 0;
                 }
             }
@@ -831,14 +830,14 @@ namespace WWTMVC5.Services
             {
                 // TODO: This is a temporary fix, since multiple order by cannot be passed.
                 // Need to do this in a better way, instead of getting all the items.
-                communities =   _communitiesViewRepository.GetItems(condition, null, true);
+                communities = _communitiesViewRepository.GetItems(condition, null, true);
                 communities = communities.OrderByDescending(c => c.AverageRating).ThenByDescending(c => c.RatedPeople)
                                 .Skip((pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage)
                                 .Take(pageDetails.ItemsPerPage).ToList();
             }
             else
             {
-                communities =  _communitiesViewRepository.GetItems(condition, orderBy, true, (pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage, pageDetails.ItemsPerPage);
+                communities = _communitiesViewRepository.GetItems(condition, orderBy, true, (pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage, pageDetails.ItemsPerPage);
             }
 
             var communityDetails = new List<CommunityDetails>();
@@ -882,8 +881,8 @@ namespace WWTMVC5.Services
             {
                 // TODO: This is a temporary fix, since multiple order by cannot be passed.
                 // Need to do this in a better way, instead of getting all the items.
-                contents =  _contentsViewRepository.GetItems(condition, null, true);
-                
+                contents = _contentsViewRepository.GetItems(condition, null, true);
+
                 contents = contents
                     .OrderByDescending((ContentsView c) => c.AverageRating)
                     .ThenByDescending<ContentsView, int?>((ContentsView c) => c.RatedPeople)
@@ -893,7 +892,7 @@ namespace WWTMVC5.Services
             }
             else
             {
-                contents =  _contentsViewRepository.GetItems(condition, orderBy, true, (pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage, pageDetails.ItemsPerPage);
+                contents = _contentsViewRepository.GetItems(condition, orderBy, true, (pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage, pageDetails.ItemsPerPage);
             }
 
             var contentDetails = new List<ContentDetails>();
@@ -931,7 +930,7 @@ namespace WWTMVC5.Services
 
             IEnumerable<FeaturedCommunitiesView> communities = null;
 
-            communities =  _featuredCommunitiesViewRepository.GetItems(condition, orderBy, false, (pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage, pageDetails.ItemsPerPage);
+            communities = _featuredCommunitiesViewRepository.GetItems(condition, orderBy, false, (pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage, pageDetails.ItemsPerPage);
 
             var communityDetails = new List<CommunityDetails>();
             if (communities != null)
@@ -980,7 +979,7 @@ namespace WWTMVC5.Services
             relatedCommunityIds = relatedCommunityIds.Skip((pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage).Take(pageDetails.ItemsPerPage);
             condition = GetRelatedCommunitiesCondition(relatedCommunityIds);
 
-            communities =  _communitiesViewRepository.GetItems(condition, null, false);
+            communities = _communitiesViewRepository.GetItems(condition, null, false);
 
             var communityDetails = new List<CommunityDetails>();
             if (communities != null)
@@ -1020,7 +1019,7 @@ namespace WWTMVC5.Services
             IEnumerable<FeaturedContentsView> contents = null;
 
             // Only for Popular/Top Rated, there is multiple order by which needs to added here.
-            contents =  _featuredContentsViewRepository.GetItems(condition, orderBy, false, (pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage, pageDetails.ItemsPerPage);
+            contents = _featuredContentsViewRepository.GetItems(condition, orderBy, false, (pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage, pageDetails.ItemsPerPage);
 
             var contentDetails = new List<ContentDetails>();
             if (contents != null)
@@ -1069,7 +1068,7 @@ namespace WWTMVC5.Services
             relatedContentIds = relatedContentIds.Skip((pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage).Take(pageDetails.ItemsPerPage);
             condition = GetRelatedContentsCondition(relatedContentIds);
 
-            contents =  _contentsViewRepository.GetItems(condition, null, false);
+            contents = _contentsViewRepository.GetItems(condition, null, false);
 
             var contentDetails = new List<ContentDetails>();
             if (contents != null)
@@ -1096,7 +1095,7 @@ namespace WWTMVC5.Services
             Expression<Func<FeaturedCommunitiesView, bool>> condition = condition = c => c.FeaturedCategoryID == (int)entityHighlightFilter.CategoryType
                     && (c.CommunityTypeID == (int)CommunityTypes.Community || c.CommunityTypeID == (int)CommunityTypes.Folder);
 
-            var communities =  _featuredCommunitiesViewRepository.GetItems(condition, orderBy, false);
+            var communities = _featuredCommunitiesViewRepository.GetItems(condition, orderBy, false);
 
             var communityDetails = new List<CommunityDetails>();
             if (communities != null)
@@ -1120,7 +1119,7 @@ namespace WWTMVC5.Services
             Func<FeaturedContentsView, object> orderBy = c => c.SortOrder;
             Expression<Func<FeaturedContentsView, bool>> condition = c => c.FeaturedCategoryID == (int)entityHighlightFilter.CategoryType;
 
-            var contents =  _featuredContentsViewRepository.GetItems(condition, orderBy, false);
+            var contents = _featuredContentsViewRepository.GetItems(condition, orderBy, false);
 
             var contentDetails = new List<ContentDetails>();
             if (contents != null)
@@ -1152,11 +1151,11 @@ namespace WWTMVC5.Services
             }
             else
             {
-                condition = c => c.AccessType == accessType && 
+                condition = c => c.AccessType == accessType &&
                     (c.CommunityTypeID == (int)CommunityTypes.Community || c.CommunityTypeID == (int)CommunityTypes.Folder);
             }
 
-            var communities =  _communitiesViewRepository.GetItems(condition, orderBy, true);
+            var communities = _communitiesViewRepository.GetItems(condition, orderBy, true);
 
             var communityDetails = new List<CommunityDetails>();
             if (communities != null)
@@ -1186,7 +1185,7 @@ namespace WWTMVC5.Services
                 condition = c => c.CategoryID == (int)entityHighlightFilter.CategoryType && c.AccessType == accessType;
             }
 
-            var contents =  _contentsViewRepository.GetItems(condition, orderBy, true);
+            var contents = _contentsViewRepository.GetItems(condition, orderBy, true);
 
             var contentDetails = new List<ContentDetails>();
             if (contents != null)

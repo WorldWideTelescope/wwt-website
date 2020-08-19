@@ -173,7 +173,7 @@ namespace WWTMVC5.Controllers
 
                 return await GetViewOrRedirect(group, page, _baseModel);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return View("~/Views/Support/Error.cshtml", _baseModel);
             }

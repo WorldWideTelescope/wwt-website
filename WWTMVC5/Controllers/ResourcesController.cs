@@ -139,10 +139,8 @@ namespace WWTMVC5.Controllers
             {
                 throw new WebFaultException<string>(Resources.UserNotRegisteredMessage, HttpStatusCode.Unauthorized);
             }
-            
-
-            return false;
         }
+
         [AllowAnonymous]
         [HttpDelete]
         [Route("Resource/Service/Content/{id}")]
@@ -161,10 +159,8 @@ namespace WWTMVC5.Controllers
             {
                 throw new WebFaultException<string>(Resources.UserNotRegisteredMessage, HttpStatusCode.Unauthorized);
             }
-            
-
-            return false;
         }
+
         [AllowAnonymous]
         [HttpGet]
         [Route("Resource/Service/Communities")]
@@ -301,9 +297,8 @@ namespace WWTMVC5.Controllers
             {
                 throw new WebFaultException<string>(Resources.UserNotRegisteredMessage, HttpStatusCode.Unauthorized);
             }
-
-            return false;
         }
+
         [AllowAnonymous]
         [HttpPost]
         [Route("Resource/Service/Community/Rate/{id}/{rating}")]
@@ -335,9 +330,6 @@ namespace WWTMVC5.Controllers
                 {
                     throw new WebFaultException<string>(Resources.UserNotRegisteredMessage, HttpStatusCode.Unauthorized);
                 }
-            
-
-            return false;
         }
 
         #endregion Mandatory profile check calls - Only logged in users
@@ -733,7 +725,7 @@ namespace WWTMVC5.Controllers
         /// <param name="payloadDetails">PayloadDetails object</param>
         /// <param name="hasChildCommunities"></param>
         
-        private async void RewritePayloadUrls(PayloadDetails payloadDetails, bool hasChildCommunities)
+        private void RewritePayloadUrls(PayloadDetails payloadDetails, bool hasChildCommunities)
         {
             var baseUri = BaseUri();
 

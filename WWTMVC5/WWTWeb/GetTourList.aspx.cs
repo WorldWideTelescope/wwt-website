@@ -96,7 +96,6 @@ namespace WWTMVC5.WWTWeb
             string tourastroobjectlist;
             string tourexplicittourlinklist;
             int lengthinsecs;
-            string tourxml;
             double averageRating;
 
             strErrorMsg = "";
@@ -627,27 +626,23 @@ namespace WWTMVC5.WWTWeb
                 //fsw.WriteLine(sw.ToString());
                 //fsw.Close();
             }
-            return "";
         }
 
         public int UpdateCacheEx()
         {
             bool needToBuild;
-            bool cacheIsEmpty;
             int fromCacheVersion;
             int fromSqlVersion;
             int minutesToAdd;
 
             List<Tour> sqlTours = new List<Tour>();
 
-            cacheIsEmpty = false;
             needToBuild = false;
 
             DateTime fromCacheDateTime;
 
             if (HttpContext.Current.Cache.Get("WWTXMLTours") == null)
             {
-                cacheIsEmpty = true;
                 needToBuild = true;
             }
             // see if you need to build the cache.... 
@@ -722,21 +717,18 @@ namespace WWTMVC5.WWTWeb
         public static int UpdateCache()
         {
             bool needToBuild;
-            bool cacheIsEmpty;
             int fromCacheVersion;
             int fromSqlVersion;
             int minutesToAdd;
 
             List<Tour> sqlTours = new List<Tour>();
 
-            cacheIsEmpty = false;
             needToBuild = false;
 
             DateTime fromCacheDateTime;
 
             if (HttpContext.Current.Cache.Get("WWTXMLTours") == null)
             {
-                cacheIsEmpty = true;
                 needToBuild = true;
             }
             // see if you need to build the cache.... 

@@ -12,17 +12,13 @@ namespace WWTWebservices
         double raMax;
         double decMin;
         private const double D2R = 0.017453292519943295;
-        private double decCenter;
         private FastBitmap fastImage;
         public Bitmap image;
         private const double ImageSizeX = 512.0;
         private const double ImageSizeY = 512.0;
-        private double raCenter;
         private double scaleX;
         private double scaleY;
 
-        private double xoff;
-        private double yoff;
 
 
         public WMSImage(double raMin, double decMax, double raMax, double decMin)
