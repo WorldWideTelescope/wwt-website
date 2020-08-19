@@ -259,3 +259,6 @@ Bootstrap/
 # WURFL files
 web.config.transform
 COPYING.evaluation
+
+# Database file
+Database.jfm

@@ -203,6 +203,26 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Code\AstroObjectServices.cs" />
+    <Content Include="App_Code\ContentHomePage.cs" />
+    <Content Include="App_Code\Database.cs" />
+    <Content Include="App_Code\DBUtils.cs" />
+    <Content Include="App_Code\FileCabnet.cs" />
+    <Content Include="App_Code\Global.cs" />
+    <Content Include="App_Code\ISearchProvider.cs" />
+    <Content Include="App_Code\NavigationItem.cs" />
+    <Content Include="App_Code\PlateFile2.cs" />
+    <Content Include="App_Code\RootMasterPage.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Content>
+    <Content Include="App_Code\SearchResults.cs" />
+    <Content Include="App_Code\Tour.cs" />
+    <Content Include="App_Code\TourServices.cs" />
+    <Content Include="App_Code\Util.cs" />
+    <Content Include="App_Code\WebContent.cs" />
+    <Content Include="App_Code\WWTWebService.cs">
+      <SubType>Component</SubType>
+    </Content>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -1146,6 +1166,23 @@
     <Content Include="COPYING.evaluation" />
     <Content Include="App_Readme\WURFL.chm" />
     <Content Include="App_Readme\wurfl-latest.zip" />
+    <None Include="App_Code\AstroObjectsDataset.xsd" />
+    <Content Include="App_Code\AstroObjectsDataset.xss">
+      <DependentUpon>AstroObjectsDataset.xsd</DependentUpon>
+    </Content>
+    <Content Include="App_Code\DataSet1.xss" />
+    <None Include="App_Code\TourRatingDataset.xsd" />
+    <Content Include="App_Code\TourRatingDataset.xss">
+      <DependentUpon>TourRatingDataset.xsd</DependentUpon>
+    </Content>
+    <None Include="App_Code\TourVersionDataset.xsd" />
+    <Content Include="App_Code\TourVersionDataset.xss">
+      <DependentUpon>TourVersionDataset.xsd</DependentUpon>
+    </Content>
+    <None Include="App_Code\WWTToursDataset.xsd" />
+    <Content Include="App_Code\WWTToursDataset.xss">
+      <DependentUpon>WWTToursDataset.xsd</DependentUpon>
+    </Content>
     <None Include="Properties\PublishProfiles\wwt.thewebkid.com.pubxml" />
     <None Include="Properties\PublishProfiles\wwtstaging - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy.pubxml" />
