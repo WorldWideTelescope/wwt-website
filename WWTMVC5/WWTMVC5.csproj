@@ -936,6 +936,7 @@
     <Content Include="WWTWeb\512\mag9.7.png" />
     <Content Include="WWTWeb\512\mag9.8.png" />
     <Content Include="WWTWeb\512\mag9.9.png" />
+    <Content Include="WWTWeb\asyncproxy.aspx" />
     <Content Include="WWTWeb\BingDemTile.aspx" />
     <Content Include="WWTWeb\BingDemTile2.aspx" />
     <Content Include="WWTWeb\Catalog.aspx" />
@@ -997,6 +998,7 @@
     <Content Include="WWTWeb\postmarsdem2.aspx" />
     <Content Include="WWTWeb\PostRatingFeedback.aspx" />
     <Content Include="WWTWeb\RassToast.aspx" />
+    <Content Include="WWTWeb\SDSS12Toast.aspx" />
     <Content Include="WWTWeb\SDSSToast.aspx" />
     <Content Include="WWTWeb\SDSSToast.offline.aspx" />
     <Content Include="WWTWeb\SDSSToast2.aspx" />
@@ -1005,6 +1007,7 @@
     <Content Include="WWTWeb\StarChart.aspx" />
     <Content Include="WWTWeb\test.aspx" />
     <Content Include="WWTWeb\testfailover.aspx" />
+    <Content Include="WWTWeb\testplate2.aspx" />
     <Content Include="WWTWeb\thumbnail.aspx" />
     <Content Include="WWTWeb\TileImage.aspx" />
     <Content Include="WWTWeb\tiles.aspx" />
@@ -1315,6 +1318,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
     <Content Include="WWTWeb\colors.map" />
+    <Content Include="WWTWeb\AsyncProxy.ashx" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\OpenWWT\" />
