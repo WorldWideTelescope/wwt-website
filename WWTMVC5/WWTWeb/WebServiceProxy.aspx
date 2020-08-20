@@ -15,8 +15,9 @@
         {
             if (url.ToLower().StartsWith("http") && !url.Contains("127.0.0.1") && !url.ToLower().Contains("localhost"))
             {
-	 	Uri target = new Uri(url);
-		
+                Uri target = new Uri(url);
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
                 using (WebClient wc = new WebClient())
                 {
                     byte[] data = wc.DownloadData(url);

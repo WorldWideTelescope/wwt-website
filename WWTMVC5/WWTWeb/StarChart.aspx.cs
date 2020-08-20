@@ -2433,9 +2433,21 @@ namespace WWTMVC5.WWTWeb
 
             // draw target
 
+        // draw target
+        if (ra != 0 && dec != 0)
+        {
+            Vector2DD pnt = new Vector2DD(ra/15, dec);
+            Vector2DD pntOut = Calc.EquitorialToHorizon(pnt, location, time);
+            pntOut.X -= 90;
 
-            //return bitmap
+            double x = radius - Math.Cos(pntOut.X * Calc.RC) * ((1 - pntOut.Y / 90) * radius);
+            double y = radius + Math.Sin(pntOut.X * Calc.RC) * ((1 - pntOut.Y / 90) * radius);
 
+            int tSize = width / 50;
+            g.DrawEllipse(Pens.Green, new RectangleF((float)(x - tSize), (float)(y - tSize), tSize * 2, tSize * 2));
+            g.DrawLine(Pens.Green, new PointF((float)(x - tSize), (float)y), new PointF( (float)(x + tSize), (float)y));
+            g.DrawLine(Pens.Green, new PointF((float)x, (float)(y - tSize)), new PointF( (float)x, (float)(y + tSize)));
+        }
 
             //Clean up
 
