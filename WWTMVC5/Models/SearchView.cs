@@ -11,7 +11,6 @@ namespace WWTMVC5.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.Data.Entity;
     
     [global::System.CodeDom.Compiler.GeneratedCode("EdmxTool", "1.0.0.0")] 
     public partial class SearchView
