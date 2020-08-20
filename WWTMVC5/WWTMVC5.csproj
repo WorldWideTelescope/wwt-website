@@ -463,6 +463,10 @@
     <Content Include="WWT2\updateurl.txt" />
     <Content Include="WWT2\version.txt" />
     <Content Include="WWT2\warnver.txt" />
+    <Content Include="WWTWeb\MartianTile.aspx.cs">
+      <DependentUpon>MartianTile.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Content>
     <Content Include="WWTWeb\demmars.aspx.cs">
       <DependentUpon>demmars.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -980,6 +984,7 @@
     <Content Include="WWTWeb\postmarsdem2.aspx" />
     <Content Include="WWTWeb\PostRatingFeedback.aspx" />
     <Content Include="WWTWeb\RassToast.aspx" />
+    <Content Include="WWTWeb\SDSS12Toast.aspx" />
     <Content Include="WWTWeb\SDSSToast.aspx" />
     <Content Include="WWTWeb\SDSSToast.offline.aspx" />
     <Content Include="WWTWeb\SDSSToast2.aspx" />
