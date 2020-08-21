@@ -6,9 +6,9 @@
 <%@ Import Namespace="System.Collections.Generic" %>
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="System.Net" %>
-<%@ Import Namespace="OctSetTest" %>
-<%@ Import Namespace="PlateTile" %>
 <%@ Import Namespace="System.Threading" %> 
+<%@ Import Namespace="OctSetTest" %>
+<%@ Import Namespace="WWTWebservices" %>
 
 <%
     
@@ -48,7 +48,7 @@
 
         string filename2;
         string wwtTilesDir = ConfigurationManager.AppSettings["WWTTilesDir"];
-        string DSSTileCache = Util.GetCurrentConfigShare("DSSTileCache", true);
+        string DSSTileCache = WWTUtil.GetCurrentConfigShare("DSSTileCache", true);
 
 
 

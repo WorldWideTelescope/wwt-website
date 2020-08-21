@@ -6,21 +6,11 @@
 <%@ Import Namespace="System.Collections.Generic" %>
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="System.Net" %>
-<%@ Import Namespace="OctSetTest" %>
-<%@ Import Namespace="DpossTile" %>
-<%@ Import Namespace="PlateTile" %>
-<%@ Import Namespace="PlateTools" %>
 <%@ Import Namespace="WWTMVC5.WWTWeb" %>
+<%@ Import Namespace="WWTWebservices" %>
 <%
-        DPOSSPlates dap;
-        int NUMSAMPLES = 9; // number of sample points per tile; includes centre
-        int KNEAR = 5; // ask for this many nearby plates for each sample point
-        Counter<int> coveringPlates = new Counter<int>(KNEAR * NUMSAMPLES);
-        Vector2d[] samplePoints01Coords = new Vector2d[NUMSAMPLES];
-        Vector2d[] samplePoints = new Vector2d[NUMSAMPLES];   // holds, eventually, (ra,dec) values for each sample point
-
     	string wwtTilesDir = ConfigurationManager.AppSettings["WWTTilesDir"];
-    	string dsstoastpng = Util.GetCurrentConfigShare("DSSTOASTPNG", true);
+    	string dsstoastpng = WWTUtil.GetCurrentConfigShare("DSSTOASTPNG", true);
    
     
     

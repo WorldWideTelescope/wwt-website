@@ -5,7 +5,6 @@
 <%@ Import Namespace="System.Drawing.Drawing2D" %>
 <%@ Import Namespace="System.Collections.Generic" %>
 <%@ Import Namespace="System.IO" %>
-<%@ Import Namespace="PlateTile" %>
 <%
 
 

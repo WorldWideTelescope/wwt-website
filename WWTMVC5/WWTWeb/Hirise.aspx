@@ -1,4 +1,4 @@
-<%@ Page Language="C#" ContentType="image/png" CodeFile="HiRise.aspx.cs" Inherits="HiRise" %>
+<%@ Page Language="C#" ContentType="image/png" CodeFile="Hirise.aspx.cs" Inherits="WWTMVC5.WWTWeb.HiRise" %>
 
 <%@ Import Namespace="System.Drawing" %>
 <%@ Import Namespace="System.Drawing.Text" %>
@@ -9,7 +9,7 @@
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="System.Security.Cryptography" %>  
 <%@ Import Namespace="System.Diagnostics" %>
-<%@ Import Namespace="PlateFile2" %>
+<%@ Import Namespace="WWTWebservices" %>
 <%
 
     string query = Request.Params["Q"];

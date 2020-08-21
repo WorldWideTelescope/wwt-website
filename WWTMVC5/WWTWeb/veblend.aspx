@@ -6,6 +6,7 @@
 <%@ Import Namespace="System.Collections.Generic" %>
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="System.Net" %>
+<%@ Import Namespace="WWTWebservices" %>
 <%
         string query = "";
 
@@ -26,13 +27,13 @@
         int tileX = 0;
         int tileY = 0;
 
-        level = Util.GetTileAddressFromVEKey(veKey, out tileX, out tileY);
+        level = WWTUtil.GetTileAddressFromVEKey(veKey, out tileX, out tileY);
     
     
         string filename;
         string path;
 
-	string DSSTileCache = Util.GetCurrentConfigShare("DSSTileCache", true);
+	string DSSTileCache = WWTUtil.GetCurrentConfigShare("DSSTileCache", true);
         filename = String.Format(DSSTileCache + "\\VE\\level{0}\\{2}\\{1}_{2}.jpg", level, tileX, tileY);
         path = String.Format(DSSTileCache +"\\VE\\level{0}\\{2}", level, tileX, tileY);
 
@@ -54,7 +55,7 @@
                     Directory.CreateDirectory(path);
                 }
 
-                Util.DownloadVeTile(level, tileX, tileY, true);
+                WWTUtil.DownloadVeTile(level, tileX, tileY, true);
                 
                 float[][] ptsArray ={ 
 									new float[] {1, 0, 0, 0, 0},
@@ -67,14 +68,14 @@
                 imgAttributes.SetColorMatrix(clrMatrix,
                     ColorMatrixFlag.Default,
                     ColorAdjustType.Bitmap);
-                Bitmap bmp = new Bitmap(Util.DownloadVeTile(level, tileX, tileY, true));
+                Bitmap bmp = new Bitmap(WWTUtil.DownloadVeTile(level, tileX, tileY, true));
                 Graphics g = Graphics.FromImage(bmp);
                 g.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 for (int y = 0; y <  2; y++)
                 {
                     for (int x = 0; x < 2; x++)
                     {
-                        string tempName = Util.DownloadVeTile(level + 1, tileX * 2 + x, tileY * 2 + y, false);
+                        string tempName = WWTUtil.DownloadVeTile(level + 1, tileX * 2 + x, tileY * 2 + y, false);
                         FileInfo fi = new FileInfo(tempName);
                         if (fi.Length != 0 && fi.Length != 1033)
                         {
@@ -90,7 +91,7 @@
             }
             else
             {
-                Util.DownloadVeTile(level, tileX, tileY, false);
+                WWTUtil.DownloadVeTile(level, tileX, tileY, false);
             }
             
 

@@ -14,6 +14,7 @@
     <RootNamespace>WWTMVC5</RootNamespace>
     <AssemblyName>WWTMVC5</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
@@ -39,7 +40,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -113,31 +113,9 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="twoMassClassLibrary">
-      <HintPath>..\libs\twoMassClassLibrary.dll</HintPath>
-    </Reference>
+    <Reference Include="System.Xml.Serialization" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Code\AstroObjectServices.cs" />
-    <Content Include="App_Code\ContentHomePage.cs" />
-    <Content Include="App_Code\Database.cs" />
-    <Content Include="App_Code\DBUtils.cs" />
-    <Content Include="App_Code\FileCabnet.cs" />
-    <Content Include="App_Code\Global.cs" />
-    <Content Include="App_Code\ISearchProvider.cs" />
-    <Content Include="App_Code\NavigationItem.cs" />
-    <Content Include="App_Code\PlateFile2.cs" />
-    <Content Include="App_Code\RootMasterPage.cs">
-      <SubType>ASPXCodeBehind</SubType>
-    </Content>
-    <Content Include="App_Code\SearchResults.cs" />
-    <Content Include="App_Code\Tour.cs" />
-    <Content Include="App_Code\TourServices.cs" />
-    <Content Include="App_Code\Util.cs" />
-    <Content Include="App_Code\WebContent.cs" />
-    <Content Include="App_Code\WWTWebService.cs">
-      <SubType>Component</SubType>
-    </Content>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -480,78 +458,78 @@
       <DependentUpon>ResourceService.svc</DependentUpon>
     </Compile>
     <Compile Include="WebServices\ServiceBase.cs" />
-    <Compile Include="WWTWeb\demmars.aspx.cs">
+    <Content Include="WWTWeb\demmars.aspx.cs">
       <DependentUpon>demmars.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WWTWeb\g360.aspx.cs">
+    </Content>
+    <Content Include="WWTWeb\g360.aspx.cs">
       <DependentUpon>g360.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WWTWeb\GetTourList.aspx.cs">
+    </Content>
+    <Content Include="WWTWeb\GetTourList.aspx.cs">
       <DependentUpon>GetTourList.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WWTWeb\GetTours.aspx.cs">
+    </Content>
+    <Content Include="WWTWeb\GetTours.aspx.cs">
       <DependentUpon>GetTours.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WWTWeb\Hirise.aspx.cs">
+    </Content>
+    <Content Include="WWTWeb\Hirise.aspx.cs">
       <DependentUpon>Hirise.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WWTWeb\HiriseDem2.aspx.cs">
+    </Content>
+    <Content Include="WWTWeb\HiriseDem2.aspx.cs">
       <DependentUpon>HiriseDem2.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WWTWeb\isstle.aspx.cs">
+    </Content>
+    <Content Include="WWTWeb\isstle.aspx.cs">
       <DependentUpon>isstle.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WWTWeb\login.aspx.cs">
+    </Content>
+    <Content Include="WWTWeb\login.aspx.cs">
       <DependentUpon>login.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WWTWeb\MarsHirise.aspx.cs">
+    </Content>
+    <Content Include="WWTWeb\MarsHirise.aspx.cs">
       <DependentUpon>MarsHirise.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WWTWeb\MarsMoc.aspx.cs">
+    </Content>
+    <Content Include="WWTWeb\MarsMoc.aspx.cs">
       <DependentUpon>MarsMoc.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WWTWeb\PostRatingFeedback.aspx.cs">
+    </Content>
+    <Content Include="WWTWeb\PostRatingFeedback.aspx.cs">
       <DependentUpon>PostRatingFeedback.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WWTWeb\StarChart.aspx.cs">
+    </Content>
+    <Content Include="WWTWeb\StarChart.aspx.cs">
       <DependentUpon>StarChart.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WWTWeb\TileImage.aspx.cs">
+    </Content>
+    <Content Include="WWTWeb\TileImage.aspx.cs">
       <DependentUpon>TileImage.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WWTWeb\weblogin.aspx.cs">
+    </Content>
+    <Content Include="WWTWeb\weblogin.aspx.cs">
       <DependentUpon>weblogin.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WWTWeb\WMSEarthToday.aspx.cs">
+    </Content>
+    <Content Include="WWTWeb\WMSEarthToday.aspx.cs">
       <DependentUpon>WMSEarthToday.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WWTWeb\WMSMoon.aspx.cs">
+    </Content>
+    <Content Include="WWTWeb\WMSMoon.aspx.cs">
       <DependentUpon>WMSMoon.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WWTWeb\WMSToast.aspx.cs">
+    </Content>
+    <Content Include="WWTWeb\WMSToast.aspx.cs">
       <DependentUpon>WMSToast.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WWTWeb\XML2WTT.aspx.cs">
+    </Content>
+    <Content Include="WWTWeb\XML2WTT.aspx.cs">
       <DependentUpon>XML2WTT.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
-    </Compile>
+    </Content>
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\GreatObservatories.xml" />
     <Content Include="Content\images\addview.png" />
@@ -936,8 +914,8 @@
     <Content Include="WWTWeb\512\mag9.7.png" />
     <Content Include="WWTWeb\512\mag9.8.png" />
     <Content Include="WWTWeb\512\mag9.9.png" />
-    <Content Include="WWTWeb\BingDemTile.aspx" />
-    <Content Include="WWTWeb\BingDemTile2.aspx" />
+    <None Include="WWTWeb\BingDemTile.aspx" />
+    <None Include="WWTWeb\BingDemTile2.aspx" />
     <Content Include="WWTWeb\Catalog.aspx" />
     <Content Include="WWTWeb\Catalog2.aspx" />
     <Content Include="WWTWeb\dem.aspx" />
@@ -1071,23 +1049,6 @@
     <Content Include="Scripts\factory\dataproxy.js" />
     <Content Include="Content\CSS\sprites.less" />
     <Content Include="Content\CSS\multiselect.less" />
-    <None Include="App_Code\AstroObjectsDataset.xsd" />
-    <Content Include="App_Code\AstroObjectsDataset.xss">
-      <DependentUpon>AstroObjectsDataset.xsd</DependentUpon>
-    </Content>
-    <Content Include="App_Code\DataSet1.xss" />
-    <None Include="App_Code\TourRatingDataset.xsd" />
-    <Content Include="App_Code\TourRatingDataset.xss">
-      <DependentUpon>TourRatingDataset.xsd</DependentUpon>
-    </Content>
-    <None Include="App_Code\TourVersionDataset.xsd" />
-    <Content Include="App_Code\TourVersionDataset.xss">
-      <DependentUpon>TourVersionDataset.xsd</DependentUpon>
-    </Content>
-    <None Include="App_Code\WWTToursDataset.xsd" />
-    <Content Include="App_Code\WWTToursDataset.xss">
-      <DependentUpon>WWTToursDataset.xsd</DependentUpon>
-    </Content>
     <Content Include="Docs\worldwide-telescope-advanced-guides.epub" />
     <Content Include="Docs\worldwide-telescope-advanced-guides.mobi" />
     <Content Include="Docs\worldwide-telescope-advanced-guides.pdf" />

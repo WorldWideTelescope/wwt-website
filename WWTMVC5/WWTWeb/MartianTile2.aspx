@@ -1,4 +1,4 @@
-<%@ Page Language="C#" ContentType="image/png" CodeFile="HiRise.aspx.cs" Inherits="HiRise" %>
+<%@ Page Language="C#" ContentType="image/png" CodeFile="HiRise.aspx.cs" Inherits="WWTMVC5.WWTWeb.HiRise" %>
 
 <%@ Import Namespace="System.Drawing" %>
 <%@ Import Namespace="System.Drawing.Text" %>
@@ -7,7 +7,7 @@
 <%@ Import Namespace="System.Collections.Generic" %>
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="System.Net" %>
-<%@ Import Namespace="PlateFile2" %>
+<%@ Import Namespace="WWTWebservices" %>
 <%
 
     string query = Request.Params["Q"];
@@ -19,7 +19,7 @@
     string id = "nothing";
     string type = ".png";
 	
-  	string DSSTileCache = Util.GetCurrentConfigShare("DSSTileCache", true);
+  	string DSSTileCache = WWTUtil.GetCurrentConfigShare("DSSTileCache", true);
 
 	switch(dataset)
 	{

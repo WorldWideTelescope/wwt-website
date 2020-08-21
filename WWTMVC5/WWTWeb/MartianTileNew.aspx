@@ -7,6 +7,7 @@
 <%@ Import Namespace="System.Collections.Generic" %>
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="System.Net" %>
+<%@ Import Namespace="WWTWebservices" %>
 <%
 
     string query = Request.Params["Q"];
@@ -18,7 +19,7 @@
     string id = "nothing";
     string type = ".png";
 	
-  	string DSSTileCache = Util.GetCurrentConfigShare("DSSTileCache", true);
+  	string DSSTileCache = WWTUtil.GetCurrentConfigShare("DSSTileCache", true);
 
 	switch(dataset)
 	{

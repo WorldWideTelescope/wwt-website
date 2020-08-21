@@ -625,6 +625,12 @@ namespace WWTWebservices
             point.Y = (point.Y / Math.PI * 180) - 90;
             return point;
         }
-
+        public Vector2d ToRaDec()
+        {
+            Vector2d vectord = ToSpherical();
+            vectord.X = vectord.X / Math.PI * 180.0;
+            vectord.Y = vectord.Y / Math.PI * 180.0 - 90.0;
+            return vectord;
+        }
     }
 }

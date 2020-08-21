@@ -7,7 +7,7 @@
 <%@ Import Namespace="System.Collections.Generic" %>
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="System.Net" %>
-<%@ Import Namespace="PlateFile2" %>
+<%@ Import Namespace="WWTMVC5.WWTWeb" %>
 <%
 
     double lat = double.Parse(Request.Params["lat"]);

@@ -4,6 +4,7 @@
 <%@ Import Namespace="System.Drawing.Imaging" %>
 <%@ Import Namespace="System.Drawing.Drawing2D" %>
 <%@ Import Namespace="System.IO" %>
+<%@ Import Namespace="WWTWebservices" %>
 <%
         string query = Request.Params["Q"];
         string[] values = query.Split(',');   
@@ -14,7 +15,7 @@
         string filename;
         string path;
         Bitmap b = null;
-    	string DSSTileCache = Util.GetCurrentConfigShare("DSSTileCache", true);
+    	string DSSTileCache = WWTUtil.GetCurrentConfigShare("DSSTileCache", true);
 	string webDir = ConfigurationManager.AppSettings["WWTWEBDIR"];
 
 

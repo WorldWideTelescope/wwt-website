@@ -2462,11 +2462,13 @@ namespace WWTMVC5.WWTWeb
 
     
     }
-    class Calc
+
+    public class Calc
     {
         public const double RC = (Math.PI / 180.0);
         public const double RCRA = (Math.PI / 12.0);
-        static public Vector2DD EquitorialToHorizon(Vector2DD equitorial, Vector2DD location, double jDate)
+
+        internal static Vector2DD EquitorialToHorizon(Vector2DD equitorial, Vector2DD location, double jDate)
         {
             double hourAngle = MstFromUTC2(jDate, location.X) - (equitorial.X * 15);
 

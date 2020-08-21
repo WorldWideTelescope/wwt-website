@@ -5,7 +5,8 @@
 <%@ Import Namespace="System.Drawing.Drawing2D" %>
 <%@ Import Namespace="System.Collections.Generic" %>
 <%@ Import Namespace="System.IO" %>
-<%@ Import Namespace="PlateTile" %>
+<%@ Import Namespace="OctSetTest" %>
+<%@ Import Namespace="WWTWebservices" %>
 <%
         string query = Request.Params["Q"];
         string[] values = query.Split(',');   

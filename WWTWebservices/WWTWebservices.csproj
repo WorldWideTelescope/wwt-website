@@ -52,6 +52,8 @@
     <Content Include="ISearchProvider.cs" />
     <Content Include="SearchResults.cs" />
     <Compile Include="FastBitmap.cs" />
+    <Compile Include="OctSetTest\OctTileMap.cs" />
+    <Compile Include="OctSetTest\SdssImage.cs" />
     <Compile Include="PlateHelper.cs" />
     <Compile Include="PlateTilePyramid.cs" />
     <Compile Include="StoredProc.cs" />
@@ -71,6 +73,7 @@
     <Compile Include="Vector2d.cs" />
     <Compile Include="Vector3d.cs" />
     <Compile Include="WMSImage.cs" />
+    <Compile Include="WWTThumbnail.cs" />
     <Compile Include="WWTToursDataset.cs">
       <DependentUpon>WWTToursDataset.xsd</DependentUpon>
     </Compile>

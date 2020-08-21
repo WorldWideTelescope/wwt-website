@@ -6,6 +6,8 @@
 <%@ Import Namespace="System.Collections.Generic" %>
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="System.Net" %>
+<%@ Import Namespace="OctSetTest" %>
+<%@ Import Namespace="WWTWebservices" %>
 <%
         string guid;
         if (Request.Params["GUID"] != null)
@@ -19,7 +21,7 @@
         }
 	string tourcache = ConfigurationManager.AppSettings["WWTTOURCACHE"];
         string localDir = tourcache;
-        string filename = Util.GetCurrentConfigShare("WWTToursTourFileUNC", true) + String.Format(@"\{0}_TourThumb.bin", guid);
+        string filename = WWTUtil.GetCurrentConfigShare("WWTToursTourFileUNC", true) + String.Format(@"\{0}_TourThumb.bin", guid);
  	string localfilename = localDir  +String.Format(@"\{0}_TourThumb.bin", guid);
 
         if (!File.Exists(localfilename))
