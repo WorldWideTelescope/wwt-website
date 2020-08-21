@@ -10,7 +10,6 @@
     int tileX = Convert.ToInt32(values[1]);
     int tileY = Convert.ToInt32(values[2]);
 	
-    string file = "mars";
     //string wwtTilesDir = ConfigurationManager.AppSettings["WWTTilesDir"];
     string DSSTileCache = WWTUtil.GetCurrentConfigShare("DSSTileCache", true);
 

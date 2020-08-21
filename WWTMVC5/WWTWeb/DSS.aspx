@@ -14,9 +14,6 @@
 
         int octsetlevel = level;
         string filename;
-        string path;
-    
-        string filename2;
 
 
         if (level > 12)
@@ -63,8 +60,9 @@
             return;
 	
 	}
-
-
     
+    // This file has returns which cause this warning to show in the generated files.
+    // This should be refactored, but that will be a bigger change.
+    #pragma warning disable 0162
 	
 	%>

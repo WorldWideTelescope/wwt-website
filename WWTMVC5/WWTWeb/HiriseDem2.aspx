@@ -14,7 +14,6 @@
     int tileX = Convert.ToInt32(values[1]);
     int tileY = Convert.ToInt32(values[2]);
 	
-    string file = "marsToastDem";
     string wwtTilesDir = ConfigurationManager.AppSettings["WWTTilesDir"];
     string DSSTileCache = WWTUtil.GetCurrentConfigShare("DSSTileCache", true);
 
@@ -74,5 +73,9 @@ DSSTileCache = @"\\wwt-mars\marsroot";
             return;
 }
 
+    
+// This file has returns which cause this warning to show in the generated files.
+// This should be refactored, but that will be a bigger change.
+#pragma warning disable 0162
     
 %>

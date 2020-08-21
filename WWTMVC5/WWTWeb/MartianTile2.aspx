@@ -17,7 +17,6 @@
     int tileY = Convert.ToInt32(values[2]);
     string dataset = values[3];
     string id = "nothing";
-    string type = ".png";
 	
   	string DSSTileCache = WWTUtil.GetCurrentConfigShare("DSSTileCache", true);
 

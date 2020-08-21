@@ -5,7 +5,6 @@
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="System.Net" %>
 <%
-    string returnString = "Erorr: Request Failed";
     string url = "";
  
     {
@@ -73,7 +72,7 @@
             }
             Response.Write(reply);
         }
-        catch (System.Exception e)
+        catch (System.Exception)
         {
 		string reply  = "1 25544U 98067A   13274.85334491  .00007046  00000-0  12878-3 0  7167\n";
 		reply  += "2 25544  51.6486 299.7368 0003212  97.7461 254.0523 15.50562392851247\n";

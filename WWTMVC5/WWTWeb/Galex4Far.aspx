@@ -56,7 +56,6 @@
             int L = level;
             int X = tileX;
             int Y = tileY;
-            string mime = "png";
             int powLev3Diff = (int)Math.Pow(2, L - 3);
             int X8 = X / powLev3Diff;
             int Y8 = Y / powLev3Diff;
@@ -83,5 +82,9 @@
             Response.End();
             return;
         }
-	}
+    }    
+    
+    // This file has returns which cause this warning to show in the generated files.
+    // This should be refactored, but that will be a bigger change.
+    #pragma warning disable 0162
 %>
