@@ -17,7 +17,6 @@
     int tileY = Convert.ToInt32(values[2]);
     string dataset = values[3];
     string id = "nothing";
-    string type = ".png";
 	
   	string DSSTileCache = WWTUtil.GetCurrentConfigShare("DSSTileCache", true);
 
@@ -31,7 +30,6 @@
 			break;
 		case "mars_hirise":
 			id = "109459728";
-            type = ".auto";
 			break;
 		case "mars_moc":
 			id = "252927426";

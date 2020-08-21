@@ -20,10 +20,6 @@
 
         int octsetlevel = level;
         string filename;
-        string path;
-    
-        string filename2;
-
 
         if (level > 20)
         {

@@ -62,13 +62,10 @@
             Directory.CreateDirectory(path);
         }
       
-        
-        bool tileIt = false;
         if (!File.Exists(filename))
         {
             WebClient client = new WebClient();
             client.DownloadFile(url, filename);
-            tileIt = true;
         }
 
 

@@ -15,8 +15,6 @@
     int tileX = Convert.ToInt32(values[1]);
     int tileY = Convert.ToInt32(values[2]);
   //  string dataset = values[3];
-    string id = "nothing";
-    string type = ".png";
 	
     Bitmap output = new Bitmap(256,256);
     Graphics g = Graphics.FromImage(output);

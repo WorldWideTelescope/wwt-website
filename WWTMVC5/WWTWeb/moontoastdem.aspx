@@ -22,10 +22,6 @@
 
         int octsetlevel = level;
         string filename;
-        string path;
-    
-        string filename2;
-
 
         if (level > 10)
         {
@@ -51,7 +47,6 @@
 	    int L = level;
 	    int X = tileX;
 	    int Y = tileY;
-	    string mime = "png";	
 	    int powLev5Diff = (int) Math.Pow(2, L - 3);
             int X32 = X / powLev5Diff;
             int Y32 = Y / powLev5Diff;
@@ -71,8 +66,9 @@
             return;
 	
 	}
-
-
     
+    // This file has returns which cause this warning to show in the generated files.
+    // This should be refactored, but that will be a bigger change.
+    #pragma warning disable 0162
 	
 	%>

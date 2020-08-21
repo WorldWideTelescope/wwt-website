@@ -17,10 +17,6 @@
 
         string filename;
         string path;
-    
-        string filename2;
-
-
       	string wwtTilesDir = ConfigurationManager.AppSettings["WWTTilesDir"];
       	string DSSTileCache = WWTUtil.GetCurrentConfigShare("DSSTileCache", true);
 

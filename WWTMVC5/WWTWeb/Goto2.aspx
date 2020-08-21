@@ -27,17 +27,6 @@
         zoom = Math.Max(0.001373291015625,Math.Min(360,Convert.ToDouble(Request.Params["zoom"])));
     }
 
-    //if (Request.UserAgent.Contains("WWTClient"))
-    if (true)
-    {
-
-        string data;
-        string xml = string.Format("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Folder Group=\"Goto\">\n<Place Name=\"{0}\" RA=\"{1}\" Dec=\"{2}\" ZoomLevel=\"{3}\" DataSetType=\"Sky\"/>\n</Folder>", name, ra, dec, zoom);
-        Response.Write(xml);
-    }
-    else
-    {
-        Response.ClearHeaders();
-        Response.Redirect("http://www.worldwidetelescope.org/wwt.html");
-    }
+    string xml = string.Format("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Folder Group=\"Goto\">\n<Place Name=\"{0}\" RA=\"{1}\" Dec=\"{2}\" ZoomLevel=\"{3}\" DataSetType=\"Sky\"/>\n</Folder>", name, ra, dec, zoom);
+    Response.Write(xml);
 %>

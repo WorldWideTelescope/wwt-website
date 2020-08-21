@@ -15,10 +15,7 @@
     {
 	id = Convert.ToInt32(values[3]);
     }
-	
-	
-    string type = ".png";
-	
+		
     if (level > 17)
     {
         Response.StatusCode = 404;
