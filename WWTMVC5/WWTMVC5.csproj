@@ -1454,7 +1454,7 @@
       <Version>3.4.1</Version>
     </PackageReference>
     <PackageReference Include="bootstrap.less">
-      <Version>3.3.7</Version>
+      <Version>3.4.1</Version>
     </PackageReference>
     <PackageReference Include="EntityFramework">
       <Version>6.1.3</Version>
@@ -1500,9 +1500,6 @@
     </PackageReference>
     <PackageReference Include="RestSharp">
       <Version>105.2.3</Version>
-    </PackageReference>
-    <PackageReference Include="Twitter.Bootstrap.Less">
-      <Version>3.3.6</Version>
     </PackageReference>
     <PackageReference Include="Unity.Mvc">
       <Version>4.0.1</Version>
