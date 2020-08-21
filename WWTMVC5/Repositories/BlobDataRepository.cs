@@ -383,7 +383,7 @@ namespace WWTMVC5.Repositories
                 // "Error getting contents of blob {0}: {1}", ContainerUrl + _PathSeparator + blobName, sc.Message
                 outputStream = null;
             }
-            catch (StorageException exception)
+            catch (StorageException)
             {
                 
                 // TODO: Add error handling logic

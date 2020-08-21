@@ -52,9 +52,9 @@ namespace WWTMVC5.Services
         /// <param name="staticContentDetails">static Content details.</param>
         /// <returns>True if the content was updated successfully; Otherwise false.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Need to ignore any exception which occurs.")]
-        public async Task<OperationStatus> UpdateStaticContentAsync(StaticContentDetails staticContentDetails)
+        public Task<OperationStatus> UpdateStaticContentAsync(StaticContentDetails staticContentDetails)
         {
-            return UpdateStaticContent(staticContentDetails);
+            return Task.FromResult(UpdateStaticContent(staticContentDetails));
         }
 
         public OperationStatus UpdateStaticContent(StaticContentDetails staticContentDetails)

@@ -19,7 +19,6 @@ public partial class MarsMoc : System.Web.UI.Page
     {
         string DSSTileCache = WWTUtil.GetCurrentConfigShare("DSSTileCache", true);
         string id = "1738422189";
-        string type = ".png";
         switch (dataset)
         {
             case "mars_base_map":
@@ -30,7 +29,6 @@ public partial class MarsMoc : System.Web.UI.Page
                 break;
             case "mars_hirise":
                 id = "109459728";
-                type = ".auto";
                 break;
             case "mars_moc":
                 id = "252927426";

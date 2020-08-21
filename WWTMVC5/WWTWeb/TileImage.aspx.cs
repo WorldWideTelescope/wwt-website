@@ -25,7 +25,6 @@ namespace WWTMVC5.WWTWeb
             //todo fix this
             string DSSTileCache = ""; //; Util.GetCurrentConfigShare("DSSTileCache", true);
             string id = "1738422189";
-            string type = ".png";
             switch (dataset)
             {
                 case "mars_base_map":
@@ -36,7 +35,6 @@ namespace WWTMVC5.WWTWeb
                     break;
                 case "mars_hirise":
                     id = "109459728";
-                    type = ".auto";
                     break;
                 case "mars_moc":
                     id = "252927426";
@@ -561,11 +559,11 @@ namespace WWTMVC5.WWTWeb
             return data;
         }
 
-        private string filename;
+        private string imageFilename;
 
         public VampWCSImageReader(string filename)
         {
-            this.filename = filename;
+            this.imageFilename = filename;
             string data = VampWCSImageReader.ExtractXMPFromFile(filename);
             ValidWcs = ExtractXMPParameters(data);
         }
@@ -575,7 +573,7 @@ namespace WWTMVC5.WWTWeb
 
         public override Bitmap GetBitmap()
         {
-            return new Bitmap(filename);
+            return new Bitmap(imageFilename);
         }
 
         private int Rating;

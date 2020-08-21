@@ -124,7 +124,7 @@ namespace WWTMVC5.Repositories
                 var container = GetContainer(Constants.NotificationContainerName);
                 var blobAddress = Guid.NewGuid().ToString();
                 var blob = container.GetBlobReferenceFromServer(blobAddress);
-                blob.ServiceClient.ParallelOperationThreadCount = 1;
+                blob.ServiceClient.DefaultRequestOptions.ParallelOperationThreadCount = 1;
                 blob.UploadFromByteArray(content,0,content.Length);
 
                 m.BlobAddress = blobAddress;
@@ -172,7 +172,7 @@ namespace WWTMVC5.Repositories
                 var container = GetContainer(Constants.NotificationContainerName);
                 var blobAddress = genericMessage.BlobAddress;
                 var blob = container.GetBlobReferenceFromServer(blobAddress);
-                blob.ServiceClient.ParallelOperationThreadCount = 1;
+                blob.ServiceClient.DefaultRequestOptions.ParallelOperationThreadCount = 1;
                 blob.DownloadToByteArray(content, 0);
                 blob.Delete();
             }

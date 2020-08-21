@@ -66,7 +66,7 @@ namespace WWTMVC5.Services
         /// <param name="categoryId">Category Type.</param>
         /// <returns>True of the communities are updated. False otherwise.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "We are returning the details of the exceptions as part of the function.")]
-        public async Task<OperationStatus> UpdateFeaturedCommunities(IEnumerable<AdminEntityDetails> communities, long userId, int? categoryId)
+        public Task<OperationStatus> UpdateFeaturedCommunities(IEnumerable<AdminEntityDetails> communities, long userId, int? categoryId)
         {
             OperationStatus status = null;
             try
@@ -123,7 +123,7 @@ namespace WWTMVC5.Services
 
             status = status ?? OperationStatus.CreateSuccessStatus();
 
-            return status;
+            return Task.FromResult(status);
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace WWTMVC5.Services
         /// <param name="categoryId">Category Type.</param>
         /// <returns>True of the contents are updated. False otherwise.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "We are returning the details of the exceptions as part of the function.")]
-        public async Task<OperationStatus> UpdateFeaturedContents(IEnumerable<AdminEntityDetails> contents, long userId, int? categoryId)
+        public Task<OperationStatus> UpdateFeaturedContents(IEnumerable<AdminEntityDetails> contents, long userId, int? categoryId)
         {
             OperationStatus status = null;
             try
@@ -191,7 +191,7 @@ namespace WWTMVC5.Services
 
             status = status ?? OperationStatus.CreateSuccessStatus();
 
-            return status;
+            return Task.FromResult(status);
         }
 
         #endregion

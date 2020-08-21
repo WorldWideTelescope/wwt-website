@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -33,7 +34,7 @@ namespace WWTMVC5.Services
         /// Instance of CommunityCommentRepository repository
         /// </summary>
         private ICommunityCommentRepository _communityCommentRepository;
-        
+
         #endregion
 
         #region Constructor
@@ -47,7 +48,7 @@ namespace WWTMVC5.Services
             this._contentCommentsRepository = contentCommentsRepository;
             this._communityCommentRepository = communityCommentRepository;
         }
-      
+
         #endregion
 
         #region Public Methods
@@ -58,14 +59,14 @@ namespace WWTMVC5.Services
         /// <param name="filter">Filter which comments to be fetched</param>
         /// <param name="pageDetails">Details about the pagination</param>
         /// <returns>List of all comments of the Content</returns>
-        public async Task<IEnumerable<CommentDetails>> GetContentComments(CommentFilter filter, PageDetails pageDetails)
+        public Task<IEnumerable<CommentDetails>> GetContentComments(CommentFilter filter, PageDetails pageDetails)
         {
             this.CheckNotNull(() => new { filter, pageDetails });
 
             Func<ContentComments, object> orderBy = (contentComments) => contentComments.CommentDatetime;
             Expression<Func<ContentComments, bool>> condition = (contentComments) => contentComments.ContentID == filter.EntityId && contentComments.IsDeleted == false;
 
-            IEnumerable<ContentComments> comments =  _contentCommentsRepository
+            IEnumerable<ContentComments> comments = _contentCommentsRepository
                 .GetItems(condition, orderBy, filter.OrderType == OrderType.NewestFirst, (pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage, pageDetails.ItemsPerPage);
 
             var commentDetails = new List<CommentDetails>();
@@ -79,7 +80,7 @@ namespace WWTMVC5.Services
                 }
             }
 
-            return commentDetails;
+            return Task.FromResult(commentDetails.AsEnumerable());
         }
 
         /// <summary>
@@ -88,7 +89,7 @@ namespace WWTMVC5.Services
         /// <param name="filter">Filter which comments to be fetched</param>
         /// <param name="pageDetails">Details about the pagination</param>
         /// <returns>List of all comments of the Community</returns>
-        public async Task<IEnumerable<CommentDetails>> GetCommunityComments(CommentFilter filter, PageDetails pageDetails)
+        public Task<IEnumerable<CommentDetails>> GetCommunityComments(CommentFilter filter, PageDetails pageDetails)
         {
             this.CheckNotNull(() => new { filter, pageDetails });
 
@@ -99,7 +100,7 @@ namespace WWTMVC5.Services
             var totalItemsForCondition = _communityCommentRepository.GetItemsCount(condition);
             pageDetails.TotalPages = (totalItemsForCondition / pageDetails.ItemsPerPage) + ((totalItemsForCondition % pageDetails.ItemsPerPage == 0) ? 0 : 1);
 
-            IEnumerable<CommunityComments> comments =  _communityCommentRepository
+            IEnumerable<CommunityComments> comments = _communityCommentRepository
                 .GetItems(condition, orderBy, filter.OrderType == OrderType.NewestFirst, (pageDetails.CurrentPage - 1) * pageDetails.ItemsPerPage, pageDetails.ItemsPerPage);
 
             var commentDetails = new List<CommentDetails>();
@@ -113,7 +114,7 @@ namespace WWTMVC5.Services
                 }
             }
 
-            return commentDetails;
+            return Task.FromResult(commentDetails.AsEnumerable());
         }
 
         /// <summary>
@@ -266,7 +267,7 @@ namespace WWTMVC5.Services
             }
 
             return false;
-        } 
+        }
 
         #endregion
     }

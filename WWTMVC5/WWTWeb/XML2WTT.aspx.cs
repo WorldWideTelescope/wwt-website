@@ -142,7 +142,6 @@ namespace WWTMVC5.WWTWeb
             string musicUrl = null;
             string musicPath = null;
             string voiceUrl = null;
-            string voicePath = null;
             try
             {
                 XmlNode Tour = doc["Tour"];

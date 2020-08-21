@@ -61,10 +61,10 @@ namespace WWTMVC5.Repositories
         /// <param name="searchText">Text to be searched</param>
         /// <param name="userId">User who is searching</param>
         /// <returns>Count of search result items</returns>
-        public async Task<int> SearchContentsCount(string searchText, long userId)
+        public Task<int> SearchContentsCount(string searchText, long userId)
         {
             var items = GetItems(GetContentSearchCondition(searchText, userId), GetContentOrderByCondition(), true);
-            return items.Count();
+            return Task.FromResult(items.Count());
         }
 
         /// <summary>

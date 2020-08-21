@@ -135,7 +135,7 @@ namespace WWTMVC5.Services
         /// <param name="userId">Id of the user</param>
         /// <returns>List of all offensive communities.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Need to ignore any exception which occurs.")]
-        public async Task<IEnumerable<OffensiveEntityDetails>> GetOffensiveCommunities(long userId)
+        public Task<IEnumerable<OffensiveEntityDetails>> GetOffensiveCommunities(long userId)
         {
             var results = new List<OffensiveEntityDetails>();
 
@@ -161,7 +161,7 @@ namespace WWTMVC5.Services
                 // TODO: Add exception handling logic here.
             }
 
-            return results;
+            return Task.FromResult(results.AsEnumerable());
         }
 
         /// <summary>
@@ -170,7 +170,7 @@ namespace WWTMVC5.Services
         /// <param name="userId">Id of the user</param>
         /// <returns>List of all offensive contents.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Need to ignore any exception which occurs.")]
-        public async Task<IEnumerable<OffensiveEntityDetails>> GetOffensiveContents(long userId)
+        public Task<IEnumerable<OffensiveEntityDetails>> GetOffensiveContents(long userId)
         {
             var results = new List<OffensiveEntityDetails>();
 
@@ -196,7 +196,7 @@ namespace WWTMVC5.Services
                 // TODO: Add exception handling logic here.
             }
 
-            return results;
+            return Task.FromResult(results.AsEnumerable());
         }
 
         /// <summary>
@@ -295,7 +295,7 @@ namespace WWTMVC5.Services
         /// <param name="details">Details provided.</param>
         /// <returns>True if Community was updated; otherwise false.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "We are returning the details of the exceptions as part of the function.")]
-        public async Task<OperationStatus> UpdateAllOffensiveCommunityEntry(OffensiveEntry details)
+        public Task<OperationStatus> UpdateAllOffensiveCommunityEntry(OffensiveEntry details)
         {
             this.CheckNotNull(() => new { details = details });
 
@@ -335,7 +335,7 @@ namespace WWTMVC5.Services
             // If one them is not deleted then the status will have the exception details.
             status = status ?? OperationStatus.CreateSuccessStatus();
 
-            return status;
+            return Task.FromResult(status);
         }
 
         /// <summary>
@@ -344,7 +344,7 @@ namespace WWTMVC5.Services
         /// <param name="details">Details provided.</param>
         /// <returns>True if content was updated; otherwise false.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "We are returning the details of the exceptions as part of the function.")]
-        public async Task<OperationStatus> UpdateAllOffensiveContentEntry(OffensiveEntry details)
+        public Task<OperationStatus> UpdateAllOffensiveContentEntry(OffensiveEntry details)
         {
             this.CheckNotNull(() => new { details = details });
 
@@ -384,7 +384,7 @@ namespace WWTMVC5.Services
             // If one them is not deleted then the status will have the exception details.
             status = status ?? OperationStatus.CreateSuccessStatus();
 
-            return status;
+            return Task.FromResult(status);
         }
 
         #endregion

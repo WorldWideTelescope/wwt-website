@@ -441,9 +441,8 @@ namespace WWTMVC5.Controllers
                 _communityService.UpdateCommunity(communityDetails, CurrentUserId);
                 return Json(new {id = community.ID});
             }
-            catch (Exception exception)
+            catch (Exception)
             {
-                
             }
 
             return Json("error: community not saved");

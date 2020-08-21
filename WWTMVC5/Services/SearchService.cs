@@ -131,12 +131,12 @@ namespace WWTMVC5.Services
         /// <param name="searchText">Text to be searched</param>
         /// <param name="userId">Id of the user who is accessing</param>
         /// <returns>Communities/Contents which are having the search text</returns>
-        public async Task<IEnumerable<DeepZoomViewModel>> DeepZoomSearch(string searchText, long userId)
+        public Task<IEnumerable<DeepZoomViewModel>> DeepZoomSearch(string searchText, long userId)
         {
             var searchResults = new List<DeepZoomViewModel>();
 
-            var communitiesResult =  _communitiesViewRepository.SearchCommunities(searchText, userId, 0, Constants.PivotResultsCount * 2);
-            var contentResult =  _contentsViewRepository.SearchContents(searchText, userId, 0, Constants.PivotResultsCount * 2);
+            var communitiesResult = _communitiesViewRepository.SearchCommunities(searchText, userId, 0, Constants.PivotResultsCount * 2);
+            var contentResult = _contentsViewRepository.SearchContents(searchText, userId, 0, Constants.PivotResultsCount * 2);
             var communitiesResultCount = communitiesResult.Count();
             var contentResultCount = contentResult.Count();
             var communityTakeCount = Constants.PivotResultsCount;
@@ -168,7 +168,7 @@ namespace WWTMVC5.Services
             }
 
             // TODO: Need to send the results based on relevance with following order: Title, Description, Tags and Parent.
-            return searchResults.AsEnumerable().OrderByDescending(item => item.Rating);
+            return Task.FromResult(searchResults.OrderByDescending(item => item.Rating).AsEnumerable());
         }
     }
 }
