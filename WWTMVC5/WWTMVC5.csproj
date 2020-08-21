@@ -914,8 +914,8 @@
     <Content Include="WWTWeb\512\mag9.7.png" />
     <Content Include="WWTWeb\512\mag9.8.png" />
     <Content Include="WWTWeb\512\mag9.9.png" />
-    <None Include="WWTWeb\BingDemTile.aspx" />
-    <None Include="WWTWeb\BingDemTile2.aspx" />
+    <Content Include="WWTWeb\BingDemTile.aspx" />
+    <Content Include="WWTWeb\BingDemTile2.aspx" />
     <Content Include="WWTWeb\Catalog.aspx" />
     <Content Include="WWTWeb\Catalog2.aspx" />
     <Content Include="WWTWeb\dem.aspx" />

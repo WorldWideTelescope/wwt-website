@@ -33,8 +33,8 @@
 
 
 
-	string id = WWTUtils.GetTileID(parentL,parentX,parentY);
-	int server = WWTUTils.GetServerID(parentX,parentY);
+	string id = WWTUtil.GetTileID(parentX,parentY,parentL,false);
+	int server = WWTUtil.GetServerID(parentX,parentY);
 	WebClient client = new WebClient();
 	
 	string url = string.Format(urlBase,server,id);

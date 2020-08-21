@@ -13,8 +13,8 @@
     //string filename = String.Format(wwtDemDir  + @"\Mercator\Chunks\{0}\{1}.chunk", level, tileY);
 	string urlBase = "http://ecn.t{0}.tiles.virtualearth.net/tiles/d{1}.elv?g=1&n=z";
 	
-	string id = WWTUtils.GetTileID(level,tileX,tileY);
-	int server = WWTUtils.GetServerID(tileX,tileY);
+	string id = WWTUtil.GetTileID(tileX,tileY,level,false);
+	int server = WWTUtil.GetServerID(tileX,tileY);
 	WebClient client = new WebClient();
 	
 	string url = string.Format(urlBase,server,id);
