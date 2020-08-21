@@ -1,6 +1,7 @@
 <%@ Page Language="C#" ContentType="image/png" %>
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="System.Net" %>
+<%@ Import Namespace="WWTWebservices" %>
 <%
     string returnString = "Error: No URL Specified";
     string url = "";
@@ -34,7 +35,7 @@
             }
 
 
-            WebUtil.FileCabinet.Extract(filename, targetfile, Response);
+            FileCabinet.Extract(filename, targetfile, Response);
         }
     }
     catch (System.Exception e)

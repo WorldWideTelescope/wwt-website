@@ -1,6 +1,7 @@
 <%@ Page Language="C#" ContentType="image/png" %>
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="WWTMVC5.WWTWeb" %>
+<%@ Import Namespace="WWTWebservices" %>
 <%
     string query = Request.Params["Q"];
     string[] values = query.Split(',');   

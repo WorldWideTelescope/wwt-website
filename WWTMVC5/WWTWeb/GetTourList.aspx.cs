@@ -14,7 +14,7 @@ namespace WWTMVC5.WWTWeb
 {
     
 
-    public class GetTourList : System.Web.UI.Page
+    public partial class GetTourList : System.Web.UI.Page
     {
         
         public static string GetToursXML()

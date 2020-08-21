@@ -1,4 +1,4 @@
-<%@ Page Language="C#" ContentType="image/png" CodeFile="MarsMoc.aspx.cs" Inherits="MarsMoc" %>
+<%@ Page Language="C#" ContentType="image/png" CodeFile="MarsMoc.aspx.cs" Inherits="WWTMVC5.WWTWeb.MarsMoc" %>
 
 <%@ Import Namespace="System.Drawing" %>
 <%@ Import Namespace="System.Drawing.Text" %>
@@ -7,7 +7,6 @@
 <%@ Import Namespace="System.Collections.Generic" %>
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="System.Net" %>
-<%@ Import Namespace="PlateFile2" %>
 <%
 
     string query = Request.Params["Q"];

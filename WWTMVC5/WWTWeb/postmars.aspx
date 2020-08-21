@@ -5,7 +5,7 @@
 <%@ Import Namespace="System.Drawing.Drawing2D" %>
 <%@ Import Namespace="System.Collections.Generic" %>
 <%@ Import Namespace="System.IO" %>
-<%@ Import Namespace="PlateTile" %>
+<%@ Import Namespace="WWTWebservices" %>
 <%
 	Response.Write("OK");	
 return;
@@ -18,7 +18,7 @@ return;
 	string dataset = values[3];
         string file = "mars";
 	string wwtTilesDir = ConfigurationManager.AppSettings["WWTTilesDir"];
-  	string DSSTileCache = Util.GetCurrentConfigShare("DSSTileCache", true);
+  	string DSSTileCache = WWTUtil.GetCurrentConfigShare("DSSTileCache", true);
 
         string filename = String.Format( DSSTileCache  + "\\wwtcache\\mars\\{3}\\{0}\\{2}\\{1}_{2}.png", level, tileX, tileY, dataset);
         string path = String.Format(DSSTileCache + "\\wwtcache\\mars\\{3}\\{0}\\{2}", level, tileX, tileY, dataset);

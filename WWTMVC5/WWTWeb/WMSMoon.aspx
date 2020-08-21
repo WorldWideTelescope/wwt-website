@@ -2,6 +2,7 @@
 <%@ Import Namespace="System.Drawing" %>
 <%@ Import Namespace="System.Drawing.Imaging" %>
 <%@ Import Namespace="System.IO" %>
+<%@ Import Namespace="WWTWebservices" %>
 <%
     string query = Request.Params["Q"];
     bool debug = Request.Params["debug"] != null;

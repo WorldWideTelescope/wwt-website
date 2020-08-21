@@ -6,10 +6,11 @@
 <%@ Import Namespace="System.Collections.Generic" %>
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="System.Net" %>
+<%@ Import Namespace="WWTWebservices" %>
 <%
         string name = Request.Params["name"];
         string type = Request.Params["class"];
-  	string path = Util.GetCurrentConfigShare("DSSTileCache", true) + "\\imagesTiler\\thumbnails\\";
+  	string path = WWTUtil.GetCurrentConfigShare("DSSTileCache", true) + "\\imagesTiler\\thumbnails\\";
 
         string filename = path + name + ".jpg";
 	if (File.Exists(filename ))

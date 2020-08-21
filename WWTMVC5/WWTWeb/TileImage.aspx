@@ -1,10 +1,11 @@
-<%@ Page Language="C#" ContentType="application/x-wtml" CodeFile="TileImage.aspx.cs"
-    Inherits="TileImage" %>
+<%@ Page Language="C#" ContentType="application/x-wtml" CodeFile="TileImage.aspx.cs" Inherits="WWTMVC5.WWTWeb.TileImage" %>
 
 <%@ Import Namespace="System.Drawing" %>
 <%@ Import Namespace="System.Drawing.Text" %>
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="System.Net" %>
+<%@ Import Namespace="WWTWebservices" %>
+<%@ Import Namespace="WWTMVC5.WWTWeb" %>
 <% 
     {
         //if (Request.Cookies["alphakey"] != null && Request.Params["wtml"] == null)
@@ -52,7 +53,7 @@
         int hashID = Math.Abs(url.GetHashCode());
 
         //hashID = 12345;
-        string path = Util.GetCurrentConfigShare("DSSTileCache", true) + "\\imagesTiler\\dowloadImages\\";
+        string path = WWTUtil.GetCurrentConfigShare("DSSTileCache", true) + "\\imagesTiler\\dowloadImages\\";
        
         string filename = path + hashID + ".png";
 

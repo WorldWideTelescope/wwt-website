@@ -1,6 +1,7 @@
 <%@ Page Language="C#" ContentType="image/png" %>
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="System.Net" %>
+<%@ Import Namespace="WWTWebservices" %>
 <%
     string returnString = "Erorr: No URL Specified";
     string url = "";

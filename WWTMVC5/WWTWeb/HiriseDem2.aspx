@@ -1,4 +1,4 @@
-<%@ Page Language="C#" ContentType="text/plain" CodeFile="Hirisedem2.aspx.cs" Inherits="HiriseDem2" %>
+<%@ Page Language="C#" ContentType="text/plain" CodeFile="Hirisedem2.aspx.cs" Inherits="WWTMVC5.WWTWeb.HiriseDem2" %>
 <%@ Import Namespace="System.Drawing" %>
 <%@ Import Namespace="System.Drawing.Text" %>
 <%@ Import Namespace="System.Drawing.Imaging" %>
@@ -6,7 +6,7 @@
 <%@ Import Namespace="System.Collections.Generic" %>
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="System.Net" %>
-<%@ Import Namespace="PlateFile2" %>
+<%@ Import Namespace="WWTWebservices" %>
 <%
     string query = Request.Params["Q"];
     string[] values = query.Split(',');   
@@ -16,7 +16,7 @@
 	
     string file = "marsToastDem";
     string wwtTilesDir = ConfigurationManager.AppSettings["WWTTilesDir"];
-    string DSSTileCache = Util.GetCurrentConfigShare("DSSTileCache", true);
+    string DSSTileCache = WWTUtil.GetCurrentConfigShare("DSSTileCache", true);
 
 DSSTileCache = @"\\wwt-mars\marsroot";
 
@@ -29,7 +29,7 @@ DSSTileCache = @"\\wwt-mars\marsroot";
     if (File.Exists(filename))
     {
          Stream stream = File.OpenRead(filename);
-            Stream s = HiriseDem2.MergeMolaDemTileStream( level, tileX, tileY, stream);
+            Stream s = MergeMolaDemTileStream( level, tileX, tileY, stream);
 
             int length = (int)s.Length;
 	    if(length == 0)
@@ -54,7 +54,7 @@ DSSTileCache = @"\\wwt-mars\marsroot";
 
 
 
-            Stream ss =  HiriseDem2.GetMolaDemTileStream( level, tileX, tileY);
+            Stream ss =  GetMolaDemTileStream( level, tileX, tileY);
 
             int len = (int)ss.Length;
 	    if(len == 0)

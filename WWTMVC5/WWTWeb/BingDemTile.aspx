@@ -1,7 +1,7 @@
 <%@ Page Language="C#" ContentType="application/octet-stream" %>
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="System.Net" %>
-<%@ Import Namespace="Microsoft.Maps.ElevationAdjustmentService.HDPhoto" %>
+<%@ Import Namespace="WWTWebservices" %>
 <%
     string query = Request.Params["Q"];
     string[] values = query.Split(',');   
@@ -33,8 +33,8 @@
 
 
 
-	string id = TileTools.GetTileID(parentL,parentX,parentY);
-	int server = TileTools.GetServerID(parentX,parentY);
+	string id = WWTUtil.GetTileID(parentX,parentY,parentL,false);
+	int server = WWTUtil.GetServerID(parentX,parentY);
 	WebClient client = new WebClient();
 	
 	string url = string.Format(urlBase,server,id);

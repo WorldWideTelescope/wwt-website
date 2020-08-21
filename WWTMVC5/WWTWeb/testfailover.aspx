@@ -6,9 +6,10 @@
 <%@ Import Namespace="System.Collections.Generic" %>
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="System.Net" %>
+<%@ Import Namespace="WWTWebservices" %>
 <%
        
-                Response.Write(Util.GetCurrentConfigShare("DSSTOASTPNG", true));
+                Response.Write(WWTUtil.GetCurrentConfigShare("DSSTOASTPNG", true));
 
 
 	

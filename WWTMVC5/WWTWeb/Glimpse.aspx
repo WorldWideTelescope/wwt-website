@@ -6,9 +6,7 @@
 <%@ Import Namespace="System.Collections.Generic" %>
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="System.Net" %>
-<%@ Import Namespace="OctSetTest" %>
-<%@ Import Namespace="DpossTile" %>
-<%@ Import Namespace="PlateTile" %>
+<%@ Import Namespace="WWTWebservices" %>
 <%
    
     

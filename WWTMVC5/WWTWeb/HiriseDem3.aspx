@@ -6,7 +6,7 @@
 <%@ Import Namespace="System.Collections.Generic" %>
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="System.Net" %>
-<%@ Import Namespace="PlateFile2" %>
+<%@ Import Namespace="WWTWebservices" %>
 <%
     string query = Request.Params["Q"];
     string[] values = query.Split(',');   
@@ -16,7 +16,7 @@
 	
     string file = "marsToastDem";
     string wwtTilesDir = ConfigurationManager.AppSettings["WWTTilesDir"];
-    string DSSTileCache = Util.GetCurrentConfigShare("DSSTileCache", true);
+    string DSSTileCache = WWTUtil.GetCurrentConfigShare("DSSTileCache", true);
 
 DSSTileCache = @"\\wwt-mars\marsroot";
 

@@ -2,6 +2,7 @@
 
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="System.Net" %>
+<%@ Import Namespace="WWTWebservices" %>
 <%
     string returnString = "Error: No URL Specified";
     string url = "";

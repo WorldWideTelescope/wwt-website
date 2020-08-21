@@ -7,7 +7,7 @@
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="System.Net" %>
 <%@ Import Namespace="OctSetTest" %>
-<%@ Import Namespace="PlateTile" %>
+<%@ Import Namespace="WWTWebservices" %>
 <%
 	Response.Write("Hello");
 
@@ -24,7 +24,7 @@ return;
     
         string filename2;
 	string wwtTilesDir = ConfigurationManager.AppSettings["WWTTilesDir"];
-      	string DSSTileCache = Util.GetCurrentConfigShare("DSSTileCache", true);
+      	string DSSTileCache = WWTUtil.GetCurrentConfigShare("DSSTileCache", true);
 
 
  
@@ -38,9 +38,7 @@ return;
             Response.End();
             return;
         }
-    
-//        bool sdssTile = Util.ShouldDownloadSDSS(level,  tileX, tileY);
-    
+        
         if ( level < 9 )
         {
             Response.ContentType = "image/png";

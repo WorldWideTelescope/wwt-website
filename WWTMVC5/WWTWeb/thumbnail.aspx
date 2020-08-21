@@ -12,10 +12,10 @@
         string type = Request.Params["class"];
     	string wwtWebDir = ConfigurationManager.AppSettings["WWTWEBDIR"];
 
-	Stream s = WWTThmbnail.GetThumbnailStream(name);
+	Stream s = WWTThumbnail.GetThumbnailStream(name);
         if (s == null && type != null)
         {
-            s = WWTThmbnail.GetThumbnailStream(type);
+            s = WWTThumbnail.GetThumbnailStream(type);
         }
 
 
@@ -26,7 +26,7 @@
 	 	   Response.WriteFile(wwtWebDir + "\\thumbnails\\"+name+".jpg");
 		    Response.End();
 		}
-            s = WWTThmbnail.GetThumbnailStream("Star");
+            s = WWTThumbnail.GetThumbnailStream("Star");
         }
     
         int length = (int)s.Length;

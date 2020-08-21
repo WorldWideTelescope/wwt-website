@@ -6,7 +6,7 @@ using WWTWebservices;
 namespace WWTMVC5.WWTWeb
 {
 
-    public class MarsHirise : System.Web.UI.Page
+    public partial class MarsHirise : System.Web.UI.Page
     {
 
         public Bitmap DownloadBitmap(string dataset, int level, int x, int y)
