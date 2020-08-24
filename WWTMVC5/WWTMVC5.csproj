@@ -53,12 +53,6 @@
     <Reference Include="Microsoft.CSharp">
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.WindowsAzure.Diagnostics, Version=2.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.WindowsAzure.ServiceRuntime, Version=2.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>False</Private>
-    </Reference>
     <Reference Include="System">
       <Private>True</Private>
     </Reference>
@@ -458,6 +452,18 @@
       <DependentUpon>ResourceService.svc</DependentUpon>
     </Compile>
     <Compile Include="WebServices\ServiceBase.cs" />
+    <Content Include="WWT2\ClientVersion.txt" />
+    <Content Include="WWT2\Copy of updateurl.txt" />
+    <Content Include="WWT2\dataversion.txt" />
+    <Content Include="WWT2\EqClientVersion.txt" />
+    <Content Include="WWT2\Eqdataversion.txt" />
+    <Content Include="WWT2\ExcelAddinUpdateUrl.txt" />
+    <Content Include="WWT2\ExcelAddinVersion.txt" />
+    <Content Include="WWT2\Message.txt" />
+    <Content Include="WWT2\minver.txt" />
+    <Content Include="WWT2\updateurl.txt" />
+    <Content Include="WWT2\version.txt" />
+    <Content Include="WWT2\warnver.txt" />
     <Content Include="WWTWeb\demmars.aspx.cs">
       <DependentUpon>demmars.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

@@ -15,8 +15,8 @@ using System.IdentityModel.Services;
 
 namespace WWTMVC5
 {
-	public class MvcApplication : HttpApplication
-	{
+    public class MvcApplication : HttpApplication
+    {
         private static UnityContainer _container;
 
         /// <summary>
@@ -30,27 +30,27 @@ namespace WWTMVC5
             }
         }
 
-		public const String WurflDataFilePath = "./App_Data/wurfl-latest.zip";
-		
+        public const String WurflDataFilePath = "./App_Data/wurfl-latest.zip";
+
         protected void Application_Start()
-		{
-           
-            RegisterUnityContainer(); 
+        {
+
+            RegisterUnityContainer();
 
             AutoMapperSettings.RegisterControllerAutoMappers();
             AutoMapperSettings.RegisterServiceAutoMappers();
-			AreaRegistration.RegisterAllAreas();
-			FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-			RouteConfig.RegisterRoutes(RouteTable.Routes);
-			BundleConfig.RegisterBundles(BundleTable.Bundles);
-			//DateTime time = DateTime.Now;
-			var wurflDataFile = HttpContext.Current.Server.MapPath(WurflDataFilePath);
+            AreaRegistration.RegisterAllAreas();
+            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
+            //DateTime time = DateTime.Now;
+            var wurflDataFile = HttpContext.Current.Server.MapPath(WurflDataFilePath);
 
-			//DateTime time2 = DateTime.Now;
-			//var wurfltime = time.Millisecond - time2.Millisecond;
-			//var breakhere = true;
+            //DateTime time2 = DateTime.Now;
+            //var wurfltime = time.Millisecond - time2.Millisecond;
+            //var breakhere = true;
 
-		}
+        }
 
         protected void Application_Error(object sender, EventArgs e)
         {
@@ -72,9 +72,15 @@ namespace WWTMVC5
         {
             _container = new UnityContainer();
             var earthSettings = ConfigReader<string>.GetSetting("EarthOnlineEntities");
+
+            if (earthSettings is null)
+            {
+                throw new InvalidOperationException("Setting for EarthOnlineEntitites is unavailable");
+            }
+
             var manager = new PerRequestLifetimeManager();
             var constructor = new InjectionConstructor(earthSettings);
-            _container.RegisterType<EarthOnlineEntities>(manager,constructor);
+            _container.RegisterType<EarthOnlineEntities>(manager, constructor);
 
             RegisterRepositories(_container);
             RegisterServices(_container);
@@ -127,7 +133,7 @@ namespace WWTMVC5
                 container.RegisterType<IContentTagsRepository, ContentTagsRepository>(new PerRequestLifetimeManager());
             }
         }
-         
+
         /// <summary>
         /// Registers the required services which is required for all the controllers.
         /// </summary>
@@ -150,5 +156,5 @@ namespace WWTMVC5
                 container.RegisterType<IFeaturedEntityService, FeaturedEntityService>(new PerRequestLifetimeManager());
             }
         }
-	}
+    }
 }
