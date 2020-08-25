@@ -2,7 +2,6 @@
 using System.Configuration;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using Microsoft.WindowsAzure.ServiceRuntime;
 
 namespace WWTMVC5
 {
@@ -71,24 +70,8 @@ namespace WWTMVC5
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Need to ignore any exception.")]
         public static T GetSetting(string settingKey, T defaultValue)
         {
-            string settingValue = string.Empty;
-            try
-            {
-                
-                if (RoleEnvironment.IsAvailable)
-                {
-                    settingValue = RoleEnvironment.GetConfigurationSettingValue(settingKey);
-                }
-                else
-                {
-                    settingValue = ConfigurationManager.AppSettings[settingKey];
-                }
-                
-            }
-            catch
-            {
-                settingValue = ConfigurationManager.AppSettings[settingKey];
-            }
+            string settingValue = ConfigurationManager.AppSettings[settingKey];
+
             if (!string.IsNullOrEmpty(settingValue))
             {
                 return (T)Convert.ChangeType(settingValue, typeof(T), CultureInfo.InvariantCulture);
