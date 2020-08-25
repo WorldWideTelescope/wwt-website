@@ -30,11 +30,8 @@ namespace WWTMVC5
             }
         }
 
-        public const String WurflDataFilePath = "./App_Data/wurfl-latest.zip";
-
         protected void Application_Start()
         {
-
             RegisterUnityContainer();
 
             AutoMapperSettings.RegisterControllerAutoMappers();
@@ -43,20 +40,14 @@ namespace WWTMVC5
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            //DateTime time = DateTime.Now;
-            var wurflDataFile = HttpContext.Current.Server.MapPath(WurflDataFilePath);
-
-            //DateTime time2 = DateTime.Now;
-            //var wurfltime = time.Millisecond - time2.Millisecond;
-            //var breakhere = true;
 
         }
 
         protected void Application_Error(object sender, EventArgs e)
         {
             var error = Server.GetLastError();
-            var cryptoEx = error as CryptographicException;
-            if (cryptoEx != null)
+
+            if (error is CryptographicException)
             {
                 FederatedAuthentication.SessionAuthenticationModule.SignOut();
                 SessionWrapper.Clear();

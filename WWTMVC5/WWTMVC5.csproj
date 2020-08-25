@@ -453,7 +453,6 @@
     </Compile>
     <Compile Include="WebServices\ServiceBase.cs" />
     <Content Include="WWT2\ClientVersion.txt" />
-    <Content Include="WWT2\Copy of updateurl.txt" />
     <Content Include="WWT2\dataversion.txt" />
     <Content Include="WWT2\EqClientVersion.txt" />
     <Content Include="WWT2\Eqdataversion.txt" />
