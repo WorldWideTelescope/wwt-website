@@ -353,6 +353,7 @@
     </Compile>
     <Compile Include="Models\UserPermissionChangedRequest.cs" />
     <Compile Include="Models\UserPermissionStatusRequest.cs" />
+    <Compile Include="Models\UserRequestStatusNotification.cs" />
     <Compile Include="Models\UserType.cs">
       <DependentUpon>EarthOnline.tt</DependentUpon>
     </Compile>
@@ -452,6 +453,40 @@
       <DependentUpon>ResourceService.svc</DependentUpon>
     </Compile>
     <Compile Include="WebServices\ServiceBase.cs" />
+    <Content Include="Content\images\defaultcommunitythumbnail.png" />
+    <Content Include="Content\images\defaultcommunitywwtthumbnail.png" />
+    <Content Include="Content\images\defaultdocthumbnail.png" />
+    <Content Include="Content\images\defaultdocwwtthumbnail.png" />
+    <Content Include="Content\images\defaultExcelThumbnail.png" />
+    <Content Include="Content\images\defaultexcelwwtthumbnail.png" />
+    <Content Include="Content\images\defaultfolderthumbnail.png" />
+    <Content Include="Content\images\defaultfolderwwtthumbnail.png" />
+    <Content Include="Content\images\defaultgenericthumbnail.png" />
+    <Content Include="Content\images\defaultgenericwwtthumbnail.png" />
+    <Content Include="Content\images\defaultlinkthumbnail.png" />
+    <Content Include="Content\images\defaultlinkwwtthumbnail.png" />
+    <Content Include="Content\images\defaultpptthumbnail.png" />
+    <Content Include="Content\images\defaultpptwwtthumbnail.png" />
+    <Content Include="Content\images\defaulttoursthumbnail.png" />
+    <Content Include="Content\images\defaulttourswwtthumbnail.png" />
+    <Content Include="Content\images\defaultvideothumbnail.png" />
+    <Content Include="Content\images\defaultvideowwtthumbnail.png" />
+    <Content Include="Content\images\defaultwtmlthumbnail.png" />
+    <Content Include="Content\images\defaultwtmlwwtthumbnail.png" />
+    <Content Include="Content\images\defaultWwtlThumbnail.png" />
+    <Content Include="Content\images\defaultwwtlwwtthumbnail.png" />
+    <Content Include="Content\images\gbox.png" />
+    <Content Include="Content\images\helpwwtthumbnail.png" />
+    <Content Include="Content\images\searchwwtthumbnail.png" />
+    <Content Include="images\astronomers.png" />
+    <Content Include="images\develop.png" />
+    <Content Include="images\educators.png" />
+    <Content Include="images\exploreweb.png" />
+    <Content Include="images\installwwt.png" />
+    <Content Include="images\learntouse.png" />
+    <Content Include="images\planetariums.png" />
+    <Content Include="images\videos.png" />
+    <Content Include="Models\wwtguides.xml" />
     <Content Include="WWT2\ClientVersion.txt" />
     <Content Include="WWT2\dataversion.txt" />
     <Content Include="WWT2\EqClientVersion.txt" />
@@ -1273,6 +1308,7 @@
     <Content Include="Views\GetInvolved\PlanetExplorer.cshtml" />
     <Content Include="Views\GetInvolved\GreatObservatories.cshtml" />
     <Content Include="Views\GetInvolved\ImportImage.cshtml" />
+    <Content Include="vampfeeds.wtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
