@@ -8,32 +8,35 @@
 <%@ Import Namespace="System.Net" %>
 <%@ Import Namespace="WWTThumbnails" %>
 <%
-        string name = Request.Params["name"];
-        string type = Request.Params["class"];
-    	string wwtWebDir = ConfigurationManager.AppSettings["WWTWEBDIR"];
+    string name = Request.Params["name"];
+    string type = Request.Params["class"];
 
-	Stream s = WWTThumbnail.GetThumbnailStream(name);
-        if (s == null && type != null)
+    Stream s = WWTThumbnail.GetThumbnailStream(name);
+    if (s == null && type != null)
+    {
+        s = WWTThumbnail.GetThumbnailStream(type);
+    }
+
+    if (s == null)
+    {
+        string dataDir = ConfigurationManager.AppSettings["DataDir"];
+
+        var jpeg = Path.Combine(dataDir, "thumbnails", name + ".jpg");
+        if (File.Exists(jpeg))
         {
-            s = WWTThumbnail.GetThumbnailStream(type);
+            Response.WriteFile(jpeg);
+            Response.End();
         }
 
+        s = File.OpenRead(Path.Combine(dataDir, "thumbnails", "Star.jpg"));
+    }
 
-        if (s == null)
-        {
-		if (File.Exists(wwtWebDir + "\\thumbnails\\"+name+".jpg"))
-		{
-	 	   Response.WriteFile(wwtWebDir + "\\thumbnails\\"+name+".jpg");
-		    Response.End();
-		}
-            s = WWTThumbnail.GetThumbnailStream("Star");
-        }
-    
-        int length = (int)s.Length;
-        byte[] data = new byte[length];
-        s.Read(data, 0, length);
-        Response.OutputStream.Write(data, 0, length);
-        Response.Flush();
-        Response.End();
-    
+    int length = (int)s.Length;
+    byte[] data = new byte[length];
+    s.Read(data, 0, length);
+    Response.OutputStream.Write(data, 0, length);
+    Response.Flush();
+    Response.End();
+    s.Dispose();
+
 	%>

@@ -3,7 +3,7 @@
 <%
     string etag = Request.Headers["If-None-Match"];
     string filename = "";
-    string webDir = ConfigurationManager.AppSettings["WWTWEBDIR"]+"\\data\\";
+    string webDir = Path.Combine(ConfigurationManager.AppSettings["DataDir"], "data");
 
     if (Request.Params["Q"] != null)
     {
@@ -12,8 +12,7 @@
         query = query.Replace("..", "");
         query = query.Replace("\\", "");
         query = query.Replace("/", "");
-        filename = webDir  + query + ".txt";
-
+        filename = Path.Combine(webDir, query + ".txt");
     }
     else if (Request.Params["X"] != null)
     {
@@ -24,7 +23,7 @@
         query = query.Replace("..", "");
         query = query.Replace("\\", "");
         query = query.Replace("/", "");
-        filename = webDir  + query + ".xml";
+        filename = Path.Combine(webDir, query + ".xml");
     }
     else if (Request.Params["W"] != null)
     {
@@ -36,7 +35,8 @@
         query = query.Replace("..", "");
         query = query.Replace("\\", "");
         query = query.Replace("/", "");
-        filename = webDir  + query + ".wtml";
+
+        filename = Path.Combine(webDir, query + ".wtml");
     }
 
     if (!string.IsNullOrEmpty(filename))
