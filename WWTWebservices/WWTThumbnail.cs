@@ -1,28 +1,33 @@
-﻿using System.Drawing;
+﻿using System.Configuration;
 using System.IO;
-using System.Reflection;
 
 namespace WWTThumbnails
 {
-	public class WWTThumbnail
-	{
-		public static Bitmap GetThumbnail(string fileName)
-		{
-			fileName = "WWTThumbnails.thumbnails." + fileName.ToLower() + ".jpg";
-			using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(fileName))
-			{
-				if (stream == null)
-				{
-					return null;
-				}
-				return new Bitmap(stream);
-			}
-		}
+    public class WWTThumbnail
+    {
+        private const string DefaultThumbnail = "Star";
 
-		public static Stream GetThumbnailStream(string fileName)
-		{
-			fileName = "WWTThumbnails.thumbnails." + fileName.ToLower() + ".jpg";
-			return Assembly.GetExecutingAssembly().GetManifestResourceStream(fileName);
-		}
-	}
+        public static Stream GetThumbnailStream(string name, string type)
+        {
+            return GetThumbnailStream(name) ?? GetThumbnailStream(type) ?? GetThumbnailStream(DefaultThumbnail);
+        }
+
+        private static Stream GetThumbnailStream(string fileName)
+        {
+            if (fileName is null)
+            {
+                return null;
+            }
+
+            var dataDir = ConfigurationManager.AppSettings["DataDir"];
+            var jpeg = Path.Combine(dataDir, "thumbnails", fileName + ".jpg");
+
+            if (!File.Exists(jpeg))
+            {
+                return File.OpenRead(jpeg);
+            }
+
+            return null;
+        }
+    }
 }
