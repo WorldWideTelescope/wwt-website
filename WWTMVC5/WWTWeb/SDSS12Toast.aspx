@@ -6,11 +6,12 @@
 <%@ Import Namespace="System.Collections.Generic" %>
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="System.Net" %>
+<%@ Import Namespace="System.Threading" %>
 <%@ Import Namespace="OctSetTest" %>
-<%@ Import Namespace="System.Threading" %> 
+<%@ Import Namespace="WWTWebservices" %>
 
 <%
-    
+
         if (Request.UserAgent.ToLower().Contains("wget"))
         {
 
@@ -47,7 +48,7 @@
 
         string filename2;
         string wwtTilesDir = ConfigurationManager.AppSettings["WWTTilesDir"];
-        string DSSTileCache = Util.GetCurrentConfigShare("DSSTileCache", true);
+        string DSSTileCache = WWTUtil.GetCurrentConfigShare("DSSTileCache", true);
 
 
 
@@ -102,17 +103,17 @@
 
             Int32 sqSide = 256;
 
- 
+
             if (true)
             {
                 Bitmap bmpOutput = new Bitmap(sqSide, sqSide);
                 FastBitmap bmpOutputFast = new FastBitmap(bmpOutput);
                 SdssImage sdim = new SdssImage(map.raMin, map.decMax, map.raMax, map.decMin, true);
-		sdim.LoadImage();		
+		sdim.LoadImage();
 
 		if (sdim.image != null)
             	{
-                	
+
                 	sdim.Lock();
 
                 	bmpOutputFast.LockBitmap();
@@ -164,5 +165,5 @@
         }
 
         Response.End();
-    
+
 	%>
