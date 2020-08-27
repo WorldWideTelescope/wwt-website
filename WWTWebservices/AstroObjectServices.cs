@@ -12,12 +12,11 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.IO;
 
-
 /// <summary>
 /// Summary description for AstroObjectServices
 /// </summary>
 /// 
-namespace WWTWebServices
+namespace WWTWebservices
 {
     internal static class AstroObjectServices
     {

@@ -17,7 +17,7 @@ using System.IO;
 /// Summary description for WWTWebService
 /// </summary>
 
-namespace WWTWebServices
+namespace WWTWebservices
 {
 
 [WebService(Namespace = "http://research.microsoft.com/WWT/")]

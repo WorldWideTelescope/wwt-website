@@ -29,7 +29,7 @@ using System.IO;
 /// 
 /// </summary>
 /// 
-namespace WWTWebServices
+namespace WWTWebservices
 {
     internal static class TourServices
     {
@@ -43,7 +43,7 @@ namespace WWTWebServices
             {
                 doc.LoadXml(TourXML);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return TourGUIDString;
             }
@@ -70,14 +70,12 @@ namespace WWTWebServices
         public static int UpdateCache()
         {
             bool needToBuild;
-            bool cacheIsEmpty;
             int fromCacheVersion;
             int fromSQLVersion;
             int MinutesToAdd;
 
             List<Tour> SQLTours = new List<Tour>();
 
-            cacheIsEmpty = false;
             needToBuild = false;
 
             DateTime fromCacheDateTime;
@@ -85,7 +83,6 @@ namespace WWTWebServices
 
             if (HttpContext.Current.Cache.Get("WWTTours") == null)
             {
-                cacheIsEmpty = true;
                 needToBuild = true;
             }
             // see if you need to build the cache.... 
@@ -250,7 +247,6 @@ namespace WWTWebServices
             string tourastroobjectlist;
             string tourexplicittourlinklist;
             int lengthinsecs;
-            string tourxml;
             double averageRating;
             int numberOfRatings;
             int numberOfObjections;
@@ -571,8 +567,8 @@ namespace WWTWebServices
                     loadTour.TourExplicitTourLinkList = tourexplicittourlinklist;
                     loadTour.LengthInSecs = lengthinsecs;
                     loadTour.AverageRating = averageRating;
-                    loadTour.NumberOfRatings = numberOfRatings;
-                    loadTour.NumberOfObjections = numberOfObjections;
+                    //loadTour.NumberOfRatings = numberOfRatings;
+                    //loadTour.NumberOfObjections = numberOfObjections;
                     //loadTour.TourXML = tourxml;
 
                     sqlTours.Add(loadTour);
@@ -1007,7 +1003,6 @@ namespace WWTWebServices
 
 
             Tour cacheTour;
-            int GuidFoundPtr = -1;
             string TourGUIDString = "";
 
             Guid outTourGuid;

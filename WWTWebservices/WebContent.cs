@@ -2,15 +2,12 @@
 using System.Data;
 using System.Data.SqlClient;
 
-using WebUtil;
-using Database = WebServices.Database;
-
 /// <summary>
 /// Summary description for WebContentServices
 /// </summary>
 /// 
 
-namespace WebUtil
+namespace WWTWebservices
 {
 
 
