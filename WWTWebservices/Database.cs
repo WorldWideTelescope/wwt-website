@@ -14,7 +14,7 @@ using System.Web.UI.HtmlControls;
 /// Summary description for Class1
 /// </summary>
 ///
-namespace WWTWebServices
+namespace WWTWebservices
 {
     public static class Database
     {
