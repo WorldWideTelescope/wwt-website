@@ -13,14 +13,16 @@ namespace WWTThumbnails
         }
 
         private static Stream GetThumbnailStream(string fileName)
+            => GetThumbnailStreamFromFile(fileName, "fromAssembly") ?? GetThumbnailStreamFromFile(fileName, "fromBackup");
+
+        private static Stream GetThumbnailStreamFromFile(string fileName, string sub)
         {
             if (fileName is null)
             {
                 return null;
             }
 
-            var dataDir = ConfigurationManager.AppSettings["DataDir"];
-            var jpeg = Path.Combine(dataDir, "thumbnails", fileName + ".jpg");
+            var jpeg = Path.Combine(ConfigurationManager.AppSettings["DataDir"], "thumbnails", sub, fileName + ".jpg");
 
             if (!File.Exists(jpeg))
             {
