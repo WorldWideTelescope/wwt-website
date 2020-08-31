@@ -5,7 +5,4 @@ namespace WWTMVC5.WWTWeb
     {
         
     }
-
-    
-    
 }

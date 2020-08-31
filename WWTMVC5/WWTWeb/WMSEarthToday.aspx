@@ -53,11 +53,11 @@
         {
             Response.Clear();
             Response.ContentType = "text/plain";  
-            Response.Write( sdim.LoadImage(wmsUrl,true));
+            Response.Write( sdim.LoadImage(wmsUrl,true, ImageSource.WmsJpl));
             Response.End();
             return;
         }
-        sdim.LoadImage(wmsUrl,false);
+        sdim.LoadImage(wmsUrl,false,ImageSource.WmsJpl);
         sdim.Lock();
      
         bmpOutputFast.LockBitmap();
