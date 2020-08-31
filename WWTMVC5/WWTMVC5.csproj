@@ -1449,6 +1449,10 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\src\WWT.Providers\WWT.Providers.csproj">
+      <Project>{ee4a3106-572b-4ef4-9ab5-a22643309a57}</Project>
+      <Name>WWT.Providers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WWTWebservices\WWTWebservices.csproj">
       <Project>{1cf4d986-51ad-43f8-a84a-38b6ecba2172}</Project>
       <Name>WWTWebservices</Name>
