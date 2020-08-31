@@ -8,11 +8,11 @@ namespace WWTWebservices
 {
     public class PlateFile2
     {
-        Stream fileStream;
+        Stream dataStream;
 
         public PlateFile2(string filename, int filecount)
         {
-            fileStream = File.Open(filename, FileMode.Create);
+            dataStream = File.Open(filename, FileMode.Create);
             //Initialize the header
             header.Signature = 0x17914242;
             header.HashBuckets = NextPowerOfTwo(filecount);
@@ -24,38 +24,44 @@ namespace WWTWebservices
 
             //Write the header and the empty Hash area. O/S will zero the data
             Byte[] headerData = GetHeaderBytes();
-            fileStream.Write(headerData, 0, headerData.Length);
-            fileStream.Seek(header.NextFreeDirectoryEntry + Marshal.SizeOf(entry) * header.HashBuckets, SeekOrigin.Begin);
-            fileStream.WriteByte(42);
+            dataStream.Write(headerData, 0, headerData.Length);
+            dataStream.Seek(header.NextFreeDirectoryEntry + Marshal.SizeOf(entry) * header.HashBuckets, SeekOrigin.Begin);
+            dataStream.WriteByte(42);
 
-            fileStream.Seek(header.FirstDirectoryEntry, SeekOrigin.Begin);
+            dataStream.Seek(header.FirstDirectoryEntry, SeekOrigin.Begin);
             entry = new DirectoryEntry();
             entry.size = (uint)header.FreeEntries * (uint)Marshal.SizeOf(entry);
             entry.location = header.FirstDirectoryEntry;
             byte[] entryData = GetEntryBytes();
-            fileStream.Write(entryData, 0, entryData.Length);
+            dataStream.Write(entryData, 0, entryData.Length);
 
-            fileStream.Seek(0, SeekOrigin.Begin);
+            dataStream.Seek(0, SeekOrigin.Begin);
         }
 
         public void Close()
         {
-            if (fileStream != null)
+            if (dataStream != null)
             {
-                fileStream.Close();
-                fileStream = null;
+                dataStream.Close();
+                dataStream = null;
             }
+        }
+
+        public PlateFile2(Stream stream)
+        {
+            dataStream = stream;
+            ReadHeader();
         }
 
         public PlateFile2(string filename)
         {
-            fileStream = File.Open(filename, FileMode.Open);
+            dataStream = File.Open(filename, FileMode.Open);
             ReadHeader();
         }
 
         public PlateFile2(string filename, bool readOnly)
         {
-            fileStream = File.Open(filename, FileMode.Open, readOnly ? FileAccess.Read : FileAccess.ReadWrite, FileShare.Read);
+            dataStream = File.Open(filename, FileMode.Open, readOnly ? FileAccess.Read : FileAccess.ReadWrite, FileShare.Read);
             ReadHeader();
         }
 
@@ -87,18 +93,18 @@ namespace WWTWebservices
                     entry.size = 8192 * (uint)Marshal.SizeOf(entry);
                     entry.NextEntryInChain = header.FirstDirectoryEntry;
                     entryData = GetEntryBytes();
-                    header.FirstDirectoryEntry = fileStream.Seek(0, SeekOrigin.End);
-                    fileStream.Write(entryData, 0, entryData.Length);
+                    header.FirstDirectoryEntry = dataStream.Seek(0, SeekOrigin.End);
+                    dataStream.Write(entryData, 0, entryData.Length);
 
                     // Allocate a new 8k entries
                     header.FreeEntries = 8192;
-                    header.NextFreeDirectoryEntry = fileStream.Seek(0, SeekOrigin.End);
-                    fileStream.Seek(8192 * Marshal.SizeOf(entry), SeekOrigin.End);
-                    fileStream.WriteByte(42);
+                    header.NextFreeDirectoryEntry = dataStream.Seek(0, SeekOrigin.End);
+                    dataStream.Seek(8192 * Marshal.SizeOf(entry), SeekOrigin.End);
+                    dataStream.WriteByte(42);
                 }
 
 
-                long position = fileStream.Seek(0, SeekOrigin.End);
+                long position = dataStream.Seek(0, SeekOrigin.End);
                 entry = new DirectoryEntry(tag, level, x, y, position, (UInt32)fi.Length);
 
                 UInt32 index = entry.ComputeHash() % (UInt32)header.HashBuckets;
@@ -111,7 +117,7 @@ namespace WWTWebservices
                     buf = new byte[fi.Length];
 
                     ifs.Read(buf, 0, len);
-                    fileStream.Write(buf, 0, len);
+                    dataStream.Write(buf, 0, len);
                     ifs.Close();
                 }
 
@@ -122,10 +128,10 @@ namespace WWTWebservices
                 WriteHashEntryPosition(index, header.NextFreeDirectoryEntry);
 
                 // Write the directory entry
-                fileStream.Seek(header.NextFreeDirectoryEntry, SeekOrigin.Begin);
+                dataStream.Seek(header.NextFreeDirectoryEntry, SeekOrigin.Begin);
 
                 entryData = GetEntryBytes();
-                fileStream.Write(entryData, 0, entryData.Length);
+                dataStream.Write(entryData, 0, entryData.Length);
 
                 // Update Header
                 header.FileCount++;
@@ -136,8 +142,8 @@ namespace WWTWebservices
 
                 // Write it back to file
                 Byte[] headerData = GetHeaderBytes();
-                fileStream.Seek(0, SeekOrigin.Begin);
-                fileStream.Write(headerData, 0, headerData.Length);
+                dataStream.Seek(0, SeekOrigin.Begin);
+                dataStream.Write(headerData, 0, headerData.Length);
 
                 //todo check for file count and extend file when we get to end.
 
@@ -160,10 +166,10 @@ namespace WWTWebservices
 
             List<List<DirectoryEntry>> list = new List<List<DirectoryEntry>>();
             byte[] buf = new byte[header.HashBuckets * 8];
-            fileStream.Read(buf, 0, (int)buf.Length);
+            dataStream.Read(buf, 0, (int)buf.Length);
             de = GetDirectoryEntry(header.FirstDirectoryEntry);
             buf = new byte[de.size];
-            fileStream.Read(buf, 0, (int)de.size);
+            dataStream.Read(buf, 0, (int)de.size);
 
             for (UInt32 i = 0; i < header.HashBuckets; i++)
             {
@@ -204,8 +210,8 @@ namespace WWTWebservices
                         {
                             de.NextEntryInChain = curPos + Marshal.SizeOf(entry);
                         }
-                        fileStream.Seek(curPos, SeekOrigin.Begin);
-                        de.Write(fileStream);
+                        dataStream.Seek(curPos, SeekOrigin.Begin);
+                        de.Write(dataStream);
                         curPos += Marshal.SizeOf(entry);
                     }
                 }
@@ -219,6 +225,17 @@ namespace WWTWebservices
 
         }
 
+        public static Stream GetFileStream(Stream stream, int tag, int level, int x, int y)
+        {
+            PlateFile2 plate = new PlateFile2(stream);
+
+            Stream result = plate.GetFileStream(tag, level, x, y);
+
+            plate.Close();
+
+            return result;
+        }
+
         public static Stream GetFileStream(string filename, int tag, int level, int x, int y)
         {
             PlateFile2 plate = new PlateFile2(filename, true);
@@ -228,7 +245,6 @@ namespace WWTWebservices
             plate.Close();
 
             return stream;
-
         }
 
 
@@ -366,8 +382,8 @@ namespace WWTWebservices
                     MemoryStream ms = null;
 
                     byte[] buffer = new byte[de.size];
-                    fileStream.Seek(de.location, SeekOrigin.Begin);
-                    fileStream.Read(buffer, 0, (int)de.size);
+                    dataStream.Seek(de.location, SeekOrigin.Begin);
+                    dataStream.Read(buffer, 0, (int)de.size);
                     ms = new MemoryStream(buffer);
                     return ms;
                 }
@@ -416,8 +432,8 @@ namespace WWTWebservices
                 MemoryStream ms = null;
 
                 byte[] buffer = new byte[den.size];
-                fileStream.Seek(den.location, SeekOrigin.Begin);
-                fileStream.Read(buffer, 0, (int)den.size);
+                dataStream.Seek(den.location, SeekOrigin.Begin);
+                dataStream.Read(buffer, 0, (int)den.size);
                 ms = new MemoryStream(buffer);
                 return ms;
             }
@@ -433,7 +449,7 @@ namespace WWTWebservices
             {
                 throw (new IndexOutOfRangeException());
             }
-            fileStream.Seek(Marshal.SizeOf(header) + (hashindex * 8), SeekOrigin.Begin);
+            dataStream.Seek(Marshal.SizeOf(header) + (hashindex * 8), SeekOrigin.Begin);
 
             return ReadLong();
         }
@@ -441,7 +457,7 @@ namespace WWTWebservices
         public long ReadLong()
         {
             Byte[] data = new Byte[8];
-            int count = fileStream.Read(data, 0, 8);
+            int count = dataStream.Read(data, 0, 8);
 
             return BitConverter.ToInt64(data, 0);
         }
@@ -452,7 +468,7 @@ namespace WWTWebservices
             {
                 throw (new IndexOutOfRangeException());
             }
-            fileStream.Seek(Marshal.SizeOf(header) + (hashindex * 8), SeekOrigin.Begin);
+            dataStream.Seek(Marshal.SizeOf(header) + (hashindex * 8), SeekOrigin.Begin);
 
             WriteLong(position);
         }
@@ -460,7 +476,7 @@ namespace WWTWebservices
         public void WriteLong(long val)
         {
             Byte[] data = BitConverter.GetBytes(val);
-            fileStream.Write(data, 0, 8);
+            dataStream.Write(data, 0, 8);
         }
 
         public string GetEntryString()
@@ -486,8 +502,8 @@ namespace WWTWebservices
         private void ReadHeader()
         {
             byte[] buffer = new byte[Marshal.SizeOf(header)];
-            fileStream.Seek(0, SeekOrigin.Begin);
-            fileStream.Read(buffer, 0, buffer.Length);
+            dataStream.Seek(0, SeekOrigin.Begin);
+            dataStream.Read(buffer, 0, buffer.Length);
             SetHeaderBytes(buffer);
         }
 
@@ -500,9 +516,9 @@ namespace WWTWebservices
 
         private DirectoryEntry GetDirectoryEntry(long pos)
         {
-            fileStream.Seek(pos, SeekOrigin.Begin);
+            dataStream.Seek(pos, SeekOrigin.Begin);
             byte[] data = new byte[Marshal.SizeOf(entry)];
-            fileStream.Read(data, 0, data.Length);
+            dataStream.Read(data, 0, data.Length);
 
             GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
             DirectoryEntry de = (DirectoryEntry)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(DirectoryEntry));

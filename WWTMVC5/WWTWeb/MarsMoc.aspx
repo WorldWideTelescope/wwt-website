@@ -7,6 +7,7 @@
 <%@ Import Namespace="System.Collections.Generic" %>
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="System.Net" %>
+<%@ Import Namespace="WWTWebservices" %>
 <%
 
     string query = Request.Params["Q"];
@@ -22,7 +23,8 @@
     Bitmap bmp1 = null;
     Bitmap bmp2 = null;
 
-    if (level > 15)
+    // TODO: This level was set to 15 before. Should identify a better to know if a level is beyond the dataset without hardcoding.
+    if (level > 14)
     {
         Response.StatusCode = 404;
 	return;
@@ -51,7 +53,7 @@
 	   height -=1;
 	}
 
-        bmp1 = DownloadBitmap("mars_base_map", 8, tx, ty);
+        bmp1 = new Bitmap(PlateFile2.GetFileStream(Path.Combine(ConfigurationManager.AppSettings["WWTTilesDir"], "marsbasemap.plate"), -1, 8, tx, ty));
 
 	//g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
 
@@ -60,18 +62,18 @@
     }
     else
     {
-        bmp1 = DownloadBitmap("mars_base_map", ll, xx, yy);
+        bmp1 = new Bitmap(PlateFile2.GetFileStream(Path.Combine(ConfigurationManager.AppSettings["WWTTilesDir"], "marsbasemap.plate"), -1, ll, xx, yy));
         g.DrawImageUnscaled(bmp1, new Point(0, 0));
     }
 
 
-    try
+   // try
     {
         bmp2 = LoadMoc(ll, xx, yy);
 
         g.DrawImageUnscaled(bmp2, new Point(0, 0));
     }
-    catch
+   // catch
     {
     }
 
