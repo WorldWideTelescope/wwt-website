@@ -2,6 +2,9 @@
 
 namespace WWTWebservices
 {
+    // Summary:
+    //     Describes a custom vertex format structure that contains position and one
+    //     set of texture coordinates.
     public struct PositionTexture
     {
         // Summary:

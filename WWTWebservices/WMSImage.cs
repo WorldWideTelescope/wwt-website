@@ -5,21 +5,24 @@ using System.Net;
 
 namespace WWTWebservices
 {
+    public enum ImageSource
+    {
+        OnMoon,
+        WmsJpl,
+        MarsAsu
+    }
+
     public class WMSImage
     {
-        double raMin;
-        double decMax;
-        double raMax;
-        double decMin;
-        private const double D2R = 0.017453292519943295;
+        private readonly double raMin;
+        private readonly double decMax;
+        private readonly double raMax;
+        private readonly double decMin;
+        private readonly double scaleX;
+        private readonly double scaleY;
+
         private FastBitmap fastImage;
         public Bitmap image;
-        private const double ImageSizeX = 512.0;
-        private const double ImageSizeY = 512.0;
-        private double scaleX;
-        private double scaleY;
-
-
 
         public WMSImage(double raMin, double decMax, double raMax, double decMin)
         {
@@ -32,14 +35,19 @@ namespace WWTWebservices
         }
 
 
-        public string LoadImage(string url, bool debug)
+        public string LoadImage(string url, bool debug, ImageSource source = ImageSource.OnMoon)
         {
             object[] args = new object[] { (raMin - 180), decMin, (raMax - 180), decMax, 512.0, 512.0, url };
-            string address = string.Format("http://onmoon.jpl.nasa.gov/browse.cgi?WIDTH={4}&HEIGHT={5}&layers=Clementine&styles=&srs=IAU2000:30100&format=image/jpeg&bbox={0},{1},{2},{3}", args);
-            //	string address = string.Format("http://ms.mars.asu.edu/?REQUEST=GetMap&SERVICE=WMS&VERSION=1.1.1&LAYERS={6}&STYLES=&FORMAT=image/png&BGCOLOR=0x000000&TRANSPARENT=FALSE&SRS=JMARS:1&BBOX={0},{1},{2},{3}&WIDTH={4}&HEIGHT={5}&reaspect=false", args);
-            //	string address = string.Format("http://wms.jpl.nasa.gov/wms.cgi?request=GetMap&layers=BMNG&srs=EPSG:4326&format=image/jpeg&styles=&BBOX={0},{1},{2},{3}&WIDTH={4}&HEIGHT={5}", args);
-            //	string address = url+string.Format("BBOX={0},{1},{2},{3}&WIDTH={4}&HEIGHT={5}", args);
 
+            var formatString = source switch
+            {
+                ImageSource.OnMoon => "http://onmoon.jpl.nasa.gov/browse.cgi?WIDTH={4}&HEIGHT={5}&layers=Clementine&styles=&srs=IAU2000:30100&format=image/jpeg&bbox={0},{1},{2},{3}",
+                ImageSource.WmsJpl => "http://wms.jpl.nasa.gov/wms.cgi?request=GetMap&layers=daily_planet&srs=EPSG:4326&format=image/jpeg&styles=&BBOX={0},{1},{2},{3}&WIDTH={4}&HEIGHT={5}",
+                ImageSource.MarsAsu => "http://ms.mars.asu.edu/?REQUEST=GetMap&SERVICE=WMS&VERSION=1.1.1&LAYERS={6}&STYLES=&FORMAT=image/png&BGCOLOR=0x000000&TRANSPARENT=FALSE&SRS=JMARS:1&BBOX={0},{1},{2},{3}&WIDTH={4}&HEIGHT={5}&reaspect=false",
+                _ => throw new NotImplementedException(),
+            };
+
+            var address = string.Format(formatString, args);
             if (debug) return address;
             Stream stream = new WebClient().OpenRead(address);
             this.image = new Bitmap(stream);
@@ -83,4 +91,5 @@ namespace WWTWebservices
         }
 
     }
+
 }

@@ -57,11 +57,11 @@
         {
             Response.Clear();
             Response.ContentType = "text/plain";
-            Response.Write(sdim.LoadImage(wmsUrl, true));
+            Response.Write(sdim.LoadImage(wmsUrl, true, ImageSource.MarsAsu));
             Response.End();
             return;
         }
-        sdim.LoadImage(wmsUrl,false);
+        sdim.LoadImage(wmsUrl,false, ImageSource.MarsAsu);
         sdim.Lock();
      
         bmpOutputFast.LockBitmap();
