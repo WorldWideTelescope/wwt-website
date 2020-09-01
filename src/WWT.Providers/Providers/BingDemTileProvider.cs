@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Maps.ElevationAdjustmentService.HDPhoto;
+using System;
 using System.Configuration;
 using System.IO;
 using System.Net;
