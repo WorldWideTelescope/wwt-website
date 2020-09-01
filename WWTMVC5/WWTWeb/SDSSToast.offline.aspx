@@ -1,4 +1,6 @@
-<%@ Page Language="C#" ContentType="image/png" %>
+<%@ Page Language="C#" ContentType="image/png" %> 
+
+<%@ Import Namespace="WWT.Providers" %>
 <%
-	Response.Write("Hello");
+	RequestProvider.Get<SDSSToastOfflineProvider>().Run(this);
 %>
