@@ -1,2 +1,6 @@
-<%@ Page Language="C#" ContentType="text/plain" %>
-<% Response.Write(Server.MachineName); %>
+<%@ Page Language="C#" ContentType="text/plain" %> 
+
+<%@ Import Namespace="WWT.Providers" %>
+<%
+	RequestProvider.Get<GetHostNameProvider>().Run(this);
+%>

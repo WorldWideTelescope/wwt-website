@@ -1,4 +1,6 @@
-<%@ Page Language="C#" ContentType="text/plain" %>
+<%@ Page Language="C#" ContentType="text/plain" %> 
+
+<%@ Import Namespace="WWT.Providers" %>
 <%
-	Response.Write("OK");	
+	RequestProvider.Get<postmarsdem2Provider>().Run(this);
 %>

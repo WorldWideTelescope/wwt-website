@@ -1,59 +1,6 @@
 <%@ Page Language="C#" ContentType="text/plain" %>
-<%@ Import Namespace="System.IO" %>
 
+<%@ Import Namespace="WWT.Providers" %>
 <%
-    string etag = Request.Headers["If-None-Match"];
-    string filename = "";
-    string webDir = Path.Combine(ConfigurationManager.AppSettings["DataDir"], "data");
-
-    if (Request.Params["Q"] != null)
-    {
-        string query = Request.Params["Q"];
-
-        query = query.Replace("..", "");
-        query = query.Replace("\\", "");
-        query = query.Replace("/", "");
-        filename = Path.Combine(webDir, query + ".txt");
-
-    }
-    else if (Request.Params["X"] != null)
-    {
-        string query = Request.Params["X"];
-
-        query = query.Replace("..", "");
-        query = query.Replace("\\", "");
-        query = query.Replace("/", "");
-        filename = Path.Combine(webDir, query + ".xml");
-    }
-    else if (Request.Params["W"] != null)
-    {
-	//Response.Clear();
-	//Response.ContentType = "application/x-wtml";
-
-        string query = Request.Params["W"];
-
-        query = query.Replace("..", "");
-        query = query.Replace("\\", "");
-        query = query.Replace("/", "");
-        filename = Path.Combine(webDir, query + ".wtml");
-    }
-
-    if (!string.IsNullOrEmpty(filename))
-    {
-        FileInfo fi = new FileInfo(filename);
-        fi.LastWriteTimeUtc.ToString();
-
-        string newEtag = fi.LastWriteTimeUtc.ToString();
-
-        if (newEtag != etag)
-        {
-            Response.AddHeader("etag", fi.LastWriteTimeUtc.ToString());
-            Response.AddHeader("Cache-Control", "no-cache");
-            Response.WriteFile(filename);
-        }
-        else
-        {
-            Response.Status = "304 Not Modified";
-        }
-    }	
+    RequestProvider.Get<CatalogProvider>().Run(this);
 %>

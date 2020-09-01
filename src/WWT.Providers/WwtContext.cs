@@ -1,17 +1,21 @@
 ﻿using System.Web;
+using System.Web.UI;
 
 namespace WWT.Providers
 {
     public readonly struct WwtContext
     {
-        public WwtContext(HttpRequest request, HttpResponse response)
+        private readonly Page _page;
+
+        public WwtContext(Page page)
         {
-            Request = request;
-            Response = response;
+            _page = page;
         }
 
-        public HttpRequest Request { get; }
+        public HttpRequest Request => _page.Request;
 
-        public HttpResponse Response { get; }
+        public HttpResponse Response => _page.Response;
+
+        public HttpServerUtility Server => _page.Server;
     }
 }

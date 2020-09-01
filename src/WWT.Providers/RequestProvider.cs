@@ -1,12 +1,11 @@
-﻿using System.Dynamic;
-using System.Web;
+﻿using System.Web.UI;
 
 namespace WWT.Providers
 {
     public abstract class RequestProvider
     {
-        public void Run(HttpRequest request, HttpResponse response)
-            => Run(new WwtContext(request, response));
+        public void Run(Page page)
+            => Run(new WwtContext(page));
 
         public abstract void Run(WwtContext context);
 
