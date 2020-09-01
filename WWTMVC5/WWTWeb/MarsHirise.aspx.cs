@@ -2,13 +2,12 @@ using System;
 using System.IO;
 using System.Drawing;
 using WWTWebservices;
+using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace WWTMVC5.WWTWeb
 {
-
     public partial class MarsHirise : System.Web.UI.Page
     {
-
         public Bitmap DownloadBitmap(string dataset, int level, int x, int y)
         {
             string DSSTileCache = WWTUtil.GetCurrentConfigShare("DSSTileCache", true);
@@ -61,11 +60,12 @@ namespace WWTMVC5.WWTWeb
 
         public Bitmap LoadHiRise(int level, int tileX, int tileY, int id)
         {
-            UInt32 index = ComputeHash(level, tileX, tileY)%300;
+            UInt32 index = ComputeHash(level, tileX, tileY) % 300;
+            CloudBlockBlob blob = new CloudBlockBlob(new Uri(String.Format(@"https://marsstage.blob.core.windows.net/hirise/hiriseV5_{0}.plate", index)));
 
+            Stream stream = blob.OpenRead();
 
-            Stream s = PlateFile2.GetFileStream(String.Format(@"\\wwt-mars\marsroot\hirise\hiriseV5_{0}.plate", index),
-                id, level, tileX, tileY);
+            Stream s = PlateFile2.GetFileStream(stream, id, level, tileX, tileY);
             if (s != null)
             {
                 return new Bitmap(s);
@@ -78,9 +78,5 @@ namespace WWTMVC5.WWTWeb
         {
             return DirectoryEntry.ComputeHash(level + 128, x, y);
         }
-
-
     }
-
-    
 }

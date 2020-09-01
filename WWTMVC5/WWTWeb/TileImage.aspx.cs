@@ -1,5 +1,12 @@
 using System;
+using System.Data;
+using System.Data.SqlClient;
+using System.Configuration;
+using System.Collections;
+using System.Web;
+using System.Web.Security;
 using System.Web.UI;
+using System.Web.UI.WebControls;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
@@ -9,12 +16,8 @@ using WWTWebservices;
 
 namespace WWTMVC5.WWTWeb
 {
-
-
     public partial class TileImage : System.Web.UI.Page
     {
-        private static MD5 md5Hash = MD5.Create();
-
         protected void Page_Load(object sender, EventArgs e)
         {
 
@@ -149,7 +152,7 @@ namespace WWTMVC5.WWTWeb
                             Bitmap bmpTile = new Bitmap(256, 256);
                             Graphics gfx = Graphics.FromImage(bmpTile);
                             gfx.DrawImage(bmp, new Rectangle(0, 0, 256, 256),
-                                new Rectangle((x*gridX) - xOffset, (y*gridX) - yOffset, gridX, gridX),
+                                new Rectangle((x*gridX) - xOffset, (y*gridX) - yOffset, gridX, gridX), 
                                 GraphicsUnit.Pixel);
                             //gfx.Flush(FlushIntention.Sync);
                             gfx.Dispose();
@@ -768,7 +771,5 @@ namespace WWTMVC5.WWTWeb
 
             return hasRotation && hasSize && hasScale && hasLocation && hasPixel;
         }
-
     }
-
-}
+ }

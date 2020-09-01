@@ -28,7 +28,6 @@ public partial class HiRise : System.Web.UI.Page
         //todo fix this
         string DSSTileCache = "";//; Util.GetCurrentConfigShare("DSSTileCache", true);
         string id = "1738422189";
-        string type = ".png";
         switch (dataset)
         {
             case "mars_base_map":
@@ -39,7 +38,6 @@ public partial class HiRise : System.Web.UI.Page
                 break;
             case "mars_hirise":
                 id = "109459728";
-                type = ".auto";
                 break;
             case "mars_moc":
                 id = "252927426";

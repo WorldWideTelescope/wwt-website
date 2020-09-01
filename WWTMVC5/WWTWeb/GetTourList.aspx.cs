@@ -1,22 +1,17 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
-using System.Text;
 using System.Web;
 using System.Xml;
 using WWTWebservices;
 
 namespace WWTMVC5.WWTWeb
 {
-    
-
     public partial class GetTourList : System.Web.UI.Page
     {
-        
         public static string GetToursXML()
         {
             List<Tour> sqlTours = new List<Tour>();
