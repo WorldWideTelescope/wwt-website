@@ -1,5 +1,7 @@
 using System;
+using System.Linq;
 using Microsoft.Practices.Unity;
+using WWT.Providers;
 
 namespace WWTMVC5
 {
@@ -31,11 +33,24 @@ namespace WWTMVC5
         /// change the defaults), as Unity allows resolving a concrete type even if it was not previously registered.</remarks>
         public static void RegisterTypes(IUnityContainer container)
         {
+            RegisterRequestProviders(container);
+
             // NOTE: To load from web.config uncomment the line below. Make sure to add a Microsoft.Practices.Unity.Configuration to the using statements.
             // container.LoadConfiguration();
 
             // TODO: Register your types here
             // container.RegisterType<IProductRepository, ProductRepository>();
+        }
+
+        private static void RegisterRequestProviders(IUnityContainer container)
+        {
+            var types = typeof(RequestProvider).Assembly.GetTypes()
+                .Where(t => !t.IsAbstract && typeof(RequestProvider).IsAssignableFrom(t));
+
+            foreach (var type in types)
+            {
+                container.RegisterType(type);
+            }
         }
     }
 }
