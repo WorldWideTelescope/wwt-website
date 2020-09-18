@@ -238,14 +238,13 @@ namespace WWTWebservices
         static public Stream GetFileStream(string filename, int level, int x, int y)
         {
             uint offset = GetFileIndexOffset(level, x, y);
-            uint length;
             uint start;
 
             MemoryStream ms = null;
             using (FileStream f = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
                 f.Seek(offset, SeekOrigin.Begin);
-                start = GetNodeInfo(f, offset, out length);
+                start = GetNodeInfo(f, offset, out var length);
 
                 byte[] buffer = new byte[length];
                 f.Seek(start, SeekOrigin.Begin);

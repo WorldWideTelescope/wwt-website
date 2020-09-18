@@ -1,8 +1,11 @@
-using System;
-using System.Linq;
+using Azure.Identity;
 using Microsoft.Practices.Unity;
+using System;
+using System.Configuration;
+using System.Linq;
 using WWT.Providers;
 using WWTWebservices;
+using WWTWebservices.Azure;
 
 namespace WWTMVC5
 {
@@ -35,6 +38,7 @@ namespace WWTMVC5
         public static void RegisterTypes(IUnityContainer container)
         {
             RegisterRequestProviders(container);
+            RegisterPlateFileProvider(container);
 
             // NOTE: To load from web.config uncomment the line below. Make sure to add a Microsoft.Practices.Unity.Configuration to the using statements.
             // container.LoadConfiguration();
@@ -52,6 +56,18 @@ namespace WWTMVC5
             foreach (var type in types)
             {
                 container.RegisterType(type);
+            }
+        }
+
+        private static void RegisterPlateFileProvider(IUnityContainer container)
+        {
+            if (ConfigReader<bool>.GetSetting("UseAzurePlateFiles"))
+            {
+                container.RegisterInstance<IPlateTilePyramid>(new AzurePlateTilePyramid(ConfigurationManager.AppSettings["AzurePlateFileContainer"], new DefaultAzureCredential()));
+            }
+            else
+            {
+                container.RegisterType<IPlateTilePyramid, ConfigurationManagerFilePlateTilePyramid>(new ContainerControlledLifetimeManager());
             }
         }
     }
