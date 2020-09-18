@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Microsoft.Practices.Unity;
 using WWT.Providers;
+using WWTWebservices;
 
 namespace WWTMVC5
 {
@@ -40,6 +41,7 @@ namespace WWTMVC5
 
             // TODO: Register your types here
             // container.RegisterType<IProductRepository, ProductRepository>();
+            container.RegisterType<IFileNameHasher, Net4x32BitFileNameHasher>(new ContainerControlledLifetimeManager());
         }
 
         private static void RegisterRequestProviders(IUnityContainer container)

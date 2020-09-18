@@ -1,9 +1,15 @@
 using System.Configuration;
+using WWTWebservices;
 
 namespace WWT.Providers
 {
     public class XML2WTTProvider : WWTWeb_XML2WTT
     {
+        public XML2WTTProvider(IFileNameHasher hasher)
+            : base(hasher)
+        {
+        }
+
         public override void Run(WwtContext context)
         {
             //string etag = context.Request.Headers["If-None-Match"];

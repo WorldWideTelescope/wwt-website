@@ -8,6 +8,13 @@ namespace WWT.Providers
 {
     public class WMSToastProvider : RequestProvider
     {
+        private readonly IFileNameHasher _hasher;
+
+        public WMSToastProvider(IFileNameHasher hasher)
+        {
+            _hasher = hasher;
+        }
+
         public override void Run(WwtContext context)
         {
             string query = context.Request.Params["Q"];
@@ -18,7 +25,7 @@ namespace WWT.Providers
             int tileX = Convert.ToInt32(values[1]);
             int tileY = Convert.ToInt32(values[2]);
             string wmsUrl = values[3];
-            string dirPart = Math.Abs(wmsUrl.GetHashCode()).ToString();
+            string dirPart = _hasher.HashName(wmsUrl).ToString();
             string filename;
             string path;
 

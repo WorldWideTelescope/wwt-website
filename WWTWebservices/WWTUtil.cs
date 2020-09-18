@@ -8,7 +8,6 @@ namespace WWTWebservices
 {
 
 
-
     public class WWTUtil
     {
         public WWTUtil()

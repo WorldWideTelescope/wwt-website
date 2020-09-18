@@ -8,6 +8,13 @@ namespace WWT.Providers
 {
     public class TileImageProvider : TileImage
     {
+        private readonly IFileNameHasher _hasher;
+
+        public TileImageProvider(IFileNameHasher hasher)
+        {
+            _hasher = hasher;
+        }
+
         public override void Run(WwtContext context)
         {
             {
@@ -53,7 +60,7 @@ namespace WWT.Providers
                     url = "http://www.spitzer.caltech.edu/uploaded_files/images/0009/0848/sig12-011.jpg";
                 }
 
-                int hashID = Math.Abs(url.GetHashCode());
+                int hashID = _hasher.HashName(url);
 
                 //hashID = 12345;
                 string path = WWTUtil.GetCurrentConfigShare("DSSTileCache", true) + "\\imagesTiler\\dowloadImages\\";
