@@ -62,21 +62,21 @@ namespace WWTMVC5
         private static void RegisterUnityContainer()
         {
             _container = new UnityContainer();
-            var earthSettings = ConfigReader<string>.GetSetting("EarthOnlineEntities");
 
-            if (earthSettings is null)
-            {
-                throw new InvalidOperationException("Setting for EarthOnlineEntitites is unavailable");
-            }
-
-            var manager = new PerRequestLifetimeManager();
-            var constructor = new InjectionConstructor(earthSettings);
-            _container.RegisterType<EarthOnlineEntities>(manager, constructor);
-
+            RegisterEarthOnlineEntities(_container);
             RegisterRepositories(_container);
             RegisterServices(_container);
 
             DependencyResolver.SetResolver(new UnityDependencyResolver(_container));
+        }
+
+        private static void RegisterEarthOnlineEntities(UnityContainer container)
+        {
+            var earthSettings = ConfigReader<string>.GetSetting("EarthOnlineEntities") ?? string.Empty;
+            var manager = new PerRequestLifetimeManager();
+            var constructor = new InjectionConstructor(earthSettings);
+
+            container.RegisterType<EarthOnlineEntities>(manager, constructor);
         }
 
         /// <summary>
