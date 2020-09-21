@@ -7,21 +7,24 @@ namespace WWT.Providers
 {
     public class GetTourFileProvider : RequestProvider
     {
+        private readonly IFileNameHasher _hasher;
+
+        public GetTourFileProvider(IFileNameHasher hasher)
+        {
+            _hasher = hasher;
+        }
+
         public override void Run(WwtContext context)
         {
-            string returnString = "Error: No URL Specified";
-            string url = "";
-
             string path = context.Server.MapPath(@"TourCache");
 
             try
             {
                 if (context.Request.Params["targeturl"] != null && context.Request.Params["filename"] != null)
                 {
-                    url = context.Request.Params["targeturl"];
-
+                    var url = context.Request.Params["targeturl"];
                     string targetfile = context.Request.Params["filename"];
-                    string filename = path + "\\" + Math.Abs(url.GetHashCode()) + ".wtt";
+                    string filename = Path.Combine(path, $"{_hasher.HashName(url)}.wtt");
 
                     if (!File.Exists(filename))
                     {
@@ -44,10 +47,9 @@ namespace WWT.Providers
                     FileCabinet.Extract(filename, targetfile, context.Response);
                 }
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
-                returnString = e.Message;
-                context.Response.Write(returnString);
+                context.Response.Write(e.Message);
             }
         }
     }

@@ -4,11 +4,19 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Xml;
+using WWTWebservices;
 
 namespace WWT.Providers
 {
     public abstract partial class WWTWeb_XML2WTT : RequestProvider
     {
+        private readonly IFileNameHasher _hasher;
+
+        public WWTWeb_XML2WTT(IFileNameHasher hasher)
+        {
+            _hasher = hasher;
+        }
+
         protected string MakeTourFromXML(WwtContext context, Stream InputStream, string baseDir)
         {
             XmlDocument doc = new XmlDocument();
@@ -181,24 +189,8 @@ namespace WWT.Providers
             {
             }
 
-
-
-
-            //if (!string.IsNullOrEmpty(voiceUrl))
-            //{
-            //    voicePath = dir + (Math.Abs(voiceUrl.GetHashCode()).ToString());
-            //    if (!File.Exists(voicePath))
-            //    {
-            //        client.DownloadFile(voiceUrl, voicePath);
-            //    }
-            //    cab.AddFile(voicePath, true, tourGuid + "\\voice.wma");
-            //}
-
-
-
             string tourfilename = dir + id.ToString() + ".wttxml";
             File.WriteAllText(tourfilename, sb.ToString(), Encoding.UTF8);
-
 
             cab.AddFile(tourfilename, false, "");
             cab.AddFile(page + "\\images\\zoologo.png", true, tourGuid + "\\zoologo.png");
@@ -207,7 +199,8 @@ namespace WWT.Providers
 
             if (!string.IsNullOrEmpty(musicUrl))
             {
-                musicPath = dir + (Math.Abs(musicUrl.GetHashCode()).ToString());
+                musicPath = $"{dir}{_hasher.HashName(musicUrl)}";
+
                 if (!File.Exists(musicPath))
                 {
                     client.DownloadFile(musicUrl, musicPath);
