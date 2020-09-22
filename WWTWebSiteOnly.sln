@@ -24,6 +24,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WWTWebservices.Azure", "WWTWebservices.Azure\WWTWebservices.Azure.csproj", "{FB9956F9-B0FF-4E45-BAA5-4180DA8A12A9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,6 +48,10 @@ Global
 		{31DC6DC8-AF43-41AC-B9B7-7E77E6CD8950}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{31DC6DC8-AF43-41AC-B9B7-7E77E6CD8950}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{31DC6DC8-AF43-41AC-B9B7-7E77E6CD8950}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB9956F9-B0FF-4E45-BAA5-4180DA8A12A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB9956F9-B0FF-4E45-BAA5-4180DA8A12A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB9956F9-B0FF-4E45-BAA5-4180DA8A12A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB9956F9-B0FF-4E45-BAA5-4180DA8A12A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
