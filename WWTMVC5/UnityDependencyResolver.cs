@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using Microsoft.Practices.Unity;
 
@@ -14,12 +15,12 @@ namespace WWTMVC5
     /// <summary>
     /// Class representing the unity dependency resolver used for dependency injection.
     /// </summary>
-    public class UnityDependencyResolver : IDependencyResolver
+    public class UnityDependencyResolver : IDependencyResolver, IServiceProvider
     {
         /// <summary>
         /// Instance of unity container.
         /// </summary>
-        private readonly IUnityContainer unityContainer;
+        private readonly IUnityContainer _unityContainer;
 
         /// <summary>
         /// Initializes a new instance of the UnityDependencyResolver class.
@@ -27,7 +28,7 @@ namespace WWTMVC5
         /// <param name="container">Instance of unity container</param>
         public UnityDependencyResolver(IUnityContainer container)
         {
-            this.unityContainer = container;
+            _unityContainer = container;
         }
 
         /// <summary>
@@ -35,11 +36,11 @@ namespace WWTMVC5
         /// </summary>
         /// <param name="serviceType">Type of the service to be resolved</param>
         /// <returns>Resolved service</returns>
-        public object GetService(Type serviceType)
+        object IDependencyResolver.GetService(Type serviceType)
         {
             try
             {
-                return unityContainer.Resolve(serviceType);
+                return _unityContainer.Resolve(serviceType);
             }
             catch
             {
@@ -47,20 +48,23 @@ namespace WWTMVC5
             }
         }
 
+        object IServiceProvider.GetService(Type serviceType)
+            => _unityContainer.Resolve(serviceType);
+
         /// <summary>
         /// Gets one or more resolved services from the unity container.
         /// </summary>
         /// <param name="serviceType">Type of the service to be resolved</param>
         /// <returns>Collection of resolved services</returns>
-        public IEnumerable<object> GetServices(Type serviceType)
+        IEnumerable<object> IDependencyResolver.GetServices(Type serviceType)
         {
             try
             {
-                return unityContainer.ResolveAll(serviceType);
+                return _unityContainer.ResolveAll(serviceType);
             }
             catch
             {
-                return new List<object>();
+                return Enumerable.Empty<object>();
             }
         }
     }

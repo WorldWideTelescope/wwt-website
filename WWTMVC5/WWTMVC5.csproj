@@ -119,7 +119,6 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\SessionAuthenticationConfig.cs" />
     <Compile Include="App_Start\UnityConfig.cs" />
-    <Compile Include="App_Start\UnityMvcActivator.cs" />
     <Compile Include="AutoMapperSettings.cs" />
     <Compile Include="ConfigReader.cs" />
     <Compile Include="Constants.cs" />
