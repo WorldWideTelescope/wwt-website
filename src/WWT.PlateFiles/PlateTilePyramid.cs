@@ -48,7 +48,7 @@ namespace WWTWebservices
         public PlateTilePyramid(string filename)
         {
             int L = -1;
-            if (numLevels(filename, out L))
+            if (GetLevelCount(filename, out L))
             {
                 this.filename = filename;
                 this.levels = L;
@@ -140,10 +140,10 @@ namespace WWTWebservices
         {
             // returns true if plateFileName has the magic number identifying this as a .plate file
             int L = -1;
-            return numLevels(plateFileName, out L);
+            return GetLevelCount(plateFileName, out L);
         }
 
-        static bool numLevels(string plateFileName, out int L)
+        public static bool GetLevelCount(string plateFileName, out int L)
         {
             // Returns true if plateFileName has the magic number identifying this as a .plate file
             // Also returns the number of levels in the .plate file. 

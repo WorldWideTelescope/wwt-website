@@ -24,7 +24,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WWTWebservices.Azure", "WWTWebservices.Azure\WWTWebservices.Azure.csproj", "{FB9956F9-B0FF-4E45-BAA5-4180DA8A12A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WWTWebservices.Azure", "WWTWebservices.Azure\WWTWebservices.Azure.csproj", "{FB9956F9-B0FF-4E45-BAA5-4180DA8A12A9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{45CC6DAC-BC15-4EEC-ABD3-34EC42E93221}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlateUploader", "tools\PlateUploader\PlateUploader.csproj", "{DBBE5B19-2AFF-4359-8137-2022D6DC5E81}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F12286DB-AF41-4661-A1C6-EB3259CB9B41}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WWT.PlateFiles", "src\WWT.PlateFiles\WWT.PlateFiles.csproj", "{FECD0629-586C-42C1-931A-3A06F18376AE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,9 +60,22 @@ Global
 		{FB9956F9-B0FF-4E45-BAA5-4180DA8A12A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB9956F9-B0FF-4E45-BAA5-4180DA8A12A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB9956F9-B0FF-4E45-BAA5-4180DA8A12A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBBE5B19-2AFF-4359-8137-2022D6DC5E81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBBE5B19-2AFF-4359-8137-2022D6DC5E81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBBE5B19-2AFF-4359-8137-2022D6DC5E81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBBE5B19-2AFF-4359-8137-2022D6DC5E81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FECD0629-586C-42C1-931A-3A06F18376AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FECD0629-586C-42C1-931A-3A06F18376AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FECD0629-586C-42C1-931A-3A06F18376AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FECD0629-586C-42C1-931A-3A06F18376AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EE4A3106-572B-4EF4-9AB5-A22643309A57} = {F12286DB-AF41-4661-A1C6-EB3259CB9B41}
+		{DBBE5B19-2AFF-4359-8137-2022D6DC5E81} = {45CC6DAC-BC15-4EEC-ABD3-34EC42E93221}
+		{FECD0629-586C-42C1-931A-3A06F18376AE} = {F12286DB-AF41-4661-A1C6-EB3259CB9B41}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {80DABDD3-0D48-43AD-893B-B09A38FCFC72}

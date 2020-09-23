@@ -108,10 +108,6 @@
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml.Serialization" />
-    <Reference Include="WWT.Imaging, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\WWT.Imaging.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -1372,12 +1368,16 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\src\WWT.PlateFiles\WWT.PlateFiles.csproj">
+      <Project>{019af978-5882-428c-a8b4-365613959875}</Project>
+      <Name>WWT.PlateFiles</Name>
+    </ProjectReference>
     <ProjectReference Include="..\src\WWT.Providers\WWT.Providers.csproj">
       <Project>{ee4a3106-572b-4ef4-9ab5-a22643309a57}</Project>
       <Name>WWT.Providers</Name>
     </ProjectReference>
     <ProjectReference Include="..\WWTWebservices.Azure\WWTWebservices.Azure.csproj">
-      <Project>{FB9956F9-B0FF-4E45-BAA5-4180DA8A12A9}</Project>
+      <Project>{fb9956f9-b0ff-4e45-baa5-4180da8a12a9}</Project>
       <Name>WWTWebservices.Azure</Name>
     </ProjectReference>
     <ProjectReference Include="..\WWTWebservices\WWTWebservices.csproj">
