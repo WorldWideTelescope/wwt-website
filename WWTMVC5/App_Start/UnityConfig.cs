@@ -65,7 +65,12 @@ namespace WWTMVC5
         {
             if (ConfigReader<bool>.GetSetting("UseAzurePlateFiles"))
             {
-                container.RegisterInstance<IPlateTilePyramid>(new AzurePlateTilePyramid(ConfigurationManager.AppSettings["AzurePlateFileContainer"], new DefaultAzureCredential()));
+                var options = new AzurePlateTilePyramidOptions
+                {
+                    StorageUri = ConfigurationManager.AppSettings["AzurePlateFileContainer"]
+                };
+
+                container.RegisterInstance<IPlateTilePyramid>(new AzurePlateTilePyramid(options, new DefaultAzureCredential()));
             }
             else
             {
