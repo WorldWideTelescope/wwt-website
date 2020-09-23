@@ -8,7 +8,7 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  solution: 'WWTWebSiteOnly.sln'
+  solution: 'wwt-website.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
@@ -22,7 +22,7 @@ steps:
 - task: Npm@1
   inputs:
     command: 'install'
-    workingDir: 'WWTMVC5'
+    workingDir: 'src/WWTMVC5'
 
 - task: Npm@1
   inputs:

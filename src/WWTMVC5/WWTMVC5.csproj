@@ -1,0 +1,1493 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{53EB6FD6-9D50-45D4-9987-328A7AE53E2C}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WWTMVC5</RootNamespace>
+    <AssemblyName>WWTMVC5</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <TargetFrameworkProfile />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <WcfConfigValidationEnabled>True</WcfConfigValidationEnabled>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IdentityModel">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IdentityModel.Services">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ServiceModel">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ServiceModel.Web">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Abstractions">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Routing">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Configuration">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml.Serialization" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\SessionAuthenticationConfig.cs" />
+    <Compile Include="App_Start\UnityConfig.cs" />
+    <Compile Include="AutoMapperSettings.cs" />
+    <Compile Include="ConfigReader.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\CategoryController.cs" />
+    <Compile Include="Controllers\CommunityController.cs" />
+    <Compile Include="Controllers\ContentController.cs" />
+    <Compile Include="Controllers\ControllerBase.cs" />
+    <Compile Include="Controllers\DefaultController.cs" />
+    <Compile Include="Controllers\EntityController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\FileController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\OffensiveController.cs" />
+    <Compile Include="Controllers\ProfileController.cs" />
+    <Compile Include="Controllers\RatingController.cs" />
+    <Compile Include="Controllers\ResourcesController.cs" />
+    <Compile Include="Controllers\SearchController.cs" />
+    <Compile Include="Controllers\SitemapController.cs" />
+    <Compile Include="Controllers\SocialSharingController.cs" />
+    <Compile Include="Controllers\StaticContentController.cs" />
+    <Compile Include="Extensions\BitmapExtensions.cs" />
+    <Compile Include="Extensions\CommunityExtensions.cs" />
+    <Compile Include="Extensions\ContentDetailsExtensions.cs" />
+    <Compile Include="Extensions\ContentExtensions.cs" />
+    <Compile Include="Extensions\ContentInputViewModelExtensions.cs" />
+    <Compile Include="Extensions\ContentViewModelExtensions.cs" />
+    <Compile Include="Extensions\DataDetailExtensions.cs" />
+    <Compile Include="Extensions\DateTimeExtensions.cs" />
+    <Compile Include="Extensions\DeepZoomViewModelExtensions.cs" />
+    <Compile Include="Extensions\DoubleExtensions.cs" />
+    <Compile Include="Extensions\EntityDetailsExtensions.cs" />
+    <Compile Include="Extensions\EntityViewModelExtensions.cs" />
+    <Compile Include="Extensions\EnumExtensions.cs" />
+    <Compile Include="Extensions\FileDetailExtensions.cs" />
+    <Compile Include="Extensions\HttpRequestBaseExtensions.cs" />
+    <Compile Include="Extensions\ObjectExtensions.cs" />
+    <Compile Include="Extensions\PayloadDetailsExtensions.cs" />
+    <Compile Include="Extensions\PivotCollectionActionExtensions.cs" />
+    <Compile Include="Extensions\ProfileDetailsExtensions.cs" />
+    <Compile Include="Extensions\SerializerExtensions.cs" />
+    <Compile Include="Extensions\StreamExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Extensions\UriExtensions.cs" />
+    <Compile Include="Extensions\UserExtensions.cs" />
+    <Compile Include="Extensions\XmlDocumentExtensions.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Models\AccessType.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AdminEntityDetails.cs" />
+    <Compile Include="Models\AdminEntityDetailsList.cs" />
+    <Compile Include="Models\AdminReportProfileDetails.cs" />
+    <Compile Include="Models\AdminReportProfileDetailsList.cs" />
+    <Compile Include="Models\AdminUserDetails.cs" />
+    <Compile Include="Models\AdminUserDetailsList.cs" />
+    <Compile Include="Models\AllCommunitiesView.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AllContentsView.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\BaseModel.cs" />
+    <Compile Include="Models\BlobDetails.cs" />
+    <Compile Include="Models\Category.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CommentDetails.cs" />
+    <Compile Include="Models\CommentFilter.cs" />
+    <Compile Include="Models\CommunitiesView.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Community.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CommunityComments.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CommunityContents.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CommunityDetails.cs" />
+    <Compile Include="Models\CommunityRatings.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CommunityRelation.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CommunityTags.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CommunityType.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Content.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ContentComments.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ContentDetails.cs" />
+    <Compile Include="Models\ContentRatings.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ContentRelation.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ContentRelationshipType.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ContentsView.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ContentTags.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ContentType.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DataDetail.cs" />
+    <Compile Include="Models\DeepZoomItem.cs" />
+    <Compile Include="Models\DownloadDetails.cs" />
+    <Compile Include="Models\EarthOnline.Context1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EarthOnline.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\EarthOnline1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\EarthOnline1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EarthOnline.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\EntityAdminActionRequest.cs" />
+    <Compile Include="Models\EntityCommentRequest.cs" />
+    <Compile Include="Models\EntityDetails.cs" />
+    <Compile Include="Models\EntityHighlightFilter.cs" />
+    <Compile Include="Models\Enum.cs" />
+    <Compile Include="Models\FacetCategory.cs" />
+    <Compile Include="Models\FacetType.cs" />
+    <Compile Include="Models\FeaturedCommunities.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FeaturedCommunitiesView.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FeaturedContents.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FeaturedContentsView.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FileDetail.cs" />
+    <Compile Include="Models\FlaggedRequest.cs" />
+    <Compile Include="Models\InviteRequest.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\InviteRequestContent.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\InviteRequestItem.cs" />
+    <Compile Include="Models\InviteRequestsView.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\JoinCommunityRequest.cs" />
+    <Compile Include="Models\LinkDetail.cs" />
+    <Compile Include="Models\MessagePayload.cs" />
+    <Compile Include="Models\ModeratorPermissionStatusRequest.cs" />
+    <Compile Include="Models\NewEntityRequest.cs" />
+    <Compile Include="Models\NotifyInviteRequest.cs" />
+    <Compile Include="Models\OffenceType.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OffensiveCommunities.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OffensiveContent.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OffensiveEntityDetails.cs" />
+    <Compile Include="Models\OffensiveEntityDetailsList.cs" />
+    <Compile Include="Models\OffensiveEntry.cs" />
+    <Compile Include="Models\OffensiveStatus.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OpeartionStatus.cs" />
+    <Compile Include="Models\PageDetails.cs" />
+    <Compile Include="Models\PayloadDetails.cs" />
+    <Compile Include="Models\PermissionDetails.cs" />
+    <Compile Include="Models\PermissionItem.cs" />
+    <Compile Include="Models\PermissionRequest.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Place.cs" />
+    <Compile Include="Models\ProfileDetails.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\RatingDetails.cs" />
+    <Compile Include="Models\RemoveUserRequest.cs" />
+    <Compile Include="Models\ReportEntityDetails.cs" />
+    <Compile Include="Models\Role.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SearchQueryDetails.cs" />
+    <Compile Include="Models\SearchView.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SignUpDetails.cs" />
+    <Compile Include="Models\StaticContent.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\StaticContentDetails.cs" />
+    <Compile Include="Models\StaticContentType.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Tag.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TopCategoryEntities.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TourModel.cs" />
+    <Compile Include="Models\User.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UserCommunities.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UserPermissionChangedRequest.cs" />
+    <Compile Include="Models\UserPermissionStatusRequest.cs" />
+    <Compile Include="Models\UserRequestStatusNotification.cs" />
+    <Compile Include="Models\UserType.cs">
+      <DependentUpon>EarthOnline.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PerRequestLifetimeManager.cs" />
+    <Compile Include="ProfileCacheManager.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs" />
+    <Compile Include="Repositories\BlobDataRepository.cs" />
+    <Compile Include="Repositories\CommunitiesViewRepository.cs" />
+    <Compile Include="Repositories\CommunityCommentRepository.cs" />
+    <Compile Include="Repositories\CommunityRepository.cs" />
+    <Compile Include="Repositories\CommunityTagsRepository.cs" />
+    <Compile Include="Repositories\ContentCommentsRepository.cs" />
+    <Compile Include="Repositories\ContentRepository.cs" />
+    <Compile Include="Repositories\ContentsViewRepository.cs" />
+    <Compile Include="Repositories\ContentTagsRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IBlobDataRepository.cs" />
+    <Compile Include="Repositories\Interfaces\ICommunitiesViewRepository.cs" />
+    <Compile Include="Repositories\Interfaces\ICommunityCommentRepository.cs" />
+    <Compile Include="Repositories\Interfaces\ICommunityRepository.cs" />
+    <Compile Include="Repositories\Interfaces\ICommunityTagsRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IContentCommentsRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IContentRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IContentsViewRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IContentTagsRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IQueueRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IRepositoryBase.cs" />
+    <Compile Include="Repositories\Interfaces\ISearchViewRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IUserCommunitiesRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IUserRepository.cs" />
+    <Compile Include="Repositories\QueueRepository.cs" />
+    <Compile Include="Repositories\RepositoryBase.cs" />
+    <Compile Include="Repositories\SearchViewRepository.cs" />
+    <Compile Include="Repositories\UserCommunitiesRepository.cs" />
+    <Compile Include="Repositories\UserRepository.cs" />
+    <Compile Include="Services\BlobService.cs" />
+    <Compile Include="Services\CommentService.cs" />
+    <Compile Include="Services\CommunityService.cs" />
+    <Compile Include="Services\ContentService.cs" />
+    <Compile Include="Services\EntityService.cs" />
+    <Compile Include="Services\FeaturedEntityService.cs" />
+    <Compile Include="Services\Interfaces\IBlobService.cs" />
+    <Compile Include="Services\Interfaces\ICommentService.cs" />
+    <Compile Include="Services\Interfaces\ICommunityService.cs" />
+    <Compile Include="Services\Interfaces\IContentService.cs" />
+    <Compile Include="Services\Interfaces\IEntityService.cs" />
+    <Compile Include="Services\Interfaces\IFeaturedEntityService.cs" />
+    <Compile Include="Services\Interfaces\INotificationService.cs" />
+    <Compile Include="Services\Interfaces\IProfileService.cs" />
+    <Compile Include="Services\Interfaces\IRatingService.cs" />
+    <Compile Include="Services\Interfaces\IReportEntityService.cs" />
+    <Compile Include="Services\Interfaces\ISearchService.cs" />
+    <Compile Include="Services\Interfaces\IStaticContentService.cs" />
+    <Compile Include="Services\NotificationService.cs" />
+    <Compile Include="Services\PermissionService.cs" />
+    <Compile Include="Services\ProfileService.cs" />
+    <Compile Include="Services\RatingService.cs" />
+    <Compile Include="Services\ReportEntityService.cs" />
+    <Compile Include="Services\SearchService.cs" />
+    <Compile Include="Services\StaticContentService.cs" />
+    <Compile Include="SessionWrapper.cs" />
+    <Compile Include="UnityDependencyResolver.cs" />
+    <Compile Include="ViewModels\AssociatedFileViewModel.cs" />
+    <Compile Include="ViewModels\CommentItemViewModel.cs" />
+    <Compile Include="ViewModels\CommentViewModel.cs" />
+    <Compile Include="ViewModels\CommunityInputViewModel.cs" />
+    <Compile Include="ViewModels\CommunityViewModel.cs" />
+    <Compile Include="ViewModels\ContentDataViewModel.cs" />
+    <Compile Include="ViewModels\ContentInputViewModel.cs" />
+    <Compile Include="ViewModels\ContentViewModel.cs" />
+    <Compile Include="ViewModels\DeepZoomViewModel.cs" />
+    <Compile Include="ViewModels\DefaultThumbnailViewModel.cs" />
+    <Compile Include="ViewModels\EntityBaseDetailsViewModel.cs" />
+    <Compile Include="ViewModels\EntityInputBaseViewModel.cs" />
+    <Compile Include="ViewModels\EntityViewModel.cs" />
+    <Compile Include="ViewModels\InviteRequestDetailsViewModel.cs" />
+    <Compile Include="ViewModels\InviteRequestInputViewModel.cs" />
+    <Compile Include="ViewModels\InviteRequestViewModel.cs" />
+    <Compile Include="ViewModels\PermissionBaseViewModel.cs" />
+    <Compile Include="ViewModels\PermissionDetailsViewModel.cs" />
+    <Compile Include="ViewModels\PermissionViewModel.cs" />
+    <Compile Include="ViewModels\ProfileViewModel.cs" />
+    <Compile Include="ViewModels\RatingViewModel.cs" />
+    <Compile Include="ViewModels\SearchViewModel.cs" />
+    <Compile Include="ViewModels\ShareViewModel.cs" />
+    <Compile Include="ViewModels\StaticContentViewModel.cs" />
+    <Compile Include="ViewModels\TopCategoryViewModel.cs" />
+    <Compile Include="ViewModels\UploadAssetViewModel.cs" />
+    <Compile Include="ViewModels\VideoDataViewModel.cs" />
+    <Compile Include="Views\Test.cs" />
+    <Compile Include="Views\UseWWT.cs" />
+    <Compile Include="WebServices\IResourceService.cs" />
+    <Compile Include="WebServices\LiveIdAuth.svc.cs">
+      <DependentUpon>LiveIdAuth.svc</DependentUpon>
+    </Compile>
+    <Compile Include="WebServices\ResourceService.svc.cs">
+      <DependentUpon>ResourceService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="WebServices\ServiceBase.cs" />
+    <Content Include="Content\images\defaultcommunitythumbnail.png" />
+    <Content Include="Content\images\defaultcommunitywwtthumbnail.png" />
+    <Content Include="Content\images\defaultdocthumbnail.png" />
+    <Content Include="Content\images\defaultdocwwtthumbnail.png" />
+    <Content Include="Content\images\defaultExcelThumbnail.png" />
+    <Content Include="Content\images\defaultexcelwwtthumbnail.png" />
+    <Content Include="Content\images\defaultfolderthumbnail.png" />
+    <Content Include="Content\images\defaultfolderwwtthumbnail.png" />
+    <Content Include="Content\images\defaultgenericthumbnail.png" />
+    <Content Include="Content\images\defaultgenericwwtthumbnail.png" />
+    <Content Include="Content\images\defaultlinkthumbnail.png" />
+    <Content Include="Content\images\defaultlinkwwtthumbnail.png" />
+    <Content Include="Content\images\defaultpptthumbnail.png" />
+    <Content Include="Content\images\defaultpptwwtthumbnail.png" />
+    <Content Include="Content\images\defaulttoursthumbnail.png" />
+    <Content Include="Content\images\defaulttourswwtthumbnail.png" />
+    <Content Include="Content\images\defaultvideothumbnail.png" />
+    <Content Include="Content\images\defaultvideowwtthumbnail.png" />
+    <Content Include="Content\images\defaultwtmlthumbnail.png" />
+    <Content Include="Content\images\defaultwtmlwwtthumbnail.png" />
+    <Content Include="Content\images\defaultWwtlThumbnail.png" />
+    <Content Include="Content\images\defaultwwtlwwtthumbnail.png" />
+    <Content Include="Content\images\gbox.png" />
+    <Content Include="Content\images\helpwwtthumbnail.png" />
+    <Content Include="Content\images\searchwwtthumbnail.png" />
+    <Content Include="images\astronomers.png" />
+    <Content Include="images\develop.png" />
+    <Content Include="images\educators.png" />
+    <Content Include="images\exploreweb.png" />
+    <Content Include="images\installwwt.png" />
+    <Content Include="images\learntouse.png" />
+    <Content Include="images\planetariums.png" />
+    <Content Include="images\videos.png" />
+    <Content Include="Models\wwtguides.xml" />
+    <Content Include="WWT2\ClientVersion.txt" />
+    <Content Include="WWT2\dataversion.txt" />
+    <Content Include="WWT2\EqClientVersion.txt" />
+    <Content Include="WWT2\Eqdataversion.txt" />
+    <Content Include="WWT2\ExcelAddinUpdateUrl.txt" />
+    <Content Include="WWT2\ExcelAddinVersion.txt" />
+    <Content Include="WWT2\Message.txt" />
+    <Content Include="WWT2\minver.txt" />
+    <Content Include="WWT2\updateurl.txt" />
+    <Content Include="WWT2\version.txt" />
+    <Content Include="WWT2\warnver.txt" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\GreatObservatories.xml" />
+    <Content Include="Content\images\addview.png" />
+    <Content Include="Content\images\layoutpage.png" />
+    <Content Include="Content\images\solutionexplorer.png" />
+    <Content Include="Content\Views\EditCommunity.html" />
+    <Content Include="Content\Views\CommunityDetail.html" />
+    <Content Include="Content\Views\ContentPreview.html" />
+    <Content Include="Content\Views\generatedtours.xml" />
+    <Content Include="Content\Views\modals\EditFolder.html" />
+    <Content Include="Content\Views\modals\EditTour.html" />
+    <Content Include="Content\Views\TestResources.html" />
+    <Content Include="Content\Views\TourAdmin.html" />
+    <Content Include="Content\Views\tours.xml" />
+    <Content Include="Content\WMAP.xml" />
+    <Content Include="Docs\conversionTutorial.htm" />
+    <Content Include="Docs\domespecs.html" />
+    <Content Include="Docs\Samples\displaycode.htm" />
+    <Content Include="Docs\Samples\Sample_WWT Web Client Arrived.html" />
+    <Content Include="Docs\Samples\Sample_WWT Web Client Click Event.html" />
+    <Content Include="Docs\Samples\Sample_WWT Web Client Fov.html" />
+    <Content Include="Docs\Samples\Sample_WWT Web Client Local View.html" />
+    <Content Include="Docs\Samples\Sample_WWT Web Client Poly.html" />
+    <Content Include="Docs\Samples\Sample_WWT Web Client Simple.html" />
+    <Content Include="Docs\Samples\Sample_WWTWebClientArrived.html" />
+    <Content Include="Docs\Samples\Sample_WWTWebClientClickEvent.html" />
+    <Content Include="Docs\Samples\Sample_WWTWebClientEarthCitySearch.html" />
+    <Content Include="Docs\Samples\Sample_WWTWebClientFov.html" />
+    <Content Include="Docs\Samples\sample_wwtwebclientimages.html" />
+    <Content Include="Docs\Samples\Sample_WWTWebClientLocalView.html" />
+    <Content Include="Docs\Samples\Sample_WWTWebClientMarsExplorer.html" />
+    <Content Include="Docs\Samples\Sample_WWTWebClientPoly.html" />
+    <Content Include="Docs\Samples\Sample_WWTWebClientSimple.html" />
+    <Content Include="Docs\Samples\sample_wwtwebclienttours.html" />
+    <Content Include="Docs\Samples\WWT Web Client Arrived.html" />
+    <Content Include="Docs\Samples\WWT Web Client Click Event.html" />
+    <Content Include="Docs\Samples\WWT Web Client Fov.html" />
+    <Content Include="Docs\Samples\WWT Web Client Local View.html" />
+    <Content Include="Docs\Samples\WWT Web Client Poly.html" />
+    <Content Include="Docs\Samples\WWT Web Client Simple.html" />
+    <Content Include="Docs\Samples\WWTWebClientArrived.html" />
+    <Content Include="Docs\Samples\WWTWebClientArrivedHtml5.html" />
+    <Content Include="Docs\Samples\WWTWebClientClickEvent.html" />
+    <Content Include="Docs\Samples\WWTWebClientClickEventHtml5.html" />
+    <Content Include="Docs\Samples\wwtwebclientdistantplanetexplorer.html" />
+    <Content Include="Docs\Samples\wwtwebclientdistantplanetexplorerHtml5.html" />
+    <Content Include="Docs\Samples\WWTWebClientEarthCitySearch.html" />
+    <Content Include="Docs\Samples\WWTWebClientEarthCitySearchHtml5.html" />
+    <Content Include="Docs\Samples\WWTWebClientFov.html" />
+    <Content Include="Docs\Samples\WWTWebClientFovHtml5.html" />
+    <Content Include="Docs\Samples\wwtwebclientimages.html" />
+    <Content Include="Docs\Samples\wwtwebclientimagesHtml5.html" />
+    <Content Include="Docs\Samples\wwtwebclientkepler.html" />
+    <Content Include="Docs\Samples\WWTWebClientLocalView.html" />
+    <Content Include="Docs\Samples\WWTWebClientLocalViewHtml5.html" />
+    <Content Include="Docs\Samples\WWTWebClientMarsExplorer.html" />
+    <Content Include="Docs\Samples\WWTWebClientMarsExplorerHtml5.html" />
+    <Content Include="Docs\Samples\wwtwebclientmessiercatalog.html" />
+    <Content Include="Docs\Samples\wwtwebclientmessiercatalogHtml5.html" />
+    <Content Include="Docs\Samples\WWTWebClientMoonExplorer.html" />
+    <Content Include="Docs\Samples\wwtwebclientplanetexplorer.html" />
+    <Content Include="Docs\Samples\wwtwebclientplanetexplorerHtml5.html" />
+    <Content Include="Docs\Samples\WWTWebClientPoly.html" />
+    <Content Include="Docs\Samples\WWTWebClientPolyHtml5.html" />
+    <Content Include="Docs\Samples\WWTWebClientSimple.html" />
+    <Content Include="Docs\Samples\WWTWebClientSimpleHtml5.html" />
+    <Content Include="Docs\Samples\WWTWebClientSimpleUIHtml5.html" />
+    <Content Include="Docs\Samples\wwtwebclienttour.html" />
+    <Content Include="Docs\Samples\wwtwebclienttours.html" />
+    <Content Include="Docs\Samples\wwtwebclienttoursHtml5.html" />
+    <Content Include="Docs\Scripts\jqueryCodeView.css" />
+    <Content Include="Docs\Scripts\jqueryCodeView.js" />
+    <Content Include="Docs\SDK_style.css" />
+    <Content Include="Docs\user_style.css" />
+    <Content Include="Docs\WorldWideTelescopeDataFilesReference.html" />
+    <Content Include="Docs\WorldWideTelescopeDataToolsGuide.html" />
+    <Content Include="Docs\worldwidetelescopeexceladdin.html" />
+    <Content Include="Docs\worldwidetelescopelcapi.html" />
+    <Content Include="Docs\worldwidetelescopelocalizationtool.html" />
+    <Content Include="Docs\worldwidetelescopeplanetarium.html" />
+    <Content Include="Docs\WorldWideTelescopeProjectionReference.html" />
+    <Content Include="Docs\worldwidetelescopesdkgettingstarted.html" />
+    <Content Include="Docs\WorldWideTelescopeSDKOverview.html" />
+    <Content Include="Docs\worldwidetelescopetilepyramidsdk.html" />
+    <Content Include="Docs\worldwidetelescopetilepyramidsdksamples.html" />
+    <Content Include="Docs\worldwidetelescopeuserguide.html" />
+    <Content Include="Docs\WorldWideTelescopeWebControlScriptReference.html" />
+    <Content Include="Docs\WorldWideTelescope_lcapi.html" />
+    <Content Include="Docs\Wtml\an_author.jpg" />
+    <Content Include="Docs\Wtml\Sample_Blank Collection.html" />
+    <Content Include="Docs\Wtml\Sample_Community Payload.html" />
+    <Content Include="Docs\Wtml\Sample_CommunityPayload.html" />
+    <Content Include="Docs\Wtml\sample_panoramasurvey.html" />
+    <Content Include="Docs\Wtml\Sample_Signup.html" />
+    <Content Include="Docs\Wtml\sample_study.html" />
+    <Content Include="Docs\Wtml\sample_tourcollection.html" />
+    <Content Include="Docs\Wtml\Thumb1.jpg" />
+    <Content Include="Docs\Wtml\Thumb2.jpg" />
+    <Content Include="Docs\YesNo.bmp" />
+    <Content Include="GetTourFile.aspx" />
+    <Content Include="GetTourFile2.aspx" />
+    <Content Include="hello.aspx" />
+    <Content Include="hello2.aspx" />
+    <Content Include="html5sdk\1.0.1\wwtsdk.js" />
+    <Content Include="html5sdk\1.0.1\wwtsdk.min.js" />
+    <Content Include="html5sdk\1.1.0\wwtsdk.js" />
+    <Content Include="html5sdk\1.1.0\wwtsdk.min.js" />
+    <Content Include="html5sdk\2.0\wwtsdk.js" />
+    <Content Include="html5sdk\2.0\wwtsdk.min.js" />
+    <Content Include="images\StarProfile.png" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\controllers\modals\editfolder.js" />
+    <Content Include="Scripts\controllers\modals\edittour.js" />
+    <Content Include="Scripts\controllers\touradmin.js" />
+    <Content Include="Scripts\ext\hljsrazor.js" />
+    <Content Include="Scripts\ext\ui-bootstrap-tpls-0.12.1.modified.js" />
+    <Content Include="WWTWeb\2MASSOct.aspx" />
+    <Content Include="WWTWeb\512\mag-0.1.png" />
+    <Content Include="WWTWeb\512\mag-0.2.png" />
+    <Content Include="WWTWeb\512\mag-0.3.png" />
+    <Content Include="WWTWeb\512\mag-0.4.png" />
+    <Content Include="WWTWeb\512\mag-0.5.png" />
+    <Content Include="WWTWeb\512\mag-0.6.png" />
+    <Content Include="WWTWeb\512\mag-0.7.png" />
+    <Content Include="WWTWeb\512\mag-0.8.png" />
+    <Content Include="WWTWeb\512\mag-0.9.png" />
+    <Content Include="WWTWeb\512\mag-1.0.png" />
+    <Content Include="WWTWeb\512\mag-1.1.png" />
+    <Content Include="WWTWeb\512\mag-1.2.png" />
+    <Content Include="WWTWeb\512\mag-1.3.png" />
+    <Content Include="WWTWeb\512\mag-1.4.png" />
+    <Content Include="WWTWeb\512\mag-1.5.png" />
+    <Content Include="WWTWeb\512\mag0.0.png" />
+    <Content Include="WWTWeb\512\mag0.1.png" />
+    <Content Include="WWTWeb\512\mag0.2.png" />
+    <Content Include="WWTWeb\512\mag0.3.png" />
+    <Content Include="WWTWeb\512\mag0.4.png" />
+    <Content Include="WWTWeb\512\mag0.5.png" />
+    <Content Include="WWTWeb\512\mag0.6.png" />
+    <Content Include="WWTWeb\512\mag0.7.png" />
+    <Content Include="WWTWeb\512\mag0.8.png" />
+    <Content Include="WWTWeb\512\mag0.9.png" />
+    <Content Include="WWTWeb\512\mag1.0.png" />
+    <Content Include="WWTWeb\512\mag1.1.png" />
+    <Content Include="WWTWeb\512\mag1.2.png" />
+    <Content Include="WWTWeb\512\mag1.3.png" />
+    <Content Include="WWTWeb\512\mag1.4.png" />
+    <Content Include="WWTWeb\512\mag1.5.png" />
+    <Content Include="WWTWeb\512\mag1.6.png" />
+    <Content Include="WWTWeb\512\mag1.7.png" />
+    <Content Include="WWTWeb\512\mag1.8.png" />
+    <Content Include="WWTWeb\512\mag1.9.png" />
+    <Content Include="WWTWeb\512\mag10.0.png" />
+    <Content Include="WWTWeb\512\mag10.1.png" />
+    <Content Include="WWTWeb\512\mag10.2.png" />
+    <Content Include="WWTWeb\512\mag10.3.png" />
+    <Content Include="WWTWeb\512\mag10.4.png" />
+    <Content Include="WWTWeb\512\mag10.5.png" />
+    <Content Include="WWTWeb\512\mag10.6.png" />
+    <Content Include="WWTWeb\512\mag10.7.png" />
+    <Content Include="WWTWeb\512\mag10.8.png" />
+    <Content Include="WWTWeb\512\mag10.9.png" />
+    <Content Include="WWTWeb\512\mag11.0.png" />
+    <Content Include="WWTWeb\512\mag11.1.png" />
+    <Content Include="WWTWeb\512\mag11.2.png" />
+    <Content Include="WWTWeb\512\mag11.3.png" />
+    <Content Include="WWTWeb\512\mag11.4.png" />
+    <Content Include="WWTWeb\512\mag11.5.png" />
+    <Content Include="WWTWeb\512\mag11.6.png" />
+    <Content Include="WWTWeb\512\mag11.7.png" />
+    <Content Include="WWTWeb\512\mag11.8.png" />
+    <Content Include="WWTWeb\512\mag11.9.png" />
+    <Content Include="WWTWeb\512\mag12.0.png" />
+    <Content Include="WWTWeb\512\mag12.1.png" />
+    <Content Include="WWTWeb\512\mag12.2.png" />
+    <Content Include="WWTWeb\512\mag12.3.png" />
+    <Content Include="WWTWeb\512\mag12.4.png" />
+    <Content Include="WWTWeb\512\mag12.5.png" />
+    <Content Include="WWTWeb\512\mag12.6.png" />
+    <Content Include="WWTWeb\512\mag12.7.png" />
+    <Content Include="WWTWeb\512\mag12.8.png" />
+    <Content Include="WWTWeb\512\mag12.9.png" />
+    <Content Include="WWTWeb\512\mag13.0.png" />
+    <Content Include="WWTWeb\512\mag13.1.png" />
+    <Content Include="WWTWeb\512\mag13.2.png" />
+    <Content Include="WWTWeb\512\mag13.3.png" />
+    <Content Include="WWTWeb\512\mag13.4.png" />
+    <Content Include="WWTWeb\512\mag13.5.png" />
+    <Content Include="WWTWeb\512\mag13.6.png" />
+    <Content Include="WWTWeb\512\mag13.7.png" />
+    <Content Include="WWTWeb\512\mag13.8.png" />
+    <Content Include="WWTWeb\512\mag13.9.png" />
+    <Content Include="WWTWeb\512\mag14.0.png" />
+    <Content Include="WWTWeb\512\mag14.1.png" />
+    <Content Include="WWTWeb\512\mag14.2.png" />
+    <Content Include="WWTWeb\512\mag14.3.png" />
+    <Content Include="WWTWeb\512\mag14.4.png" />
+    <Content Include="WWTWeb\512\mag14.5.png" />
+    <Content Include="WWTWeb\512\mag14.6.png" />
+    <Content Include="WWTWeb\512\mag14.7.png" />
+    <Content Include="WWTWeb\512\mag14.8.png" />
+    <Content Include="WWTWeb\512\mag14.9.png" />
+    <Content Include="WWTWeb\512\mag15.0.png" />
+    <Content Include="WWTWeb\512\mag15.1.png" />
+    <Content Include="WWTWeb\512\mag15.2.png" />
+    <Content Include="WWTWeb\512\mag15.3.png" />
+    <Content Include="WWTWeb\512\mag15.4.png" />
+    <Content Include="WWTWeb\512\mag15.5.png" />
+    <Content Include="WWTWeb\512\mag15.6.png" />
+    <Content Include="WWTWeb\512\mag15.7.png" />
+    <Content Include="WWTWeb\512\mag15.8.png" />
+    <Content Include="WWTWeb\512\mag15.9.png" />
+    <Content Include="WWTWeb\512\mag16.0.png" />
+    <Content Include="WWTWeb\512\mag16.1.png" />
+    <Content Include="WWTWeb\512\mag16.2.png" />
+    <Content Include="WWTWeb\512\mag16.3.png" />
+    <Content Include="WWTWeb\512\mag16.4.png" />
+    <Content Include="WWTWeb\512\mag16.5.png" />
+    <Content Include="WWTWeb\512\mag16.6.png" />
+    <Content Include="WWTWeb\512\mag16.7.png" />
+    <Content Include="WWTWeb\512\mag16.8.png" />
+    <Content Include="WWTWeb\512\mag16.9.png" />
+    <Content Include="WWTWeb\512\mag17.0.png" />
+    <Content Include="WWTWeb\512\mag17.1.png" />
+    <Content Include="WWTWeb\512\mag17.2.png" />
+    <Content Include="WWTWeb\512\mag17.3.png" />
+    <Content Include="WWTWeb\512\mag17.4.png" />
+    <Content Include="WWTWeb\512\mag17.5.png" />
+    <Content Include="WWTWeb\512\mag17.6.png" />
+    <Content Include="WWTWeb\512\mag17.7.png" />
+    <Content Include="WWTWeb\512\mag17.8.png" />
+    <Content Include="WWTWeb\512\mag17.9.png" />
+    <Content Include="WWTWeb\512\mag18.0.png" />
+    <Content Include="WWTWeb\512\mag18.1.png" />
+    <Content Include="WWTWeb\512\mag18.2.png" />
+    <Content Include="WWTWeb\512\mag18.3.png" />
+    <Content Include="WWTWeb\512\mag18.4.png" />
+    <Content Include="WWTWeb\512\mag18.5.png" />
+    <Content Include="WWTWeb\512\mag18.6.png" />
+    <Content Include="WWTWeb\512\mag18.7.png" />
+    <Content Include="WWTWeb\512\mag18.8.png" />
+    <Content Include="WWTWeb\512\mag18.9.png" />
+    <Content Include="WWTWeb\512\mag19.0.png" />
+    <Content Include="WWTWeb\512\mag19.1.png" />
+    <Content Include="WWTWeb\512\mag19.2.png" />
+    <Content Include="WWTWeb\512\mag19.3.png" />
+    <Content Include="WWTWeb\512\mag19.4.png" />
+    <Content Include="WWTWeb\512\mag19.5.png" />
+    <Content Include="WWTWeb\512\mag19.6.png" />
+    <Content Include="WWTWeb\512\mag19.7.png" />
+    <Content Include="WWTWeb\512\mag19.8.png" />
+    <Content Include="WWTWeb\512\mag19.9.png" />
+    <Content Include="WWTWeb\512\mag2.0.png" />
+    <Content Include="WWTWeb\512\mag2.1.png" />
+    <Content Include="WWTWeb\512\mag2.2.png" />
+    <Content Include="WWTWeb\512\mag2.3.png" />
+    <Content Include="WWTWeb\512\mag2.4.png" />
+    <Content Include="WWTWeb\512\mag2.5.png" />
+    <Content Include="WWTWeb\512\mag2.6.png" />
+    <Content Include="WWTWeb\512\mag2.7.png" />
+    <Content Include="WWTWeb\512\mag2.8.png" />
+    <Content Include="WWTWeb\512\mag2.9.png" />
+    <Content Include="WWTWeb\512\mag20.0.png" />
+    <Content Include="WWTWeb\512\mag20.1.png" />
+    <Content Include="WWTWeb\512\mag20.2.png" />
+    <Content Include="WWTWeb\512\mag20.3.png" />
+    <Content Include="WWTWeb\512\mag20.4.png" />
+    <Content Include="WWTWeb\512\mag20.5.png" />
+    <Content Include="WWTWeb\512\mag20.6.png" />
+    <Content Include="WWTWeb\512\mag20.7.png" />
+    <Content Include="WWTWeb\512\mag20.8.png" />
+    <Content Include="WWTWeb\512\mag20.9.png" />
+    <Content Include="WWTWeb\512\mag21.0.png" />
+    <Content Include="WWTWeb\512\mag21.1.png" />
+    <Content Include="WWTWeb\512\mag21.2.png" />
+    <Content Include="WWTWeb\512\mag21.3.png" />
+    <Content Include="WWTWeb\512\mag21.4.png" />
+    <Content Include="WWTWeb\512\mag21.5.png" />
+    <Content Include="WWTWeb\512\mag21.6.png" />
+    <Content Include="WWTWeb\512\mag21.7.png" />
+    <Content Include="WWTWeb\512\mag21.8.png" />
+    <Content Include="WWTWeb\512\mag21.9.png" />
+    <Content Include="WWTWeb\512\mag22.0.png" />
+    <Content Include="WWTWeb\512\mag22.1.png" />
+    <Content Include="WWTWeb\512\mag22.2.png" />
+    <Content Include="WWTWeb\512\mag22.3.png" />
+    <Content Include="WWTWeb\512\mag22.4.png" />
+    <Content Include="WWTWeb\512\mag22.5.png" />
+    <Content Include="WWTWeb\512\mag22.6.png" />
+    <Content Include="WWTWeb\512\mag22.7.png" />
+    <Content Include="WWTWeb\512\mag22.8.png" />
+    <Content Include="WWTWeb\512\mag22.9.png" />
+    <Content Include="WWTWeb\512\mag23.0.png" />
+    <Content Include="WWTWeb\512\mag23.1.png" />
+    <Content Include="WWTWeb\512\mag23.2.png" />
+    <Content Include="WWTWeb\512\mag23.3.png" />
+    <Content Include="WWTWeb\512\mag23.4.png" />
+    <Content Include="WWTWeb\512\mag23.5.png" />
+    <Content Include="WWTWeb\512\mag23.6.png" />
+    <Content Include="WWTWeb\512\mag23.7.png" />
+    <Content Include="WWTWeb\512\mag23.8.png" />
+    <Content Include="WWTWeb\512\mag23.9.png" />
+    <Content Include="WWTWeb\512\mag24.0.png" />
+    <Content Include="WWTWeb\512\mag24.1.png" />
+    <Content Include="WWTWeb\512\mag24.2.png" />
+    <Content Include="WWTWeb\512\mag24.3.png" />
+    <Content Include="WWTWeb\512\mag24.4.png" />
+    <Content Include="WWTWeb\512\mag24.5.png" />
+    <Content Include="WWTWeb\512\mag24.6.png" />
+    <Content Include="WWTWeb\512\mag24.7.png" />
+    <Content Include="WWTWeb\512\mag24.8.png" />
+    <Content Include="WWTWeb\512\mag24.9.png" />
+    <Content Include="WWTWeb\512\mag25.0.png" />
+    <Content Include="WWTWeb\512\mag3.0.png" />
+    <Content Include="WWTWeb\512\mag3.1.png" />
+    <Content Include="WWTWeb\512\mag3.2.png" />
+    <Content Include="WWTWeb\512\mag3.3.png" />
+    <Content Include="WWTWeb\512\mag3.4.png" />
+    <Content Include="WWTWeb\512\mag3.5.png" />
+    <Content Include="WWTWeb\512\mag3.6.png" />
+    <Content Include="WWTWeb\512\mag3.7.png" />
+    <Content Include="WWTWeb\512\mag3.8.png" />
+    <Content Include="WWTWeb\512\mag3.9.png" />
+    <Content Include="WWTWeb\512\mag4.0.png" />
+    <Content Include="WWTWeb\512\mag4.1.png" />
+    <Content Include="WWTWeb\512\mag4.2.png" />
+    <Content Include="WWTWeb\512\mag4.3.png" />
+    <Content Include="WWTWeb\512\mag4.4.png" />
+    <Content Include="WWTWeb\512\mag4.5.png" />
+    <Content Include="WWTWeb\512\mag4.6.png" />
+    <Content Include="WWTWeb\512\mag4.7.png" />
+    <Content Include="WWTWeb\512\mag4.8.png" />
+    <Content Include="WWTWeb\512\mag4.9.png" />
+    <Content Include="WWTWeb\512\mag5.0.png" />
+    <Content Include="WWTWeb\512\mag5.1.png" />
+    <Content Include="WWTWeb\512\mag5.2.png" />
+    <Content Include="WWTWeb\512\mag5.3.png" />
+    <Content Include="WWTWeb\512\mag5.4.png" />
+    <Content Include="WWTWeb\512\mag5.5.png" />
+    <Content Include="WWTWeb\512\mag5.6.png" />
+    <Content Include="WWTWeb\512\mag5.7.png" />
+    <Content Include="WWTWeb\512\mag5.8.png" />
+    <Content Include="WWTWeb\512\mag5.9.png" />
+    <Content Include="WWTWeb\512\mag6.0.png" />
+    <Content Include="WWTWeb\512\mag6.1.png" />
+    <Content Include="WWTWeb\512\mag6.2.png" />
+    <Content Include="WWTWeb\512\mag6.3.png" />
+    <Content Include="WWTWeb\512\mag6.4.png" />
+    <Content Include="WWTWeb\512\mag6.5.png" />
+    <Content Include="WWTWeb\512\mag6.6.png" />
+    <Content Include="WWTWeb\512\mag6.7.png" />
+    <Content Include="WWTWeb\512\mag6.8.png" />
+    <Content Include="WWTWeb\512\mag6.9.png" />
+    <Content Include="WWTWeb\512\mag7.0.png" />
+    <Content Include="WWTWeb\512\mag7.1.png" />
+    <Content Include="WWTWeb\512\mag7.2.png" />
+    <Content Include="WWTWeb\512\mag7.3.png" />
+    <Content Include="WWTWeb\512\mag7.4.png" />
+    <Content Include="WWTWeb\512\mag7.5.png" />
+    <Content Include="WWTWeb\512\mag7.6.png" />
+    <Content Include="WWTWeb\512\mag7.7.png" />
+    <Content Include="WWTWeb\512\mag7.8.png" />
+    <Content Include="WWTWeb\512\mag7.9.png" />
+    <Content Include="WWTWeb\512\mag8.0.png" />
+    <Content Include="WWTWeb\512\mag8.1.png" />
+    <Content Include="WWTWeb\512\mag8.2.png" />
+    <Content Include="WWTWeb\512\mag8.3.png" />
+    <Content Include="WWTWeb\512\mag8.4.png" />
+    <Content Include="WWTWeb\512\mag8.5.png" />
+    <Content Include="WWTWeb\512\mag8.6.png" />
+    <Content Include="WWTWeb\512\mag8.7.png" />
+    <Content Include="WWTWeb\512\mag8.8.png" />
+    <Content Include="WWTWeb\512\mag8.9.png" />
+    <Content Include="WWTWeb\512\mag9.0.png" />
+    <Content Include="WWTWeb\512\mag9.1.png" />
+    <Content Include="WWTWeb\512\mag9.2.png" />
+    <Content Include="WWTWeb\512\mag9.3.png" />
+    <Content Include="WWTWeb\512\mag9.4.png" />
+    <Content Include="WWTWeb\512\mag9.5.png" />
+    <Content Include="WWTWeb\512\mag9.6.png" />
+    <Content Include="WWTWeb\512\mag9.7.png" />
+    <Content Include="WWTWeb\512\mag9.8.png" />
+    <Content Include="WWTWeb\512\mag9.9.png" />
+    <Content Include="WWTWeb\BingDemTile.aspx" />
+    <Content Include="WWTWeb\BingDemTile2.aspx" />
+    <Content Include="WWTWeb\Catalog.aspx" />
+    <Content Include="WWTWeb\Catalog2.aspx" />
+    <Content Include="WWTWeb\dem.aspx" />
+    <Content Include="WWTWeb\dembath.aspx" />
+    <Content Include="WWTWeb\demmars.aspx" />
+    <Content Include="WWTWeb\demmarsEmpty.aspx" />
+    <Content Include="WWTWeb\demmars_new.aspx" />
+    <Content Include="WWTWeb\demTile.aspx" />
+    <Content Include="WWTWeb\DSS.aspx" />
+    <Content Include="WWTWeb\DSSToast.aspx" />
+    <Content Include="WWTWeb\DustToast.aspx" />
+    <Content Include="WWTWeb\EarthBlend.aspx" />
+    <Content Include="WWTWeb\EarthMerBath.aspx" />
+    <Content Include="WWTWeb\ExcelAddinUpdate.aspx" />
+    <Content Include="WWTWeb\FixedAltitudeDemTile.aspx" />
+    <Content Include="WWTWeb\g360.aspx" />
+    <Content Include="WWTWeb\Galex4Far.aspx" />
+    <Content Include="WWTWeb\Galex4Near.aspx" />
+    <Content Include="WWTWeb\GalexToast.aspx" />
+    <Content Include="WWTWeb\GetAuthorThumbnail.aspx" />
+    <Content Include="WWTWeb\GetHostName.aspx" />
+    <Content Include="WWTWeb\GetTile.aspx" />
+    <Content Include="WWTWeb\GetTour.aspx" />
+    <Content Include="WWTWeb\GetTourFile.aspx" />
+    <Content Include="WWTWeb\GetTourList.aspx" />
+    <Content Include="WWTWeb\GetTours.aspx" />
+    <Content Include="WWTWeb\GetTourThumbnail.aspx" />
+    <Content Include="WWTWeb\Glimpse.aspx" />
+    <Content Include="WWTWeb\Goto.aspx" />
+    <Content Include="WWTWeb\Goto2.aspx" />
+    <Content Include="WWTWeb\hAlphaToast.aspx" />
+    <Content Include="WWTWeb\Hirise.aspx" />
+    <Content Include="WWTWeb\HiriseDem.aspx" />
+    <Content Include="WWTWeb\HiriseDem2.aspx" />
+    <Content Include="WWTWeb\HiriseDem3.aspx" />
+    <Content Include="WWTWeb\isstle.aspx" />
+    <Content Include="WWTWeb\isstle2.aspx" />
+    <Content Include="WWTWeb\jupiter.aspx" />
+    <Content Include="WWTWeb\login.aspx" />
+    <Content Include="WWTWeb\Mandel.aspx" />
+    <Content Include="WWTWeb\mandel1.aspx" />
+    <Content Include="WWTWeb\mars.aspx" />
+    <Content Include="WWTWeb\marsdem.aspx" />
+    <Content Include="WWTWeb\MarsHirise.aspx" />
+    <Content Include="WWTWeb\MarsMoc.aspx" />
+    <Content Include="WWTWeb\MartianTile.aspx" />
+    <Content Include="WWTWeb\MartianTile2.aspx" />
+    <Content Include="WWTWeb\MartianTileEmpty.aspx" />
+    <Content Include="WWTWeb\MartianTileNew.aspx" />
+    <Content Include="WWTWeb\Mipsgal.aspx" />
+    <Content Include="WWTWeb\moondem.aspx" />
+    <Content Include="WWTWeb\moonOct.aspx" />
+    <Content Include="WWTWeb\moontoast.aspx" />
+    <Content Include="WWTWeb\moontoastdem.aspx" />
+    <Content Include="WWTWeb\postmars.aspx" />
+    <Content Include="WWTWeb\postmarsdem.aspx" />
+    <Content Include="WWTWeb\postmarsdem2.aspx" />
+    <Content Include="WWTWeb\PostRatingFeedback.aspx" />
+    <Content Include="WWTWeb\RassToast.aspx" />
+    <Content Include="WWTWeb\SDSS12Toast.aspx" />
+    <Content Include="WWTWeb\SDSSToast.aspx" />
+    <Content Include="WWTWeb\SDSSToast.offline.aspx" />
+    <Content Include="WWTWeb\SDSSToast2.aspx" />
+    <Content Include="WWTWeb\ShowImage.aspx" />
+    <Content Include="WWTWeb\ShowImage2.aspx" />
+    <Content Include="WWTWeb\StarChart.aspx" />
+    <Content Include="WWTWeb\test.aspx" />
+    <Content Include="WWTWeb\testfailover.aspx" />
+    <Content Include="WWTWeb\thumbnail.aspx" />
+    <Content Include="WWTWeb\TileImage.aspx" />
+    <Content Include="WWTWeb\tiles.aspx" />
+    <Content Include="WWTWeb\tiles2.aspx" />
+    <Content Include="WWTWeb\tilethumb.aspx" />
+    <Content Include="WWTWeb\TwoMassToast.aspx" />
+    <Content Include="WWTWeb\TychoOct.aspx" />
+    <Content Include="WWTWeb\veblend.aspx" />
+    <Content Include="WWTWeb\version.aspx" />
+    <Content Include="WWTWeb\versions.aspx" />
+    <Content Include="WWTWeb\vlssToast.aspx" />
+    <Content Include="WWTWeb\weblogin.aspx" />
+    <Content Include="WWTWeb\WebServiceProxy.aspx" />
+    <Content Include="WWTWeb\wmap.aspx" />
+    <Content Include="WWTWeb\WMSEarthToday.aspx" />
+    <Content Include="WWTWeb\WMSMoon.aspx" />
+    <Content Include="WWTWeb\WMSToast.aspx" />
+    <Content Include="WWTWeb\XML2WTT.aspx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="BingSiteAuth.xml" />
+    <Content Include="Content\CSS\angular-motion.css" />
+    <Content Include="Content\CSS\bootstrapValidator.css" />
+    <Content Include="Content\CSS\SDK_style.css" />
+    <Content Include="Content\CSS\wwt.css" />
+    <Content Include="Content\CSS\wwt.min.css" />
+    <Content Include="Content\print.htm" />
+    <Content Include="Content\Views\EditContent.html" />
+    <Content Include="Content\Views\CommunityContent.html" />
+    <Content Include="Content\Views\ContentDetail.html" />
+    <Content Include="Content\Views\MyProfile.html" />
+    <Content Include="embedded-webcontrol.js" />
+    <Content Include="Gruntfile.js" />
+    <Content Include="Home.aspx" />
+    <Content Include="Error404.aspx" />
+    <Content Include="Global.asax" />
+    <Content Include="html5sdk\1.0.0\wwtsdk.js" />
+    <Content Include="html5sdk\1.0.0\wwtsdk.min.js" />
+    <Content Include="html5sdk\ss.js" />
+    <Content Include="html5sdk\ss.min.js" />
+    <Content Include="html5sdk\wwtlib.js" />
+    <Content Include="html5sdk\wwtsdk.js" />
+    <Content Include="html5sdk\wwtsdk.min.js" />
+    <Content Include="HTML5TourPlayer.aspx" />
+    <Content Include="Models\images.xml" />
+    <Content Include="Models\wwtmusic.xml" />
+    <Content Include="robots.txt" />
+    <Content Include="Scripts\controllers\communitydetail.js" />
+    <Content Include="Scripts\controllers\contentdetail.js" />
+    <Content Include="Scripts\controllers\communitycontent.js" />
+    <Content Include="Scripts\controllers\editcommunity.js" />
+    <Content Include="Scripts\controllers\editcontent.js" />
+    <Content Include="Scripts\controllers\myprofile.js" />
+    <Content Include="Scripts\controllers\testresources.js" />
+    <Content Include="Scripts\controls\move.js" />
+    <Content Include="Scripts\controls\pinch.js" />
+    <Content Include="Scripts\controls\sdk.js" />
+    <Content Include="Scripts\controls\TourPlayer.js" />
+    <Content Include="Scripts\controls\tweener.js" />
+    <Content Include="Scripts\controls\user.js" />
+    <Content Include="Scripts\controls\util.js" />
+    <Content Include="Scripts\controls\WCSService.js" />
+    <Content Include="Scripts\controls\WebControl.js" />
+    <Content Include="Scripts\factory\dataproxy.js" />
+    <Content Include="Content\CSS\sprites.less" />
+    <Content Include="Content\CSS\multiselect.less" />
+    <Content Include="Docs\worldwide-telescope-advanced-guides.epub" />
+    <Content Include="Docs\worldwide-telescope-advanced-guides.mobi" />
+    <Content Include="Docs\worldwide-telescope-advanced-guides.pdf" />
+    <Content Include="Docs\worldwide-telescope-data-files-reference.epub" />
+    <Content Include="Docs\worldwide-telescope-data-files-reference.mobi" />
+    <Content Include="Docs\worldwide-telescope-data-files-reference.pdf" />
+    <Content Include="Docs\worldwide-telescope-data-tools-guide.epub" />
+    <Content Include="Docs\worldwide-telescope-data-tools-guide.mobi" />
+    <Content Include="Docs\worldwide-telescope-data-tools-guide.pdf" />
+    <Content Include="Docs\worldwide-telescope-layer-control-api.epub" />
+    <Content Include="Docs\worldwide-telescope-layer-control-api.mobi" />
+    <Content Include="Docs\worldwide-telescope-layer-control-api.pdf" />
+    <Content Include="Docs\worldwide-telescope-multi-channel-dome-setup.epub" />
+    <Content Include="Docs\worldwide-telescope-multi-channel-dome-setup.mobi" />
+    <Content Include="Docs\worldwide-telescope-multi-channel-dome-setup.pdf" />
+    <Content Include="Docs\worldwide-telescope-planetarium.epub" />
+    <Content Include="Docs\worldwide-telescope-planetarium.mobi" />
+    <Content Include="Docs\worldwide-telescope-planetarium.pdf" />
+    <Content Include="Docs\worldwide-telescope-projection-reference.epub" />
+    <Content Include="Docs\worldwide-telescope-projection-reference.mobi" />
+    <Content Include="Docs\worldwide-telescope-projection-reference.pdf" />
+    <Content Include="Docs\worldwide-telescope-user-manual.epub" />
+    <Content Include="Docs\worldwide-telescope-user-manual.mobi" />
+    <Content Include="Docs\worldwide-telescope-user-manual.pdf" />
+    <Content Include="Docs\worldwide-telescope-web-control-script-reference.epub" />
+    <Content Include="Docs\worldwide-telescope-web-control-script-reference.mobi" />
+    <Content Include="Docs\worldwide-telescope-web-control-script-reference.pdf" />
+    <Content Include="Docs\WorldWideTelescopeAdd-inforExcelUserGuide.chm" />
+    <Content Include="Docs\WorldWideTelescopeSDKUserGuide.chm" />
+    <Content Include="Docs\Wtml\Callisto surface.wtml" />
+    <Content Include="Docs\Wtml\Europa surface.wtml" />
+    <Content Include="Docs\Wtml\Ganymede surface.wtml" />
+    <Content Include="Docs\Wtml\Io surface.wtml" />
+    <Content Include="Docs\Wtml\Mars surface.wtml" />
+    <Content Include="Docs\Wtml\Mercury surface.wtml" />
+    <Content Include="Docs\Wtml\Moon surface.wtml" />
+    <Content Include="Docs\Wtml\MyPlaces.wtml" />
+    <Content Include="Docs\Wtml\planettourcollection.wtml" />
+    <Content Include="Docs\Wtml\Venus surface.wtml" />
+    <Content Include="Docs\WWTSDKFactSheet.pdf" />
+    <None Include="Properties\PublishProfiles\wwt.thewebkid.com.pubxml" />
+    <None Include="Properties\PublishProfiles\wwtstaging - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy.pubxml" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\bootstrap\wells.less" />
+    <Content Include="Content\bootstrap\variables.less" />
+    <Content Include="Content\bootstrap\utilities.less" />
+    <Content Include="Content\bootstrap\type.less" />
+    <Content Include="Content\bootstrap\tooltip.less" />
+    <Content Include="Content\bootstrap\thumbnails.less" />
+    <Content Include="Content\bootstrap\theme.less" />
+    <Content Include="Content\bootstrap\tables.less" />
+    <Content Include="Content\bootstrap\scaffolding.less" />
+    <Content Include="Content\bootstrap\responsive-utilities.less" />
+    <Content Include="Content\bootstrap\responsive-embed.less" />
+    <Content Include="Content\bootstrap\progress-bars.less" />
+    <Content Include="Content\bootstrap\print.less" />
+    <Content Include="Content\bootstrap\popovers.less" />
+    <Content Include="Content\bootstrap\panels.less" />
+    <Content Include="Content\bootstrap\pagination.less" />
+    <Content Include="Content\bootstrap\pager.less" />
+    <Content Include="Content\bootstrap\normalize.less" />
+    <Content Include="Content\bootstrap\navs.less" />
+    <Content Include="Content\bootstrap\navbar.less" />
+    <Content Include="Content\bootstrap\modals.less" />
+    <Content Include="Content\bootstrap\mixins\vendor-prefixes.less" />
+    <Content Include="Content\bootstrap\mixins\text-overflow.less" />
+    <Content Include="Content\bootstrap\mixins\text-emphasis.less" />
+    <Content Include="Content\bootstrap\mixins\table-row.less" />
+    <Content Include="Content\bootstrap\mixins\tab-focus.less" />
+    <Content Include="Content\bootstrap\mixins\size.less" />
+    <Content Include="Content\bootstrap\mixins\responsive-visibility.less" />
+    <Content Include="Content\bootstrap\mixins\resize.less" />
+    <Content Include="Content\bootstrap\mixins\reset-text.less" />
+    <Content Include="Content\bootstrap\mixins\reset-filter.less" />
+    <Content Include="Content\bootstrap\mixins\progress-bar.less" />
+    <Content Include="Content\bootstrap\mixins\panels.less" />
+    <Content Include="Content\bootstrap\mixins\pagination.less" />
+    <Content Include="Content\bootstrap\mixins\opacity.less" />
+    <Content Include="Content\bootstrap\mixins\nav-vertical-align.less" />
+    <Content Include="Content\bootstrap\mixins\nav-divider.less" />
+    <Content Include="Content\bootstrap\mixins\list-group.less" />
+    <Content Include="Content\bootstrap\mixins\labels.less" />
+    <Content Include="Content\bootstrap\mixins\image.less" />
+    <Content Include="Content\bootstrap\mixins\hide-text.less" />
+    <Content Include="Content\bootstrap\mixins\grid.less" />
+    <Content Include="Content\bootstrap\mixins\grid-framework.less" />
+    <Content Include="Content\bootstrap\mixins\gradients.less" />
+    <Content Include="Content\bootstrap\mixins\forms.less" />
+    <Content Include="Content\bootstrap\mixins\clearfix.less" />
+    <Content Include="Content\bootstrap\mixins\center-block.less" />
+    <Content Include="Content\bootstrap\mixins\buttons.less" />
+    <Content Include="Content\bootstrap\mixins\border-radius.less" />
+    <Content Include="Content\bootstrap\mixins\background-variant.less" />
+    <Content Include="Content\bootstrap\mixins\alerts.less" />
+    <Content Include="Content\bootstrap\mixins.less" />
+    <Content Include="Content\bootstrap\media.less" />
+    <Content Include="Content\bootstrap\list-group.less" />
+    <Content Include="Content\bootstrap\labels.less" />
+    <Content Include="Content\bootstrap\jumbotron.less" />
+    <Content Include="Content\bootstrap\input-groups.less" />
+    <Content Include="Content\bootstrap\grid.less" />
+    <Content Include="Content\bootstrap\glyphicons.less" />
+    <Content Include="Content\bootstrap\forms.less" />
+    <Content Include="Content\bootstrap\dropdowns.less" />
+    <Content Include="Content\bootstrap\component-animations.less" />
+    <Content Include="Content\bootstrap\code.less" />
+    <Content Include="Content\bootstrap\close.less" />
+    <Content Include="Content\bootstrap\carousel.less" />
+    <Content Include="Content\bootstrap\buttons.less" />
+    <Content Include="Content\bootstrap\button-groups.less" />
+    <Content Include="Content\bootstrap\breadcrumbs.less" />
+    <Content Include="Content\bootstrap\bootstrap.less" />
+    <Content Include="Content\bootstrap\badges.less" />
+    <Content Include="Content\bootstrap\alerts.less" />
+    <Content Include="Localization\lang_en.tdf" />
+    <None Include="Properties\PublishProfiles\wwt.thewebkid.com.pubxml" />
+    <None Include="Properties\PublishProfiles\WWTMVC5rosenfield - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\wwtstaging - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy.pubxml" />
+    <None Include="compilerconfig.json" />
+    <None Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </None>
+    <None Include="Properties\PublishProfiles\wwt.thewebkid.com.pubxml" />
+    <None Include="Properties\PublishProfiles\wwtstaging - FTP %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\wwtstaging - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy %283%29.pubxml" />
+    <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\wwt.thewebkid.com.pubxml" />
+    <None Include="Properties\PublishProfiles\wwtstaging - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy.pubxml" />
+    <Content Include="Content\Views\alltours.wtml" />
+    <None Include="Properties\PublishProfiles\wwt.thewebkid.com.pubxml" />
+    <None Include="Properties\PublishProfiles\wwtstaging - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy.pubxml" />
+    <Content Include="Content\Views\webclienttours.wtml">
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Properties\PublishProfiles\wwt.thewebkid.com.pubxml" />
+    <None Include="Properties\PublishProfiles\wwtstaging - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\wwt.thewebkid.com.pubxml" />
+    <None Include="Properties\PublishProfiles\wwtstaging - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy.pubxml" />
+    <Content Include="favicon.ico" />
+    <None Include="Properties\PublishProfiles\wwt.thewebkid.com.pubxml" />
+    <None Include="Properties\PublishProfiles\wwtstaging - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy.pubxml" />
+    <Content Include="Scripts\ext\multiselect.js" />
+    <Content Include="Scripts\factory\uihelper.js" />
+    <Content Include="Scripts\main.js" />
+    <Content Include="Scripts\pages\home.js" />
+    <Content Include="Scripts\pages\ImportImage.js" />
+    <Content Include="Scripts\pages\Observatories.js" />
+    <Content Include="Scripts\pages\PlanetExplorer.js" />
+    <Content Include="Scripts\pages\Spectroscopy.js" />
+    <Content Include="sitemap.staging.xml" />
+    <Content Include="sitemap.xml" />
+    <Content Include="TourPlayer.js" />
+    <Content Include="Views\Shared\Footer.cshtml" />
+    <Content Include="Views\Shared\TopNav.cshtml" />
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Support\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="WebControl.aspx" />
+    <Content Include="WebServices\LiveIdAuth.svc" />
+    <Content Include="WebServices\ResourceService.svc" />
+    <Content Include="Views\Interact\Index.cshtml" />
+    <Content Include="Views\OpenWWT\Contributing.cshtml" />
+    <Content Include="Views\Community\Index.cshtml" />
+    <Content Include="Views\Community\Profile.cshtml" />
+    <Content Include="Views\Shared\_CommunityLayout.cshtml" />
+    <Content Include="WWTMVC5.csproj.DotSettings" />
+    <Content Include="Views\Upgrade\Index.cshtml" />
+    <Content Include="Views\Planetariums\QuickStart.cshtml" />
+    <Content Include="Views\Learn\WebDevelopment.cshtml" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\News\planet9.cshtml" />
+    <Content Include="Views\News\LeftNav.cshtml" />
+    <Content Include="Views\News\index.cshtml" />
+    <Content Include="Views\About\Data.cshtml" />
+    <Content Include="Views\Developers\Embed.cshtml" />
+    <Content Include="Views\Developers\WebDevelopment.cshtml" />
+    <Content Include="Views\News\Eclipse2017.cshtml" />
+    <Content Include="Views\News\2016wwtprize.cshtml" />
+    <Content Include="Views\News\onlinetraining.cshtml" />
+    <Content Include="Views\GetInvolved\Develop.cshtml" />
+    <Content Include="Views\GetInvolved\HelpOthers.cshtml" />
+    <Content Include="Views\About\WhoWeAre.cshtml" />
+    <Content Include="Views\Learn\UserGuide.cshtml" />
+    <Content Include="Views\GetInvolved\LeftNav.cshtml" />
+    <Content Include="Views\GetInvolved\Index.cshtml" />
+    <Content Include="Views\Download\Embed.cshtml" />
+    <Content Include="Views\Use\Beta.cshtml" />
+    <Content Include="Views\Use\Embed.cshtml" />
+    <Content Include="Views\Use\Index.cshtml" />
+    <Content Include="Views\Use\LeftNav.cshtml" />
+    <Content Include="Views\Use\Tools.cshtml" />
+    <Content Include="Views\Use\TourAssets.cshtml" />
+    <Content Include="Views\Use\Educators.cshtml" />
+    <Content Include="Views\Use\Researchers.cshtml" />
+    <Content Include="Views\Use\Planetariums.cshtml" />
+    <Content Include="Views\Use\WWTPlanetarium.cshtml" />
+    <Content Include="Views\Use\DomeProject.cshtml" />
+    <Content Include="Views\Use\Impacts.cshtml" />
+    <Content Include="Views\GetInvolved\Spectrum.cshtml" />
+    <Content Include="Views\GetInvolved\PlanetExplorer.cshtml" />
+    <Content Include="Views\GetInvolved\GreatObservatories.cshtml" />
+    <Content Include="Views\GetInvolved\ImportImage.cshtml" />
+    <Content Include="vampfeeds.wtml" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <Content Include="WWTWeb\colors.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Content\OpenWWT\" />
+    <Folder Include="Views\Home\" />
+    <Folder Include="Views\Resources\" />
+    <Folder Include="Views\WCF\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Ashx\IssuesAndBugs.ashx" />
+    <Content Include="adsass.wtml" />
+    <Content Include="Content\CSS\bootswatch.less" />
+    <Content Include="Content\CSS\datepicker.less" />
+    <Content Include="Content\CSS\legacy.less" />
+    <Content Include="Content\CSS\wwt.less" />
+    <Content Include="Content\CSS\tourplayer.less" />
+    <Content Include="Content\CSS\variables.less" />
+    <Content Include="Content\CSS\bootstrap_overrides.less" />
+    <Content Include="bower.json" />
+    <Content Include="package.json" />
+    <Content Include="Content\CSS\wwt.css.map" />
+    <Content Include="Models\EarthOnline.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>EarthOnline.Context1.cs</LastGenOutput>
+    </Content>
+    <EntityDeploy Include="Models\EarthOnline.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>EarthOnline1.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\EarthOnline.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>EarthOnline1.cs</LastGenOutput>
+    </Content>
+    <Content Include="Views\Shared\_ContentPage.cshtml" />
+    <Content Include="Views\About\Index.cshtml" />
+    <Content Include="Views\About\Acknowledgments.cshtml" />
+    <Content Include="Views\About\FAQ.cshtml" />
+    <Content Include="Views\About\FurtherDetails.cshtml" />
+    <Content Include="Views\About\WebClient.cshtml" />
+    <Content Include="Views\Contact\Index.cshtml" />
+    <Content Include="Views\Developers\DataFilesReference.cshtml" />
+    <Content Include="Views\Developers\DataToolsGuide.cshtml" />
+    <Content Include="Views\Developers\Index.cshtml" />
+    <Content Include="Views\Developers\HTML5SDK.cshtml" />
+    <Content Include="Views\Developers\ImportImage.cshtml" />
+    <Content Include="Views\Developers\LayerControlAPI.cshtml" />
+    <Content Include="Views\Developers\ProjectionReference.cshtml" />
+    <Content Include="Views\Developers\WWTSDK.cshtml" />
+    <Content Include="Views\Download\Index.cshtml" />
+    <Content Include="Views\Download\Features.cshtml" />
+    <Content Include="Views\Download\Legacy.cshtml" />
+    <Content Include="Views\Download\Tools.cshtml" />
+    <Content Include="Views\Download\TourAssets.cshtml" />
+    <Content Include="Views\Educators\Index.cshtml" />
+    <Content Include="Views\Educators\WWTA.cshtml" />
+    <Content Include="Views\Explorers\Index.cshtml" />
+    <Content Include="Views\Explorers\WWTA.cshtml" />
+    <Content Include="Views\Eyewire\Index.cshtml" />
+    <Content Include="Views\Interact\Debug.cshtml" />
+    <Content Include="Views\Interact\GreatObservatories.cshtml" />
+    <Content Include="Views\Interact\MilkyWay.cshtml" />
+    <Content Include="Views\Interact\MoreNessies.cshtml" />
+    <Content Include="Views\Interact\PlanetExplorer.cshtml" />
+    <Content Include="Views\Interact\Spectrum.cshtml" />
+    <Content Include="Views\Layerscape\Index.cshtml" />
+    <Content Include="Views\Learn\Authoring.cshtml" />
+    <Content Include="Views\Learn\Exploring.cshtml" />
+    <Content Include="Views\Learn\Index.cshtml" />
+    <Content Include="Views\Learn\SettingUp.cshtml" />
+    <Content Include="Views\Learn\WhatsNew.cshtml" />
+    <Content Include="Views\Museums\Index.cshtml" />
+    <Content Include="Views\Planetariums\DomeProject.cshtml" />
+    <Content Include="Views\Planetariums\Index.cshtml" />
+    <Content Include="Views\Planetariums\Impacts.cshtml" />
+    <Content Include="Views\Planetariums\Resources.cshtml" />
+    <Content Include="Views\Researchers\Index.cshtml" />
+    <Content Include="Views\Researchers\Resources.cshtml" />
+    <Content Include="Views\About\LeftNav.cshtml" />
+    <Content Include="Views\Learn\LeftNav.cshtml" />
+    <Content Include="Views\Developers\LeftNav.cshtml" />
+    <Content Include="Views\Download\LeftNav.cshtml" />
+    <Content Include="Views\Educators\LeftNav.cshtml" />
+    <Content Include="Views\Explorers\LeftNav.cshtml" />
+    <Content Include="Views\Interact\LeftNav.cshtml" />
+    <Content Include="Views\Planetariums\LeftNav.cshtml" />
+    <Content Include="Views\Researchers\LeftNav.cshtml" />
+    <Content Include="Views\Support\IssuesAndBugs.cshtml" />
+    <Content Include="Views\Support\Index.cshtml" />
+    <Content Include="Views\Support\LeftNav.cshtml" />
+    <!-- <Content Include="Views\Shared\webclient\IndexNYI.cshtml" /> -->
+    <Content Include="Views\Search\Index.cshtml" />
+    <Content Include="Views\Download\Beta.cshtml" />
+    <Content Include="Views\Index.cshtml" />
+    <Content Include="Views\Support\Localization.cshtml" />
+    <Content Include="Views\Learn\MobileTest.cshtml" />
+    <!-- <Content Include="Views\Shared\webclient\debughead.cshtml" /> -->
+    <Content Include="Views\Support\Error500.cshtml" />
+    <Content Include="Views\WWTinAction\Index.cshtml" />
+    <Content Include="Views\WWTinAction\LeftNav.cshtml" />
+    <Content Include="Views\WWTinAction\WWTinEducation.cshtml" />
+    <Content Include="Views\WWTinAction\WWTinResearch.cshtml" />
+    <Content Include="Views\Interact\Embed.cshtml" />
+    <Content Include="Views\Interact\WCSService.cshtml" />
+    <Content Include="Views\OpenWWT\Index.cshtml" />
+    <Content Include="Views\OpenWWT\LeftNav.cshtml" />
+    <Content Include="Views\OpenWWT\WWTStories.cshtml" />
+    <Content Include="Views\OpenWWT\WWTatAAS.cshtml" />
+    <Content Include="Views\Interact\Planck.cshtml" />
+    <Content Include="Views\Profile\Index.cshtml" />
+    <Content Include="Views\Profile\LeftNav.cshtml" />
+    <Content Include="Views\Profile\Communities.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WWT.Azure\WWT.Azure.csproj">
+      <Project>{e371698c-f67e-4da7-8545-1a7c984279c8}</Project>
+      <Name>WWT.Azure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WWT.PlateFiles\WWT.PlateFiles.csproj">
+      <Project>{fecd0629-586c-42c1-931a-3a06f18376ae}</Project>
+      <Name>WWT.PlateFiles</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WWT.Providers\WWT.Providers.csproj">
+      <Project>{ee4a3106-572b-4ef4-9ab5-a22643309a57}</Project>
+      <Name>WWT.Providers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WWTWebservices\WWTWebservices.csproj">
+      <Project>{1cf4d986-51ad-43f8-a84a-38b6ecba2172}</Project>
+      <Name>WWTWebservices</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Antlr">
+      <Version>3.5.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="AutoMapper">
+      <Version>3.3.1</Version>
+    </PackageReference>
+    <PackageReference Include="Azure.Identity">
+      <Version>1.2.1</Version>
+    </PackageReference>
+    <PackageReference Include="bootstrap">
+      <Version>3.4.1</Version>
+    </PackageReference>
+    <PackageReference Include="bootstrap.less">
+      <Version>3.4.1</Version>
+    </PackageReference>
+    <PackageReference Include="EntityFramework">
+      <Version>6.1.3</Version>
+    </PackageReference>
+    <PackageReference Include="jQuery">
+      <Version>3.2.1</Version>
+    </PackageReference>
+    <PackageReference Include="LiveSDKHelper">
+      <Version>0.1.0.8</Version>
+    </PackageReference>
+    <PackageReference Include="LiveSDKServer">
+      <Version>5.6.0</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNet.Identity.EntityFramework">
+      <Version>2.2.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNet.Mvc">
+      <Version>5.2.3</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNet.Web.Optimization">
+      <Version>1.1.3</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Azure.KeyVault.Core">
+      <Version>2.0.4</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Bcl">
+      <Version>1.1.10</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Bcl.Async">
+      <Version>1.0.168</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Configuration.ConfigurationBuilders.Azure">
+      <Version>2.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Configuration.ConfigurationBuilders.Environment">
+      <Version>2.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Configuration.ConfigurationBuilders.UserSecrets">
+      <Version>2.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Data.Services.Client">
+      <Version>5.8.3</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.IdentityModel">
+      <Version>6.1.7600.16394</Version>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>10.0.3</Version>
+    </PackageReference>
+    <PackageReference Include="RestSharp">
+      <Version>105.2.3</Version>
+    </PackageReference>
+    <PackageReference Include="Unity.Mvc">
+      <Version>4.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="WebActivatorEx">
+      <Version>2.2.0</Version>
+    </PackageReference>
+    <PackageReference Include="WebGrease">
+      <Version>1.6.0</Version>
+    </PackageReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>4675</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:4675/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

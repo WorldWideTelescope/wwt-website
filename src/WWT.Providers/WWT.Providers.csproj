@@ -10,8 +10,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\MapDataUtil\MapDataUtil.csproj" />
-    <ProjectReference Include="..\..\WWTWebservices\WWTWebservices.csproj" />
+    <ProjectReference Include="..\WWT.Maps\WWT.Maps.csproj" />
+    <ProjectReference Include="..\WWT.PlateFiles\WWT.PlateFiles.csproj" />
+    <ProjectReference Include="..\WWTWebservices\WWTWebservices.csproj" />
   </ItemGroup>
 
   <ItemGroup>
