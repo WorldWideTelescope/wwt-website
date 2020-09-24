@@ -1,3 +1,4 @@
+using AutofacContrib.NSubstitute;
 using AutoFixture;
 using Azure;
 using Azure.Storage.Blobs;
@@ -25,17 +26,18 @@ namespace WWT.Azure.Tests
         public void GetStreamTests(string plateFile, int level, int x, int y, string containerName, string blobFormat)
         {
             // Arrange
-            var (service, container, _, result) = ConfigureServiceClient(plateFile, level, x, y, containerName, blobFormat);
-            var pyramid = new AzurePlateTilePyramid(new AzurePlateTilePyramidOptions(), service);
+            using var mock = ConfigureServiceClient(plateFile, level, x, y, containerName, blobFormat)
+                .Build();
+            var pyramid = mock.Resolve<AzurePlateTilePyramid>();
 
             // Act
-            using var stream = pyramid.GetStream(plateFile, level, x, y);
+            using var result = pyramid.GetStream(plateFile, level, x, y);
 
             // Assert
-            Assert.NotNull(stream);
-            Assert.Same(result, stream);
+            Assert.NotNull(result);
+            Assert.Same(mock.Resolve<DownloadResult>(), result);
 
-            container.DidNotReceive().CreateIfNotExists();
+            mock.Resolve<BlobContainerClient>().DidNotReceive().CreateIfNotExists();
         }
 
         [Theory]
@@ -48,12 +50,15 @@ namespace WWT.Azure.Tests
             var level = _fixture.Create<int>();
             var x = _fixture.Create<int>();
             var y = _fixture.Create<int>();
-            var (service, container, _, _) = ConfigureServiceClient(plateFile, level, x, y);
             var options = new AzurePlateTilePyramidOptions
             {
                 CreateContainer = isCreateCalled
             };
-            var pyramid = new AzurePlateTilePyramid(options, service);
+
+            using var mock = ConfigureServiceClient(plateFile, level, x, y)
+                .Provide(options)
+                .Build();
+            var pyramid = mock.Resolve<AzurePlateTilePyramid>();
 
             // Act
             using var stream1 = pyramid.GetStream(plateFile, level, x, y);
@@ -64,11 +69,11 @@ namespace WWT.Azure.Tests
 
             if (isCreateCalled)
             {
-                container.Received(1).CreateIfNotExists();
+                mock.Resolve<BlobContainerClient>().Received(1).CreateIfNotExists();
             }
             else
             {
-                container.DidNotReceive().CreateIfNotExists();
+                mock.Resolve<BlobContainerClient>().DidNotReceive().CreateIfNotExists();
             }
         }
 
@@ -80,50 +85,55 @@ namespace WWT.Azure.Tests
         public void SaveStreamTests(string plateFile, int level, int x, int y, bool overwrite, string containerName, string blobFormat)
         {
             // Arrange
-            var (service, _, blob, _) = ConfigureServiceClient(plateFile, level, x, y, containerName, blobFormat);
-            var options = new AzurePlateTilePyramidOptions
-            {
-                OverwriteExisting = overwrite
-            };
+            using var container = ConfigureServiceClient(plateFile, level, x, y, containerName, blobFormat)
+                .Provide(new AzurePlateTilePyramidOptions
+                {
+                    OverwriteExisting = overwrite
+                })
+                .Build();
             var stream = Substitute.ForPartsOf<Stream>();
-            var pyramid = new AzurePlateTilePyramid(options, service);
 
             // Act
-            pyramid.SaveStream(stream, plateFile, level, x, y);
+            container.Resolve<AzurePlateTilePyramid>().SaveStream(stream, plateFile, level, x, y);
 
             // Assert
-            blob.Received(1).Upload(stream, overwrite);
+            container.Resolve<BlobClient>().Received(1).Upload(stream, overwrite);
         }
 
-        private static (BlobServiceClient, BlobContainerClient, BlobClient, Stream) ConfigureServiceClient(string plateFile, int level, int x, int y, string expectedContainerName = null, string blobFormat = null)
+        private static AutoSubstituteBuilder ConfigureServiceClient(string plateFile, int level, int x, int y, string expectedContainerName = null, string blobFormat = null)
         {
             blobFormat ??= "L{0}X{1}Y{2}.png";
             var blobName = string.Format(blobFormat, level, x, y);
             var containerName = expectedContainerName ?? plateFile.Replace(".plate", string.Empty);
-            var result = Substitute.ForPartsOf<Stream>();
 
-            var service = Substitute.ForPartsOf<BlobServiceClient>();
-            var container = Substitute.ForPartsOf<BlobContainerClient>();
-            var blob = Substitute.ForPartsOf<BlobClient>();
-            var response = Substitute.ForPartsOf<Response<BlobDownloadInfo>>();
+            return AutoSubstitute.Configure()
+                .SubstituteFor<DownloadResult>().Provide(out var result).Configured()
+                .SubstituteFor<BlobClient>().Provide(out var blob).Configure(b =>
+                {
+                    var response = Substitute.ForPartsOf<Response<BlobDownloadInfo>>();
+                    response.Value.Returns(BlobsModelFactory.BlobDownloadInfo(content: result));
 
-            service.Configure()
-                    .GetBlobContainerClient(containerName).Returns(container);
+                    b.Configure()
+                        .Download().Returns(response);
 
-            container.Configure()
-                    .GetBlobClient(blobName).Returns(blob);
-            container.Configure()
-                .CreateIfNotExists().Returns(Substitute.For<Response<BlobContainerInfo>>());
+                    b.WhenForAnyArgs(b => b.Upload(Arg.Any<Stream>(), Arg.Any<bool>(), Arg.Any<CancellationToken>()))
+                        .DoNotCallBase();
+                })
+                .SubstituteFor<BlobContainerClient>().Provide(out var container).Configure(c =>
+                {
+                    c.Configure()
+                        .GetBlobClient(blobName).Returns(blob);
 
-            response.Value.Returns(BlobsModelFactory.BlobDownloadInfo(content: result));
-
-            blob.Configure()
-                .Download().Returns(response);
-
-            blob.WhenForAnyArgs(b => b.Upload(Arg.Any<Stream>(), Arg.Any<bool>(), Arg.Any<CancellationToken>()))
-                .DoNotCallBase();
-
-            return (service, container, blob, result);
+                    c.Configure()
+                        .CreateIfNotExists().Returns(Substitute.For<Response<BlobContainerInfo>>());
+                })
+                .SubstituteFor<BlobServiceClient>().Provide(out var service).Configure(service =>
+                {
+                    service.Configure()
+                        .GetBlobContainerClient(containerName).Returns(container);
+                });
         }
+
+        public abstract class DownloadResult : Stream { }
     }
 }
