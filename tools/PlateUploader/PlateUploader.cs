@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using Azure.Identity;
+using Azure.Storage.Blobs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -40,13 +41,12 @@ namespace PlateUploader
             var credential = checkBox1.Checked
                 ? new InteractiveBrowserCredential()
                 : (TokenCredential)new DefaultAzureCredential();
-
+            var client = new BlobServiceClient(new Uri(textBox1.Text), credential);
             var tileUploader = new AzurePlateTilePyramid(new AzurePlateTilePyramidOptions
             {
-                StorageUri = textBox1.Text,
                 CreateContainer = true,
                 OverwriteExisting = true
-            }, credential);
+            }, client);
 
             var processor = new Processor(tileUploader, textBox2.Text);
             var workItems = processor.GetActions(listBox1.Items.Cast<string>()).ToList();
