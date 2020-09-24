@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using WWTWebservices;
-using WWTWebservices.Azure;
+using WWT.Azure;
 
 namespace PlateUploader
 {

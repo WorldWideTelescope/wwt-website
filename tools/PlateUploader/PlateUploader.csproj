@@ -11,7 +11,7 @@
     <PackageReference Include="Azure.Storage.Blobs" Version="12.6.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\WWT.Azure\WWT.Azure.csproj" />
     <ProjectReference Include="..\..\src\WWT.PlateFiles\WWT.PlateFiles.csproj" />
-    <ProjectReference Include="..\..\WWTWebservices.Azure\WWTWebservices.Azure.csproj" />
   </ItemGroup>
 </Project>

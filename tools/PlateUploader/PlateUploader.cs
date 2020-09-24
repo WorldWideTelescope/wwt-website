@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using WWTWebservices.Azure;
+using WWT.Azure;
 
 namespace PlateUploader
 {
