@@ -1,4 +1,5 @@
 using Azure.Identity;
+using Azure.Storage.Blobs;
 using Microsoft.Practices.Unity;
 using System;
 using System.Configuration;
@@ -65,12 +66,9 @@ namespace WWTMVC5
         {
             if (ConfigReader<bool>.GetSetting("UseAzurePlateFiles"))
             {
-                var options = new AzurePlateTilePyramidOptions
-                {
-                    StorageUri = ConfigurationManager.AppSettings["AzurePlateFileContainer"]
-                };
-
-                container.RegisterInstance<IPlateTilePyramid>(new AzurePlateTilePyramid(options, new DefaultAzureCredential()));
+                var storageUri = ConfigurationManager.AppSettings["AzurePlateFileContainer"];
+                container.RegisterInstance(new BlobServiceClient(new Uri(storageUri), new DefaultAzureCredential()));
+                container.RegisterType<IPlateTilePyramid, AzurePlateTilePyramid>();
             }
             else
             {

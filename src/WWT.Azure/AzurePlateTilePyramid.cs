@@ -1,5 +1,4 @@
-﻿using Azure.Core;
-using Azure.Storage.Blobs;
+﻿using Azure.Storage.Blobs;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -19,10 +18,10 @@ namespace WWT.Azure
             { "dssterrapixel.plate", ("dss", "DSSTerraPixelL{0}X{1}Y{2}.png") }
         };
 
-        public AzurePlateTilePyramid(AzurePlateTilePyramidOptions options, TokenCredential credentials)
+        public AzurePlateTilePyramid(AzurePlateTilePyramidOptions options, BlobServiceClient client)
         {
             _options = options;
-            _service = new BlobServiceClient(new Uri(options.StorageUri), credentials);
+            _service = client;
             _containers = new ConcurrentDictionary<string, BlobContainerClient>();
         }
 
