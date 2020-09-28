@@ -3,6 +3,8 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using WWTWebservices;
 
 namespace WWT.Azure
@@ -11,33 +13,48 @@ namespace WWT.Azure
     {
         private readonly AzurePlateTilePyramidOptions _options;
         private readonly BlobServiceClient _service;
-        private readonly ConcurrentDictionary<string, BlobContainerClient> _containers;
+        private readonly ConcurrentDictionary<string, Task<BlobContainerClient>> _containers;
 
         private readonly Dictionary<string, (string container, string blob)> _plateNameMapping = new Dictionary<string, (string, string)>(StringComparer.OrdinalIgnoreCase)
         {
             { "dssterrapixel.plate", ("dss", "DSSTerraPixelL{0}X{1}Y{2}.png") }
         };
 
-        public AzurePlateTilePyramid(AzurePlateTilePyramidOptions options, BlobServiceClient client)
+        public AzurePlateTilePyramid(AzurePlateTilePyramidOptions options, BlobServiceClient service)
         {
             _options = options;
-            _service = client;
-            _containers = new ConcurrentDictionary<string, BlobContainerClient>();
+            _service = service;
+            _containers = new ConcurrentDictionary<string, Task<BlobContainerClient>>();
         }
 
         public void SaveStream(Stream stream, string plateName, string fileName)
         {
-            var container = GetBlobContainerClient(plateName);
-            var client = container.GetBlobClient(fileName);
+            var container = GetBlobContainerClientAsync(plateName);
+            var client = container.Result.GetBlobClient(fileName);
 
             client.Upload(stream, _options.OverwriteExisting);
         }
 
         public void SaveStream(Stream stream, string plateName, int level, int x, int y)
         {
-            var client = GetBlobClient(plateName, level, x, y);
+            var client = GetBlobClientAsync(plateName, level, x, y);
 
-            client.Upload(stream, _options.OverwriteExisting);
+            client.Result.Upload(stream, _options.OverwriteExisting);
+        }
+
+        public async Task SaveStreamAsync(Stream stream, string plateName, string fileName, CancellationToken token)
+        {
+            var container = await GetBlobContainerClientAsync(plateName).ConfigureAwait(false);
+            var client = container.GetBlobClient(fileName);
+
+            await client.UploadAsync(stream, _options.OverwriteExisting, token);
+        }
+
+        public async Task SaveStreamAsync(Stream stream, string plateName, int level, int x, int y, CancellationToken token)
+        {
+            var client = await GetBlobClientAsync(plateName, level, x, y).ConfigureAwait(false);
+
+            await client.UploadAsync(stream, _options.OverwriteExisting, token);
         }
 
         Stream IPlateTilePyramid.GetStream(string pathPrefix, string plateName, int level, int x, int y)
@@ -45,29 +62,29 @@ namespace WWT.Azure
 
         public Stream GetStream(string plateName, int level, int x, int y)
         {
-            var client = GetBlobClient(plateName, level, x, y);
-            var download = client.Download();
+            var client = GetBlobClientAsync(plateName, level, x, y);
+            var download = client.Result.Download();
 
             return download.Value.Content;
         }
 
-        private BlobContainerClient GetBlobContainerClient(string plateName)
-            => _containers.GetOrAdd(plateName, p =>
+        private Task<BlobContainerClient> GetBlobContainerClientAsync(string plateName)
+            => _containers.GetOrAdd(plateName, async p =>
             {
                 var name = GetBlobContainerName(p);
                 var client = _service.GetBlobContainerClient(name);
 
                 if (_options.CreateContainer)
                 {
-                    client.CreateIfNotExists();
+                    await client.CreateIfNotExistsAsync();
                 }
 
                 return client;
             });
 
-        private BlobClient GetBlobClient(string plateName, int level, int x, int y)
+        private async Task<BlobClient> GetBlobClientAsync(string plateName, int level, int x, int y)
         {
-            var container = GetBlobContainerClient(plateName);
+            var container = await GetBlobContainerClientAsync(plateName).ConfigureAwait(false);
             var blobName = GetBlobName(plateName, level, x, y);
 
             return container.GetBlobClient(blobName);
