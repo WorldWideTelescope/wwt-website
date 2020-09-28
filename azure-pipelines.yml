@@ -44,11 +44,10 @@ steps:
   inputs:
     testSelector: 'testAssemblies'
     testAssemblyVer2: |
-      **\*test*.dll
+      **\WWT.*.Tests.dll
       !**\*TestAdapter.dll
       !**\obj\**
     searchFolder: '$(System.DefaultWorkingDirectory)'
-    codeCoverageEnabled: true
 
 - task: PublishPipelineArtifact@1
   inputs:
