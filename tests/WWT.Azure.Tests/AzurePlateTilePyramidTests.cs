@@ -7,6 +7,7 @@ using NSubstitute;
 using NSubstitute.Extensions;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace WWT.Azure.Tests
@@ -69,11 +70,11 @@ namespace WWT.Azure.Tests
 
             if (isCreateCalled)
             {
-                mock.Resolve<BlobContainerClient>().Received(1).CreateIfNotExists();
+                mock.Resolve<BlobContainerClient>().Received(1).CreateIfNotExistsAsync();
             }
             else
             {
-                mock.Resolve<BlobContainerClient>().DidNotReceive().CreateIfNotExists();
+                mock.Resolve<BlobContainerClient>().DidNotReceive().CreateIfNotExistsAsync();
             }
         }
 
@@ -82,7 +83,7 @@ namespace WWT.Azure.Tests
         [InlineData("test.plate", 0, 0, 0, false, null, null)]
         [InlineData("dssterrapixel.plate", 0, 0, 0, true, "dss", "DSSTerraPixelL{0}X{1}Y{2}.png")]
         [InlineData("dssterrapixel.plate", 0, 0, 0, false, "dss", "DSSTerraPixelL{0}X{1}Y{2}.png")]
-        public void SaveStreamTests(string plateFile, int level, int x, int y, bool overwrite, string containerName, string blobFormat)
+        public async Task SaveStreamTests(string plateFile, int level, int x, int y, bool overwrite, string containerName, string blobFormat)
         {
             // Arrange
             using var container = ConfigureServiceClient(plateFile, level, x, y, containerName, blobFormat)
@@ -94,10 +95,10 @@ namespace WWT.Azure.Tests
             var stream = Substitute.ForPartsOf<Stream>();
 
             // Act
-            container.Resolve<AzurePlateTilePyramid>().SaveStream(stream, plateFile, level, x, y);
+            await container.Resolve<AzurePlateTilePyramid>().SaveStreamAsync(stream, plateFile, level, x, y, default);
 
             // Assert
-            container.Resolve<BlobClient>().Received(1).Upload(stream, overwrite);
+            await container.Resolve<BlobClient>().Received(1).UploadAsync(stream, overwrite, default);
         }
 
         private static AutoSubstituteBuilder ConfigureServiceClient(string plateFile, int level, int x, int y, string expectedContainerName = null, string blobFormat = null)

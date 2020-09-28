@@ -27,21 +27,6 @@ namespace WWT.Azure
             _containers = new ConcurrentDictionary<string, Task<BlobContainerClient>>();
         }
 
-        public void SaveStream(Stream stream, string plateName, string fileName)
-        {
-            var container = GetBlobContainerClientAsync(plateName);
-            var client = container.Result.GetBlobClient(fileName);
-
-            client.Upload(stream, _options.OverwriteExisting);
-        }
-
-        public void SaveStream(Stream stream, string plateName, int level, int x, int y)
-        {
-            var client = GetBlobClientAsync(plateName, level, x, y);
-
-            client.Result.Upload(stream, _options.OverwriteExisting);
-        }
-
         public async Task SaveStreamAsync(Stream stream, string plateName, string fileName, CancellationToken token)
         {
             var container = await GetBlobContainerClientAsync(plateName).ConfigureAwait(false);
