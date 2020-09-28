@@ -262,3 +262,4 @@ COPYING.evaluation
 
 # Database file
 Database.jfm
+/tools/PlateManager/Properties/launchSettings.json
