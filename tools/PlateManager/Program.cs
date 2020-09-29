@@ -26,10 +26,11 @@ namespace PlateManager
                 new Option<bool>("--useplate2format"),
                 new Option<bool>("--interactive"),
                 new Option<bool>("--skip-existing", () => true),
+                new Option<LogLevel>("--log-level", () => LogLevel.Information),
                 new Option<string>("--baseUrl", ()=>"baseUrl")
             };
 
-            command.Handler = CommandHandler.Create<IEnumerable<FileInfo>, Uri, bool, bool, string, bool>(Run);
+            command.Handler = CommandHandler.Create<UploadOptions>(Run);
 
             var root = new RootCommand
             {
@@ -39,19 +40,41 @@ namespace PlateManager
             return root.InvokeAsync(args);
         }
 
-        static async Task Run(IEnumerable<FileInfo> file, Uri storage, bool interactive, bool usePlate2Format, string baseUrl, bool skipExisting)
+        private class UploadOptions
+        {
+            public IEnumerable<FileInfo> File { get; set; }
+
+            public Uri Storage { get; set; }
+
+            public bool Interactive { get; set; }
+
+            public bool UsePlate2Format { get; set; }
+
+            public string BaseUrl { get; set; }
+
+            public bool SkipExisting { get; set; }
+
+            public LogLevel LogLevel { get; set; }
+        }
+
+        static async Task Run(UploadOptions uploadOptions)
         {
             var services = new ServiceCollection();
 
             services.AddLogging(builder =>
             {
+                builder.SetMinimumLevel(uploadOptions.LogLevel);
                 builder.AddConsole();
             });
 
-            if (usePlate2Format)
+            if (uploadOptions.UsePlate2Format)
+            {
                 services.AddTransient<IWorkItemGenerator, PlateFile2WorkItemGenerator>();
+            }
             else
+            {
                 services.AddTransient<IWorkItemGenerator, PlateFileWorkItemGenerator>();
+            }
 
             services.AddSingleton<AzurePlateTilePyramid>();
             services.AddSingleton<Processor>();
@@ -59,14 +82,14 @@ namespace PlateManager
             services.AddSingleton(new AzurePlateTilePyramidOptions
             {
                 CreateContainer = true,
-                SkipIfExists = skipExisting,
+                SkipIfExists = uploadOptions.SkipExisting,
             });
 
             services.AddAzureClients(builder =>
             {
-                builder.AddBlobServiceClient(storage);
+                builder.AddBlobServiceClient(uploadOptions.Storage);
 
-                if (interactive)
+                if (uploadOptions.Interactive)
                 {
                     builder.UseCredential(new InteractiveBrowserCredential());
                 }
@@ -78,8 +101,8 @@ namespace PlateManager
 
             var options = new ProcessorOptions
             {
-                BaseUrl = baseUrl,
-                Files = file.Select(p => p.FullName)
+                BaseUrl = uploadOptions.BaseUrl,
+                Files = uploadOptions.File.Select(p => p.FullName)
             };
 
             using var container = services.BuildServiceProvider();
