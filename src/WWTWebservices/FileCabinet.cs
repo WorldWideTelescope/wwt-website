@@ -23,7 +23,7 @@ namespace WWTWebservices
     }
     public class FileCabinet
     {
-        public static void Extract(string cabfile, string filetarget, HttpResponse response)
+        public static void Extract(string cabfile, string filetarget, HttpResponseBase response)
         {
 
             //try

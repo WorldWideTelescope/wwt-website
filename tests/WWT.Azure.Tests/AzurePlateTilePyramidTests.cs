@@ -108,11 +108,11 @@ namespace WWT.Azure.Tests
             var containerName = expectedContainerName ?? plateFile.Replace(".plate", string.Empty);
 
             return AutoSubstitute.Configure()
-                .SubstituteFor<DownloadResult>().Provide(out var result).Configured()
-                .SubstituteFor<BlobClient>().Provide(out var blob).Configure(b =>
+                .SubstituteFor2<DownloadResult>().Provide(out var result).Configured()
+                .SubstituteFor2<BlobClient>().Provide(out var blob).Configure(b =>
                 {
                     var response = Substitute.ForPartsOf<Response<BlobDownloadInfo>>();
-                    response.Value.Returns(BlobsModelFactory.BlobDownloadInfo(content: result));
+                    response.Value.Returns(BlobsModelFactory.BlobDownloadInfo(content: result.Value));
 
                     b.Configure()
                         .Download().Returns(response);
@@ -120,18 +120,18 @@ namespace WWT.Azure.Tests
                     b.WhenForAnyArgs(b => b.Upload(Arg.Any<Stream>(), Arg.Any<bool>(), Arg.Any<CancellationToken>()))
                         .DoNotCallBase();
                 })
-                .SubstituteFor<BlobContainerClient>().Provide(out var container).Configure(c =>
+                .SubstituteFor2<BlobContainerClient>().Provide(out var container).Configure(c =>
                 {
                     c.Configure()
-                        .GetBlobClient(blobName).Returns(blob);
+                        .GetBlobClient(blobName).Returns(blob.Value);
 
                     c.Configure()
                         .CreateIfNotExists().Returns(Substitute.For<Response<BlobContainerInfo>>());
                 })
-                .SubstituteFor<BlobServiceClient>().Provide(out var service).Configure(service =>
+                .SubstituteFor2<BlobServiceClient>().Provide(out var service).Configure(service =>
                 {
                     service.Configure()
-                        .GetBlobContainerClient(containerName).Returns(container);
+                        .GetBlobContainerClient(containerName).Returns(container.Value);
                 });
         }
 

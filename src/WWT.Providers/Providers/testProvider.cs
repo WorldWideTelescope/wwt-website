@@ -7,7 +7,7 @@ namespace WWT.Providers
 {
     public class testProvider : RequestProvider
     {
-        public override void Run(WwtContext context)
+        public override void Run(IWwtContext context)
         {
             string primary = ConfigurationManager.AppSettings["PrimaryFileserver"].ToLower();
             context.Response.Write("primary: " + primary + "<BR />");

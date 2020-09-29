@@ -7,7 +7,7 @@ namespace WWT.Providers
 {
     public class GetAuthorThumbnailProvider : RequestProvider
     {
-        public override void Run(WwtContext context)
+        public override void Run(IWwtContext context)
         {
             string guid;
             if (context.Request.Params["GUID"] != null)

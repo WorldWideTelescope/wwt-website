@@ -16,7 +16,7 @@ namespace WWT.Providers
             _hasher = hasher;
         }
 
-        public override void Run(WwtContext context)
+        public override void Run(IWwtContext context)
         {
             string query = context.Request.Params["Q"];
             bool debug = context.Request.Params["debug"] != null;

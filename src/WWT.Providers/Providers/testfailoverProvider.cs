@@ -4,7 +4,7 @@ namespace WWT.Providers
 {
     public class testfailoverProvider : RequestProvider
     {
-        public override void Run(WwtContext context)
+        public override void Run(IWwtContext context)
         {
             context.Response.Write(WWTUtil.GetCurrentConfigShare("DSSTOASTPNG", true));
         }

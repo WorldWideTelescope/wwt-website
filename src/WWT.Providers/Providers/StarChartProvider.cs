@@ -6,7 +6,7 @@ namespace WWT.Providers
 {
     public class StarChartProvider : StarChart
     {
-        public override void Run(WwtContext context)
+        public override void Run(IWwtContext context)
         {
             double lat = double.Parse(context.Request.Params["lat"]);
             double lng = double.Parse(context.Request.Params["lng"]);

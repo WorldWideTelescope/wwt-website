@@ -10,7 +10,7 @@ namespace WWT.Providers
 {
     public class SDSS12ToastProvider : RequestProvider
     {
-        public override void Run(WwtContext context)
+        public override void Run(IWwtContext context)
         {
             if (context.Request.UserAgent.ToLower().Contains("wget"))
             {

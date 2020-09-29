@@ -4,7 +4,7 @@ namespace WWT.Providers
 {
     public class GetTourListProvider : GetTourList
     {
-        public override void Run(WwtContext context)
+        public override void Run(IWwtContext context)
         {
             string etag = context.Request.Headers["If-None-Match"];
 

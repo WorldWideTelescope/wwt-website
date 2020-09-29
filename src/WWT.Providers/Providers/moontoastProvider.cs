@@ -7,7 +7,7 @@ namespace WWT.Providers
 {
     public class moontoastProvider : RequestProvider
     {
-        public override void Run(WwtContext context)
+        public override void Run(IWwtContext context)
         {
             string wwtTilesDir = ConfigurationManager.AppSettings["WWTTilesDir"] + "\\LROWAC";
 

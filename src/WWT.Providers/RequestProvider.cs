@@ -8,9 +8,9 @@ namespace WWT.Providers
         private static IServiceProvider _provider;
 
         public void Run(Page page)
-            => Run(new WwtContext(page));
+            => Run(new PageWwtContext(page));
 
-        public abstract void Run(WwtContext context);
+        public abstract void Run(IWwtContext context);
 
         public static RequestProvider Get<TProvider>()
             where TProvider : RequestProvider

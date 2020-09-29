@@ -9,7 +9,7 @@ namespace WWT.Providers
 {
     public class veblendProvider : RequestProvider
     {
-        public override void Run(WwtContext context)
+        public override void Run(IWwtContext context)
         {
             string query = "";
 

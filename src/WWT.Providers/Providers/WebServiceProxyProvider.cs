@@ -5,7 +5,7 @@ namespace WWT.Providers
 {
     public class WebServiceProxyProvider : RequestProvider
     {
-        public override void Run(WwtContext context)
+        public override void Run(IWwtContext context)
         {
             string returnString = "Erorr: No URL Specified";
             string url = "";

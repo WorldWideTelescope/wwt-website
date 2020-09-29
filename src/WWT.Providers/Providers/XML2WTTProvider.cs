@@ -10,7 +10,7 @@ namespace WWT.Providers
         {
         }
 
-        public override void Run(WwtContext context)
+        public override void Run(IWwtContext context)
         {
             //string etag = context.Request.Headers["If-None-Match"];
             string tourcache = ConfigurationManager.AppSettings["WWTTOURCACHE"];

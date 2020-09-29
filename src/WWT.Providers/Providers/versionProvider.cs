@@ -4,7 +4,7 @@ namespace WWT.Providers
 {
     public class versionProvider : RequestProvider
     {
-        public override void Run(WwtContext context)
+        public override void Run(IWwtContext context)
         {
             context.Response.AddHeader("Cache-Control", "no-cache");
             string webDir = ConfigurationManager.AppSettings["WWTWEBDIR"];
