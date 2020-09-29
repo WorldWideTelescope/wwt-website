@@ -4,6 +4,8 @@
     {
         public bool CreateContainer { get; set; }
 
+        public bool SkipIfExists { get; set; }
+
         public bool OverwriteExisting { get; set; }
     }
 }

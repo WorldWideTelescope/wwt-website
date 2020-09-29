@@ -44,7 +44,7 @@ namespace WWT.Azure.Tests
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public void CreateContainer(bool isCreateCalled)
+        public async Task CreateContainer(bool isCreateCalled)
         {
             // Arrange
             var plateFile = _fixture.Create<string>();
@@ -70,11 +70,11 @@ namespace WWT.Azure.Tests
 
             if (isCreateCalled)
             {
-                mock.Resolve<BlobContainerClient>().Received(1).CreateIfNotExistsAsync();
+                await mock.Resolve<BlobContainerClient>().Received(1).CreateIfNotExistsAsync();
             }
             else
             {
-                mock.Resolve<BlobContainerClient>().DidNotReceive().CreateIfNotExistsAsync();
+                await mock.Resolve<BlobContainerClient>().DidNotReceive().CreateIfNotExistsAsync();
             }
         }
 
@@ -99,6 +99,38 @@ namespace WWT.Azure.Tests
 
             // Assert
             await container.Resolve<BlobClient>().Received(1).UploadAsync(stream, overwrite, default);
+        }
+
+        [Theory]
+        [InlineData(true, true)]
+        [InlineData(false, true)]
+        [InlineData(true, false)]
+        [InlineData(false, false)]
+        public async Task VeriyExists(bool skipIfExists, bool exists)
+        {
+            // Arrange
+            var plateFile = _fixture.Create<string>();
+            var level = _fixture.Create<int>();
+            var x = _fixture.Create<int>();
+            var y = _fixture.Create<int>();
+            var options = new AzurePlateTilePyramidOptions
+            {
+                SkipIfExists = skipIfExists,
+            };
+
+            using var mock = ConfigureServiceClient(plateFile, level, x, y)
+              .Provide(options)
+              .Build();
+
+            mock.Resolve<BlobClient>().Configure().ExistsAsync().Returns(Response.FromValue(exists, null));
+
+            var stream = Substitute.For<Stream>();
+
+            // Act
+            var result = await mock.Resolve<AzurePlateTilePyramid>().SaveStreamAsync(stream, plateFile, level, x, y, default);
+
+            // Assert
+            Assert.Equal(!skipIfExists || !exists, result);
         }
 
         private static AutoSubstituteBuilder ConfigureServiceClient(string plateFile, int level, int x, int y, string expectedContainerName = null, string blobFormat = null)

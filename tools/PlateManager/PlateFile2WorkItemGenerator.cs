@@ -15,7 +15,7 @@ namespace PlateManager
     {
         private readonly AzurePlateTilePyramid _pyramid;
         private readonly ILogger<PlateFile2WorkItemGenerator> _logger;
-        
+
         public PlateFile2WorkItemGenerator(AzurePlateTilePyramid pyramid, ILogger<PlateFile2WorkItemGenerator> logger)
         {
             _pyramid = pyramid;
@@ -26,7 +26,7 @@ namespace PlateManager
         {
             var filepart = Path.GetFileNameWithoutExtension(plateFile);
             var azureContainer = Path.GetFileName(plateFile).ToLowerInvariant();
-            
+
             // Handle thumbnails if one exists alongside the plate file
             string thumbnail = GetThumbnailName(plateFile);
             if (File.Exists(thumbnail))
@@ -48,21 +48,29 @@ namespace PlateManager
 
             var plateFile2 = new PlateFile2(plateFile);
             var directoryEntries = plateFile2.GetEntries().ToList();
-            
+
             _logger.LogInformation("Found {Count} files encoded in {File}", directoryEntries.Count, plateFile);
             foreach (var item in directoryEntries)
             {
                 token.ThrowIfCancellationRequested();
-                
+
                 async Task UploadItem(int count, int total)
                 {
                     _logger.LogTrace("[{Count} of {Total}] Starting upload for {File} {tag}/L{Level}X{X}Y{Y}", count, total, plateFile, item.tag, item.level, item.x, item.y);
                     try
                     {
-                        await ProcessPlateTileAsync(plateFile2, azureContainer, item.tag, item.level, item.x, item.y, token);
-                        _logger.LogTrace("[{Count} of {Total}] Completed upload for {File} {tag}/L{Level}X{X}Y{Y}", count, total, plateFile, item.tag, item.level, item.x, item.y);
+                        var result = await ProcessPlateTileAsync(plateFile2, azureContainer, item.tag, item.level, item.x, item.y, token);
+
+                        if (result)
+                        {
+                            _logger.LogInformation("[{Count} of {Total}] Completed upload for {File} {tag}/L{Level}X{X}Y{Y}", count, total, plateFile, item.tag, item.level, item.x, item.y);
+                        }
+                        else
+                        {
+                            _logger.LogWarning("[{Count} of {Total}] Skipped upload for {File} {tag}/L{Level}X{X}Y{Y}", count, total, plateFile, item.tag, item.level, item.x, item.y);
+                        }
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         _logger.LogError(ex, "[{Count} of {Total}] Unexpected error uploading {File} {tag}/L{Level}X{X}Y{Y}", count, total, plateFile, item.tag, item.level, item.x, item.y);
                     }
@@ -72,14 +80,16 @@ namespace PlateManager
             _logger.LogInformation("Done adding upload tasks for {File}", plateFile);
         }
 
-        private async Task ProcessPlateTileAsync(PlateFile2 plateFile, string container, int tag, int level, int x, int y, CancellationToken token)
+        private async Task<bool> ProcessPlateTileAsync(PlateFile2 plateFile, string container, int tag, int level, int x, int y, CancellationToken token)
         {
             using var stream = plateFile.GetFileStream(tag, level, x, y);
 
             if (stream != null)
             {
-                await _pyramid.SaveStreamAsync(stream, container, tag, level, x, y, token);
+                return await _pyramid.SaveStreamAsync(stream, container, tag, level, x, y, token);
             }
+
+            return false;
         }
     }
 }

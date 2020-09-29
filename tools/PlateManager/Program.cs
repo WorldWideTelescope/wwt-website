@@ -25,10 +25,11 @@ namespace PlateManager
                 new Option<Uri>("--storage", () => new Uri("https://127.0.0.1:10000/devstoreaccount1/")),
                 new Option<bool>("--useplate2format"),
                 new Option<bool>("--interactive"),
+                new Option<bool>("--skip-existing", () => true),
                 new Option<string>("--baseUrl", ()=>"baseUrl")
             };
 
-            command.Handler = CommandHandler.Create<IEnumerable<FileInfo>, Uri, bool, bool, string>(Run);
+            command.Handler = CommandHandler.Create<IEnumerable<FileInfo>, Uri, bool, bool, string, bool>(Run);
 
             var root = new RootCommand
             {
@@ -38,7 +39,7 @@ namespace PlateManager
             return root.InvokeAsync(args);
         }
 
-        static async Task Run(IEnumerable<FileInfo> file, Uri storage, bool interactive, bool usePlate2Format, string baseUrl)
+        static async Task Run(IEnumerable<FileInfo> file, Uri storage, bool interactive, bool usePlate2Format, string baseUrl, bool skipExisting)
         {
             var services = new ServiceCollection();
 
@@ -47,7 +48,7 @@ namespace PlateManager
                 builder.AddConsole();
             });
 
-            if(usePlate2Format)
+            if (usePlate2Format)
                 services.AddTransient<IWorkItemGenerator, PlateFile2WorkItemGenerator>();
             else
                 services.AddTransient<IWorkItemGenerator, PlateFileWorkItemGenerator>();
@@ -58,7 +59,7 @@ namespace PlateManager
             services.AddSingleton(new AzurePlateTilePyramidOptions
             {
                 CreateContainer = true,
-                OverwriteExisting = true
+                SkipIfExists = skipExisting,
             });
 
             services.AddAzureClients(builder =>
