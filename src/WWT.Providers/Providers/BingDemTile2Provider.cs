@@ -8,7 +8,7 @@ namespace WWT.Providers
 {
     public class BingDemTile2Provider : RequestProvider
     {
-        public override void Run(WwtContext context)
+        public override void Run(IWwtContext context)
         {
             string query = context.Request.Params["Q"];
             string[] values = query.Split(',');

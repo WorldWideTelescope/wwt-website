@@ -4,7 +4,7 @@ namespace WWT.Providers
 {
     public class ExcelAddinUpdateProvider : RequestProvider
     {
-        public override void Run(WwtContext context)
+        public override void Run(IWwtContext context)
         {
             string webDir = ConfigurationManager.AppSettings["WWTWEBDIR"];
             context.Response.AddHeader("Cache-Control", "no-cache");

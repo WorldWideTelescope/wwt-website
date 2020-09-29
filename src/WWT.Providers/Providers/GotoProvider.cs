@@ -5,7 +5,7 @@ namespace WWT.Providers
 {
     public class GotoProvider : RequestProvider
     {
-        public override void Run(WwtContext context)
+        public override void Run(IWwtContext context)
         {
             //if (context.Request.Cookies["alphakey"] != null && context.Request.Params["wtml"] == null)
             if (context.Request.Cookies["fullclient"] == null && context.Request.Params["wtml"] == null)

@@ -5,7 +5,7 @@ namespace WWT.Providers
 {
     public class CatalogProvider : RequestProvider
     {
-        public override void Run(WwtContext context)
+        public override void Run(IWwtContext context)
         {
             string etag = context.Request.Headers["If-None-Match"];
             string filename = "";

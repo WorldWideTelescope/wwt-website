@@ -5,7 +5,7 @@ namespace WWT.Providers
 {
     public class tilethumbProvider : RequestProvider
     {
-        public override void Run(WwtContext context)
+        public override void Run(IWwtContext context)
         {
             string name = context.Request.Params["name"];
             string type = context.Request.Params["class"];

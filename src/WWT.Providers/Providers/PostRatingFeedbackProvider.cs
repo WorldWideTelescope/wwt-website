@@ -4,7 +4,7 @@ namespace WWT.Providers
 {
     public class PostRatingFeedbackProvider : PostRatingFeedback
     {
-        public override void Run(WwtContext context)
+        public override void Run(IWwtContext context)
         {
             context.Response.ClearHeaders();
             context.Response.Clear();

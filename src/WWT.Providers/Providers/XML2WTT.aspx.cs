@@ -17,7 +17,7 @@ namespace WWT.Providers
             _hasher = hasher;
         }
 
-        protected string MakeTourFromXML(WwtContext context, Stream InputStream, string baseDir)
+        protected string MakeTourFromXML(IWwtContext context, Stream InputStream, string baseDir)
         {
             XmlDocument doc = new XmlDocument();
             doc.Load(InputStream);

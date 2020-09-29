@@ -14,7 +14,7 @@ namespace WWT.Providers
             _hasher = hasher;
         }
 
-        public override void Run(WwtContext context)
+        public override void Run(IWwtContext context)
         {
             string path = context.Server.MapPath(@"TourCache");
 

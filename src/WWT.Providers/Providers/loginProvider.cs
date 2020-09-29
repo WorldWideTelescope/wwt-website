@@ -6,7 +6,7 @@ namespace WWT.Providers
 {
     public class loginProvider : LoginUser
     {
-        public override void Run(WwtContext context)
+        public override void Run(IWwtContext context)
         {
             string wwt2dir = ConfigurationManager.AppSettings["WWT2DIR"];
             context.Response.AddHeader("Cache-Control", "no-cache");

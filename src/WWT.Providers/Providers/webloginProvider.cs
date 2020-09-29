@@ -5,7 +5,7 @@ namespace WWT.Providers
 {
     public class webloginProvider : LoginWebUser
     {
-        public override void Run(WwtContext context)
+        public override void Run(IWwtContext context)
         {
             context.Response.AddHeader("Cache-Control", "no-cache");
             context.Response.Expires = -1;

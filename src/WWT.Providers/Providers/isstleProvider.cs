@@ -6,7 +6,7 @@ namespace WWT.Providers
 {
     public class isstleProvider : isstle
     {
-        public override void Run(WwtContext context)
+        public override void Run(IWwtContext context)
         {
             string url = "";
 

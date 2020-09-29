@@ -7,7 +7,7 @@ namespace WWT.Providers
 {
     public class moontoastdemProvider : RequestProvider
     {
-        public override void Run(WwtContext context)
+        public override void Run(IWwtContext context)
         {
             string wwtDemDir = ConfigurationManager.AppSettings["WWTDEMDir"];
 

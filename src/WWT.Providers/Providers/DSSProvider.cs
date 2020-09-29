@@ -4,16 +4,25 @@ using WWTWebservices;
 
 namespace WWT.Providers
 {
+    public class DSSOptions
+    {
+        public string WwtTilesDir { get; set; } = ConfigurationManager.AppSettings["WWTTilesDir"];
+
+        public string DssTerapixelDir { get; set; } = ConfigurationManager.AppSettings["DssTerapixelDir"];
+    }
+
     public class DSSProvider : RequestProvider
     {
         private readonly IPlateTilePyramid _plateTile;
+        private readonly DSSOptions _options;
 
-        public DSSProvider(IPlateTilePyramid plateTile)
+        public DSSProvider(IPlateTilePyramid plateTile, DSSOptions options)
         {
             _plateTile = plateTile;
+            _options = options;
         }
 
-        public override void Run(WwtContext context)
+        public override void Run(IWwtContext context)
         {
             string query = context.Request.Params["Q"];
             string[] values = query.Split(',');
@@ -28,11 +37,9 @@ namespace WWT.Providers
             }
             else if (level < 8)
             {
-                string wwtTilesDir = ConfigurationManager.AppSettings["WWTTilesDir"];
-
                 context.Response.ContentType = "image/png";
 
-                using (var s = _plateTile.GetStream(wwtTilesDir, "dssterrapixel.plate", level, tileX, tileY))
+                using (var s = _plateTile.GetStream(_options.WwtTilesDir, "dssterrapixel.plate", level, tileX, tileY))
                 {
                     s.CopyTo(context.Response.OutputStream);
                     context.Response.Flush();
@@ -51,10 +58,9 @@ namespace WWT.Providers
 
                 context.Response.ContentType = "image/png";
 
-                string dssTerapixelDir = ConfigurationManager.AppSettings["DssTerapixelDir"];
                 string filename = $"DSSpngL5to12_x{X32}_y{Y32}.plate";
 
-                using (var s = _plateTile.GetStream(dssTerapixelDir, filename, L5, X5, Y5))
+                using (var s = _plateTile.GetStream(_options.DssTerapixelDir, filename, L5, X5, Y5))
                 {
                     s.CopyTo(context.Response.OutputStream);
                     context.Response.Flush();

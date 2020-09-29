@@ -7,7 +7,7 @@ namespace WWT.Providers
 {
     public class EarthMerBathProvider : RequestProvider
     {
-        public override void Run(WwtContext context)
+        public override void Run(IWwtContext context)
         {
             string wwtTilesDir = ConfigurationManager.AppSettings["WWTTilesDir"];
             string dsstoastpng = WWTUtil.GetCurrentConfigShare("DSSTOASTPNG", true);
