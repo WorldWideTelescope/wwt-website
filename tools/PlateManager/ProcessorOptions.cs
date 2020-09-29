@@ -12,5 +12,7 @@ namespace PlateManager
         public int FileProcessorCount { get; set; } = 5;
 
         public int UploadingCount { get; set; } = 50;
+
+        public bool UsePlate2Format { get; set; }
     }
 }
