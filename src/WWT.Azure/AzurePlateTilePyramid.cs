@@ -9,6 +9,10 @@ using WWTWebservices;
 
 namespace WWT.Azure
 {
+    /// <summary>
+    /// Manages the interface to Azure storage for the decomposition of plate files
+    /// Note that the presence of the "tag" parameter is an indicator of the PlateTile2 format in use
+    /// </summary>
     public class AzurePlateTilePyramid : IPlateTilePyramid
     {
         private readonly AzurePlateTilePyramidOptions _options;
@@ -42,6 +46,16 @@ namespace WWT.Azure
             await client.UploadAsync(stream, _options.OverwriteExisting, token);
         }
 
+        /// <summary>
+        /// Saves a PlateFile2 stream to blob storage
+        /// </summary>
+        public async Task SaveStreamAsync(Stream stream, string plateName, int tag, int level, int x, int y, CancellationToken token)
+        {
+            var client = await GetBlobClientAsync(plateName, tag, level, x, y).ConfigureAwait(false);
+
+            await client.UploadAsync(stream, _options.OverwriteExisting, token);
+        }
+
         Stream IPlateTilePyramid.GetStream(string pathPrefix, string plateName, int level, int x, int y)
             => GetStream(plateName, level, x, y);
 
@@ -50,6 +64,13 @@ namespace WWT.Azure
             var client = GetBlobClientAsync(plateName, level, x, y);
             var download = client.Result.Download();
 
+            return download.Value.Content;
+        }
+
+        public Stream GetStream(string pathPrefix, string plateName, int tag, int level, int x, int y)
+        {
+            var client = GetBlobClientAsync(plateName, tag, level, x, y);
+            var download = client.Result.Download();
             return download.Value.Content;
         }
 
@@ -75,6 +96,13 @@ namespace WWT.Azure
             return container.GetBlobClient(blobName);
         }
 
+        private async Task<BlobClient> GetBlobClientAsync(string plateName, int tag, int level, int x, int y)
+        {
+            var container = await GetBlobContainerClientAsync(plateName).ConfigureAwait(false);
+            var blobName = GetBlobName(tag, level, x, y);
+            return container.GetBlobClient(blobName);
+        }
+
         private string GetBlobContainerName(string plateName)
         {
             if (_plateNameMapping.TryGetValue(plateName, out var info))
@@ -96,5 +124,12 @@ namespace WWT.Azure
 
             return string.Format(blobFormat, level, x, y);
         }
+
+        /// <summary>
+        /// Gets the URL upload pattern for a blob for a PlateFile2 image
+        /// </summary>
+        private static string GetBlobName(int tag, int level, int x, int y) 
+            => $"{tag}/L{level}X{x}Y{y}.png";
+
     }
 }

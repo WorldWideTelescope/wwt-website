@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace PlateManager
 {
-    internal class PlateFileWorkItemGenerator : IWorkItemGenerator
+    internal class PlateFileWorkItemGenerator : PlateFileWorkItemGeneratorBase, IWorkItemGenerator
     {
         private readonly AzurePlateTilePyramid _pyramid;
         private readonly ILogger<PlateFileWorkItemGenerator> _logger;
@@ -26,8 +26,8 @@ namespace PlateManager
             var azureContainer = Path.GetFileName(plateFile).ToLowerInvariant();
 
             bool hasLevels = PlateTilePyramid.GetLevelCount(plateFile, out int levels);
-            string thumbnail = plateFile.Replace(".plate", ".jpg").ToLower().Replace("-", "_");
-            string wtmlfile = plateFile.Replace(".plate", ".wtml").ToLower();
+            string thumbnail = GetThumbnailName(plateFile);
+            string wtmlfile = GetWtmlName(plateFile);
 
             if (File.Exists(thumbnail))
             {
@@ -35,18 +35,15 @@ namespace PlateManager
 
                 Task UploadThumbnail(int count, int total)
                 {
-                    return _pyramid.SaveStreamAsync(GetFileStream(thumbnail), azureContainer, filepart.ToLower().Replace("-", "_") + "_thumb.jpg", token);
+                    return _pyramid.SaveStreamAsync(GetFileStream(thumbnail), azureContainer, GetThumbnailBlobName(filepart), token);
                 }
-
                 yield return UploadThumbnail;
             }
 
             if (File.Exists(wtmlfile))
             {
                 string wtmlFileOut = wtmlfile.Replace(".wtml", ".azure.wtml");
-                string wtmldata = File.ReadAllText(wtmlfile);
-                wtmldata = wtmldata.Replace(filepart + "/{1}/{3}/{3}_{2}.png", baseUrl + azureContainer + "/" + filepart + "L{1}X{2}Y{3}.png");
-                wtmldata = wtmldata.Replace(filepart.ToLower().Replace("-", "_") + ".jpg", baseUrl + azureContainer + "/" + filepart.ToLower().Replace("-", "_") + "_thumb.jpg");
+                string wtmldata = UpdateWtmlEntries(File.ReadAllText(wtmlfile), filepart, baseUrl, azureContainer);               
                 File.WriteAllText(wtmlFileOut, wtmldata);
             }
 
@@ -95,12 +92,6 @@ namespace PlateManager
             {
                 _logger.LogWarning("Found no levels for {File}", plateFile);
             }
-        }
-
-        private Stream GetFileStream(string filename)
-        {
-            byte[] data = File.ReadAllBytes(filename);
-            return new MemoryStream(data);
         }
 
         private async Task ProcessPlateTileAsync(string container, string plateFile, int level, int x, int y, CancellationToken token)
