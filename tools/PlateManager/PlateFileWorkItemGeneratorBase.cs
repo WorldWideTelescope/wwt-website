@@ -8,7 +8,7 @@ namespace PlateManager
     /// <summary>
     /// Shared logic that the different plate work item generators will reuse
     /// </summary>
-    public abstract class BasePlateFileWorkItemGenerator
+    public abstract class PlateFileWorkItemGeneratorBase
     {
         /// <summary>
         /// Reads a file into a memory stream

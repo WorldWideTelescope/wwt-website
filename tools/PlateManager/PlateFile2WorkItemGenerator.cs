@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,7 +11,7 @@ using WWTWebservices;
 
 namespace PlateManager
 {
-    internal sealed class PlateFile2WorkItemGenerator : BasePlateFileWorkItemGenerator, IWorkItemGenerator
+    internal sealed class PlateFile2WorkItemGenerator : PlateFileWorkItemGeneratorBase, IWorkItemGenerator
     {
         private readonly AzurePlateTilePyramid _pyramid;
         private readonly ILogger<PlateFile2WorkItemGenerator> _logger;
@@ -46,10 +47,9 @@ namespace PlateManager
             }
 
             var plateFile2 = new PlateFile2(plateFile);
-            var fileCount = plateFile2.GetTotalFiles();
-            var directoryEntries = plateFile2.GetDirectoryEntries();
+            var directoryEntries = plateFile2.GetEntries().ToList();
             
-            _logger.LogInformation("Found {Count} files encoded in {File}", fileCount, plateFile);
+            _logger.LogInformation("Found {Count} files encoded in {File}", directoryEntries.Count, plateFile);
             foreach (var item in directoryEntries)
             {
                 token.ThrowIfCancellationRequested();
@@ -59,7 +59,7 @@ namespace PlateManager
                     _logger.LogTrace("[{Count} of {Total}] Starting upload for {File} {tag}/L{Level}X{X}Y{Y}", count, total, plateFile, item.tag, item.level, item.x, item.y);
                     try
                     {
-                        await ProcessPlateTileAsync(plateFile2, azureContainer, plateFile, item.tag, item.level, item.x, item.y, token);
+                        await ProcessPlateTileAsync(plateFile2, azureContainer, item.tag, item.level, item.x, item.y, token);
                         _logger.LogTrace("[{Count} of {Total}] Completed upload for {File} {tag}/L{Level}X{X}Y{Y}", count, total, plateFile, item.tag, item.level, item.x, item.y);
                     }
                     catch(Exception ex)
@@ -72,7 +72,7 @@ namespace PlateManager
             _logger.LogInformation("Done adding upload tasks for {File}", plateFile);
         }
 
-        private async Task ProcessPlateTileAsync(PlateFile2 plateFile, string container, string plateFileName, int tag, int level, int x, int y, CancellationToken token)
+        private async Task ProcessPlateTileAsync(PlateFile2 plateFile, string container, int tag, int level, int x, int y, CancellationToken token)
         {
             using var stream = plateFile.GetFileStream(tag, level, x, y);
 

@@ -67,6 +67,13 @@ namespace WWT.Azure
             return download.Value.Content;
         }
 
+        public Stream GetStream(string pathPrefix, string plateName, int tag, int level, int x, int y)
+        {
+            var client = GetBlobClientAsync(plateName, tag, level, x, y);
+            var download = client.Result.Download();
+            return download.Value.Content;
+        }
+
         private Task<BlobContainerClient> GetBlobContainerClientAsync(string plateName)
             => _containers.GetOrAdd(plateName, async p =>
             {
@@ -123,5 +130,6 @@ namespace WWT.Azure
         /// </summary>
         private static string GetBlobName(int tag, int level, int x, int y) 
             => $"{tag}/L{level}X{x}Y{y}.png";
+
     }
 }

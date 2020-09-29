@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace PlateManager
 {
-    internal class PlateFileWorkItemGenerator : BasePlateFileWorkItemGenerator, IWorkItemGenerator
+    internal class PlateFileWorkItemGenerator : PlateFileWorkItemGeneratorBase, IWorkItemGenerator
     {
         private readonly AzurePlateTilePyramid _pyramid;
         private readonly ILogger<PlateFileWorkItemGenerator> _logger;
