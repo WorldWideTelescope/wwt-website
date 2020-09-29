@@ -31,29 +31,41 @@ namespace WWT.Azure
             _containers = new ConcurrentDictionary<string, Task<BlobContainerClient>>();
         }
 
-        public async Task SaveStreamAsync(Stream stream, string plateName, string fileName, CancellationToken token)
+        public async Task<bool> SaveStreamAsync(Stream stream, string plateName, string fileName, CancellationToken token)
         {
             var container = await GetBlobContainerClientAsync(plateName).ConfigureAwait(false);
             var client = container.GetBlobClient(fileName);
 
-            await client.UploadAsync(stream, _options.OverwriteExisting, token);
+            return await SaveStreamAsync(client, stream, token).ConfigureAwait(false);
         }
 
-        public async Task SaveStreamAsync(Stream stream, string plateName, int level, int x, int y, CancellationToken token)
+        public async Task<bool> SaveStreamAsync(Stream stream, string plateName, int level, int x, int y, CancellationToken token)
         {
             var client = await GetBlobClientAsync(plateName, level, x, y).ConfigureAwait(false);
 
-            await client.UploadAsync(stream, _options.OverwriteExisting, token);
+            return await SaveStreamAsync(client, stream, token).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Saves a PlateFile2 stream to blob storage
         /// </summary>
-        public async Task SaveStreamAsync(Stream stream, string plateName, int tag, int level, int x, int y, CancellationToken token)
+        public async Task<bool> SaveStreamAsync(Stream stream, string plateName, int tag, int level, int x, int y, CancellationToken token)
         {
             var client = await GetBlobClientAsync(plateName, tag, level, x, y).ConfigureAwait(false);
 
-            await client.UploadAsync(stream, _options.OverwriteExisting, token);
+            return await SaveStreamAsync(client, stream, token).ConfigureAwait(false);
+        }
+
+        private async Task<bool> SaveStreamAsync(BlobClient client, Stream stream, CancellationToken token)
+        {
+            if (_options.SkipIfExists && await client.ExistsAsync(token).ConfigureAwait(false))
+            {
+                return false;
+            }
+
+            await client.UploadAsync(stream, _options.OverwriteExisting, token).ConfigureAwait(false);
+
+            return true;
         }
 
         Stream IPlateTilePyramid.GetStream(string pathPrefix, string plateName, int level, int x, int y)

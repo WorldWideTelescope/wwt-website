@@ -70,8 +70,16 @@ namespace PlateManager
                                 _logger.LogTrace("[{Count} of {Total}] Starting upload for {File} L{Level}X{X}Y{Y}", count, total, plateFile, tmpLevel, tmpX, tmpY);
                                 try
                                 {
-                                    await ProcessPlateTileAsync(azureContainer, plateFile, tmpLevel, tmpX, tmpY, token);
-                                    _logger.LogInformation("[{Count} of {Total}] Completed upload for {File} L{Level}X{X}Y{Y}", count, total, plateFile, tmpLevel, tmpX, tmpY);
+                                    var result = await ProcessPlateTileAsync(azureContainer, plateFile, tmpLevel, tmpX, tmpY, token);
+
+                                    if (result)
+                                    {
+                                        _logger.LogInformation("[{Count} of {Total}] Completed upload for {File} L{Level}X{X}Y{Y}", count, total, plateFile, tmpLevel, tmpX, tmpY);
+                                    }
+                                    else
+                                    {
+                                        _logger.LogWarning("[{Count} of {Total}] Skipped upload for {File} L{Level}X{X}Y{Y}", count, total, plateFile, tmpLevel, tmpX, tmpY);
+                                    }
                                 }
                                 catch (Exception e)
                                 {
@@ -94,14 +102,16 @@ namespace PlateManager
             }
         }
 
-        private async Task ProcessPlateTileAsync(string container, string plateFile, int level, int x, int y, CancellationToken token)
+        private async Task<bool> ProcessPlateTileAsync(string container, string plateFile, int level, int x, int y, CancellationToken token)
         {
             using var stream = PlateTilePyramid.GetFileStream(plateFile, level, x, y);
 
             if (stream != null)
             {
-                await _pyramid.SaveStreamAsync(stream, container, level, x, y, token);
+                return await _pyramid.SaveStreamAsync(stream, container, level, x, y, token);
             }
+
+            return false;
         }
     }
 }
