@@ -71,6 +71,7 @@ namespace PlateManager
 
             services.AddLogging(builder =>
             {
+                builder.AddFilter("Azure-Core", LogLevel.Error);
                 builder.SetMinimumLevel(uploadOptions.LogLevel);
                 builder.AddConsole();
 
