@@ -1,9 +1,9 @@
-﻿using Azure.Core;
-using Azure.Identity;
+﻿using Azure.Identity;
 using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Events;
 using System;
 using System.Collections.Generic;
 using System.CommandLine;
@@ -27,7 +27,8 @@ namespace PlateManager
                 new Option<bool>("--interactive"),
                 new Option<bool>("--skip-existing", () => true),
                 new Option<LogLevel>("--log-level", () => LogLevel.Information),
-                new Option<string>("--baseUrl", ()=>"baseUrl")
+                new Option<string>("--baseUrl", () => "baseUrl"),
+                new Option<FileInfo>("--error-log")
             };
 
             command.Handler = CommandHandler.Create<UploadOptions>(Run);
@@ -60,6 +61,8 @@ namespace PlateManager
             public bool SkipExisting { get; set; }
 
             public LogLevel LogLevel { get; set; }
+
+            public FileInfo ErrorLog { get; set; }
         }
 
         static async Task Run(UploadOptions uploadOptions)
@@ -70,6 +73,15 @@ namespace PlateManager
             {
                 builder.SetMinimumLevel(uploadOptions.LogLevel);
                 builder.AddConsole();
+
+                if (uploadOptions.ErrorLog != null)
+                {
+                    var serilog = new LoggerConfiguration()
+                        .WriteTo.File(uploadOptions.ErrorLog.FullName, LogEventLevel.Error)
+                        .CreateLogger();
+
+                    builder.AddSerilog(serilog);
+                }
             });
 
             if (uploadOptions.UsePlate2Format)
