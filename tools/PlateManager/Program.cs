@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using WWT.Azure;
 
@@ -18,6 +17,21 @@ namespace PlateManager
     class Program
     {
         static Task<int> Main(string[] args)
+        {
+            var root = new RootCommand
+            {
+                CreateUploadCommand()
+            };
+
+            using (var current = System.Diagnostics.Process.GetCurrentProcess())
+            {
+                root.Name = current.ProcessName;
+            }
+
+            return root.InvokeAsync(args);
+        }
+
+        static Command CreateUploadCommand()
         {
             var command = new Command("upload")
             {
@@ -31,83 +45,48 @@ namespace PlateManager
                 new Option<FileInfo>("--error-log")
             };
 
-            command.Handler = CommandHandler.Create<UploadOptions>(Run);
+            command.Handler = CommandHandler.Create<UploadProcessorOptions>(Run);
 
-            var root = new RootCommand
-            {
-                command
-            };
-
-            using (var current = System.Diagnostics.Process.GetCurrentProcess())
-            {
-                root.Name = current.ProcessName;
-            }
-
-            return root.InvokeAsync(args);
+            return command;
         }
 
-        private class UploadOptions
-        {
-            public IEnumerable<FileInfo> File { get; set; }
-
-            public Uri Storage { get; set; }
-
-            public bool Interactive { get; set; }
-
-            public bool UsePlate2Format { get; set; }
-
-            public string BaseUrl { get; set; }
-
-            public bool SkipExisting { get; set; }
-
-            public LogLevel LogLevel { get; set; }
-
-            public FileInfo ErrorLog { get; set; }
-        }
-
-        static async Task Run(UploadOptions uploadOptions)
+        static async Task Run<T>(T options)
+            where T : BaseOptions, IServiceRegistration
         {
             var services = new ServiceCollection();
 
             services.AddLogging(builder =>
             {
                 builder.AddFilter("Azure-Core", LogLevel.Error);
-                builder.SetMinimumLevel(uploadOptions.LogLevel);
+                builder.SetMinimumLevel(options.LogLevel);
                 builder.AddConsole();
 
-                if (uploadOptions.ErrorLog != null)
+                if (options.ErrorLog != null)
                 {
                     var serilog = new LoggerConfiguration()
-                        .WriteTo.File(uploadOptions.ErrorLog.FullName, LogEventLevel.Error)
+                        .WriteTo.File(options.ErrorLog.FullName, LogEventLevel.Error)
                         .CreateLogger();
 
                     builder.AddSerilog(serilog);
                 }
             });
 
-            if (uploadOptions.UsePlate2Format)
-            {
-                services.AddTransient<IWorkItemGenerator, PlateFile2WorkItemGenerator>();
-            }
-            else
-            {
-                services.AddTransient<IWorkItemGenerator, PlateFileWorkItemGenerator>();
-            }
+            options.AddServices(services);
 
+            services.AddSingleton(options);
             services.AddSingleton<AzurePlateTilePyramid>();
-            services.AddSingleton<Processor>();
 
             services.AddSingleton(new AzurePlateTilePyramidOptions
             {
                 CreateContainer = true,
-                SkipIfExists = uploadOptions.SkipExisting,
+                SkipIfExists = options.SkipExisting,
             });
 
             services.AddAzureClients(builder =>
             {
-                builder.AddBlobServiceClient(uploadOptions.Storage);
+                builder.AddBlobServiceClient(options.Storage);
 
-                if (uploadOptions.Interactive)
+                if (options.Interactive)
                 {
                     builder.UseCredential(new InteractiveBrowserCredential());
                 }
@@ -117,15 +96,9 @@ namespace PlateManager
                 }
             });
 
-            var options = new ProcessorOptions
-            {
-                BaseUrl = uploadOptions.BaseUrl,
-                Files = uploadOptions.File.Select(p => p.FullName)
-            };
-
             using var container = services.BuildServiceProvider();
 
-            await container.GetRequiredService<Processor>().ProcessAsync(options, default);
+            await container.GetRequiredService<ICommand>().RunAsync(default);
         }
     }
 }
