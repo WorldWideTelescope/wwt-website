@@ -55,8 +55,6 @@ steps:
     command: 'pack'
     packagesToPack: 'tools/PlateManager/PlateManager.csproj'
     packDirectory: '$(Build.ArtifactStagingDirectory)/tools'
-    includesymbols: true
-    includesource: true
     versioningScheme: 'off'
 
 - task: VSTest@2
