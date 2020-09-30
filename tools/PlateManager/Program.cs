@@ -37,6 +37,11 @@ namespace PlateManager
                 command
             };
 
+            using (var current = System.Diagnostics.Process.GetCurrentProcess())
+            {
+                root.Name = current.ProcessName;
+            }
+
             return root.InvokeAsync(args);
         }
 

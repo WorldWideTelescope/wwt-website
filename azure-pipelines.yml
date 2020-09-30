@@ -13,6 +13,15 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
+- task: PowerShell@2
+  displayName: 'Update version'
+  name: updateVersion
+  inputs:
+    targetType: 'inline'
+    script: |
+      dotnet tool install --global GitVersion.Tool --version 5.1.2      
+      dotnet gitversion /output buildserver /nofetch
+
 - task: NuGetToolInstaller@1
 
 - task: NuGetCommand@2
@@ -36,9 +45,19 @@ steps:
 - task: VSBuild@1
   inputs:
     solution: '$(solution)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:PrecompileBeforePublish=true /p:EnableUpdateable=false /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+    msbuildArgs: '/p:DeployOnBuild=true /p:PrecompileBeforePublish=true /p:EnableUpdateable=false /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)/website"'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: Create tool package
+  inputs:
+    command: 'pack'
+    packagesToPack: 'tools/PlateManager/PlateManager.csproj'
+    packDirectory: '$(Build.ArtifactStagingDirectory)/tools'
+    includesymbols: true
+    includesource: true
+    versioningScheme: 'off'
 
 - task: VSTest@2
   inputs:
@@ -51,6 +70,21 @@ steps:
 
 - task: PublishPipelineArtifact@1
   inputs:
-    targetPath: '$(build.artifactStagingDirectory)'
+    targetPath: '$(build.artifactStagingDirectory)/website'
     artifact: 'website'
     publishLocation: 'pipeline'
+
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: '$(build.artifactStagingDirectory)/tools'
+    artifact: 'tools'
+    publishLocation: 'pipeline'
+
+- task: DotNetCoreCLI@2
+  displayName: Push tools to feed
+  inputs:
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/tools/*.nupkg'
+    nuGetFeedType: 'internal'
+    publishVstsFeed: '5b8413f0-309f-4655-933b-c3b9516cd60f/cec2a436-ea5b-41d3-a4d4-8f2380a4c6a9'
+  condition: ne(variables['Build.Reason'], 'PullRequest')
