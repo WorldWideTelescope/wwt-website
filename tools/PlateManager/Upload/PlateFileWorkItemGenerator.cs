@@ -20,7 +20,7 @@ namespace PlateManager
             _logger = logger;
         }
 
-        public IEnumerable<Func<int, int, Task>> GenerateWorkItems(string plateFile, string baseUrl, CancellationToken token)
+        public IEnumerable<Func<int, int, CancellationToken, Task>> GenerateWorkItems(string plateFile, string baseUrl)
         {
             var filepart = Path.GetFileNameWithoutExtension(plateFile);
             var azureContainer = Path.GetFileName(plateFile).ToLowerInvariant();
@@ -33,7 +33,7 @@ namespace PlateManager
             {
                 _logger.LogTrace("Adding task for thumbnail {Path}", thumbnail);
 
-                Task UploadThumbnail(int count, int total)
+                Task UploadThumbnail(int count, int total, CancellationToken token)
                 {
                     return _pyramid.SaveStreamAsync(GetFileStream(thumbnail), azureContainer, GetThumbnailBlobName(filepart), token);
                 }
@@ -43,7 +43,7 @@ namespace PlateManager
             if (File.Exists(wtmlfile))
             {
                 string wtmlFileOut = wtmlfile.Replace(".wtml", ".azure.wtml");
-                string wtmldata = UpdateWtmlEntries(File.ReadAllText(wtmlfile), filepart, baseUrl, azureContainer);               
+                string wtmldata = UpdateWtmlEntries(File.ReadAllText(wtmlfile), filepart, baseUrl, azureContainer);
                 File.WriteAllText(wtmlFileOut, wtmldata);
             }
 
@@ -59,13 +59,11 @@ namespace PlateManager
                     {
                         for (int x = 0; x < maxX; x++)
                         {
-                            token.ThrowIfCancellationRequested();
-
                             var tmpLevel = level;
                             var tmpX = x;
                             var tmpY = y;
 
-                            async Task UploadItem(int count, int total)
+                            async Task UploadItem(int count, int total, CancellationToken token)
                             {
                                 _logger.LogTrace("[{Count} of {Total}] Starting upload for {File} L{Level}X{X}Y{Y}", count, total, plateFile, tmpLevel, tmpX, tmpY);
                                 try

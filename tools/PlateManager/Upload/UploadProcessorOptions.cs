@@ -7,13 +7,13 @@ namespace PlateManager
 {
     internal class UploadProcessorOptions : BaseOptions, IServiceRegistration
     {
+        public const int DefaultUploaderCount = 50;
+
         public IEnumerable<FileInfo> File { get; set; } = Enumerable.Empty<FileInfo>();
 
         public bool UsePlate2Format { get; set; }
 
-        public int FileProcessorCount { get; set; } = 5;
-
-        public int UploadingCount { get; set; } = 50;
+        public int UploaderCount { get; set; } = DefaultUploaderCount;
 
         public string BaseUrl { get; set; }
 
