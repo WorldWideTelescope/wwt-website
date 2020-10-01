@@ -8,25 +8,27 @@ using System.Collections.Generic;
 
 namespace PlateManager
 {
-    internal class Processor
+    internal class UploadProcessor : ICommand
     {
+        private readonly UploadProcessorOptions _options;
         private readonly IEnumerable<IWorkItemGenerator> _generators;
-        private readonly ILogger<Processor> _logger;
+        private readonly ILogger<UploadProcessor> _logger;
 
-        public Processor(IEnumerable<IWorkItemGenerator> generators, ILogger<Processor> logger)
+        public UploadProcessor(UploadProcessorOptions options, IEnumerable<IWorkItemGenerator> generators, ILogger<UploadProcessor> logger)
         {
+            _options = options;
             _generators = generators;
             _logger = logger;
         }
 
-        public async Task ProcessAsync(ProcessorOptions options, CancellationToken token)
+        public async Task RunAsync(CancellationToken token)
         {
             var files = Channel.CreateUnbounded<string>(new UnboundedChannelOptions
             {
                 SingleWriter = true
             });
 
-            foreach (var file in options.Files)
+            foreach (var file in _options.Files)
             {
                 while (!files.Writer.TryWrite(file))
                 {
@@ -44,7 +46,7 @@ namespace PlateManager
 
             int total = 0;
 
-            var fileProcessing = Enumerable.Range(0, options.FileProcessorCount).Select(async _ =>
+            var fileProcessing = Enumerable.Range(0, _options.FileProcessorCount).Select(async _ =>
             {
                 while (!files.Reader.Completion.IsCompleted)
                 {
@@ -54,7 +56,7 @@ namespace PlateManager
 
                     foreach (var generator in _generators)
                     {
-                        foreach (var task in generator.GenerateWorkItems(file, options.BaseUrl, token))
+                        foreach (var task in generator.GenerateWorkItems(file, _options.BaseUrl, token))
                         {
                             await tasks.Writer.WriteAsync(task, token);
 
@@ -66,7 +68,7 @@ namespace PlateManager
 
             var c = 0;
 
-            var uploadProcessing = Enumerable.Range(0, options.UploadingCount).Select(async _ =>
+            var uploadProcessing = Enumerable.Range(0, _options.UploadingCount).Select(async _ =>
             {
                 while (!tasks.Reader.Completion.IsCompleted)
                 {
