@@ -30,7 +30,7 @@ namespace PlateManager
                 services.AddTransient<IWorkItemGenerator, PlateFileWorkItemGenerator>();
             }
 
-            services.AddSingleton<UploadProcessor>();
+            services.AddSingleton<ICommand, UploadProcessor>();
         }
     }
 }
