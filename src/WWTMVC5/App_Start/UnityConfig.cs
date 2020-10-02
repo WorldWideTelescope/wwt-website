@@ -1,9 +1,12 @@
 using Azure.Identity;
 using Azure.Storage.Blobs;
-using Microsoft.Practices.Unity;
 using System;
 using System.Configuration;
 using System.Linq;
+using Unity;
+using Unity.AspNet.Mvc;
+using Unity.Injection;
+using Unity.Lifetime;
 using WWT.Azure;
 using WWT.Providers;
 using WWTMVC5.Models;

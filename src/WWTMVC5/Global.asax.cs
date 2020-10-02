@@ -1,20 +1,14 @@
 ﻿using System;
-using System.CodeDom;
+using System.IdentityModel.Services;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using Microsoft.Practices.Unity;
-using WWTMVC5.Models;
-using WWTMVC5.Repositories;
-using WWTMVC5.Repositories.Interfaces;
-using WWTMVC5.Services;
-using WWTMVC5.Services.Interfaces;
-using System.IdentityModel.Services;
+using Unity;
+using Unity.AspNet.Mvc;
 using WWT.Providers;
-using Microsoft.Practices.Unity.Mvc;
-using System.Linq;
 
 namespace WWTMVC5
 {
@@ -61,10 +55,21 @@ namespace WWTMVC5
             FilterProviders.Providers.Remove(FilterProviders.Providers.OfType<FilterAttributeFilterProvider>().First());
             FilterProviders.Providers.Add(new UnityFilterAttributeFilterProvider(container));
 
-            var provider = new UnityDependencyResolver(container);
+            DependencyResolver.SetResolver(new UnityDependencyResolver(container));
+            RequestProvider.SetServiceProvider(new UnityServiceProvider(container));
+        }
 
-            DependencyResolver.SetResolver(provider);
-            RequestProvider.SetServiceProvider(provider);
+        public class UnityServiceProvider : IServiceProvider
+        {
+            private readonly IUnityContainer _unityContainer;
+
+            public UnityServiceProvider(IUnityContainer container)
+            {
+                _unityContainer = container;
+            }
+
+            public object GetService(Type serviceType)
+                => _unityContainer.Resolve(serviceType);
         }
     }
 }
