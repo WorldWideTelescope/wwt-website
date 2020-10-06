@@ -72,12 +72,14 @@ namespace WWTWebservices
                 }
             }
 
-
-
             string baseName = ConfigurationManager.AppSettings[entryName].ToLower();
 
-            return baseName.Replace(primary, current);
+            if(string.IsNullOrEmpty(primary))
+            {
+                return baseName;
+            }
 
+            return baseName.Replace(primary, current);
         }
 
         public static bool ShouldDownloadSDSS(int level, int xtile, int ytile)
