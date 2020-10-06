@@ -1,10 +1,10 @@
-﻿using System;
-using System.Linq;
+﻿using Microsoft.Extensions.Logging;
+using Open.ChannelExtensions;
+using System;
+using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
-using System.Threading;
-using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
 
 namespace PlateManager
 {
@@ -21,76 +21,42 @@ namespace PlateManager
             _logger = logger;
         }
 
-        public async Task RunAsync(CancellationToken token)
+        public Task RunAsync(CancellationToken token)
         {
-            var files = Channel.CreateUnbounded<string>(new UnboundedChannelOptions
-            {
-                SingleWriter = true
-            });
-
-            foreach (var file in _options.Files)
-            {
-                while (!files.Writer.TryWrite(file))
+            int _count = 0;
+            int _total = 0;
+            
+            return Channel.CreateBounded<string>(capacity: 100)
+                .Source(_options.Files, token)
+                .TransformMany(ProcessFile, capacity: 10000, token: token)
+                .ReadAllConcurrentlyAsync(_options.UploaderCount, async action =>
                 {
-                }
-            }
-
-            files.Writer.Complete();
-
-            var tasks = Channel.CreateBounded<Func<int, int, Task>>(new BoundedChannelOptions(10000)
-            {
-                FullMode = BoundedChannelFullMode.Wait,
-                SingleReader = false,
-                SingleWriter = false
-            });
-
-            int total = 0;
-
-            var fileProcessing = Enumerable.Range(0, _options.FileProcessorCount).Select(async _ =>
-            {
-                while (!files.Reader.Completion.IsCompleted)
-                {
-                    var file = await files.Reader.ReadAsync(token);
-
-                    _logger.LogInformation("Adding {File}", file);
-
-                    foreach (var generator in _generators)
-                    {
-                        foreach (var task in generator.GenerateWorkItems(file, _options.BaseUrl, token))
-                        {
-                            await tasks.Writer.WriteAsync(task, token);
-
-                            Interlocked.Increment(ref total);
-                        }
-                    }
-                }
-            }).ToList();
-
-            var c = 0;
-
-            var uploadProcessing = Enumerable.Range(0, _options.UploadingCount).Select(async _ =>
-            {
-                while (!tasks.Reader.Completion.IsCompleted)
-                {
-                    var count = Interlocked.Increment(ref c);
-                    var task = await tasks.Reader.ReadAsync();
-
                     try
                     {
-                        await task(count, total);
+                        var count = Interlocked.Increment(ref _count);
+
+                        await action(count, _total, token);
                     }
                     catch (Exception e)
                     {
                         _logger.LogError(e, "Unexpected error running task");
                     }
+                });
+
+            IEnumerable<Func<int, int, CancellationToken, Task>> ProcessFile(string file)
+            {
+                _logger.LogInformation("Adding {File}", file);
+
+                foreach (var generator in _generators)
+                {
+                    foreach (var task in generator.GenerateWorkItems(file, _options.BaseUrl))
+                    {
+                        yield return task;
+
+                        Interlocked.Increment(ref _total);
+                    }
                 }
-            }).ToList();
-
-            await Task.WhenAll(fileProcessing);
-
-            tasks.Writer.Complete();
-
-            await Task.WhenAll(uploadProcessing);
+            }
         }
     }
 }

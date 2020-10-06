@@ -42,6 +42,7 @@ namespace PlateManager
                 new Option<bool>("--skip-existing", () => true),
                 new Option<LogLevel>("--log-level", () => LogLevel.Information),
                 new Option<string>("--baseUrl", () => "baseUrl"),
+                new Option<int>("--uploader-count", () => UploadProcessorOptions.DefaultUploaderCount),
                 new Option<FileInfo>("--error-log")
             };
 
@@ -80,6 +81,7 @@ namespace PlateManager
             {
                 CreateContainer = true,
                 SkipIfExists = options.SkipExisting,
+                OverwriteExisting = !options.SkipExisting
             });
 
             services.AddAzureClients(builder =>

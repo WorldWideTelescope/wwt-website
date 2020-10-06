@@ -22,7 +22,7 @@ namespace PlateManager
             _logger = logger;
         }
 
-        public IEnumerable<Func<int, int, Task>> GenerateWorkItems(string plateFile, string baseUrl, CancellationToken token)
+        public IEnumerable<Func<int, int, CancellationToken, Task>> GenerateWorkItems(string plateFile, string baseUrl)
         {
             var filepart = Path.GetFileNameWithoutExtension(plateFile);
             var azureContainer = Path.GetFileName(plateFile).ToLowerInvariant();
@@ -32,7 +32,7 @@ namespace PlateManager
             if (File.Exists(thumbnail))
             {
                 _logger.LogTrace("Adding task for thumbnail {Path}", thumbnail);
-                Task UploadThumbnail(int count, int total) => _pyramid.SaveStreamAsync(GetFileStream(thumbnail), azureContainer, GetThumbnailBlobName(filepart), token);
+                Task UploadThumbnail(int count, int total, CancellationToken token) => _pyramid.SaveStreamAsync(GetFileStream(thumbnail), azureContainer, GetThumbnailBlobName(filepart), token);
                 yield return UploadThumbnail;
             }
 
@@ -52,9 +52,7 @@ namespace PlateManager
             _logger.LogInformation("Found {Count} files encoded in {File}", directoryEntries.Count, plateFile);
             foreach (var item in directoryEntries)
             {
-                token.ThrowIfCancellationRequested();
-
-                async Task UploadItem(int count, int total)
+                async Task UploadItem(int count, int total, CancellationToken token)
                 {
                     _logger.LogTrace("[{Count} of {Total}] Starting upload for {File} {tag}/L{Level}X{X}Y{Y}", count, total, plateFile, item.tag, item.level, item.x, item.y);
                     try
