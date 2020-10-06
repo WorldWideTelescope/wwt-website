@@ -1,22 +1,14 @@
 using System;
-using System.Configuration;
 using WWTWebservices;
 
 namespace WWT.Providers
 {
-    public class DSSOptions
-    {
-        public string WwtTilesDir { get; set; } = ConfigurationManager.AppSettings["WWTTilesDir"];
-
-        public string DssTerapixelDir { get; set; } = ConfigurationManager.AppSettings["DssTerapixelDir"];
-    }
-
     public class DSSProvider : RequestProvider
     {
         private readonly IPlateTilePyramid _plateTile;
-        private readonly DSSOptions _options;
+        private readonly FilePathOptions _options;
 
-        public DSSProvider(IPlateTilePyramid plateTile, DSSOptions options)
+        public DSSProvider(IPlateTilePyramid plateTile, FilePathOptions options)
         {
             _plateTile = plateTile;
             _options = options;
