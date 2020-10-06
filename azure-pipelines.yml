@@ -29,16 +29,19 @@ steps:
     restoreSolution: '$(solution)'
 
 - task: Npm@1
+  displayName: npm install
   inputs:
     command: 'install'
     workingDir: 'src/WWTMVC5'
 
 - task: Npm@1
+  displayName: npm install -g bower
   inputs:
     command: 'custom'
     customCommand: 'install -g bower'
 
 - task: PowerShell@2
+  displayName: Run init.ps1
   inputs:
     filePath: 'init.ps1'
 
@@ -67,12 +70,14 @@ steps:
     searchFolder: '$(System.DefaultWorkingDirectory)'
 
 - task: PublishPipelineArtifact@1
+  displayName: Publish website bundle artifacts
   inputs:
     targetPath: '$(build.artifactStagingDirectory)/website'
     artifact: 'website'
     publishLocation: 'pipeline'
 
 - task: PublishPipelineArtifact@1
+  displayName: Publish tool package artifacts
   inputs:
     targetPath: '$(build.artifactStagingDirectory)/tools'
     artifact: 'tools'
@@ -85,9 +90,9 @@ steps:
     packagesToPush: '$(Build.ArtifactStagingDirectory)/tools/*.nupkg'
     nuGetFeedType: 'internal'
     publishVstsFeed: '5b8413f0-309f-4655-933b-c3b9516cd60f/cec2a436-ea5b-41d3-a4d4-8f2380a4c6a9'
-  condition: ne(variables['Build.Reason'], 'PullRequest')
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
 
-# One way we should have a dev/prod deployment scheme, but for now it's YOLO.
+# One day we should have a dev/prod deployment scheme, but for now it's YOLO.
 - task: AzureRmWebAppDeployment@4
   displayName: Deploy to App Service
   inputs:
@@ -99,4 +104,4 @@ steps:
     ResourceGroupName: 'wwtcoreapp-resources'
     SlotName: 'production'
     packageForLinux: '$(Build.artifactStagingDirectory)/website/*.zip'
-  condition: ne(variables['Build.Reason'], 'PullRequest')
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
