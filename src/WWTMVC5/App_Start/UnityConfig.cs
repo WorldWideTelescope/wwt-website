@@ -63,6 +63,8 @@ namespace WWTMVC5
             {
                 container.RegisterType(type);
             }
+
+            container.RegisterInstance(FilePathOptions.CreateFromConfig());
         }
 
         private static void RegisterPlateFileProvider(IUnityContainer container)

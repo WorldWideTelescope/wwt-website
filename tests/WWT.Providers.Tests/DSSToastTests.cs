@@ -1,4 +1,4 @@
-using AutofacContrib.NSubstitute;
+﻿using AutofacContrib.NSubstitute;
 using AutoFixture;
 using NSubstitute;
 using NSubstitute.Extensions;
@@ -10,11 +10,11 @@ using Xunit;
 
 namespace WWT.Providers.Tests
 {
-    public class DSSTests
+    public class DSSToastTests
     {
         private readonly Fixture _fixture;
 
-        public DSSTests()
+        public DSSToastTests()
         {
             _fixture = new Fixture();
         }
@@ -30,7 +30,7 @@ namespace WWT.Providers.Tests
                 .Build();
 
             // Act
-            container.RunProviderTest<DSSProvider>();
+            container.RunProviderTest<DSSToastProvider>();
 
             // Assert
             container.Resolve<HttpResponseBase>().Received(1).Write("No image");
@@ -57,10 +57,10 @@ namespace WWT.Providers.Tests
             var outputStream = new MemoryStream();
 
             container.Resolve<HttpResponseBase>().Configure().OutputStream.Returns(outputStream);
-            container.Resolve<IPlateTilePyramid>().GetStream(options.WwtTilesDir, "dssterrapixel.plate", level, x, y).Returns(result);
+            container.Resolve<IPlateTilePyramid>().GetStream(options.WwtTilesDir, "dsstoast.plate", level, x, y).Returns(result);
 
             // Act
-            container.RunProviderTest<DSSProvider>();
+            container.RunProviderTest<DSSToastProvider>();
 
             // Assert
             Assert.Equal("image/png", container.Resolve<HttpResponseBase>().ContentType);
@@ -89,10 +89,10 @@ namespace WWT.Providers.Tests
             var filename = $"DSSpngL5to12_x{fileX}_y{fileY}.plate";
 
             container.Resolve<HttpResponseBase>().Configure().OutputStream.Returns(outputStream);
-            container.Resolve<IPlateTilePyramid>().GetStream(options.DssTerapixelDir, filename, level2, x2, y2).Returns(result);
+            container.Resolve<IPlateTilePyramid>().GetStream(options.DssToastPng, filename, level2, x2, y2).Returns(result);
 
             // Act
-            container.RunProviderTest<DSSProvider>();
+            container.RunProviderTest<DSSToastProvider>();
 
             // Assert
             Assert.Equal("image/png", container.Resolve<HttpResponseBase>().ContentType);
