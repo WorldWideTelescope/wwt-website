@@ -20,6 +20,8 @@ node_modules/
 packages/
 [Rr]elease/
 x64/
+[Tt]est[Rr]esult*
+[Bb]uild[Ll]og.*
 
 # Database file
 Database.jfm

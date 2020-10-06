@@ -1,11 +1,17 @@
 using System;
-using System.IO;
 using WWTWebservices;
 
 namespace WWT.Providers
 {
-    public class DemMarsNewProvider : DemMars
+    public class DemMarsNewProvider : RequestProvider
     {
+        private readonly IPlateTilePyramid _plateTile;
+
+        public DemMarsNewProvider(IPlateTilePyramid plateTile)
+        {
+            _plateTile = plateTile;
+        }
+
         public override void Run(IWwtContext context)
         {
             string query = context.Request.Params["Q"];
@@ -16,29 +22,30 @@ namespace WWT.Providers
 
             if (level < 18)
             {
-                //    context.Response.ContentType = "image/png";
+                var index = ComputeHash(level, tileX, tileY) % 400;
 
-                UInt32 index = ComputeHash(level, tileX, tileY) % 400;
-
-                Stream s = PlateFile2.GetFileStream(String.Format(@"\\wwt-mars\marsroot\dem\marsToastDem_{0}.plate", index), -1, level, tileX, tileY);
-
-                if (s == null || (int)s.Length == 0)
+                using (var s = _plateTile.GetStream(@"\\wwt-mars\marsroot\dem\", $"marsToastDem_{index}.plate", -1, level, tileX, tileY))
                 {
-                    context.Response.Clear();
-                    context.Response.ContentType = "text/plain";
-                    context.Response.Write("No image");
-                    context.Response.End();
-                    return;
+                    if (s == null || (int)s.Length == 0)
+                    {
+                        context.Response.Clear();
+                        context.Response.ContentType = "text/plain";
+                        context.Response.Write("No image");
+                        context.Response.End();
+                    }
+                    else
+                    {
+                        s.CopyTo(context.Response.OutputStream);
+                        context.Response.Flush();
+                        context.Response.End();
+                    }
                 }
-
-                int length = (int)s.Length;
-                byte[] data = new byte[length];
-                s.Read(data, 0, length);
-                context.Response.OutputStream.Write(data, 0, length);
-                context.Response.Flush();
-                context.Response.End();
-                return;
             }
+        }
+
+        private uint ComputeHash(int level, int x, int y)
+        {
+            return DirectoryEntry.ComputeHash(level + 128, x, y);
         }
     }
 }
