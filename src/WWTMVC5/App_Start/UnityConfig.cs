@@ -71,8 +71,19 @@ namespace WWTMVC5
         {
             if (ConfigReader<bool>.GetSetting("UseAzurePlateFiles"))
             {
-                var storageUri = ConfigurationManager.AppSettings["AzurePlateFileContainer"];
-                container.RegisterInstance(new BlobServiceClient(new Uri(storageUri), new DefaultAzureCredential()));
+                // TODO: The current storage account is a classic storage account and managed identity is not supported
+                // If the setting is a URL, we'll use managed identity. Otherwise, we'll expect it to be a connection string.
+                var storageAccount = ConfigurationManager.AppSettings["AzurePlateFileStorageAccount"];
+
+                if (Uri.TryCreate(storageAccount, UriKind.Absolute, out var storageUri))
+                {
+                    container.RegisterInstance(new BlobServiceClient(storageUri, new DefaultAzureCredential()));
+                }
+                else
+                {
+                    container.RegisterInstance(new BlobServiceClient(storageAccount));
+                }
+
                 container.RegisterType<IPlateTilePyramid, AzurePlateTilePyramid>();
             }
             else
