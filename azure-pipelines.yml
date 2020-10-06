@@ -86,3 +86,17 @@ steps:
     nuGetFeedType: 'internal'
     publishVstsFeed: '5b8413f0-309f-4655-933b-c3b9516cd60f/cec2a436-ea5b-41d3-a4d4-8f2380a4c6a9'
   condition: ne(variables['Build.Reason'], 'PullRequest')
+
+# One way we should have a dev/prod deployment scheme, but for now it's YOLO.
+- task: AzureRmWebAppDeployment@4
+  displayName: Deploy to App Service
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'aas@wwtadmindotnetfoundation'
+    appType: 'webApp'
+    WebAppName: 'wwtcoreapp-app-service'
+    deployToSlotOrASE: true
+    ResourceGroupName: 'wwtcoreapp-resources'
+    SlotName: 'production'
+    packageForLinux: '$(Build.artifactStagingDirectory)/website/*.zip'
+  condition: ne(variables['Build.Reason'], 'PullRequest')
