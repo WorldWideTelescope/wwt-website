@@ -29,16 +29,19 @@ steps:
     restoreSolution: '$(solution)'
 
 - task: Npm@1
+  displayName: npm install
   inputs:
     command: 'install'
     workingDir: 'src/WWTMVC5'
 
 - task: Npm@1
+  displayName: npm install -g bower
   inputs:
     command: 'custom'
     customCommand: 'install -g bower'
 
 - task: PowerShell@2
+  displayName: Run init.ps1
   inputs:
     filePath: 'init.ps1'
 
@@ -67,12 +70,14 @@ steps:
     searchFolder: '$(System.DefaultWorkingDirectory)'
 
 - task: PublishPipelineArtifact@1
+  displayName: Publish website bundle artifacts
   inputs:
     targetPath: '$(build.artifactStagingDirectory)/website'
     artifact: 'website'
     publishLocation: 'pipeline'
 
 - task: PublishPipelineArtifact@1
+  displayName: Publish tool package artifacts
   inputs:
     targetPath: '$(build.artifactStagingDirectory)/tools'
     artifact: 'tools'
