@@ -13,6 +13,7 @@ namespace WWT.Providers
                 DssToastPng = ConfigurationManager.AppSettings["DSSTOASTPNG"],
                 WWTDEMDir = ConfigurationManager.AppSettings["WWTDEMDir"],
                 WwtTilesDir = ConfigurationManager.AppSettings["WWTTilesDir"],
+                WwtGalexDir = ConfigurationManager.AppSettings["WWTGALEXDIR"],
             };
 
         public string DssTerapixelDir { get; set; }
@@ -24,5 +25,7 @@ namespace WWT.Providers
         public string WWTDEMDir { get; set; }
 
         public string WwtTilesDir { get; set; }
+
+        public string WwtGalexDir { get; set; }
     }
 }

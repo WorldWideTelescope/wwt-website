@@ -68,6 +68,7 @@ steps:
       !**\*TestAdapter.dll
       !**\obj\**
     searchFolder: '$(System.DefaultWorkingDirectory)'
+    codeCoverageEnabled: true
 
 - task: PublishPipelineArtifact@1
   displayName: Publish website bundle artifacts
