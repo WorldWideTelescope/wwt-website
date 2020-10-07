@@ -1,4 +1,5 @@
 using System;
+using System.Configuration;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -29,7 +30,7 @@ namespace WWT.Providers
             string filename;
             string path;
 
-            string DSSTileCache = WWTUtil.GetCurrentConfigShare("DSSTileCache", true);
+            string DSSTileCache = ConfigurationManager.AppSettings["DSSTileCache"];
             filename = String.Format(DSSTileCache + "\\WMS\\{3}\\{0}\\{2}\\{2}_{1}.png", level, tileX, tileY, dirPart);
             path = String.Format(DSSTileCache + "\\WMS\\{3}\\{0}\\{2}", level, tileX, tileY, dirPart);
 

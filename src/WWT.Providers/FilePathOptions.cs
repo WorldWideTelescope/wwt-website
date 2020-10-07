@@ -9,8 +9,8 @@ namespace WWT.Providers
             => new FilePathOptions
             {
                 DssTerapixelDir = ConfigurationManager.AppSettings["DssTerapixelDir"],
-                DSSTileCache = WWTUtil.GetCurrentConfigShare("DSSTileCache", true),
-                DssToastPng = WWTUtil.GetCurrentConfigShare("DSSTOASTPNG", true),
+                DSSTileCache = ConfigurationManager.AppSettings["DSSTileCache"],
+                DssToastPng = ConfigurationManager.AppSettings["DSSTOASTPNG"],
                 WWTDEMDir = ConfigurationManager.AppSettings["WWTDEMDir"],
                 WwtTilesDir = ConfigurationManager.AppSettings["WWTTilesDir"],
             };

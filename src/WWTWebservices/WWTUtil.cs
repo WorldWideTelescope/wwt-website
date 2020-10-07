@@ -14,74 +14,6 @@ namespace WWTWebservices
         {
         }
 
-        public static string GetCurrentConfigShare(string entryName, bool checkAlive)
-        {
-            string primary = ConfigurationManager.AppSettings["PrimaryFileserver"].ToLower();
-            string backup = ConfigurationManager.AppSettings["BackupFileserver"].ToLower();
-
-            string current = (string) HttpContext.Current.Cache.Get("CurrentFileServer");
-
-            if (checkAlive || string.IsNullOrEmpty(current))
-            {
-                DateTime lastCheck = DateTime.Now.AddDays(-1);
-
-                if (!string.IsNullOrEmpty(current) &&
-                    HttpContext.Current.Cache.Get("LastFileserverUpdateDateTime") != null)
-                {
-                    lastCheck = (DateTime) HttpContext.Current.Cache.Get("LastFileserverUpdateDateTime");
-                }
-
-                TimeSpan ts = DateTime.Now - lastCheck;
-
-                if (ts.TotalMinutes > 1)
-                {
-                    HttpContext.Current.Cache.Remove("LastFileserverUpdateDateTime");
-                    HttpContext.Current.Cache.Add("LastFileserverUpdateDateTime", System.DateTime.Now, null,
-                        DateTime.MaxValue, new TimeSpan(24, 0, 0), System.Web.Caching.CacheItemPriority.Normal, null);
-
-
-                    if (string.IsNullOrEmpty(current) || !Directory.Exists(@"\\" + current + @"\DSSTileCache\dsstoast"))
-                    {
-                        bool primaryUp = false;
-
-                        try
-                        {
-                            primaryUp = Directory.Exists(@"\\" + primary + @"\DSSTileCache\dsstoast");
-
-                        }
-                        catch
-                        {
-                        }
-
-                        if (primaryUp)
-                        {
-                            current = primary;
-                            HttpContext.Current.Cache.Remove("CurrentFileServer");
-                            HttpContext.Current.Cache.Add("CurrentFileServer", current, null, DateTime.MaxValue,
-                                new TimeSpan(24, 0, 0), System.Web.Caching.CacheItemPriority.Normal, null);
-
-                        }
-                        else
-                        {
-                            current = backup;
-                            HttpContext.Current.Cache.Remove("CurrentFileServer");
-                            HttpContext.Current.Cache.Add("CurrentFileServer", current, null, DateTime.MaxValue,
-                                new TimeSpan(24, 0, 0), System.Web.Caching.CacheItemPriority.Normal, null);
-                        }
-                    }
-                }
-            }
-
-            string baseName = ConfigurationManager.AppSettings[entryName].ToLower();
-
-            if(string.IsNullOrEmpty(primary))
-            {
-                return baseName;
-            }
-
-            return baseName.Replace(primary, current);
-        }
-
         public static bool ShouldDownloadSDSS(int level, int xtile, int ytile)
         {
             // SDSS boundaries
@@ -192,7 +124,7 @@ namespace WWTWebservices
 
         public static string DownloadVeTile(int level, int tileX, int tileY, bool temp)
         {
-            string DSSTileCache = GetCurrentConfigShare("DSSTileCache", true);
+            string DSSTileCache = ConfigurationManager.AppSettings["DSSTileCache"];
             string filename = String.Format(DSSTileCache + "\\VE\\level{0}\\{2}\\{1}_{2}.jpg", level, tileX, tileY);
             string path = String.Format(DSSTileCache + "\\VE\\level{0}\\{2}", level, tileX, tileY);
 

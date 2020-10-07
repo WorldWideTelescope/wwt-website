@@ -13,7 +13,7 @@ namespace WWT.Providers
         public override void Run(IWwtContext context)
         {
             string wwtTilesDir = ConfigurationManager.AppSettings["WWTTilesDir"];
-            string DSSTileCache = WWTUtil.GetCurrentConfigShare("DSSTileCache", true);
+            string DSSTileCache = ConfigurationManager.AppSettings["DSSTileCache"];
             string query = context.Request.Params["Q"];
             string[] values = query.Split(',');
             int level = Convert.ToInt32(values[0]);

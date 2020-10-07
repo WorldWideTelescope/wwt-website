@@ -16,7 +16,7 @@ namespace WWT.Providers
             int tileY = Convert.ToInt32(values[2]);
 
             string wwtTilesDir = ConfigurationManager.AppSettings["WWTTilesDir"];
-            string wwtgalexdir = WWTUtil.GetCurrentConfigShare("WWTGALEXDIR", true);
+            string wwtgalexdir = ConfigurationManager.AppSettings["WWTGALEXDIR"];
 
 
             if (level > 10)

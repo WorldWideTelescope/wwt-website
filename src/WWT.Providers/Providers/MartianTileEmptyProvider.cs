@@ -1,4 +1,5 @@
 using System;
+using System.Configuration;
 using System.IO;
 using System.Net;
 using WWTWebservices;
@@ -18,7 +19,7 @@ namespace WWT.Providers
             string id = "nothing";
             string type = ".png";
 
-            string DSSTileCache = WWTUtil.GetCurrentConfigShare("DSSTileCache", true);
+            string DSSTileCache = ConfigurationManager.AppSettings["DSSTileCache"];
 
             switch (dataset)
             {

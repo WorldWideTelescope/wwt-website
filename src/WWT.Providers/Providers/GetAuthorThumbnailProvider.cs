@@ -21,7 +21,7 @@ namespace WWT.Providers
             }
             string tourcache = ConfigurationManager.AppSettings["WWTTOURCACHE"];
             string localDir = tourcache;
-            string filename = WWTUtil.GetCurrentConfigShare("WWTToursTourFileUNC", true) + String.Format(@"\{0}_AuthorThumb.bin", guid);
+            string filename = ConfigurationManager.AppSettings["WWTToursTourFileUNC"] + String.Format(@"\{0}_AuthorThumb.bin", guid);
             string localfilename = localDir + String.Format(@"\{0}_AuthorThumb.bin", guid);
 
             if (!File.Exists(localfilename))

@@ -16,7 +16,7 @@ namespace WWT.Providers
             int tileY = Convert.ToInt32(values[2]);
 
             string wwtTilesDir = ConfigurationManager.AppSettings["WWTTilesDir"];
-            string DSSTileCache = WWTUtil.GetCurrentConfigShare("DSSTileCache", true);
+            string DSSTileCache = ConfigurationManager.AppSettings["DSSTileCache"];
 
             DSSTileCache = @"\\wwt-mars\marsroot";
 
