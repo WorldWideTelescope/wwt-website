@@ -1,11 +1,17 @@
 using System;
-using System.IO;
 using WWTWebservices;
 
 namespace WWT.Providers
 {
-    public class DemMarsProvider : DemMars
+    public class DemMarsProvider : RequestProvider
     {
+        private readonly IPlateTilePyramid _plateTiles;
+
+        public DemMarsProvider(IPlateTilePyramid plateTiles)
+        {
+            _plateTiles = plateTiles;
+        }
+
         public override void Run(IWwtContext context)
         {
             string query = context.Request.Params["Q"];
@@ -16,24 +22,22 @@ namespace WWT.Providers
 
             if (level < 18)
             {
-                Stream s = PlateFile2.GetFileStream(@"\\wwtfiles.file.core.windows.net\wwtmars\MarsDem\marsToastDem.plate", -1, level, tileX, tileY);
-
-                if (s == null || (int)s.Length == 0)
+                using (var s = _plateTiles.GetStream(@"\\wwtfiles.file.core.windows.net\wwtmars\MarsDem", "marsToastDem.plate", -1, level, tileX, tileY))
                 {
-                    context.Response.Clear();
-                    context.Response.ContentType = "text/plain";
-                    context.Response.Write("No image");
-                    context.Response.End();
-                    return;
+                    if (s == null || (int)s.Length == 0)
+                    {
+                        context.Response.Clear();
+                        context.Response.ContentType = "text/plain";
+                        context.Response.Write("No image");
+                        context.Response.End();
+                    }
+                    else
+                    {
+                        s.CopyTo(context.Response.OutputStream);
+                        context.Response.Flush();
+                        context.Response.End();
+                    }
                 }
-
-                int length = (int)s.Length;
-                byte[] data = new byte[length];
-                s.Read(data, 0, length);
-                context.Response.OutputStream.Write(data, 0, length);
-                context.Response.Flush();
-                context.Response.End();
-                return;
             }
         }
     }

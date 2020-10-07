@@ -4,12 +4,25 @@ using NSubstitute;
 using NSubstitute.Extensions;
 using System;
 using System.Collections.Specialized;
+using System.IO;
 using System.Web;
 
 namespace WWT.Providers.Tests
 {
     internal static class HttpAutoSubstituteExtensions
     {
+        public static byte[] GetOutputData(this AutoSubstitute container)
+        {
+            using var ms = new MemoryStream();
+
+            var stream = container.Resolve<HttpResponseBase>().OutputStream;
+
+            stream.Position = 0;
+            stream.CopyTo(ms);
+
+            return ms.ToArray();
+        }
+
         public static void RunProviderTest<T>(this AutoSubstitute container)
             where T : RequestProvider
         {
@@ -21,6 +34,7 @@ namespace WWT.Providers.Tests
             builder.SubstituteFor2<HttpResponseBase>()
                 .Configure((b, ctx) =>
                 {
+                    b.Configure().OutputStream.Returns(new MemoryStream());
                     b.When(bb => bb.Write(Arg.Any<string>())).DoNotCallBase();
                     b.When(bb => bb.Close()).DoNotCallBase();
 

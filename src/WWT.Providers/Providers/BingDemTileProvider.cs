@@ -1,6 +1,5 @@
 ﻿using Microsoft.Maps.ElevationAdjustmentService.HDPhoto;
 using System;
-using System.Configuration;
 using System.IO;
 using System.Net;
 using WWTWebservices;
@@ -17,18 +16,8 @@ namespace WWT.Providers
             int tileX = Convert.ToInt32(values[1]);
             int tileY = Convert.ToInt32(values[2]);
             int demSize = 33 * 33;
-            string wwtDemDir = ConfigurationManager.AppSettings["WWTDEMDir"];
-            //string filename = String.Format(wwtDemDir  + @"\Mercator\Chunks\{0}\{1}.chunk", level, tileY);
-            string urlBase = "http://ecn.t{0}.tiles.virtualearth.net/tiles/d{1}.elv?g=1&n=z";
-
-
-            int parentX = tileX;
-            int parentY = tileY;
             int parentL = Math.Max(1, level - 3);
             int DemGeneration = level - parentL;
-
-            //Response.Write( level.ToString() + "," + parentL.ToString() + "," + tileX.ToString());
-            //Response.End();
 
             int count = (int)Math.Pow(2, 3 - DemGeneration);
             int tileSize = (int)Math.Pow(2, DemGeneration);
@@ -36,19 +25,14 @@ namespace WWT.Providers
             int offsetX = (tileX % tileSize) * count * 32;
             int offsetY = (tileY % tileSize) * count * 32;
 
-            parentX = tileX / tileSize;
-            parentY = tileY / tileSize;
-
-
+            var parentX = tileX / tileSize;
+            var parentY = tileY / tileSize;
 
             string id = WWTUtil.GetTileID(parentX, parentY, parentL, false);
             int server = WWTUtil.GetServerID(parentX, parentY);
             WebClient client = new WebClient();
 
-            string url = string.Format(urlBase, server, id);
-
-            //Response.Write( url);
-            //Response.End();
+            string url = $"http://ecn.t{server}.tiles.virtualearth.net/tiles/d{id}.elv?g=1&n=z";
 
             byte[] data = client.DownloadData(url);
             MemoryStream stream = new MemoryStream(data);
@@ -67,10 +51,8 @@ namespace WWT.Providers
                     {
                         int indexI = xl + (32 - yl) * 33;
                         DemData[indexI] = (float)tile.AltitudeInMeters(yh + offsetY, xh + offsetX);
-                        //  Response.Write( tile.AltitudeInMeters(yh, xh).ToString() + "\n");	  
 
                         xh += count;
-                        //Response.Write(indexI);
                     }
                     yh += count;
 

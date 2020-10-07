@@ -1,12 +1,18 @@
 ﻿using System;
 using System.IO;
 using System.Net;
-using WWTWebservices;
 
 namespace WWT.Providers
 {
     public class DemMarsEmptyProvider : RequestProvider
     {
+        private readonly FilePathOptions _options;
+
+        public DemMarsEmptyProvider(FilePathOptions options)
+        {
+            _options = options;
+        }
+
         public override void Run(IWwtContext context)
         {
             string query = context.Request.Params["Q"];
@@ -15,13 +21,8 @@ namespace WWT.Providers
             int tileX = Convert.ToInt32(values[1]);
             int tileY = Convert.ToInt32(values[2]);
 
-            //string wwtTilesDir = ConfigurationManager.AppSettings["WWTTilesDir"];
-            string DSSTileCache = WWTUtil.GetCurrentConfigShare("DSSTileCache", true);
-
-            string filename = String.Format(DSSTileCache + "\\wwtcache\\mars\\dem\\{0}\\{2}\\{1}_{2}.dem", level, tileX, tileY);
-            string path = String.Format(DSSTileCache + "\\wwtcache\\mars\\dem\\{0}\\{2}", level, tileX, tileY);
-
-
+            string path = Path.Combine(_options.DSSTileCache, "wwtcache", "mars", "dem", level.ToString(), tileY.ToString());
+            string filename = Path.Combine(path, $"{tileX}_{tileY}.dem");
 
             if (!File.Exists(filename))
             {
@@ -34,7 +35,7 @@ namespace WWT.Providers
 
                     WebClient webclient = new WebClient();
 
-                    string url = string.Format("http://wwt.nasa.gov/wwt/p/mars_toast_dem_32f/{0}/{1}/{2}.toast_dem_v1", level, tileX, tileY);
+                    string url = $"http://wwt.nasa.gov/wwt/p/mars_toast_dem_32f/{level}/{tileX}/{tileY}.toast_dem_v1";
 
                     webclient.DownloadFile(url, filename);
                 }
@@ -46,7 +47,6 @@ namespace WWT.Providers
             }
 
             context.Response.Write("ok");
-
         }
     }
 }

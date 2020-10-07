@@ -13,15 +13,16 @@ namespace WWT.Providers
             int tileX = Convert.ToInt32(values[1]);
             int tileY = Convert.ToInt32(values[2]);
 
-            string filename = String.Format("D:\\DEM\\bath\\{0}\\{1}\\L{0}X{1}Y{2}.dem", level, tileX, tileY);
+            string filename = $@"D:\DEM\bath\{level}\{tileX}\L{level}X{tileX}Y{tileY}.dem";
 
             if (!File.Exists(filename))
             {
                 context.Response.StatusCode = 404;
-                return;
             }
-
-            context.Response.WriteFile(filename);
+            else
+            {
+                context.Response.WriteFile(filename);
+            }
         }
     }
 }

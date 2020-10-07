@@ -15,16 +15,13 @@ namespace WWT.Providers
             int level = Convert.ToInt32(values[0]);
             int tileX = Convert.ToInt32(values[1]);
             int tileY = Convert.ToInt32(values[2]);
-            int demSize = 33 * 33;
-            //string wwtDemDir = ConfigurationManager.AppSettings["WWTDEMDir"];
-            //string filename = String.Format(wwtDemDir  + @"\Mercator\Chunks\{0}\{1}.chunk", level, tileY);
-            string urlBase = "http://ecn.t{0}.tiles.virtualearth.net/tiles/d{1}.elv?g=1&n=z";
+            const int demSize = 33 * 33;
 
             string id = WWTUtil.GetTileID(tileX, tileY, level, false);
             int server = WWTUtil.GetServerID(tileX, tileY);
             WebClient client = new WebClient();
 
-            string url = string.Format(urlBase, server, id);
+            string url = $"http://ecn.t{server}.tiles.virtualearth.net/tiles/d{id}.elv?g=1&n=z";
 
             byte[] data = client.DownloadData(url);
             MemoryStream stream = new MemoryStream(data);
@@ -42,10 +39,8 @@ namespace WWT.Providers
                     {
                         int indexI = xl + (32 - yl) * 33;
                         DemData[indexI] = (float)tile.AltitudeInMeters(yh, xh);
-                        //  Response.Write( tile.AltitudeInMeters(yh, xh).ToString() + "\n");	  
 
                         xh += 8;
-                        //Response.Write(indexI);
                     }
                     yh += 8;
 
