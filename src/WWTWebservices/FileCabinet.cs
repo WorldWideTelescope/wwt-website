@@ -23,7 +23,7 @@ namespace WWTWebservices
     }
     public class FileCabinet
     {
-        public static void Extract(string cabfile, string filetarget, HttpResponseBase response)
+        public static (string contentType, byte[] data) Extract(string cabfile, string filetarget)
         {
 
             //try
@@ -90,9 +90,9 @@ namespace WWTWebservices
 
                             buffer = UnGzip(buffer);
 
-                            response.ContentType = GetMimeTypoForFile(entry.Filename);
-                            response.OutputStream.Write(buffer, 0, buffer.Length);
-                            return;
+                            var contentType = GetMimeTypoForFile(entry.Filename);
+
+                            return (contentType, buffer);
                         }
 
                     }
@@ -106,6 +106,7 @@ namespace WWTWebservices
                 //  UiTools.ShowMessageBox("The data cabinet file was not found. WWT will now download all data from network.");
             }
 
+            return default;
         }
 
         static byte[] UnGzip(byte[] buffer)

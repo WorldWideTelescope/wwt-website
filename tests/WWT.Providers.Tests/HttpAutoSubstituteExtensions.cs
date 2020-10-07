@@ -1,11 +1,9 @@
 ﻿using Autofac;
 using AutofacContrib.NSubstitute;
 using NSubstitute;
-using NSubstitute.Extensions;
+using NSubstitute.Core;
 using System;
-using System.Collections.Specialized;
 using System.IO;
-using System.Web;
 
 namespace WWT.Providers.Tests
 {
@@ -15,7 +13,7 @@ namespace WWT.Providers.Tests
         {
             using var ms = new MemoryStream();
 
-            var stream = container.Resolve<HttpResponseBase>().OutputStream;
+            var stream = container.Resolve<IResponse>().OutputStream;
 
             stream.Position = 0;
             stream.CopyTo(ms);
@@ -29,28 +27,67 @@ namespace WWT.Providers.Tests
             container.Resolve<T>().Run(container.Resolve<IWwtContext>());
         }
 
+        public static AutoSubstituteBuilder RegisterAfterBuild<T>(this AutoSubstituteBuilder builder, Action<T, IComponentContext> action)
+            => builder.ConfigureBuilder(b => b.RegisterBuildCallback(s => action(s.Resolve<T>(), s)));
+
         public static AutoSubstituteBuilder InitializeProviderTests(this AutoSubstituteBuilder builder)
             => builder
-                .InjectProperties()
+                // TODO: Add this back once https://github.com/MRCollective/AutofacContrib.NSubstitute/pull/51 is available
+                //.InjectProperties()
+                .ConfigureOptions(options =>
+                {
+                    options.MockHandlers.Add(FixedAutoPropertyInjectorMockHandler.Instance);
+                })
                 .MakeUnregisteredTypesPerLifetime()
-                .SubstituteFor<HttpResponseBase>()
-                    .ConfigureSubstitute(b =>
+                .RegisterAfterBuild<IResponse>((r, _) => r.OutputStream.Returns(new MemoryStream()));
+
+        // TODO: Add this back once https://github.com/MRCollective/AutofacContrib.NSubstitute/pull/51 is available
+        private class FixedAutoPropertyInjectorMockHandler : MockHandler
+        {
+            public static FixedAutoPropertyInjectorMockHandler Instance { get; } = new FixedAutoPropertyInjectorMockHandler();
+
+            private FixedAutoPropertyInjectorMockHandler()
+            {
+            }
+
+            protected override void OnMockCreated(object instance, Type type, IComponentContext context, ISubstitutionContext substitutionContext)
+            {
+                var router = substitutionContext.GetCallRouterFor(instance);
+
+                router.RegisterCustomCallHandlerFactory(_ => new AutoPropertyInjectorCallHandler(context));
+            }
+
+            private class AutoPropertyInjectorCallHandler : ICallHandler
+            {
+                private readonly IComponentContext _context;
+
+                public AutoPropertyInjectorCallHandler(IComponentContext context)
+                {
+                    _context = context;
+                }
+
+                public RouteAction Handle(ICall call)
+                {
+                    var property = call.GetMethodInfo().GetPropertyFromGetterCallOrNull();
+
+                    if (property is null)
                     {
-                        b.Configure().OutputStream.Returns(new MemoryStream());
-                        b.Configure().ContentType.Returns(string.Empty);
-                    })
-                .SubstituteFor<HttpRequestBase>();
+                        return RouteAction.Continue();
+                    }
+
+                    var service = _context.ResolveOptional(call.GetReturnType());
+
+                    if (service is null)
+                    {
+                        return RouteAction.Continue();
+                    }
+
+                    return RouteAction.Return(service);
+                }
+            }
+        }
 
         public static AutoSubstituteBuilder ConfigureParameterQ(this AutoSubstituteBuilder builder, int level, int x, int y)
-            => builder.ConfigureParameters(c => c.Add("Q", $"{level},{x},{y}"));
-
-        public static AutoSubstituteBuilder ConfigureParameters(this AutoSubstituteBuilder builder, Action<NameValueCollection> action)
-            => builder.ConfigureBuilder(b =>
-            {
-                b.RegisterBuildCallback(ctx =>
-                {
-                    action(ctx.Resolve<NameValueCollection>());
-                });
-            });
+            => builder.RegisterAfterBuild<IParameters>((p, ctx) => p["Q"].Returns($"{level},{x},{y}"));
     }
 }

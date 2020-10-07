@@ -26,14 +26,14 @@ namespace WWT.Providers.Tests
             // Arrange
             using var container = AutoSubstitute.Configure()
                 .InitializeProviderTests()
-                .ConfigureParameters(a => a.Add("Q", $"{level},2,3"))
+                .ConfigureParameterQ(level, 2, 3)
                 .Build();
 
             // Act
             container.RunProviderTest<DustToastProvider>();
 
             // Assert
-            Assert.Empty(container.Resolve<HttpResponseBase>().ContentType);
+            Assert.Empty(container.Resolve<IResponse>().ContentType);
         }
 
         [Theory]
@@ -49,7 +49,7 @@ namespace WWT.Providers.Tests
             using var container = AutoSubstitute.Configure()
                 .InitializeProviderTests()
                 .Provide(options)
-                .ConfigureParameters(a => a.Add("Q", $"{level},{x},{y}"))
+                .ConfigureParameterQ(level, x, y)
                 .Build();
 
             var data = _fixture.CreateMany<byte>(10);
@@ -60,7 +60,7 @@ namespace WWT.Providers.Tests
             container.RunProviderTest<DustToastProvider>();
 
             // Assert
-            Assert.Equal("image/png", container.Resolve<HttpResponseBase>().ContentType);
+            Assert.Equal("image/png", container.Resolve<IResponse>().ContentType);
             Assert.Equal(data, container.GetOutputData());
         }
     }

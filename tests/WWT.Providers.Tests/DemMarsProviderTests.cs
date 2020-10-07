@@ -72,8 +72,8 @@ namespace WWT.Providers.Tests
 
             // Assert
             container.Resolve<IPlateTilePyramid>().Received(1).GetStream(Prefix, PlateName, -1, level, x, y);
-            container.Resolve<HttpResponseBase>().Received(1).Write("No image");
-            Assert.Equal("text/plain", container.Resolve<HttpResponseBase>().ContentType);
+            container.Resolve<IResponse>().Received(1).Write("No image");
+            Assert.Equal("text/plain", container.Resolve<IResponse>().ContentType);
         }
     }
 }
