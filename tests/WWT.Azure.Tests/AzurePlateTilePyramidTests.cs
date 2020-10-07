@@ -1,3 +1,4 @@
+using Autofac;
 using AutofacContrib.NSubstitute;
 using AutoFixture;
 using Azure;
@@ -6,7 +7,6 @@ using Azure.Storage.Blobs.Models;
 using NSubstitute;
 using NSubstitute.Extensions;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -140,31 +140,22 @@ namespace WWT.Azure.Tests
             var containerName = expectedContainerName ?? plateFile.Replace(".plate", string.Empty);
 
             return AutoSubstitute.Configure()
-                .SubstituteFor2<DownloadResult>().Provide(out var result).Configured()
-                .SubstituteFor2<BlobClient>().Provide(out var blob).Configure(b =>
-                {
-                    var response = Substitute.ForPartsOf<Response<BlobDownloadInfo>>();
-                    response.Value.Returns(BlobsModelFactory.BlobDownloadInfo(content: result.Value));
-
-                    b.Configure()
-                        .Download().Returns(response);
-
-                    b.WhenForAnyArgs(b => b.Upload(Arg.Any<Stream>(), Arg.Any<bool>(), Arg.Any<CancellationToken>()))
-                        .DoNotCallBase();
-                })
-                .SubstituteFor2<BlobContainerClient>().Provide(out var container).Configure(c =>
-                {
-                    c.Configure()
-                        .GetBlobClient(blobName).Returns(blob.Value);
-
-                    c.Configure()
-                        .CreateIfNotExists().Returns(Substitute.For<Response<BlobContainerInfo>>());
-                })
-                .SubstituteFor2<BlobServiceClient>().Provide(out var service).Configure(service =>
-                {
-                    service.Configure()
-                        .GetBlobContainerClient(containerName).Returns(container.Value);
-                });
+                .InjectProperties()
+                .MakeUnregisteredTypesPerLifetime()
+                .SubstituteFor<Response<BlobDownloadInfo>>()
+                .SubstituteFor<DownloadResult>()
+                .Provide(ctx => BlobsModelFactory.BlobDownloadInfo(content: ctx.Resolve<DownloadResult>()))
+                .SubstituteFor<BlobClient>()
+                    .ResolveReturnValue(c => c.Download())
+                .SubstituteFor<BlobContainerClient>()
+                    .ResolveReturnValue(t => t.GetBlobClient(blobName))
+                    .ConfigureSubstitute(c =>
+                    {
+                        c.Configure()
+                            .CreateIfNotExists().Returns(Substitute.For<Response<BlobContainerInfo>>());
+                    })
+                .SubstituteFor<BlobServiceClient>()
+                    .ResolveReturnValue(service => service.GetBlobContainerClient(containerName));
         }
 
         public abstract class DownloadResult : Stream { }
