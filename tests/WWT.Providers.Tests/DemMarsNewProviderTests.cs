@@ -29,7 +29,7 @@ namespace WWT.Providers.Tests
             var data = _fixture.CreateMany<byte>().ToArray();
             var hash = DirectoryEntry.ComputeHash(level + 128, x, y) % 400;
             using var container = AutoSubstitute.Configure()
-                .InitializeHttpWrappers()
+                .InitializeProviderTests()
                 .ConfigureParameterQ(level, x, y)
                 .Build();
             container.Resolve<IPlateTilePyramid>().GetStream(Prefix, $"marsToastDem_{hash}.plate", -1, level, x, y).Returns(new MemoryStream(data));
@@ -54,7 +54,7 @@ namespace WWT.Providers.Tests
             var hash = DirectoryEntry.ComputeHash(level + 128, x, y) % 400;
 
             using var container = AutoSubstitute.Configure()
-                .InitializeHttpWrappers()
+                .InitializeProviderTests()
                 .ConfigureParameterQ(level, x, y)
                 .Build();
 

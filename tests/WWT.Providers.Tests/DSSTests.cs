@@ -25,7 +25,7 @@ namespace WWT.Providers.Tests
         {
             // Arrange
             using var container = AutoSubstitute.Configure()
-                .InitializeHttpWrappers()
+                .InitializeProviderTests()
                 .ConfigureParameters(a => a.Add("Q", $"{level},2,3"))
                 .Build();
 
@@ -47,7 +47,7 @@ namespace WWT.Providers.Tests
             var options = _fixture.Create<FilePathOptions>();
 
             using var container = AutoSubstitute.Configure()
-                .InitializeHttpWrappers()
+                .InitializeProviderTests()
                 .Provide(options)
                 .ConfigureParameters(a => a.Add("Q", $"{level},{x},{y}"))
                 .Build();
@@ -78,7 +78,7 @@ namespace WWT.Providers.Tests
             var options = _fixture.Create<FilePathOptions>();
 
             using var container = AutoSubstitute.Configure()
-                .InitializeHttpWrappers()
+                .InitializeProviderTests()
                 .Provide(options)
                 .ConfigureParameters(a => a.Add("Q", $"{level},{x},{y}"))
                 .Build();

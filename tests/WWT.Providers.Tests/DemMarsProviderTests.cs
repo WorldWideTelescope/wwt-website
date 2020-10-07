@@ -29,7 +29,7 @@ namespace WWT.Providers.Tests
             // Arrange
             var data = _fixture.CreateMany<byte>().ToArray();
             using var container = AutoSubstitute.Configure()
-                .InitializeHttpWrappers()
+                .InitializeProviderTests()
                 .ConfigureParameterQ(level, x, y)
                 .Build();
             container.Resolve<IPlateTilePyramid>().GetStream(Prefix, PlateName, -1, level, x, y).Returns(new MemoryStream(data));
@@ -53,7 +53,7 @@ namespace WWT.Providers.Tests
             var y = _fixture.Create<int>();
 
             using var container = AutoSubstitute.Configure()
-                .InitializeHttpWrappers()
+                .InitializeProviderTests()
                 .ConfigureParameterQ(level, x, y)
                 .Build();
 
