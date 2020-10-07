@@ -1,3 +1,4 @@
+using System.Configuration;
 using WWTWebservices;
 
 namespace WWT.Providers
@@ -6,7 +7,7 @@ namespace WWT.Providers
     {
         public override void Run(IWwtContext context)
         {
-            context.Response.Write(WWTUtil.GetCurrentConfigShare("DSSTOASTPNG", true));
+            context.Response.Write(ConfigurationManager.AppSettings["DSSTOASTPNG"]);
         }
     }
 }

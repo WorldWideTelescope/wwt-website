@@ -1,5 +1,6 @@
 using Microsoft.WindowsAzure.Storage.Blob;
 using System;
+using System.Configuration;
 using System.Drawing;
 using System.IO;
 using WWTWebservices;
@@ -10,7 +11,7 @@ namespace WWT.Providers
     {
         public Bitmap DownloadBitmap(string dataset, int level, int x, int y)
         {
-            string DSSTileCache = WWTUtil.GetCurrentConfigShare("DSSTileCache", true);
+            string DSSTileCache = ConfigurationManager.AppSettings["DSSTileCache"];
             string id = "1738422189";
             switch (dataset)
             {

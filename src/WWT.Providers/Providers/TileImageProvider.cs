@@ -1,4 +1,5 @@
 using System;
+using System.Configuration;
 using System.Drawing;
 using System.IO;
 using System.Net;
@@ -63,7 +64,7 @@ namespace WWT.Providers
                 int hashID = _hasher.HashName(url);
 
                 //hashID = 12345;
-                string path = WWTUtil.GetCurrentConfigShare("DSSTileCache", true) + "\\imagesTiler\\dowloadImages\\";
+                string path = ConfigurationManager.AppSettings["DSSTileCache"] + "\\imagesTiler\\dowloadImages\\";
 
                 string filename = path + hashID + ".png";
 

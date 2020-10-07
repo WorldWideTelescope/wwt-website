@@ -12,8 +12,6 @@ namespace WWT.Providers
 
         public Bitmap DownloadBitmap(string dataset, int level, int x, int y)
         {
-            //todo fix this
-            string DSSTileCache = ""; //; Util.GetCurrentConfigShare("DSSTileCache", true);
             string id = "1738422189";
             switch (dataset)
             {
@@ -48,9 +46,9 @@ namespace WWT.Providers
             }
 
 
-            string filename = String.Format(DSSTileCache + "\\wwtcache\\mars\\{3}\\{0}\\{2}\\{1}_{2}.png", level, x, y,
+            string filename = String.Format("\\wwtcache\\mars\\{3}\\{0}\\{2}\\{1}_{2}.png", level, x, y,
                 id);
-            string path = String.Format(DSSTileCache + "\\wwtcache\\mars\\{3}\\{0}\\{2}", level, x, y, id);
+            string path = String.Format("\\wwtcache\\mars\\{3}\\{0}\\{2}", level, x, y, id);
 
 
             if (!File.Exists(filename))

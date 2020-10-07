@@ -1,3 +1,4 @@
+using System.Configuration;
 using System.IO;
 using WWTWebservices;
 
@@ -9,7 +10,7 @@ namespace WWT.Providers
         {
             string name = context.Request.Params["name"];
             string type = context.Request.Params["class"];
-            string path = WWTUtil.GetCurrentConfigShare("DSSTileCache", true) + "\\imagesTiler\\thumbnails\\";
+            string path = ConfigurationManager.AppSettings["DSSTileCache"] + "\\imagesTiler\\thumbnails\\";
 
             string filename = path + name + ".jpg";
             if (File.Exists(filename))

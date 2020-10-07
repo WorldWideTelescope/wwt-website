@@ -21,7 +21,7 @@ namespace WWT.Providers
             string filename;
             string path;
             string wwtTilesDir = ConfigurationManager.AppSettings["WWTTilesDir"];
-            string DSSTileCache = WWTUtil.GetCurrentConfigShare("DSSTileCache", true);
+            string DSSTileCache = ConfigurationManager.AppSettings["DSSTileCache"];
 
 
 

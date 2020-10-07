@@ -1,4 +1,5 @@
 using System;
+using System.Configuration;
 using System.IO;
 using WWTWebservices;
 
@@ -16,7 +17,7 @@ namespace WWT.Providers
             string dataset = values[3];
             string id = dataset;
 
-            string DSSTileCache = WWTUtil.GetCurrentConfigShare("DSSTileCache", true);
+            string DSSTileCache = ConfigurationManager.AppSettings["DSSTileCache"];
 
             string filename = String.Format(DSSTileCache + "\\imagesTiler\\{3}\\{0}\\{2}\\{2}_{1}.png", level, tileX, tileY, id);
 

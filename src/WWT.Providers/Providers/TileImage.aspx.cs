@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Drawing;
 using System.IO;
 using System.Xml;
@@ -11,8 +12,6 @@ namespace WWT.Providers
     {
         public Bitmap DownloadBitmap(string dataset, int level, int x, int y)
         {
-            //todo fix this
-            string DSSTileCache = ""; //; Util.GetCurrentConfigShare("DSSTileCache", true);
             string id = "1738422189";
             switch (dataset)
             {
@@ -47,9 +46,9 @@ namespace WWT.Providers
             }
 
 
-            string filename = String.Format(DSSTileCache + "\\wwtcache\\mars\\{3}\\{0}\\{2}\\{1}_{2}.png", level, x, y,
+            string filename = String.Format("\\wwtcache\\mars\\{3}\\{0}\\{2}\\{1}_{2}.png", level, x, y,
                 id);
-            string path = String.Format(DSSTileCache + "\\wwtcache\\mars\\{3}\\{0}\\{2}", level, x, y, id);
+            string path = String.Format("\\wwtcache\\mars\\{3}\\{0}\\{2}", level, x, y, id);
 
 
             if (!File.Exists(filename))
@@ -62,7 +61,7 @@ namespace WWT.Providers
 
         public void TileBitmap(Bitmap bmp, string ID)
         {
-            string baseDirectory = WWTUtil.GetCurrentConfigShare("DSSTileCache", true) + "\\imagesTiler\\";
+            string baseDirectory = ConfigurationManager.AppSettings["DSSTileCache"] + "\\imagesTiler\\";
             int width = bmp.Width;
             int height = bmp.Height;
             double aspect = (double)width / (double)height;
@@ -156,7 +155,7 @@ namespace WWT.Providers
 
         public static void MakeThumbnail(Bitmap imgOrig, string hashID)
         {
-            string path = WWTUtil.GetCurrentConfigShare("DSSTileCache", true) + "\\imagesTiler\\thumbnails\\";
+            string path = ConfigurationManager.AppSettings["DSSTileCache"] + "\\imagesTiler\\thumbnails\\";
 
             string filename = path + hashID + ".jpg";
 

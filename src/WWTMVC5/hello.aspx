@@ -11,7 +11,7 @@
     <form id="form1" runat="server">
     <div>
     <h1>WWT Running on Server <% = System.Environment.MachineName %></h1>
-    <h1>WWT File Server <% = WWTUtil.GetCurrentConfigShare("DSSTOASTPNG", true) %></h1>
+    <h1>WWT File Server <% = ConfigurationManager.AppSettings["DSSTOASTPNG"] %></h1>
     <h1>URL was Running on <% =  Server.HtmlEncode(Request.RawUrl) %></h1>
    <h1>URL was Running on <% =  Request.Headers["host"] %></h1>
     </div>

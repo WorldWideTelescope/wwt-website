@@ -17,7 +17,7 @@ namespace WWT.Providers
 
             string file = "marsToastDem";
             string wwtTilesDir = ConfigurationManager.AppSettings["WWTTilesDir"];
-            string DSSTileCache = WWTUtil.GetCurrentConfigShare("DSSTileCache", true);
+            string DSSTileCache = ConfigurationManager.AppSettings["DSSTileCache"];
 
             DSSTileCache = @"\\wwt-mars\marsroot";
 

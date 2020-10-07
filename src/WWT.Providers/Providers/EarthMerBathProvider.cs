@@ -10,7 +10,7 @@ namespace WWT.Providers
         public override void Run(IWwtContext context)
         {
             string wwtTilesDir = ConfigurationManager.AppSettings["WWTTilesDir"];
-            string dsstoastpng = WWTUtil.GetCurrentConfigShare("DSSTOASTPNG", true);
+            string dsstoastpng = ConfigurationManager.AppSettings["DSSTOASTPNG"];
 
             string query = context.Request.Params["Q"];
             string[] values = query.Split(',');
