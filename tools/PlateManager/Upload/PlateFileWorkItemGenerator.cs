@@ -20,10 +20,10 @@ namespace PlateManager
             _logger = logger;
         }
 
-        public IEnumerable<Func<int, int, CancellationToken, Task>> GenerateWorkItems(string plateFile, string baseUrl)
+        public IEnumerable<Func<int, int, CancellationToken, Task>> GenerateWorkItems(string plateFile, string baseUrl, string container)
         {
             var filepart = Path.GetFileNameWithoutExtension(plateFile);
-            var azureContainer = Path.GetFileName(plateFile).ToLowerInvariant();
+            var azureContainer = $"{container}//{Path.GetFileName(plateFile).ToLowerInvariant()}";
 
             bool hasLevels = PlateTilePyramid.GetLevelCount(plateFile, out int levels);
             string thumbnail = GetThumbnailName(plateFile);
@@ -102,14 +102,8 @@ namespace PlateManager
 
         private async Task<bool> ProcessPlateTileAsync(string container, string plateFile, int level, int x, int y, CancellationToken token)
         {
-            using var stream = PlateTilePyramid.GetFileStream(plateFile, level, x, y);
-
-            if (stream != null)
-            {
-                return await _pyramid.SaveStreamAsync(stream, container, level, x, y, token);
-            }
-
-            return false;
+            await using var stream = PlateTilePyramid.GetFileStream(plateFile, level, x, y);
+            return stream != null && await _pyramid.SaveStreamAsync(stream, container, level, x, y, token);
         }
     }
 }

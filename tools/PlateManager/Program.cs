@@ -38,6 +38,7 @@ namespace PlateManager
                 new Option<IEnumerable<FileInfo>>(new[] { "--file", "-f" }) { IsRequired = true }.ExistingOnly(),
                 new Option<Uri>("--storage", () => new Uri("https://127.0.0.1:10000/devstoreaccount1/")),
                 new Option<bool>("--useplate2format"),
+                new Option<string>("--container", () => "plate-data"),
                 new Option<bool>("--interactive"),
                 new Option<bool>("--skip-existing", () => true),
                 new Option<LogLevel>("--log-level", () => LogLevel.Information),
