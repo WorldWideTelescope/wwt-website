@@ -26,14 +26,14 @@ namespace WWT.Providers.Tests
             // Arrange
             using var container = AutoSubstitute.Configure()
                 .InitializeProviderTests()
-                .ConfigureParameters(a => a.Add("Q", $"{level},2,3"))
+                .ConfigureParameterQ(level, 2, 3)
                 .Build();
 
             // Act
             container.RunProviderTest<DSSToastProvider>();
 
             // Assert
-            container.Resolve<HttpResponseBase>().Received(1).Write("No image");
+            container.Resolve<IResponse>().Received(1).Write("No image");
         }
 
         [Theory]
@@ -49,21 +49,21 @@ namespace WWT.Providers.Tests
             using var container = AutoSubstitute.Configure()
                 .InitializeProviderTests()
                 .Provide(options)
-                .ConfigureParameters(a => a.Add("Q", $"{level},{x},{y}"))
+                .ConfigureParameterQ(level, x, y)
                 .Build();
 
             var data = _fixture.CreateMany<byte>(10);
             var result = new MemoryStream(data.ToArray());
             var outputStream = new MemoryStream();
 
-            container.Resolve<HttpResponseBase>().Configure().OutputStream.Returns(outputStream);
+            container.Resolve<IResponse>().Configure().OutputStream.Returns(outputStream);
             container.Resolve<IPlateTilePyramid>().GetStream(options.WwtTilesDir, "dsstoast.plate", level, x, y).Returns(result);
 
             // Act
             container.RunProviderTest<DSSToastProvider>();
 
             // Assert
-            Assert.Equal("image/png", container.Resolve<HttpResponseBase>().ContentType);
+            Assert.Equal("image/png", container.Resolve<IResponse>().ContentType);
             Assert.Equal(data, outputStream.ToArray());
         }
 
@@ -80,7 +80,7 @@ namespace WWT.Providers.Tests
             using var container = AutoSubstitute.Configure()
                 .InitializeProviderTests()
                 .Provide(options)
-                .ConfigureParameters(a => a.Add("Q", $"{level},{x},{y}"))
+                .ConfigureParameterQ(level, x, y)
                 .Build();
 
             var data = _fixture.CreateMany<byte>(10);
@@ -88,14 +88,14 @@ namespace WWT.Providers.Tests
             var outputStream = new MemoryStream();
             var filename = $"DSSpngL5to12_x{fileX}_y{fileY}.plate";
 
-            container.Resolve<HttpResponseBase>().Configure().OutputStream.Returns(outputStream);
+            container.Resolve<IResponse>().Configure().OutputStream.Returns(outputStream);
             container.Resolve<IPlateTilePyramid>().GetStream(options.DssToastPng, filename, level2, x2, y2).Returns(result);
 
             // Act
             container.RunProviderTest<DSSToastProvider>();
 
             // Assert
-            Assert.Equal("image/png", container.Resolve<HttpResponseBase>().ContentType);
+            Assert.Equal("image/png", container.Resolve<IResponse>().ContentType);
             Assert.Equal(data, outputStream.ToArray());
         }
     }

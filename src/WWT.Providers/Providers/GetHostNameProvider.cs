@@ -4,7 +4,7 @@ namespace WWT.Providers
     {
         public override void Run(IWwtContext context)
         {
-            context.Response.Write(context.Server.MachineName);
+            context.Response.Write(context.MachineName);
         }
     }
 }

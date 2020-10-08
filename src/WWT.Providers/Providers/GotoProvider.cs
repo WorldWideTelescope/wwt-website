@@ -7,8 +7,7 @@ namespace WWT.Providers
     {
         public override void Run(IWwtContext context)
         {
-            //if (context.Request.Cookies["alphakey"] != null && context.Request.Params["wtml"] == null)
-            if (context.Request.Cookies["fullclient"] == null && context.Request.Params["wtml"] == null)
+            if (!context.Request.ContainsCookie("fullclient") && context.Request.Params["wtml"] == null)
             {
                 context.Response.Redirect("http://www.worldwidetelescope.org/webclient/default.aspx?wtml=" + HttpUtility.UrlEncode(context.Request.Url.ToString() + "&wtml=true"));
                 return;

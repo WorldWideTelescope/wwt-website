@@ -16,7 +16,7 @@ namespace WWT.Providers
 
         public override void Run(IWwtContext context)
         {
-            string path = context.Server.MapPath(@"TourCache");
+            string path = context.MapPath(@"TourCache");
 
             try
             {
@@ -43,8 +43,13 @@ namespace WWT.Providers
                         }
                     }
 
+                    var (contentType, result) = FileCabinet.Extract(filename, targetfile);
 
-                    FileCabinet.Extract(filename, targetfile, context.Response);
+                    if (result != null)
+                    {
+                        context.Response.ContentType = contentType;
+                        context.Response.OutputStream.Write(result, 0, result.Length);
+                    }
                 }
             }
             catch (Exception e)
