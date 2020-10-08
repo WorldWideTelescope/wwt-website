@@ -49,7 +49,7 @@ namespace PlateManager
 
                 foreach (var generator in _generators)
                 {
-                    foreach (var task in generator.GenerateWorkItems(file, _options.BaseUrl))
+                    foreach (var task in generator.GenerateWorkItems(file, _options.BaseUrl, _options.AzureContainer))
                     {
                         yield return task;
 

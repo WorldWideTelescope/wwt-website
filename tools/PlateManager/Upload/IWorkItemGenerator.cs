@@ -7,6 +7,6 @@ namespace PlateManager
 {
     internal interface IWorkItemGenerator
     {
-        IEnumerable<Func<int, int, CancellationToken, Task>> GenerateWorkItems(string plateFile, string baseUrl);
+        IEnumerable<Func<int, int, CancellationToken, Task>> GenerateWorkItems(string plateFile, string baseUrl, string container);
     }
 }
