@@ -104,7 +104,6 @@ namespace WWT.Azure
         {
             var container = await GetBlobContainerClientAsync(plateName).ConfigureAwait(false);
             var blobName = GetBlobName(plateName, level, x, y);
-
             return container.GetBlobClient(blobName);
         }
 
@@ -121,27 +120,23 @@ namespace WWT.Azure
             {
                 return info.container;
             }
-
-            return Path.GetFileNameWithoutExtension(plateName).ToLowerInvariant();
+            return $"{_options.Container}//{Path.GetFileNameWithoutExtension(plateName).ToLowerInvariant()}";
         }
 
         private string GetBlobName(string plateName, int level, int x, int y)
         {
-            var blobFormat = "L{0}X{1}Y{2}.png";
-
             if (_plateNameMapping.TryGetValue(plateName, out var info))
             {
-                blobFormat = info.blob;
+                return string.Format(info.blob, level, x, y);
             }
-
-            return string.Format(blobFormat, level, x, y);
+            return $"{_options.Container}/L{level}X{x}Y{y}.png";
         }
 
         /// <summary>
         /// Gets the URL upload pattern for a blob for a PlateFile2 image
         /// </summary>
-        private static string GetBlobName(int tag, int level, int x, int y) 
-            => $"{tag}/L{level}X{x}Y{y}.png";
+        private string GetBlobName(int tag, int level, int x, int y) 
+            => $"{_options.Container}/{tag}/L{level}X{x}Y{y}.png";
 
     }
 }
