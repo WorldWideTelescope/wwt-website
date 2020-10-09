@@ -110,7 +110,7 @@ namespace WWT.Azure
         private async Task<BlobClient> GetBlobClientAsync(string plateName, int tag, int level, int x, int y)
         {
             var container = await GetBlobContainerClientAsync(plateName).ConfigureAwait(false);
-            var blobName = GetBlobName(tag, level, x, y);
+            var blobName = GetBlobName(plateName, tag, level, x, y);
             return container.GetBlobClient(blobName);
         }
 
@@ -120,23 +120,29 @@ namespace WWT.Azure
             {
                 return info.container;
             }
-            return $"{_options.Container}//{Path.GetFileNameWithoutExtension(plateName).ToLowerInvariant()}";
+            return $"{_options.Container}";
         }
 
+        /// <summary>
+        /// Azure Blob storage uses a virtual "folder" structure - the blob name having /'s indicates folders
+        /// Ex: plate-data/testname/0/test.png
+        ///     container  blobName, but will show as folder testname, subfolder 0 with test.png in it
+        /// </summary>
         private string GetBlobName(string plateName, int level, int x, int y)
         {
             if (_plateNameMapping.TryGetValue(plateName, out var info))
             {
                 return string.Format(info.blob, level, x, y);
             }
-            return $"{_options.Container}/L{level}X{x}Y{y}.png";
+            var blobName = $"{Path.GetFileNameWithoutExtension(plateName).ToLowerInvariant()}/L{level}X{x}Y{y}.png";
+            return blobName;
         }
 
         /// <summary>
         /// Gets the URL upload pattern for a blob for a PlateFile2 image
         /// </summary>
-        private string GetBlobName(int tag, int level, int x, int y) 
-            => $"{_options.Container}/{tag}/L{level}X{x}Y{y}.png";
+        private static string GetBlobName(string plateName, int tag, int level, int x, int y) 
+            => $"{Path.GetFileNameWithoutExtension(plateName).ToLowerInvariant()}/{tag}/L{level}X{x}Y{y}.png";
 
     }
 }
