@@ -8,6 +8,7 @@ using NSubstitute;
 using NSubstitute.Extensions;
 using System.IO;
 using System.Threading.Tasks;
+using Castle.Core.Smtp;
 using Xunit;
 
 namespace WWT.Azure.Tests
@@ -136,8 +137,15 @@ namespace WWT.Azure.Tests
 
         private static AutoSubstituteBuilder ConfigureServiceClient(string plateFile, int level, int x, int y, string expectedContainerName = null, string blobFormat = null)
         {
+            // For all the non dss plate files
             var blobName = $"{plateFile.Replace(".plate", string.Empty)}/L{level}X{x}Y{y}.png";
-            const string containerName = "plate-data";
+            var containerName = "plate-data";
+            
+            if (plateFile == "dssterrapixel.plate")
+            {
+                blobName = $"DSSTerraPixelL{level}X{x}Y{y}.png";
+                containerName = "dss";
+            }
 
             return AutoSubstitute.Configure()
                 .InjectProperties()
