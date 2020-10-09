@@ -1,4 +1,4 @@
-﻿namespace WWT.Azure
+namespace WWT.Azure
 {
     public class AzurePlateTilePyramidOptions
     {
