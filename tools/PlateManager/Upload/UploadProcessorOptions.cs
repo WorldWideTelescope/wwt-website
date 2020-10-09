@@ -13,8 +13,6 @@ namespace PlateManager
 
         public bool UsePlate2Format { get; set; }
 
-        public string AzureContainer { get; set; }
-
         public int UploaderCount { get; set; } = DefaultUploaderCount;
 
         public string BaseUrl { get; set; }

@@ -8,6 +8,8 @@ namespace PlateManager
     {
         public Uri Storage { get; set; }
 
+        public string AzureContainer { get; set; }
+
         public bool Interactive { get; set; }
 
         public LogLevel LogLevel { get; set; }

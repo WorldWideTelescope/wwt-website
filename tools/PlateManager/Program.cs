@@ -56,7 +56,7 @@ namespace PlateManager
             where T : BaseOptions, IServiceRegistration
         {
             var services = new ServiceCollection();
-
+            
             services.AddLogging(builder =>
             {
                 builder.AddFilter("Azure-Core", LogLevel.Error);
@@ -82,7 +82,8 @@ namespace PlateManager
             {
                 CreateContainer = true,
                 SkipIfExists = options.SkipExisting,
-                OverwriteExisting = !options.SkipExisting
+                OverwriteExisting = !options.SkipExisting,
+                Container = options.AzureContainer
             });
 
             services.AddAzureClients(builder =>
@@ -99,7 +100,7 @@ namespace PlateManager
                 }
             });
 
-            using var container = services.BuildServiceProvider();
+            await using var container = services.BuildServiceProvider();
 
             await container.GetRequiredService<ICommand>().RunAsync(default);
         }
