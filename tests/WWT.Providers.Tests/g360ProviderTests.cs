@@ -84,8 +84,8 @@ namespace WWT.Providers.Tests
             container.RunProviderTest<g360Provider>();
 
             // Assert
-            container.Resolve<HttpResponseBase>().Received(1).Write("No image");
-            Assert.Equal("text/plain", container.Resolve<HttpResponseBase>().ContentType);
+            container.Resolve<IResponse>().Received(1).Write("No image");
+            Assert.Equal("text/plain", container.Resolve<IResponse>().ContentType);
         }
 
         [InlineData(13)]
@@ -107,8 +107,8 @@ namespace WWT.Providers.Tests
             container.RunProviderTest<g360Provider>();
 
             // Assert
-            container.Resolve<HttpResponseBase>().DidNotReceiveWithAnyArgs().Write(Arg.Any<string>());
-            Assert.Empty(container.Resolve<HttpResponseBase>().ContentType);
+            container.Resolve<IResponse>().DidNotReceiveWithAnyArgs().Write(Arg.Any<string>());
+            Assert.Empty(container.Resolve<IResponse>().ContentType);
         }
     }
 }

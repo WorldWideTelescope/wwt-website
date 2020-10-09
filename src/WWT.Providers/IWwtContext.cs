@@ -1,13 +1,13 @@
-﻿using System.Web;
-
-namespace WWT.Providers
+﻿namespace WWT.Providers
 {
     public interface IWwtContext
     {
-        HttpRequestBase Request { get; }
+        IRequest Request { get; }
 
-        HttpResponseBase Response { get; }
+        IResponse Response { get; }
 
-        HttpServerUtilityBase Server { get; }
+        string MachineName { get; }
+
+        string MapPath(string path);
     }
 }
