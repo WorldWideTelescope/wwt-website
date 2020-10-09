@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,7 +12,7 @@ namespace PlateManager
         public IEnumerable<FileInfo> File { get; set; } = Enumerable.Empty<FileInfo>();
 
         public bool UsePlate2Format { get; set; }
-        
+         
         public int UploaderCount { get; set; } = DefaultUploaderCount;
 
         public string BaseUrl { get; set; }

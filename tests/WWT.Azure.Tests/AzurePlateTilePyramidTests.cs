@@ -8,6 +8,7 @@ using NSubstitute;
 using NSubstitute.Extensions;
 using System.IO;
 using System.Threading.Tasks;
+using Castle.Core.Smtp;
 using Xunit;
 
 namespace WWT.Azure.Tests
@@ -116,6 +117,7 @@ namespace WWT.Azure.Tests
             var options = new AzurePlateTilePyramidOptions
             {
                 SkipIfExists = skipIfExists,
+                Container = "plate-data"
             };
 
             using var mock = ConfigureServiceClient(plateFile, level, x, y)
@@ -135,9 +137,15 @@ namespace WWT.Azure.Tests
 
         private static AutoSubstituteBuilder ConfigureServiceClient(string plateFile, int level, int x, int y, string expectedContainerName = null, string blobFormat = null)
         {
-            blobFormat ??= "L{0}X{1}Y{2}.png";
-            var blobName = string.Format(blobFormat, level, x, y);
-            var containerName = expectedContainerName ?? plateFile.Replace(".plate", string.Empty);
+            // For all the non dss plate files
+            var blobName = $"{plateFile.Replace(".plate", string.Empty)}/L{level}X{x}Y{y}.png";
+            var containerName = "plate-data";
+            
+            if (plateFile == "dssterrapixel.plate")
+            {
+                blobName = $"DSSTerraPixelL{level}X{x}Y{y}.png";
+                containerName = "dss";
+            }
 
             return AutoSubstitute.Configure()
                 .InjectProperties()

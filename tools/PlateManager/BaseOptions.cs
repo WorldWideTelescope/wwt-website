@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 
@@ -8,7 +8,7 @@ namespace PlateManager
     {
         public Uri Storage { get; set; }
 
-        public string AzureContainer { get; set; }
+        public string AzureContainer { get; set; } = "plate-data";
 
         public bool Interactive { get; set; }
 
