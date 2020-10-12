@@ -1,5 +1,4 @@
 using System;
-using System.Configuration;
 using System.IO;
 using WWTWebservices;
 
@@ -7,6 +6,11 @@ namespace WWT.Providers
 {
     public class HiriseDem2Provider : HiriseDem2
     {
+        public HiriseDem2Provider(IPlateTilePyramid plateTiles, FilePathOptions options)
+            : base(plateTiles, options)
+        {
+        }
+
         public override void Run(IWwtContext context)
         {
             string query = context.Request.Params["Q"];
@@ -15,63 +19,46 @@ namespace WWT.Providers
             int tileX = Convert.ToInt32(values[1]);
             int tileY = Convert.ToInt32(values[2]);
 
-            string wwtTilesDir = ConfigurationManager.AppSettings["WWTTilesDir"];
-            string DSSTileCache = ConfigurationManager.AppSettings["DSSTileCache"];
-
-            DSSTileCache = @"\\wwt-mars\marsroot";
-
-            string filename = String.Format(DSSTileCache + "\\dem\\Merged4\\{0}\\{1}\\DL{0}X{1}Y{2}.dem", level, tileX, tileY);
-
-            string path = String.Format(DSSTileCache + "\\dem\\Merged4\\{0}\\{1}\\", level, tileX, tileY);
-
-
+            string filename = $@"\\wwt-mars\marsroot\dem\Merged4\{level}\{tileX}\DL{level}X{tileX}Y{tileY}.dem";
 
             if (File.Exists(filename))
             {
-                Stream stream = File.OpenRead(filename);
-                Stream s = MergeMolaDemTileStream(level, tileX, tileY, stream);
-
-                int length = (int)s.Length;
-                if (length == 0)
+                using (Stream stream = File.OpenRead(filename))
+                using (Stream s = MergeMolaDemTileStream(level, tileX, tileY, stream))
                 {
+                    if (s.Length == 0)
+                    {
+                        context.Response.Clear();
+                        context.Response.ContentType = "text/plain";
+                        context.Response.Write("No image");
+                        context.Response.End();
+                        return;
+                    }
 
-                    context.Response.Clear();
-                    context.Response.ContentType = "text/plain";
-                    context.Response.Write("No image");
+                    s.CopyTo(context.Response.OutputStream);
+                    context.Response.Flush();
                     context.Response.End();
                     return;
                 }
-                byte[] data = new byte[length];
-                s.Read(data, 0, length);
-                context.Response.OutputStream.Write(data, 0, length);
-                context.Response.Flush();
-                context.Response.End();
-                return;
-
             }
-
+            else
             {
-
-
-
-                Stream ss = GetMolaDemTileStream(level, tileX, tileY);
-
-                int len = (int)ss.Length;
-                if (len == 0)
+                using (Stream ss = GetMolaDemTileStream(level, tileX, tileY))
                 {
+                    if (ss.Length == 0)
+                    {
+                        context.Response.Clear();
+                        context.Response.ContentType = "text/plain";
+                        context.Response.Write("No image");
+                        context.Response.End();
+                        return;
+                    }
 
-                    context.Response.Clear();
-                    context.Response.ContentType = "text/plain";
-                    context.Response.Write("No image");
+                    ss.CopyTo(context.Response.OutputStream);
+                    context.Response.Flush();
                     context.Response.End();
                     return;
                 }
-                byte[] data = new byte[len];
-                ss.Read(data, 0, len);
-                context.Response.OutputStream.Write(data, 0, len);
-                context.Response.Flush();
-                context.Response.End();
-                return;
             }
         }
     }

@@ -5,9 +5,9 @@ using Xunit;
 
 namespace WWT.Providers.Tests
 {
-    public class DemMarsNewProviderTests : ProviderTests<DemMarsNewProvider>
+    public class HiriseProviderTests : ProviderTests<HiriseProvider>
     {
-        protected override int MaxLevel => 17;
+        protected override int MaxLevel => 18;
 
         protected override Action<IResponse> StreamExceptionResponseHandler => null;
 
@@ -18,9 +18,9 @@ namespace WWT.Providers.Tests
 
         protected override Stream GetStreamFromPlateTilePyramid(IPlateTilePyramid plateTiles, int level, int x, int y)
         {
-            var index = DirectoryEntry.ComputeHash(level + 128, x, y) % 400;
+            var index = DirectoryEntry.ComputeHash(level + 128, x, y) % 300;
 
-            return plateTiles.GetStream(@"\\wwt-mars\marsroot\dem\", $"marsToastDem_{index}.plate", -1, level, x, y);
+            return plateTiles.GetStream(@"\\wwt-mars\marsroot\hirise", $"hiriseV5_{index}.plate", -1, level, x, y);
         }
     }
 }

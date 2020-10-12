@@ -4,9 +4,6 @@ using WWTWebservices;
 
 namespace WWT.Providers
 {
-
-
-
     public abstract partial class HiriseDem2 : RequestProvider
     {
         private static byte[] backslashXIndex = new byte[]
@@ -93,7 +90,16 @@ namespace WWT.Providers
             14, 13
         };
 
-        public static Stream GetMolaDemTileStream(int level, int x, int y)
+        private readonly IPlateTilePyramid _plateTiles;
+        private readonly FilePathOptions _options;
+
+        public HiriseDem2(IPlateTilePyramid plateTiles, FilePathOptions options)
+        {
+            _plateTiles = plateTiles;
+            _options = options;
+        }
+
+        public Stream GetMolaDemTileStream(int level, int x, int y)
         {
             float[] dataOut = GetMolaDemTile(level, x, y);
             MemoryStream stream = new MemoryStream();
@@ -109,7 +115,7 @@ namespace WWT.Providers
             return stream;
         }
 
-        public static Stream MergeMolaDemTileStream(int level, int x, int y, Stream tile)
+        public Stream MergeMolaDemTileStream(int level, int x, int y, Stream tile)
         {
             float[] dataIn = ReadDemStream(tile);
 
@@ -136,7 +142,7 @@ namespace WWT.Providers
             return stream;
         }
 
-        private static float[] GetMolaDemTile(int level, int xx, int yy)
+        private float[] GetMolaDemTile(int level, int xx, int yy)
         {
             float[] data = GetMolaDEMTileRaw(level, xx, yy);
 
@@ -253,9 +259,10 @@ namespace WWT.Providers
             return demArray[(16 - y) * 17 + x];
         }
 
-        private static float[] GetMolaDEMTileRaw(int level, int x, int y)
+        private float[] GetMolaDEMTileRaw(int level, int x, int y)
         {
-            Stream stream = PlateFile2.GetFileStream(@"D:\WWTTiles\marsToastDem.plate", -1, level, x, y);
+            Stream stream = _plateTiles.GetStream(_options.WwtTilesDir, "marsToastDem.plate", -1, level, x, y);
+
             if (stream != null)
             {
                 return ReadDemStream(stream);
@@ -276,7 +283,5 @@ namespace WWT.Providers
             br.Close();
             return data;
         }
-
-
     }
 }
