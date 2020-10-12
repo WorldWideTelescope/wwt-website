@@ -2,5 +2,5 @@
 
 <%@ Import Namespace="WWT.Providers" %>
 <%
-	RequestProvider.Get<MartianTileNewProvider>().Run(this);
+	RequestProvider.Get<MartianTileProvider>().Run(this);
 %>
