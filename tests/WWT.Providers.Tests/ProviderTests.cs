@@ -23,7 +23,7 @@ namespace WWT.Providers.Tests
 
         protected FilePathOptions Options { get; }
 
-        protected abstract int MaxLevel { get; }
+        protected virtual int MaxLevel => -1;
 
         protected virtual Action<IResponse> StreamExceptionResponseHandler { get; } = response =>
         {
@@ -75,7 +75,9 @@ namespace WWT.Providers.Tests
         [Fact]
         public void ErrorInStream()
         {
-            foreach (var level in Enumerable.Range(0, MaxLevel))
+            var maxLevel = MaxLevel < 0 ? 10 : MaxLevel;
+
+            foreach (var level in Enumerable.Range(0, maxLevel))
             {
                 // Arrange
                 var data = _fixture.CreateMany<byte>().ToArray();
@@ -166,6 +168,11 @@ namespace WWT.Providers.Tests
         [Fact]
         public void AboveMaxLevel()
         {
+            if (MaxLevel < 0)
+            {
+                return;
+            }
+
             foreach (var level in GetLevelsAboveMax())
             {
                 // Arrange
