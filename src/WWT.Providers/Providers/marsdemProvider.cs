@@ -1,11 +1,17 @@
 using System;
-using System.Configuration;
 using System.IO;
 
 namespace WWT.Providers
 {
-    public class marsdemProvider : RequestProvider
+    public class MarsdemProvider : RequestProvider
     {
+        private readonly FilePathOptions _options;
+
+        public MarsdemProvider(FilePathOptions options)
+        {
+            _options = options;
+        }
+
         public override void Run(IWwtContext context)
         {
             string query = context.Request.Params["Q"];
@@ -13,14 +19,12 @@ namespace WWT.Providers
             int level = Convert.ToInt32(values[0]);
             int tileX = Convert.ToInt32(values[1]);
             int tileY = Convert.ToInt32(values[2]);
-            string type = values[3];
             int demSize = 513 * 2;
-            string wwtDemDir = ConfigurationManager.AppSettings["WWTDEMDir"];
-            string filename = String.Format(wwtDemDir + @"\toast\mars\Chunks\{0}\{1}.chunk", level, tileY);
+
+            string filename = $@"{_options.WWTDEMDir}\toast\mars\Chunks\{level}\{tileY}.chunk";
 
             if (File.Exists(filename))
             {
-
                 byte[] data = new byte[demSize];
                 FileStream fs = File.OpenRead(filename);
                 fs.Seek((long)(demSize * tileX), SeekOrigin.Begin);
@@ -29,18 +33,13 @@ namespace WWT.Providers
                 fs.Close();
                 context.Response.OutputStream.Write(data, 0, demSize);
                 context.Response.OutputStream.Flush();
-
-
             }
             else
             {
-
                 byte[] data = new byte[demSize];
 
                 context.Response.OutputStream.Write(data, 0, demSize);
                 context.Response.OutputStream.Flush();
-
-
             }
 
             context.Response.End();
