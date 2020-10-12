@@ -10,10 +10,16 @@ namespace WWT.Providers.Tests
     internal static class HttpAutoSubstituteExtensions
     {
         public static byte[] GetOutputData(this AutoSubstitute container)
-        {
-            using var ms = new MemoryStream();
+            => container.Resolve<IResponse>().OutputStream.ToArray();
 
-            var stream = container.Resolve<IResponse>().OutputStream;
+        public static byte[] ToArray(this Stream stream)
+        {
+            if (stream is MemoryStream msInput)
+            {
+                return msInput.ToArray();
+            }
+
+            using var ms = new MemoryStream();
 
             stream.Position = 0;
             stream.CopyTo(ms);

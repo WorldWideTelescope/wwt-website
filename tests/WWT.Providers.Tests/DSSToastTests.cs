@@ -1,102 +1,45 @@
-﻿using AutofacContrib.NSubstitute;
-using AutoFixture;
-using NSubstitute;
-using NSubstitute.Extensions;
+﻿using NSubstitute;
+using System;
 using System.IO;
-using System.Linq;
-using System.Web;
 using WWTWebservices;
-using Xunit;
 
 namespace WWT.Providers.Tests
 {
-    public class DSSToastTests
+    public class DSSToastTests : ProviderTests<DSSToastProvider>
     {
-        private readonly Fixture _fixture;
+        protected override int MaxLevel => 12;
 
-        public DSSToastTests()
+        protected override Action<IResponse> StreamExceptionResponseHandler => null;
+
+        protected override Action<IResponse> NullStreamResponseHandler => null;
+
+        protected override Stream GetStreamFromPlateTilePyramid(IPlateTilePyramid plateTiles, int level, int x, int y)
         {
-            _fixture = new Fixture();
+            if (level > 12)
+            {
+                return null;
+            }
+            else if (level < 8)
+            {
+                return plateTiles.GetStream(Options.WwtTilesDir, "dsstoast.plate", level, x, y);
+            }
+            else
+            {
+                var powLev5Diff = (int)Math.Pow(2, level - 5);
+
+                var L5 = level - 5;
+                var X5 = x % powLev5Diff;
+                var Y5 = y % powLev5Diff;
+
+                var filename = $"DSSpngL5to12_x{x / powLev5Diff}_y{y / powLev5Diff}.plate";
+
+                return plateTiles.GetStream(Options.DssToastPng, filename, L5, X5, Y5);
+            }
         }
 
-        [Theory]
-        [InlineData(13)]
-        public void TooLarge(int level)
+        protected override void ExpectedResponseAboveMaxLevel(IResponse response)
         {
-            // Arrange
-            using var container = AutoSubstitute.Configure()
-                .InitializeProviderTests()
-                .ConfigureParameterQ(level, 2, 3)
-                .Build();
-
-            // Act
-            container.RunProviderTest<DSSToastProvider>();
-
-            // Assert
-            container.Resolve<IResponse>().Received(1).Write("No image");
-        }
-
-        [Theory]
-        [InlineData(7)]
-        [InlineData(0)]
-        public void LowLevels(int level)
-        {
-            // Arrange
-            var x = _fixture.Create<int>();
-            var y = _fixture.Create<int>();
-            var options = _fixture.Create<FilePathOptions>();
-
-            using var container = AutoSubstitute.Configure()
-                .InitializeProviderTests()
-                .Provide(options)
-                .ConfigureParameterQ(level, x, y)
-                .Build();
-
-            var data = _fixture.CreateMany<byte>(10);
-            var result = new MemoryStream(data.ToArray());
-            var outputStream = new MemoryStream();
-
-            container.Resolve<IResponse>().Configure().OutputStream.Returns(outputStream);
-            container.Resolve<IPlateTilePyramid>().GetStream(options.WwtTilesDir, "dsstoast.plate", level, x, y).Returns(result);
-
-            // Act
-            container.RunProviderTest<DSSToastProvider>();
-
-            // Assert
-            Assert.Equal("image/png", container.Resolve<IResponse>().ContentType);
-            Assert.Equal(data, outputStream.ToArray());
-        }
-
-        [Theory]
-        [InlineData(8, 1, 2, 0, 0, 3, 1, 2)]
-        [InlineData(9, 3, 3, 0, 0, 4, 3, 3)]
-        [InlineData(10, 6, 3, 0, 0, 5, 6, 3)]
-        [InlineData(11, 1, 3, 0, 0, 6, 1, 3)]
-        public void HighLevels(int level, int x, int y, int fileX, int fileY, int level2, int x2, int y2)
-        {
-            // Arrange
-            var options = _fixture.Create<FilePathOptions>();
-
-            using var container = AutoSubstitute.Configure()
-                .InitializeProviderTests()
-                .Provide(options)
-                .ConfigureParameterQ(level, x, y)
-                .Build();
-
-            var data = _fixture.CreateMany<byte>(10);
-            var result = new MemoryStream(data.ToArray());
-            var outputStream = new MemoryStream();
-            var filename = $"DSSpngL5to12_x{fileX}_y{fileY}.plate";
-
-            container.Resolve<IResponse>().Configure().OutputStream.Returns(outputStream);
-            container.Resolve<IPlateTilePyramid>().GetStream(options.DssToastPng, filename, level2, x2, y2).Returns(result);
-
-            // Act
-            container.RunProviderTest<DSSToastProvider>();
-
-            // Assert
-            Assert.Equal("image/png", container.Resolve<IResponse>().ContentType);
-            Assert.Equal(data, outputStream.ToArray());
+            response.Received(1).Write("No image");
         }
     }
 }
