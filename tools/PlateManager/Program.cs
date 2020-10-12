@@ -36,7 +36,7 @@ namespace PlateManager
             var command = new Command("upload")
             {
                 new Option<IEnumerable<FileInfo>>(new[] { "--file", "-f" }) { IsRequired = true }.ExistingOnly(),
-                new Option<Uri>("--storage", () => new Uri("https://127.0.0.1:10000/devstoreaccount1/")),
+                new Option<string>("--storage", () => "https://127.0.0.1:10000/devstoreaccount1/"),
                 new Option<bool>("--useplate2format"),
                 new Option<string>("--container", () => "plate-data"),
                 new Option<bool>("--interactive"),
@@ -88,15 +88,20 @@ namespace PlateManager
 
             services.AddAzureClients(builder =>
             {
-                builder.AddBlobServiceClient(options.Storage);
-
-                if (options.Interactive)
+                if (Uri.TryCreate(options.Storage, UriKind.Absolute, out var storageUri))
                 {
-                    builder.UseCredential(new InteractiveBrowserCredential());
+                    // Use the storage URI and register the credential provider 
+                    builder.AddBlobServiceClient(storageUri);
+
+                    if (options.Interactive)
+                        builder.UseCredential(new InteractiveBrowserCredential());
+                    else
+                        builder.UseCredential(new DefaultAzureCredential());
                 }
                 else
                 {
-                    builder.UseCredential(new DefaultAzureCredential());
+                    // this is actually a storage connection string with included credentials
+                    builder.AddBlobServiceClient(options.Storage);
                 }
             });
 
