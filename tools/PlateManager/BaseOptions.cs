@@ -8,7 +8,7 @@ namespace PlateManager
     {
         public string Storage { get; set; }
 
-        public string AzureContainer { get; set; } = "plate-data";
+        public string AzureContainer { get; set; } = "coredata";
 
         public bool Interactive { get; set; }
 
