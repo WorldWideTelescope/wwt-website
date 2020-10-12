@@ -6,7 +6,7 @@ namespace PlateManager
 {
     internal class BaseOptions
     {
-        public Uri Storage { get; set; }
+        public string Storage { get; set; }
 
         public string AzureContainer { get; set; } = "plate-data";
 
