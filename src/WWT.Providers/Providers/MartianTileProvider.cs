@@ -1,12 +1,17 @@
 using System;
-using System.Configuration;
 using System.IO;
-using WWTWebservices;
 
 namespace WWT.Providers
 {
     public class MartianTileProvider : RequestProvider
     {
+        private readonly FilePathOptions _options;
+
+        public MartianTileProvider(FilePathOptions options)
+        {
+            _options = options;
+        }
+
         public override void Run(IWwtContext context)
         {
             string query = context.Request.Params["Q"];
@@ -16,8 +21,6 @@ namespace WWT.Providers
             int tileY = Convert.ToInt32(values[2]);
             string dataset = values[3];
             string id = "nothing";
-
-            string DSSTileCache = ConfigurationManager.AppSettings["DSSTileCache"];
 
             switch (dataset)
             {
@@ -51,34 +54,16 @@ namespace WWT.Providers
 
             }
 
-
-            string filename = String.Format(DSSTileCache + "\\wwtcache\\mars\\{3}\\{0}\\{2}\\{1}_{2}.png", level, tileX, tileY, id);
-            string path = String.Format(DSSTileCache + "\\wwtcache\\mars\\{3}\\{0}\\{2}", level, tileX, tileY, id);
-
+            string filename = $@"{_options.DSSTileCache}\wwtcache\mars\{id}\{level}\{tileY}\{tileX}_{tileY}.png";
 
             if (!File.Exists(filename))
             {
-                //try
-                //{
-                //    if (!Directory.Exists(filename))
-                //    {
-                //        Directory.CreateDirectory(path);
-                //    }
-
-                //    WebClient webclient = new WebClient();
-
-                //    string url = string.Format("http://wwt.nasa.gov/wwt/p/{0}/{1}/{2}/{3}{4}", dataset, level, tileX, tileY, type);
-
-                //    webclient.DownloadFile(url, filename);
-                //}
-                //catch
-                // {
                 context.Response.StatusCode = 404;
-                return;
-                // }
             }
-
-            context.Response.WriteFile(filename);
+            else
+            {
+                context.Response.WriteFile(filename);
+            }
         }
     }
 }

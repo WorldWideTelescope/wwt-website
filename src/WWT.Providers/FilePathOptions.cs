@@ -14,14 +14,11 @@ namespace WWT.Providers
                 WWTDEMDir = ConfigurationManager.AppSettings["WWTDEMDir"],
                 WwtTilesDir = ConfigurationManager.AppSettings["WWTTilesDir"],
                 WwtGalexDir = ConfigurationManager.AppSettings["WWTGALEXDIR"],
-                WwtWebDir = ConfigurationManager.AppSettings["WWTWEBDIR"],
             };
 
         public string DssTerapixelDir { get; set; }
 
         public string DSSTileCache { get; set; }
-
-        public string WwtWebDir { get; set; }
 
         public string DssToastPng { get; set; }
 

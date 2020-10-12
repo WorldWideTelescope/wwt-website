@@ -51,7 +51,7 @@ namespace WWT.Providers
                     try
                     {
                         Color[] c = new Color[256];
-                        StreamReader sr = new StreamReader(Path.Combine(_options.WwtWebDir, "wwtweb", "colors.map"));
+                        StreamReader sr = new StreamReader(context.MapPath("colors.map"));
                         ArrayList lines = new ArrayList();
                         string line = sr.ReadLine();
                         while (line != null)

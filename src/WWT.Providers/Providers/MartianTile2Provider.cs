@@ -7,6 +7,15 @@ namespace WWT.Providers
 {
     public class MartianTile2Provider : HiRise
     {
+        private readonly IPlateTilePyramid _plateTiles;
+        private readonly FilePathOptions _options;
+
+        public MartianTile2Provider(IPlateTilePyramid plateTiles, FilePathOptions options)
+        {
+            _plateTiles = plateTiles;
+            _options = options;
+        }
+
         public override void Run(IWwtContext context)
         {
             string query = context.Request.Params["Q"];
@@ -17,32 +26,27 @@ namespace WWT.Providers
             string dataset = values[3];
             string id = "nothing";
 
-            string DSSTileCache = ConfigurationManager.AppSettings["DSSTileCache"];
-
             switch (dataset)
             {
                 case "mars_base_map":
                     if (level < 18)
                     {
-                        // context.Response.ContentType = "image/png";
-
-                        Stream s = PlateFile2.GetFileStream(@"\\wwt-mars\marsroot\MARSBASEMAP\marsbasemap.plate", -1, level, tileX, tileY);
-
-                        if (s == null || (int)s.Length == 0)
+                        using (Stream s = _plateTiles.GetStream(@"\\wwt-mars\marsroot\MARSBASEMAP", "marsbasemap.plate", -1, level, tileX, tileY))
                         {
-                            context.Response.Clear();
-                            context.Response.ContentType = "text/plain";
-                            context.Response.Write("No image");
+                            if (s == null || (int)s.Length == 0)
+                            {
+                                context.Response.Clear();
+                                context.Response.ContentType = "text/plain";
+                                context.Response.Write("No image");
+                                context.Response.End();
+                                return;
+                            }
+
+                            s.CopyTo(context.Response.OutputStream);
+                            context.Response.Flush();
                             context.Response.End();
                             return;
                         }
-                        int length = (int)s.Length;
-                        byte[] data = new byte[length];
-                        s.Read(data, 0, length);
-                        context.Response.OutputStream.Write(data, 0, length);
-                        context.Response.Flush();
-                        context.Response.End();
-                        return;
                     }
                     break;
                 case "mars_terrain_color":
@@ -55,24 +59,21 @@ namespace WWT.Providers
 
                         UInt32 index = ComputeHash(level, tileX, tileY) % 300;
 
-
-                        Stream s = PlateFile2.GetFileStream(String.Format(@"\\wwt-mars\marsroot\hirise\hiriseV5_{0}.plate", index), -1, level, tileX, tileY);
-
-                        if (s == null || (int)s.Length == 0)
+                        using (Stream s = _plateTiles.GetStream(@"\\wwt-mars\marsroot\hirise", $"hiriseV5_{index}.plate", -1, level, tileX, tileY))
                         {
-                            context.Response.Clear();
-                            context.Response.ContentType = "text/plain";
-                            context.Response.Write("No image");
+                            if (s == null || (int)s.Length == 0)
+                            {
+                                context.Response.Clear();
+                                context.Response.ContentType = "text/plain";
+                                context.Response.Write("No image");
+                                context.Response.End();
+                                return;
+                            }
+                            s.CopyTo(context.Response.OutputStream);
+                            context.Response.Flush();
                             context.Response.End();
                             return;
                         }
-                        int length = (int)s.Length;
-                        byte[] data = new byte[length];
-                        s.Read(data, 0, length);
-                        context.Response.OutputStream.Write(data, 0, length);
-                        context.Response.Flush();
-                        context.Response.End();
-                        return;
                     }
 
                     break;
@@ -83,23 +84,22 @@ namespace WWT.Providers
 
                         UInt32 index = ComputeHash(level, tileX, tileY) % 400;
 
-                        Stream s = PlateFile2.GetFileStream(String.Format(@"\\wwt-mars\marsroot\moc\mocv5_{0}.plate", index), -1, level, tileX, tileY);
-
-                        if (s == null || (int)s.Length == 0)
+                        using (Stream s = _plateTiles.GetStream(@"\\wwt-mars\marsroot\moc", $"mocv5_{index}.plate", -1, level, tileX, tileY))
                         {
-                            context.Response.Clear();
-                            context.Response.ContentType = "text/plain";
-                            context.Response.Write("No image");
+                            if (s == null || (int)s.Length == 0)
+                            {
+                                context.Response.Clear();
+                                context.Response.ContentType = "text/plain";
+                                context.Response.Write("No image");
+                                context.Response.End();
+                                return;
+                            }
+
+                            s.CopyTo(context.Response.OutputStream);
+                            context.Response.Flush();
                             context.Response.End();
                             return;
                         }
-                        int length = (int)s.Length;
-                        byte[] data = new byte[length];
-                        s.Read(data, 0, length);
-                        context.Response.OutputStream.Write(data, 0, length);
-                        context.Response.Flush();
-                        context.Response.End();
-                        return;
                     }
                     break;
                 case "mars_historic_green":
@@ -120,34 +120,16 @@ namespace WWT.Providers
 
             }
 
-
-            string filename = String.Format(DSSTileCache + "\\wwtcache\\mars\\{3}\\{0}\\{2}\\{1}_{2}.png", level, tileX, tileY, id);
-            string path = String.Format(DSSTileCache + "\\wwtcache\\mars\\{3}\\{0}\\{2}", level, tileX, tileY, id);
-
+            string filename = $@"{_options.DssToastPng}\wwtcache\mars\{id}\{level}\{tileY}\{tileX}_{tileY}.png";
 
             if (!File.Exists(filename))
             {
-                //try
-                //{
-                //    if (!Directory.Exists(filename))
-                //    {
-                //        Directory.CreateDirectory(path);
-                //    }
-
-                //    WebClient webclient = new WebClient();
-
-                //    string url = string.Format("http://wwt.nasa.gov/wwt/p/{0}/{1}/{2}/{3}{4}", dataset, level, tileX, tileY, type);
-
-                //    webclient.DownloadFile(url, filename);
-                //}
-                //catch
-                // {
                 context.Response.StatusCode = 404;
-                return;
-                // }
             }
-
-            context.Response.WriteFile(filename);
+            else
+            {
+                context.Response.WriteFile(filename);
+            }
         }
     }
 }
