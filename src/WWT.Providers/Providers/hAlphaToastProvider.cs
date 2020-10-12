@@ -1,5 +1,4 @@
 using System;
-using System.Configuration;
 using System.IO;
 using WWTWebservices;
 
@@ -7,6 +6,15 @@ namespace WWT.Providers
 {
     public class hAlphaToastProvider : RequestProvider
     {
+        private readonly IPlateTilePyramid _plateTiles;
+        private readonly FilePathOptions _options;
+
+        public hAlphaToastProvider(IPlateTilePyramid plateTiles, FilePathOptions options)
+        {
+            _plateTiles = plateTiles;
+            _options = options;
+        }
+
         public override void Run(IWwtContext context)
         {
             string query = context.Request.Params["Q"];
@@ -14,21 +22,18 @@ namespace WWT.Providers
             int level = Convert.ToInt32(values[0]);
             int tileX = Convert.ToInt32(values[1]);
             int tileY = Convert.ToInt32(values[2]);
-            string file = "halpha";
-            string wwtTilesDir = ConfigurationManager.AppSettings["WWTTilesDir"];
-
 
             if (level < 8)
             {
                 context.Response.ContentType = "image/png";
-                Stream s = PlateTilePyramid.GetFileStream(String.Format(wwtTilesDir + "\\{0}.plate", file), level, tileX, tileY);
-                int length = (int)s.Length;
-                byte[] data = new byte[length];
-                s.Read(data, 0, length);
-                context.Response.OutputStream.Write(data, 0, length);
-                context.Response.Flush();
-                context.Response.End();
-                return;
+
+                using (Stream s = _plateTiles.GetStream(_options.WwtTilesDir, "halpha.plate", level, tileX, tileY))
+                {
+                    s.CopyTo(context.Response.OutputStream);
+                    context.Response.Flush();
+                    context.Response.End();
+                    return;
+                }
             }
         }
     }
