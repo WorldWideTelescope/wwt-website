@@ -1,6 +1,5 @@
 using OctSetTest;
 using System;
-using System.Configuration;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -10,17 +9,23 @@ namespace WWT.Providers
 {
     public class SDSSToastProvider : RequestProvider
     {
+        private readonly IPlateTilePyramid _plateTiles;
+        private readonly FilePathOptions _options;
+
+        public SDSSToastProvider(IPlateTilePyramid plateTiles, FilePathOptions options)
+        {
+            _plateTiles = plateTiles;
+            _options = options;
+        }
+
         public override void Run(IWwtContext context)
         {
             if (context.Request.UserAgent.ToLower().Contains("wget"))
             {
-
                 context.Response.Write("You are not allowed to bulk download imagery thru the tile service. Please contact wwtpage@microsoft.com for more information.");
                 context.Response.End();
                 return;
             }
-
-
 
             string query = context.Request.Params["Q"];
             string[] values = query.Split(',');
@@ -43,17 +48,7 @@ namespace WWT.Providers
                 return;
             }
 
-            string filename;
-            string path;
-
-            string wwtTilesDir = ConfigurationManager.AppSettings["WWTTilesDir"];
-            string DSSTileCache = ConfigurationManager.AppSettings["DSSTileCache"];
-
-
-
-
-            filename = String.Format(DSSTileCache + "\\SDSSToast\\{0}\\{2}\\{2}_{1}.png", level, tileX, tileY);
-            path = String.Format(DSSTileCache + "\\SDSSToast\\{0}\\{2}", level, tileX, tileY);
+            string wwtTilesDir = _options.WwtTilesDir;
 
             if (level > 14)
             {
@@ -65,26 +60,26 @@ namespace WWT.Providers
             if (level < 9)
             {
                 context.Response.ContentType = "image/png";
-                Stream s = PlateTilePyramid.GetFileStream(wwtTilesDir + "\\sdss_8.plate", level, tileX, tileY);
-                int length = (int)s.Length;
-                if (length == 0)
-                {
 
-                    context.Response.Clear();
-                    context.Response.ContentType = "text/plain";
-                    context.Response.Write("No image");
+                using (Stream s = _plateTiles.GetStream(wwtTilesDir, "sdss_8.plate", level, tileX, tileY))
+                {
+                    if (s.Length == 0)
+                    {
+                        context.Response.Clear();
+                        context.Response.ContentType = "text/plain";
+                        context.Response.Write("No image");
+                        context.Response.End();
+                        return;
+                    }
+
+                    s.CopyTo(context.Response.OutputStream);
+                    context.Response.Flush();
                     context.Response.End();
                     return;
                 }
-                byte[] data = new byte[length];
-                s.Read(data, 0, length);
-                context.Response.OutputStream.Write(data, 0, length);
-                context.Response.Flush();
-                context.Response.End();
-                return;
             }
 
-
+            string filename = $@"{_options.DSSTileCache}\SDSSToast\{level}\{tileY}\{tileY}_{tileX}.png";
             if (File.Exists(filename))
             {
                 try
@@ -143,6 +138,7 @@ namespace WWT.Providers
 
                     bmpOutputFast.UnlockBitmap();
 
+                    string path = Path.GetDirectoryName(filename);
                     if (!Directory.Exists(path))
                     {
                         Directory.CreateDirectory(path);
