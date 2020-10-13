@@ -124,6 +124,8 @@ namespace WWT.Providers
 
             if (!File.Exists(filename))
             {
+                // This used to download from $"http://wwt.nasa.gov/wwt/p/{dataset}/{level}/{tileX}/{tileY}.png"
+                // That URL is no longer available.
                 context.Response.StatusCode = 404;
             }
             else

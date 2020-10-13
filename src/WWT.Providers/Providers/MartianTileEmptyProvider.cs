@@ -1,13 +1,18 @@
 using System;
-using System.Configuration;
 using System.IO;
 using System.Net;
-using WWTWebservices;
 
 namespace WWT.Providers
 {
     public class MartianTileEmptyProvider : RequestProvider
     {
+        private readonly FilePathOptions _options;
+
+        public MartianTileEmptyProvider(FilePathOptions options)
+        {
+            _options = options;
+        }
+
         public override void Run(IWwtContext context)
         {
             string query = context.Request.Params["Q"];
@@ -18,8 +23,6 @@ namespace WWT.Providers
             string dataset = values[3];
             string id = "nothing";
             string type = ".png";
-
-            string DSSTileCache = ConfigurationManager.AppSettings["DSSTileCache"];
 
             switch (dataset)
             {
@@ -51,13 +54,10 @@ namespace WWT.Providers
                 case "mars_historic_mec1":
                     id = "2141096698";
                     break;
-
             }
 
-
-            string filename = String.Format(DSSTileCache + "\\wwtcache\\mars\\{3}\\{0}\\{2}\\{1}_{2}.png", level, tileX, tileY, id);
-            string path = String.Format(DSSTileCache + "\\wwtcache\\mars\\{3}\\{0}\\{2}", level, tileX, tileY, id);
-
+            string filename = $@"{_options.DSSTileCache}\wwtcache\mars\{id}\{level}\{tileY}\{tileX}_{tileY}.png";
+            string path = Path.GetDirectoryName(filename);
 
             if (!File.Exists(filename))
             {
@@ -81,9 +81,8 @@ namespace WWT.Providers
                     return;
                 }
             }
-            context.Response.Write("OK");
 
-            //context.Response.WriteFile(filename);
+            context.Response.Write("OK");
         }
     }
 }
