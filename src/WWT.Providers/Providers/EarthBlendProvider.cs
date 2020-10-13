@@ -1,5 +1,4 @@
 using System;
-using System.Configuration;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -10,17 +9,24 @@ namespace WWT.Providers
 {
     public class EarthBlendProvider : RequestProvider
     {
+        private readonly IPlateTilePyramid _plateTiles;
+        private readonly FilePathOptions _options;
+
+        public EarthBlendProvider(IPlateTilePyramid plateTiles, FilePathOptions options)
+        {
+            _plateTiles = plateTiles;
+            _options = options;
+        }
+
         public override void Run(IWwtContext context)
         {
-            string wwtTilesDir = ConfigurationManager.AppSettings["WWTTilesDir"];
-            string DSSTileCache = ConfigurationManager.AppSettings["DSSTileCache"];
+            string wwtTilesDir = _options.WwtTilesDir;
+            string DSSTileCache = _options.DSSTileCache;
             string query = context.Request.Params["Q"];
             string[] values = query.Split(',');
             int level = Convert.ToInt32(values[0]);
             int tileX = Convert.ToInt32(values[1]);
             int tileY = Convert.ToInt32(values[2]);
-            string filename = String.Format(DSSTileCache + "\\EarthBlend\\level{0}\\{2}\\{1}_{2}.jpg", level, tileX, tileY);
-            string path = String.Format(DSSTileCache + "\\EarthBlend\\level{0}\\{2}", level, tileX, tileY);
 
             if (level > 20)
             {
@@ -29,47 +35,54 @@ namespace WWT.Providers
                 return;
             }
 
+            string filename = $@"{DSSTileCache}\EarthBlend\level{level}\{tileY}\{tileX}_{tileY}.jpg";
             if (level < 8)
             {
                 context.Response.ContentType = "image/png";
-                Stream s = PlateTilePyramid.GetFileStream(wwtTilesDir + "\\BmngMerBase.plate", level, tileX, tileY);
-                int length = (int)s.Length;
-                byte[] data = new byte[length];
-                s.Read(data, 0, length);
-                context.Response.OutputStream.Write(data, 0, length);
-                context.Response.Flush();
-                context.Response.End();
-                return;
+
+                using (Stream s = _plateTiles.GetStream(wwtTilesDir, "BmngMerBase.plate", level, tileX, tileY))
+                {
+                    int length = (int)s.Length;
+                    byte[] data = new byte[length];
+                    s.Read(data, 0, length);
+                    context.Response.OutputStream.Write(data, 0, length);
+                    context.Response.Flush();
+                    context.Response.End();
+                    return;
+                }
             }
             else if (level == 8)
             {
                 int L = level;
                 int X = tileX;
                 int Y = tileY;
-                string mime = "png";
                 int powLev5Diff = (int)Math.Pow(2, L - 2);
                 int X32 = X / powLev5Diff;
                 int Y32 = Y / powLev5Diff;
-                filename = string.Format(wwtTilesDir + @"\BmngMerL2X{1}Y{2}.plate", mime, X32, Y32);
 
                 int L5 = L - 2;
                 int X5 = X % powLev5Diff;
                 int Y5 = Y % powLev5Diff;
+
                 context.Response.ContentType = "image/png";
-                Stream s = PlateTilePyramid.GetFileStream(filename, L5, X5, Y5);
-                int length = (int)s.Length;
-                byte[] data = new byte[length];
-                s.Read(data, 0, length);
-                context.Response.OutputStream.Write(data, 0, length);
-                context.Response.Flush();
-                context.Response.End();
-                return;
+
+                using (Stream s = _plateTiles.GetStream(wwtTilesDir, $"BmngMerL2X{X32}Y{Y32}.plate", L5, X5, Y5))
+                {
+                    int length = (int)s.Length;
+                    byte[] data = new byte[length];
+                    s.Read(data, 0, length);
+                    context.Response.OutputStream.Write(data, 0, length);
+                    context.Response.Flush();
+                    context.Response.End();
+                    return;
+                }
 
             }
             else if (level == 9)
             {
                 if (!File.Exists(filename))
                 {
+                    string path = Path.GetDirectoryName(filename);
                     if (!Directory.Exists(path))
                     {
                         Directory.CreateDirectory(path);
@@ -77,11 +90,9 @@ namespace WWT.Providers
                     int L = level;
                     int X = tileX;
                     int Y = tileY;
-                    string mime = "png";
                     int powLev5Diff = (int)Math.Pow(2, L - 2);
                     int X32 = X / powLev5Diff;
                     int Y32 = Y / powLev5Diff;
-                    string platefilename = string.Format(wwtTilesDir + @"\BmngMerL2X{1}Y{2}.plate", mime, X32, Y32);
 
                     int L5 = L - 2;
                     int X5 = X % powLev5Diff;
@@ -89,36 +100,38 @@ namespace WWT.Providers
 
                     float[][] ptsArray =
                     {
-                new float[] {1, 0, 0, 0, 0},
-                new float[] {0, 1, 0, 0, 0},
-                new float[] {0, 0, 1, 0, 0},
-                new float[] {0, 0, 0, 0.5f, 0},
-                new float[] {0, 0, 0, 0, 1}
-            };
+                        new float[] {1, 0, 0, 0, 0},
+                        new float[] {0, 1, 0, 0, 0},
+                        new float[] {0, 0, 1, 0, 0},
+                        new float[] {0, 0, 0, 0.5f, 0},
+                        new float[] {0, 0, 0, 0, 1}
+                    };
+
                     ColorMatrix clrMatrix = new ColorMatrix(ptsArray);
                     ImageAttributes imgAttributes = new ImageAttributes();
                     imgAttributes.SetColorMatrix(clrMatrix,
                         ColorMatrixFlag.Default,
                         ColorAdjustType.Bitmap);
                     context.Response.ContentType = "image/png";
-                    Stream s = PlateTilePyramid.GetFileStream(platefilename, L5, X5, Y5);
-
-                    Bitmap bmp = new Bitmap(s);
-                    Graphics g = Graphics.FromImage(bmp);
-                    g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-
-                    string tempName = WWTUtil.DownloadVeTile(level, tileX, tileY, false);
-                    FileInfo fi = new FileInfo(tempName);
-                    if (fi.Length != 0 && fi.Length != 1033)
+                    using (Stream s = _plateTiles.GetStream(wwtTilesDir, $"BmngMerL2X{X32}Y{Y32}.plate", L5, X5, Y5))
                     {
-                        Bitmap temp = new Bitmap(tempName);
+                        Bitmap bmp = new Bitmap(s);
+                        Graphics g = Graphics.FromImage(bmp);
+                        g.InterpolationMode = InterpolationMode.HighQualityBicubic;
 
-                        g.DrawImage(temp, new Rectangle(0, 0, 256, 256), 0, 0, 256, 256, GraphicsUnit.Pixel, imgAttributes);
-                        temp.Dispose();
+                        string tempName = WWTUtil.DownloadVeTile(level, tileX, tileY, false);
+                        FileInfo fi = new FileInfo(tempName);
+                        if (fi.Length != 0 && fi.Length != 1033)
+                        {
+                            Bitmap temp = new Bitmap(tempName);
+
+                            g.DrawImage(temp, new Rectangle(0, 0, 256, 256), 0, 0, 256, 256, GraphicsUnit.Pixel, imgAttributes);
+                            temp.Dispose();
+                        }
+                        g.Dispose();
+                        bmp.Save(filename, ImageFormat.Jpeg);
+                        bmp.Dispose();
                     }
-                    g.Dispose();
-                    bmp.Save(filename, ImageFormat.Jpeg);
-                    bmp.Dispose();
                 }
 
                 context.Response.WriteFile(filename);
