@@ -2,5 +2,5 @@
 
 <%@ Import Namespace="WWT.Providers" %>
 <%
-	RequestProvider.Get<postmarsProvider>().Run(this);
+	RequestProvider.Get<PostMarsProvider>().Run(this);
 %>
