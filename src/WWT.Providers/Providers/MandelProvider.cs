@@ -1,15 +1,20 @@
 using System;
 using System.Collections;
-using System.Configuration;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using WWTWebservices;
 
 namespace WWT.Providers
 {
     public class MandelProvider : RequestProvider
     {
+        private readonly FilePathOptions _options;
+
+        public MandelProvider(FilePathOptions options)
+        {
+            _options = options;
+        }
+
         public override void Run(IWwtContext context)
         {
             string query = context.Request.Params["Q"];
@@ -18,15 +23,8 @@ namespace WWT.Providers
             int tileX = Convert.ToInt32(values[1]);
             int tileY = Convert.ToInt32(values[2]);
 
-            string filename;
-            string path;
-            Bitmap b = null;
-            string DSSTileCache = ConfigurationManager.AppSettings["DSSTileCache"];
-            string webDir = ConfigurationManager.AppSettings["WWTWEBDIR"];
-
-
-            filename = String.Format(DSSTileCache + "\\wwtcache\\mandel\\level{0}\\{2}\\{1}_{2}.png", level, tileX, tileY);
-            path = String.Format(DSSTileCache + "\\wwtcache\\mandel\\level{0}\\{2}", level, tileX, tileY);
+            string filename = $@"{_options.DSSTileCache}\wwtcache\mandel\level{level}\{tileY}\{tileX}_{tileY}.png";
+            string path = Path.GetDirectoryName(filename);
 
             if ((level < 32) && File.Exists(filename))
             {
@@ -36,7 +34,6 @@ namespace WWT.Providers
                 }
                 catch
                 {
-                    b = null;
                 }
             }
             else
@@ -47,7 +44,6 @@ namespace WWT.Providers
                 double Sx = ((double)tileX * tileWidth) - 4;
                 double Fx = Sx + tileWidth;
 
-
                 context.Response.Clear();
 
                 Color[] cs = new Color[256];
@@ -55,8 +51,7 @@ namespace WWT.Providers
                     try
                     {
                         Color[] c = new Color[256];
-                        System.IO.StreamReader sr = new System.IO.StreamReader(webDir + @"\wwtweb\colors.map");
-                        //System.IO.StreamReader sr = new System.IO.StreamReader(@"colors.map");
+                        StreamReader sr = new StreamReader(context.MapPath("colors.map"));
                         ArrayList lines = new ArrayList();
                         string line = sr.ReadLine();
                         while (line != null)
@@ -85,7 +80,7 @@ namespace WWT.Providers
 
                 int MAXITER = 100 + level * 100;
 
-                b = new Bitmap(256, 256);
+                var b = new Bitmap(256, 256);
                 double x, y, x1, y1, xx, xmin, xmax, ymin, ymax = 0.0;
                 int looper, s, z = 0;
                 double intigralX, intigralY = 0.0;
