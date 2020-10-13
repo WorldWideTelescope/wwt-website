@@ -1,6 +1,6 @@
 namespace WWT.Providers
 {
-    public class postmarsProvider : RequestProvider
+    public class PostMarsProvider : RequestProvider
     {
         public override void Run(IWwtContext context)
         {
