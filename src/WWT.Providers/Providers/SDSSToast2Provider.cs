@@ -1,6 +1,5 @@
 using OctSetTest;
 using System;
-using System.Configuration;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -10,6 +9,15 @@ namespace WWT.Providers
 {
     public class SDSSToast2Provider : RequestProvider
     {
+        private readonly IPlateTilePyramid _plateTiles;
+        private readonly FilePathOptions _options;
+
+        public SDSSToast2Provider(IPlateTilePyramid plateTiles, FilePathOptions options)
+        {
+            _plateTiles = plateTiles;
+            _options = options;
+        }
+
         public override void Run(IWwtContext context)
         {
             string query = context.Request.Params["Q"];
@@ -17,16 +25,6 @@ namespace WWT.Providers
             int level = Convert.ToInt32(values[0]);
             int tileX = Convert.ToInt32(values[1]);
             int tileY = Convert.ToInt32(values[2]);
-
-            string filename;
-            string path;
-            string wwtTilesDir = ConfigurationManager.AppSettings["WWTTilesDir"];
-            string DSSTileCache = ConfigurationManager.AppSettings["DSSTileCache"];
-
-
-
-            filename = String.Format(DSSTileCache + "\\SDSSToast\\{0}\\{2}\\{2}_{1}.png", level, tileX, tileY);
-            path = String.Format(DSSTileCache + "\\SDSSToast\\{0}\\{2}", level, tileX, tileY);
 
             if (level > 14)
             {
@@ -38,16 +36,18 @@ namespace WWT.Providers
             if (level < 9)
             {
                 context.Response.ContentType = "image/png";
-                Stream s = PlateTilePyramid.GetFileStream(wwtTilesDir + "\\sdss_8.plate", level, tileX, tileY);
-                int length = (int)s.Length;
-                byte[] data = new byte[length];
-                s.Read(data, 0, length);
-                context.Response.OutputStream.Write(data, 0, length);
-                context.Response.Flush();
-                context.Response.End();
-                return;
+
+                using (Stream s = _plateTiles.GetStream(_options.WwtTilesDir, "sdss_8.plate", level, tileX, tileY))
+                {
+                    s.CopyTo(context.Response.OutputStream);
+                    context.Response.Flush();
+                    context.Response.End();
+                    return;
+                }
             }
 
+
+            string filename = $@"{_options.DSSTileCache}\SDSSToast\{level}\{tileY}\{tileY}_{tileX}.png";
             /*   
                    if (!sdssTile )
                    {
@@ -78,9 +78,6 @@ namespace WWT.Providers
             }
             else
             {
-
-
-
                 OctTileMap map = new OctTileMap(level, tileX, tileY);
 
                 Int32 sqSide = 256;
@@ -128,6 +125,7 @@ namespace WWT.Providers
 
                     bmpOutputFast.UnlockBitmap();
 
+                    string path = Path.GetDirectoryName(filename);
                     if (!Directory.Exists(path))
                     {
                         Directory.CreateDirectory(path);
