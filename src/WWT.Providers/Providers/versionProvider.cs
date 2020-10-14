@@ -1,14 +1,13 @@
-using System.Configuration;
+using System.IO;
 
 namespace WWT.Providers
 {
-    public class versionProvider : RequestProvider
+    public class VersionProvider : RequestProvider
     {
         public override void Run(IWwtContext context)
         {
             context.Response.AddHeader("Cache-Control", "no-cache");
-            string webDir = ConfigurationManager.AppSettings["WWTWEBDIR"];
-            context.Response.WriteFile(webDir + @"\wwt2\version.txt");
+            context.Response.WriteFile(context.MapPath(Path.Combine("..", "wwt2", "version.txt")));
         }
     }
 }

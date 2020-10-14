@@ -1,20 +1,21 @@
-using System.Configuration;
+using System.IO;
 
 namespace WWT.Providers
 {
-    public class versionsProvider : RequestProvider
+    public class VersionsProvider : RequestProvider
     {
         public override void Run(IWwtContext context)
         {
-            string wwt2dir = ConfigurationManager.AppSettings["WWT2DIR"];
             context.Response.AddHeader("Cache-Control", "no-cache");
 
+            var wwt2dir = context.MapPath(Path.Combine("..", "wwt2"));
+
             context.Response.Write("ClientVersion:");
-            context.Response.WriteFile(wwt2dir + @"\version.txt");
+            context.Response.WriteFile(Path.Combine(wwt2dir, "version.txt"));
             context.Response.Write("\n");
-            context.Response.WriteFile(wwt2dir + @"\dataversion.txt");
+            context.Response.WriteFile(Path.Combine(wwt2dir, "dataversion.txt"));
             context.Response.Write("\nMessage:");
-            context.Response.WriteFile(wwt2dir + @"\message.txt");
+            context.Response.WriteFile(Path.Combine(wwt2dir, "message.txt"));
         }
     }
 }

@@ -2,5 +2,5 @@
 
 <%@ Import Namespace="WWT.Providers" %>
 <%
-	RequestProvider.Get<versionsProvider>().Run(this);
+	RequestProvider.Get<VersionsProvider>().Run(this);
 %>

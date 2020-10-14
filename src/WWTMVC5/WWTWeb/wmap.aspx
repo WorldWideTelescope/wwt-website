@@ -2,5 +2,5 @@
 
 <%@ Import Namespace="WWT.Providers" %>
 <%
-	RequestProvider.Get<wmapProvider>().Run(this);
+	RequestProvider.Get<WmapProvider>().Run(this);
 %>
