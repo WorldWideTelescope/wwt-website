@@ -95,5 +95,11 @@ namespace WWT.Providers.Tests
 
         public static AutoSubstituteBuilder ConfigureParameterQ(this AutoSubstituteBuilder builder, int level, int x, int y)
             => builder.RegisterAfterBuild<IParameters>((p, ctx) => p["Q"].Returns($"{level},{x},{y}"));
+
+        public static AutoSubstituteBuilder ConfigureParameterQ(this AutoSubstituteBuilder builder, object[] args)
+        {
+            var str = string.Join(",", args);
+            return builder.RegisterAfterBuild<IParameters>((p, ctx) => p["Q"].Returns(str));
+        }
     }
 }
