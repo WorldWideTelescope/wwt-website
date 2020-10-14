@@ -120,12 +120,13 @@ namespace WWT.Azure
             {
                 return info.container;
             }
-            return $"{_options.Container}";
+
+            return _options.Container;
         }
 
         /// <summary>
         /// Azure Blob storage uses a virtual "folder" structure - the blob name having /'s indicates folders
-        /// Ex: plate-data/testname/0/test.png
+        /// Ex: coredata/testname/0/test.png
         ///     container  blobName, but will show as folder testname, subfolder 0 with test.png in it
         /// </summary>
         private string GetBlobName(string plateName, int level, int x, int y)

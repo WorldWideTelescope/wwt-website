@@ -2,9 +2,11 @@ namespace WWT.Azure
 {
     public class AzurePlateTilePyramidOptions
     {
+        public const string DefaultContainer = "coredata";
+
         public bool CreateContainer { get; set; }
 
-        public string Container { get; set; } = "plate-data";
+        public string Container { get; set; } = DefaultContainer;
 
         public bool SkipIfExists { get; set; }
 
