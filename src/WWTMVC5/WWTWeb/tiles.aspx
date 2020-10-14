@@ -2,5 +2,5 @@
 
 <%@ Import Namespace="WWT.Providers" %>
 <%
-	RequestProvider.Get<tilesProvider>().Run(this);
+	RequestProvider.Get<TilesProvider>().Run(this);
 %>

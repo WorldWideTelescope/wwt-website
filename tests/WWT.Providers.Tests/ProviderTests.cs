@@ -13,13 +13,13 @@ namespace WWT.Providers.Tests
     public abstract class ProviderTests<T>
         where T : RequestProvider
     {
-        private readonly Fixture _fixture;
-
         public ProviderTests()
         {
-            _fixture = new Fixture();
-            Options = _fixture.Create<FilePathOptions>();
+            Fixture = new Fixture();
+            Options = Fixture.Create<FilePathOptions>();
         }
+
+        protected Fixture Fixture { get; }
 
         protected FilePathOptions Options { get; }
 
@@ -45,20 +45,23 @@ namespace WWT.Providers.Tests
             Assert.Equal("text/plain", response.ContentType);
         }
 
+        protected virtual object[] GetParameterQ(int level, int x, int y)
+            => new object[] { level, x, y };
+
         [Fact]
         public void ExpectedTests()
         {
             for (int level = 0; level < MaxLevel; level++)
             {
                 // Arrange
-                var data = _fixture.CreateMany<byte>().ToArray();
-                var x = _fixture.Create<int>();
-                var y = _fixture.Create<int>();
+                var data = Fixture.CreateMany<byte>().ToArray();
+                var x = Fixture.Create<int>();
+                var y = Fixture.Create<int>();
 
                 using var container = AutoSubstitute.Configure()
                     .InitializeProviderTests()
                     .Provide(Options)
-                    .ConfigureParameterQ(level, x, y)
+                    .ConfigureParameterQ(GetParameterQ(level, x, y))
                     .Build();
 
                 GetStreamFromPlateTilePyramid(container.Resolve<IPlateTilePyramid>(), level, x, y).Returns(new MemoryStream(data));
@@ -80,14 +83,14 @@ namespace WWT.Providers.Tests
             foreach (var level in Enumerable.Range(0, maxLevel))
             {
                 // Arrange
-                var data = _fixture.CreateMany<byte>().ToArray();
-                var x = _fixture.Create<int>();
-                var y = _fixture.Create<int>();
+                var data = Fixture.CreateMany<byte>().ToArray();
+                var x = Fixture.Create<int>();
+                var y = Fixture.Create<int>();
 
                 using var container = AutoSubstitute.Configure()
                     .InitializeProviderTests()
                     .Provide(Options)
-                    .ConfigureParameterQ(level, x, y)
+                    .ConfigureParameterQ(GetParameterQ(level, x, y))
                     .Build();
 
                 GetStreamFromPlateTilePyramid(container.Resolve<IPlateTilePyramid>(), level, x, y).Returns(_ => throw new InvalidOperationException());
@@ -113,14 +116,14 @@ namespace WWT.Providers.Tests
         public void EmptyResult()
         {
             // Arrange
-            var level = _fixture.Create<int>() % MaxLevel;
-            var x = _fixture.Create<int>();
-            var y = _fixture.Create<int>();
+            var level = Fixture.Create<int>() % MaxLevel;
+            var x = Fixture.Create<int>();
+            var y = Fixture.Create<int>();
 
             using var container = AutoSubstitute.Configure()
                 .Provide(Options)
                 .InitializeProviderTests()
-                .ConfigureParameterQ(level, x, y)
+                .ConfigureParameterQ(GetParameterQ(level, x, y))
                 .Build();
 
             var empty = new MemoryStream();
@@ -138,14 +141,14 @@ namespace WWT.Providers.Tests
         public void NullResult()
         {
             // Arrange
-            var level = _fixture.Create<int>() % MaxLevel;
-            var x = _fixture.Create<int>();
-            var y = _fixture.Create<int>();
+            var level = Fixture.Create<int>() % MaxLevel;
+            var x = Fixture.Create<int>();
+            var y = Fixture.Create<int>();
 
             using var container = AutoSubstitute.Configure()
                 .Provide(Options)
                 .InitializeProviderTests()
-                .ConfigureParameterQ(level, x, y)
+                .ConfigureParameterQ(GetParameterQ(level, x, y))
                 .Build();
 
             GetStreamFromPlateTilePyramid(container.Resolve<IPlateTilePyramid>(), level, x, y).Returns((Stream)null);
@@ -176,13 +179,13 @@ namespace WWT.Providers.Tests
             foreach (var level in GetLevelsAboveMax())
             {
                 // Arrange
-                var x = _fixture.Create<int>();
-                var y = _fixture.Create<int>();
+                var x = Fixture.Create<int>();
+                var y = Fixture.Create<int>();
 
                 using var container = AutoSubstitute.Configure()
                     .Provide(Options)
                     .InitializeProviderTests()
-                    .ConfigureParameterQ(level, x, y)
+                    .ConfigureParameterQ(GetParameterQ(level, x, y))
                     .Build();
 
                 // Act
@@ -196,7 +199,7 @@ namespace WWT.Providers.Tests
             {
                 for (int i = 0; i < 10; i++)
                 {
-                    yield return MaxLevel + _fixture.Create<int>();
+                    yield return MaxLevel + Fixture.Create<int>();
                 }
             }
         }

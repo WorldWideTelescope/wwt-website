@@ -2,5 +2,5 @@
 
 <%@ Import Namespace="WWT.Providers" %>
 <%
-	RequestProvider.Get<tilethumbProvider>().Run(this);
+    RequestProvider.Get<TilethumbProvider>().Run(this);
 %>

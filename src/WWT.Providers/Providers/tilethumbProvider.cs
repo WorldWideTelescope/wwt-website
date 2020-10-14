@@ -1,18 +1,22 @@
-using System.Configuration;
 using System.IO;
-using WWTWebservices;
 
 namespace WWT.Providers
 {
-    public class tilethumbProvider : RequestProvider
+    public class TilethumbProvider : RequestProvider
     {
+        private readonly FilePathOptions _options;
+
+        public TilethumbProvider(FilePathOptions options)
+        {
+            _options = options;
+        }
+
         public override void Run(IWwtContext context)
         {
             string name = context.Request.Params["name"];
-            string type = context.Request.Params["class"];
-            string path = ConfigurationManager.AppSettings["DSSTileCache"] + "\\imagesTiler\\thumbnails\\";
+            string path = Path.Combine(_options.DSSTileCache, "imagesTiler", "thumbnails");
+            string filename = Path.Combine(path, $"{name}.jpg");
 
-            string filename = path + name + ".jpg";
             if (File.Exists(filename))
             {
                 context.Response.WriteFile(filename);
