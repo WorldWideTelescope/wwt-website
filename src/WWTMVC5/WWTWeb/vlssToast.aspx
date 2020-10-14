@@ -2,5 +2,5 @@
 
 <%@ Import Namespace="WWT.Providers" %>
 <%
-	RequestProvider.Get<vlssToastProvider>().Run(this);
+	RequestProvider.Get<VlssToastProvider>().Run(this);
 %>
