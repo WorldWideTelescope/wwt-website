@@ -1,4 +1,4 @@
-using System.Configuration;
+using System.IO;
 
 namespace WWT.Providers
 {
@@ -6,12 +6,11 @@ namespace WWT.Providers
     {
         public override void Run(IWwtContext context)
         {
-            string webDir = ConfigurationManager.AppSettings["WWTWEBDIR"];
             context.Response.AddHeader("Cache-Control", "no-cache");
             context.Response.Write("ClientVersion:");
-            context.Response.WriteFile(webDir + @"\wwt2\ExcelAddinVersion.txt");
+            context.Response.WriteFile(context.MapPath(Path.Combine("..", "wwt2", "ExcelAddinVersion.txt")));
             context.Response.Write("\nUpdateUrl:");
-            context.Response.WriteFile(webDir + @"\wwt2\ExcelAddinUpdateUrl.txt");
+            context.Response.WriteFile(context.MapPath(Path.Combine("..", "wwt2", "ExcelAddinUpdateUrl.txt")));
         }
     }
 }
