@@ -38,7 +38,7 @@ namespace PlateManager
                 new Option<IEnumerable<FileInfo>>(new[] { "--file", "-f" }) { IsRequired = true }.ExistingOnly(),
                 new Option<string>("--storage", () => "https://127.0.0.1:10000/devstoreaccount1/"),
                 new Option<bool>("--useplate2format"),
-                new Option<string>("--container", () => "coredata"),
+                new Option<string>("--container", () => AzurePlateTilePyramidOptions.DefaultContainer),
                 new Option<bool>("--interactive"),
                 new Option<bool>("--skip-existing", () => true),
                 new Option<LogLevel>("--log-level", () => LogLevel.Information),

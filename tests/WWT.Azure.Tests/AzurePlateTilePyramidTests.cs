@@ -8,7 +8,6 @@ using NSubstitute;
 using NSubstitute.Extensions;
 using System.IO;
 using System.Threading.Tasks;
-using Castle.Core.Smtp;
 using Xunit;
 
 namespace WWT.Azure.Tests
@@ -117,7 +116,6 @@ namespace WWT.Azure.Tests
             var options = new AzurePlateTilePyramidOptions
             {
                 SkipIfExists = skipIfExists,
-                Container = "plate-data"
             };
 
             using var mock = ConfigureServiceClient(plateFile, level, x, y)
@@ -139,7 +137,7 @@ namespace WWT.Azure.Tests
         {
             // For all the non dss plate files
             var blobName = $"{plateFile.Replace(".plate", string.Empty)}/L{level}X{x}Y{y}.png";
-            var containerName = "plate-data";
+            var containerName = AzurePlateTilePyramidOptions.DefaultContainer;
             
             if (plateFile == "dssterrapixel.plate")
             {
