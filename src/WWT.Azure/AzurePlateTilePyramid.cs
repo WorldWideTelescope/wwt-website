@@ -3,6 +3,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using WWTWebservices;
@@ -139,11 +140,26 @@ namespace WWT.Azure
             return blobName;
         }
 
+        public async IAsyncEnumerable<string> GetPlateNames([EnumeratorCancellation] CancellationToken token)
+        {
+            foreach (var names in _plateNameMapping)
+            {
+                yield return names.Key;
+            }
+
+            var container = _service.GetBlobContainerClient(_options.Container);
+
+            await foreach (var item in container.GetBlobsByHierarchyAsync(delimiter: "/", cancellationToken: token).WithCancellation(token))
+            {
+                var prefix = item.Prefix.TrimEnd('/');
+                yield return $"{prefix}.plate";
+            }
+        }
+
         /// <summary>
         /// Gets the URL upload pattern for a blob for a PlateFile2 image
         /// </summary>
-        private static string GetBlobName(string plateName, int tag, int level, int x, int y) 
+        private static string GetBlobName(string plateName, int tag, int level, int x, int y)
             => $"{Path.GetFileNameWithoutExtension(plateName).ToLowerInvariant()}/{tag}/L{level}X{x}Y{y}.png";
-
     }
 }

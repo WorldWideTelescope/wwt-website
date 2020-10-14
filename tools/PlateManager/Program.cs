@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using PlateManager.List;
 using Serilog;
 using Serilog.Events;
 using System;
@@ -11,6 +12,7 @@ using System.CommandLine.Invocation;
 using System.IO;
 using System.Threading.Tasks;
 using WWT.Azure;
+using WWTWebservices;
 
 namespace PlateManager
 {
@@ -20,7 +22,8 @@ namespace PlateManager
         {
             var root = new RootCommand
             {
-                CreateUploadCommand()
+                CreateUploadCommand(),
+                CreateListCommand(),
             };
 
             using (var current = System.Diagnostics.Process.GetCurrentProcess())
@@ -31,32 +34,49 @@ namespace PlateManager
             return root.InvokeAsync(args);
         }
 
+        static Command CreateListCommand()
+        {
+            var command = new Command("list");
+
+            AddDefaultOptions(command);
+
+            command.Handler = CommandHandler.Create<ListCommandOptions>(Run);
+
+            return command;
+        }
+
         static Command CreateUploadCommand()
         {
             var command = new Command("upload")
             {
                 new Option<IEnumerable<FileInfo>>(new[] { "--file", "-f" }) { IsRequired = true }.ExistingOnly(),
-                new Option<string>("--storage", () => "https://127.0.0.1:10000/devstoreaccount1/"),
                 new Option<bool>("--useplate2format"),
                 new Option<string>("--container", () => AzurePlateTilePyramidOptions.DefaultContainer),
-                new Option<bool>("--interactive"),
                 new Option<bool>("--skip-existing", () => true),
-                new Option<LogLevel>("--log-level", () => LogLevel.Information),
                 new Option<string>("--baseUrl", () => "baseUrl"),
                 new Option<int>("--uploader-count", () => UploadProcessorOptions.DefaultUploaderCount),
-                new Option<FileInfo>("--error-log")
             };
+
+            AddDefaultOptions(command);
 
             command.Handler = CommandHandler.Create<UploadProcessorOptions>(Run);
 
             return command;
         }
 
+        private static void AddDefaultOptions(Command command)
+        {
+            command.Add(new Option<string>("--storage", () => "https://127.0.0.1:10000/devstoreaccount1/"));
+            command.Add(new Option<bool>("--interactive"));
+            command.Add(new Option<LogLevel>("--log-level", () => LogLevel.Information));
+            command.Add(new Option<FileInfo>("--error-log"));
+        }
+
         static async Task Run<T>(T options)
             where T : BaseOptions, IServiceRegistration
         {
             var services = new ServiceCollection();
-            
+
             services.AddLogging(builder =>
             {
                 builder.AddFilter("Azure-Core", LogLevel.Error);
@@ -77,6 +97,7 @@ namespace PlateManager
 
             services.AddSingleton(options);
             services.AddSingleton<AzurePlateTilePyramid>();
+            services.AddSingleton<IPlateTilePyramid>(ctx => ctx.GetRequiredService<AzurePlateTilePyramid>());
 
             services.AddSingleton(new AzurePlateTilePyramidOptions
             {
