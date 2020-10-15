@@ -1,9 +1,20 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace WWTWebservices
 {
     public class ConfigurationManagerFilePlateTilePyramid : IPlateTilePyramid
     {
+        public async IAsyncEnumerable<string> GetPlateNames([EnumeratorCancellation]CancellationToken token)
+        {
+            await Task.Yield();
+            yield break;
+        }
+
         public Stream GetStream(string pathPrefix, string plateName, int level, int x, int y)
         {
             if (string.IsNullOrEmpty(pathPrefix))
