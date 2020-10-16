@@ -1391,7 +1391,7 @@
       <Version>3.3.1</Version>
     </PackageReference>
     <PackageReference Include="Azure.Identity">
-      <Version>1.2.1</Version>
+      <Version>1.2.3</Version>
     </PackageReference>
     <PackageReference Include="bootstrap">
       <Version>3.4.1</Version>
