@@ -12,21 +12,6 @@ namespace WWT.Providers.Tests
         public static byte[] GetOutputData(this AutoSubstitute container)
             => container.Resolve<IResponse>().OutputStream.ToArray();
 
-        public static byte[] ToArray(this Stream stream)
-        {
-            if (stream is MemoryStream msInput)
-            {
-                return msInput.ToArray();
-            }
-
-            using var ms = new MemoryStream();
-
-            stream.Position = 0;
-            stream.CopyTo(ms);
-
-            return ms.ToArray();
-        }
-
         public static void RunProviderTest<T>(this AutoSubstitute container)
             where T : RequestProvider
         {

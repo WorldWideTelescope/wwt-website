@@ -9,7 +9,7 @@ namespace WWT.PlateFiles
     /// An implementation of <see cref="Stream"/> that allows for slicing of another stream given
     /// an initial offset and length.
     /// </summary>
-    internal class StreamSlice : Stream
+    public class StreamSlice : Stream
     {
         private Stream _baseStream;
         private long _position;
@@ -46,7 +46,7 @@ namespace WWT.PlateFiles
                 throw new ArgumentOutOfRangeException(nameof(length));
             }
 
-            baseStream.Seek(offset, SeekOrigin.Current);
+            baseStream.Seek(offset, SeekOrigin.Begin);
         }
 
         public override Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
