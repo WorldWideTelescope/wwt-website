@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using WWT.Azure;
 
 namespace WWTWebservices
 {
@@ -225,28 +226,14 @@ namespace WWTWebservices
 
         }
 
-        public static Stream GetFileStream(Stream stream, int tag, int level, int x, int y)
+        public static Stream GetImageStream(Stream stream, int tag, int level, int x, int y)
         {
             PlateFile2 plate = new PlateFile2(stream);
 
             Stream result = plate.GetFileStream(tag, level, x, y);
 
-            plate.Close();
-
             return result;
         }
-
-        public static Stream GetFileStream(string filename, int tag, int level, int x, int y)
-        {
-            PlateFile2 plate = new PlateFile2(filename, true);
-
-            Stream stream = plate.GetFileStream(tag, level, x, y);
-
-            plate.Close();
-
-            return stream;
-        }
-
 
         public IEnumerable<DirectoryEntry> GetEntries()
         {
@@ -372,27 +359,20 @@ namespace WWTWebservices
 
             DirectoryEntry de;
 
-
             while (hep != 0)
             {
                 de = GetDirectoryEntry(hep);
 
                 if ((de.x == x) && (de.y == y) && ((de.tag == tag) || (tag == -1)) && (de.level == level))
                 {
-                    MemoryStream ms = null;
-
-                    byte[] buffer = new byte[de.size];
-                    dataStream.Seek(de.location, SeekOrigin.Begin);
-                    dataStream.Read(buffer, 0, (int)de.size);
-                    ms = new MemoryStream(buffer);
-                    return ms;
+                    return new StreamSlice(dataStream, de.location, de.size);
                 }
                 else
                 {
                     hep = de.NextEntryInChain;
                 }
-
             }
+
             return null;
         }
 

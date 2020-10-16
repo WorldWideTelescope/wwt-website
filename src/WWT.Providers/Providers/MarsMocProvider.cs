@@ -101,7 +101,7 @@ namespace WWT.Providers
 
             Stream stream = blob.OpenRead();
 
-            return PlateFile2.GetFileStream(stream, -1, level, tileX, tileY);
+            return PlateFile2.GetImageStream(stream, -1, level, tileX, tileY);
         }
 
         private UInt32 ComputeHash(int level, int x, int y)

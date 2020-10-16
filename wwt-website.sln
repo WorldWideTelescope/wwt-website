@@ -16,6 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		init.ps1 = init.ps1
 		INSTALL.md = INSTALL.md
 		LICENSE = LICENSE
+		nuget.config = nuget.config
 		README.md = README.md
 	EndProjectSection
 EndProject
