@@ -3,7 +3,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace WWT.Azure
+namespace WWT.PlateFiles
 {
     /// <summary>
     /// An implementation of <see cref="Stream"/> that allows for slicing of another stream given
@@ -34,6 +34,16 @@ namespace WWT.Azure
             if (offset < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(offset));
+            }
+
+            if (length < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(length));
+            }
+
+            if (offset + length > baseStream.Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(length));
             }
 
             baseStream.Seek(offset, SeekOrigin.Current);
