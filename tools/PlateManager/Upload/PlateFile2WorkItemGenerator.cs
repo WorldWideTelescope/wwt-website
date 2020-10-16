@@ -2,12 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using WWT.Azure;
-using WWTWebservices;
 
 namespace PlateManager
 {
@@ -46,42 +43,20 @@ namespace PlateManager
                 File.WriteAllText(wtmlFileOut, wtmldata);
             }
 
-            var plateFile2 = new PlateFile2(plateFile);
-            var directoryEntries = plateFile2.GetEntries().ToList();
-
-            _logger.LogInformation("Found {Count} files encoded in {File}", directoryEntries.Count, plateFile);
-            foreach (var item in directoryEntries)
+            async Task UploadItem(int count, int total, CancellationToken token)
             {
-                async Task UploadItem(int count, int total, CancellationToken token)
+                _logger.LogTrace("[{Count} of {Total}] Starting upload for {File}", count, total, plateFile);
+
+                using (var fs = File.OpenRead(plateFile))
                 {
-                    _logger.LogTrace("[{Count} of {Total}] Starting upload for {File} {tag}/L{Level}X{X}Y{Y}", count, total, plateFile, item.tag, item.level, item.x, item.y);
-                    try
-                    {
-                        var result = await ProcessPlateTileAsync(plateFile2, azureContainer, item.tag, item.level, item.x, item.y, token);
-
-                        if (result)
-                        {
-                            _logger.LogInformation("[{Count} of {Total}] Completed upload for {File} {tag}/L{Level}X{X}Y{Y}", count, total, plateFile, item.tag, item.level, item.x, item.y);
-                        }
-                        else
-                        {
-                            _logger.LogWarning("[{Count} of {Total}] Skipped upload for {File} {tag}/L{Level}X{X}Y{Y}", count, total, plateFile, item.tag, item.level, item.x, item.y);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogError(ex, "[{Count} of {Total}] Unexpected error uploading {File} {tag}/L{Level}X{X}Y{Y}", count, total, plateFile, item.tag, item.level, item.x, item.y);
-                    }
+                    await _pyramid.SaveStreamAsync(fs, plateFile, "", token).ConfigureAwait(false);
                 }
-                yield return UploadItem;
-            }
-            _logger.LogInformation("Done adding upload tasks for {File}", plateFile);
-        }
 
-        private async Task<bool> ProcessPlateTileAsync(PlateFile2 plateFile, string container, int tag, int level, int x, int y, CancellationToken token)
-        {
-            await using var stream = plateFile.GetFileStream(tag, level, x, y);
-            return stream != null && await _pyramid.SaveStreamAsync(stream, container, tag, level, x, y, token);
+                _logger.LogTrace("[{Count} of {Total}] Completed upload for {File}", count, total, plateFile);
+            }
+
+            yield return UploadItem;
+            _logger.LogInformation("Done adding upload tasks for {File}", plateFile);
         }
     }
 }
