@@ -33,6 +33,7 @@ steps:
 - task: NuGetCommand@2
   inputs:
     restoreSolution: '$(solution)'
+    feedsToUse: config
     nugetConfigPath: NuGet.config
 
 - task: Npm@1
