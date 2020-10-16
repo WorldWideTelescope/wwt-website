@@ -1,4 +1,3 @@
-using Microsoft.WindowsAzure.Storage.Blob;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -97,11 +96,7 @@ namespace WWT.Providers
         {
             UInt32 index = ComputeHash(level, tileX, tileY) % 400;
 
-            CloudBlockBlob blob = new CloudBlockBlob(new Uri($"https://marsstage.blob.core.windows.net/moc/mocv5_{index}.plate"));
-
-            Stream stream = blob.OpenRead();
-
-            return PlateFile2.GetImageStream(stream, -1, level, tileX, tileY);
+            return _plateTiles.GetStream("https://marsstage.blob.core.windows.net/moc", $"mocv5_{index}.plate", -1, level, tileX, tileY);
         }
 
         private UInt32 ComputeHash(int level, int x, int y)

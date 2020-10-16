@@ -1,4 +1,3 @@
-using Microsoft.WindowsAzure.Storage.Blob;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -102,11 +101,8 @@ namespace WWT.Providers
         private Stream LoadHiRise(int level, int tileX, int tileY, int id)
         {
             UInt32 index = ComputeHash(level, tileX, tileY) % 300;
-            CloudBlockBlob blob = new CloudBlockBlob(new Uri(String.Format(@"https://marsstage.blob.core.windows.net/hirise/hiriseV5_{0}.plate", index)));
 
-            Stream stream = blob.OpenRead();
-
-            return PlateFile2.GetImageStream(stream, id, level, tileX, tileY);
+            return _plateTiles.GetStream("https://marsstage.blob.core.windows.net/hirise", $"hiriseV5_{index}.plate", id, level, tileX, tileY);
         }
 
         private UInt32 ComputeHash(int level, int x, int y)
