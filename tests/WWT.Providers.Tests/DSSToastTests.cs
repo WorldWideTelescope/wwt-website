@@ -21,7 +21,7 @@ namespace WWT.Providers.Tests
             }
             else if (level < 8)
             {
-                return plateTiles.GetStream(Options.WwtTilesDir, "dsstoast.plate", level, x, y);
+                return plateTiles.GetStream(Options.WwtTilesDir, "DSSToast.plate", level, x, y);
             }
             else
             {

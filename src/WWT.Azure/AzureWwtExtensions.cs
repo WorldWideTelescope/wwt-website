@@ -29,7 +29,7 @@ namespace WWT.Azure
                     services.AddTransient(_ => new BlobServiceClient(azureOptions.StorageAccount));
                 }
 
-                services.AddSingleton<IPlateTilePyramid, AzurePlateTilePyramid>();
+                services.AddSingleton<IPlateTilePyramid, SeekableAzurePlateTilePyramid>();
             }
             else
             {

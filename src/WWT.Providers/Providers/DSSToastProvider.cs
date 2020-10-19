@@ -33,7 +33,7 @@ namespace WWT.Providers
             {
                 context.Response.ContentType = "image/png";
 
-                using (var s = _plateTile.GetStream(_options.WwtTilesDir, "dsstoast.plate", level, tileX, tileY))
+                using (var s = _plateTile.GetStream(_options.WwtTilesDir, "DSSToast.plate", level, tileX, tileY))
                 {
                     s.CopyTo(context.Response.OutputStream);
                     context.Response.Flush();
