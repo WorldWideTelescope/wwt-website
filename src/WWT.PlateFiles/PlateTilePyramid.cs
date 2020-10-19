@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using WWT.PlateFiles;
 
 /* Jonathan Fay wrote this, except for the bits polluted by Dinoj, which are between <dinoj>...</dinoj> tags
 *  The header information in the .plate files is being upgraded.
@@ -103,7 +104,7 @@ namespace WWTWebservices
                 fs.Close();
             }
         }
-        
+
 
         public void AddStream(Stream inputStream, int level, int x, int y)
         {
@@ -123,8 +124,7 @@ namespace WWTWebservices
             int lenRead = inputStream.Read(buf, 0, len);
             fileStream.Write(buf, 0, len);
             inputStream.Close();
-        }   
-        
+        }
 
         public void UpdateHeaderAndClose()
         {
@@ -235,6 +235,17 @@ namespace WWTWebservices
             }
             return null;
         }
+
+        public static Stream GetImageStream(Stream f, int level, int x, int y)
+        {
+            var offset = GetFileIndexOffset(level, x, y);
+            f.Seek(offset, SeekOrigin.Begin);
+
+            var start = GetNodeInfo(f, offset, out var length);
+
+            return new StreamSlice(f, start, length);
+        }
+
         static public Stream GetFileStream(string filename, int level, int x, int y)
         {
             uint offset = GetFileIndexOffset(level, x, y);
@@ -254,28 +265,8 @@ namespace WWTWebservices
             }
             return ms;
         }
-/*
 
-        public byte[] GetTile(int level, int x, int y)
-        {
-            uint offset = GetFileIndexOffset(level, x, y);
-            uint length;
-            uint start;
-
-            MemoryStream ms = null;
-            if (_readStream == null)
-                _readStream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-            _readStream.Seek(offset, SeekOrigin.Begin);
-            start = GetNodeInfo(_readStream, offset, out length);
-            if (length == 0)
-                return null;
-            byte[] buffer = new byte[length];
-            _readStream.Seek(start, SeekOrigin.Begin);
-            _readStream.Read(buffer, 0, (int)length);
-            return buffer;
-        }
-*/
-        static public uint GetNodeInfo(FileStream fs, uint offset, out uint length)
+        public static uint GetNodeInfo(Stream fs, uint offset, out uint length)
         {
             Byte[] buf = new Byte[8];
             fs.Seek(offset, SeekOrigin.Begin);
@@ -332,7 +323,6 @@ namespace WWTWebservices
         {
             this.level = level;
             fileMap = new NodeInfo[(int)Math.Pow(2, level), (int)Math.Pow(2, level)];
-
         }
     }
 
