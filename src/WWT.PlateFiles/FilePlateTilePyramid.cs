@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace WWTWebservices
 {
-    public class ConfigurationManagerFilePlateTilePyramid : IPlateTilePyramid
+    public class FilePlateTilePyramid : IPlateTilePyramid
     {
         public async IAsyncEnumerable<string> GetPlateNames([EnumeratorCancellation]CancellationToken token)
         {

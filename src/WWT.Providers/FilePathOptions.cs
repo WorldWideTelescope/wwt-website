@@ -1,20 +1,7 @@
-﻿using System.Configuration;
-using WWTWebservices;
-
-namespace WWT.Providers
+﻿namespace WWT.Providers
 {
     public class FilePathOptions
     {
-        public static FilePathOptions CreateFromConfig()
-            => new FilePathOptions
-            {
-                DssTerapixelDir = ConfigurationManager.AppSettings["DssTerapixelDir"],
-                DSSTileCache = ConfigurationManager.AppSettings["DSSTileCache"],
-                DssToastPng = ConfigurationManager.AppSettings["DSSTOASTPNG"],
-                WWTDEMDir = ConfigurationManager.AppSettings["WWTDEMDir"],
-                WwtTilesDir = ConfigurationManager.AppSettings["WWTTilesDir"],
-                WwtGalexDir = ConfigurationManager.AppSettings["WWTGALEXDIR"],
-            };
 
         public string DssTerapixelDir { get; set; }
 
