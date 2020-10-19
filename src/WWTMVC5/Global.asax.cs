@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Configuration;
 using System.IdentityModel.Services;
 using System.Linq;
 using System.Security.Cryptography;
@@ -8,7 +10,9 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using Unity;
 using Unity.AspNet.Mvc;
+using WWT.Azure;
 using WWT.Providers;
+using WWTWebservices;
 
 namespace WWTMVC5
 {
@@ -56,20 +60,32 @@ namespace WWTMVC5
             FilterProviders.Providers.Add(new UnityFilterAttributeFilterProvider(container));
 
             DependencyResolver.SetResolver(new UnityDependencyResolver(container));
-            RequestProvider.SetServiceProvider(new UnityServiceProvider(container));
+            RequestProvider.SetServiceProvider(BuildServiceProvider());
         }
 
-        public class UnityServiceProvider : IServiceProvider
+        private static IServiceProvider BuildServiceProvider()
         {
-            private readonly IUnityContainer _unityContainer;
+            var services = new ServiceCollection();
 
-            public UnityServiceProvider(IUnityContainer container)
+            services.AddSingleton<IFileNameHasher, Net4x32BitFileNameHasher>();
+
+            services.AddRequestProviders(options =>
             {
-                _unityContainer = container;
-            }
+                options.DssTerapixelDir = ConfigurationManager.AppSettings["DssTerapixelDir"];
+                options.DSSTileCache = ConfigurationManager.AppSettings["DSSTileCache"];
+                options.DssToastPng = ConfigurationManager.AppSettings["DSSTOASTPNG"];
+                options.WWTDEMDir = ConfigurationManager.AppSettings["WWTDEMDir"];
+                options.WwtTilesDir = ConfigurationManager.AppSettings["WWTTilesDir"];
+                options.WwtGalexDir = ConfigurationManager.AppSettings["WWTGALEXDIR"];
+            });
 
-            public object GetService(Type serviceType)
-                => _unityContainer.Resolve(serviceType);
+            services.AddAzureServices(options =>
+            {
+                options.StorageAccount = ConfigurationManager.AppSettings["AzurePlateFileStorageAccount"];
+                options.UseAzurePlateFiles = ConfigReader<bool>.GetSetting("UseAzurePlateFiles");
+            });
+
+            return services.BuildServiceProvider();
         }
     }
 }

@@ -1,20 +1,13 @@
-using Azure.Identity;
-using Azure.Storage.Blobs;
 using System;
-using System.Configuration;
-using System.Linq;
 using Unity;
 using Unity.AspNet.Mvc;
 using Unity.Injection;
 using Unity.Lifetime;
-using WWT.Azure;
-using WWT.Providers;
 using WWTMVC5.Models;
 using WWTMVC5.Repositories;
 using WWTMVC5.Repositories.Interfaces;
 using WWTMVC5.Services;
 using WWTMVC5.Services.Interfaces;
-using WWTWebservices;
 
 namespace WWTMVC5
 {
@@ -44,52 +37,10 @@ namespace WWTMVC5
         /// change the defaults), as Unity allows resolving a concrete type even if it was not previously registered.</remarks>
         private static void RegisterTypes(IUnityContainer container)
         {
-            RegisterRequestProviders(container);
-            RegisterPlateFileProvider(container);
-
             RegisterEarthOnlineEntities(container);
             RegisterRepositories(container);
             RegisterServices(container);
 
-            container.RegisterType<IFileNameHasher, Net4x32BitFileNameHasher>(new ContainerControlledLifetimeManager());
-        }
-
-        private static void RegisterRequestProviders(IUnityContainer container)
-        {
-            var types = typeof(RequestProvider).Assembly.GetTypes()
-                .Where(t => !t.IsAbstract && typeof(RequestProvider).IsAssignableFrom(t));
-
-            foreach (var type in types)
-            {
-                container.RegisterType(type);
-            }
-
-            container.RegisterInstance(FilePathOptions.CreateFromConfig());
-        }
-
-        private static void RegisterPlateFileProvider(IUnityContainer container)
-        {
-            if (ConfigReader<bool>.GetSetting("UseAzurePlateFiles"))
-            {
-                // TODO: The current storage account is a classic storage account and managed identity is not supported
-                // If the setting is a URL, we'll use managed identity. Otherwise, we'll expect it to be a connection string.
-                var storageAccount = ConfigurationManager.AppSettings["AzurePlateFileStorageAccount"];
-
-                if (Uri.TryCreate(storageAccount, UriKind.Absolute, out var storageUri))
-                {
-                    container.RegisterInstance(new BlobServiceClient(storageUri, new DefaultAzureCredential()));
-                }
-                else
-                {
-                    container.RegisterInstance(new BlobServiceClient(storageAccount));
-                }
-
-                container.RegisterType<IPlateTilePyramid, AzurePlateTilePyramid>();
-            }
-            else
-            {
-                container.RegisterType<IPlateTilePyramid, ConfigurationManagerFilePlateTilePyramid>(new ContainerControlledLifetimeManager());
-            }
         }
 
         private static void RegisterEarthOnlineEntities(IUnityContainer container)

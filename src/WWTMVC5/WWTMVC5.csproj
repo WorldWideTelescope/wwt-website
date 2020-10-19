@@ -1441,6 +1441,9 @@
     <PackageReference Include="Microsoft.Data.Services.Client">
       <Version>5.8.3</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection">
+      <Version>3.1.9</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.IdentityModel">
       <Version>6.1.7600.16394</Version>
     </PackageReference>
