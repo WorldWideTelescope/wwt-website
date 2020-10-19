@@ -1370,6 +1370,10 @@
       <Project>{e371698c-f67e-4da7-8545-1a7c984279c8}</Project>
       <Name>WWT.Azure</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WWT.PlateFiles.Caching\WWT.PlateFiles.Caching.csproj">
+      <Project>{568de47a-de03-4b82-836a-c42c4c5a9f84}</Project>
+      <Name>WWT.PlateFiles.Caching</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WWT.PlateFiles\WWT.PlateFiles.csproj">
       <Project>{fecd0629-586c-42c1-931a-3a06f18376ae}</Project>
       <Name>WWT.PlateFiles</Name>
