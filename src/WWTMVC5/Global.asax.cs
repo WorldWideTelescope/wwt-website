@@ -12,6 +12,7 @@ using Unity;
 using Unity.AspNet.Mvc;
 using WWT.Azure;
 using WWT.Providers;
+using WWT;
 using WWTWebservices;
 
 namespace WWTMVC5
@@ -83,6 +84,13 @@ namespace WWTMVC5
             {
                 options.StorageAccount = ConfigurationManager.AppSettings["AzurePlateFileStorageAccount"];
                 options.UseAzurePlateFiles = ConfigReader<bool>.GetSetting("UseAzurePlateFiles");
+            });
+
+            services.AddCaching(options =>
+            {
+                options.RedisCacheConnectionString = ConfigurationManager.AppSettings["RedisConnectionString"];
+                options.UseCaching = ConfigReader<bool>.GetSetting("UseCaching");
+                options.SlidingExpiration = TimeSpan.Parse(ConfigurationManager.AppSettings["SlidingExpiration"]);
             });
 
             return services.BuildServiceProvider();
