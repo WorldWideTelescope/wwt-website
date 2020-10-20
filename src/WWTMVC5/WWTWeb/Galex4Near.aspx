@@ -1,6 +1,9 @@
-<%@ Page Language="C#" ContentType="image/png" %> 
-
+<%@ Page Language="C#" Async="true" ContentType="image/png" %>
 <%@ Import Namespace="WWT.Providers" %>
-<%
-	RequestProvider.Get<Galex4NearProvider>().Run(this);
-%>
+
+<script runat="server">
+	public void Page_Load(object sender, EventArgs e)
+	{
+		RequestProviderRunner.Run<Galex4NearProvider>(this);
+	}
+</script>

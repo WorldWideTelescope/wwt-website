@@ -3,6 +3,8 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using WWTWebservices;
 
 namespace WWT.Providers
@@ -18,13 +20,13 @@ namespace WWT.Providers
             _options = options;
         }
 
-        public override void Run(IWwtContext context)
+        public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             if (context.Request.UserAgent.ToLower().Contains("wget"))
             {
                 context.Response.Write("You are not allowed to bulk download imagery thru the tile service. Please contact wwtpage@microsoft.com for more information.");
                 context.Response.End();
-                return;
+                return Task.CompletedTask;
             }
 
             string query = context.Request.Params["Q"];
@@ -45,7 +47,7 @@ namespace WWT.Providers
             {
                 context.Response.Write("Invalid query string.");
                 context.Response.End();
-                return;
+                return Task.CompletedTask;
             }
 
             string wwtTilesDir = _options.WwtTilesDir;
@@ -54,7 +56,7 @@ namespace WWT.Providers
             {
                 context.Response.Write("No image");
                 context.Response.End();
-                return;
+                return Task.CompletedTask;
             }
 
             if (level < 9)
@@ -69,13 +71,13 @@ namespace WWT.Providers
                         context.Response.ContentType = "text/plain";
                         context.Response.Write("No image");
                         context.Response.End();
-                        return;
+                        return Task.CompletedTask;
                     }
 
                     s.CopyTo(context.Response.OutputStream);
                     context.Response.Flush();
                     context.Response.End();
-                    return;
+                    return Task.CompletedTask;
                 }
             }
 
@@ -85,7 +87,7 @@ namespace WWT.Providers
                 try
                 {
                     context.Response.WriteFile(filename);
-                    return;
+                    return Task.CompletedTask;
                 }
                 catch
                 {
@@ -161,6 +163,7 @@ namespace WWT.Providers
             }
 
             context.Response.End();
+            return Task.CompletedTask;
         }
     }
 }

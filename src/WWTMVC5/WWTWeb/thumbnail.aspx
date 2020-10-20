@@ -1,6 +1,9 @@
-<%@ Page Language="C#" ContentType="image/jpeg" %> 
-
+<%@ Page Language="C#" Async="true" ContentType="image/jpeg" %>
 <%@ Import Namespace="WWT.Providers" %>
-<%
-	RequestProvider.Get<thumbnailProvider>().Run(this);
-%>
+
+<script runat="server">
+	public void Page_Load(object sender, EventArgs e)
+	{
+		RequestProviderRunner.Run<thumbnailProvider>(this);
+	}
+</script>

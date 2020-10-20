@@ -1,6 +1,9 @@
-<%@ Page Language="C#" ContentType="text/plain" %> 
-
+<%@ Page Language="C#" Async="true" ContentType="text/plain" %>
 <%@ Import Namespace="WWT.Providers" %>
-<%
-	RequestProvider.Get<HiriseDem3Provider>().Run(this);
-%>
+
+<script runat="server">
+	public void Page_Load(object sender, EventArgs e)
+	{
+		RequestProviderRunner.Run<HiriseDem3Provider>(this);
+	}
+</script>

@@ -1,10 +1,12 @@
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
     public class VersionsProvider : RequestProvider
     {
-        public override void Run(IWwtContext context)
+        public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             context.Response.AddHeader("Cache-Control", "no-cache");
 
@@ -16,6 +18,8 @@ namespace WWT.Providers
             context.Response.WriteFile(Path.Combine(wwt2dir, "dataversion.txt"));
             context.Response.Write("\nMessage:");
             context.Response.WriteFile(Path.Combine(wwt2dir, "message.txt"));
+
+            return Task.CompletedTask;
         }
     }
 }

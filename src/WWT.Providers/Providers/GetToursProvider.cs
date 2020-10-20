@@ -1,13 +1,14 @@
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace WWT.Providers
 {
     public class GetToursProvider : GetTours
     {
-        public override void Run(IWwtContext context)
+        public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string etag = context.Request.Headers["If-None-Match"];
-
 
             context.Response.ClearHeaders();
             context.Response.Clear();
@@ -34,6 +35,8 @@ namespace WWT.Providers
                 }
             }
             context.Response.End();
+
+            return Task.CompletedTask;
         }
     }
 }

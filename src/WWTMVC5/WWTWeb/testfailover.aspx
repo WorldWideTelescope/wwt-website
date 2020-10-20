@@ -1,6 +1,9 @@
-<%@ Page Language="C#" ContentType="text/html" %> 
-
+<%@ Page Language="C#" Async="true" ContentType="text/html" %>
 <%@ Import Namespace="WWT.Providers" %>
-<%
-	RequestProvider.Get<testfailoverProvider>().Run(this);
-%>
+
+<script runat="server">
+	public void Page_Load(object sender, EventArgs e)
+	{
+		RequestProviderRunner.Run<testfailoverProvider>(this);
+	}
+</script>

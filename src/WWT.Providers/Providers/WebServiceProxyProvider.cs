@@ -1,11 +1,13 @@
 using System;
 using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
     public class WebServiceProxyProvider : RequestProvider
     {
-        public override void Run(IWwtContext context)
+        public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string returnString = "Erorr: No URL Specified";
             string url = "";
@@ -36,6 +38,8 @@ namespace WWT.Providers
                     context.Response.Write(returnString);
                 }
             }
+
+            return Task.CompletedTask;
         }
     }
 }

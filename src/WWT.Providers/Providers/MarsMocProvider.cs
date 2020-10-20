@@ -2,6 +2,8 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using WWTWebservices;
 
 namespace WWT.Providers
@@ -17,7 +19,7 @@ namespace WWT.Providers
             _options = options;
         }
 
-        public override void Run(IWwtContext context)
+        public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string query = context.Request.Params["Q"];
             string[] values = query.Split(',');
@@ -34,7 +36,7 @@ namespace WWT.Providers
                     if (level > 14)
                     {
                         context.Response.StatusCode = 404;
-                        return;
+                        return Task.CompletedTask;
                     }
 
                     int ll = level;
@@ -90,6 +92,8 @@ namespace WWT.Providers
 
                 output.Save(context.Response.OutputStream, ImageFormat.Png);
             }
+
+            return Task.CompletedTask;
         }
 
         private Stream LoadMoc(int level, int tileX, int tileY)

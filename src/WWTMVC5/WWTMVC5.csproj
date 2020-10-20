@@ -387,6 +387,8 @@
     <Compile Include="Repositories\SearchViewRepository.cs" />
     <Compile Include="Repositories\UserCommunitiesRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
+    <Compile Include="RequestProviders\PageWwtContext.cs" />
+    <Compile Include="RequestProviders\RequestProviderRunner.cs" />
     <Compile Include="Services\BlobService.cs" />
     <Compile Include="Services\CommentService.cs" />
     <Compile Include="Services\CommunityService.cs" />

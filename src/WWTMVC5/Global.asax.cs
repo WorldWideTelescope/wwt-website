@@ -8,11 +8,10 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using Unity;
 using Unity.AspNet.Mvc;
+using WWT;
 using WWT.Azure;
 using WWT.Providers;
-using WWT;
 using WWTWebservices;
 
 namespace WWTMVC5
@@ -61,7 +60,7 @@ namespace WWTMVC5
             FilterProviders.Providers.Add(new UnityFilterAttributeFilterProvider(container));
 
             DependencyResolver.SetResolver(new UnityDependencyResolver(container));
-            RequestProvider.SetServiceProvider(BuildServiceProvider());
+            RequestProviderRunner.SetServiceProvider(BuildServiceProvider());
         }
 
         private static IServiceProvider BuildServiceProvider()

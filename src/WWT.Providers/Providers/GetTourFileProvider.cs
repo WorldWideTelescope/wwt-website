@@ -1,6 +1,8 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 using WWTWebservices;
 
 namespace WWT.Providers
@@ -14,7 +16,7 @@ namespace WWT.Providers
             _hasher = hasher;
         }
 
-        public override void Run(IWwtContext context)
+        public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string path = context.MapPath(@"TourCache");
 
@@ -56,6 +58,8 @@ namespace WWT.Providers
             {
                 context.Response.Write(e.Message);
             }
+
+            return Task.CompletedTask;
         }
     }
 }

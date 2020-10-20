@@ -1,13 +1,15 @@
 using System;
 using System.Configuration;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using WWTWebservices;
 
 namespace WWT.Providers
 {
     public class GetTileProvider : RequestProvider
     {
-        public override void Run(IWwtContext context)
+        public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string query = context.Request.Params["Q"];
             string[] values = query.Split(',');
@@ -24,10 +26,11 @@ namespace WWT.Providers
             if (!File.Exists(filename))
             {
                 context.Response.StatusCode = 404;
-                return;
+                return Task.CompletedTask;
             }
 
             context.Response.WriteFile(filename);
+            return Task.CompletedTask;
         }
     }
 }
