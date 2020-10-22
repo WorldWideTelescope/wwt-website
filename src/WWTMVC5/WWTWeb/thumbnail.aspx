@@ -2,5 +2,5 @@
 
 <%@ Import Namespace="WWT.Providers" %>
 <%
-	RequestProvider.Get<thumbnailProvider>().Run(this);
+	RequestProvider.Get<ThumbnailProvider>().Run(this);
 %>

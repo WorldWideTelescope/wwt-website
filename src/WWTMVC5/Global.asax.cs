@@ -80,11 +80,20 @@ namespace WWTMVC5
                 options.WwtGalexDir = ConfigurationManager.AppSettings["WWTGALEXDIR"];
             });
 
-            services.AddAzureServices(options =>
-            {
-                options.StorageAccount = ConfigurationManager.AppSettings["AzurePlateFileStorageAccount"];
-                options.UseAzurePlateFiles = ConfigReader<bool>.GetSetting("UseAzurePlateFiles");
-            });
+            services
+                .AddAzureServices(options =>
+                {
+                    options.StorageAccount = ConfigurationManager.AppSettings["AzurePlateFileStorageAccount"];
+                })
+                .AddPlateFiles(options =>
+                {
+                    options.UseAzurePlateFiles = ConfigReader<bool>.GetSetting("UseAzurePlateFiles");
+                })
+                .AddThumbnails(options =>
+                {
+                    options.ContainerName = ConfigurationManager.AppSettings["ThumbnailContainer"];
+                    options.Default = ConfigurationManager.AppSettings["DefaultThumbnail"];
+                });
 
             services.AddCaching(options =>
             {

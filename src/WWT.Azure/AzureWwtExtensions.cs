@@ -9,32 +9,62 @@ namespace WWT.Azure
 {
     public static class AzureWwtExtensions
     {
-        public static void AddAzureServices(this IServiceCollection services, Action<AzurePlateTilePyramidOptions> configure)
+        public static AzureServiceBuilder AddAzureServices(this IServiceCollection services, Action<AzureOptions> configure)
         {
-            var azureOptions = new AzurePlateTilePyramidOptions();
-
+            var azureOptions = new AzureOptions();
             configure(azureOptions);
 
-            services.AddSingleton(azureOptions);
-
-            if (azureOptions.UseAzurePlateFiles)
+            if (Uri.TryCreate(azureOptions.StorageAccount, UriKind.Absolute, out var storageUri))
             {
-                if (Uri.TryCreate(azureOptions.StorageAccount, UriKind.Absolute, out var storageUri))
-                {
-                    services.AddSingleton<TokenCredential, DefaultAzureCredential>();
-                    services.AddTransient(ctx => new BlobServiceClient(storageUri, ctx.GetRequiredService<TokenCredential>()));
-                }
-                else
-                {
-                    services.AddTransient(_ => new BlobServiceClient(azureOptions.StorageAccount));
-                }
-
-                services.AddSingleton<IPlateTilePyramid, SeekableAzurePlateTilePyramid>();
+                services.AddSingleton<TokenCredential, DefaultAzureCredential>();
+                services.AddTransient(ctx => new BlobServiceClient(storageUri, ctx.GetRequiredService<TokenCredential>()));
             }
             else
             {
-                services.AddSingleton<IPlateTilePyramid, FilePlateTilePyramid>();
+                services.AddTransient(_ => new BlobServiceClient(azureOptions.StorageAccount));
             }
+
+            return new AzureServiceBuilder(services);
+        }
+
+        public static AzureServiceBuilder AddThumbnails(this AzureServiceBuilder services, Action<ThumbnailOptions> configure)
+        {
+            var thumbnailOptions = new ThumbnailOptions();
+            configure(thumbnailOptions);
+
+            services.Services.AddSingleton(thumbnailOptions);
+            services.Services.AddSingleton<IThumbnailAccessor, AzureThumbnailAccessor>();
+
+            return services;
+        }
+
+        public static AzureServiceBuilder AddPlateFiles(this AzureServiceBuilder services, Action<AzurePlateTilePyramidOptions> configure)
+        {
+            var plateTileOptions = new AzurePlateTilePyramidOptions();
+            configure(plateTileOptions);
+
+            services.Services.AddSingleton(plateTileOptions);
+
+            if (plateTileOptions.UseAzurePlateFiles)
+            {
+                services.Services.AddSingleton<IPlateTilePyramid, SeekableAzurePlateTilePyramid>();
+            }
+            else
+            {
+                services.Services.AddSingleton<IPlateTilePyramid, FilePlateTilePyramid>();
+            }
+
+            return services;
+        }
+
+        public class AzureServiceBuilder
+        {
+            public AzureServiceBuilder(IServiceCollection services)
+            {
+                Services = services;
+            }
+
+            public IServiceCollection Services { get; }
         }
     }
 }
