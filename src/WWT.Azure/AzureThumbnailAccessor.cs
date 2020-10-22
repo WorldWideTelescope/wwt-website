@@ -11,7 +11,7 @@ namespace WWT.Azure
         public AzureThumbnailAccessor(ThumbnailOptions options, BlobServiceClient service)
         {
             _options = options;
-            _container = service.GetBlobContainerClient(options.Default);
+            _container = service.GetBlobContainerClient(options.ContainerName);
         }
 
         public Stream GetThumbnailStream(string name, string type)

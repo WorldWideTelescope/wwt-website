@@ -61,7 +61,7 @@ namespace WWTMVC5
             FilterProviders.Providers.Add(new UnityFilterAttributeFilterProvider(container));
 
             DependencyResolver.SetResolver(new UnityDependencyResolver(container));
-            RequestProvider.SetServiceProvider(BuildServiceProvider());
+            WwtWebHttpHandler.Initialize(BuildServiceProvider());
         }
 
         private static IServiceProvider BuildServiceProvider()
