@@ -11,7 +11,7 @@ namespace WWT.Azure
         public AzureThumbnailAccessor(ThumbnailOptions options, BlobServiceClient service)
         {
             _options = options;
-            _container = service.GetBlobContainerClient("thumbnails");
+            _container = service.GetBlobContainerClient(options.Default);
         }
 
         public Stream GetThumbnailStream(string name, string type)
@@ -29,12 +29,12 @@ namespace WWT.Azure
 
             var blob = _container.GetBlobClient($"{sub}/{fileName}.jpg");
 
-            if (blob.Exists())
+            if (blob is null || !blob.Exists())
             {
-                return blob.OpenRead();
+                return null;
             }
 
-            return null;
+            return blob.OpenRead();
         }
     }
 }

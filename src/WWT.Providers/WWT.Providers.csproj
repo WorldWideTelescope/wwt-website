@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\WWT.Imaging\WWT.Imaging.csproj" />
     <ProjectReference Include="..\WWT.Maps\WWT.Maps.csproj" />
     <ProjectReference Include="..\WWT.PlateFiles\WWT.PlateFiles.csproj" />
     <ProjectReference Include="..\WWTWebservices\WWTWebservices.csproj" />
