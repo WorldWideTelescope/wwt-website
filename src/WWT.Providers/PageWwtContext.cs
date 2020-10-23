@@ -1,10 +1,11 @@
 ﻿using System;
 using System.IO;
+using System.Web.Caching;
 using System.Web.UI;
 
 namespace WWT.Providers
 {
-    internal class PageWwtContext : IWwtContext, IRequest, IResponse, IHeaders, IParameters
+    internal class PageWwtContext : IWwtContext, IRequest, IResponse, IHeaders, IParameters, ICache
     {
         private readonly Page _page;
 
@@ -12,6 +13,21 @@ namespace WWT.Providers
         {
             _page = page;
         }
+
+        public ICache Cache => this;
+
+        object ICache.Get(string key) => _page.Cache.Get(key);
+
+        object ICache.this[string key]
+        {
+            get => _page.Cache[key];
+            set => _page.Cache[key] = value;
+        }
+
+        object ICache.Add(string key, object value, DateTime absoluteExpiration, TimeSpan slidingExpiration)
+            => _page.Cache.Add(key, value, null, absoluteExpiration, slidingExpiration, CacheItemPriority.Normal, null);
+
+        void ICache.Remove(string key) => _page.Cache.Remove(key);
 
         public string MachineName => _page.Server.MachineName;
 
@@ -23,9 +39,9 @@ namespace WWT.Providers
 
         string IRequest.GetParams(string name) => _page.Request.Params[name];
 
-        string IHeaders.this[string name]=> _page.Request.Headers[name];
+        string IHeaders.this[string name] => _page.Request.Headers[name];
 
-        string IParameters.this[string name]=> _page.Request.Params[name];
+        string IParameters.this[string name] => _page.Request.Params[name];
 
         IParameters IRequest.Params => this;
 

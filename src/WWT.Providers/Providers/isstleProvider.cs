@@ -1,6 +1,5 @@
 using System;
 using System.Net;
-using System.Web;
 
 namespace WWT.Providers
 {
@@ -15,12 +14,12 @@ namespace WWT.Providers
 
                 try
                 {
-                    string reply = (string)HttpContext.Current.Cache["WWTISSTLE"];
+                    string reply = (string)context.Cache["WWTISSTLE"];
                     DateTime date = DateTime.Now;
                     TimeSpan ts = new TimeSpan(100, 0, 0, 0);
-                    if (HttpContext.Current.Cache["WWTISSTLDATE"] != null)
+                    if (context.Cache["WWTISSTLDATE"] != null)
                     {
-                        date = (DateTime)HttpContext.Current.Cache["WWTISSTLDATE"];
+                        date = (DateTime)context.Cache["WWTISSTLDATE"];
                         ts = DateTime.Now - date;
                     }
 
@@ -61,8 +60,8 @@ namespace WWT.Providers
                                 reply = line1 + "\n" + line2 + "\nLaste Updated:" + DateTime.Now;
                             }
 
-                            HttpContext.Current.Cache["WWTISSTLE"] = reply;
-                            HttpContext.Current.Cache["WWTISSTLDATE"] = DateTime.Now;
+                            context.Cache["WWTISSTLE"] = reply;
+                            context.Cache["WWTISSTLDATE"] = DateTime.Now;
                         }
                     }
                     context.Response.Write(reply);

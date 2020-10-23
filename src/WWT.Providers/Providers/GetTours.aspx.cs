@@ -4,7 +4,6 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
-using System.Web;
 using System.Xml;
 using WWTWebservices;
 
@@ -12,57 +11,10 @@ namespace WWT.Providers
 {
     public abstract partial class GetTours : RequestProvider
     {
-        public static string GetToursXML()
-        {
-            List<Tour> SQLTours = new List<Tour>();
-            int rc = GetSQLTourArrayList(SQLTours);
-
-            if (SQLTours.Count > 0)
-            {
-                using (StringWriter sw = new StringWriter())
-                {
-                    using (XmlTextWriter xmlWriter = new XmlTextWriter(sw))
-                    {
-                        xmlWriter.Formatting = Formatting.Indented;
-                        xmlWriter.WriteProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\"");
-                        xmlWriter.WriteStartElement("Folder");
-                        foreach (Tour tr in SQLTours)
-                        {
-                            xmlWriter.WriteStartElement("Tour");
-                            xmlWriter.WriteAttributeString("Title", tr.TourTitle);
-                            xmlWriter.WriteAttributeString("ID", tr.TourGuid.ToString());
-                            xmlWriter.WriteAttributeString("Description", tr.TourDescription);
-                            xmlWriter.WriteAttributeString("Classification", "Other");
-                            xmlWriter.WriteAttributeString("AuthorEmail", tr.AuthorEmailAddress);
-                            xmlWriter.WriteAttributeString("Author", tr.AuthorName);
-                            xmlWriter.WriteAttributeString("AuthorUrl", tr.AuthorURL);
-                            xmlWriter.WriteAttributeString("AverageRating", tr.AverageRating.ToString());
-                            xmlWriter.WriteAttributeString("LengthInSecs", tr.LengthInSecs.ToString());
-                            xmlWriter.WriteAttributeString("OrganizationUrl", tr.OrganizationURL);
-                            xmlWriter.WriteAttributeString("OrganizationName", tr.OrganizationName);
-                            xmlWriter.WriteAttributeString("ITHList", tr.TourITHList);
-                            xmlWriter.WriteAttributeString("AstroObjectsList", tr.TourAstroObjectList);
-                            xmlWriter.WriteAttributeString("Keywords", tr.TourKeywordList);
-                            xmlWriter.WriteAttributeString("RelatedTours", tr.TourExplicitTourLinkList);
-                            xmlWriter.WriteEndElement();
-                        }
-                        xmlWriter.WriteEndElement();
-
-                        xmlWriter.Close();
-                    }
-                    sw.Close();
-                    return sw.ToString();
-                }
-            }
-            return "";
-        }
-
         internal static SqlConnection GetConnectionWWTTours()
         {
-            string connStr = null;
-            connStr = ConfigurationManager.AppSettings["WWTToursDBConnectionString"];
-            SqlConnection myConnection = null;
-            myConnection = new SqlConnection(connStr);
+            var connStr = ConfigurationManager.AppSettings["WWTToursDBConnectionString"];
+            var myConnection = new SqlConnection(connStr);
             return myConnection;
         }
 
@@ -643,7 +595,7 @@ namespace WWT.Providers
             }
         }
 
-        public int UpdateCacheEx()
+        public int UpdateCacheEx(ICache cache)
         {
             bool needToBuild;
             int fromCacheVersion;
@@ -656,7 +608,7 @@ namespace WWT.Providers
 
             DateTime fromCacheDateTime;
 
-            if (HttpContext.Current.Cache.Get("WWTXMLTours") == null)
+            if (cache.Get("WWTXMLTours") == null)
             {
                 needToBuild = true;
             }
@@ -666,7 +618,7 @@ namespace WWT.Providers
             //  get the version number from sql.   if different, then needtoupdate.  
             try
             {
-                fromCacheDateTime = (DateTime)HttpContext.Current.Cache.Get("LastCacheUpdateDateTime");
+                fromCacheDateTime = (DateTime)cache.Get("LastCacheUpdateDateTime");
             }
             catch
             {
@@ -688,7 +640,7 @@ namespace WWT.Providers
             {
                 try
                 {
-                    fromCacheVersion = (int)HttpContext.Current.Cache.Get("Version");
+                    fromCacheVersion = (int)cache.Get("Version");
                 }
                 catch
                 {
@@ -715,109 +667,17 @@ namespace WWT.Providers
             if (needToBuild)
             {
 
-                HttpContext.Current.Cache.Remove("LastCacheUpdateDateTime");
-                HttpContext.Current.Cache.Add("LastCacheUpdateDateTime", System.DateTime.Now, null, DateTime.MaxValue, new TimeSpan(24, 0, 0), System.Web.Caching.CacheItemPriority.Normal, null);
+                cache.Remove("LastCacheUpdateDateTime");
+                cache.Add("LastCacheUpdateDateTime", System.DateTime.Now, DateTime.MaxValue, new TimeSpan(24, 0, 0));
 
                 //update the version number in the cache (datetime is already updated)
                 fromSQLVersion = GetSQLToursVersion();
-                HttpContext.Current.Cache.Remove("Version");
-                HttpContext.Current.Cache.Add("Version", fromSQLVersion, null, DateTime.MaxValue, new TimeSpan(24, 0, 0), System.Web.Caching.CacheItemPriority.Normal, null);
+                cache.Remove("Version");
+                cache.Add("Version", fromSQLVersion, DateTime.MaxValue, new TimeSpan(24, 0, 0));
 
                 //update the WWTTours cache with the SQLTours ArrayList
-                HttpContext.Current.Cache.Remove("WWTXMLTours");
-                HttpContext.Current.Cache.Add("WWTXMLTours", LoadTourHierarchy(), null, DateTime.MaxValue, new TimeSpan(24, 0, 0), System.Web.Caching.CacheItemPriority.Normal, null);
-            }
-            return 0;
-        }
-
-        public static int UpdateCache()
-        {
-            bool needToBuild;
-            int fromCacheVersion;
-            int fromSQLVersion;
-            int MinutesToAdd;
-
-            List<Tour> SQLTours = new List<Tour>();
-
-            needToBuild = false;
-
-            DateTime fromCacheDateTime;
-
-            if (HttpContext.Current.Cache.Get("WWTXMLTours") == null)
-            {
-                needToBuild = true;
-            }
-            // see if you need to build the cache.... 
-
-            // if it has been more than n minutes since you last checked the version, then 
-            //  get the version number from sql.   if different, then needtoupdate.  
-            try
-            {
-                fromCacheDateTime = (DateTime)HttpContext.Current.Cache.Get("LastCacheUpdateDateTime");
-            }
-            catch
-            {
-                fromCacheDateTime = System.DateTime.Now.AddDays(-1);
-            }
-
-
-
-            try
-            {
-                MinutesToAdd = Int32.Parse(ConfigurationManager.AppSettings["TourVersionCheckIntervalMinutes"]);
-            }
-            catch
-            {
-                MinutesToAdd = 5;  // if missing config, set to 5 minutes
-            }
-
-            if (System.DateTime.Now > fromCacheDateTime.AddMinutes(MinutesToAdd))
-            {
-                try
-                {
-                    fromCacheVersion = (int)HttpContext.Current.Cache.Get("Version");
-                }
-                catch
-                {
-                    fromCacheVersion = 0;
-                }
-
-                if (fromCacheVersion == 0)
-                {
-                    needToBuild = true;
-                }
-                else
-                {
-                    fromSQLVersion = GetSQLToursVersion();
-
-                    if (fromSQLVersion != fromCacheVersion)
-                    {
-                        needToBuild = true;
-                    }
-                    // at this point, you have checked the db to see if the version has changed, you don't need to do this again for the next n minutes
-                    HttpContext.Current.Cache.Remove("LastCacheUpdateDateTime");
-                    HttpContext.Current.Cache.Add("LastCacheUpdateDateTime", System.DateTime.Now, null, DateTime.MaxValue, new TimeSpan(24, 0, 0), System.Web.Caching.CacheItemPriority.Normal, null);
-                }
-
-            }
-            if (needToBuild)
-            {
-
-                // if needToBuild, get the tours from SQL, replace the cache
-                // step thru sql result set, create array of tours
-                // clear cache
-                // add array to cache
-
-                int rc = GetSQLTourArrayList(SQLTours);
-
-                //update the version number in the cache (datetime is already updated)
-                fromSQLVersion = GetSQLToursVersion();
-                HttpContext.Current.Cache.Remove("Version");
-                HttpContext.Current.Cache.Add("Version", fromSQLVersion, null, DateTime.MaxValue, new TimeSpan(24, 0, 0), System.Web.Caching.CacheItemPriority.Normal, null);
-
-                //update the WWTTours cache with the SQLTours ArrayList
-                HttpContext.Current.Cache.Remove("WWTXMLTours");
-                HttpContext.Current.Cache.Add("WWTXMLTours", GetToursXML(SQLTours), null, DateTime.MaxValue, new TimeSpan(24, 0, 0), System.Web.Caching.CacheItemPriority.Normal, null);
+                cache.Remove("WWTXMLTours");
+                cache.Add("WWTXMLTours", LoadTourHierarchy(), DateTime.MaxValue, new TimeSpan(24, 0, 0));
             }
             return 0;
         }
