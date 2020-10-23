@@ -1,5 +1,3 @@
-using WWTThumbnails;
-
 namespace WWT.Providers
 {
     public class ThumbnailProvider : RequestProvider
