@@ -48,9 +48,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlateManager", "tools\Plate
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WWT.PlateFiles.Tests", "tests\WWT.PlateFiles.Tests\WWT.PlateFiles.Tests.csproj", "{D34D5F02-3A5B-446C-B02A-68DA5B9BC2AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WWT.PlateFiles.Caching", "src\WWT.PlateFiles.Caching\WWT.PlateFiles.Caching.csproj", "{568DE47A-DE03-4B82-836A-C42C4C5A9F84}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WWT.PlateFiles.Caching", "src\WWT.PlateFiles.Caching\WWT.PlateFiles.Caching.csproj", "{568DE47A-DE03-4B82-836A-C42C4C5A9F84}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WWT.PlateFiles.Caching.Tests", "tests\WWT.PlateFiles.Caching.Tests\WWT.PlateFiles.Caching.Tests.csproj", "{A34C0E73-F384-4FBA-AE89-3ECCC48892C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WWT.PlateFiles.Caching.Tests", "tests\WWT.PlateFiles.Caching.Tests\WWT.PlateFiles.Caching.Tests.csproj", "{A34C0E73-F384-4FBA-AE89-3ECCC48892C1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WWT.Imaging", "src\WWT.Imaging\WWT.Imaging.csproj", "{33640247-520C-4F61-9055-B02CD8B66B8A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -106,6 +108,10 @@ Global
 		{A34C0E73-F384-4FBA-AE89-3ECCC48892C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A34C0E73-F384-4FBA-AE89-3ECCC48892C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A34C0E73-F384-4FBA-AE89-3ECCC48892C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33640247-520C-4F61-9055-B02CD8B66B8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33640247-520C-4F61-9055-B02CD8B66B8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33640247-520C-4F61-9055-B02CD8B66B8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33640247-520C-4F61-9055-B02CD8B66B8A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -123,6 +129,7 @@ Global
 		{D34D5F02-3A5B-446C-B02A-68DA5B9BC2AF} = {EFF21404-6CEA-49EB-9402-C6643AC2564F}
 		{568DE47A-DE03-4B82-836A-C42C4C5A9F84} = {F12286DB-AF41-4661-A1C6-EB3259CB9B41}
 		{A34C0E73-F384-4FBA-AE89-3ECCC48892C1} = {EFF21404-6CEA-49EB-9402-C6643AC2564F}
+		{33640247-520C-4F61-9055-B02CD8B66B8A} = {F12286DB-AF41-4661-A1C6-EB3259CB9B41}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {80DABDD3-0D48-43AD-893B-B09A38FCFC72}
