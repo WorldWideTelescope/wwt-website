@@ -35,7 +35,7 @@ namespace WWT.Providers
             if (level < 7)
             {
                 context.Response.ContentType = "application/octet-stream";
-                using (Stream s = _plateTiles.GetStream(wwtDemDir, "L0X0Y0.plate", level, tileX, tileY))
+                using (Stream s = _plateTiles.GetStream(wwtDemDir, "moontoast_L0X0Y0.plate", level, tileX, tileY))
                 {
                     s.CopyTo(context.Response.OutputStream);
                     context.Response.Flush();
@@ -55,7 +55,7 @@ namespace WWT.Providers
 
                 context.Response.ContentType = "application/octet-stream";
 
-                using (Stream s = _plateTiles.GetStream(wwtDemDir, $"L3x{X32}y{Y32}.plate", L5, X5, Y5))
+                using (Stream s = _plateTiles.GetStream(wwtDemDir, $"moontoast_L3x{X32}y{Y32}.plate", L5, X5, Y5))
                 {
                     s.CopyTo(context.Response.OutputStream);
                     context.Response.Flush();

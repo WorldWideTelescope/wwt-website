@@ -36,7 +36,7 @@ namespace WWT.Providers
             {
                 context.Response.ContentType = "image/png";
 
-                using (Stream s = _plateTiles.GetStream(wwtTilesDir, "L0X0Y0.plate", level, tileX, tileY))
+                using (Stream s = _plateTiles.GetStream(wwtTilesDir, "LROWAC_L0X0Y0.plate", level, tileX, tileY))
                 {
                     s.CopyTo(context.Response.OutputStream);
                     context.Response.Flush();
@@ -55,7 +55,7 @@ namespace WWT.Providers
                 int Y5 = tileY % powLev5Diff;
                 context.Response.ContentType = "image/png";
 
-                using (Stream s = _plateTiles.GetStream(wwtTilesDir, $"L3x{X32}y{Y32}.plate", L5, X5, Y5))
+                using (Stream s = _plateTiles.GetStream(wwtTilesDir, $"LROWAC_L3x{X32}y{Y32}.plate", L5, X5, Y5))
                 {
                     s.CopyTo(context.Response.OutputStream);
                     context.Response.Flush();
