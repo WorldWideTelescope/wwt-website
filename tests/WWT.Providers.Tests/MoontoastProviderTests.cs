@@ -25,7 +25,7 @@ namespace WWT.Providers.Tests
 
             if (level < 7)
             {
-                return plateTiles.GetStream(prefix, "L0X0Y0.plate", level, x, y);
+                return plateTiles.GetStream(prefix, "LROWAC_L0X0Y0.plate", level, x, y);
             }
             else
             {
@@ -37,7 +37,7 @@ namespace WWT.Providers.Tests
                 int X5 = x % powLev5Diff;
                 int Y5 = y % powLev5Diff;
 
-                return plateTiles.GetStream(prefix, $"L3x{X32}y{Y32}.plate", L5, X5, Y5);
+                return plateTiles.GetStream(prefix, $"LROWAC_L3x{X32}y{Y32}.plate", L5, X5, Y5);
             }
         }
     }
