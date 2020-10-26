@@ -1,5 +1,7 @@
 using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using AutofacContrib.NSubstitute;
+using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using NSubstitute.Extensions;
 using System;
@@ -9,6 +11,16 @@ namespace WWT
 {
     internal static class AutoSubstituteExtensions
     {
+        public static AutoSubstituteBuilder ConfigureServices(this AutoSubstituteBuilder builder, Action<IServiceCollection> configure)
+            => builder.ConfigureBuilder(b =>
+            {
+                var services = new ServiceCollection();
+
+                configure(services);
+
+                b.Populate(services);
+            });
+
         public static SubstituteForBuilder<T> ResolveReturnValue<T, TResult>(this SubstituteForBuilder<T> builder, Func<T, TResult> action)
             where T : class
             => builder.ConfigureSubstitute((t, ctx) =>
