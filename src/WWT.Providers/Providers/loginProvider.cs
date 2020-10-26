@@ -1,12 +1,14 @@
 using System;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
     public class loginProvider : LoginUser
     {
-        public override void Run(IWwtContext context)
+        public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string wwt2dir = ConfigurationManager.AppSettings["WWT2DIR"];
             context.Response.AddHeader("Cache-Control", "no-cache");
@@ -51,6 +53,8 @@ namespace WWT.Providers
             catch
             {
             }
+
+            return Task.CompletedTask;
         }
     }
 }

@@ -2,6 +2,8 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using WWTWebservices;
 
 namespace WWT.Providers
@@ -15,7 +17,7 @@ namespace WWT.Providers
             _hasher = hasher;
         }
 
-        public override void Run(IWwtContext context)
+        public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string query = context.Request.Params["Q"];
             bool debug = context.Request.Params["debug"] != null;
@@ -34,7 +36,7 @@ namespace WWT.Providers
             {
                 context.Response.Write("No image");
                 context.Response.End();
-                return;
+                return Task.CompletedTask;
             }
 
             if (File.Exists(filename))
@@ -42,7 +44,7 @@ namespace WWT.Providers
                 try
                 {
                     context.Response.WriteFile(filename);
-                    return;
+                    return Task.CompletedTask;
                 }
                 catch
                 {
@@ -62,7 +64,7 @@ namespace WWT.Providers
                     context.Response.ContentType = "text/plain";
                     context.Response.Write(sdim.LoadImage(wmsUrl, true));
                     context.Response.End();
-                    return;
+                    return Task.CompletedTask;
                 }
                 sdim.LoadImage(wmsUrl, false);
                 sdim.Lock();
@@ -116,6 +118,7 @@ namespace WWT.Providers
             }
 
             context.Response.End();
+            return Task.CompletedTask;
         }
     }
 }

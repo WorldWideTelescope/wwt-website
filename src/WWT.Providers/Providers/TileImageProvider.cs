@@ -3,6 +3,8 @@ using System.Configuration;
 using System.Drawing;
 using System.IO;
 using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 using WWTWebservices;
 
 namespace WWT.Providers
@@ -16,7 +18,7 @@ namespace WWT.Providers
             _hasher = hasher;
         }
 
-        public override void Run(IWwtContext context)
+        public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             {
                 //if (context.Request.Cookies["alphakey"] != null && context.Request.Params["wtml"] == null)
@@ -204,6 +206,8 @@ namespace WWT.Providers
 
                     context.Response.Write(xml);
                 }
+
+                return Task.CompletedTask;
             }
         }
     }

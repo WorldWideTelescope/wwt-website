@@ -2,12 +2,14 @@ using System;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
     public class PostRatingFeedbackProvider : RequestProvider
     {
-        public override void Run(IWwtContext context)
+        public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             context.Response.ClearHeaders();
             context.Response.Clear();
@@ -28,6 +30,7 @@ namespace WWT.Providers
             {
             }
             context.Response.End();
+            return Task.CompletedTask;
         }
 
         private static SqlConnection GetConnectionWWTTours()

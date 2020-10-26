@@ -2,16 +2,17 @@
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web;
 using WWT.Providers;
 
 namespace WWTMVC5
 {
-    public class WwtWebHttpHandler : IHttpHandler
+    public class WwtWebHttpHandler : HttpTaskAsyncHandler
     {
         private static EndpointManager _endpoints;
 
-        public void ProcessRequest(HttpContext context)
+        public override async Task ProcessRequestAsync(HttpContext context)
         {
             using (var scope = _endpoints.GetRequestScope(context.Request.Path))
             {
@@ -28,12 +29,12 @@ namespace WWTMVC5
 
                     scope.Resolve<ILogger<WwtWebHttpHandler>>().LogInformation("Dispatch {Path} to {Provider}", context.Request.Path, scope.Provider.GetType());
 
-                    scope.Provider.Run(new SystemWebWwtContext(context));
+                    await scope.Provider.RunAsync(new SystemWebWwtContext(context), context.Response.ClientDisconnectedToken);
                 }
             }
         }
 
-        public bool IsReusable => true;
+        public override bool IsReusable => true;
 
         public static void Initialize(IServiceProvider provider)
         {

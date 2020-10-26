@@ -1,4 +1,6 @@
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using WWTWebservices;
 
 namespace WWT.Providers
@@ -12,7 +14,7 @@ namespace WWT.Providers
             _plateTile = plateTile;
         }
 
-        public override void Run(IWwtContext context)
+        public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string query = context.Request.Params["Q"];
             string[] values = query.Split(',');
@@ -41,6 +43,8 @@ namespace WWT.Providers
                     }
                 }
             }
+
+            return Task.CompletedTask;
         }
 
         private uint ComputeHash(int level, int x, int y)

@@ -1,12 +1,14 @@
 using System;
 using System.Configuration;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
     public class moondemProvider : RequestProvider
     {
-        public override void Run(IWwtContext context)
+        public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string query = context.Request.Params["Q"];
             string[] values = query.Split(',');
@@ -20,7 +22,6 @@ namespace WWT.Providers
 
             if (File.Exists(filename))
             {
-
                 byte[] data = new byte[demSize];
                 FileStream fs = File.OpenRead(filename);
                 fs.Seek((long)(demSize * tileX), SeekOrigin.Begin);
@@ -29,21 +30,18 @@ namespace WWT.Providers
                 fs.Close();
                 context.Response.OutputStream.Write(data, 0, demSize);
                 context.Response.OutputStream.Flush();
-
-
             }
             else
             {
-
                 byte[] data = new byte[demSize];
 
                 context.Response.OutputStream.Write(data, 0, demSize);
                 context.Response.OutputStream.Flush();
-
-
             }
 
             context.Response.End();
+
+            return Task.CompletedTask;
         }
     }
 }

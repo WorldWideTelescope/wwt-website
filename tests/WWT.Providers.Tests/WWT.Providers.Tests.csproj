@@ -8,8 +8,4 @@
     <ProjectReference Include="..\..\src\WWT.Providers\WWT.Providers.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="System.Web" />
-  </ItemGroup>
-
 </Project>

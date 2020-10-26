@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using WWTWebservices;
 
 namespace WWT.Providers
@@ -15,7 +17,7 @@ namespace WWT.Providers
             _options = options;
         }
 
-        public override void Run(IWwtContext context)
+        public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string query = context.Request.Params["Q"];
             string[] values = query.Split(',');
@@ -27,13 +29,15 @@ namespace WWT.Providers
             {
                 context.Response.ContentType = "image/png";
 
-                using (Stream s = _plateTiles.GetStream(_options.WwtTilesDir,  $"tychotoast.plate", level, tileX, tileY))
+                using (Stream s = _plateTiles.GetStream(_options.WwtTilesDir, $"tychotoast.plate", level, tileX, tileY))
                 {
                     s.CopyTo(context.Response.OutputStream);
                     context.Response.Flush();
                     context.Response.End();
                 }
             }
+
+            return Task.CompletedTask;
         }
     }
 }

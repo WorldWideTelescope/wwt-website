@@ -4,6 +4,7 @@ using NSubstitute;
 using NSubstitute.Core;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace WWT.Providers.Tests
 {
@@ -12,10 +13,10 @@ namespace WWT.Providers.Tests
         public static byte[] GetOutputData(this AutoSubstitute container)
             => container.Resolve<IResponse>().OutputStream.ToArray();
 
-        public static void RunProviderTest<T>(this AutoSubstitute container)
+        public static Task RunProviderTestAsync<T>(this AutoSubstitute container)
             where T : RequestProvider
         {
-            container.Resolve<T>().Run(container.Resolve<IWwtContext>());
+            return container.Resolve<T>().RunAsync(container.Resolve<IWwtContext>(), default);
         }
 
         public static AutoSubstituteBuilder RegisterAfterBuild<T>(this AutoSubstituteBuilder builder, Action<T, IComponentContext> action)

@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using WWTWebservices;
 
 namespace WWT.Providers
@@ -15,7 +17,7 @@ namespace WWT.Providers
             _options = options;
         }
 
-        public override void Run(IWwtContext context)
+        public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string wwtDemDir = Path.Combine(_options.WWTDEMDir, "toast", "lola");
 
@@ -29,7 +31,7 @@ namespace WWT.Providers
             {
                 context.Response.Write("No image");
                 context.Response.Close();
-                return;
+                return Task.CompletedTask;
             }
 
             if (level < 7)
@@ -40,7 +42,7 @@ namespace WWT.Providers
                     s.CopyTo(context.Response.OutputStream);
                     context.Response.Flush();
                     context.Response.End();
-                    return;
+                    return Task.CompletedTask;
                 }
             }
             else
@@ -60,7 +62,7 @@ namespace WWT.Providers
                     s.CopyTo(context.Response.OutputStream);
                     context.Response.Flush();
                     context.Response.End();
-                    return;
+                    return Task.CompletedTask;
                 }
             }
         }

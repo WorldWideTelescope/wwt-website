@@ -1,6 +1,8 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
@@ -13,7 +15,7 @@ namespace WWT.Providers
             _options = options;
         }
 
-        public override void Run(IWwtContext context)
+        public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string query = context.Request.Params["Q"];
             string[] values = query.Split(',');
@@ -78,11 +80,12 @@ namespace WWT.Providers
                 {
                     context.Response.StatusCode = 404;
                     context.Response.Write("Not Found");
-                    return;
+                    return Task.CompletedTask;
                 }
             }
 
             context.Response.Write("OK");
+            return Task.CompletedTask;
         }
     }
 }

@@ -3,6 +3,8 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using WWTWebservices;
 
 namespace WWT.Providers
@@ -18,7 +20,7 @@ namespace WWT.Providers
             _options = options;
         }
 
-        public override void Run(IWwtContext context)
+        public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string wwtTilesDir = _options.WwtTilesDir;
             string DSSTileCache = _options.DSSTileCache;
@@ -32,7 +34,7 @@ namespace WWT.Providers
             {
                 context.Response.Write("No image");
                 context.Response.Close();
-                return;
+                return Task.CompletedTask;
             }
 
             string filename = $@"{DSSTileCache}\EarthBlend\level{level}\{tileY}\{tileX}_{tileY}.jpg";
@@ -48,7 +50,7 @@ namespace WWT.Providers
                     context.Response.OutputStream.Write(data, 0, length);
                     context.Response.Flush();
                     context.Response.End();
-                    return;
+                    return Task.CompletedTask;
                 }
             }
             else if (level == 8)
@@ -74,7 +76,7 @@ namespace WWT.Providers
                     context.Response.OutputStream.Write(data, 0, length);
                     context.Response.Flush();
                     context.Response.End();
-                    return;
+                    return Task.CompletedTask;
                 }
 
             }
@@ -135,8 +137,7 @@ namespace WWT.Providers
                 }
 
                 context.Response.WriteFile(filename);
-                return;
-
+                return Task.CompletedTask;
             }
 
 
@@ -151,6 +152,8 @@ namespace WWT.Providers
             client.Dispose();
 
             context.Response.OutputStream.Write(dat, 0, dat.Length);
+
+            return Task.CompletedTask;
         }
     }
 }

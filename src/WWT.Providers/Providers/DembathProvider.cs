@@ -1,11 +1,13 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
     public class DembathProvider : RequestProvider
     {
-        public override void Run(IWwtContext context)
+        public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string query = context.Request.Params["Q"];
             string[] values = query.Split(',');
@@ -23,6 +25,8 @@ namespace WWT.Providers
             {
                 context.Response.WriteFile(filename);
             }
+
+            return Task.CompletedTask;
         }
     }
 }

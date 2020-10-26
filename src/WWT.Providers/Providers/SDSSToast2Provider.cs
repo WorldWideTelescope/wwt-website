@@ -3,6 +3,8 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using WWTWebservices;
 
 namespace WWT.Providers
@@ -18,7 +20,7 @@ namespace WWT.Providers
             _options = options;
         }
 
-        public override void Run(IWwtContext context)
+        public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string query = context.Request.Params["Q"];
             string[] values = query.Split(',');
@@ -30,7 +32,7 @@ namespace WWT.Providers
             {
                 context.Response.Write("No image");
                 context.Response.Close();
-                return;
+                return Task.CompletedTask;
             }
 
             if (level < 9)
@@ -42,7 +44,7 @@ namespace WWT.Providers
                     s.CopyTo(context.Response.OutputStream);
                     context.Response.Flush();
                     context.Response.End();
-                    return;
+                    return Task.CompletedTask;
                 }
             }
 
@@ -70,7 +72,7 @@ namespace WWT.Providers
                 try
                 {
                     context.Response.WriteFile(filename);
-                    return;
+                    return Task.CompletedTask;
                 }
                 catch
                 {
@@ -149,6 +151,8 @@ namespace WWT.Providers
             }
 
             context.Response.End();
+
+            return Task.CompletedTask;
         }
     }
 }

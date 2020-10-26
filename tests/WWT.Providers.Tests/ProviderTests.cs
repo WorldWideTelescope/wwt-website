@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using WWTWebservices;
 using Xunit;
 
@@ -49,7 +50,7 @@ namespace WWT.Providers.Tests
             => new object[] { level, x, y };
 
         [Fact]
-        public void ExpectedTests()
+        public async Task ExpectedTests()
         {
             for (int level = 0; level < MaxLevel; level++)
             {
@@ -67,7 +68,7 @@ namespace WWT.Providers.Tests
                 GetStreamFromPlateTilePyramid(container.Resolve<IPlateTilePyramid>(), level, x, y).Returns(new MemoryStream(data));
 
                 // Act
-                container.RunProviderTest<T>();
+                await container.RunProviderTestAsync<T>();
 
                 // Assert
                 GetStreamFromPlateTilePyramid(container.Resolve<IPlateTilePyramid>().Received(1), level, x, y);
@@ -76,7 +77,7 @@ namespace WWT.Providers.Tests
         }
 
         [Fact]
-        public void ErrorInStream()
+        public async Task ErrorInStream()
         {
             var maxLevel = MaxLevel < 0 ? 10 : MaxLevel;
 
@@ -98,12 +99,12 @@ namespace WWT.Providers.Tests
                 if (StreamExceptionResponseHandler is null)
                 {
                     // Act
-                    Assert.Throws<InvalidOperationException>(() => container.RunProviderTest<T>());
+                    await Assert.ThrowsAsync<InvalidOperationException>(() => container.RunProviderTestAsync<T>());
                 }
                 else
                 {
                     // Act
-                    container.RunProviderTest<T>();
+                    await container.RunProviderTestAsync<T>();
 
                     // Assert
                     GetStreamFromPlateTilePyramid(container.Resolve<IPlateTilePyramid>().Received(1), level, x, y);
@@ -113,7 +114,7 @@ namespace WWT.Providers.Tests
         }
 
         [Fact]
-        public void EmptyResult()
+        public async Task EmptyResult()
         {
             // Arrange
             var level = Fixture.Create<int>() % MaxLevel;
@@ -130,7 +131,7 @@ namespace WWT.Providers.Tests
             GetStreamFromPlateTilePyramid(container.Resolve<IPlateTilePyramid>(), level, x, y).Returns(empty);
 
             // Act
-            container.RunProviderTest<T>();
+            await container.RunProviderTestAsync<T>();
 
             // Assert
             GetStreamFromPlateTilePyramid(container.Resolve<IPlateTilePyramid>().Received(1), level, x, y);
@@ -138,7 +139,7 @@ namespace WWT.Providers.Tests
         }
 
         [Fact]
-        public void NullResult()
+        public async Task NullResult()
         {
             // Arrange
             var level = Fixture.Create<int>() % MaxLevel;
@@ -155,12 +156,12 @@ namespace WWT.Providers.Tests
 
             if (NullStreamResponseHandler is null)
             {
-                Assert.Throws<NullReferenceException>(() => container.RunProviderTest<T>());
+                await Assert.ThrowsAsync<NullReferenceException>(() => container.RunProviderTestAsync<T>());
             }
             else
             {
                 // Act
-                container.RunProviderTest<T>();
+                await container.RunProviderTestAsync<T>();
 
                 // Assert
                 GetStreamFromPlateTilePyramid(container.Resolve<IPlateTilePyramid>().Received(1), level, x, y);
@@ -169,7 +170,7 @@ namespace WWT.Providers.Tests
         }
 
         [Fact]
-        public void AboveMaxLevel()
+        public async Task AboveMaxLevel()
         {
             if (MaxLevel < 0)
             {
@@ -189,7 +190,7 @@ namespace WWT.Providers.Tests
                     .Build();
 
                 // Act
-                container.RunProviderTest<T>();
+                await container.RunProviderTestAsync<T>();
 
                 // Assert
                 ExpectedResponseAboveMaxLevel(container.Resolve<IResponse>());

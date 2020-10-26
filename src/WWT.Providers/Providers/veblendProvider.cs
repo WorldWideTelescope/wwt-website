@@ -4,13 +4,15 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using WWTWebservices;
 
 namespace WWT.Providers
 {
     public class veblendProvider : RequestProvider
     {
-        public override void Run(IWwtContext context)
+        public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string query = "";
 
@@ -22,7 +24,7 @@ namespace WWT.Providers
             {
                 context.Response.Write("No image");
                 context.Response.End();
-                return;
+                return Task.CompletedTask;
             }
 
             string veKey = query;
@@ -46,7 +48,7 @@ namespace WWT.Providers
             {
                 context.Response.Write("No image");
                 context.Response.Close();
-                return;
+                return Task.CompletedTask;
             }
 
 
@@ -108,6 +110,8 @@ namespace WWT.Providers
             {
             }
             context.Response.End();
+
+            return Task.CompletedTask;
         }
     }
 }
