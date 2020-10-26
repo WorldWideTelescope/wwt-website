@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Web;
@@ -24,6 +25,8 @@ namespace WWTMVC5
                     {
                         context.Response.ContentType = scope.ContentType;
                     }
+
+                    scope.Resolve<ILogger<WwtWebHttpHandler>>().LogInformation("Dispatch {Path} to {Provider}", context.Request.Path, scope.Provider.GetType());
 
                     scope.Provider.Run(new SystemWebWwtContext(context));
                 }
@@ -176,6 +179,8 @@ namespace WWTMVC5
             public string ContentType { get; }
 
             public RequestProvider Provider { get; }
+
+            public T Resolve<T>() => _scope.ServiceProvider.GetRequiredService<T>();
 
             public void Dispose()
             {

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Configuration;
 using System.IdentityModel.Services;
@@ -8,11 +9,10 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using Unity;
 using Unity.AspNet.Mvc;
+using WWT;
 using WWT.Azure;
 using WWT.Providers;
-using WWT;
 using WWTWebservices;
 
 namespace WWTMVC5
@@ -100,6 +100,11 @@ namespace WWTMVC5
                 options.RedisCacheConnectionString = ConfigurationManager.AppSettings["RedisConnectionString"];
                 options.UseCaching = ConfigReader<bool>.GetSetting("UseCaching");
                 options.SlidingExpiration = TimeSpan.Parse(ConfigurationManager.AppSettings["SlidingExpiration"]);
+            });
+
+            services.AddLogging(builder =>
+            {
+                builder.AddDebug();
             });
 
             return services.BuildServiceProvider();

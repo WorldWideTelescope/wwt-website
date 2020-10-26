@@ -1,4 +1,5 @@
-﻿using AutoFixture;
+﻿using AutofacContrib.NSubstitute;
+using AutoFixture;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using StackExchange.Redis;
@@ -20,20 +21,21 @@ namespace WWT.PlateFiles.Caching.Tests
         public void NoCachingByDefault()
         {
             // Arrange
-            var services = new ServiceCollection();
-
             var original = Substitute.For<IPlateTilePyramid>();
-            services.AddSingleton(original);
-
-            services.AddCaching(options =>
-            {
-                options.UseCaching = false;
-            });
-
-            using var provider = services.BuildServiceProvider();
+            var mock = AutoSubstitute.Configure()
+                .ConfigureServices(services =>
+                {
+                    services.AddSingleton(original);
+                    services.AddCaching(options =>
+                    {
+                        options.UseCaching = false;
+                    });
+                })
+                .SubstituteFor<IConnectionMultiplexer>()
+                .Build();
 
             // Act
-            var resolved = provider.GetRequiredService<IPlateTilePyramid>();
+            var resolved = mock.Resolve<IPlateTilePyramid>();
 
             // Assert
             Assert.Same(original, resolved);
@@ -43,20 +45,21 @@ namespace WWT.PlateFiles.Caching.Tests
         public void InMemoryWhenNoRedisConnection()
         {
             // Arrange
-            var services = new ServiceCollection();
-
             var original = Substitute.For<IPlateTilePyramid>();
-            services.AddSingleton(original);
-
-            services.AddCaching(options =>
-            {
-                options.UseCaching = true;
-            });
-
-            using var provider = services.BuildServiceProvider();
+            var mock = AutoSubstitute.Configure()
+                .ConfigureServices(services =>
+                {
+                    services.AddSingleton(original);
+                    services.AddCaching(options =>
+                    {
+                        options.UseCaching = true;
+                    });
+                })
+                .SubstituteFor<IConnectionMultiplexer>()
+                .Build();
 
             // Act
-            var resolved = provider.GetRequiredService<IPlateTilePyramid>();
+            var resolved = mock.Resolve<IPlateTilePyramid>();
 
             // Assert
             var inMemory = Assert.IsType<InMemoryCachedPlateTilePyramid>(resolved);
@@ -68,23 +71,22 @@ namespace WWT.PlateFiles.Caching.Tests
         public void RedisUsedWithConnectionString()
         {
             // Arrange
-            var services = new ServiceCollection();
-
             var original = Substitute.For<IPlateTilePyramid>();
-            services.AddSingleton(original);
-
-            services.AddCaching(options =>
-            {
-                options.UseCaching = true;
-                options.RedisCacheConnectionString = _fixture.Create<string>();
-            });
-
-            services.AddSingleton(Substitute.For<IConnectionMultiplexer>());
-
-            using var provider = services.BuildServiceProvider();
+            var mock = AutoSubstitute.Configure()
+                .ConfigureServices(services =>
+                {
+                    services.AddSingleton(original);
+                    services.AddCaching(options =>
+                    {
+                        options.UseCaching = true;
+                        options.RedisCacheConnectionString = _fixture.Create<string>();
+                    });
+                })
+                .SubstituteFor<IConnectionMultiplexer>()
+                .Build();
 
             // Act
-            var resolved = provider.GetRequiredService<IPlateTilePyramid>();
+            var resolved = mock.Resolve<IPlateTilePyramid>();
 
             // Assert
             var redis = Assert.IsType<RedisCachedPlateTilePyramid>(resolved);
