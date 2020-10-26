@@ -2,6 +2,8 @@
 {
     public interface IWwtContext
     {
+        ICache Cache { get; }
+
         IRequest Request { get; }
 
         IResponse Response { get; }

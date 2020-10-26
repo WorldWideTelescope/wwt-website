@@ -1,5 +1,3 @@
-using System.Web;
-
 namespace WWT.Providers
 {
     public class GetToursProvider : GetTours
@@ -14,12 +12,12 @@ namespace WWT.Providers
             context.Response.ContentType = "application/x-wtml";
 
             string toursXML = null;
-            UpdateCacheEx();
-            toursXML = (string)HttpContext.Current.Cache["WWTXMLTours"];
+            UpdateCacheEx(context.Cache);
+            toursXML = (string)context.Cache["WWTXMLTours"];
 
             if (toursXML != null)
             {
-                int version = (int)HttpContext.Current.Cache.Get("Version");
+                int version = (int)context.Cache.Get("Version");
                 string newEtag = version.ToString();
 
                 if (newEtag != etag)
