@@ -23,60 +23,9 @@ namespace WWT.Providers.Tests
 
         public static AutoSubstituteBuilder InitializeProviderTests(this AutoSubstituteBuilder builder)
             => builder
-                // TODO: Add this back once https://github.com/MRCollective/AutofacContrib.NSubstitute/pull/51 is available
-                //.InjectProperties()
-                .ConfigureOptions(options =>
-                {
-                    options.MockHandlers.Add(FixedAutoPropertyInjectorMockHandler.Instance);
-                })
+                .InjectProperties()
                 .MakeUnregisteredTypesPerLifetime()
                 .RegisterAfterBuild<IResponse>((r, _) => r.OutputStream.Returns(new MemoryStream()));
-
-        // TODO: Add this back once https://github.com/MRCollective/AutofacContrib.NSubstitute/pull/51 is available
-        private class FixedAutoPropertyInjectorMockHandler : MockHandler
-        {
-            public static FixedAutoPropertyInjectorMockHandler Instance { get; } = new FixedAutoPropertyInjectorMockHandler();
-
-            private FixedAutoPropertyInjectorMockHandler()
-            {
-            }
-
-            protected override void OnMockCreated(object instance, Type type, IComponentContext context, ISubstitutionContext substitutionContext)
-            {
-                var router = substitutionContext.GetCallRouterFor(instance);
-
-                router.RegisterCustomCallHandlerFactory(_ => new AutoPropertyInjectorCallHandler(context));
-            }
-
-            private class AutoPropertyInjectorCallHandler : ICallHandler
-            {
-                private readonly IComponentContext _context;
-
-                public AutoPropertyInjectorCallHandler(IComponentContext context)
-                {
-                    _context = context;
-                }
-
-                public RouteAction Handle(ICall call)
-                {
-                    var property = call.GetMethodInfo().GetPropertyFromGetterCallOrNull();
-
-                    if (property is null)
-                    {
-                        return RouteAction.Continue();
-                    }
-
-                    var service = _context.ResolveOptional(call.GetReturnType());
-
-                    if (service is null)
-                    {
-                        return RouteAction.Continue();
-                    }
-
-                    return RouteAction.Return(service);
-                }
-            }
-        }
 
         public static AutoSubstituteBuilder ConfigureParameterQ(this AutoSubstituteBuilder builder, int level, int x, int y)
             => builder.RegisterAfterBuild<IParameters>((p, ctx) => p["Q"].Returns($"{level},{x},{y}"));

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WWT.PlateFiles.Caching
+namespace WWT.Caching
 {
     public class CachingOptions
     {

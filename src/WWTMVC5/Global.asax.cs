@@ -105,6 +105,7 @@ namespace WWTMVC5
 
             services.AddLogging(builder =>
             {
+                builder.AddFilter("Swick.Cache", LogLevel.Trace);
                 builder.AddDebug();
             });
 
