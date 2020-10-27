@@ -78,6 +78,7 @@ namespace WWTMVC5
                 options.WWTDEMDir = ConfigurationManager.AppSettings["WWTDEMDir"];
                 options.WwtTilesDir = ConfigurationManager.AppSettings["WWTTilesDir"];
                 options.WwtGalexDir = ConfigurationManager.AppSettings["WWTGALEXDIR"];
+                options.WwtToursDBConnectionString = ConfigurationManager.AppSettings["WWTToursDBConnectionString"];
             });
 
             services

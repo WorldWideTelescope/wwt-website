@@ -11,411 +11,24 @@ namespace WWT.Providers
 {
     public abstract partial class GetTourList : RequestProvider
     {
-        public static string GetToursXML()
+        private readonly FilePathOptions _options;
+
+        public GetTourList(FilePathOptions options)
         {
-            List<Tour> sqlTours = new List<Tour>();
-            int rc = GetSQLTourArrayList(sqlTours);
-
-            if (sqlTours.Count > 0)
-            {
-                using (StringWriter sw = new StringWriter())
-                {
-                    using (XmlTextWriter xmlWriter = new XmlTextWriter(sw))
-                    {
-                        xmlWriter.Formatting = Formatting.Indented;
-                        xmlWriter.WriteProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\"");
-                        xmlWriter.WriteStartElement("Folder");
-                        foreach (Tour tr in sqlTours)
-                        {
-                            xmlWriter.WriteStartElement("Tour");
-                            xmlWriter.WriteAttributeString("Title", tr.TourTitle);
-                            xmlWriter.WriteAttributeString("ID", tr.TourGuid.ToString());
-                            xmlWriter.WriteAttributeString("Description", tr.TourDescription);
-                            xmlWriter.WriteAttributeString("Classification", "Other");
-                            xmlWriter.WriteAttributeString("AuthorEmail", tr.AuthorEmailAddress);
-                            xmlWriter.WriteAttributeString("Author", tr.AuthorName);
-                            xmlWriter.WriteAttributeString("AuthorUrl", tr.AuthorURL);
-                            xmlWriter.WriteAttributeString("AverageRating", tr.AverageRating.ToString());
-                            xmlWriter.WriteAttributeString("LengthInSecs", tr.LengthInSecs.ToString());
-                            xmlWriter.WriteAttributeString("OrganizationUrl", tr.OrganizationURL);
-                            xmlWriter.WriteAttributeString("OrganizationName", tr.OrganizationName);
-                            xmlWriter.WriteEndElement();
-                        }
-                        xmlWriter.WriteEndElement();
-
-                        xmlWriter.Close();
-                    }
-                    sw.Close();
-                    return sw.ToString();
-                }
-            }
-            return "";
+            _options = options;
         }
 
-        internal static SqlConnection GetConnectionWwtTours()
-        {
-            string connStr = null;
-            connStr = ConfigurationManager.AppSettings["WWTToursDBConnectionString"];
-            SqlConnection myConnection = null;
-            myConnection = new SqlConnection(connStr);
-            return myConnection;
-        }
+        protected abstract string SqlCommandString { get; }
 
-        public static int GetSQLTourArrayList(List<Tour> sqlTours)
-        {
-            string strErrorMsg;
-            //int version = -1;
-            DateTime dtBeginDateTime;
-            DateTime dtEndDateTime;
-            int ordCol;
-            Guid tourguid;
-            string tourtitle;
-            string workflowstatuscode;
-            DateTime toursubmitteddatetime;
-            DateTime tourapproveddatetime;
-            DateTime tourrejecteddatetime;
-            string tourapprovedrejectedbyname;
-            string tourdescription;
-            string tourattributionandcredits;
-            string authorname;
-            string authoremailaddress;
-            string authorurl;
-            string authorsecondaryemailaddress;
-            string authorcontactphonenumber;
-            string authorcontacttext;
-            string organizationname;
-            string organizationurl;
-            string tourkeywordlist;
-            string tourithlist;
-            string tourastroobjectlist;
-            string tourexplicittourlinklist;
-            int lengthinsecs;
-            double averageRating;
+        protected abstract string HierarchySqlCommand { get; }
 
-            strErrorMsg = "";
-            SqlConnection myConnection5 = GetConnectionWwtTours();
-
-            dtBeginDateTime = Convert.ToDateTime("1/1/1900");
-            dtEndDateTime = Convert.ToDateTime("1/1/2100");
-
-            try
-            {
-                myConnection5.Open();
-
-                SqlCommand cmd = null;
-                cmd = new SqlCommand();
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandTimeout = 20;
-                cmd.Connection = myConnection5;
-
-                cmd.CommandText = "spGetWWTToursForDateRange";
-
-                SqlParameter custParm = new SqlParameter("@pBeginDateTime", SqlDbType.DateTime);
-                custParm.Value = dtBeginDateTime;
-                cmd.Parameters.Add(custParm);
-
-                SqlParameter custParm2 = new SqlParameter("@pEndDateTime", SqlDbType.DateTime);
-                custParm2.Value = dtEndDateTime;
-                cmd.Parameters.Add(custParm2);
-
-                System.Data.SqlClient.SqlDataReader mySqlReader;
-                mySqlReader = cmd.ExecuteReader();
-                while (mySqlReader.Read())
-                {
-                    ordCol = mySqlReader.GetOrdinal("TourGUID");
-                    tourguid = mySqlReader.GetGuid(ordCol);
-                    ordCol = mySqlReader.GetOrdinal("TourTitle");
-                    if (mySqlReader[ordCol] != DBNull.Value)
-                    {
-                        tourtitle = mySqlReader.GetString(ordCol);
-                    }
-                    else
-                    {
-                        tourtitle = null;
-                    }
-
-                    ordCol = mySqlReader.GetOrdinal("WorkFlowStatusCode");
-                    if (mySqlReader[ordCol] != DBNull.Value)
-                    {
-                        workflowstatuscode = mySqlReader.GetString(ordCol);
-                    }
-                    else
-                    {
-                        workflowstatuscode = null;
-                    }
-
-                    ordCol = mySqlReader.GetOrdinal("TourSubmittedDateTime");
-                    if (mySqlReader[ordCol] != DBNull.Value)
-                    {
-                        toursubmitteddatetime = Convert.ToDateTime(mySqlReader.GetSqlDateTime(ordCol).ToString());
-                    }
-                    else
-                    {
-                        toursubmitteddatetime = DateTime.MinValue;
-                    }
-
-                    ordCol = mySqlReader.GetOrdinal("TourApprovedDateTime");
-                    if (mySqlReader[ordCol] != DBNull.Value)
-                    {
-                        tourapproveddatetime = Convert.ToDateTime(mySqlReader.GetSqlDateTime(ordCol).ToString());
-                    }
-                    else
-                    {
-                        tourapproveddatetime = DateTime.MinValue;
-                    }
-
-                    ordCol = mySqlReader.GetOrdinal("TourRejectedDateTime");
-                    if (mySqlReader[ordCol] != DBNull.Value)
-                    {
-                        tourrejecteddatetime = Convert.ToDateTime(mySqlReader.GetSqlDateTime(ordCol).ToString());
-                    }
-                    else
-                    {
-                        tourrejecteddatetime = DateTime.MinValue;
-                    }
-
-                    ordCol = mySqlReader.GetOrdinal("TourApprovedRejectedByName");
-                    if (mySqlReader[ordCol] != DBNull.Value)
-                    {
-                        tourapprovedrejectedbyname = mySqlReader.GetString(ordCol);
-                    }
-                    else
-                    {
-                        tourapprovedrejectedbyname = null;
-                    }
-
-                    ordCol = mySqlReader.GetOrdinal("TourDescription");
-                    if (mySqlReader[ordCol] != DBNull.Value)
-                    {
-                        tourdescription = mySqlReader.GetString(ordCol);
-                    }
-                    else
-                    {
-                        tourdescription = null;
-                    }
-
-                    ordCol = mySqlReader.GetOrdinal("TourAttributionAndCredits");
-                    if (mySqlReader[ordCol] != DBNull.Value)
-                    {
-                        tourattributionandcredits = mySqlReader.GetString(ordCol);
-                    }
-                    else
-                    {
-                        tourattributionandcredits = null;
-                    }
-
-                    ordCol = mySqlReader.GetOrdinal("AuthorName");
-                    if (mySqlReader[ordCol] != DBNull.Value)
-                    {
-                        authorname = mySqlReader.GetString(ordCol);
-                    }
-                    else
-                    {
-                        authorname = null;
-                    }
-
-                    ordCol = mySqlReader.GetOrdinal("AuthorEmailAddress");
-                    if (mySqlReader[ordCol] != DBNull.Value)
-                    {
-                        authoremailaddress = mySqlReader.GetString(ordCol);
-                    }
-                    else
-                    {
-                        authoremailaddress = null;
-                    }
-
-                    ordCol = mySqlReader.GetOrdinal("AuthorURL");
-                    if (mySqlReader[ordCol] != DBNull.Value)
-                    {
-                        authorurl = mySqlReader.GetString(ordCol);
-                    }
-                    else
-                    {
-                        authorurl = null;
-                    }
-
-                    ordCol = mySqlReader.GetOrdinal("AuthorSecondaryEmailAddress");
-                    if (mySqlReader[ordCol] != DBNull.Value)
-                    {
-                        authorsecondaryemailaddress = mySqlReader.GetString(ordCol);
-                    }
-                    else
-                    {
-                        authorsecondaryemailaddress = null;
-                    }
-
-                    ordCol = mySqlReader.GetOrdinal("AuthorContactPhoneNumber");
-                    if (mySqlReader[ordCol] != DBNull.Value)
-                    {
-                        authorcontactphonenumber = mySqlReader.GetString(ordCol);
-                    }
-                    else
-                    {
-                        authorcontactphonenumber = null;
-                    }
-
-                    ordCol = mySqlReader.GetOrdinal("AuthorContactText");
-                    if (mySqlReader[ordCol] != DBNull.Value)
-                    {
-                        authorcontacttext = mySqlReader.GetString(ordCol);
-                    }
-                    else
-                    {
-                        authorcontacttext = null;
-                    }
-
-                    ordCol = mySqlReader.GetOrdinal("OrganizationName");
-                    if (mySqlReader[ordCol] != DBNull.Value)
-                    {
-                        organizationname = mySqlReader.GetString(ordCol);
-                    }
-                    else
-                    {
-                        organizationname = null;
-                    }
-
-                    ordCol = mySqlReader.GetOrdinal("OrganizationURL");
-                    if (mySqlReader[ordCol] != DBNull.Value)
-                    {
-                        organizationurl = mySqlReader.GetString(ordCol);
-                    }
-                    else
-                    {
-                        organizationurl = null;
-                    }
-
-                    ordCol = mySqlReader.GetOrdinal("TourKeywordList");
-                    if (mySqlReader[ordCol] != DBNull.Value)
-                    {
-                        tourkeywordlist = mySqlReader.GetString(ordCol);
-                    }
-                    else
-                    {
-                        tourkeywordlist = null;
-                    }
-
-                    ordCol = mySqlReader.GetOrdinal("TourITHList");
-                    if (mySqlReader[ordCol] != DBNull.Value)
-                    {
-                        tourithlist = mySqlReader.GetString(ordCol);
-                    }
-                    else
-                    {
-                        tourithlist = null;
-                    }
-
-                    ordCol = mySqlReader.GetOrdinal("TourAstroObjectList");
-                    if (mySqlReader[ordCol] != DBNull.Value)
-                    {
-                        tourastroobjectlist = mySqlReader.GetString(ordCol);
-                    }
-                    else
-                    {
-                        tourastroobjectlist = null;
-                    }
-
-                    ordCol = mySqlReader.GetOrdinal("TourExplicitTourLinkList");
-                    if (mySqlReader[ordCol] != DBNull.Value)
-                    {
-                        tourexplicittourlinklist = mySqlReader.GetString(ordCol);
-                    }
-                    else
-                    {
-                        tourexplicittourlinklist = null;
-                    }
-
-                    ordCol = mySqlReader.GetOrdinal("LengthInSecs");
-                    if (mySqlReader[ordCol] != DBNull.Value)
-                    {
-                        lengthinsecs = mySqlReader.GetInt32(ordCol);
-                    }
-                    else
-                    {
-                        lengthinsecs = -1;
-                    }
-
-                    ordCol = mySqlReader.GetOrdinal("AverageRating");
-                    if (mySqlReader[ordCol] != DBNull.Value)
-                    {
-                        averageRating = mySqlReader.GetDouble(ordCol);
-                    }
-                    else
-                    {
-                        averageRating = 0;
-                    }
-                    //OrdCol = MySQLReader.GetOrdinal("TourXML");
-                    //if (MySQLReader[OrdCol] != DBNull.Value)
-                    //{
-                    //    tourxml = MySQLReader.GetString(OrdCol);
-                    //}
-                    //else
-                    //{
-                    //    tourxml = null;
-                    //}
-
-
-
-                    Tour loadTour = new Tour();
-
-                    loadTour.TourGuid = tourguid;
-                    loadTour.TourTitle = tourtitle;
-                    if (workflowstatuscode != null)
-                    { loadTour.WorkFlowStatusCode = workflowstatuscode; }
-                    if (toursubmitteddatetime != null)
-                    { loadTour.TourSubmittedDateTime = toursubmitteddatetime; }
-                    if (tourapproveddatetime != null)
-                    { loadTour.TourApprovedDateTime = tourapproveddatetime; }
-                    if (tourrejecteddatetime != null)
-                    { loadTour.TourRejectedDateTime = tourrejecteddatetime; }
-
-                    //loadTour.TourApprovedRejectedByName = tourapprovedrejectedbyname;
-                    loadTour.TourDescription = tourdescription;
-                    loadTour.TourAttributionAndCredits = tourattributionandcredits;
-                    loadTour.AuthorName = authorname;
-                    loadTour.AuthorEmailAddress = authoremailaddress;
-                    loadTour.AuthorURL = authorurl;
-                    loadTour.AuthorSecondaryEmailAddress = authorsecondaryemailaddress;
-                    loadTour.AuthorContactPhoneNumber = authorcontactphonenumber;
-                    loadTour.AuthorContactText = authorcontacttext;
-                    loadTour.OrganizationName = organizationname;
-                    loadTour.OrganizationURL = organizationurl;
-                    loadTour.TourKeywordList = tourkeywordlist;
-                    //loadTour.TourITHList - tourithlist;
-                    loadTour.TourAstroObjectList = tourastroobjectlist;
-                    loadTour.TourExplicitTourLinkList = tourexplicittourlinklist;
-                    loadTour.LengthInSecs = lengthinsecs;
-                    loadTour.AverageRating = averageRating;
-                    //loadTour.TourXML = tourxml;
-
-                    sqlTours.Add(loadTour);
-                }
-
-            }
-            catch (InvalidCastException)
-            { }
-
-            catch (Exception ex)
-            {
-                //throw ex.GetBaseException();
-                strErrorMsg = ex.Message;
-                return -1;
-            }
-            finally
-            {
-                if (myConnection5.State == ConnectionState.Open)
-                    myConnection5.Close();
-            }
-
-            return 0;
-        }
-
-        public static int GetSqlToursVersion()
+        private int GetSqlToursVersion()
         {
             string strErrorMsg;
             int version = -1;
 
             strErrorMsg = "";
-            SqlConnection myConnection5 = GetConnectionWwtTours();
+            SqlConnection myConnection5 = new SqlConnection(_options.WwtToursDBConnectionString);
 
             try
             {
@@ -450,45 +63,11 @@ namespace WWT.Providers
             return version;
         }
 
-        public static string GetToursXML(List<Tour> sqlTours)
+        protected virtual void LoadTourFromRow(DataRow dr, Tour tour)
         {
-            if (sqlTours.Count > 0)
-            {
-                using (StringWriter sw = new StringWriter())
-                {
-                    using (XmlTextWriter xmlWriter = new XmlTextWriter(sw))
-                    {
-                        xmlWriter.Formatting = Formatting.Indented;
-                        xmlWriter.WriteProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\"");
-                        xmlWriter.WriteStartElement("Folder");
-                        foreach (Tour tr in sqlTours)
-                        {
-                            xmlWriter.WriteStartElement("Tour");
-                            xmlWriter.WriteAttributeString("Title", tr.TourTitle);
-                            xmlWriter.WriteAttributeString("ID", tr.TourGuid.ToString());
-                            xmlWriter.WriteAttributeString("Description", tr.TourDescription);
-                            xmlWriter.WriteAttributeString("Classification", "Other");
-                            xmlWriter.WriteAttributeString("AuthorEmail", tr.AuthorEmailAddress);
-                            xmlWriter.WriteAttributeString("Author", tr.AuthorName);
-                            xmlWriter.WriteAttributeString("AuthorUrl", tr.AuthorURL);
-                            xmlWriter.WriteAttributeString("AverageRating", tr.AverageRating.ToString());
-                            xmlWriter.WriteAttributeString("LengthInSecs", tr.LengthInSecs.ToString());
-                            xmlWriter.WriteAttributeString("OrganizationUrl", tr.OrganizationURL);
-                            xmlWriter.WriteAttributeString("OrganizationName", tr.OrganizationName);
-                            xmlWriter.WriteEndElement();
-                        }
-                        xmlWriter.WriteEndElement();
-
-                        xmlWriter.Close();
-                    }
-                    sw.Close();
-                    return sw.ToString();
-                }
-            }
-            return "";
         }
 
-        int GetSQLTourArrayList(List<Tour> sqlTours, string query)
+        private int GetSQLTourArrayList(List<Tour> sqlTours, string query)
         {
             StoredProc sp = new StoredProc(query);
             DataTable dt = new DataTable();
@@ -497,6 +76,7 @@ namespace WWT.Providers
             foreach (DataRow dr in dt.Rows)
             {
                 Tour tr = new Tour();
+
                 tr.TourTitle = Convert.ToString(dr["TourTitle"]);
                 tr.TourGuid = new Guid(dr["TourGUID"].ToString());
                 tr.TourDescription = Convert.ToString(dr["TourDescription"]);
@@ -507,10 +87,17 @@ namespace WWT.Providers
                 tr.LengthInSecs = Convert.ToInt32(dr["LengthInSecs"]);
                 tr.OrganizationURL = Convert.ToString(dr["OrganizationURL"]);
                 tr.OrganizationName = Convert.ToString(dr["OrganizationName"]);
+
+                LoadTourFromRow(dr, tr);
+
                 sqlTours.Add(tr);
             }
 
             return 0;
+        }
+
+        protected virtual void WriteTour(XmlWriter xmlWriter, Tour tr)
+        {
         }
 
         private void AddToursToChildNode(XmlWriter xmlWriter, int parcatId)
@@ -532,10 +119,13 @@ namespace WWT.Providers
                 xmlWriter.WriteAttributeString("LengthInSecs", tr.LengthInSecs.ToString());
                 xmlWriter.WriteAttributeString("OrganizationUrl", tr.OrganizationURL);
                 xmlWriter.WriteAttributeString("OrganizationName", tr.OrganizationName);
+
+                WriteTour(xmlWriter, tr);
+
                 xmlWriter.WriteEndElement();
             }
 
-            StoredProc sp1 = new StoredProc("Select CategoryId, ParentCatID, Name, CatThumbnailUrl from TourCategories where ParentCatId = " + parcatId.ToString() + " and CategoryId <> " + parcatId);
+            StoredProc sp1 = new StoredProc(SqlCommandString + parcatId.ToString());
             DataTable dt = new DataTable();
             int nRet1 = sp1.RunQuery(dt);
             sp1.Dispose();
@@ -587,11 +177,14 @@ namespace WWT.Providers
                             xmlWriter.WriteAttributeString("LengthInSecs", tr.LengthInSecs.ToString());
                             xmlWriter.WriteAttributeString("OrganizationUrl", tr.OrganizationURL);
                             xmlWriter.WriteAttributeString("OrganizationName", tr.OrganizationName);
+
+                            WriteTour(xmlWriter, tr);
+
                             xmlWriter.WriteEndElement();
                         }
                     }
 
-                    StoredProc sp1 = new StoredProc("Select CategoryId, ParentCatID, Name, CatThumbnailUrl from TourCategories where ParentCatId = 0 and CategoryId <> 0");
+                    StoredProc sp1 = new StoredProc(HierarchySqlCommand);
                     DataTable dt = new DataTable();
                     int nRet1 = sp1.RunQuery(dt);
                     sp1.Dispose();
@@ -622,7 +215,7 @@ namespace WWT.Providers
             }
         }
 
-        public int UpdateCacheEx(ICache cache)
+        protected int UpdateCacheEx(ICache cache)
         {
             bool needToBuild;
             int fromCacheVersion;
@@ -681,13 +274,13 @@ namespace WWT.Providers
                 else
                 {
                     fromSqlVersion = GetSqlToursVersion();
+                    needToBuild = true;
 
                     if (fromSqlVersion != fromCacheVersion)
                     {
                         needToBuild = true;
                     }
                 }
-
             }
 
             if (needToBuild)
@@ -706,6 +299,5 @@ namespace WWT.Providers
             }
             return 0;
         }
-
     }
 }
