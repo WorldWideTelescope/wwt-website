@@ -2,6 +2,11 @@ namespace WWT.Providers
 {
     public class GetTourListProvider : GetTourList
     {
+        public GetTourListProvider(FilePathOptions options)
+            : base(options)
+        {
+        }
+
         public override void Run(IWwtContext context)
         {
             string etag = context.Request.Headers["If-None-Match"];
@@ -33,5 +38,9 @@ namespace WWT.Providers
             }
             context.Response.End();
         }
+
+        protected override string SqlCommandString => "Select CategoryId, ParentCatID, Name, CatThumbnailUrl from TourCategories where ParentCatId = ";
+
+        protected override string HierarchySqlCommand => "Select CategoryId, ParentCatID, Name, CatThumbnailUrl from TourCategories where ParentCatId = 0 and CategoryId <> 0";
     }
 }
