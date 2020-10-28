@@ -1,12 +1,16 @@
 ﻿using AutofacContrib.NSubstitute;
+using AutofacContrib.NSubstitute.MockHandlers;
 using AutoFixture;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using NSubstitute;
 using StackExchange.Redis;
 using WWTWebservices;
 using Xunit;
 
-namespace WWT.PlateFiles.Caching.Tests
+namespace WWT.Caching.Tests
 {
     public class ExtensionTests
     {
@@ -47,6 +51,12 @@ namespace WWT.PlateFiles.Caching.Tests
             // Arrange
             var original = Substitute.For<IPlateTilePyramid>();
             var mock = AutoSubstitute.Configure()
+                .InjectProperties()
+                .MakeUnregisteredTypesPerLifetime()
+                .ConfigureOptions(options =>
+                {
+                    options.MockHandlers.Add(SkipTypeMockHandler.Create(typeof(IValidateOptions<>)));
+                })
                 .ConfigureServices(services =>
                 {
                     services.AddSingleton(original);
@@ -59,12 +69,10 @@ namespace WWT.PlateFiles.Caching.Tests
                 .Build();
 
             // Act
-            var resolved = mock.Resolve<IPlateTilePyramid>();
+            var resolved = mock.Resolve<IDistributedCache>();
 
             // Assert
-            var inMemory = Assert.IsType<InMemoryCachedPlateTilePyramid>(resolved);
-
-            Assert.Same(original, inMemory.InnerPyramid);
+            var inMemory = Assert.IsType<MemoryDistributedCache>(resolved);
         }
 
         [Fact]
@@ -73,6 +81,12 @@ namespace WWT.PlateFiles.Caching.Tests
             // Arrange
             var original = Substitute.For<IPlateTilePyramid>();
             var mock = AutoSubstitute.Configure()
+                .InjectProperties()
+                .MakeUnregisteredTypesPerLifetime()
+                .ConfigureOptions(options =>
+                {
+                    options.MockHandlers.Add(SkipTypeMockHandler.Create(typeof(IValidateOptions<>)));
+                })
                 .ConfigureServices(services =>
                 {
                     services.AddSingleton(original);
@@ -86,12 +100,10 @@ namespace WWT.PlateFiles.Caching.Tests
                 .Build();
 
             // Act
-            var resolved = mock.Resolve<IPlateTilePyramid>();
+            var resolved = mock.Resolve<IDistributedCache>();
 
             // Assert
-            var redis = Assert.IsType<RedisCachedPlateTilePyramid>(resolved);
-
-            Assert.Same(original, redis.InnerPyramid);
+            var inMemory = Assert.IsType<RedisCache>(resolved);
         }
     }
 }
