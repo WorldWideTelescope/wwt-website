@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<Folder Name="VAMP Feeds"  Group="Explorer" >
- <Folder Name="Wise" Url="http://www.worldwidetelescope.org/wwtweb/catalog.aspx?W=wise"  Group="Explorer"  Thumbnail="http://www.worldwidetelescope.org/wwtweb/thumbnail.aspx?name=wiseobservatory" />
- <Folder Name="Chandra" Url="http://www.worldwidetelescope.org/wwtweb/catalog.aspx?W=chandra"  Group="Explorer"  Thumbnail="http://www.worldwidetelescope.org/wwtweb/thumbnail.aspx?name=chandra" />
- <Folder Name="Hubble" Url="http://www.worldwidetelescope.org/wwtweb/catalog.aspx?W=hubble"  Group="Explorer"   Thumbnail="http://www.worldwidetelescope.org/wwtweb/thumbnail.aspx?name=hubble" />
- <Folder Name="ESO (European Space Observatory)" Url="http://www.worldwidetelescope.org/wwtweb/catalog.aspx?W=eso"   Group="Explorer"  Searchable="True" Type="Sky" Thumbnail="http://www.worldwidetelescope.org/wwtweb/thumbnail.aspx?name=eso" />
-</Folder>
