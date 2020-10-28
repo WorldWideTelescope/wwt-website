@@ -855,6 +855,10 @@
       <Project>{cebab32c-42a7-43f8-ad7b-2521ed5ab12e}</Project>
       <Name>WWT.Caching</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WWT.Imaging\WWT.Imaging.csproj">
+      <Project>{33640247-520c-4f61-9055-b02cd8b66b8a}</Project>
+      <Name>WWT.Imaging</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WWT.PlateFiles\WWT.PlateFiles.csproj">
       <Project>{fecd0629-586c-42c1-931a-3a06f18376ae}</Project>
       <Name>WWT.PlateFiles</Name>
@@ -862,6 +866,10 @@
     <ProjectReference Include="..\WWT.Providers\WWT.Providers.csproj">
       <Project>{ee4a3106-572b-4ef4-9ab5-a22643309a57}</Project>
       <Name>WWT.Providers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WWT.Tours\WWT.Tours.csproj">
+      <Project>{0a5b7416-b9cb-438f-8dc9-c9d3b096896b}</Project>
+      <Name>WWT.Tours</Name>
     </ProjectReference>
     <ProjectReference Include="..\WWTWebservices\WWTWebservices.csproj">
       <Project>{1cf4d986-51ad-43f8-a84a-38b6ecba2172}</Project>

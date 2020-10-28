@@ -13,6 +13,7 @@ using Unity.AspNet.Mvc;
 using WWT;
 using WWT.Azure;
 using WWT.Providers;
+using WWT.Tours;
 using WWTWebservices;
 
 namespace WWTMVC5
@@ -94,14 +95,25 @@ namespace WWTMVC5
                 {
                     options.ContainerName = ConfigurationManager.AppSettings["ThumbnailContainer"];
                     options.Default = ConfigurationManager.AppSettings["DefaultThumbnail"];
+                })
+                .AddTours(options =>
+                {
+                    options.ContainerName = ConfigurationManager.AppSettings["TourContainer"];
                 });
 
-            services.AddCaching(options =>
-            {
-                options.RedisCacheConnectionString = ConfigurationManager.AppSettings["RedisConnectionString"];
-                options.UseCaching = ConfigReader<bool>.GetSetting("UseCaching");
-                options.SlidingExpiration = TimeSpan.Parse(ConfigurationManager.AppSettings["SlidingExpiration"]);
-            });
+            services
+                .AddCaching(options =>
+                {
+                    options.RedisCacheConnectionString = ConfigurationManager.AppSettings["RedisConnectionString"];
+                    options.UseCaching = ConfigReader<bool>.GetSetting("UseCaching");
+                    options.SlidingExpiration = TimeSpan.Parse(ConfigurationManager.AppSettings["SlidingExpiration"]);
+                })
+                .CacheType<IPlateTilePyramid>(plates => plates.Add(nameof(IPlateTilePyramid.GetStream)))
+                .CacheType<IThumbnailAccessor>(plates => plates.Add(nameof(IThumbnailAccessor.GetThumbnailStream)))
+                .CacheType<ITourAccessor>(plates => plates
+                    .Add(nameof(ITourAccessor.GetAuthorThumbnailAsync))
+                    .Add(nameof(ITourAccessor.GetTourAsync))
+                    .Add(nameof(ITourAccessor.GetTourThumbnailAsync)));
 
             services.AddLogging(builder =>
             {

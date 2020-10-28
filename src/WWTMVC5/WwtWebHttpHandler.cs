@@ -62,7 +62,7 @@ namespace WWTMVC5
             endpoints.Add<Galex4FarProvider>("/wwtweb/Galex4Far.aspx", "image/png");
             endpoints.Add<Galex4NearProvider>("/wwtweb/Galex4Near.aspx", "image/png");
             endpoints.Add<GalexToastProvider>("/wwtweb/GalexToast.aspx", "image/png");
-            endpoints.Add<GetAuthorThumbnailProvider>("/wwtweb/GetAuthorThumbnail.aspx", "image/jpg");
+            endpoints.Add<GetAuthorThumbnailProvider>("/wwtweb/GetAuthorThumbnail.aspx", "image/png");
             endpoints.Add<GetHostNameProvider>("/wwtweb/GetHostName.aspx", "text/plain");
             endpoints.Add<GetTileProvider>("/wwtweb/GetTile.aspx", "image/png");
             endpoints.Add<GetTourProvider>("/wwtweb/GetTour.aspx", "application/x-wtt");

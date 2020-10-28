@@ -3,6 +3,7 @@ using Azure.Identity;
 using Azure.Storage.Blobs;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using WWT.Tours;
 using WWTWebservices;
 
 namespace WWT.Azure
@@ -40,12 +41,12 @@ namespace WWT.Azure
 
         public static AzureServiceBuilder AddPlateFiles(this AzureServiceBuilder services, Action<AzurePlateTilePyramidOptions> configure)
         {
-            var plateTileOptions = new AzurePlateTilePyramidOptions();
-            configure(plateTileOptions);
+            var options = new AzurePlateTilePyramidOptions();
+            configure(options);
 
-            services.Services.AddSingleton(plateTileOptions);
+            services.Services.AddSingleton(options);
 
-            if (plateTileOptions.UseAzurePlateFiles)
+            if (options.UseAzurePlateFiles)
             {
                 services.Services.AddSingleton<IPlateTilePyramid, SeekableAzurePlateTilePyramid>();
             }
@@ -53,6 +54,18 @@ namespace WWT.Azure
             {
                 services.Services.AddSingleton<IPlateTilePyramid, FilePlateTilePyramid>();
             }
+
+            return services;
+        }
+
+        public static AzureServiceBuilder AddTours(this AzureServiceBuilder services, Action<AzureTourOptions> configure)
+        {
+            var options = new AzureTourOptions();
+            configure(options);
+
+            services.Services.AddSingleton(options);
+
+            services.Services.AddSingleton<ITourAccessor, AzureTourAccessor>();
 
             return services;
         }

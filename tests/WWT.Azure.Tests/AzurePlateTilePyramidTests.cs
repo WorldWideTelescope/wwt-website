@@ -138,7 +138,7 @@ namespace WWT.Azure.Tests
             // For all the non dss plate files
             var blobName = $"{plateFile.Replace(".plate", string.Empty)}/L{level}X{x}Y{y}.png";
             var containerName = AzurePlateTilePyramidOptions.DefaultContainer;
-            
+
             if (plateFile == "dssterrapixel.plate")
             {
                 blobName = $"DSSTerraPixelL{level}X{x}Y{y}.png";
@@ -163,7 +163,5 @@ namespace WWT.Azure.Tests
                 .SubstituteFor<BlobServiceClient>()
                     .ResolveReturnValue(service => service.GetBlobContainerClient(containerName));
         }
-
-        public abstract class DownloadResult : Stream { }
     }
 }

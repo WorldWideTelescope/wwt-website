@@ -9,11 +9,13 @@
     <PackageReference Include="Azure.Identity" Version="1.2.3" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.7.0-alpha.20201016.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.9" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.9" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\WWT.Imaging\WWT.Imaging.csproj" />
     <ProjectReference Include="..\WWT.PlateFiles\WWT.PlateFiles.csproj" />
+    <ProjectReference Include="..\WWT.Tours\WWT.Tours.csproj" />
   </ItemGroup>
 
 </Project>

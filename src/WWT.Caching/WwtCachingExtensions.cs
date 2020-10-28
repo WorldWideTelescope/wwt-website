@@ -2,13 +2,12 @@
 using Swick.Cache;
 using Swick.Cache.Handlers;
 using System;
-using WWTWebservices;
 
 namespace WWT
 {
     public static class WwtCachingExtensions
     {
-        public static void AddCaching(this IServiceCollection services, Action<Caching.CachingOptions> configure)
+        public static WwtCacheBuilder AddCaching(this IServiceCollection services, Action<Caching.CachingOptions> configure)
         {
             var options = new Caching.CachingOptions();
 
@@ -16,31 +15,56 @@ namespace WWT
 
             services.AddSingleton(options);
 
-            if (options.UseCaching)
+            if (!options.UseCaching)
             {
-                services.AddCachingManager()
-                    .Configure(opts =>
-                    {
-                        opts.CacheHandlers.Add(new DefaultExpirationCacheHandler(entry =>
-                        {
-                            entry.SlidingExpiration = options.SlidingExpiration;
-                        }));
-                    })
-                    .CacheType<IPlateTilePyramid>(plates => plates.Add(nameof(IPlateTilePyramid.GetStream)));
+                return new WwtCacheBuilder(null);
+            }
 
-                if (!string.IsNullOrEmpty(options.RedisCacheConnectionString))
+            var cacheBuilder = services.AddCachingManager()
+                .Configure(opts =>
                 {
-                    services.AddStackExchangeRedisCache(redisOptions =>
+                    opts.CacheHandlers.Add(new DefaultExpirationCacheHandler(entry =>
                     {
-                        redisOptions.Configuration = options.RedisCacheConnectionString;
-                    });
-                }
-                else
+                        entry.SlidingExpiration = options.SlidingExpiration;
+                    }));
+                });
+
+            if (!string.IsNullOrEmpty(options.RedisCacheConnectionString))
+            {
+                services.AddStackExchangeRedisCache(redisOptions =>
                 {
-                    services.AddDistributedMemoryCache();
+                    redisOptions.Configuration = options.RedisCacheConnectionString;
+                });
+            }
+            else
+            {
+                services.AddDistributedMemoryCache();
+            }
+
+            return new WwtCacheBuilder(cacheBuilder);
+        }
+
+        public class WwtCacheBuilder
+        {
+            private readonly CacheBuilder _builder;
+
+            public WwtCacheBuilder(CacheBuilder builder)
+            {
+                _builder = builder;
+            }
+
+            public WwtCacheBuilder CacheType<T>(Action<CacheTypeBuilder<T>> config)
+                where T : class
+            {
+                if (_builder is null)
+                {
+                    return this;
                 }
 
-                services.Decorate<IPlateTilePyramid>((other, ctx) => ctx.GetRequiredService<ICachingManager>().CreateCachedProxy(other));
+                _builder.CacheType<T>(config);
+                _builder.Services.Decorate<T>((other, ctx) => ctx.GetRequiredService<ICachingManager>().CreateCachedProxy(other));
+
+                return this;
             }
         }
     }
