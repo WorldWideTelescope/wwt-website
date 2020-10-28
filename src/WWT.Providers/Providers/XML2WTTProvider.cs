@@ -1,4 +1,6 @@
 using System.Configuration;
+using System.Threading;
+using System.Threading.Tasks;
 using WWTWebservices;
 
 namespace WWT.Providers
@@ -10,9 +12,8 @@ namespace WWT.Providers
         {
         }
 
-        public override void Run(IWwtContext context)
+        public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
-            //string etag = context.Request.Headers["If-None-Match"];
             string tourcache = ConfigurationManager.AppSettings["WWTTOURCACHE"];
 
             context.Response.ClearHeaders();
@@ -21,7 +22,7 @@ namespace WWT.Providers
 
             context.Response.WriteFile(MakeTourFromXML(context, context.Request.InputStream, tourcache + "\\temp\\"));
 
-            //context.Response.OutputStream
+            return Task.CompletedTask;
         }
     }
 }

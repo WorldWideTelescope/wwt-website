@@ -1,13 +1,15 @@
 using System;
 using System.Configuration;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using WWTWebservices;
 
 namespace WWT.Providers
 {
     public class GetTourThumbnailProvider : RequestProvider
     {
-        public override void Run(IWwtContext context)
+        public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string guid;
             if (context.Request.Params["GUID"] != null)
@@ -17,7 +19,7 @@ namespace WWT.Providers
             else
             {
                 context.Response.End();
-                return;
+                return Task.CompletedTask;
             }
             string tourcache = ConfigurationManager.AppSettings["WWTTOURCACHE"];
             string localDir = tourcache;
@@ -51,7 +53,7 @@ namespace WWT.Providers
                 {
                     context.Response.ContentType = "image/png";
                     context.Response.WriteFile(localfilename);
-                    return;
+                    return Task.CompletedTask;
                 }
                 catch
                 {
@@ -61,6 +63,8 @@ namespace WWT.Providers
             {
                 context.Response.Status = "404 Not Found";
             }
+
+            return Task.CompletedTask;
         }
     }
 }

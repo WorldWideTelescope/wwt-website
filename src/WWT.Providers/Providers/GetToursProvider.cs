@@ -1,5 +1,7 @@
 using System;
 using System.Data;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml;
 using WWTWebservices;
 
@@ -12,10 +14,9 @@ namespace WWT.Providers
         {
         }
 
-        public override void Run(IWwtContext context)
+        public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string etag = context.Request.Headers["If-None-Match"];
-
 
             context.Response.ClearHeaders();
             context.Response.Clear();
@@ -42,6 +43,8 @@ namespace WWT.Providers
                 }
             }
             context.Response.End();
+
+            return Task.CompletedTask;
         }
 
         protected override void LoadTourFromRow(DataRow dr, Tour tr)

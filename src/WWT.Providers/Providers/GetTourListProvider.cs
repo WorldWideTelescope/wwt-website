@@ -1,3 +1,6 @@
+using System.Threading;
+using System.Threading.Tasks;
+
 namespace WWT.Providers
 {
     public class GetTourListProvider : GetTourList
@@ -7,7 +10,7 @@ namespace WWT.Providers
         {
         }
 
-        public override void Run(IWwtContext context)
+        public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string etag = context.Request.Headers["If-None-Match"];
 
@@ -37,6 +40,8 @@ namespace WWT.Providers
                 }
             }
             context.Response.End();
+
+            return Task.CompletedTask;
         }
 
         protected override string SqlCommandString => "Select CategoryId, ParentCatID, Name, CatThumbnailUrl from TourCategories where ParentCatId = ";

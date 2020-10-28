@@ -1,3 +1,6 @@
+using System.Threading;
+using System.Threading.Tasks;
+
 namespace WWT.Providers
 {
     public class ThumbnailProvider : RequestProvider
@@ -9,7 +12,7 @@ namespace WWT.Providers
             _thumbnails = thumbnails;
         }
 
-        public override void Run(IWwtContext context)
+        public override Task RunAsync(IWwtContext context, CancellationToken token) 
         {
             string name = context.Request.Params["name"];
             string type = context.Request.Params["class"];
@@ -20,6 +23,8 @@ namespace WWT.Providers
                 context.Response.Flush();
                 context.Response.End();
             }
+
+            return Task.CompletedTask;
         }
     }
 }

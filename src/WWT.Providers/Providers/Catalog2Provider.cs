@@ -1,11 +1,13 @@
 ﻿using System.Configuration;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
     public class Catalog2Provider : RequestProvider
     {
-        public override void Run(IWwtContext context)
+        public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string etag = context.Request.Headers["If-None-Match"];
             string filename = "";
@@ -63,6 +65,8 @@ namespace WWT.Providers
                     context.Response.Status = "304 Not Modified";
                 }
             }
+
+            return Task.CompletedTask;
         }
     }
 }

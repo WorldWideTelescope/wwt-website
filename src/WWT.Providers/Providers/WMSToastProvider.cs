@@ -3,6 +3,8 @@ using System.Configuration;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using WWTWebservices;
 
 namespace WWT.Providers
@@ -16,7 +18,7 @@ namespace WWT.Providers
             _hasher = hasher;
         }
 
-        public override void Run(IWwtContext context)
+        public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string query = context.Request.Params["Q"];
             bool debug = context.Request.Params["debug"] != null;
@@ -38,7 +40,7 @@ namespace WWT.Providers
             {
                 context.Response.Write("No image");
                 context.Response.End();
-                return;
+                return Task.CompletedTask;
             }
 
 
@@ -48,16 +50,14 @@ namespace WWT.Providers
                 try
                 {
                     context.Response.WriteFile(filename);
-                    return;
+                    return Task.CompletedTask;
                 }
                 catch
                 {
                 }
             }
             else
-
             {
-
                 ToastTileMap map = new ToastTileMap(level, tileX, tileY);
 
                 Int32 sqSide = 256;
@@ -72,7 +72,7 @@ namespace WWT.Providers
                     context.Response.ContentType = "text/plain";
                     context.Response.Write(sdim.LoadImage(wmsUrl, true, ImageSource.MarsAsu));
                     context.Response.End();
-                    return;
+                    return Task.CompletedTask;
                 }
                 sdim.LoadImage(wmsUrl, false, ImageSource.MarsAsu);
                 sdim.Lock();
@@ -124,6 +124,7 @@ namespace WWT.Providers
             }
 
             context.Response.End();
+            return Task.CompletedTask;
         }
     }
 }

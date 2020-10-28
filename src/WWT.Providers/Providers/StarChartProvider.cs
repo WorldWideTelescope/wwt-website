@@ -1,12 +1,14 @@
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
     public class StarChartProvider : StarChart
     {
-        public override void Run(IWwtContext context)
+        public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             double lat = double.Parse(context.Request.Params["lat"]);
             double lng = double.Parse(context.Request.Params["lng"]);
@@ -36,6 +38,8 @@ namespace WWT.Providers
             Bitmap chart = GetChart(lat, lng, time, ra, dec, width, height);
             chart.Save(context.Response.OutputStream, ImageFormat.Png);
             chart.Dispose();
+
+            return Task.CompletedTask;
         }
     }
 }

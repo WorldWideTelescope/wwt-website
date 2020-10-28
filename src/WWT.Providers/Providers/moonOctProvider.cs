@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using WWTWebservices;
 
 namespace WWT.Providers
@@ -15,7 +17,7 @@ namespace WWT.Providers
             _options = options;
         }
 
-        public override void Run(IWwtContext context)
+        public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string query = context.Request.Params["Q"];
             string[] values = query.Split(',');
@@ -32,9 +34,10 @@ namespace WWT.Providers
                     s.CopyTo(context.Response.OutputStream);
                     context.Response.Flush();
                     context.Response.End();
-                    return;
                 }
             }
+
+            return Task.CompletedTask;
         }
     }
 }

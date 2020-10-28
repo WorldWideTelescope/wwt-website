@@ -1,16 +1,18 @@
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace WWT.Providers
 {
     public class Goto2Provider : RequestProvider
     {
-        public override void Run(IWwtContext context)
+        public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             if (context.Request.ContainsCookie("alphakey") && context.Request.Params["wtml"] == null)
             {
                 context.Response.Redirect("http://www.worldwidetelescope.org/webclient/default.aspx?wtml=" + HttpUtility.UrlEncode(context.Request.Url.ToString() + "&wtml=true"));
-                return;
+                return Task.CompletedTask;
             }
 
             string name = context.Request.Params["object"];
@@ -32,6 +34,8 @@ namespace WWT.Providers
 
             string xml = string.Format("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Folder Group=\"Goto\">\n<Place Name=\"{0}\" RA=\"{1}\" Dec=\"{2}\" ZoomLevel=\"{3}\" DataSetType=\"Sky\"/>\n</Folder>", name, ra, dec, zoom);
             context.Response.Write(xml);
+
+            return Task.CompletedTask;
         }
     }
 }

@@ -1,11 +1,13 @@
 using System;
 using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
     public class isstle2Provider : isstle
     {
-        public override void Run(IWwtContext context)
+        public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string url = "";
 
@@ -85,6 +87,8 @@ namespace WWT.Providers
                     context.Response.Write(reply);
                 }
             }
+
+            return Task.CompletedTask;
         }
     }
 }

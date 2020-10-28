@@ -1,4 +1,6 @@
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
@@ -11,7 +13,7 @@ namespace WWT.Providers
             _options = options;
         }
 
-        public override void Run(IWwtContext context)
+        public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string name = context.Request.Params["name"];
             string path = Path.Combine(_options.DSSTileCache, "imagesTiler", "thumbnails");
@@ -22,6 +24,8 @@ namespace WWT.Providers
                 context.Response.WriteFile(filename);
                 context.Response.End();
             }
+
+            return Task.CompletedTask;
         }
     }
 }

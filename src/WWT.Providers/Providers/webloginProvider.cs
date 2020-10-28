@@ -1,11 +1,13 @@
 using System;
 using System.Configuration;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
     public class webloginProvider : LoginWebUser
     {
-        public override void Run(IWwtContext context)
+        public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             context.Response.AddHeader("Cache-Control", "no-cache");
             context.Response.Expires = -1;
@@ -50,6 +52,8 @@ namespace WWT.Providers
             {
                 context.Response.Write("Key:Failed");
             }
+
+            return Task.CompletedTask;
         }
     }
 }
