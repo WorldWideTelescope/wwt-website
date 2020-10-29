@@ -10,6 +10,6 @@
 
         string MachineName { get; }
 
-        string MapPath(string path);
+        string MapPath(params string[] path);
     }
 }

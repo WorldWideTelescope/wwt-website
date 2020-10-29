@@ -69,7 +69,7 @@ namespace WWT.Providers
 
         private int GetSQLTourArrayList(List<Tour> sqlTours, string query)
         {
-            StoredProc sp = new StoredProc(query);
+            StoredProc sp = new StoredProc(query, _options.WwtToursDBConnectionString);
             DataTable dt = new DataTable();
             int nRet = sp.RunQuery(dt);
             sp.Dispose();
@@ -125,7 +125,7 @@ namespace WWT.Providers
                 xmlWriter.WriteEndElement();
             }
 
-            StoredProc sp1 = new StoredProc(SqlCommandString + parcatId.ToString());
+            StoredProc sp1 = new StoredProc(SqlCommandString + parcatId.ToString(), _options.WwtToursDBConnectionString);
             DataTable dt = new DataTable();
             int nRet1 = sp1.RunQuery(dt);
             sp1.Dispose();
@@ -184,7 +184,7 @@ namespace WWT.Providers
                         }
                     }
 
-                    StoredProc sp1 = new StoredProc(HierarchySqlCommand);
+                    StoredProc sp1 = new StoredProc(HierarchySqlCommand, _options.WwtToursDBConnectionString);
                     DataTable dt = new DataTable();
                     int nRet1 = sp1.RunQuery(dt);
                     sp1.Dispose();

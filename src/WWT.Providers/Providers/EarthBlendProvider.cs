@@ -121,7 +121,7 @@ namespace WWT.Providers
                         Graphics g = Graphics.FromImage(bmp);
                         g.InterpolationMode = InterpolationMode.HighQualityBicubic;
 
-                        string tempName = WWTUtil.DownloadVeTile(level, tileX, tileY, false);
+                        string tempName = WWTUtil.DownloadVeTile(level, tileX, tileY, _options.DSSTileCache, false);
                         FileInfo fi = new FileInfo(tempName);
                         if (fi.Length != 0 && fi.Length != 1033)
                         {

@@ -9,6 +9,13 @@ namespace WWT.Providers
 {
     public class PostRatingFeedbackProvider : RequestProvider
     {
+        private readonly FilePathOptions _options;
+
+        public PostRatingFeedbackProvider(FilePathOptions options)
+        {
+            _options = options;
+        }
+
         public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             context.Response.ClearHeaders();
@@ -33,16 +40,16 @@ namespace WWT.Providers
             return Task.CompletedTask;
         }
 
-        private static SqlConnection GetConnectionWWTTours()
+        private SqlConnection GetConnectionWWTTours()
         {
             string connStr = null;
-            connStr = ConfigurationManager.AppSettings["WWTToursDBConnectionString"];
+            connStr = _options.WwtToursDBConnectionString;
             SqlConnection myConnection = null;
             myConnection = new SqlConnection(connStr);
             return myConnection;
         }
 
-        private static void PostFeedback(string tour, string User, int rating)
+        private void PostFeedback(string tour, string User, int rating)
         {
             string strErrorMsg;
             SqlConnection myConnection5 = GetConnectionWWTTours();

@@ -10,7 +10,6 @@ namespace WWT.Providers
     {
         public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
-            string wwt2dir = ConfigurationManager.AppSettings["WWT2DIR"];
             context.Response.AddHeader("Cache-Control", "no-cache");
             context.Response.Expires = -1;
             context.Response.CacheControl = "no-cache";
@@ -18,23 +17,23 @@ namespace WWT.Providers
 
             if (context.Request.Params["Equinox"] != null)
             {
-                context.Response.WriteFile(wwt2dir + @"\EqClientVersion.txt");
+                context.Response.WriteFile(context.MapPath("wwt2", "EqClientVersion.txt"));
                 context.Response.Write("\n");
             }
             else
             {
                 context.Response.Write("ClientVersion:");
-                context.Response.WriteFile(wwt2dir + @"\ClientVersion.txt");
+                context.Response.WriteFile(context.MapPath("wwt2", "ClientVersion.txt"));
                 context.Response.Write("\n");
-                context.Response.WriteFile(wwt2dir + @"\dataversion.txt");
+                context.Response.WriteFile(context.MapPath("wwt2", "dataversion.txt"));
                 context.Response.Write("\nMessage:");
-                context.Response.WriteFile(wwt2dir + @"\message.txt");
+                context.Response.WriteFile(context.MapPath("wwt2", "message.txt"));
                 context.Response.Write("\nWarnVersion:");
-                context.Response.WriteFile(wwt2dir + @"\warnver.txt");
+                context.Response.WriteFile(context.MapPath("wwt2", "warnver.txt"));
                 context.Response.Write("\nMinVersion:");
-                context.Response.WriteFile(wwt2dir + @"\minver.txt");
+                context.Response.WriteFile(context.MapPath("wwt2", "minver.txt"));
                 context.Response.Write("\nUpdateUrl:");
-                context.Response.WriteFile(wwt2dir + @"\updateurl.txt");
+                context.Response.WriteFile(context.MapPath("wwt2", "updateurl.txt"));
             }
             context.Response.Flush();
 

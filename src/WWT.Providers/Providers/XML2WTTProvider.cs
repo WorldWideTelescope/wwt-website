@@ -7,14 +7,17 @@ namespace WWT.Providers
 {
     public class XML2WTTProvider : WWTWeb_XML2WTT
     {
-        public XML2WTTProvider(IFileNameHasher hasher)
+        private readonly FilePathOptions _options;
+
+        public XML2WTTProvider(IFileNameHasher hasher, FilePathOptions options)
             : base(hasher)
         {
+            _options = options;
         }
 
         public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
-            string tourcache = ConfigurationManager.AppSettings["WWTTOURCACHE"];
+            string tourcache = _options.WwtTourCache;
 
             context.Response.ClearHeaders();
             context.Response.Clear();

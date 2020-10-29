@@ -17,7 +17,7 @@ namespace WWTMVC5
 
         public string MachineName => _context.Server.MachineName;
 
-        public string MapPath(string path) => _context.Server.MapPath(path);
+        public string MapPath(params string[] path) => _context.Server.MapPath(Path.Combine(path));
 
         public IRequest Request => this;
 

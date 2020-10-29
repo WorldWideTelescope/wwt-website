@@ -4,6 +4,8 @@ namespace WWT.Providers
 {
     public class FilePathOptions
     {
+        public string DataDir { get; set; }
+
         public string DssTerapixelDir { get; set; }
 
         public string DSSTileCache { get; set; }
@@ -13,6 +15,8 @@ namespace WWT.Providers
         public string WWTDEMDir { get; set; }
 
         public string WwtTilesDir { get; set; }
+
+        public string WwtTourCache { get; set; }
 
         public string WwtToursTourFileUNC { get; set; }
 

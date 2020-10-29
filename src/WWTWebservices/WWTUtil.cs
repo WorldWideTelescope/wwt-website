@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Configuration;
 using System.IO;
 using System.Text;
-using System.Web;
 
 namespace WWTWebservices
 {
-
-
     public class WWTUtil
     {
         public WWTUtil()
@@ -122,9 +118,8 @@ namespace WWTWebservices
             return level;
         }
 
-        public static string DownloadVeTile(int level, int tileX, int tileY, bool temp)
+        public static string DownloadVeTile(int level, int tileX, int tileY,string DSSTileCache, bool temp)
         {
-            string DSSTileCache = ConfigurationManager.AppSettings["DSSTileCache"];
             string filename = String.Format(DSSTileCache + "\\VE\\level{0}\\{2}\\{1}_{2}.jpg", level, tileX, tileY);
             string path = String.Format(DSSTileCache + "\\VE\\level{0}\\{2}", level, tileX, tileY);
 
