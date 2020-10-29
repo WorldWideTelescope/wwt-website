@@ -3,6 +3,8 @@ using Azure.Identity;
 using Azure.Storage.Blobs;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using WWT.Azure.Catalog;
+using WWT.Catalog;
 using WWT.Tours;
 using WWTWebservices;
 
@@ -35,6 +37,17 @@ namespace WWT.Azure
 
             services.Services.AddSingleton(thumbnailOptions);
             services.Services.AddSingleton<IThumbnailAccessor, AzureThumbnailAccessor>();
+
+            return services;
+        }
+
+        public static AzureServiceBuilder AddCatalog(this AzureServiceBuilder services, Action<AzureCatalogOptions> configure)
+        {
+            var options = new AzureCatalogOptions();
+            configure(options);
+
+            services.Services.AddSingleton(options);
+            services.Services.AddSingleton<ICatalogAccessor, AzureCatalogAccessor>();
 
             return services;
         }
