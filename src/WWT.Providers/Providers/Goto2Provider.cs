@@ -1,7 +1,7 @@
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace WWT.Providers
 {
@@ -11,7 +11,7 @@ namespace WWT.Providers
         {
             if (context.Request.ContainsCookie("alphakey") && context.Request.Params["wtml"] == null)
             {
-                context.Response.Redirect("http://www.worldwidetelescope.org/webclient/default.aspx?wtml=" + HttpUtility.UrlEncode(context.Request.Url.ToString() + "&wtml=true"));
+                context.Response.Redirect("http://www.worldwidetelescope.org/webclient/default.aspx?wtml=" + WebUtility.UrlEncode(context.Request.Url.ToString() + "&wtml=true"));
                 return Task.CompletedTask;
             }
 
