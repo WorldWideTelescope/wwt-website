@@ -15,7 +15,7 @@ namespace WWT.Azure
         }
 
         public Stream GetThumbnailStream(string name, string type)
-            => GetThumbnailStream(name) ?? GetThumbnailStream(type) ?? GetThumbnailStream(_options.Default);
+            => GetThumbnailStream(name.ToLowerInvariant()) ?? GetThumbnailStream(type.ToLowerInvariant()) ?? GetThumbnailStream(_options.Default);
 
         private Stream GetThumbnailStream(string fileName)
             => GetThumbnailStreamFromFile(fileName, "fromAssembly") ?? GetThumbnailStreamFromFile(fileName, "fromBackup");

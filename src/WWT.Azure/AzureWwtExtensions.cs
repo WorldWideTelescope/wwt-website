@@ -3,6 +3,7 @@ using Azure.Identity;
 using Azure.Storage.Blobs;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using WWT.PlateFiles;
 using WWT.Tours;
 using WWTWebservices;
 
@@ -49,6 +50,7 @@ namespace WWT.Azure
             if (options.UseAzurePlateFiles)
             {
                 services.Services.AddSingleton<IPlateTilePyramid, SeekableAzurePlateTilePyramid>();
+                services.Services.AddSingleton<IKnownPlateFiles, AzureKnownPlateFile>();
             }
             else
             {
