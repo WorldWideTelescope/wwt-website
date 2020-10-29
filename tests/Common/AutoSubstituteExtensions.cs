@@ -6,6 +6,7 @@ using NSubstitute;
 using NSubstitute.Extensions;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace WWT
 {

@@ -5,7 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\WWT.Imaging\WWT.Imaging.csproj" />
     <ProjectReference Include="..\WWT.PlateFiles\WWT.PlateFiles.csproj" />
+    <ProjectReference Include="..\WWT.Tours\WWT.Tours.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -14,7 +16,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.9" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.9" />
     <PackageReference Include="Scrutor" Version="3.2.2" />
-    <PackageReference Include="Swick.Cache" Version="0.2.0" />
+    <PackageReference Include="Swick.Cache" Version="0.2.2" />
   </ItemGroup>
 
 </Project>
