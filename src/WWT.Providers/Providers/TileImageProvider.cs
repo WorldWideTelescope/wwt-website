@@ -13,7 +13,8 @@ namespace WWT.Providers
     {
         private readonly IFileNameHasher _hasher;
 
-        public TileImageProvider(IFileNameHasher hasher)
+        public TileImageProvider(IFileNameHasher hasher, FilePathOptions options)
+            : base(options)
         {
             _hasher = hasher;
         }
@@ -66,7 +67,7 @@ namespace WWT.Providers
                 int hashID = _hasher.HashName(url);
 
                 //hashID = 12345;
-                string path = ConfigurationManager.AppSettings["DSSTileCache"] + "\\imagesTiler\\dowloadImages\\";
+                string path = _options.DSSTileCache + "\\imagesTiler\\dowloadImages\\";
 
                 string filename = path + hashID + ".png";
 

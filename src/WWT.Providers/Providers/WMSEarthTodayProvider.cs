@@ -12,10 +12,12 @@ namespace WWT.Providers
     public class WMSEarthTodayProvider : RequestProvider
     {
         private readonly IFileNameHasher _hasher;
+        private readonly FilePathOptions _options;
 
-        public WMSEarthTodayProvider(IFileNameHasher hasher)
+        public WMSEarthTodayProvider(IFileNameHasher hasher, FilePathOptions options)
         {
             _hasher = hasher;
+            _options = options;
         }
 
         public override Task RunAsync(IWwtContext context, CancellationToken token)
@@ -29,7 +31,7 @@ namespace WWT.Providers
             string wmsUrl = values[3];
             string dirPart = _hasher.HashName(wmsUrl).ToString();
 
-            string DSSTileCache = ConfigurationManager.AppSettings["DSSTileCache"];
+            string DSSTileCache = _options.DSSTileCache;
 
             var filename = String.Format(DSSTileCache + "\\WMS\\{3}\\{0}\\{2}\\{2}_{1}.png", level, tileX, tileY, dirPart);
             var path = String.Format(DSSTileCache + "\\WMS\\{3}\\{0}\\{2}", level, tileX, tileY, dirPart);

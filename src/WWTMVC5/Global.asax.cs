@@ -73,6 +73,7 @@ namespace WWTMVC5
 
             services.AddRequestProviders(options =>
             {
+                options.DataDir = ConfigurationManager.AppSettings["DataDir"];
                 options.DssTerapixelDir = ConfigurationManager.AppSettings["DssTerapixelDir"];
                 options.DSSTileCache = ConfigurationManager.AppSettings["DSSTileCache"];
                 options.DssToastPng = ConfigurationManager.AppSettings["DSSTOASTPNG"];
@@ -80,6 +81,7 @@ namespace WWTMVC5
                 options.WwtTilesDir = ConfigurationManager.AppSettings["WWTTilesDir"];
                 options.WwtGalexDir = ConfigurationManager.AppSettings["WWTGALEXDIR"];
                 options.WwtToursDBConnectionString = ConfigurationManager.AppSettings["WWTToursDBConnectionString"];
+                options.WwtTourCache = ConfigurationManager.AppSettings["WWTTOURCACHE"];
             });
 
             services

@@ -1,5 +1,4 @@
-﻿using System.Configuration;
-using System.IO;
+﻿using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -7,11 +6,18 @@ namespace WWT.Providers
 {
     public class Catalog2Provider : RequestProvider
     {
+        private readonly FilePathOptions _options;
+
+        public Catalog2Provider(FilePathOptions options)
+        {
+            _options = options;
+        }
+
         public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string etag = context.Request.Headers["If-None-Match"];
             string filename = "";
-            string webDir = Path.Combine(ConfigurationManager.AppSettings["DataDir"], "data");
+            string webDir = Path.Combine(_options.DataDir, "data");
 
             if (context.Request.Params["Q"] != null)
             {

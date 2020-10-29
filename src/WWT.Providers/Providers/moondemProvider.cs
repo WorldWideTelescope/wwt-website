@@ -1,5 +1,4 @@
 using System;
-using System.Configuration;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,6 +7,13 @@ namespace WWT.Providers
 {
     public class moondemProvider : RequestProvider
     {
+        private readonly FilePathOptions _options;
+
+        public moondemProvider(FilePathOptions options)
+        {
+            _options = options;
+        }
+
         public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string query = context.Request.Params["Q"];
@@ -17,7 +23,7 @@ namespace WWT.Providers
             int tileY = Convert.ToInt32(values[2]);
             string type = values[3];
             int demSize = 513 * 2;
-            string wwtDemDir = ConfigurationManager.AppSettings["WWTDEMDir"];
+            string wwtDemDir = _options.WWTDEMDir;
             string filename = String.Format(wwtDemDir + @"\toast\moon\Chunks\{0}\{1}.chunk", level, tileY);
 
             if (File.Exists(filename))

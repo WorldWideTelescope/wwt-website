@@ -12,6 +12,13 @@ namespace WWT.Providers
 {
     public class veblendProvider : RequestProvider
     {
+        private readonly FilePathOptions _options;
+
+        public veblendProvider(FilePathOptions options)
+        {
+            _options = options;
+        }
+
         public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string query = "";
@@ -39,7 +46,7 @@ namespace WWT.Providers
             string filename;
             string path;
 
-            string DSSTileCache = ConfigurationManager.AppSettings["DSSTileCache"];
+            string DSSTileCache = _options.DSSTileCache;
             filename = String.Format(DSSTileCache + "\\VE\\level{0}\\{2}\\{1}_{2}.jpg", level, tileX, tileY);
             path = String.Format(DSSTileCache + "\\VE\\level{0}\\{2}", level, tileX, tileY);
 
@@ -61,7 +68,7 @@ namespace WWT.Providers
                         Directory.CreateDirectory(path);
                     }
 
-                    WWTUtil.DownloadVeTile(level, tileX, tileY, true);
+                    WWTUtil.DownloadVeTile(level, tileX, tileY, _options.DSSTileCache, true);
 
                     float[][] ptsArray ={
                                     new float[] {1, 0, 0, 0, 0},
@@ -74,14 +81,14 @@ namespace WWT.Providers
                     imgAttributes.SetColorMatrix(clrMatrix,
                         ColorMatrixFlag.Default,
                         ColorAdjustType.Bitmap);
-                    Bitmap bmp = new Bitmap(WWTUtil.DownloadVeTile(level, tileX, tileY, true));
+                    Bitmap bmp = new Bitmap(WWTUtil.DownloadVeTile(level, tileX, tileY, _options.DSSTileCache, true));
                     Graphics g = Graphics.FromImage(bmp);
                     g.InterpolationMode = InterpolationMode.HighQualityBicubic;
                     for (int y = 0; y < 2; y++)
                     {
                         for (int x = 0; x < 2; x++)
                         {
-                            string tempName = WWTUtil.DownloadVeTile(level + 1, tileX * 2 + x, tileY * 2 + y, false);
+                            string tempName = WWTUtil.DownloadVeTile(level + 1, tileX * 2 + x, tileY * 2 + y, _options.DSSTileCache, false);
                             FileInfo fi = new FileInfo(tempName);
                             if (fi.Length != 0 && fi.Length != 1033)
                             {
@@ -97,10 +104,8 @@ namespace WWT.Providers
                 }
                 else
                 {
-                    WWTUtil.DownloadVeTile(level, tileX, tileY, false);
+                    WWTUtil.DownloadVeTile(level, tileX, tileY, _options.DSSTileCache, false);
                 }
-
-
             }
             try
             {

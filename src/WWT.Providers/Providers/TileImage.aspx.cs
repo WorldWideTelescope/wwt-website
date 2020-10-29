@@ -10,9 +10,16 @@ namespace WWT.Providers
 {
     public abstract partial class TileImage : RequestProvider
     {
+        protected readonly FilePathOptions _options;
+
+        public TileImage(FilePathOptions options)
+        {
+            _options = options;
+        }
+
         public void TileBitmap(Bitmap bmp, string ID)
         {
-            string baseDirectory = ConfigurationManager.AppSettings["DSSTileCache"] + "\\imagesTiler\\";
+            string baseDirectory = _options.DSSTileCache + "\\imagesTiler\\";
             int width = bmp.Width;
             int height = bmp.Height;
             double aspect = (double)width / (double)height;
@@ -104,9 +111,9 @@ namespace WWT.Providers
             }
         }
 
-        public static void MakeThumbnail(Bitmap imgOrig, string hashID)
+        public void MakeThumbnail(Bitmap imgOrig, string hashID)
         {
-            string path = ConfigurationManager.AppSettings["DSSTileCache"] + "\\imagesTiler\\thumbnails\\";
+            string path = _options.DSSTileCache + "\\imagesTiler\\thumbnails\\";
 
             string filename = path + hashID + ".jpg";
 

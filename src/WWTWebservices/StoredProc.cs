@@ -9,9 +9,9 @@ namespace WWTWebservices
     public class StoredProc
     {
         private SqlCommand cmd;
-        public StoredProc(string strQuery)
+        public StoredProc(string strQuery, string connectionString)
         {
-            cmd = new SqlCommand(strQuery, new SqlConnection(ConfigurationManager.AppSettings["WWTToursDBConnectionString"]));
+            cmd = new SqlCommand(strQuery, new SqlConnection(connectionString));
             cmd.CommandTimeout = 60;
             cmd.Parameters.Add(
                 new SqlParameter("ReturnValue",
@@ -32,30 +32,6 @@ namespace WWTWebservices
         ~StoredProc()
         {
             this.Dispose();
-        }
-
-        public StoredProc(string spName, SqlParameter[] sqlArgs)
-        {
-            cmd = new SqlCommand(spName, new SqlConnection(ConfigurationManager.AppSettings["WWTToursDBConnectionString"]));
-            cmd.CommandType = CommandType.StoredProcedure;
-
-            foreach (SqlParameter sqlArg in sqlArgs)
-                cmd.Parameters.Add(sqlArg);
-
-            cmd.Parameters.Add(
-                new SqlParameter("ReturnValue",
-                SqlDbType.Int,
-                /* int size */ 4,
-                ParameterDirection.ReturnValue,
-                /* bool isNullable */ false,
-                /* byte precision */ 0,
-                /* byte scale */ 0,
-                /* string srcColumn */ string.Empty,
-                DataRowVersion.Default,
-                /* value */ null
-                )
-            );
-            cmd.Connection.Open();
         }
 
         public StoredProc(string spName, SqlConnection conn)

@@ -12,10 +12,12 @@ namespace WWT.Providers
     public class WMSToastProvider : RequestProvider
     {
         private readonly IFileNameHasher _hasher;
+        private readonly FilePathOptions _options;
 
-        public WMSToastProvider(IFileNameHasher hasher)
+        public WMSToastProvider(IFileNameHasher hasher, FilePathOptions options)
         {
             _hasher = hasher;
+            _options = options;
         }
 
         public override Task RunAsync(IWwtContext context, CancellationToken token)
@@ -32,7 +34,7 @@ namespace WWT.Providers
             string filename;
             string path;
 
-            string DSSTileCache = ConfigurationManager.AppSettings["DSSTileCache"];
+            string DSSTileCache = _options.DSSTileCache;
             filename = String.Format(DSSTileCache + "\\WMS\\{3}\\{0}\\{2}\\{2}_{1}.png", level, tileX, tileY, dirPart);
             path = String.Format(DSSTileCache + "\\WMS\\{3}\\{0}\\{2}", level, tileX, tileY, dirPart);
 
