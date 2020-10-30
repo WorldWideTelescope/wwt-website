@@ -15,7 +15,8 @@ namespace WWT.Azure
     {
         private readonly Func<string, BlobClient> _blobRetriever;
         private readonly BlobContainerClient _container;
-        private readonly ILogger<SeekableAzurePlateTilePyramid> _logger;
+
+        protected readonly ILogger<SeekableAzurePlateTilePyramid> _logger;
 
         public SeekableAzurePlateTilePyramid(AzurePlateTilePyramidOptions options, BlobServiceClient service, ILogger<SeekableAzurePlateTilePyramid> logger)
         {
@@ -26,12 +27,9 @@ namespace WWT.Azure
             _blobRetriever = plateName => cache.GetOrAdd(plateName, _container.GetBlobClient);
         }
 
-        Stream IPlateTilePyramid.GetStream(string pathPrefix, string plateName, int level, int x, int y)
-            => GetStream(plateName, level, x, y);
-
-        public Stream GetStream(string plateName, int level, int x, int y)
+        public Stream GetStream(string pathPrefix, string plateName, int level, int x, int y)
         {
-            var client = _blobRetriever(plateName);
+            var client = GetBlob(pathPrefix, plateName);
 
             try
             {
@@ -55,12 +53,9 @@ namespace WWT.Azure
             }
         }
 
-        Stream IPlateTilePyramid.GetStream(string pathPrefix, string plateName, int tag, int level, int x, int y)
-            => GetStream(plateName, tag, level, x, y);
-
-        public Stream GetStream(string plateName, int tag, int level, int x, int y)
+        public Stream GetStream(string pathPrefix, string plateName, int tag, int level, int x, int y)
         {
-            var client = _blobRetriever(plateName);
+            var client = GetBlob(pathPrefix, plateName);
 
             try
             {
@@ -74,5 +69,8 @@ namespace WWT.Azure
                 return null;
             }
         }
+
+        protected virtual BlobClient GetBlob(string pathPrefix, string plateName)
+             => _blobRetriever(plateName);
     }
 }
