@@ -726,13 +726,13 @@
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
-    <Content Include="WWTWeb\colors.map" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\OpenWWT\" />
     <Folder Include="Views\Home\" />
     <Folder Include="Views\Resources\" />
     <Folder Include="Views\WCF\" />
+    <Folder Include="WWTWeb\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CSS\bootswatch.less" />

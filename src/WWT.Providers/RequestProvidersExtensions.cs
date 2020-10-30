@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using WWT.Providers.Services;
 
 namespace WWT.Providers
 {
@@ -18,6 +19,8 @@ namespace WWT.Providers
             {
                 services.AddSingleton(type);
             }
+
+            services.AddSingleton<IMandelbrot, Mandelbrot>();
 
             var options = new FilePathOptions();
 
