@@ -100,6 +100,10 @@ namespace WWTMVC5
                     options.ContainerName = ConfigurationManager.AppSettings["ThumbnailContainer"];
                     options.Default = ConfigurationManager.AppSettings["DefaultThumbnail"];
                 })
+                .AddCatalog(options =>
+                {
+                    options.ContainerName = ConfigurationManager.AppSettings["CatalogContainer"];
+                })
                 .AddTours(options =>
                 {
                     options.ContainerName = ConfigurationManager.AppSettings["TourContainer"];
