@@ -1,9 +1,13 @@
 ﻿using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace WWT
 {
     public interface IThumbnailAccessor
     {
-        Stream GetThumbnailStream(string name, string type);
+        Task<Stream> GetThumbnailStreamAsync(string name, string type, CancellationToken token);
+
+        Task<Stream> GetDefaultThumbnailStreamAsync(CancellationToken token);
     }
 }

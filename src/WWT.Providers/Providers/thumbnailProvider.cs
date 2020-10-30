@@ -1,3 +1,4 @@
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,19 +13,21 @@ namespace WWT.Providers
             _thumbnails = thumbnails;
         }
 
-        public override Task RunAsync(IWwtContext context, CancellationToken token) 
+        public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string name = context.Request.Params["name"];
             string type = context.Request.Params["class"];
 
-            using (var s = _thumbnails.GetThumbnailStream(name, type))
+            using (var s = await GetThumbnailAsync(name, type, token))
             {
-                s.CopyTo(context.Response.OutputStream);
+                await s.CopyToAsync(context.Response.OutputStream, token);
                 context.Response.Flush();
                 context.Response.End();
             }
-
-            return Task.CompletedTask;
         }
+
+        private async Task<Stream> GetThumbnailAsync(string name, string type, CancellationToken token)
+            => await _thumbnails.GetThumbnailStreamAsync(name, type, token).ConfigureAwait(false)
+            ?? await _thumbnails.GetDefaultThumbnailStreamAsync(token).ConfigureAwait(false);
     }
 }
