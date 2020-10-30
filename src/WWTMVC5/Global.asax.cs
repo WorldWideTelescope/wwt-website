@@ -92,6 +92,8 @@ namespace WWTMVC5
                 .AddPlateFiles(options =>
                 {
                     options.UseAzurePlateFiles = ConfigReader<bool>.GetSetting("UseAzurePlateFiles");
+                    options.Container = ConfigurationManager.AppSettings["PlateFileContainer"];
+                    options.KnownPlateFile = ConfigurationManager.AppSettings["KnownPlateFile"];
                 })
                 .AddThumbnails(options =>
                 {

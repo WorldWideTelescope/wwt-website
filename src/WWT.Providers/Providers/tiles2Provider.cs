@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using WWT.PlateFiles;
 using WWTWebservices;
 
 namespace WWT.Providers
@@ -9,11 +10,13 @@ namespace WWT.Providers
     public class Tiles2Provider : RequestProvider
     {
         private readonly IPlateTilePyramid _plateTiles;
+        private readonly IKnownPlateFiles _knownPlateFiles;
         private readonly FilePathOptions _options;
 
-        public Tiles2Provider(IPlateTilePyramid plateTiles, FilePathOptions options)
+        public Tiles2Provider(IPlateTilePyramid plateTiles, IKnownPlateFiles knownPlateFiles, FilePathOptions options)
         {
             _plateTiles = plateTiles;
+            _knownPlateFiles = knownPlateFiles;
             _options = options;
         }
 
@@ -24,14 +27,13 @@ namespace WWT.Providers
             int level = Convert.ToInt32(values[0]);
             int tileX = Convert.ToInt32(values[1]);
             int tileY = Convert.ToInt32(values[2]);
-            string file = values[3];
 
             context.Response.AddHeader("Cache-Control", "public, max-age=31536000");
             context.Response.AddHeader("Expires", "Thu, 31 Dec 2009 16:00:00 GMT");
             context.Response.AddHeader("ETag", "155");
             context.Response.AddHeader("Last-Modified", "Tue, 20 May 2008 22:32:37 GMT");
 
-            if (level < 10)
+            if (_knownPlateFiles.TryNormalizePlateName(values[3], out var file) && level < 10)
             {
                 context.Response.ContentType = "image/png";
                 using (Stream s = _plateTiles.GetStream(_options.WwtTilesDir, $"{file}.plate", -1, level, tileX, tileY))
