@@ -356,6 +356,7 @@
     <Compile Include="Models\UserType.cs">
       <DependentUpon>EarthOnline.tt</DependentUpon>
     </Compile>
+    <Compile Include="RedisConfig.cs" />
     <Compile Include="SystemWebWwtContext.cs" />
     <Compile Include="ProfileCacheManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -942,6 +943,9 @@
     </PackageReference>
     <PackageReference Include="Microsoft.IdentityModel">
       <Version>6.1.7600.16394</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Web.RedisSessionStateProvider">
+      <Version>4.0.1</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>10.0.3</Version>
