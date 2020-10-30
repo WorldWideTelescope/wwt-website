@@ -67,7 +67,7 @@ namespace WWT.Providers
 
             if (!string.IsNullOrEmpty(filename))
             {
-                var catalogEntry = await _catalog.GetCatalogEntryAsync(filename);
+                var catalogEntry = await _catalog.GetCatalogEntryAsync(filename, token);
                 string newEtag = catalogEntry.LastModified.ToUniversalTime().ToString();
 
                 if (newEtag != etag)
@@ -77,7 +77,7 @@ namespace WWT.Providers
 
                     using (var c = catalogEntry.Contents)
                     {
-                        await c.CopyToAsync(context.Response.OutputStream);
+                        await c.CopyToAsync(context.Response.OutputStream, token);
                         context.Response.Flush();
                         context.Response.End();
                     }
