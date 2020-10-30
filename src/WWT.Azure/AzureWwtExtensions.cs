@@ -15,18 +15,13 @@ namespace WWT.Azure
     {
         public static AzureServiceBuilder AddAzureServices(this IServiceCollection services, Action<AzureOptions> configure)
         {
-            var azureOptions = new AzureOptions();
-            configure(azureOptions);
+            var options = new AzureOptions();
+            configure(options);
 
-            if (Uri.TryCreate(azureOptions.StorageAccount, UriKind.Absolute, out var storageUri))
-            {
-                services.AddSingleton<TokenCredential, DefaultAzureCredential>();
-                services.AddTransient(ctx => new BlobServiceClient(storageUri, ctx.GetRequiredService<TokenCredential>()));
-            }
-            else
-            {
-                services.AddTransient(_ => new BlobServiceClient(azureOptions.StorageAccount));
-            }
+            services.AddSingleton<TokenCredential, DefaultAzureCredential>();
+            services.AddSingleton(options);
+            services.AddSingleton<AzureServiceAccessor>();
+            services.AddSingleton(ctx => ctx.GetRequiredService<AzureServiceAccessor>().WwtFiles);
 
             return new AzureServiceBuilder(services);
         }
@@ -59,16 +54,8 @@ namespace WWT.Azure
             configure(options);
 
             services.Services.AddSingleton(options);
-
-            if (options.UseAzurePlateFiles)
-            {
-                services.Services.AddSingleton<IPlateTilePyramid, SeekableAzurePlateTilePyramid>();
-                services.Services.AddSingleton<IKnownPlateFiles, AzureKnownPlateFile>();
-            }
-            else
-            {
-                services.Services.AddSingleton<IPlateTilePyramid, FilePlateTilePyramid>();
-            }
+            services.Services.AddSingleton<IPlateTilePyramid, MarsAwareSeekableAzurePlateTilePyramid>();
+            services.Services.AddSingleton<IKnownPlateFiles, AzureKnownPlateFile>();
 
             return services;
         }

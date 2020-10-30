@@ -88,6 +88,7 @@ namespace WWTMVC5
                 .AddAzureServices(options =>
                 {
                     options.StorageAccount = ConfigurationManager.AppSettings["AzurePlateFileStorageAccount"];
+                    options.MarsStorageAccount = ConfigurationManager.AppSettings["MarsStorageAccount"];
                 })
                 .AddPlateFiles(options =>
                 {
