@@ -6,6 +6,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="colors.map" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Services\colors.map" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\WWT.Catalog\WWT.Catalog.csproj" />
     <ProjectReference Include="..\WWT.Imaging\WWT.Imaging.csproj" />
     <ProjectReference Include="..\WWT.Maps\WWT.Maps.csproj" />
