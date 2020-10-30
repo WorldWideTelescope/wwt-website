@@ -5,9 +5,9 @@ using Xunit;
 
 namespace WWT.Providers.Tests
 {
-    public class moonOctProviderTests : ProviderTests<moonOctProvider>
+    public class hAlphaToastProviderTests : ProviderTests<HAlphaToastProvider>
     {
-        protected override int MaxLevel => 7;
+        protected override int MaxLevel => 8;
 
         protected override Action<IResponse> NullStreamResponseHandler => null;
 
@@ -15,11 +15,10 @@ namespace WWT.Providers.Tests
 
         protected override void ExpectedResponseAboveMaxLevel(IResponse response)
         {
-            Assert.Empty(response.ContentType);
             Assert.Empty(response.OutputStream.ToArray());
         }
 
         protected override Stream GetStreamFromPlateTilePyramid(IPlateTilePyramid plateTiles, int level, int x, int y)
-            => plateTiles.GetStream(Options.WwtTilesDir, "moon.plate", level, x, y);
+                => plateTiles.GetStream(Options.WwtTilesDir, "halpha.plate", level, x, y);
     }
 }

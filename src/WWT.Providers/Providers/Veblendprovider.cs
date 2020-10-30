@@ -10,11 +10,11 @@ using WWTWebservices;
 
 namespace WWT.Providers
 {
-    public class veblendProvider : RequestProvider
+    public class VeblendProvider : RequestProvider
     {
         private readonly FilePathOptions _options;
 
-        public veblendProvider(FilePathOptions options)
+        public VeblendProvider(FilePathOptions options)
         {
             _options = options;
         }

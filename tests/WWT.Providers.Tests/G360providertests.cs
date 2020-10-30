@@ -5,7 +5,7 @@ using Xunit;
 
 namespace WWT.Providers.Tests
 {
-    public class g360ProviderTests : ProviderTests<g360Provider>
+    public class g360ProviderTests : ProviderTests<G360Provider>
     {
         protected override int MaxLevel => 11;
 

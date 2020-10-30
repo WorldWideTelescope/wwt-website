@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
-    public class loginProvider : LoginUser
+    public class LoginProvider : LoginUser
     {
         public override Task RunAsync(IWwtContext context, CancellationToken token)
         {

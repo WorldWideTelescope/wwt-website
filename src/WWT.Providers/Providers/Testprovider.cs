@@ -4,11 +4,11 @@ using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
-    public class testProvider : RequestProvider
+    public class TestProvider : RequestProvider
     {
         private readonly FilePathOptions _options;
 
-        public testProvider(FilePathOptions options)
+        public TestProvider(FilePathOptions options)
         {
             _options = options;
         }

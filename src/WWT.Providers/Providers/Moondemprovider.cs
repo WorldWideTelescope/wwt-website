@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
-    public class moondemProvider : RequestProvider
+    public class MoondemProvider : RequestProvider
     {
         private readonly FilePathOptions _options;
 
-        public moondemProvider(FilePathOptions options)
+        public MoondemProvider(FilePathOptions options)
         {
             _options = options;
         }
