@@ -63,7 +63,7 @@ namespace WWT.Providers
             {
                 context.Response.ContentType = "image/png";
 
-                using (Stream s = _plateTiles.GetStream(wwtTilesDir, "sdss_8.plate", level, tileX, tileY))
+                using (Stream s = _plateTiles.GetStream(wwtTilesDir, "SDSS_8.plate", level, tileX, tileY))
                 {
                     if (s.Length == 0)
                     {
