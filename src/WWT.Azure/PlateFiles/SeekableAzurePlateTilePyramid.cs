@@ -1,4 +1,6 @@
+using Azure;
 using Azure.Storage.Blobs;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -13,10 +15,12 @@ namespace WWT.Azure
     {
         private readonly Func<string, BlobClient> _blobRetriever;
         private readonly BlobContainerClient _container;
+        private readonly ILogger<SeekableAzurePlateTilePyramid> _logger;
 
-        public SeekableAzurePlateTilePyramid(AzurePlateTilePyramidOptions options, BlobServiceClient service)
+        public SeekableAzurePlateTilePyramid(AzurePlateTilePyramidOptions options, BlobServiceClient service, ILogger<SeekableAzurePlateTilePyramid> logger)
         {
             _container = service.GetBlobContainerClient(options.Container);
+            _logger = logger;
 
             var cache = new ConcurrentDictionary<string, BlobClient>();
             _blobRetriever = plateName => cache.GetOrAdd(plateName, _container.GetBlobClient);
@@ -28,9 +32,18 @@ namespace WWT.Azure
         public Stream GetStream(string plateName, int level, int x, int y)
         {
             var client = _blobRetriever(plateName);
-            var download = client.OpenRead();
 
-            return PlateTilePyramid.GetImageStream(download, level, x, y);
+            try
+            {
+                var download = client.OpenRead();
+
+                return PlateTilePyramid.GetImageStream(download, level, x, y);
+            }
+            catch (RequestFailedException e)
+            {
+                _logger.LogError(e, "Unexpected error downloading {PlateName}", plateName);
+                return null;
+            }
         }
 
         public async IAsyncEnumerable<string> GetPlateNames([EnumeratorCancellation] CancellationToken token)
@@ -48,9 +61,18 @@ namespace WWT.Azure
         public Stream GetStream(string plateName, int tag, int level, int x, int y)
         {
             var client = _blobRetriever(plateName);
-            var stream = client.OpenRead();
 
-            return PlateFile2.GetImageStream(stream, tag, level, x, y);
+            try
+            {
+                var stream = client.OpenRead();
+
+                return PlateFile2.GetImageStream(stream, tag, level, x, y);
+            }
+            catch (RequestFailedException e)
+            {
+                _logger.LogError(e, "Unexpected error downloading {PlateName}", plateName);
+                return null;
+            }
         }
     }
 }
