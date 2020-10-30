@@ -10,6 +10,8 @@ namespace WWT.Azure
 
         public bool SkipIfExists { get; set; }
 
+        public string KnownPlateFile { get; set; }
+
         public bool OverwriteExisting { get; set; }
 
         public bool UseAzurePlateFiles { get; set; }

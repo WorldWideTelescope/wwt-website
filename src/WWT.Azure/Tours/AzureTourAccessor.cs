@@ -23,13 +23,15 @@ namespace WWT.Azure
         }
 
         public Task<Stream> GetAuthorThumbnailAsync(string id, CancellationToken token)
-           => GetStream($"{id}_AuthorThumb.bin", token);
+           => GetStream($"{NormalizeId(id)}_AuthorThumb.bin", token);
 
         public Task<Stream> GetTourAsync(string id, CancellationToken token)
-           => GetStream($"{id}.bin", token);
+           => GetStream($"{NormalizeId(id)}.bin", token);
 
         public Task<Stream> GetTourThumbnailAsync(string id, CancellationToken token)
-           => GetStream($"{id}_TourThumb.bin", token);
+           => GetStream($"{NormalizeId(id)}_TourThumb.bin", token);
+
+        private static string NormalizeId(string id) => id.ToLowerInvariant();
 
         private async Task<Stream> GetStream(string name, CancellationToken token)
         {
