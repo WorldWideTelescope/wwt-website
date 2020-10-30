@@ -1,6 +1,9 @@
-﻿using System;
+﻿using AutofacContrib.NSubstitute;
 using AutoFixture;
+using NSubstitute;
+using System;
 using System.IO;
+using System.Threading.Tasks;
 using WWTWebservices;
 using Xunit;
 
@@ -13,6 +16,27 @@ namespace WWT.Providers.Tests
         public Tiles2ProviderTests()
         {
             _fileName = Fixture.Create<string>();
+        }
+
+        [Fact]
+        public async Task NotKnownPlateFile()
+        {
+            // Arrange
+            var x = Fixture.Create<int>();
+            var y = Fixture.Create<int>();
+
+            using var container = AutoSubstitute.Configure()
+                .InitializeProviderTests(initializeKnownPlateFile: false)
+                .Provide(Options)
+                .ConfigureParameterQ(0, x, y, _fileName)
+                .Build();
+
+            // Act
+            await container.RunProviderTestAsync<Tiles2Provider>();
+
+            // Assert
+            GetStreamFromPlateTilePyramid(container.Resolve<IPlateTilePyramid>().DidNotReceive(), 0, x, y);
+            ExpectedResponseAboveMaxLevel(container.Resolve<IResponse>());
         }
 
         protected override object[] GetParameterQ(int level, int x, int y)
