@@ -3,11 +3,11 @@ using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
-    public class testfailoverProvider : RequestProvider
+    public class TestfailoverProvider : RequestProvider
     {
         private readonly FilePathOptions _options;
 
-        public testfailoverProvider(FilePathOptions options)
+        public TestfailoverProvider(FilePathOptions options)
         {
             _options = options;
         }

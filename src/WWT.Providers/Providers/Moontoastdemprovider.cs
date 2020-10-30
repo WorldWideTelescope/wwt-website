@@ -6,12 +6,12 @@ using WWTWebservices;
 
 namespace WWT.Providers
 {
-    public class moontoastdemProvider : RequestProvider
+    public class MoontoastdemProvider : RequestProvider
     {
         private readonly IPlateTilePyramid _plateTiles;
         private readonly FilePathOptions _options;
 
-        public moontoastdemProvider(IPlateTilePyramid plateTiles, FilePathOptions options)
+        public MoontoastdemProvider(IPlateTilePyramid plateTiles, FilePathOptions options)
         {
             _plateTiles = plateTiles;
             _options = options;

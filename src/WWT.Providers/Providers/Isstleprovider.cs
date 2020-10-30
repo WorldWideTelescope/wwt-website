@@ -5,21 +5,13 @@ using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
-    public class isstle2Provider : isstle
+    public class IsstleProvider : isstle
     {
         public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string url = "";
 
             {
-                //string data1 = "1 25544U 98067A   13274.85334491  .00007046  00000-0  12878-3 0  7167\n";
-                //data1 += "2 25544  51.6486 299.7368 0003212  97.7461 254.0523 15.50562392851247\n";
-                //data1 += "Cached during government shutdown";
-
-                //context.Response.Write(data1);
-                //return;
-
-
                 url = "http://spaceflight.nasa.gov/realdata/sightings/SSapplications/Post/JavaSSOP/orbit/ISS/SVPOST.html";
 
                 try

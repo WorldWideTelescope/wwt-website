@@ -6,12 +6,12 @@ using WWTWebservices;
 
 namespace WWT.Providers
 {
-    public class hAlphaToastProvider : RequestProvider
+    public class MoonOctProvider : RequestProvider
     {
         private readonly IPlateTilePyramid _plateTiles;
         private readonly FilePathOptions _options;
 
-        public hAlphaToastProvider(IPlateTilePyramid plateTiles, FilePathOptions options)
+        public MoonOctProvider(IPlateTilePyramid plateTiles, FilePathOptions options)
         {
             _plateTiles = plateTiles;
             _options = options;
@@ -29,12 +29,11 @@ namespace WWT.Providers
             {
                 context.Response.ContentType = "image/png";
 
-                using (Stream s = _plateTiles.GetStream(_options.WwtTilesDir, "halpha.plate", level, tileX, tileY))
+                using (Stream s = _plateTiles.GetStream(_options.WwtTilesDir, "moon.plate", level, tileX, tileY))
                 {
                     s.CopyTo(context.Response.OutputStream);
                     context.Response.Flush();
                     context.Response.End();
-                    return Task.CompletedTask;
                 }
             }
 

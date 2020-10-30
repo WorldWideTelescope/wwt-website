@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
-    public class mandel1Provider : RequestProvider
+    public class Mandel1Provider : RequestProvider
     {
         public override Task RunAsync(IWwtContext context, CancellationToken token)
         {

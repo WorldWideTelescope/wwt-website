@@ -5,12 +5,12 @@ using WWTWebservices;
 
 namespace WWT.Providers
 {
-    public class g360Provider : RequestProvider
+    public class G360Provider : RequestProvider
     {
         private readonly IPlateTilePyramid _plateTiles;
         private readonly FilePathOptions _options;
 
-        public g360Provider(IPlateTilePyramid plateTiles, FilePathOptions options)
+        public G360Provider(IPlateTilePyramid plateTiles, FilePathOptions options)
         {
             _plateTiles = plateTiles;
             _options = options;
