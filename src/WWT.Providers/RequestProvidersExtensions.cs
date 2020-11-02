@@ -20,6 +20,7 @@ namespace WWT.Providers
                 services.AddSingleton(type);
             }
 
+            services.AddSingleton<IOctTileMapBuilder, OctTileMapBuilder>();
             services.AddSingleton<IMandelbrot, Mandelbrot>();
             services.AddSingleton<IVirtualEarthDownloader, VirtualEarthDownloader>();
 
