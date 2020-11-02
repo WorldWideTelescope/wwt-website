@@ -49,7 +49,6 @@ namespace WWTMVC5
             endpoints.Add<DembathProvider>("/wwtweb/dembath.aspx", "text/plain");
             endpoints.Add<DemMarsProvider>("/wwtweb/demmars.aspx", "application/octet-stream");
             endpoints.Add<DemMarsNewProvider>("/wwtweb/demmars_new.aspx", "application/octet-stream");
-            endpoints.Add<DemMarsEmptyProvider>("/wwtweb/demmarsEmpty.aspx", "text/plain");
             endpoints.Add<DemTileProvider>("/wwtweb/demTile.aspx", "application/octet-stream");
             endpoints.Add<DSSProvider>("/wwtweb/DSS.aspx", "image/png");
             endpoints.Add<DSSToastProvider>("/wwtweb/DSSToast.aspx", "image/png");
