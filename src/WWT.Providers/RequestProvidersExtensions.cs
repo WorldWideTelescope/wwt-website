@@ -21,6 +21,7 @@ namespace WWT.Providers
             }
 
             services.AddSingleton<IMandelbrot, Mandelbrot>();
+            services.AddSingleton<IVirtualEarthDownloader, VirtualEarthDownloader>();
 
             var options = new FilePathOptions();
 

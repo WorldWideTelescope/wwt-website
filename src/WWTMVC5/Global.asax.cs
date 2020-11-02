@@ -118,6 +118,7 @@ namespace WWTMVC5
                     options.SlidingExpiration = TimeSpan.Parse(ConfigurationManager.AppSettings["SlidingExpiration"]);
                 })
                 .CacheType<IMandelbrot>(m => m.Add(nameof(IMandelbrot.CreateMandelbrot)))
+                .CacheType<IVirtualEarthDownloader>(plates => plates.Add(nameof(IVirtualEarthDownloader.DownloadVeTileAsync)))
                 .CacheType<IPlateTilePyramid>(plates => plates.Add(nameof(IPlateTilePyramid.GetStreamAsync)))
                 .CacheType<IThumbnailAccessor>(plates => plates
                     .Add(nameof(IThumbnailAccessor.GetThumbnailStreamAsync))

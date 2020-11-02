@@ -1,5 +1,4 @@
 using System;
-using System.Configuration;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,11 +10,13 @@ namespace WWT.Providers
     {
         private readonly IPlateTilePyramid _plateTiles;
         private readonly FilePathOptions _options;
+        private readonly IVirtualEarthDownloader _veDownloader;
 
-        public EarthMerBathProvider(IPlateTilePyramid plateTiles, FilePathOptions options)
+        public EarthMerBathProvider(IPlateTilePyramid plateTiles, FilePathOptions options, IVirtualEarthDownloader veDownloader)
         {
             _plateTiles = plateTiles;
             _options = options;
+            _veDownloader = veDownloader;
         }
 
         public override async Task RunAsync(IWwtContext context, CancellationToken token)
@@ -30,18 +31,16 @@ namespace WWT.Providers
             {
                 context.Response.Write("No image");
                 context.Response.Close();
-                return; 
             }
-
-            if (level < 8)
+            else if (level < 8)
             {
                 context.Response.ContentType = "image/png";
+
                 using (Stream s = await _plateTiles.GetStreamAsync(_options.WwtTilesDir, "BmngMerBase.plate", level, tileX, tileY, token))
                 {
-                    await s.CopyToAsync(context.Response.OutputStream, token);
+                    s.CopyTo(context.Response.OutputStream);
                     context.Response.Flush();
                     context.Response.End();
-                    return;
                 }
             }
             else if (level < 10)
@@ -56,25 +55,22 @@ namespace WWT.Providers
                 int L5 = L - 2;
                 int X5 = X % powLev5Diff;
                 int Y5 = Y % powLev5Diff;
+
                 context.Response.ContentType = "image/png";
+
                 using (Stream s = await _plateTiles.GetStreamAsync(_options.WwtTilesDir, $"BmngMerL2X{X32}Y{Y32}.plate", L5, X5, Y5, token))
                 {
-                    await s.CopyToAsync(context.Response.OutputStream, token);
+                    s.CopyTo(context.Response.OutputStream);
                     context.Response.Flush();
                     context.Response.End();
-                    return; 
                 }
             }
+            else
+            {
+                using var veTile = await _veDownloader.DownloadVeTileAsync(VirtualEarthTile.Ortho, level, tileX, tileY, token);
 
-            System.Net.WebClient client = new System.Net.WebClient();
-
-            string url = String.Format("http://a{0}.ortho.tiles.virtualearth.net/tiles/a{1}.jpeg?g=15", WWTUtil.GetServerID(tileX, tileY), WWTUtil.GetTileID(tileX, tileY, level, false));
-
-            byte[] dat = client.DownloadData(url);
-
-            client.Dispose();
-
-            context.Response.OutputStream.Write(dat, 0, dat.Length);
+                await veTile.CopyToAsync(context.Response.OutputStream, token);
+            }
         }
     }
 }
