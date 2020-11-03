@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using WWTWebservices;
 using Xunit;
 
@@ -18,9 +19,9 @@ namespace WWT.Providers.Tests
             Assert.Empty(response.OutputStream.ToArray());
         }
 
-        protected override Stream GetStreamFromPlateTilePyramid(IPlateTilePyramid plateTiles, int level, int x, int y)
+        protected override Task<Stream> GetStreamFromPlateTilePyramidAsync(IPlateTilePyramid plateTiles, int level, int x, int y)
         {
-            return plateTiles.GetStream(Options.WwtTilesDir, "dust.plate", level, x, y);
+            return plateTiles.GetStreamAsync(Options.WwtTilesDir, "dust.plate", level, x, y, default);
         }
     }
 }

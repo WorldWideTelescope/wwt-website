@@ -17,7 +17,7 @@ namespace WWT.Providers
             _options = options;
         }
 
-        public override Task RunAsync(IWwtContext context, CancellationToken token)
+        public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string query = context.Request.Params["Q"];
             string[] values = query.Split(',');
@@ -31,7 +31,7 @@ namespace WWT.Providers
                 context.Response.ContentType = "text/plain";
                 context.Response.Write("No image");
                 context.Response.End();
-                return Task.CompletedTask;
+                return;
             }
 
             if (level < 11)
@@ -40,12 +40,12 @@ namespace WWT.Providers
                 {
                     context.Response.ContentType = "image/png";
 
-                    using (Stream s = _plateTiles.GetStream(_options.WwtTilesDir, "glimpse_L0to10_x0_y0.plate", level, tileX, tileY))
+                    using (Stream s = await _plateTiles.GetStreamAsync(_options.WwtTilesDir, "glimpse_L0to10_x0_y0.plate", level, tileX, tileY, token))
                     {
                         s.CopyTo(context.Response.OutputStream);
                         context.Response.Flush();
                         context.Response.End();
-                        return Task.CompletedTask;
+                        return;
                     }
                 }
                 catch
@@ -54,7 +54,7 @@ namespace WWT.Providers
                     context.Response.ContentType = "text/plain";
                     context.Response.Write("No image");
                     context.Response.End();
-                    return Task.CompletedTask;
+                    return;
                 }
 
             }
@@ -75,12 +75,12 @@ namespace WWT.Providers
 
                     context.Response.ContentType = "image/png";
 
-                    using (Stream s = _plateTiles.GetStream(_options.WwtTilesDir, $"glimpse_L1to11_x{X8}_y{Y8}.plate", L3, X3, Y3))
+                    using (Stream s = await _plateTiles.GetStreamAsync(_options.WwtTilesDir, $"glimpse_L1to11_x{X8}_y{Y8}.plate", L3, X3, Y3, token))
                     {
                         s.CopyTo(context.Response.OutputStream);
                         context.Response.Flush();
                         context.Response.End();
-                        return Task.CompletedTask;
+                        return; 
                     }
                 }
                 catch
@@ -89,7 +89,7 @@ namespace WWT.Providers
                     context.Response.ContentType = "text/plain";
                     context.Response.Write("No image");
                     context.Response.End();
-                    return Task.CompletedTask;
+                    return; 
                 }
             }
         }

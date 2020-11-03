@@ -17,7 +17,7 @@ namespace WWT.Providers
             _options = options;
         }
 
-        public override Task RunAsync(IWwtContext context, CancellationToken token)
+        public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string wwtTilesDir = Path.Combine(_options.WwtTilesDir, "LROWAC");
 
@@ -31,19 +31,19 @@ namespace WWT.Providers
             {
                 context.Response.Write("No image");
                 context.Response.Close();
-                return Task.CompletedTask;
+                return; ;
             }
 
             if (level < 7)
             {
                 context.Response.ContentType = "image/png";
 
-                using (Stream s = _plateTiles.GetStream(wwtTilesDir, "LROWAC_L0X0Y0.plate", level, tileX, tileY))
+                using (Stream s = await _plateTiles.GetStreamAsync(wwtTilesDir, "LROWAC_L0X0Y0.plate", level, tileX, tileY, token))
                 {
-                    s.CopyTo(context.Response.OutputStream);
+                    await s.CopyToAsync(context.Response.OutputStream, token);
                     context.Response.Flush();
                     context.Response.End();
-                    return Task.CompletedTask;
+                    return; ;
                 }
             }
             else
@@ -57,12 +57,12 @@ namespace WWT.Providers
                 int Y5 = tileY % powLev5Diff;
                 context.Response.ContentType = "image/png";
 
-                using (Stream s = _plateTiles.GetStream(wwtTilesDir, $"LROWAC_L3x{X32}y{Y32}.plate", L5, X5, Y5))
+                using (Stream s = await _plateTiles.GetStreamAsync(wwtTilesDir, $"LROWAC_L3x{X32}y{Y32}.plate", L5, X5, Y5, token))
                 {
-                    s.CopyTo(context.Response.OutputStream);
+                    await s.CopyToAsync(context.Response.OutputStream, token);
                     context.Response.Flush();
                     context.Response.End();
-                    return Task.CompletedTask;
+                    return; ;
                 }
             }
         }

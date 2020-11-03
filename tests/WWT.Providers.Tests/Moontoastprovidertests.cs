@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using WWTWebservices;
 using Xunit;
 
@@ -19,13 +20,13 @@ namespace WWT.Providers.Tests
             Assert.Empty(response.OutputStream.ToArray());
         }
 
-        protected override Stream GetStreamFromPlateTilePyramid(IPlateTilePyramid plateTiles, int level, int x, int y)
+        protected override Task<Stream> GetStreamFromPlateTilePyramidAsync(IPlateTilePyramid plateTiles, int level, int x, int y)
         {
             string prefix = Path.Combine(Options.WwtTilesDir, "LROWAC");
 
             if (level < 7)
             {
-                return plateTiles.GetStream(prefix, "LROWAC_L0X0Y0.plate", level, x, y);
+                return plateTiles.GetStreamAsync(prefix, "LROWAC_L0X0Y0.plate", level, x, y, default);
             }
             else
             {
@@ -37,7 +38,7 @@ namespace WWT.Providers.Tests
                 int X5 = x % powLev5Diff;
                 int Y5 = y % powLev5Diff;
 
-                return plateTiles.GetStream(prefix, $"LROWAC_L3x{X32}y{Y32}.plate", L5, X5, Y5);
+                return plateTiles.GetStreamAsync(prefix, $"LROWAC_L3x{X32}y{Y32}.plate", L5, X5, Y5, default);
             }
         }
     }

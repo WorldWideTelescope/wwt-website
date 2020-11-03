@@ -20,7 +20,7 @@ namespace WWT.Providers
             _options = options;
         }
 
-        public override Task RunAsync(IWwtContext context, CancellationToken token)
+        public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string wwtTilesDir = _options.WwtTilesDir;
             string DSSTileCache = _options.DSSTileCache;
@@ -34,7 +34,7 @@ namespace WWT.Providers
             {
                 context.Response.Write("No image");
                 context.Response.Close();
-                return Task.CompletedTask;
+                return;
             }
 
             string filename = $@"{DSSTileCache}\EarthBlend\level{level}\{tileY}\{tileX}_{tileY}.jpg";
@@ -42,15 +42,12 @@ namespace WWT.Providers
             {
                 context.Response.ContentType = "image/png";
 
-                using (Stream s = _plateTiles.GetStream(wwtTilesDir, "BmngMerBase.plate", level, tileX, tileY))
+                using (Stream s = await _plateTiles.GetStreamAsync(wwtTilesDir, "BmngMerBase.plate", level, tileX, tileY, token))
                 {
-                    int length = (int)s.Length;
-                    byte[] data = new byte[length];
-                    s.Read(data, 0, length);
-                    context.Response.OutputStream.Write(data, 0, length);
+                    await s.CopyToAsync(context.Response.OutputStream, token);
                     context.Response.Flush();
                     context.Response.End();
-                    return Task.CompletedTask;
+                    return;
                 }
             }
             else if (level == 8)
@@ -68,15 +65,12 @@ namespace WWT.Providers
 
                 context.Response.ContentType = "image/png";
 
-                using (Stream s = _plateTiles.GetStream(wwtTilesDir, $"BmngMerL2X{X32}Y{Y32}.plate", L5, X5, Y5))
+                using (Stream s = await _plateTiles.GetStreamAsync(wwtTilesDir, $"BmngMerL2X{X32}Y{Y32}.plate", L5, X5, Y5, token))
                 {
-                    int length = (int)s.Length;
-                    byte[] data = new byte[length];
-                    s.Read(data, 0, length);
-                    context.Response.OutputStream.Write(data, 0, length);
+                    await s.CopyToAsync(context.Response.OutputStream, token);
                     context.Response.Flush();
                     context.Response.End();
-                    return Task.CompletedTask;
+                    return;
                 }
 
             }
@@ -115,7 +109,7 @@ namespace WWT.Providers
                         ColorMatrixFlag.Default,
                         ColorAdjustType.Bitmap);
                     context.Response.ContentType = "image/png";
-                    using (Stream s = _plateTiles.GetStream(wwtTilesDir, $"BmngMerL2X{X32}Y{Y32}.plate", L5, X5, Y5))
+                    using (Stream s = await _plateTiles.GetStreamAsync(wwtTilesDir, $"BmngMerL2X{X32}Y{Y32}.plate", L5, X5, Y5, token))
                     {
                         Bitmap bmp = new Bitmap(s);
                         Graphics g = Graphics.FromImage(bmp);
@@ -137,7 +131,7 @@ namespace WWT.Providers
                 }
 
                 context.Response.WriteFile(filename);
-                return Task.CompletedTask;
+                return; 
             }
 
 
@@ -152,8 +146,6 @@ namespace WWT.Providers
             client.Dispose();
 
             context.Response.OutputStream.Write(dat, 0, dat.Length);
-
-            return Task.CompletedTask;
         }
     }
 }

@@ -20,7 +20,7 @@ namespace WWT.Providers
             _options = options;
         }
 
-        public override Task RunAsync(IWwtContext context, CancellationToken token)
+        public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string query = context.Request.Params["Q"];
             string[] values = query.Split(',');
@@ -36,7 +36,7 @@ namespace WWT.Providers
             if (_knownPlateFiles.TryNormalizePlateName(values[3], out var file) && level < 10)
             {
                 context.Response.ContentType = "image/png";
-                using (Stream s = _plateTiles.GetStream(_options.WwtTilesDir, $"{file}.plate", -1, level, tileX, tileY))
+                using (Stream s = await _plateTiles.GetStreamAsync(_options.WwtTilesDir, $"{file}.plate", -1, level, tileX, tileY, token))
                 {
                     if (s.Length == 0)
                     {
@@ -47,14 +47,14 @@ namespace WWT.Providers
                     }
                     else
                     {
-                        s.CopyTo(context.Response.OutputStream);
+                        await s.CopyToAsync(context.Response.OutputStream, token);
                         context.Response.Flush();
                         context.Response.End();
                     }
                 }
             }
 
-            return Task.CompletedTask;
+            return;;
         }
     }
 }

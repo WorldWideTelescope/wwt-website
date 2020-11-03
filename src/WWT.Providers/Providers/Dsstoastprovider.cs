@@ -16,7 +16,7 @@ namespace WWT.Providers
             _options = options;
         }
 
-        public override Task RunAsync(IWwtContext context, CancellationToken token)
+        public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string query = context.Request.Params["Q"];
             string[] values = query.Split(',');
@@ -33,9 +33,9 @@ namespace WWT.Providers
             {
                 context.Response.ContentType = "image/png";
 
-                using (var s = _plateTile.GetStream(_options.WwtTilesDir, "DSSToast.plate", level, tileX, tileY))
+                using (var s = await _plateTile.GetStreamAsync(_options.WwtTilesDir, "DSSToast.plate", level, tileX, tileY, token))
                 {
-                    s.CopyTo(context.Response.OutputStream);
+                    await s.CopyToAsync(context.Response.OutputStream, token);
                     context.Response.Flush();
                     context.Response.End();
                 }
@@ -54,15 +54,13 @@ namespace WWT.Providers
 
                 var filename = $"DSSpngL5to12_x{X32}_y{Y32}.plate";
 
-                using (var s = _plateTile.GetStream(_options.DssToastPng, filename, L5, X5, Y5))
+                using (var s = await _plateTile.GetStreamAsync(_options.DssToastPng, filename, L5, X5, Y5, token))
                 {
-                    s.CopyTo(context.Response.OutputStream);
+                    await s.CopyToAsync(context.Response.OutputStream, token);
                     context.Response.Flush();
                     context.Response.End();
                 }
             }
-
-            return Task.CompletedTask;
         }
     }
 }

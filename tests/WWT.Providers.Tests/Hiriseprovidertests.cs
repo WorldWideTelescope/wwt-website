@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using WWTWebservices;
 using Xunit;
 
@@ -16,11 +17,11 @@ namespace WWT.Providers.Tests
             Assert.Empty(response.OutputStream.ToArray());
         }
 
-        protected override Stream GetStreamFromPlateTilePyramid(IPlateTilePyramid plateTiles, int level, int x, int y)
+        protected override Task<Stream> GetStreamFromPlateTilePyramidAsync(IPlateTilePyramid plateTiles, int level, int x, int y)
         {
             var index = DirectoryEntry.ComputeHash(level + 128, x, y) % 300;
 
-            return plateTiles.GetStream(@"\\wwt-mars\marsroot\hirise", $"hiriseV5_{index}.plate", -1, level, x, y);
+            return plateTiles.GetStreamAsync(@"\\wwt-mars\marsroot\hirise", $"hiriseV5_{index}.plate", -1, level, x, y, default);
         }
     }
 }

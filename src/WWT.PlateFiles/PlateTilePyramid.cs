@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using WWT.PlateFiles;
 
 /* Jonathan Fay wrote this, except for the bits polluted by Dinoj, which are between <dinoj>...</dinoj> tags
@@ -236,12 +238,12 @@ namespace WWTWebservices
             return null;
         }
 
-        public static Stream GetImageStream(Stream f, int level, int x, int y)
+        public static async Task<Stream> GetImageStreamAsync(Stream f, int level, int x, int y, CancellationToken token)
         {
             var offset = GetFileIndexOffset(level, x, y);
             f.Seek(offset, SeekOrigin.Begin);
 
-            var start = GetNodeInfo(f, offset, out var length);
+            var (start, length) = await GetNodeInfoAsync(f, offset, token).ConfigureAwait(false);
 
             return new StreamSlice(f, start, length);
         }
@@ -264,6 +266,18 @@ namespace WWTWebservices
                 f.Close();
             }
             return ms;
+        }
+
+        public static async ValueTask<(uint start, uint length)> GetNodeInfoAsync(Stream fs, uint offset, CancellationToken token)
+        {
+            Byte[] buf = new Byte[8];
+            fs.Seek(offset, SeekOrigin.Begin);
+            await fs.ReadAsync(buf, 0, 8, token).ConfigureAwait(false);
+
+            var length = (uint)(buf[4] + (buf[5] << 8) + (buf[6] << 16) + (buf[7] << 24));
+            var start = (uint)((buf[0] + (buf[1] << 8) + (buf[2] << 16) + (buf[3] << 24)));
+
+            return (start, length);
         }
 
         public static uint GetNodeInfo(Stream fs, uint offset, out uint length)

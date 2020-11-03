@@ -19,7 +19,7 @@ namespace WWT.Providers
             _options = options;
         }
 
-        public override Task RunAsync(IWwtContext context, CancellationToken token)
+        public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string query = context.Request.Params["Q"];
             string[] values = query.Split(',');
@@ -36,7 +36,7 @@ namespace WWT.Providers
                     if (level > 14)
                     {
                         context.Response.StatusCode = 404;
-                        return Task.CompletedTask;
+                        return; ;
                     }
 
                     int ll = level;
@@ -63,7 +63,7 @@ namespace WWT.Providers
                             height -= 1;
                         }
 
-                        using (var stream = _plateTiles.GetStream(_options.WwtTilesDir, "marsbasemap.plate", -1, 8, tx, ty))
+                        using (var stream = await _plateTiles.GetStreamAsync(_options.WwtTilesDir, "marsbasemap.plate", -1, 8, tx, ty, token))
                         using (var bmp1 = new Bitmap(stream))
                         {
                             g.DrawImage(bmp1, new RectangleF(0, 0, 256, 256), new RectangleF(offsetX, offsetY, width, height), GraphicsUnit.Pixel);
@@ -71,14 +71,14 @@ namespace WWT.Providers
                     }
                     else
                     {
-                        using (var stream = _plateTiles.GetStream(_options.WwtTilesDir, "marsbasemap.plate", -1, ll, xx, yy))
+                        using (var stream = await _plateTiles.GetStreamAsync(_options.WwtTilesDir, "marsbasemap.plate", -1, ll, xx, yy, token))
                         using (var bmp1 = new Bitmap(stream))
                         {
                             g.DrawImageUnscaled(bmp1, new Point(0, 0));
                         }
                     }
 
-                    using (var stream = LoadMoc(ll, xx, yy))
+                    using (var stream = await LoadMocAsync(ll, xx, yy, token))
                     {
                         if (stream != null)
                         {
@@ -93,14 +93,14 @@ namespace WWT.Providers
                 output.Save(context.Response.OutputStream, ImageFormat.Png);
             }
 
-            return Task.CompletedTask;
+            return; ;
         }
 
-        private Stream LoadMoc(int level, int tileX, int tileY)
+        private Task<Stream> LoadMocAsync(int level, int tileX, int tileY, CancellationToken token)
         {
             UInt32 index = ComputeHash(level, tileX, tileY) % 400;
 
-            return _plateTiles.GetStream("https://marsstage.blob.core.windows.net/moc", $"mocv5_{index}.plate", -1, level, tileX, tileY);
+            return _plateTiles.GetStreamAsync("https://marsstage.blob.core.windows.net/moc", $"mocv5_{index}.plate", -1, level, tileX, tileY, token);
         }
 
         private UInt32 ComputeHash(int level, int x, int y)

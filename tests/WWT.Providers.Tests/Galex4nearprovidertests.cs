@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using WWTWebservices;
 
 namespace WWT.Providers.Tests
@@ -8,7 +9,7 @@ namespace WWT.Providers.Tests
     {
         protected override int MaxLevel => 10;
 
-        protected override Stream GetStreamFromPlateTilePyramid(IPlateTilePyramid plateTiles, int level, int x, int y)
+        protected override Task<Stream> GetStreamFromPlateTilePyramidAsync(IPlateTilePyramid plateTiles, int level, int x, int y)
         {
             if (level == 9 || level == 10)
             {
@@ -21,10 +22,10 @@ namespace WWT.Providers.Tests
                 var X3 = x % powLev3Diff;
                 var Y3 = y % powLev3Diff;
 
-                return plateTiles.GetStream(Options.WwtTilesDir, plateName, L3, X3, Y3);
+                return plateTiles.GetStreamAsync(Options.WwtTilesDir, plateName, L3, X3, Y3, default);
             }
 
-            return plateTiles.GetStream(Options.WwtTilesDir, "Galex4Near_L0to8_x0_y0.plate", level, x, y);
+            return plateTiles.GetStreamAsync(Options.WwtTilesDir, "Galex4Near_L0to8_x0_y0.plate", level, x, y, default);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace WWT.Providers
             _plateTile = plateTile;
         }
 
-        public override Task RunAsync(IWwtContext context, CancellationToken token)
+        public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string query = context.Request.Params["Q"];
             string[] values = query.Split(',');
@@ -26,7 +26,7 @@ namespace WWT.Providers
             {
                 var index = ComputeHash(level, tileX, tileY) % 400;
 
-                using (var s = _plateTile.GetStream(@"\\wwt-mars\marsroot\dem\", $"marsToastDem_{index}.plate", -1, level, tileX, tileY))
+                using (var s = await _plateTile.GetStreamAsync(@"\\wwt-mars\marsroot\dem\", $"marsToastDem_{index}.plate", -1, level, tileX, tileY, token))
                 {
                     if (s == null || (int)s.Length == 0)
                     {
@@ -37,14 +37,12 @@ namespace WWT.Providers
                     }
                     else
                     {
-                        s.CopyTo(context.Response.OutputStream);
+                        await s.CopyToAsync(context.Response.OutputStream, token);
                         context.Response.Flush();
                         context.Response.End();
                     }
                 }
             }
-
-            return Task.CompletedTask;
         }
 
         private uint ComputeHash(int level, int x, int y)
