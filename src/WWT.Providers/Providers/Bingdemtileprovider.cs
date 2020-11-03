@@ -4,13 +4,19 @@ using System.IO;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using WWTWebservices;
 
 namespace WWT.Providers
 {
     public class BingDemTileProvider : RequestProvider
     {
-        public override Task RunAsync(IWwtContext context, CancellationToken token)
+        private readonly IVirtualEarthDownloader _veDownloader;
+
+        public BingDemTileProvider(IVirtualEarthDownloader veDownloader)
+        {
+            _veDownloader = veDownloader; 
+        }
+
+        public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string query = context.Request.Params["Q"];
             string[] values = query.Split(',');
@@ -30,14 +36,7 @@ namespace WWT.Providers
             var parentX = tileX / tileSize;
             var parentY = tileY / tileSize;
 
-            string id = WWTUtil.GetTileID(parentX, parentY, parentL, false);
-            int server = WWTUtil.GetServerID(parentX, parentY);
-            WebClient client = new WebClient();
-
-            string url = $"http://ecn.t{server}.tiles.virtualearth.net/tiles/d{id}.elv?g=1&n=z";
-
-            byte[] data = client.DownloadData(url);
-            MemoryStream stream = new MemoryStream(data);
+            using var stream = await _veDownloader.DownloadVeTileAsync(VirtualEarthTile.Ecn, parentL, parentX, parentY, token);
 
 
             DemTile tile = DemCodec.Decompress(stream);
@@ -59,9 +58,10 @@ namespace WWT.Providers
                     yh += count;
 
                 }
-                data = new byte[DemData.Length * 4];
-                MemoryStream ms = new MemoryStream(data);
-                BinaryWriter bw = new BinaryWriter(ms);
+
+                var data = new byte[DemData.Length * 4];
+                using var ms = new MemoryStream(data);
+                var bw = new BinaryWriter(ms);
 
                 foreach (float sample in DemData)
                 {
@@ -72,8 +72,6 @@ namespace WWT.Providers
             }
 
             context.Response.End();
-
-            return Task.CompletedTask;
         }
     }
 }
