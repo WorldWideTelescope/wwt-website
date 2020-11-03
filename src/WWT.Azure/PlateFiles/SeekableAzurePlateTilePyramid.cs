@@ -18,7 +18,7 @@ namespace WWT.Azure
         private readonly Func<string, BlobClient> _blobRetriever;
         private readonly BlobContainerClient _container;
 
-        private readonly BlobOpenReadOptions _readOptions = new BlobOpenReadOptions(allowModifications: false)
+        protected readonly BlobOpenReadOptions _readOptions = new BlobOpenReadOptions(allowModifications: false)
         {
             BufferSize = 150 * 1024 // Default to 150kb instead of 4mb. Images are 256x256, and most are less than 150kb
         };
@@ -34,7 +34,7 @@ namespace WWT.Azure
             _blobRetriever = plateName => cache.GetOrAdd(plateName, _container.GetBlobClient);
         }
 
-        public async Task<Stream> GetStreamAsync(string pathPrefix, string plateName, int level, int x, int y, CancellationToken token)
+        public virtual async Task<Stream> GetStreamAsync(string pathPrefix, string plateName, int level, int x, int y, CancellationToken token)
         {
             var client = GetBlob(pathPrefix, plateName);
 

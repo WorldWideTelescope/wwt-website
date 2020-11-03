@@ -54,7 +54,7 @@ namespace WWT.Azure
             configure(options);
 
             services.Services.AddSingleton(options);
-            services.Services.AddSingleton<IPlateTilePyramid, MarsAwareSeekableAzurePlateTilePyramid>();
+            services.Services.AddSingleton<IPlateTilePyramid, MarsMolaAwareSeekableAzurePlateTilePyramid>();
             services.Services.AddSingleton<IKnownPlateFiles, AzureKnownPlateFile>();
 
             return services;

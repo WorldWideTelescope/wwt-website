@@ -2,74 +2,79 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using WWTWebservices;
 
 namespace WWT.Providers
 {
     public class MartianTileProvider : RequestProvider
     {
-        private readonly FilePathOptions _options;
+        private readonly IPlateTilePyramid _plateTiles;
 
-        public MartianTileProvider(FilePathOptions options)
+        public MartianTileProvider(IPlateTilePyramid plateTiles)
         {
-            _options = options;
+            _plateTiles = plateTiles;
         }
 
-        public override Task RunAsync(IWwtContext context, CancellationToken token)
+        public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string query = context.Request.Params["Q"];
+
             string[] values = query.Split(',');
             int level = Convert.ToInt32(values[0]);
             int tileX = Convert.ToInt32(values[1]);
             int tileY = Convert.ToInt32(values[2]);
-            string dataset = values[3];
-            string id = "nothing";
 
-            switch (dataset)
+            context.Response.ContentType = "image/png";
+
+            switch (values[3])
             {
                 case "mars_base_map":
-                    id = "1738422189";
+                    if (level < 18)
+                    {
+                        using (Stream s = await _plateTiles.GetStreamAsync(@"F:\WWTTiles", "marsbasemap.plate", -1, level, tileX, tileY, token))
+                        {
+                            if (s == null || (int)s.Length == 0)
+                            {
+                                context.Response.Clear();
+                                context.Response.ContentType = "text/plain";
+                                context.Response.Write("No image");
+                                context.Response.End();
+                            }
+                            else
+                            {
+                                await s.CopyToAsync(context.Response.OutputStream);
+                                context.Response.Flush();
+                                context.Response.End();
+                            }
+                        }
+                    }
                     break;
                 case "mars_terrain_color":
-                    id = "220581050";
+                    {
+                        using (var s = await _plateTiles.GetStreamAsync("https://wwtfiles.blob.core.windows.net/marsmola", "marsmola.plate", level, tileX, tileY, token))
+                        {
+                            if (s == null || (int)s.Length == 0)
+                            {
+                                context.Response.Clear();
+                                context.Response.ContentType = "text/plain";
+                                context.Response.Write("No image");
+                                context.Response.End();
+                            }
+                            else
+                            {
+                                await s.CopyToAsync(context.Response.OutputStream);
+                                context.Response.Flush();
+                                context.Response.End();
+                            }
+                        }
+                    }
                     break;
-                case "mars_hirise":
-                    id = "109459728";
+                default:
+                    {
+                        context.Response.StatusCode = 404;
+                    }
                     break;
-                case "mars_moc":
-                    id = "252927426";
-                    break;
-                case "mars_historic_green":
-                    id = "1194136815";
-                    break;
-                case "mars_historic_schiaparelli":
-                    id = "1113282550";
-                    break;
-                case "mars_historic_lowell":
-                    id = "675790761";
-                    break;
-                case "mars_historic_antoniadi":
-                    id = "1648157275";
-                    break;
-                case "mars_historic_mec1":
-                    id = "2141096698";
-                    break;
-
             }
-
-            string filename = $@"{_options.DSSTileCache}\wwtcache\mars\{id}\{level}\{tileY}\{tileX}_{tileY}.png";
-
-            if (!File.Exists(filename))
-            {
-                // This used to download from $"http://wwt.nasa.gov/wwt/p/{dataset}/{level}/{tileX}/{tileY}.png"
-                // That URL is no longer available.
-                context.Response.StatusCode = 404;
-            }
-            else
-            {
-                context.Response.WriteFile(filename);
-            }
-
-            return Task.CompletedTask;
         }
     }
 }
