@@ -16,7 +16,7 @@ namespace WWT.Providers.Tests
 
 
         protected override Task<Stream> GetStreamFromPlateTilePyramidAsync(IPlateTilePyramid plateTiles, int level, int x, int y)
-            => plateTiles.GetStreamAsync(Options.WwtTilesDir, "rass.plate", level, x, y, default);
+            => plateTiles.GetStreamAsync(Options.WwtTilesDir, "RASS.plate", level, x, y, default);
 
         protected override void ExpectedResponseAboveMaxLevel(IResponse response)
         {

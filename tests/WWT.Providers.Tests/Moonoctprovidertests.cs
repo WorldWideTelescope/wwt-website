@@ -21,6 +21,6 @@ namespace WWT.Providers.Tests
         }
 
         protected override Task<Stream> GetStreamFromPlateTilePyramidAsync(IPlateTilePyramid plateTiles, int level, int x, int y)
-            => plateTiles.GetStreamAsync(Options.WwtTilesDir, "moon.plate", level, x, y, default);
+            => plateTiles.GetStreamAsync(Options.WwtTilesDir, "Moon.plate", level, x, y, default);
     }
 }

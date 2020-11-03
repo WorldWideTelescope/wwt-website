@@ -28,7 +28,7 @@ namespace WWT.Providers
             {
                 context.Response.ContentType = "image/png";
 
-                using (var s = await _plateTiles.GetStreamAsync(_options.WwtTilesDir, "mars.plate", level, tileX, tileY, token))
+                using (var s = await _plateTiles.GetStreamAsync(_options.WwtTilesDir, "Mars.plate", level, tileX, tileY, token))
                 {
                     await s.CopyToAsync(context.Response.OutputStream, token);
                     context.Response.Flush();
