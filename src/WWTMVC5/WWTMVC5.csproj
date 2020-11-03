@@ -545,6 +545,9 @@
     <Content Include="Scripts\factory\dataproxy.js" />
     <Content Include="Content\CSS\sprites.less" />
     <Content Include="Content\CSS\multiselect.less" />
+    <Content Include="ApplicationInsights.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Properties\PublishProfiles\wwt.thewebkid.com.pubxml" />
     <None Include="Properties\PublishProfiles\wwtstaging - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy.pubxml" />
