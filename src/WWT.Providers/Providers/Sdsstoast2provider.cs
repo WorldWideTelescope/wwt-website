@@ -38,7 +38,7 @@ namespace WWT.Providers
             {
                 context.Response.ContentType = "image/png";
 
-                using (Stream s = await _plateTiles.GetStreamAsync(_options.WwtTilesDir, "sdss_8.plate", level, tileX, tileY, token))
+                using (Stream s = await _plateTiles.GetStreamAsync(_options.WwtTilesDir, "SDSS_8.plate", level, tileX, tileY, token))
                 {
                     await s.CopyToAsync(context.Response.OutputStream, token);
                     context.Response.Flush();
