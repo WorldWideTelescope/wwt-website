@@ -91,7 +91,6 @@ namespace WWTMVC5
             endpoints.Add<MarsMocProvider>("/wwtweb/MarsMoc.aspx", "image/png");
             endpoints.Add<MartianTileProvider>("/wwtweb/MartianTile.aspx", "text/plain");
             endpoints.Add<MartianTile2Provider>("/wwtweb/MartianTile2.aspx", "image/png");
-            endpoints.Add<MartianTileEmptyProvider>("/wwtweb/MartianTileEmpty.aspx", "text/plain");
             endpoints.Add<MartianTileProvider>("/wwtweb/MartianTileNew.aspx", "text/plain");
             endpoints.Add<MipsgalProvider>("/wwtweb/Mipsgal.aspx", "image/png");
             endpoints.Add<MoondemProvider>("/wwtweb/moondem.aspx", "application/octet-stream");
