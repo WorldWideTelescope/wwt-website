@@ -1,5 +1,6 @@
 using Azure;
 using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Concurrent;
@@ -15,6 +16,11 @@ namespace WWT.Azure
     {
         private readonly Func<string, BlobClient> _blobRetriever;
         private readonly BlobContainerClient _container;
+
+        private readonly BlobOpenReadOptions _readOptions = new BlobOpenReadOptions(allowModifications: false)
+        {
+            BufferSize = 150 * 1024 // Default to 150kb instead of 4mb. Images are 256x256, and most are less than 150kb
+        };
 
         protected readonly ILogger<SeekableAzurePlateTilePyramid> _logger;
 
@@ -33,7 +39,8 @@ namespace WWT.Azure
 
             try
             {
-                var download = client.OpenRead();
+              
+                var download = client.OpenRead(_readOptions);
 
                 return PlateTilePyramid.GetImageStream(download, level, x, y);
             }
@@ -59,7 +66,7 @@ namespace WWT.Azure
 
             try
             {
-                var stream = client.OpenRead();
+                var stream = client.OpenRead(_readOptions);
 
                 return PlateFile2.GetImageStream(stream, tag, level, x, y);
             }
