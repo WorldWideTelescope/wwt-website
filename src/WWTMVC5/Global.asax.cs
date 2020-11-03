@@ -119,6 +119,7 @@ namespace WWTMVC5
                 })
                 .CacheType<IMandelbrot>(m => m.Add(nameof(IMandelbrot.CreateMandelbrot)))
                 .CacheType<IVirtualEarthDownloader>(plates => plates.Add(nameof(IVirtualEarthDownloader.DownloadVeTileAsync)))
+                .CacheType<IOctTileMapBuilder>(plates => plates.Add(nameof(IOctTileMapBuilder.GetOctTileAsync)))
                 .CacheType<IPlateTilePyramid>(plates => plates.Add(nameof(IPlateTilePyramid.GetStreamAsync)))
                 .CacheType<IThumbnailAccessor>(plates => plates
                     .Add(nameof(IThumbnailAccessor.GetThumbnailStreamAsync))
