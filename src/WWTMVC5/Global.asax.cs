@@ -133,6 +133,7 @@ namespace WWTMVC5
             {
                 builder.AddFilter("Swick.Cache", LogLevel.Trace);
                 builder.AddDebug();
+                builder.AddApplicationInsights();
             });
 
             return services.BuildServiceProvider();
