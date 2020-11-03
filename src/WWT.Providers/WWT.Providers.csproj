@@ -20,7 +20,6 @@
     <ProjectReference Include="..\WWT.Maps\WWT.Maps.csproj" />
     <ProjectReference Include="..\WWT.PlateFiles\WWT.PlateFiles.csproj" />
     <ProjectReference Include="..\WWT.Tours\WWT.Tours.csproj" />
-    <ProjectReference Include="..\WWTWebservices\WWTWebservices.csproj" />
   </ItemGroup>
 
   <ItemGroup>
