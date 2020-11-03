@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Threading.Tasks;
 using WWTWebservices;
 
 namespace WWT.Azure
@@ -33,16 +34,15 @@ namespace WWT.Azure
             _blobRetriever = plateName => cache.GetOrAdd(plateName, _container.GetBlobClient);
         }
 
-        public Stream GetStream(string pathPrefix, string plateName, int level, int x, int y)
+        public async Task<Stream> GetStreamAsync(string pathPrefix, string plateName, int level, int x, int y, CancellationToken token)
         {
             var client = GetBlob(pathPrefix, plateName);
 
             try
             {
-              
-                var download = client.OpenRead(_readOptions);
+                var download = await client.OpenReadAsync(_readOptions, token).ConfigureAwait(false);
 
-                return PlateTilePyramid.GetImageStream(download, level, x, y);
+                return await PlateTilePyramid.GetImageStreamAsync(download, level, x, y, token).ConfigureAwait(false);
             }
             catch (RequestFailedException e)
             {
@@ -60,13 +60,13 @@ namespace WWT.Azure
             }
         }
 
-        public Stream GetStream(string pathPrefix, string plateName, int tag, int level, int x, int y)
+        public async Task<Stream> GetStreamAsync(string pathPrefix, string plateName, int tag, int level, int x, int y, CancellationToken token)
         {
             var client = GetBlob(pathPrefix, plateName);
 
             try
             {
-                var stream = client.OpenRead(_readOptions);
+                var stream = await client.OpenReadAsync(_readOptions, token).ConfigureAwait(false);
 
                 return PlateFile2.GetImageStream(stream, tag, level, x, y);
             }

@@ -62,13 +62,13 @@ namespace WWT.Azure
             return true;
         }
 
-        Stream IPlateTilePyramid.GetStream(string pathPrefix, string plateName, int level, int x, int y)
-            => GetStream(plateName, level, x, y);
+        Task<Stream> IPlateTilePyramid.GetStreamAsync(string pathPrefix, string plateName, int level, int x, int y, CancellationToken token)
+            => GetStreamAsync(plateName, level, x, y, token);
 
-        public Stream GetStream(string plateName, int level, int x, int y)
+        public async Task<Stream> GetStreamAsync(string plateName, int level, int x, int y, CancellationToken token)
         {
-            var client = GetBlobClientAsync(plateName, level, x, y);
-            var download = client.Result.Download();
+            var client = await GetBlobClientAsync(plateName, level, x, y).ConfigureAwait(false);
+            var download = client.Download();
 
             return download.Value.Content;
         }
@@ -135,11 +135,11 @@ namespace WWT.Azure
             }
         }
 
-        public Stream GetStream(string pathPrefix, string plateName, int tag, int level, int x, int y)
+        public async Task<Stream> GetStreamAsync(string pathPrefix, string plateName, int tag, int level, int x, int y, CancellationToken token)
         {
-            var container = GetBlobContainerClientAsync(plateName).Result;
+            var container = await GetBlobContainerClientAsync(plateName).ConfigureAwait(false);
             var client = container.GetBlobClient(plateName);
-            var stream = client.OpenRead();
+            var stream = await client.OpenReadAsync();
 
             return PlateFile2.GetImageStream(stream, tag, level, x, y);
         }

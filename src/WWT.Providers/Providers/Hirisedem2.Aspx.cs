@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using WWTWebservices;
 
 namespace WWT.Providers
@@ -99,9 +101,9 @@ namespace WWT.Providers
             _options = options;
         }
 
-        public Stream GetMolaDemTileStream(int level, int x, int y)
+        public async Task<Stream> GetMolaDemTileStreamAsync(int level, int x, int y, CancellationToken token)
         {
-            float[] dataOut = GetMolaDemTile(level, x, y);
+            float[] dataOut = await GetMolaDemTileAsync(level, x, y, token);
             MemoryStream stream = new MemoryStream();
             BinaryWriter bw = new BinaryWriter(stream);
 
@@ -115,11 +117,11 @@ namespace WWT.Providers
             return stream;
         }
 
-        public Stream MergeMolaDemTileStream(int level, int x, int y, Stream tile)
+        public async Task<Stream> MergeMolaDemTileStream(int level, int x, int y, Stream tile, CancellationToken token = default)
         {
             float[] dataIn = ReadDemStream(tile);
 
-            float[] dataOut = GetMolaDemTile(level, x, y);
+            float[] dataOut = await GetMolaDemTileAsync(level, x, y, token);
 
             for (int i = 0; i < 513; i++)
             {
@@ -142,13 +144,13 @@ namespace WWT.Providers
             return stream;
         }
 
-        private float[] GetMolaDemTile(int level, int xx, int yy)
+        private async ValueTask<float[]> GetMolaDemTileAsync(int level, int xx, int yy, CancellationToken token)
         {
-            float[] data = GetMolaDEMTileRaw(level, xx, yy);
+            float[] data = await GetMolaDEMTileRawAsync(level, xx, yy, token);
 
             if (data == null)
             {
-                float[] parent = GetMolaDemTile(level - 1, xx / 2, yy / 2);
+                float[] parent = await GetMolaDemTileAsync(level - 1, xx / 2, yy / 2, token);
 
                 bool backslash = ComputeBackslash(level, xx, yy);
 
@@ -259,15 +261,16 @@ namespace WWT.Providers
             return demArray[(16 - y) * 17 + x];
         }
 
-        private float[] GetMolaDEMTileRaw(int level, int x, int y)
+        private async ValueTask<float[]> GetMolaDEMTileRawAsync(int level, int x, int y, CancellationToken token)
         {
-            Stream stream = _plateTiles.GetStream(_options.WwtTilesDir, "marsToastDem.plate", -1, level, x, y);
-
-            if (stream != null)
+            using (var stream = await _plateTiles.GetStreamAsync(_options.WwtTilesDir, "marsToastDem.plate", -1, level, x, y, token))
             {
-                return ReadDemStream(stream);
+                if (stream != null)
+                {
+                    return ReadDemStream(stream);
+                }
+                return null;
             }
-            return null;
         }
 
         private static float[] ReadDemStream(Stream stream)

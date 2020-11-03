@@ -17,7 +17,7 @@ namespace WWT.Providers
             _options = options;
         }
 
-        public override Task RunAsync(IWwtContext context, CancellationToken token)
+        public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string query = context.Request.Params["Q"];
             string[] values = query.Split(',');
@@ -30,7 +30,7 @@ namespace WWT.Providers
             if (!File.Exists(filename))
             {
                 context.Response.ContentType = "image/png";
-                using (Stream s = _plateTiles.GetStream(_options.WwtTilesDir, $"marsToastDem.plate", -1, level, tileX, tileY))
+                using (Stream s = await _plateTiles.GetStreamAsync(_options.WwtTilesDir, $"marsToastDem.plate", -1, level, tileX, tileY, token))
                 {
                     if (s.Length == 0)
                     {
@@ -38,19 +38,17 @@ namespace WWT.Providers
                         context.Response.ContentType = "text/plain";
                         context.Response.Write("No image");
                         context.Response.End();
-                        return Task.CompletedTask;
+                        return; 
                     }
 
-                    s.CopyTo(context.Response.OutputStream);
+                    await s.CopyToAsync(context.Response.OutputStream, token);
                     context.Response.Flush();
                     context.Response.End();
-                    return Task.CompletedTask;
+                    return; 
                 }
             }
 
             context.Response.WriteFile(filename);
-
-            return Task.CompletedTask;
         }
     }
 }

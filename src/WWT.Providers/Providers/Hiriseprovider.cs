@@ -15,7 +15,7 @@ namespace WWT.Providers
             _plateTiles = plateTiles;
         }
 
-        public override Task RunAsync(IWwtContext context, CancellationToken token)
+        public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string query = context.Request.Params["Q"];
             string[] values = query.Split(',');
@@ -29,7 +29,7 @@ namespace WWT.Providers
 
                 UInt32 index = ComputeHash(level, tileX, tileY) % 300;
 
-                using (Stream s = _plateTiles.GetStream(@"\\wwt-mars\marsroot\hirise", $"hiriseV5_{index}.plate", -1, level, tileX, tileY))
+                using (Stream s = await _plateTiles.GetStreamAsync(@"\\wwt-mars\marsroot\hirise", $"hiriseV5_{index}.plate", -1, level, tileX, tileY, token))
                 {
                     if (s == null || (int)s.Length == 0)
                     {
@@ -37,17 +37,15 @@ namespace WWT.Providers
                         context.Response.ContentType = "text/plain";
                         context.Response.Write("No image");
                         context.Response.End();
-                        return Task.CompletedTask;
+                        return;
                     }
 
-                    s.CopyTo(context.Response.OutputStream);
+                    await s.CopyToAsync(context.Response.OutputStream, token);
                     context.Response.Flush();
                     context.Response.End();
-                    return Task.CompletedTask;
+                    return; 
                 }
             }
-
-            return Task.CompletedTask;
         }
     }
 }

@@ -14,7 +14,7 @@ namespace WWT.Providers
             _plateTiles = plateTiles;
         }
 
-        public override Task RunAsync(IWwtContext context, CancellationToken token)
+        public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string query = context.Request.Params["Q"];
             string[] values = query.Split(',');
@@ -24,7 +24,7 @@ namespace WWT.Providers
 
             if (level < 18)
             {
-                using (var s = _plateTiles.GetStream(@"\\wwtfiles.file.core.windows.net\wwtmars\MarsDem", "marsToastDem.plate", -1, level, tileX, tileY))
+                using (var s = await _plateTiles.GetStreamAsync(@"\\wwtfiles.file.core.windows.net\wwtmars\MarsDem", "marsToastDem.plate", -1, level, tileX, tileY, token))
                 {
                     if (s == null || (int)s.Length == 0)
                     {
@@ -35,14 +35,12 @@ namespace WWT.Providers
                     }
                     else
                     {
-                        s.CopyTo(context.Response.OutputStream);
+                        await s.CopyToAsync(context.Response.OutputStream, token);
                         context.Response.Flush();
                         context.Response.End();
                     }
                 }
             }
-
-            return Task.CompletedTask;
         }
     }
 }

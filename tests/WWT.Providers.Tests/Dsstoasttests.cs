@@ -1,6 +1,7 @@
 ﻿using NSubstitute;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using WWTWebservices;
 
 namespace WWT.Providers.Tests
@@ -13,7 +14,7 @@ namespace WWT.Providers.Tests
 
         protected override Action<IResponse> NullStreamResponseHandler => null;
 
-        protected override Stream GetStreamFromPlateTilePyramid(IPlateTilePyramid plateTiles, int level, int x, int y)
+        protected override Task<Stream> GetStreamFromPlateTilePyramidAsync(IPlateTilePyramid plateTiles, int level, int x, int y)
         {
             if (level > 12)
             {
@@ -21,7 +22,7 @@ namespace WWT.Providers.Tests
             }
             else if (level < 8)
             {
-                return plateTiles.GetStream(Options.WwtTilesDir, "DSSToast.plate", level, x, y);
+                return plateTiles.GetStreamAsync(Options.WwtTilesDir, "DSSToast.plate", level, x, y, default);
             }
             else
             {
@@ -33,7 +34,7 @@ namespace WWT.Providers.Tests
 
                 var filename = $"DSSpngL5to12_x{x / powLev5Diff}_y{y / powLev5Diff}.plate";
 
-                return plateTiles.GetStream(Options.DssToastPng, filename, L5, X5, Y5);
+                return plateTiles.GetStreamAsync(Options.DssToastPng, filename, L5, X5, Y5, default);
             }
         }
 

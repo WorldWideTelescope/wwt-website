@@ -13,7 +13,7 @@ namespace WWT.Providers
         {
         }
 
-        public override Task RunAsync(IWwtContext context, CancellationToken token)
+        public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string query = context.Request.Params["Q"];
             string[] values = query.Split(',');
@@ -26,7 +26,7 @@ namespace WWT.Providers
             if (File.Exists(filename))
             {
                 using (Stream stream = File.OpenRead(filename))
-                using (Stream s = MergeMolaDemTileStream(level, tileX, tileY, stream))
+                using (Stream s = await MergeMolaDemTileStream(level, tileX, tileY, stream, token))
                 {
                     if (s.Length == 0)
                     {
@@ -34,18 +34,18 @@ namespace WWT.Providers
                         context.Response.ContentType = "text/plain";
                         context.Response.Write("No image");
                         context.Response.End();
-                        return Task.CompletedTask;
+                        return;
                     }
 
-                    s.CopyTo(context.Response.OutputStream);
+                    await s.CopyToAsync(context.Response.OutputStream, token);
                     context.Response.Flush();
                     context.Response.End();
-                    return Task.CompletedTask;
+                    return;
                 }
             }
             else
             {
-                using (Stream ss = GetMolaDemTileStream(level, tileX, tileY))
+                using (Stream ss = await GetMolaDemTileStreamAsync(level, tileX, tileY, token))
                 {
                     if (ss.Length == 0)
                     {
@@ -53,13 +53,13 @@ namespace WWT.Providers
                         context.Response.ContentType = "text/plain";
                         context.Response.Write("No image");
                         context.Response.End();
-                        return Task.CompletedTask;
+                        return;
                     }
 
-                    ss.CopyTo(context.Response.OutputStream);
+                    await ss.CopyToAsync(context.Response.OutputStream, token);
                     context.Response.Flush();
                     context.Response.End();
-                    return Task.CompletedTask;
+                    return;
                 }
             }
         }

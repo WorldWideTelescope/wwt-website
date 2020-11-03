@@ -20,13 +20,13 @@ namespace WWT.Providers
             _options = options;
         }
 
-        public override Task RunAsync(IWwtContext context, CancellationToken token)
+        public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             if (context.Request.UserAgent.ToLower().Contains("wget"))
             {
                 context.Response.Write("You are not allowed to bulk download imagery thru the tile service. Please contact wwtpage@microsoft.com for more information.");
                 context.Response.End();
-                return Task.CompletedTask;
+                return; ;
             }
 
             string query = context.Request.Params["Q"];
@@ -47,7 +47,7 @@ namespace WWT.Providers
             {
                 context.Response.Write("Invalid query string.");
                 context.Response.End();
-                return Task.CompletedTask;
+                return; ;
             }
 
             string wwtTilesDir = _options.WwtTilesDir;
@@ -56,14 +56,14 @@ namespace WWT.Providers
             {
                 context.Response.Write("No image");
                 context.Response.End();
-                return Task.CompletedTask;
+                return; ;
             }
 
             if (level < 9)
             {
                 context.Response.ContentType = "image/png";
 
-                using (Stream s = _plateTiles.GetStream(wwtTilesDir, "SDSS_8.plate", level, tileX, tileY))
+                using (Stream s = await _plateTiles.GetStreamAsync(wwtTilesDir, "SDSS_8.plate", level, tileX, tileY, token))
                 {
                     if (s.Length == 0)
                     {
@@ -71,13 +71,13 @@ namespace WWT.Providers
                         context.Response.ContentType = "text/plain";
                         context.Response.Write("No image");
                         context.Response.End();
-                        return Task.CompletedTask;
+                        return; ;
                     }
 
-                    s.CopyTo(context.Response.OutputStream);
+                    await s.CopyToAsync(context.Response.OutputStream, token);
                     context.Response.Flush();
                     context.Response.End();
-                    return Task.CompletedTask;
+                    return; ;
                 }
             }
 
@@ -87,7 +87,7 @@ namespace WWT.Providers
                 try
                 {
                     context.Response.WriteFile(filename);
-                    return Task.CompletedTask;
+                    return; ;
                 }
                 catch
                 {
@@ -163,7 +163,7 @@ namespace WWT.Providers
             }
 
             context.Response.End();
-            return Task.CompletedTask;
+            return; ;
         }
     }
 }

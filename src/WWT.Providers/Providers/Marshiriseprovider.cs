@@ -19,7 +19,7 @@ namespace WWT.Providers
             _options = options;
         }
 
-        public override Task RunAsync(IWwtContext context, CancellationToken token)
+        public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string query = context.Request.Params["Q"];
             string[] values = query.Split(',');
@@ -32,7 +32,7 @@ namespace WWT.Providers
             if (level > 17)
             {
                 context.Response.StatusCode = 404;
-                return Task.CompletedTask;
+                return;
             }
 
             using (Bitmap output = new Bitmap(256, 256))
@@ -63,7 +63,7 @@ namespace WWT.Providers
                             height -= 1;
                         }
 
-                        using (var stream = _plateTiles.GetStream(_options.WwtTilesDir, "marsbasemap.plate", -1, 8, tx, ty))
+                        using (var stream = await _plateTiles.GetStreamAsync(_options.WwtTilesDir, "marsbasemap.plate", -1, 8, tx, ty, token))
                         using (var bmp1 = new Bitmap(stream))
                         {
                             g.DrawImage(bmp1, new RectangleF(0, 0, 256, 256), new RectangleF(offsetX, offsetY, width, height), GraphicsUnit.Pixel);
@@ -71,7 +71,7 @@ namespace WWT.Providers
                     }
                     else
                     {
-                        using (var stream = _plateTiles.GetStream(_options.WwtTilesDir, "marsbasemap.plate", -1, ll, xx, yy))
+                        using (var stream = await _plateTiles.GetStreamAsync(_options.WwtTilesDir, "marsbasemap.plate", -1, ll, xx, yy, token))
                         using (var bmp1 = new Bitmap(stream))
                         {
                             g.DrawImageUnscaled(bmp1, new Point(0, 0));
@@ -80,7 +80,7 @@ namespace WWT.Providers
 
                     try
                     {
-                        using (var stream = LoadHiRise(ll, xx, yy, id))
+                        using (var stream = await LoadHiRiseAsync(ll, xx, yy, id, token))
                         {
                             if (stream != null)
                             {
@@ -99,14 +99,14 @@ namespace WWT.Providers
                 output.Save(context.Response.OutputStream, ImageFormat.Png);
             }
 
-            return Task.CompletedTask;
+            return; ;
         }
 
-        private Stream LoadHiRise(int level, int tileX, int tileY, int id)
+        private Task<Stream> LoadHiRiseAsync(int level, int tileX, int tileY, int id, CancellationToken token)
         {
             UInt32 index = ComputeHash(level, tileX, tileY) % 300;
 
-            return _plateTiles.GetStream("https://marsstage.blob.core.windows.net/hirise", $"hiriseV5_{index}.plate", id, level, tileX, tileY);
+            return _plateTiles.GetStreamAsync("https://marsstage.blob.core.windows.net/hirise", $"hiriseV5_{index}.plate", id, level, tileX, tileY, token);
         }
 
         private UInt32 ComputeHash(int level, int x, int y)

@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Threading.Tasks;
 using WWTWebservices;
 
 namespace WWT.Providers.Tests
@@ -7,7 +8,7 @@ namespace WWT.Providers.Tests
     {
         protected override int MaxLevel => 7;
 
-        protected override Stream GetStreamFromPlateTilePyramid(IPlateTilePyramid plateTiles, int level, int x, int y)
-            => plateTiles.GetStream(Options.WwtTilesDir, "2MassToast0to7.plate", level, x, y);
+        protected override Task<Stream> GetStreamFromPlateTilePyramidAsync(IPlateTilePyramid plateTiles, int level, int x, int y)
+            => plateTiles.GetStreamAsync(Options.WwtTilesDir, "2MassToast0to7.plate", level, x, y, default);
     }
 }

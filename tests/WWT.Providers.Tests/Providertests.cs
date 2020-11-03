@@ -38,7 +38,7 @@ namespace WWT.Providers.Tests
             Assert.Equal("text/plain", response.ContentType);
         };
 
-        protected abstract Stream GetStreamFromPlateTilePyramid(IPlateTilePyramid plateTiles, int level, int x, int y);
+        protected abstract Task<Stream> GetStreamFromPlateTilePyramidAsync(IPlateTilePyramid plateTiles, int level, int x, int y);
 
         protected virtual void ExpectedResponseAboveMaxLevel(IResponse response)
         {
@@ -65,13 +65,13 @@ namespace WWT.Providers.Tests
                     .ConfigureParameterQ(GetParameterQ(level, x, y))
                     .Build();
 
-                GetStreamFromPlateTilePyramid(container.Resolve<IPlateTilePyramid>(), level, x, y).Returns(new MemoryStream(data));
+                GetStreamFromPlateTilePyramidAsync(container.Resolve<IPlateTilePyramid>(), level, x, y).Returns(new MemoryStream(data));
 
                 // Act
                 await container.RunProviderTestAsync<T>();
 
                 // Assert
-                GetStreamFromPlateTilePyramid(container.Resolve<IPlateTilePyramid>().Received(1), level, x, y);
+                await GetStreamFromPlateTilePyramidAsync(container.Resolve<IPlateTilePyramid>().Received(1), level, x, y);
                 Assert.Equal(data, container.GetOutputData());
             }
         }
@@ -94,7 +94,7 @@ namespace WWT.Providers.Tests
                     .ConfigureParameterQ(GetParameterQ(level, x, y))
                     .Build();
 
-                GetStreamFromPlateTilePyramid(container.Resolve<IPlateTilePyramid>(), level, x, y).Returns(_ => throw new InvalidOperationException());
+                GetStreamFromPlateTilePyramidAsync(container.Resolve<IPlateTilePyramid>(), level, x, y).Returns<Task<Stream>>(_ => throw new InvalidOperationException());
 
                 if (StreamExceptionResponseHandler is null)
                 {
@@ -107,7 +107,7 @@ namespace WWT.Providers.Tests
                     await container.RunProviderTestAsync<T>();
 
                     // Assert
-                    GetStreamFromPlateTilePyramid(container.Resolve<IPlateTilePyramid>().Received(1), level, x, y);
+                    await GetStreamFromPlateTilePyramidAsync(container.Resolve<IPlateTilePyramid>().Received(1), level, x, y);
                     StreamExceptionResponseHandler(container.Resolve<IResponse>());
                 }
             }
@@ -127,14 +127,14 @@ namespace WWT.Providers.Tests
                 .ConfigureParameterQ(GetParameterQ(level, x, y))
                 .Build();
 
-            var empty = new MemoryStream();
-            GetStreamFromPlateTilePyramid(container.Resolve<IPlateTilePyramid>(), level, x, y).Returns(empty);
+            var empty = Task.FromResult<Stream>(new MemoryStream());
+            GetStreamFromPlateTilePyramidAsync(container.Resolve<IPlateTilePyramid>(), level, x, y).Returns(empty, default);
 
             // Act
             await container.RunProviderTestAsync<T>();
 
             // Assert
-            GetStreamFromPlateTilePyramid(container.Resolve<IPlateTilePyramid>().Received(1), level, x, y);
+            await GetStreamFromPlateTilePyramidAsync(container.Resolve<IPlateTilePyramid>().Received(1), level, x, y);
             Assert.Empty(container.GetOutputData());
         }
 
@@ -152,7 +152,7 @@ namespace WWT.Providers.Tests
                 .ConfigureParameterQ(GetParameterQ(level, x, y))
                 .Build();
 
-            GetStreamFromPlateTilePyramid(container.Resolve<IPlateTilePyramid>(), level, x, y).Returns((Stream)null);
+            GetStreamFromPlateTilePyramidAsync(container.Resolve<IPlateTilePyramid>(), level, x, y).Returns((Stream)null);
 
             if (NullStreamResponseHandler is null)
             {
@@ -164,7 +164,7 @@ namespace WWT.Providers.Tests
                 await container.RunProviderTestAsync<T>();
 
                 // Assert
-                GetStreamFromPlateTilePyramid(container.Resolve<IPlateTilePyramid>().Received(1), level, x, y);
+                await GetStreamFromPlateTilePyramidAsync(container.Resolve<IPlateTilePyramid>().Received(1), level, x, y);
                 NullStreamResponseHandler(container.Resolve<IResponse>());
             }
         }

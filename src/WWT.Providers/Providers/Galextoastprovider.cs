@@ -16,7 +16,7 @@ namespace WWT.Providers
             _options = options;
         }
 
-        public override Task RunAsync(IWwtContext context, CancellationToken token)
+        public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string query = context.Request.Params["Q"];
             string[] values = query.Split(',');
@@ -30,7 +30,7 @@ namespace WWT.Providers
                 context.Response.ContentType = "text/plain";
                 context.Response.Write("No image");
                 context.Response.End();
-                return Task.CompletedTask;
+                return; 
             }
 
             if (level < 9)
@@ -39,12 +39,12 @@ namespace WWT.Providers
                 {
                     context.Response.ContentType = "image/png";
 
-                    using (var s = _plateTiles.GetStream(_options.WwtTilesDir, "GalexBoth_L0to8_x0_y0.plate", level, tileX, tileY))
+                    using (var s = await _plateTiles.GetStreamAsync(_options.WwtTilesDir, "GalexBoth_L0to8_x0_y0.plate", level, tileX, tileY, token))
                     {
-                        s.CopyTo(context.Response.OutputStream);
+                        await s.CopyToAsync(context.Response.OutputStream, token);
                         context.Response.Flush();
                         context.Response.End();
-                        return Task.CompletedTask;
+                        return; 
                     }
                 }
                 catch
@@ -53,7 +53,7 @@ namespace WWT.Providers
                     context.Response.ContentType = "text/plain";
                     context.Response.Write("No image");
                     context.Response.End();
-                    return Task.CompletedTask;
+                    return; 
                 }
             }
             else
@@ -70,12 +70,12 @@ namespace WWT.Providers
 
                     context.Response.ContentType = "image/png";
 
-                    using (var s = _plateTiles.GetStream(_options.WwtGalexDir, $"GalexBoth_L3to10_x{X8}_y{Y8}.plate", L3, X3, Y3))
+                    using (var s = await _plateTiles.GetStreamAsync(_options.WwtGalexDir, $"GalexBoth_L3to10_x{X8}_y{Y8}.plate", L3, X3, Y3, token))
                     {
-                        s.CopyTo(context.Response.OutputStream);
+                        await s.CopyToAsync(context.Response.OutputStream, token);
                         context.Response.Flush();
                         context.Response.End();
-                        return Task.CompletedTask;
+                        return;
                     }
                 }
                 catch
@@ -84,7 +84,7 @@ namespace WWT.Providers
                     context.Response.ContentType = "text/plain";
                     context.Response.Write("No image");
                     context.Response.End();
-                    return Task.CompletedTask;
+                    return; 
                 }
             }
         }

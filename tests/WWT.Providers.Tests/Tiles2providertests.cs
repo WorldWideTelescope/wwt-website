@@ -35,7 +35,7 @@ namespace WWT.Providers.Tests
             await container.RunProviderTestAsync<Tiles2Provider>();
 
             // Assert
-            GetStreamFromPlateTilePyramid(container.Resolve<IPlateTilePyramid>().DidNotReceive(), 0, x, y);
+            await GetStreamFromPlateTilePyramidAsync(container.Resolve<IPlateTilePyramid>().DidNotReceive(), 0, x, y);
             ExpectedResponseAboveMaxLevel(container.Resolve<IResponse>());
         }
 
@@ -44,8 +44,8 @@ namespace WWT.Providers.Tests
 
         protected override int MaxLevel => 9;
 
-        protected override Stream GetStreamFromPlateTilePyramid(IPlateTilePyramid plateTiles, int level, int x, int y)
-            => plateTiles.GetStream(Options.WwtTilesDir, $"{_fileName}.plate", -1, level, x, y);
+        protected override Task<Stream> GetStreamFromPlateTilePyramidAsync(IPlateTilePyramid plateTiles, int level, int x, int y)
+            => plateTiles.GetStreamAsync(Options.WwtTilesDir, $"{_fileName}.plate", -1, level, x, y, default);
 
         protected override Action<IResponse> NullStreamResponseHandler => null;
 

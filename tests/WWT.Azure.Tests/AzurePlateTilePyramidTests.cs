@@ -24,7 +24,7 @@ namespace WWT.Azure.Tests
         [Theory]
         [InlineData("test.plate", 0, 0, 0, null, null)]
         [InlineData("dssterrapixel.plate", 0, 0, 0, "dss", "DSSTerraPixelL{0}X{1}Y{2}.png")]
-        public void GetStreamTests(string plateFile, int level, int x, int y, string containerName, string blobFormat)
+        public async Task GetStreamTests(string plateFile, int level, int x, int y, string containerName, string blobFormat)
         {
             // Arrange
             using var mock = ConfigureServiceClient(plateFile, level, x, y, containerName, blobFormat)
@@ -32,7 +32,7 @@ namespace WWT.Azure.Tests
             var pyramid = mock.Resolve<AzurePlateTilePyramid>();
 
             // Act
-            using var result = pyramid.GetStream(plateFile, level, x, y);
+            using var result = await pyramid.GetStreamAsync(plateFile, level, x, y, default);
 
             // Assert
             Assert.NotNull(result);
@@ -62,8 +62,8 @@ namespace WWT.Azure.Tests
             var pyramid = mock.Resolve<AzurePlateTilePyramid>();
 
             // Act
-            using var stream1 = pyramid.GetStream(plateFile, level, x, y);
-            using var stream2 = pyramid.GetStream(plateFile, level, x, y);
+            using var stream1 = await pyramid.GetStreamAsync(plateFile, level, x, y, default);
+            using var stream2 = await pyramid.GetStreamAsync(plateFile, level, x, y, default);
 
             // Assert
             Assert.Same(stream1, stream2);
