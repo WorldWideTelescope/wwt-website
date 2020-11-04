@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Configuration;
@@ -133,7 +134,14 @@ namespace WWTMVC5
             {
                 builder.AddFilter("Swick.Cache", LogLevel.Trace);
                 builder.AddDebug();
-                builder.AddApplicationInsights();
+
+                var appInsightsKey = ConfigurationManager.AppSettings["APPINSIGHTS_INSTRUMENTATIONKEY"];
+
+                if (!string.IsNullOrEmpty(appInsightsKey))
+                {
+                    builder.AddApplicationInsights(appInsightsKey);
+                    TelemetryConfiguration.Active.InstrumentationKey = appInsightsKey;
+                }
             });
 
             return services.BuildServiceProvider();
