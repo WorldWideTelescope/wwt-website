@@ -66,11 +66,9 @@ namespace WWT.Providers
                 bmpOutputFast.UnlockBitmap();
             }
 
-            var ms = new MemoryStream();
-            bmpOutput.Save(ms, ImageFormat.Png);
-            ms.Position = 0;
+            var result = bmpOutput.SaveToStream(ImageFormat.Png);
 
-            return Task.FromResult<Stream>(ms);
+            return Task.FromResult(result);
         }
     }
 }

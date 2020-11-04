@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -37,5 +39,13 @@ namespace WWT.Providers
         /// </summary>
         internal static Task CopyToAsync(this Stream stream, Stream destination, CancellationToken token)
             => stream.CopyToAsync(destination, 81920, token);
+
+        internal static Stream SaveToStream(this Bitmap bitmap, ImageFormat format)
+        {
+            var ms = new MemoryStream();
+            bitmap.Save(ms, format);
+            ms.Position = 0;
+            return ms;
+        }
     }
 }

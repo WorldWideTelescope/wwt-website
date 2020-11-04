@@ -17,16 +17,10 @@ namespace WWT.Providers.Services
 
         public Stream CreateMandelbrot(int level, int tileX, int tileY)
         {
-            var ms = new MemoryStream();
-
             using (var image = CreateMandelbrotBitmap(level, tileX, tileY))
             {
-                image.Save(ms, ImageFormat.Png);
+                return image.SaveToStream(ImageFormat.Png);
             }
-
-            ms.Position = 0;
-
-            return ms;
         }
 
         private Bitmap CreateMandelbrotBitmap(int level, int tileX, int tileY)

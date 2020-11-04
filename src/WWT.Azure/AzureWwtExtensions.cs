@@ -66,8 +66,18 @@ namespace WWT.Azure
             configure(options);
 
             services.Services.AddSingleton(options);
-
             services.Services.AddSingleton<ITourAccessor, AzureTourAccessor>();
+
+            return services;
+        }
+
+        public static AzureServiceBuilder AddTiles(this AzureServiceBuilder services, Action<AzureTileOptions> configure)
+        {
+            var options = new AzureTileOptions();
+            configure(options);
+
+            services.Services.AddSingleton(options);
+            services.Services.AddSingleton<ITileAccessor, AzureTileAccessor>();
 
             return services;
         }

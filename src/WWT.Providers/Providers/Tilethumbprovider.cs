@@ -1,4 +1,3 @@
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -6,26 +5,23 @@ namespace WWT.Providers
 {
     public class TilethumbProvider : RequestProvider
     {
-        private readonly FilePathOptions _options;
+        private readonly ITileAccessor _tileAccessor;
 
-        public TilethumbProvider(FilePathOptions options)
+        public TilethumbProvider(ITileAccessor tileAccessor)
         {
-            _options = options;
+            _tileAccessor = tileAccessor;
         }
 
-        public override Task RunAsync(IWwtContext context, CancellationToken token)
+        public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string name = context.Request.Params["name"];
-            string path = Path.Combine(_options.DSSTileCache, "imagesTiler", "thumbnails");
-            string filename = Path.Combine(path, $"{name}.jpg");
 
-            if (File.Exists(filename))
+            using var stream = await _tileAccessor.GetThumbnailAsync(name, token);
+
+            if (stream != null)
             {
-                context.Response.WriteFile(filename);
-                context.Response.End();
+                await stream.CopyToAsync(context.Response.OutputStream, token);
             }
-
-            return Task.CompletedTask;
         }
     }
 }

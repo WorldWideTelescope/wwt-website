@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -7,14 +6,14 @@ namespace WWT.Providers
 {
     public class GetTileProvider : RequestProvider
     {
-        private readonly FilePathOptions _options;
+        private readonly ITileAccessor _tileAccessor;
 
-        public GetTileProvider(FilePathOptions options)
+        public GetTileProvider(ITileAccessor tileAccessor)
         {
-            _options = options;
+            _tileAccessor = tileAccessor;
         }
 
-        public override Task RunAsync(IWwtContext context, CancellationToken token)
+        public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string query = context.Request.Params["Q"];
             string[] values = query.Split(',');
@@ -24,18 +23,16 @@ namespace WWT.Providers
             string dataset = values[3];
             string id = dataset;
 
-            string DSSTileCache = _options.DSSTileCache;
+            using var stream = await _tileAccessor.GetTileAsync(id, level, tileX, tileY, token);
 
-            string filename = String.Format(DSSTileCache + "\\imagesTiler\\{3}\\{0}\\{2}\\{2}_{1}.png", level, tileX, tileY, id);
-
-            if (!File.Exists(filename))
+            if (stream is null)
             {
                 context.Response.StatusCode = 404;
-                return Task.CompletedTask;
             }
-
-            context.Response.WriteFile(filename);
-            return Task.CompletedTask;
+            else
+            {
+                await stream.CopyToAsync(context.Response.OutputStream);
+            }
         }
     }
 }
