@@ -9,6 +9,17 @@ Telescope](https://worldwidetelescope.org/home) (WWT) software system.
 **Note** The contents of this repository are in flux as we modernize this
 codebase.
 
+## Deprecated APIs
+
+As we move the service to a more modern architecture, some endpoints are being deprecated. These include the following:
+
+| Endpoint | Reason | PR |
+| -------- | -------| -- |
+| `/wwtweb/martiantileempty.aspx` | Data is from `wwt.nasa.gov` which is no longer available. | [#182](https://github.com/WorldWideTelescope/wwt-website/pull/182) |
+| `/wwtweb/demmarsempty.aspx` | Data is from `wwt.nasa.gov` which is no longer available. | [#173](https://github.com/WorldWideTelescope/wwt-website/pull/173) |
+| `/wwtweb/wmsearthtoday.aspx` | Data is from `wms.jpl.nasa.gov` which is no longer available. | [#181](https://github.com/WorldWideTelescope/wwt-website/pull/181) |
+| `/wwtweb/wmsmoon.aspx` | Data is from `onmoon.jpl.nasa.gov` which no longer available. | [#181](https://github.com/WorldWideTelescope/wwt-website/pull/181) |
+| `/wwtweb/wmstoast.aspx` | Data is from `ms.mars.asu.edu` which no longer available. | [#181](https://github.com/WorldWideTelescope/wwt-website/pull/181) |
 
 ## Installation Instructions
 

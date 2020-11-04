@@ -12,7 +12,6 @@ using System.Web.Routing;
 using Unity.AspNet.Mvc;
 using WWT;
 using WWT.Azure;
-using WWT.Imaging;
 using WWT.Providers;
 using WWT.Tours;
 using WWTWebservices;
@@ -122,7 +121,6 @@ namespace WWTMVC5
                 .CacheType<IVirtualEarthDownloader>(plates => plates.Add(nameof(IVirtualEarthDownloader.DownloadVeTileAsync)))
                 .CacheType<IOctTileMapBuilder>(plates => plates.Add(nameof(IOctTileMapBuilder.GetOctTileAsync)))
                 .CacheType<IPlateTilePyramid>(plates => plates.Add(nameof(IPlateTilePyramid.GetStreamAsync)))
-                .CacheType<IToastTileMapBuilder>(toast => toast.Add(nameof(IToastTileMapBuilder.CreateToastTileMapAsync)))
                 .CacheType<IThumbnailAccessor>(plates => plates
                     .Add(nameof(IThumbnailAccessor.GetThumbnailStreamAsync))
                     .Add(nameof(IThumbnailAccessor.GetDefaultThumbnailStreamAsync)))

@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using WWT.Imaging;
 using WWT.Providers.Services;
 
 namespace WWT.Providers
@@ -24,7 +23,6 @@ namespace WWT.Providers
             services.AddSingleton<IOctTileMapBuilder, OctTileMapBuilder>();
             services.AddSingleton<IMandelbrot, Mandelbrot>();
             services.AddSingleton<IVirtualEarthDownloader, VirtualEarthDownloader>();
-            services.AddSingleton<IToastTileMapBuilder, ToastTileMapBuilder>();
 
             var options = new FilePathOptions();
 
