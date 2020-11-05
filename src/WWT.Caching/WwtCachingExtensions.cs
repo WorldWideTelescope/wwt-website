@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Swick.Cache;
 using Swick.Cache.Handlers;
 using System;
@@ -35,6 +38,8 @@ namespace WWT
                 {
                     redisOptions.Configuration = options.RedisCacheConnectionString;
                 });
+
+                services.Decorate<IDistributedCache>((other, ctx) => new AppInsightsDistributedCache(ctx.GetRequiredService<IOptions<TelemetryConfiguration>>(), other));
             }
             else
             {

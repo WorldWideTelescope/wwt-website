@@ -110,7 +110,7 @@ namespace WWT.Caching.Tests
             var resolved = mock.Resolve<IDistributedCache>();
 
             // Assert
-            var inMemory = Assert.IsType<RedisCache>(resolved);
+            var inMemory = Assert.IsType<AppInsightsDistributedCache>(resolved);
         }
 
         public interface ITestService

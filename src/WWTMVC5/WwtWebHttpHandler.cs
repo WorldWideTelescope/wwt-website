@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Web;
 using WWT.Providers;
@@ -16,20 +17,39 @@ namespace WWTMVC5
         {
             using (var scope = _endpoints.GetRequestScope(context.Request.Path))
             {
-                if (scope is null)
-                {
-                    context.Response.StatusCode = 404;
-                }
-                else
-                {
-                    if (!string.IsNullOrEmpty(scope.ContentType))
+                var logger = scope.Resolve<ILogger<WwtWebHttpHandler>>();
+
+                // AppInsights modules will populate the current activity. This ensures that the subsequent
+                // calls to ILogger<> will have the correct settings as well.
+                // NOTE: This will be available by default with v5.0.0 of the logging library
+                var activity = Activity.Current;
+                var scopes = new Dictionary<string, object>
                     {
-                        context.Response.ContentType = scope.ContentType;
+                        { "ParentId", activity.ParentSpanId.ToHexString() },
+                        { "SpanId", activity.SpanId.ToHexString() },
+                        { "TraceId", activity.TraceId.ToHexString() },
+                        { "TraceFlags", activity.ActivityTraceFlags },
+                        { "TraceState", activity.TraceStateString },
+                    };
+
+                using (logger.BeginScope(scopes))
+                {
+                    if (scope.Provider is null)
+                    {
+                        logger.LogError("No known route for {Path}", context.Request.Path);
+
+                        context.Response.StatusCode = 404;
                     }
+                    else
+                    {
+                        if (!string.IsNullOrEmpty(scope.ContentType))
+                        {
+                            context.Response.ContentType = scope.ContentType;
+                        }
 
-                    scope.Resolve<ILogger<WwtWebHttpHandler>>().LogInformation("Dispatch {Path} to {Provider}", context.Request.Path, scope.Provider.GetType());
-
-                    await scope.Provider.RunAsync(new SystemWebWwtContext(context), context.Response.ClientDisconnectedToken);
+                        logger.LogInformation("Dispatch {Path} to {Provider}", context.Request.Path, scope.Provider.GetType());
+                        await scope.Provider.RunAsync(new SystemWebWwtContext(context), context.Response.ClientDisconnectedToken);
+                    }
                 }
             }
         }
@@ -152,15 +172,18 @@ namespace WWTMVC5
 
             public ScopedRequest GetRequestScope(string endpoint)
             {
+                var scope = _services.CreateScope();
+
                 if (_map.TryGetValue(endpoint, out var result))
                 {
-                    var scope = _services.CreateScope();
                     var provider = (RequestProvider)scope.ServiceProvider.GetRequiredService(result.provider);
 
                     return new ScopedRequest(scope, result.contentType, provider);
                 }
-
-                return default;
+                else
+                {
+                    return new ScopedRequest(scope, null, null);
+                }
             }
         }
 
