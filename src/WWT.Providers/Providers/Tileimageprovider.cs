@@ -29,6 +29,8 @@ namespace WWT.Providers
             }
         }
 
+        public override string ContentType => ContentTypes.XWtml;
+
         public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             {

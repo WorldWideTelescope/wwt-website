@@ -7,6 +7,8 @@ namespace WWT.Providers
 {
     public class DembathProvider : RequestProvider
     {
+        public override string ContentType => ContentTypes.Text;
+
         public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string query = context.Request.Params["Q"];

@@ -14,6 +14,8 @@ namespace WWT.Providers
             _tourAccessor = tourAccessor;
         }
 
+        public override string ContentType => ContentTypes.XWtt;
+
         protected override Task<Stream> GetStreamAsync(string id, CancellationToken token)
             => _tourAccessor.GetTourAsync(id, token);
     }

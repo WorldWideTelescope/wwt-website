@@ -16,6 +16,8 @@ namespace WWT.Providers
             _hasher = hasher;
         }
 
+        public override string ContentType => ContentTypes.Png;
+
         public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string path = context.MapPath(@"TourCache");

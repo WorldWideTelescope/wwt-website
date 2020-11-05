@@ -13,6 +13,8 @@ namespace WWT.Providers
             _options = options;
         }
 
+        public override string ContentType => ContentTypes.Html;
+
         public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             String baseName = _options.WwtToursTourFileUNC.ToLower();

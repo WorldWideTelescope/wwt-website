@@ -8,5 +8,7 @@ namespace WWT.Providers
             : base(catalog, true)
         {
         }
+
+        public override string ContentType => ContentTypes.Text;
     }
 }

@@ -7,6 +7,8 @@ namespace WWT.Providers
 {
     public class ShowImageProvider : RequestProvider
     {
+        public override string ContentType => ContentTypes.XWtml;
+
         public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             if (!context.Request.ContainsCookie("fullclient") && context.Request.Params["wtml"] == null)

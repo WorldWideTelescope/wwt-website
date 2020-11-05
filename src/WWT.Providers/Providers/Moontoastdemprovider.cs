@@ -17,6 +17,8 @@ namespace WWT.Providers
             _options = options;
         }
 
+        public override string ContentType => ContentTypes.OctetStream;
+
         public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string wwtDemDir = Path.Combine(_options.WWTDEMDir, "toast", "lola");

@@ -7,6 +7,8 @@ namespace WWT.Providers
 {
     public class ShowImage2Provider : RequestProvider
     {
+        public override string ContentType => ContentTypes.XWtml;
+
         public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             if (context.Request.ContainsCookie("alphakey"))

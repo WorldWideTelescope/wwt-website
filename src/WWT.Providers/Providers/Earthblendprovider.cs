@@ -22,6 +22,8 @@ namespace WWT.Providers
             _veDownloader = veDownloader;
         }
 
+        public override string ContentType => ContentTypes.Png;
+
         public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string wwtTilesDir = _options.WwtTilesDir;

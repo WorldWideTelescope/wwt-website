@@ -17,6 +17,8 @@ namespace WWT.Providers
             _options = options;
         }
 
+        public override string ContentType => ContentTypes.Png;
+
         public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string query = context.Request.Params["Q"];

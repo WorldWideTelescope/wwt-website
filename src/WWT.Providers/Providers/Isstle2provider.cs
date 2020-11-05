@@ -7,6 +7,8 @@ namespace WWT.Providers
 {
     public class Isstle2Provider : isstle
     {
+        public override string ContentType => ContentTypes.Text;
+
         public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string url = "";

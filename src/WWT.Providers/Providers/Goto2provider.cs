@@ -7,6 +7,8 @@ namespace WWT.Providers
 {
     public class Goto2Provider : RequestProvider
     {
+        public override string ContentType => ContentTypes.XWtml;
+
         public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             if (context.Request.ContainsCookie("alphakey") && context.Request.Params["wtml"] == null)

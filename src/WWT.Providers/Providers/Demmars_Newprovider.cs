@@ -14,6 +14,8 @@ namespace WWT.Providers
             _plateTile = plateTile;
         }
 
+        public override string ContentType => ContentTypes.OctetStream;
+
         public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string query = context.Request.Params["Q"];

@@ -14,6 +14,8 @@ namespace WWT.Providers
             _options = options;
         }
 
+        public override string ContentType => ContentTypes.Text;
+
         public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             context.Response.AddHeader("Cache-Control", "no-cache");

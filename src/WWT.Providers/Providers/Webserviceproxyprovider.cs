@@ -7,6 +7,8 @@ namespace WWT.Providers
 {
     public class WebServiceProxyProvider : RequestProvider
     {
+        public override string ContentType => ContentTypes.Text;
+
         public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string returnString = "Erorr: No URL Specified";

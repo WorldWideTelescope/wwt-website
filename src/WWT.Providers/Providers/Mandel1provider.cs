@@ -8,6 +8,8 @@ namespace WWT.Providers
 {
     public class Mandel1Provider : RequestProvider
     {
+        public override string ContentType => ContentTypes.Jpeg;
+
         public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string query = context.Request.Params["Q"];

@@ -19,6 +19,8 @@ namespace WWT.Providers
             _octTileMap = octTileMap;
         }
 
+        public override string ContentType => ContentTypes.Png;
+
         public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             if (context.Request.UserAgent.ToLower().Contains("wget"))
