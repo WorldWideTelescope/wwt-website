@@ -109,6 +109,10 @@ namespace WWTMVC5
                 .AddTours(options =>
                 {
                     options.ContainerName = ConfigurationManager.AppSettings["TourContainer"];
+                })
+                .AddTiles(options =>
+                {
+                    options.ContainerName = ConfigurationManager.AppSettings["ImagesTilerContainer"];
                 });
 
             services
