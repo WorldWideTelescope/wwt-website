@@ -13,6 +13,8 @@ namespace WWT.Providers
 
         public override string ContentType => ContentTypes.XWtml;
 
+        public override bool IsCacheable => false;
+
         public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string etag = context.Request.Headers["If-None-Match"];
@@ -27,7 +29,6 @@ namespace WWT.Providers
                 if (newEtag != etag)
                 {
                     context.Response.AddHeader("etag", newEtag);
-                    context.Response.AddHeader("Cache-Control", "no-cache");
                     context.Response.Write(toursXML);
                 }
                 else

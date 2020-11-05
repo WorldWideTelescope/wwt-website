@@ -17,11 +17,11 @@ namespace WWT.Providers
 
         public override string ContentType => ContentTypes.Text;
 
+        public override bool IsCacheable => false;
+
         public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
-            context.Response.AddHeader("Cache-Control", "no-cache");
             context.Response.Expires = -1;
-            context.Response.CacheControl = "no-cache";
             context.Response.AddHeader("etag", "1-2-3-4-5");
 
             if (context.Request.Params["Equinox"] != null)

@@ -19,6 +19,8 @@ namespace WWT.Providers
 
         public override string ContentType => ContentTypes.Text;
 
+        public override bool IsCacheable => false;
+
         public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string etag = context.Request.Headers["If-None-Match"];
@@ -36,7 +38,7 @@ namespace WWT.Providers
             else if (context.Request.Params["X"] != null)
             {
                 // One of 2 changes that make up Catalog2Provider
-                if(_useXmlContentType)
+                if (_useXmlContentType)
                 {
                     context.Response.Clear();
                     context.Response.ContentType = "application/xml";
@@ -52,7 +54,7 @@ namespace WWT.Providers
             else if (context.Request.Params["W"] != null)
             {
                 // Two of 2 changes that make up Catalog2Provider
-                if(_useXmlContentType)
+                if (_useXmlContentType)
                 {
                     context.Response.Clear();
                     context.Response.ContentType = "application/xml";
@@ -74,7 +76,6 @@ namespace WWT.Providers
                 if (newEtag != etag)
                 {
                     context.Response.AddHeader("etag", newEtag);
-                    context.Response.AddHeader("Cache-Control", "no-cache");
 
                     using (var c = catalogEntry.Contents)
                     {

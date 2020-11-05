@@ -13,11 +13,11 @@ namespace WWT.Providers
 
         public override string ContentType => ContentTypes.Text;
 
+        public override bool IsCacheable => false;
+
         public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
-            context.Response.AddHeader("Cache-Control", "no-cache");
             context.Response.Expires = -1;
-            context.Response.CacheControl = "no-cache";
 
             string key = _options.Webkey;
             string testkey = context.Request.Params["webkey"];

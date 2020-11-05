@@ -9,10 +9,10 @@ namespace WWT.Providers
     {
         public override string ContentType => ContentTypes.Text;
 
+        public override bool IsCacheable => false;
+
         public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
-            context.Response.AddHeader("Cache-Control", "no-cache");
-
             var wwt2dir = context.MapPath(Path.Combine("..", "wwt2"));
 
             context.Response.Write("ClientVersion:");
