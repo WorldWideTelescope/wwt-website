@@ -45,7 +45,7 @@ namespace WWT.Providers
                     url = context.Request.Params["imageurl"];
                 }
 
-                if (String.IsNullOrEmpty(url))
+                if (string.IsNullOrEmpty(url))
                 {
                     url = "http://www.spitzer.caltech.edu/uploaded_files/images/0009/0848/sig12-011.jpg";
                 }
@@ -58,15 +58,13 @@ namespace WWT.Providers
                 {
                     var creator = _tileAccessor.CreateTile(id);
 
-                    if (await creator.ExistsAsync(token))
+                    if (!await creator.ExistsAsync(token))
                     {
-                        return;
+                        using var bmp = wcsImage.GetBitmap();
+                        wcsImage.AdjustScale(bmp.Width, bmp.Height);
+                        await MakeThumbnailAsync(bmp, creator, token);
+                        await TileBitmap(bmp, creator, token);
                     }
-
-                    using Bitmap bmp = wcsImage.GetBitmap();
-                    wcsImage.AdjustScale(bmp.Width, bmp.Height);
-
-                    await MakeThumbnailAsync(bmp, creator, token);
 
                     string name = wcsImage.Keywords[0];
                     bool reverseparity = false;
@@ -81,8 +79,6 @@ namespace WWT.Providers
                     double x = 0;
                     double dec = wcsImage.CenterY;
                     double ra = wcsImage.CenterX;
-
-                    await TileBitmap(bmp, creator, token);
 
                     if (context.Request.Params["debug"] != null)
                     {
