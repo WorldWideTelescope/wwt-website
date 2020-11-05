@@ -1,6 +1,8 @@
 ﻿using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.ApplicationInsights;
+using Microsoft.Extensions.Options;
 using System;
 using System.Configuration;
 using System.IdentityModel.Services;
@@ -134,6 +136,9 @@ namespace WWTMVC5
                     .Add(nameof(ITourAccessor.GetTourAsync))
                     .Add(nameof(ITourAccessor.GetTourThumbnailAsync)));
 
+            // Override built-in configuration for ILoggerProvider so everyone uses the same instance
+            services.AddSingleton<IOptionsFactory<TelemetryConfiguration>>(new TelemetryConfigurationInstance());
+
             services.AddLogging(builder =>
             {
                 builder.AddFilter("Swick.Cache", LogLevel.Trace);
@@ -144,11 +149,18 @@ namespace WWTMVC5
                 if (!string.IsNullOrEmpty(appInsightsKey))
                 {
                     builder.AddApplicationInsights(appInsightsKey);
+                    builder.AddFilter<ApplicationInsightsLoggerProvider>(string.Empty, LogLevel.Trace);
+
                     TelemetryConfiguration.Active.InstrumentationKey = appInsightsKey;
                 }
             });
 
             return services.BuildServiceProvider();
+        }
+
+        private class TelemetryConfigurationInstance : IOptionsFactory<TelemetryConfiguration>
+        {
+            public TelemetryConfiguration Create(string name) => TelemetryConfiguration.Active;
         }
     }
 }
