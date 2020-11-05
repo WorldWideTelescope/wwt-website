@@ -125,9 +125,6 @@ namespace WWTMVC5
             endpoints.Add<WebloginProvider>("/wwtweb/weblogin.aspx", "text/plain");
             endpoints.Add<WebServiceProxyProvider>("/wwtweb/WebServiceProxy.aspx", "text/plain");
             endpoints.Add<WmapProvider>("/wwtweb/wmap.aspx", "image/png");
-            endpoints.Add<WMSEarthTodayProvider>("/wwtweb/WMSEarthToday.aspx", "image/png");
-            endpoints.Add<WMSMoonProvider>("/wwtweb/WMSMoon.aspx", "image/png");
-            endpoints.Add<WMSToastProvider>("/wwtweb/WMSToast.aspx", "image/png");
             endpoints.Add<XML2WTTProvider>("/wwtweb/XML2WTT.aspx");
 
             _endpoints = endpoints;

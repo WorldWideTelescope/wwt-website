@@ -12,7 +12,7 @@ namespace WWTWebservices
         MarsAsu
     }
 
-    public class WMSImage
+    public class WMSImage : IDisposable
     {
         private readonly double raMin;
         private readonly double decMax;
@@ -22,7 +22,8 @@ namespace WWTWebservices
         private readonly double scaleY;
 
         private FastBitmap fastImage;
-        public Bitmap image;
+
+        public Bitmap Image { get; set; }
 
         public WMSImage(double raMin, double decMax, double raMax, double decMin)
         {
@@ -34,8 +35,13 @@ namespace WWTWebservices
             scaleY = (this.decMax - this.decMin) / 512;
         }
 
+        public void Dispose()
+        {
+            fastImage?.Dispose();
+            Image?.Dispose();
+        }
 
-        public string LoadImage(string url, bool debug, ImageSource source = ImageSource.OnMoon)
+        public string GetImageUrl(string url, ImageSource source)
         {
             object[] args = new object[] { (raMin - 180), decMin, (raMax - 180), decMax, 512.0, 512.0, url };
 
@@ -47,16 +53,12 @@ namespace WWTWebservices
                 _ => throw new NotImplementedException(),
             };
 
-            var address = string.Format(formatString, args);
-            if (debug) return address;
-            Stream stream = new WebClient().OpenRead(address);
-            this.image = new Bitmap(stream);
-            return address;
+            return string.Format(formatString, args);
         }
 
         public void Lock()
         {
-            this.fastImage = new FastBitmap(this.image);
+            this.fastImage = new FastBitmap(this.Image);
             this.fastImage.LockBitmap();
         }
 
@@ -75,8 +77,6 @@ namespace WWTWebservices
             double x = Math.Max(0, Math.Min((raDec.X - raMin) / this.scaleX, 511));
             double y = Math.Max(0, Math.Min(511 - (raDec.Y - decMin) / this.scaleY, 511));
 
-
-
             return this.fastImage.GetFilteredPixel(x, y);
         }
 
@@ -86,10 +86,6 @@ namespace WWTWebservices
             double y = (raDec.Y - decMin) / this.scaleY;
 
             return string.Format("x={0},y={1}, scaleX={2}, scaleY={3}", x, y, scaleX, scaleY);
-
-            //return this.fastImage.GetFilteredPixel(x,y);
         }
-
     }
-
 }

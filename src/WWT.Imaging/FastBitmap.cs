@@ -80,7 +80,7 @@ namespace WWTWebservices
     /// <summary>
     /// A bitmap class that allows fast x, y access 
     /// </summary>
-    public unsafe class FastBitmap
+    public unsafe class FastBitmap : IDisposable
     {
         Bitmap bitmap;
 
