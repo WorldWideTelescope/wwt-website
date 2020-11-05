@@ -8,9 +8,9 @@ namespace WWT.Providers
     public class RassToastProvider : RequestProvider
     {
         private readonly IPlateTilePyramid _plateTiles;
-        private readonly FilePathOptions _options;
+        private readonly WwtOptions _options;
 
-        public RassToastProvider(IPlateTilePyramid plateTiles, FilePathOptions options)
+        public RassToastProvider(IPlateTilePyramid plateTiles, WwtOptions options)
         {
             _plateTiles = plateTiles;
             _options = options;

@@ -11,9 +11,9 @@ namespace WWT.Providers
 {
     public abstract partial class GetTourList : RequestProvider
     {
-        private readonly FilePathOptions _options;
+        private readonly WwtOptions _options;
 
-        public GetTourList(FilePathOptions options)
+        public GetTourList(WwtOptions options)
         {
             _options = options;
         }
@@ -247,14 +247,7 @@ namespace WWT.Providers
 
 
 
-            try
-            {
-                minutesToAdd = Int32.Parse(ConfigurationManager.AppSettings["TourVersionCheckIntervalMinutes"]);
-            }
-            catch
-            {
-                minutesToAdd = 5;  // if missing config, set to 5 minutes
-            }
+            minutesToAdd = _options.TourVersionCheckIntervalMinutes;
 
             if (System.DateTime.Now > fromCacheDateTime.AddMinutes(minutesToAdd))
             {

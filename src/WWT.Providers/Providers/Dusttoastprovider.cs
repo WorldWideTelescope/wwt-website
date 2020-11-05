@@ -8,9 +8,9 @@ namespace WWT.Providers
     public class DustToastProvider : RequestProvider
     {
         private readonly IPlateTilePyramid _plateTiles;
-        private readonly FilePathOptions _options;
+        private readonly WwtOptions _options;
 
-        public DustToastProvider(IPlateTilePyramid plateTiles, FilePathOptions options)
+        public DustToastProvider(IPlateTilePyramid plateTiles, WwtOptions options)
         {
             _plateTiles = plateTiles;
             _options = options;

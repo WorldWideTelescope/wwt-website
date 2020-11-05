@@ -8,7 +8,7 @@ namespace WWT.Providers
 {
     public class HiriseDem2Provider : HiriseDem2
     {
-        public HiriseDem2Provider(IPlateTilePyramid plateTiles, FilePathOptions options)
+        public HiriseDem2Provider(IPlateTilePyramid plateTiles, WwtOptions options)
             : base(plateTiles, options)
         {
         }

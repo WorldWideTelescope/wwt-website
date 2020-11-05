@@ -9,9 +9,9 @@ namespace WWT.Providers
     public class TychoOctProvider : RequestProvider
     {
         private readonly IPlateTilePyramid _plateTiles;
-        private readonly FilePathOptions _options;
+        private readonly WwtOptions _options;
 
-        public TychoOctProvider(IPlateTilePyramid plateTiles, FilePathOptions options)
+        public TychoOctProvider(IPlateTilePyramid plateTiles, WwtOptions options)
         {
             _plateTiles = plateTiles;
             _options = options;

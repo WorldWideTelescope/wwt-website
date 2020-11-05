@@ -9,10 +9,10 @@ namespace WWT.Providers
     public class EarthMerBathProvider : RequestProvider
     {
         private readonly IPlateTilePyramid _plateTiles;
-        private readonly FilePathOptions _options;
+        private readonly WwtOptions _options;
         private readonly IVirtualEarthDownloader _veDownloader;
 
-        public EarthMerBathProvider(IPlateTilePyramid plateTiles, FilePathOptions options, IVirtualEarthDownloader veDownloader)
+        public EarthMerBathProvider(IPlateTilePyramid plateTiles, WwtOptions options, IVirtualEarthDownloader veDownloader)
         {
             _plateTiles = plateTiles;
             _options = options;

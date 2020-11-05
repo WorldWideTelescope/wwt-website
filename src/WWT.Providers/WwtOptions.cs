@@ -1,9 +1,15 @@
-﻿using System;
-
-namespace WWT.Providers
+﻿namespace WWT.Providers
 {
-    public class FilePathOptions
+    public class WwtOptions
     {
+        public int TourVersionCheckIntervalMinutes { get; set; }
+
+        public bool LoginTracking { get; set; }
+
+        public string LoggingConn { get; set; }
+
+        public string Webkey { get; set; }
+
         public string DataDir { get; set; }
 
         public string DssTerapixelDir { get; set; }

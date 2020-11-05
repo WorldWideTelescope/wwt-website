@@ -7,9 +7,9 @@ namespace WWT.Providers
 {
     public class MoondemProvider : RequestProvider
     {
-        private readonly FilePathOptions _options;
+        private readonly WwtOptions _options;
 
-        public MoondemProvider(FilePathOptions options)
+        public MoondemProvider(WwtOptions options)
         {
             _options = options;
         }

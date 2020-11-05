@@ -10,9 +10,9 @@ namespace WWT.Providers
     public class MartianTile2Provider : HiRise
     {
         private readonly IPlateTilePyramid _plateTiles;
-        private readonly FilePathOptions _options;
+        private readonly WwtOptions _options;
 
-        public MartianTile2Provider(IPlateTilePyramid plateTiles, FilePathOptions options)
+        public MartianTile2Provider(IPlateTilePyramid plateTiles, WwtOptions options)
         {
             _plateTiles = plateTiles;
             _options = options;

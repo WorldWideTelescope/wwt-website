@@ -8,9 +8,9 @@ namespace WWT.Providers
     public class Galex4NearProvider : RequestProvider
     {
         private readonly IPlateTilePyramid _plateTiles;
-        private readonly FilePathOptions _options;
+        private readonly WwtOptions _options;
 
-        public Galex4NearProvider(IPlateTilePyramid plateTiles, FilePathOptions options)
+        public Galex4NearProvider(IPlateTilePyramid plateTiles, WwtOptions options)
         {
             _plateTiles = plateTiles;
             _options = options;

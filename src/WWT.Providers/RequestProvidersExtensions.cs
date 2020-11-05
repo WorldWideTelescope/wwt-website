@@ -12,7 +12,7 @@ namespace WWT.Providers
 {
     public static class RequestProvidersExtensions
     {
-        public static void AddRequestProviders(this IServiceCollection services, Action<FilePathOptions> config)
+        public static void AddRequestProviders(this IServiceCollection services, Action<WwtOptions> config)
         {
             var types = typeof(RequestProvider).Assembly.GetTypes()
                 .Where(t => !t.IsAbstract && typeof(RequestProvider).IsAssignableFrom(t));
@@ -26,7 +26,7 @@ namespace WWT.Providers
             services.AddSingleton<IMandelbrot, Mandelbrot>();
             services.AddSingleton<IVirtualEarthDownloader, VirtualEarthDownloader>();
 
-            var options = new FilePathOptions();
+            var options = new WwtOptions();
 
             config(options);
 

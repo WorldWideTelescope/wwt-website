@@ -7,18 +7,23 @@ namespace WWT.Providers
 {
     public class WebloginProvider : LoginWebUser
     {
+        public WebloginProvider(WwtOptions options)
+            : base(options)
+        {
+        }
+
         public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             context.Response.AddHeader("Cache-Control", "no-cache");
             context.Response.Expires = -1;
             context.Response.CacheControl = "no-cache";
 
-            string key = ConfigurationManager.AppSettings["webkey"];
+            string key = _options.Webkey;
             string testkey = context.Request.Params["webkey"];
             if (key == testkey)
             {
                 context.Response.Write("Key:Authorized");
-                if (Convert.ToBoolean(ConfigurationManager.AppSettings["LoginTracking"]))
+                if (_options.LoginTracking)
                 {
                     byte platform = 2;
                     if (context.Request.Params["Version"] != null)

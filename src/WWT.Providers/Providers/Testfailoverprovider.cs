@@ -5,9 +5,9 @@ namespace WWT.Providers
 {
     public class TestfailoverProvider : RequestProvider
     {
-        private readonly FilePathOptions _options;
+        private readonly WwtOptions _options;
 
-        public TestfailoverProvider(FilePathOptions options)
+        public TestfailoverProvider(WwtOptions options)
         {
             _options = options;
         }

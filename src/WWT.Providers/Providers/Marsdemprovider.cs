@@ -7,9 +7,9 @@ namespace WWT.Providers
 {
     public class MarsdemProvider : RequestProvider
     {
-        private readonly FilePathOptions _options;
+        private readonly WwtOptions _options;
 
-        public MarsdemProvider(FilePathOptions options)
+        public MarsdemProvider(WwtOptions options)
         {
             _options = options;
         }

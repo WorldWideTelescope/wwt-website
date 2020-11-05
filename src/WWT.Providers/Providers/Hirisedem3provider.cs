@@ -9,9 +9,9 @@ namespace WWT.Providers
     public class HiriseDem3Provider : RequestProvider
     {
         private readonly IPlateTilePyramid _plateTiles;
-        private readonly FilePathOptions _options;
+        private readonly WwtOptions _options;
 
-        public HiriseDem3Provider(IPlateTilePyramid plateTiles, FilePathOptions options)
+        public HiriseDem3Provider(IPlateTilePyramid plateTiles, WwtOptions options)
         {
             _plateTiles = plateTiles;
             _options = options;

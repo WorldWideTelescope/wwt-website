@@ -17,12 +17,12 @@ namespace WWT.Providers.Tests
         public ProviderTests()
         {
             Fixture = new Fixture();
-            Options = Fixture.Create<FilePathOptions>();
+            Options = Fixture.Create<WwtOptions>();
         }
 
         protected Fixture Fixture { get; }
 
-        protected FilePathOptions Options { get; }
+        protected WwtOptions Options { get; }
 
         protected virtual int MaxLevel => -1;
 
