@@ -12,10 +12,10 @@ namespace WWT.Providers
     public class EarthBlendProvider : RequestProvider
     {
         private readonly IPlateTilePyramid _plateTiles;
-        private readonly FilePathOptions _options;
+        private readonly WwtOptions _options;
         private readonly IVirtualEarthDownloader _veDownloader;
 
-        public EarthBlendProvider(IPlateTilePyramid plateTiles, FilePathOptions options, IVirtualEarthDownloader veDownloader)
+        public EarthBlendProvider(IPlateTilePyramid plateTiles, WwtOptions options, IVirtualEarthDownloader veDownloader)
         {
             _plateTiles = plateTiles;
             _options = options;

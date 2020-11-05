@@ -8,9 +8,9 @@ namespace WWT.Providers
     public class DSSToastProvider : RequestProvider
     {
         private readonly IPlateTilePyramid _plateTile;
-        private readonly FilePathOptions _options;
+        private readonly WwtOptions _options;
 
-        public DSSToastProvider(IPlateTilePyramid plateTile, FilePathOptions options)
+        public DSSToastProvider(IPlateTilePyramid plateTile, WwtOptions options)
         {
             _plateTile = plateTile;
             _options = options;

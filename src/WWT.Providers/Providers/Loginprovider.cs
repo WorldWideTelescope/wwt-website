@@ -1,5 +1,4 @@
 using System;
-using System.Configuration;
 using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,6 +7,13 @@ namespace WWT.Providers
 {
     public class LoginProvider : LoginUser
     {
+        private readonly WwtOptions _options;
+
+        public LoginProvider(WwtOptions options)
+        {
+            _options = options;
+        }
+
         public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             context.Response.AddHeader("Cache-Control", "no-cache");
@@ -39,10 +45,10 @@ namespace WWT.Providers
 
             try
             {
-                if (Convert.ToBoolean(ConfigurationManager.AppSettings["LoginTracking"]))
+                if (_options.LoginTracking)
                 {
                     String guid = context.Request.Params["user"];
-                    String con = ConfigurationManager.AppSettings["LoggingConn"];
+                    String con = _options.LoggingConn;
                     String ver = context.Request.Params["version"];
                     SqlConnection myConn = GetConnectionLogging(con);
 

@@ -9,9 +9,9 @@ namespace WWT.Providers
 {
     public class PostRatingFeedbackProvider : RequestProvider
     {
-        private readonly FilePathOptions _options;
+        private readonly WwtOptions _options;
 
-        public PostRatingFeedbackProvider(FilePathOptions options)
+        public PostRatingFeedbackProvider(WwtOptions options)
         {
             _options = options;
         }

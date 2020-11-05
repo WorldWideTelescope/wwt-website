@@ -5,7 +5,7 @@ namespace WWT.Providers
 {
     public class GetTourListProvider : GetTourList
     {
-        public GetTourListProvider(FilePathOptions options)
+        public GetTourListProvider(WwtOptions options)
             : base(options)
         {
         }

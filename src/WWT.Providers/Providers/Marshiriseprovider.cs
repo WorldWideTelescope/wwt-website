@@ -11,9 +11,9 @@ namespace WWT.Providers
     public class MarsHiriseProvider : RequestProvider
     {
         private readonly IPlateTilePyramid _plateTiles;
-        private readonly FilePathOptions _options;
+        private readonly WwtOptions _options;
 
-        public MarsHiriseProvider(IPlateTilePyramid plateTiles, FilePathOptions options)
+        public MarsHiriseProvider(IPlateTilePyramid plateTiles, WwtOptions options)
         {
             _plateTiles = plateTiles;
             _options = options;

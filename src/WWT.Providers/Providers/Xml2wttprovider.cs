@@ -7,9 +7,9 @@ namespace WWT.Providers
 {
     public class XML2WTTProvider : WWTWeb_XML2WTT
     {
-        private readonly FilePathOptions _options;
+        private readonly WwtOptions _options;
 
-        public XML2WTTProvider(IFileNameHasher hasher, FilePathOptions options)
+        public XML2WTTProvider(IFileNameHasher hasher, WwtOptions options)
             : base(hasher)
         {
             _options = options;

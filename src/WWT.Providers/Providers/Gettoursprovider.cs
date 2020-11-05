@@ -9,7 +9,7 @@ namespace WWT.Providers
 {
     public class GetToursProvider : GetTourList
     {
-        public GetToursProvider(FilePathOptions options)
+        public GetToursProvider(WwtOptions options)
             : base(options)
         {
         }

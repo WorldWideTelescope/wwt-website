@@ -7,9 +7,9 @@ namespace WWT.Providers
 {
     public class DemProvider : RequestProvider
     {
-        private readonly FilePathOptions _options;
+        private readonly WwtOptions _options;
 
-        public DemProvider(FilePathOptions options)
+        public DemProvider(WwtOptions options)
         {
             _options = options;
         }

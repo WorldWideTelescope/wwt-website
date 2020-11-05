@@ -9,9 +9,9 @@ namespace WWT.Providers
     public class VlssToastProvider : RequestProvider
     {
         private readonly IPlateTilePyramid _plateTiles;
-        private readonly FilePathOptions _options;
+        private readonly WwtOptions _options;
 
-        public VlssToastProvider(IPlateTilePyramid plateTiles, FilePathOptions options)
+        public VlssToastProvider(IPlateTilePyramid plateTiles, WwtOptions options)
         {
             _plateTiles = plateTiles;
             _options = options;

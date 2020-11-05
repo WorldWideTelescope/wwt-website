@@ -11,9 +11,9 @@ namespace WWT.Providers
     {
         private readonly IPlateTilePyramid _plateTiles;
         private readonly IKnownPlateFiles _knownPlateFiles;
-        private readonly FilePathOptions _options;
+        private readonly WwtOptions _options;
 
-        public Tiles2Provider(IPlateTilePyramid plateTiles, IKnownPlateFiles knownPlateFiles, FilePathOptions options)
+        public Tiles2Provider(IPlateTilePyramid plateTiles, IKnownPlateFiles knownPlateFiles, WwtOptions options)
         {
             _plateTiles = plateTiles;
             _knownPlateFiles = knownPlateFiles;

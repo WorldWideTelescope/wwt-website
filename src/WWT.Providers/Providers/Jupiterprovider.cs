@@ -8,9 +8,9 @@ namespace WWT.Providers
     public class JupiterProvider : RequestProvider
     {
         private readonly IPlateTilePyramid _plateTiles;
-        private readonly FilePathOptions _options;
+        private readonly WwtOptions _options;
 
-        public JupiterProvider(IPlateTilePyramid plateTiles, FilePathOptions options)
+        public JupiterProvider(IPlateTilePyramid plateTiles, WwtOptions options)
         {
             _plateTiles = plateTiles;
             _options = options;

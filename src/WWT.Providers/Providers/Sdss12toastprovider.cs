@@ -9,10 +9,10 @@ namespace WWT.Providers
     public class SDSS12ToastProvider : RequestProvider
     {
         private readonly IPlateTilePyramid _plateTiles;
-        private readonly FilePathOptions _options;
+        private readonly WwtOptions _options;
         private readonly IOctTileMapBuilder _octTileMap;
 
-        public SDSS12ToastProvider(IPlateTilePyramid plateTiles, FilePathOptions options, IOctTileMapBuilder octTileMap)
+        public SDSS12ToastProvider(IPlateTilePyramid plateTiles, WwtOptions options, IOctTileMapBuilder octTileMap)
         {
             _plateTiles = plateTiles;
             _options = options;

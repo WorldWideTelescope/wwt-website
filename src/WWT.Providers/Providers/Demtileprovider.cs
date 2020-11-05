@@ -7,9 +7,9 @@ namespace WWT.Providers
 {
     public class DemTileProvider : RequestProvider
     {
-        private readonly FilePathOptions _options;
+        private readonly WwtOptions _options;
 
-        public DemTileProvider(FilePathOptions options)
+        public DemTileProvider(WwtOptions options)
         {
             _options = options;
         }

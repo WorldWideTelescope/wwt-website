@@ -7,13 +7,11 @@ namespace WWT.Providers
 {
     public class CatalogProvider : RequestProvider
     {
-        private readonly FilePathOptions _options;
         private readonly ICatalogAccessor _catalog;        
         private readonly bool _useXmlContentType;
 
-        public CatalogProvider(FilePathOptions options, ICatalogAccessor catalogAccessor, bool useXmlContentType = false)
+        public CatalogProvider(ICatalogAccessor catalogAccessor, bool useXmlContentType = false)
         {
-            _options = options;
             _catalog = catalogAccessor;
             _useXmlContentType = useXmlContentType;
         }

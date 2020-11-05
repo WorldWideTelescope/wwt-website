@@ -9,9 +9,9 @@ namespace WWT.Providers
     public class WmapProvider : RequestProvider
     {
         private readonly IPlateTilePyramid _plateTiles;
-        private readonly FilePathOptions _options;
+        private readonly WwtOptions _options;
 
-        public WmapProvider(IPlateTilePyramid plateTiles, FilePathOptions options)
+        public WmapProvider(IPlateTilePyramid plateTiles, WwtOptions options)
         {
             _plateTiles = plateTiles;
             _options = options;

@@ -1,5 +1,4 @@
 using System;
-using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -7,16 +6,23 @@ namespace WWT.Providers
 {
     public abstract partial class LoginWebUser : RequestProvider
     {
-        internal static SqlConnection GetConnectionLogging()
+        protected readonly WwtOptions _options;
+
+        public LoginWebUser(WwtOptions options)
+        {
+            _options = options;
+        }
+
+        internal SqlConnection GetConnectionLogging()
         {
             string connStr = null;
-            connStr = ConfigurationManager.AppSettings["LoggingConn"];
+            connStr = _options.LoggingConn;
             SqlConnection myConnection = null;
             myConnection = new SqlConnection(connStr);
             return myConnection;
         }
 
-        public static string PostFeedback(string GUID, byte type)
+        public string PostFeedback(string GUID, byte type)
         {
             // type 1 = Windows client
             // type 2 = Web Client

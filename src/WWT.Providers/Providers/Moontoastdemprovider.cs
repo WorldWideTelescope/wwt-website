@@ -9,9 +9,9 @@ namespace WWT.Providers
     public class MoontoastdemProvider : RequestProvider
     {
         private readonly IPlateTilePyramid _plateTiles;
-        private readonly FilePathOptions _options;
+        private readonly WwtOptions _options;
 
-        public MoontoastdemProvider(IPlateTilePyramid plateTiles, FilePathOptions options)
+        public MoontoastdemProvider(IPlateTilePyramid plateTiles, WwtOptions options)
         {
             _plateTiles = plateTiles;
             _options = options;
