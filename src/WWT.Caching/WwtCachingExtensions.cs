@@ -4,7 +4,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Swick.Cache;
 using Swick.Cache.Handlers;
+using Swick.Cache.Json;
 using System;
+using System.Reflection;
 
 namespace WWT
 {
@@ -26,10 +28,12 @@ namespace WWT
             var cacheBuilder = services.AddCachingManager()
                 .Configure(opts =>
                 {
-                    opts.CacheHandlers.Add(new DefaultExpirationCacheHandler(entry =>
-                    {
-                        entry.SlidingExpiration = options.SlidingExpiration;
-                    }));
+                    opts.CacheHandlers.Add(new WwtCacheHandler(options.SlidingExpiration));
+                })
+                .AddJsonSerializer(opts =>
+                {
+                    opts.JsonOptions = new System.Text.Json.JsonSerializerOptions();
+                    opts.JsonOptions.Converters.Add(new StreamConverter());
                 });
 
             if (!string.IsNullOrEmpty(options.RedisCacheConnectionString))
@@ -71,6 +75,26 @@ namespace WWT
 
                 return this;
             }
+        }
+
+        private class WwtCacheHandler : CacheHandler
+        {
+            private readonly TimeSpan _slidingExpiration;
+
+            public WwtCacheHandler(TimeSpan slidingExpiration)
+            {
+                _slidingExpiration = slidingExpiration;
+            }
+
+            protected override void ConfigureEntryOptions(Type type, MethodInfo method, object obj, DistributedCacheEntryOptions entry)
+            {
+                entry.SlidingExpiration = _slidingExpiration;
+            }
+
+            /// <summary>
+            /// Many of the return types have a Stream in them, which is not round-trippable and must be deserialized again before returning it.
+            /// </summary>
+            protected override bool IsDataDrained(object obj) => true;
         }
     }
 }
