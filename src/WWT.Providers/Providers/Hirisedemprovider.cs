@@ -17,6 +17,8 @@ namespace WWT.Providers
             _options = options;
         }
 
+        public override string ContentType => ContentTypes.Text;
+
         public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string query = context.Request.Params["Q"];
@@ -38,13 +40,13 @@ namespace WWT.Providers
                         context.Response.ContentType = "text/plain";
                         context.Response.Write("No image");
                         context.Response.End();
-                        return; 
+                        return;
                     }
 
                     await s.CopyToAsync(context.Response.OutputStream, token);
                     context.Response.Flush();
                     context.Response.End();
-                    return; 
+                    return;
                 }
             }
 

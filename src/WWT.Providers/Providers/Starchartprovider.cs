@@ -8,6 +8,8 @@ namespace WWT.Providers
 {
     public class StarChartProvider : StarChart
     {
+        public override string ContentType => ContentTypes.Png;
+
         public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             double lat = double.Parse(context.Request.Params["lat"]);

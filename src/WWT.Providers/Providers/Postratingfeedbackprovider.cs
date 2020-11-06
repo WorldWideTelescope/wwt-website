@@ -16,11 +16,10 @@ namespace WWT.Providers
             _options = options;
         }
 
+        public override string ContentType => ContentTypes.Xml;
+
         public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
-            context.Response.ClearHeaders();
-            context.Response.Clear();
-            context.Response.ContentType = "text/xml";
             try
             {
                 string query = context.Request.Params["Q"];

@@ -13,6 +13,8 @@ namespace WWT.Providers
             _mandelbrot = mandelbrot;
         }
 
+        public override string ContentType => ContentTypes.Jpeg;
+
         public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string query = context.Request.Params["Q"];

@@ -12,6 +12,8 @@ namespace WWT.Providers
             _tileAccessor = tileAccessor;
         }
 
+        public override string ContentType => ContentTypes.Jpeg;
+
         public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string name = context.Request.Params["name"];

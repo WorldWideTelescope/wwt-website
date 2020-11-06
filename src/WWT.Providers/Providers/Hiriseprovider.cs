@@ -15,6 +15,8 @@ namespace WWT.Providers
             _plateTiles = plateTiles;
         }
 
+        public override string ContentType => ContentTypes.Png;
+
         public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string query = context.Request.Params["Q"];
@@ -43,7 +45,7 @@ namespace WWT.Providers
                     await s.CopyToAsync(context.Response.OutputStream, token);
                     context.Response.Flush();
                     context.Response.End();
-                    return; 
+                    return;
                 }
             }
         }

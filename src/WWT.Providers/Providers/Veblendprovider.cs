@@ -15,6 +15,8 @@ namespace WWT.Providers
             _veDownloader = veDownloader;
         }
 
+        public override string ContentType => ContentTypes.Jpeg;
+
         public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             var query = context.Request.Params["Q"];

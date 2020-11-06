@@ -6,6 +6,8 @@ namespace WWT.Providers
 {
     public class VersionProvider : RequestProvider
     {
+        public override string ContentType => ContentTypes.Text;
+
         public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             context.Response.AddHeader("Cache-Control", "no-cache");

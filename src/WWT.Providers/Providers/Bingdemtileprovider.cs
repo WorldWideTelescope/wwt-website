@@ -1,7 +1,6 @@
 ﻿using Microsoft.Maps.ElevationAdjustmentService.HDPhoto;
 using System;
 using System.IO;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,6 +14,8 @@ namespace WWT.Providers
         {
             _veDownloader = veDownloader; 
         }
+
+        public override string ContentType => ContentTypes.OctetStream;
 
         public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {

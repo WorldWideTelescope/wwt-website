@@ -16,6 +16,8 @@ namespace WWT.Providers
             _useXmlContentType = useXmlContentType;
         }
 
+        public override string ContentType => ContentTypes.Text;
+
         public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string etag = context.Request.Headers["If-None-Match"];

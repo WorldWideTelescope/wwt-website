@@ -1,5 +1,3 @@
-using System;
-using System.Configuration;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,6 +9,8 @@ namespace WWT.Providers
             : base(options)
         {
         }
+
+        public override string ContentType => ContentTypes.Text;
 
         public override Task RunAsync(IWwtContext context, CancellationToken token)
         {

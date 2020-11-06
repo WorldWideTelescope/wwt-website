@@ -10,18 +10,13 @@ namespace WWT.Providers
         {
         }
 
+        public override string ContentType => ContentTypes.XWtml;
+
         public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string etag = context.Request.Headers["If-None-Match"];
-
-
-            context.Response.ClearHeaders();
-            context.Response.Clear();
-            context.Response.ContentType = "application/x-wtml";
-
-            string toursXML = null;
             UpdateCacheEx(context.Cache);
-            toursXML = (string)context.Cache["WWTXMLTours"];
+            string toursXML = (string)context.Cache["WWTXMLTours"];
 
             if (toursXML != null)
             {

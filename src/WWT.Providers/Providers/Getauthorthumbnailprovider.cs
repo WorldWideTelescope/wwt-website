@@ -9,6 +9,8 @@ namespace WWT.Providers
     {
         private readonly ITourAccessor _tourAccessor;
 
+        public override string ContentType => ContentTypes.Png;
+
         public GetAuthorThumbnailProvider(ITourAccessor tourAccessor)
         {
             _tourAccessor = tourAccessor;
