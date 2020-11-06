@@ -43,6 +43,7 @@ namespace WWTMVC5
                     else
                     {
                         context.Response.ContentType = scope.Provider.ContentType;
+                        context.Response.CacheControl = scope.Provider.IsCacheable ? CacheType.Public : CacheType.NoCache;
 
                         logger.LogInformation("Dispatch {Path} to {Provider}", context.Request.Path, scope.Provider.GetType());
                         await scope.Provider.RunAsync(new SystemWebWwtContext(context), context.Response.ClientDisconnectedToken);
@@ -63,7 +64,9 @@ namespace WWTMVC5
 
                 if (endpoints.TryGetType(endpoint, out var type))
                 {
-                    return new ScopedRequest(scope, (RequestProvider)scope.ServiceProvider.GetRequiredService(type));
+                    var requestProvider = (RequestProvider)scope.ServiceProvider.GetRequiredService(type);
+
+                    return new ScopedRequest(scope, requestProvider);
                 }
                 else
                 {
@@ -92,6 +95,13 @@ namespace WWTMVC5
             {
                 _scope.Dispose();
             }
+        }
+
+        private static class CacheType
+        {
+            public const string NoCache = "no-cache";
+
+            public const string Public = "public";
         }
     }
 }

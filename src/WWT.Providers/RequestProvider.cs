@@ -7,6 +7,8 @@ namespace WWT.Providers
     {
         public abstract Task RunAsync(IWwtContext context, CancellationToken token);
 
+        public virtual bool IsCacheable => true;
+
         public abstract string ContentType { get; }
 
         protected static class ContentTypes
