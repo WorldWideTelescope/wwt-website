@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/demTile.aspx")]
     public class DemTileProvider : RequestProvider
     {
         private readonly WwtOptions _options;

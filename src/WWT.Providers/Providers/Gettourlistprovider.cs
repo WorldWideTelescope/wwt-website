@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/GetTourList.aspx")]
     public class GetTourListProvider : GetTourList
     {
         public GetTourListProvider(WwtOptions options)

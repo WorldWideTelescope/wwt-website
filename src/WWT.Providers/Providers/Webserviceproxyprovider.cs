@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/WebServiceProxy.aspx")]
     public class WebServiceProxyProvider : RequestProvider
     {
         public override string ContentType => ContentTypes.Text;

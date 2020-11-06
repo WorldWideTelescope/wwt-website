@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/PostRatingFeedback.aspx")]
     public class PostRatingFeedbackProvider : RequestProvider
     {
         private readonly WwtOptions _options;

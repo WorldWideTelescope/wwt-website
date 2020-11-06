@@ -5,6 +5,7 @@ using WWTWebservices;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/GalexToast.aspx")]
     public class GalexToastProvider : RequestProvider
     {
         private readonly IPlateTilePyramid _plateTiles;

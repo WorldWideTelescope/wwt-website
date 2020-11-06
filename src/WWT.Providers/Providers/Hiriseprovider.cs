@@ -6,6 +6,7 @@ using WWTWebservices;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/Hirise.aspx")]
     public class HiriseProvider : HiRise
     {
         private readonly IPlateTilePyramid _plateTiles;

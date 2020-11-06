@@ -5,6 +5,7 @@ using WWTWebservices;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/g360.aspx")]
     public class G360Provider : RequestProvider
     {
         private readonly IPlateTilePyramid _plateTiles;

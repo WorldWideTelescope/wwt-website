@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/marsdem.aspx")]
     public class MarsdemProvider : RequestProvider
     {
         private readonly WwtOptions _options;

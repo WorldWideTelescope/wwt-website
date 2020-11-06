@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/test.aspx")]
     public class TestProvider : RequestProvider
     {
         private readonly WwtOptions _options;

@@ -1,5 +1,4 @@
 using System;
-using System.Configuration;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,6 +6,7 @@ using WWTWebservices;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/MartianTile2.aspx")]
     public class MartianTile2Provider : HiRise
     {
         private readonly IPlateTilePyramid _plateTiles;

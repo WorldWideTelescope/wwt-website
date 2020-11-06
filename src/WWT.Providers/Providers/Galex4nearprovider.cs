@@ -5,6 +5,7 @@ using WWTWebservices;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/Galex4Near.aspx")]
     public class Galex4NearProvider : RequestProvider
     {
         private readonly IPlateTilePyramid _plateTiles;

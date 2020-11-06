@@ -6,6 +6,7 @@ using WWTWebservices;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/TychoOct.aspx")]
     public class TychoOctProvider : RequestProvider
     {
         private readonly IPlateTilePyramid _plateTiles;

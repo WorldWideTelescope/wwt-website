@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/BingDemTile.aspx")]
     public class BingDemTileProvider : RequestProvider
     {
         private readonly IVirtualEarthDownloader _veDownloader;

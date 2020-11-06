@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/tilethumb.aspx")]
     public class TilethumbProvider : RequestProvider
     {
         private readonly ITileAccessor _tileAccessor;

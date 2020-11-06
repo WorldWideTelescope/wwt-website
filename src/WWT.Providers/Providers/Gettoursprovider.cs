@@ -7,6 +7,7 @@ using WWTWebservices;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/GetTours.aspx")]
     public class GetToursProvider : GetTourList
     {
         public GetToursProvider(WwtOptions options)

@@ -6,6 +6,7 @@ using WWTWebservices;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/HiriseDem2.aspx")]
     public class HiriseDem2Provider : HiriseDem2
     {
         public HiriseDem2Provider(IPlateTilePyramid plateTiles, WwtOptions options)

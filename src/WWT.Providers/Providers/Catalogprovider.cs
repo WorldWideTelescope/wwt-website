@@ -5,6 +5,7 @@ using WWT.Catalog;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/Catalog.aspx")]
     public class CatalogProvider : RequestProvider
     {
         private readonly ICatalogAccessor _catalog;        

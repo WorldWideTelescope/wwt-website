@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/weblogin.aspx")]
     public class WebloginProvider : LoginWebUser
     {
         public WebloginProvider(WwtOptions options)

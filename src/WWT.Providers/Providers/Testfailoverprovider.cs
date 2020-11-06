@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/testfailover.aspx")]
     public class TestfailoverProvider : RequestProvider
     {
         private readonly WwtOptions _options;

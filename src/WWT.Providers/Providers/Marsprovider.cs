@@ -5,6 +5,7 @@ using WWTWebservices;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/mars.aspx")]
     public class MarsProvider : RequestProvider
     {
         private readonly IPlateTilePyramid _plateTiles;

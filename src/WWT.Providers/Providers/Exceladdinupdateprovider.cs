@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/ExcelAddinUpdate.aspx")]
     public class ExcelAddinUpdateProvider : RequestProvider
     {
         public override string ContentType => ContentTypes.Text;

@@ -5,6 +5,7 @@ using WWTWebservices;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/XML2WTT.aspx")]
     public class XML2WTTProvider : WWTWeb_XML2WTT
     {
         private readonly WwtOptions _options;

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/FixedAltitudeDemTile.aspx")]
     public class FixedAltitudeDemTileProvider : RequestProvider
     {
         public override string ContentType => ContentTypes.OctetStream;

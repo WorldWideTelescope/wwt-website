@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/isstle2.aspx")]
     public class Isstle2Provider : isstle
     {
         public override string ContentType => ContentTypes.Text;

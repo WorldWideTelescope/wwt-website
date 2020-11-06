@@ -7,6 +7,9 @@ using WWTWebservices;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/GetTourFile.aspx")]
+    [RequestEndpoint("/GetTourFile.aspx")]
+    [RequestEndpoint("/GetTourFile2.aspx")]
     public class GetTourFileProvider : RequestProvider
     {
         private readonly IFileNameHasher _hasher;
