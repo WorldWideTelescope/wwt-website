@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/thumbnail.aspx")]
     public class ThumbnailProvider : RequestProvider
     {
         private readonly IThumbnailAccessor _thumbnails;

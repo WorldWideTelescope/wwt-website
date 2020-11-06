@@ -5,6 +5,7 @@ using WWTWebservices;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/jupiter.aspx")]
     public class JupiterProvider : RequestProvider
     {
         private readonly IPlateTilePyramid _plateTiles;

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/login.aspx")]
     public class LoginProvider : LoginUser
     {
         private readonly WwtOptions _options;

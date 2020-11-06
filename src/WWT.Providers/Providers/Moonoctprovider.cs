@@ -6,6 +6,7 @@ using WWTWebservices;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/moonOct.aspx")]
     public class MoonOctProvider : RequestProvider
     {
         private readonly IPlateTilePyramid _plateTiles;

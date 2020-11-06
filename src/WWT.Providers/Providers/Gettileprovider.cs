@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/GetTile.aspx")]
     public class GetTileProvider : RequestProvider
     {
         private readonly ITileAccessor _tileAccessor;

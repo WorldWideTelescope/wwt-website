@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/dembath.aspx")]
     public class DembathProvider : RequestProvider
     {
         public override string ContentType => ContentTypes.Text;

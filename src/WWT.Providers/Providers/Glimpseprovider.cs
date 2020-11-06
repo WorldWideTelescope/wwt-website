@@ -6,6 +6,7 @@ using WWTWebservices;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/Glimpse.aspx")]
     public class GlimpseProvider : RequestProvider
     {
         private readonly IPlateTilePyramid _plateTiles;

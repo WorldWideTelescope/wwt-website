@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/Mandel.aspx")]
     public class MandelProvider : RequestProvider
     {
         private readonly IMandelbrot _mandelbrot;

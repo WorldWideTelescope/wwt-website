@@ -5,6 +5,7 @@ using WWTWebservices;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/demmars_new.aspx")]
     public class DemMarsNewProvider : RequestProvider
     {
         private readonly IPlateTilePyramid _plateTile;

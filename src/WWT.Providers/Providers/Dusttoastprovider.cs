@@ -5,6 +5,7 @@ using WWTWebservices;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/DustToast.aspx")]
     public class DustToastProvider : RequestProvider
     {
         private readonly IPlateTilePyramid _plateTiles;

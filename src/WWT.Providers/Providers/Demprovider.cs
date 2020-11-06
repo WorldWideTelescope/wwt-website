@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/dem.aspx")]
     public class DemProvider : RequestProvider
     {
         private readonly WwtOptions _options;

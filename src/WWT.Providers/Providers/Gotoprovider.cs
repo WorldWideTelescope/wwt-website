@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/Goto.aspx")]
     public class GotoProvider : RequestProvider
     {
         public override string ContentType => ContentTypes.XWtml;

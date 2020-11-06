@@ -5,6 +5,7 @@ using WWTWebservices;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/DSSToast.aspx")]
     public class DSSToastProvider : RequestProvider
     {
         private readonly IPlateTilePyramid _plateTile;

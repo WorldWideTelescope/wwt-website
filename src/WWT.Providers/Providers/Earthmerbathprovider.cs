@@ -6,6 +6,7 @@ using WWTWebservices;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/EarthMerBath.aspx")]
     public class EarthMerBathProvider : RequestProvider
     {
         private readonly IPlateTilePyramid _plateTiles;

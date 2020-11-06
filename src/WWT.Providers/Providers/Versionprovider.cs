@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/version.aspx")]
     public class VersionProvider : RequestProvider
     {
         public override string ContentType => ContentTypes.Text;

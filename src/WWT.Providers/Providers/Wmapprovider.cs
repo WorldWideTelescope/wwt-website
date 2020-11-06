@@ -6,6 +6,7 @@ using WWTWebservices;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/wmap.aspx")]
     public class WmapProvider : RequestProvider
     {
         private readonly IPlateTilePyramid _plateTiles;

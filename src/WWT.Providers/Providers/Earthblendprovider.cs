@@ -9,6 +9,7 @@ using WWTWebservices;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/EarthBlend.aspx")]
     public class EarthBlendProvider : RequestProvider
     {
         private readonly IPlateTilePyramid _plateTiles;

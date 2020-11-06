@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/StarChart.aspx")]
     public class StarChartProvider : StarChart
     {
         public override string ContentType => ContentTypes.Png;

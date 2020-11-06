@@ -7,6 +7,7 @@ using WWTWebservices;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/tiles.aspx")]
     public class TilesProvider : RequestProvider
     {
         private readonly IPlateTilePyramid _plateTiles;

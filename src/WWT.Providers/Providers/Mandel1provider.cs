@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/mandel1.aspx")]
     public class Mandel1Provider : RequestProvider
     {
         public override string ContentType => ContentTypes.Jpeg;

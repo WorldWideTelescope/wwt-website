@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/veblend.aspx")]
     public class VeblendProvider : RequestProvider
     {
         private readonly IVirtualEarthDownloader _veDownloader;

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/ShowImage.aspx")]
     public class ShowImageProvider : RequestProvider
     {
         public override string ContentType => ContentTypes.XWtml;

@@ -5,6 +5,7 @@ using WWT.Tours;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/GetTourThumbnail.aspx")]
     public class GetTourThumbnailProvider : GetTourProviderBase
     {
         private readonly ITourAccessor _tourAccessor;

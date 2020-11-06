@@ -6,6 +6,7 @@ using WWTWebservices;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/hAlphaToast.aspx")]
     public class HAlphaToastProvider : RequestProvider
     {
         private readonly IPlateTilePyramid _plateTiles;

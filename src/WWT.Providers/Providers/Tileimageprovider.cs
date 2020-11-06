@@ -9,6 +9,7 @@ using WWTWebservices;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/TileImage.aspx")]
     public class TileImageProvider : RequestProvider
     {
         private readonly IFileNameHasher _hasher;

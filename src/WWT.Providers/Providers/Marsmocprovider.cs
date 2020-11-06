@@ -8,6 +8,7 @@ using WWTWebservices;
 
 namespace WWT.Providers
 {
+    [RequestEndpoint("/wwtweb/MarsMoc.aspx")]
     public class MarsMocProvider : RequestProvider
     {
         private readonly IPlateTilePyramid _plateTiles;
