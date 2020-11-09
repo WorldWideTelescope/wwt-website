@@ -17,8 +17,7 @@ namespace WWT.Providers
 
         public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
-            context.Response.Write(_options.DssToastPng);
-            return Task.CompletedTask;
+            return context.Response.WriteAsync(_options.DssToastPng, token);
         }
     }
 }

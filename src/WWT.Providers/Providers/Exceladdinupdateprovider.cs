@@ -11,14 +11,12 @@ namespace WWT.Providers
 
         public override string ContentType => ContentTypes.Text;
 
-        public override Task RunAsync(IWwtContext context, CancellationToken token)
+        public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
-            context.Response.Write("ClientVersion:");
+            await context.Response.WriteAsync("ClientVersion:", token);
             context.Response.WriteFile(context.MapPath(Path.Combine("..", "wwt2", "ExcelAddinVersion.txt")));
-            context.Response.Write("\nUpdateUrl:");
+            await context.Response.WriteAsync("\nUpdateUrl:", token);
             context.Response.WriteFile(context.MapPath(Path.Combine("..", "wwt2", "ExcelAddinUpdateUrl.txt")));
-
-            return Task.CompletedTask;
         }
     }
 }

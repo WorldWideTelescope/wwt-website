@@ -153,7 +153,7 @@ namespace WWT.Providers
 
                     string xml = string.Format("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Folder Name=\"{0}\" Group=\"{14}\">\n<Place Name=\"{0}\" RA=\"{1}\" Dec=\"{2}\" ZoomLevel=\"{3}\" DataSetType=\"Sky\" Opacity=\"100\" Thumbnail=\"{10}\" Constellation=\"\">\n <ForegroundImageSet>\n <ImageSet DataSetType=\"Sky\" Name=\"{0}\" BandPass=\"Visible\" Url=\"http://www.worldwidetelescope.org/wwtweb/GetTile.aspx?q={{1}},{{2}},{{3}},{8}\" TileLevels=\"{15}\" WidthFactor=\"1\" Rotation=\"{5}\" Projection=\"Tan\" FileType=\".png\" CenterY=\"{2}\" CenterX=\"{9}\" BottomsUp=\"{13}\" OffsetX=\"{6}\" OffsetY=\"{7}\" BaseTileLevel=\"0\" BaseDegreesPerTile=\"{4}\">\n<Credits>{11}</Credits>\n<CreditsUrl>{12}</CreditsUrl>\n<ThumbnailUrl>{10}</ThumbnailUrl>\n</ImageSet>\n</ForegroundImageSet>\n</Place>\n</Folder>", name, ra / 15, dec, zoom, scale, rotation, x, y, id, ra, thumb, credits, creditsUrl, reverseparity, "Explorer", maxLevels);
 
-                    context.Response.Write(xml);
+                    await context.Response.WriteAsync(xml, token);
                 }
             }
         }

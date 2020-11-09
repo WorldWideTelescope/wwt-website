@@ -735,7 +735,6 @@
     <Folder Include="Views\Home\" />
     <Folder Include="Views\Resources\" />
     <Folder Include="Views\WCF\" />
-    <Folder Include="WWTWeb\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CSS\bootswatch.less" />

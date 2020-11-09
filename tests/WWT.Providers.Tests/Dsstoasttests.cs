@@ -40,7 +40,7 @@ namespace WWT.Providers.Tests
 
         protected override void ExpectedResponseAboveMaxLevel(IResponse response)
         {
-            response.Received(1).Write("No image");
+            response.Received(1).WriteAsync("No image", default);
         }
     }
 }

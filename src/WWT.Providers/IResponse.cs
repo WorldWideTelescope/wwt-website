@@ -1,11 +1,11 @@
 ﻿using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
     public interface IResponse
     {
-        void BinaryWrite(byte[] data);
-
         void End();
 
         void Clear();
@@ -20,7 +20,7 @@ namespace WWT.Providers
 
         int StatusCode { get; set; }
 
-        void Write(string message);
+        Task WriteAsync(string message, CancellationToken token);
 
         void Flush();
 

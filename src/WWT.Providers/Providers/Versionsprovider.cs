@@ -11,18 +11,16 @@ namespace WWT.Providers
 
         public override bool IsCacheable => false;
 
-        public override Task RunAsync(IWwtContext context, CancellationToken token)
+        public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             var wwt2dir = context.MapPath(Path.Combine("..", "wwt2"));
 
-            context.Response.Write("ClientVersion:");
+            await context.Response.WriteAsync("ClientVersion:", token);
             context.Response.WriteFile(Path.Combine(wwt2dir, "version.txt"));
-            context.Response.Write("\n");
+            await context.Response.WriteAsync("\n", token);
             context.Response.WriteFile(Path.Combine(wwt2dir, "dataversion.txt"));
-            context.Response.Write("\nMessage:");
+            await context.Response.WriteAsync("\nMessage:", token);
             context.Response.WriteFile(Path.Combine(wwt2dir, "message.txt"));
-
-            return Task.CompletedTask;
         }
     }
 }

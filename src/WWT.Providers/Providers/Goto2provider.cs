@@ -36,9 +36,7 @@ namespace WWT.Providers
             }
 
             string xml = string.Format("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Folder Group=\"Goto\">\n<Place Name=\"{0}\" RA=\"{1}\" Dec=\"{2}\" ZoomLevel=\"{3}\" DataSetType=\"Sky\"/>\n</Folder>", name, ra, dec, zoom);
-            context.Response.Write(xml);
-
-            return Task.CompletedTask;
+            return context.Response.WriteAsync(xml, token);
         }
     }
 }

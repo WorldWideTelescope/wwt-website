@@ -41,15 +41,15 @@ namespace WWT.Providers
                             {
                                 context.Response.Clear();
                                 context.Response.ContentType = "text/plain";
-                                context.Response.Write("No image");
+                                await context.Response.WriteAsync("No image", token);
                                 context.Response.End();
-                                return; 
+                                return;
                             }
 
                             await s.CopyToAsync(context.Response.OutputStream, token);
                             context.Response.Flush();
                             context.Response.End();
-                            return; 
+                            return;
                         }
                     }
                     break;
@@ -69,14 +69,14 @@ namespace WWT.Providers
                             {
                                 context.Response.Clear();
                                 context.Response.ContentType = "text/plain";
-                                context.Response.Write("No image");
+                                await context.Response.WriteAsync("No image", token);
                                 context.Response.End();
                                 return;
                             }
                             await s.CopyToAsync(context.Response.OutputStream, token);
                             context.Response.Flush();
                             context.Response.End();
-                            return; 
+                            return;
                         }
                     }
 
@@ -94,15 +94,15 @@ namespace WWT.Providers
                             {
                                 context.Response.Clear();
                                 context.Response.ContentType = "text/plain";
-                                context.Response.Write("No image");
+                                await context.Response.WriteAsync("No image", token);
                                 context.Response.End();
-                                return; 
+                                return;
                             }
 
                             await s.CopyToAsync(context.Response.OutputStream, token);
                             context.Response.Flush();
                             context.Response.End();
-                            return; 
+                            return;
                         }
                     }
                     break;

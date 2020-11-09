@@ -15,7 +15,7 @@ namespace WWT.Providers
 
         public override bool IsCacheable => false;
 
-        public override Task RunAsync(IWwtContext context, CancellationToken token)
+        public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string etag = context.Request.Headers["If-None-Match"];
             UpdateCacheEx(context.Cache);
@@ -29,7 +29,7 @@ namespace WWT.Providers
                 if (newEtag != etag)
                 {
                     context.Response.AddHeader("etag", newEtag);
-                    context.Response.Write(toursXML);
+                    await context.Response.WriteAsync(toursXML, token);
                 }
                 else
                 {
@@ -37,8 +37,6 @@ namespace WWT.Providers
                 }
             }
             context.Response.End();
-
-            return Task.CompletedTask;
         }
 
         protected override string SqlCommandString => "Select CategoryId, ParentCatID, Name, CatThumbnailUrl from TourCategories where ParentCatId = ";

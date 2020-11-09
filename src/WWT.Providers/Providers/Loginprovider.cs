@@ -19,7 +19,7 @@ namespace WWT.Providers
 
         public override bool IsCacheable => false;
 
-        public override Task RunAsync(IWwtContext context, CancellationToken token)
+        public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             context.Response.Expires = -1;
             context.Response.AddHeader("etag", "1-2-3-4-5");
@@ -27,21 +27,21 @@ namespace WWT.Providers
             if (context.Request.Params["Equinox"] != null)
             {
                 context.Response.WriteFile(context.MapPath("wwt2", "EqClientVersion.txt"));
-                context.Response.Write("\n");
+                await context.Response.WriteAsync("\n", token);
             }
             else
             {
-                context.Response.Write("ClientVersion:");
+                await context.Response.WriteAsync("ClientVersion:",token);
                 context.Response.WriteFile(context.MapPath("wwt2", "ClientVersion.txt"));
-                context.Response.Write("\n");
+                await context.Response.WriteAsync("\n", token);
                 context.Response.WriteFile(context.MapPath("wwt2", "dataversion.txt"));
-                context.Response.Write("\nMessage:");
+                await context.Response.WriteAsync("\nMessage:", token);
                 context.Response.WriteFile(context.MapPath("wwt2", "message.txt"));
-                context.Response.Write("\nWarnVersion:");
+                await context.Response.WriteAsync("\nWarnVersion:", token);
                 context.Response.WriteFile(context.MapPath("wwt2", "warnver.txt"));
-                context.Response.Write("\nMinVersion:");
+                await context.Response.WriteAsync("\nMinVersion:", token);
                 context.Response.WriteFile(context.MapPath("wwt2", "minver.txt"));
-                context.Response.Write("\nUpdateUrl:");
+                await context.Response.WriteAsync("\nUpdateUrl:", token);
                 context.Response.WriteFile(context.MapPath("wwt2", "updateurl.txt"));
             }
             context.Response.Flush();
@@ -61,8 +61,6 @@ namespace WWT.Providers
             catch
             {
             }
-
-            return Task.CompletedTask;
         }
     }
 }

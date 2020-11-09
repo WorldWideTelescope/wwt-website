@@ -58,7 +58,7 @@ namespace WWT.Providers
                 }
 
                 bw.Flush();
-                context.Response.BinaryWrite(data);
+                await context.Response.OutputStream.WriteAsync(data, 0, data.Length, token);
             }
 
             context.Response.End();

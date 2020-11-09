@@ -26,7 +26,7 @@ namespace WWT.Providers
         {
             if (context.Request.UserAgent.ToLower().Contains("wget"))
             {
-                context.Response.Write("You are not allowed to bulk download imagery thru the tile service. Please contact wwtpage@microsoft.com for more information.");
+                await context.Response.WriteAsync("You are not allowed to bulk download imagery thru the tile service. Please contact wwtpage@microsoft.com for more information.", token);
                 context.Response.End();
                 return;
             }
@@ -47,7 +47,7 @@ namespace WWT.Providers
             }
             catch
             {
-                context.Response.Write("Invalid query string.");
+                await context.Response.WriteAsync("Invalid query string.", token);
                 context.Response.End();
                 return;
             }
@@ -56,7 +56,7 @@ namespace WWT.Providers
 
             if (level > 14)
             {
-                context.Response.Write("No image");
+                await context.Response.WriteAsync("No image", token);
                 context.Response.End();
                 return;
             }
@@ -71,7 +71,7 @@ namespace WWT.Providers
                     {
                         context.Response.Clear();
                         context.Response.ContentType = "text/plain";
-                        context.Response.Write("No image");
+                        await context.Response.WriteAsync("No image", token);
                         context.Response.End();
                         return;
                     }
@@ -87,7 +87,7 @@ namespace WWT.Providers
             {
                 if (stream is null)
                 {
-                    context.Response.Write("No Image");
+                    await context.Response.WriteAsync("No image", token);
                 }
                 else
                 {
