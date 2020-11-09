@@ -10,8 +10,7 @@ namespace WWT.Providers
 
         public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
-            context.Response.Write("Hello");
-            return Task.CompletedTask;
+            return context.Response.WriteAsync("Hello", token);
         }
     }
 }

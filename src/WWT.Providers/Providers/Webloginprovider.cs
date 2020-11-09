@@ -15,7 +15,7 @@ namespace WWT.Providers
 
         public override bool IsCacheable => false;
 
-        public override Task RunAsync(IWwtContext context, CancellationToken token)
+        public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             context.Response.Expires = -1;
 
@@ -23,7 +23,7 @@ namespace WWT.Providers
             string testkey = context.Request.Params["webkey"];
             if (key == testkey)
             {
-                context.Response.Write("Key:Authorized");
+                await context.Response.WriteAsync("Key:Authorized", token);
                 if (_options.LoginTracking)
                 {
                     byte platform = 2;
@@ -56,10 +56,8 @@ namespace WWT.Providers
             }
             else
             {
-                context.Response.Write("Key:Failed");
+                await context.Response.WriteAsync("Key:Failed", token);
             }
-
-            return Task.CompletedTask;
         }
     }
 }

@@ -10,7 +10,7 @@ namespace WWT.Providers
     {
         public override string ContentType => ContentTypes.Text;
 
-        public override Task RunAsync(IWwtContext context, CancellationToken token)
+        public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string url = "";
 
@@ -69,21 +69,18 @@ namespace WWT.Providers
                             context.Cache["WWTISSTLDATE"] = DateTime.Now;
                         }
                     }
-                    context.Response.Write(reply);
+
+                    await context.Response.WriteAsync(reply, token);
                 }
-                catch (System.Exception)
+                catch (Exception)
                 {
                     string reply = "1 25544U 98067A   13274.85334491  .00007046  00000-0  12878-3 0  7167\n";
                     reply += "2 25544  51.6486 299.7368 0003212  97.7461 254.0523 15.50562392851247\n";
                     reply += "Cached during NASA Downtime";
 
-
-                    // returnString = e.Message;
-                    context.Response.Write(reply);
+                    await context.Response.WriteAsync(reply, token);
                 }
             }
-
-            return Task.CompletedTask;
         }
     }
 }

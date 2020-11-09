@@ -21,7 +21,7 @@ namespace WWT.Providers
 
         public override string ContentType => ContentTypes.Png;
 
-        public override Task RunAsync(IWwtContext context, CancellationToken token)
+        public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string path = context.MapPath(@"TourCache");
 
@@ -61,10 +61,8 @@ namespace WWT.Providers
             }
             catch (Exception e)
             {
-                context.Response.Write(e.Message);
+                await context.Response.WriteAsync(e.Message, token);
             }
-
-            return Task.CompletedTask;
         }
     }
 }

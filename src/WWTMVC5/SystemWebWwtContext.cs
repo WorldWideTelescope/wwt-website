@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Caching;
 using WWT.Providers;
@@ -90,14 +92,19 @@ namespace WWTMVC5
             set => _context.Response.CacheControl = value;
         }
         void IResponse.AddHeader(string name, string value) => _context.Response.AddHeader(name, value);
-        void IResponse.BinaryWrite(byte[] data) => _context.Response.BinaryWrite(data);
         void IResponse.Clear() => _context.Response.Clear();
         void IResponse.ClearHeaders() => _context.Response.ClearHeaders();
         void IResponse.Close() => _context.Response.Close();
         void IResponse.End() => _context.Response.End();
         void IResponse.Flush() => _context.Response.Flush();
         void IResponse.Redirect(string redirectUri) => _context.Response.Redirect(redirectUri);
-        void IResponse.Write(string message) => _context.Response.Write(message);
+
+        Task IResponse.WriteAsync(string message, CancellationToken token)
+        {
+            _context.Response.Write(message);
+            return Task.CompletedTask;
+        }
+
         void IResponse.WriteFile(string path) => _context.Response.WriteFile(path);
     }
 }

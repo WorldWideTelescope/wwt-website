@@ -38,7 +38,7 @@ namespace WWT.Providers
                     {
                         context.Response.Clear();
                         context.Response.ContentType = "text/plain";
-                        context.Response.Write("No image");
+                        await context.Response.WriteAsync("No image", token);
                         context.Response.End();
                         return;
                     }

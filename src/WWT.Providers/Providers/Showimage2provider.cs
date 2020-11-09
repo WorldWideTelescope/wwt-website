@@ -10,12 +10,12 @@ namespace WWT.Providers
     {
         public override string ContentType => ContentTypes.XWtml;
 
-        public override Task RunAsync(IWwtContext context, CancellationToken token)
+        public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             if (context.Request.ContainsCookie("alphakey"))
             {
                 context.Response.Redirect("http://www.worldwidetelescope.org/webclient/default.aspx?Wtml=" + WebUtility.UrlEncode(context.Request.Url.ToString() + "&wtml=true"));
-                return Task.CompletedTask;
+                return; 
             }
 
             if (context.Request.Params["debug"] != null)
@@ -105,9 +105,7 @@ namespace WWT.Providers
             //string xml = string.Format("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Folder Group=\"Goto\">\n<Place Name=\"{0}\" RA=\"{1}\" Dec=\"{2}\" ZoomLevel=\"{3}\" DataSetType=\"Sky\"/>\n</Folder>", name, ra, dec, zoom);
             string xml = string.Format("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Folder Name=\"{0}\" Group=\"{14}\">\n<Place Name=\"{0}\" RA=\"{1}\" Dec=\"{2}\" ZoomLevel=\"{3}\" DataSetType=\"Sky\" Opacity=\"100\" Thumbnail=\"{10}\" Constellation=\"\">\n <ForegroundImageSet>\n <ImageSet DataSetType=\"Sky\" BandPass=\"Visible\" Url=\"{8}\" TileLevels=\"0\" WidthFactor=\"2\" Rotation=\"{5}\" Projection=\"SkyImage\" FileType=\".tif\" CenterY=\"{2}\" CenterX=\"{9}\" BottomsUp=\"{13}\" OffsetX=\"{6}\" OffsetY=\"{7}\" BaseTileLevel=\"0\" BaseDegreesPerTile=\"{4}\">\n<Credits>{11}</Credits>\n<CreditsUrl>{12}</CreditsUrl>\n</ImageSet>\n</ForegroundImageSet>\n</Place>\n</Folder>", name, ra / 15, dec, zoom, scale, rotation, x, y, url, ra, thumb, credits, creditsUrl, reverseparity, bgoto ? "Goto" : "Search");
 
-            context.Response.Write(xml);
-
-            return Task.CompletedTask;
+            await context.Response.WriteAsync(xml, token);
         }
     }
 }

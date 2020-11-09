@@ -32,7 +32,7 @@ namespace WWT.Providers
 
             if (level > 20)
             {
-                context.Response.Write("No image");
+                await context.Response.WriteAsync("No image", token);
                 context.Response.Close();
             }
             else if (level < 8)

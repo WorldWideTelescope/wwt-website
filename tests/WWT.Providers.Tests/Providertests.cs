@@ -28,13 +28,13 @@ namespace WWT.Providers.Tests
 
         protected virtual Action<IResponse> StreamExceptionResponseHandler { get; } = response =>
         {
-            response.Received(1).Write("No image");
+            response.Received(1).WriteAsync("No image", default);
             Assert.Equal("text/plain", response.ContentType);
         };
 
         protected virtual Action<IResponse> NullStreamResponseHandler { get; } = response =>
         {
-            response.Received(1).Write("No image");
+            response.Received(1).WriteAsync("No image", default);
             Assert.Equal("text/plain", response.ContentType);
         };
 
@@ -42,7 +42,7 @@ namespace WWT.Providers.Tests
 
         protected virtual void ExpectedResponseAboveMaxLevel(IResponse response)
         {
-            response.Received(1).Write("No image");
+            response.Received(1).WriteAsync("No image", default);
             Assert.Equal("text/plain", response.ContentType);
         }
 

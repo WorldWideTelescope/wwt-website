@@ -24,7 +24,7 @@ namespace WWT.Providers
 
             if (query is null)
             {
-                context.Response.Write("No image");
+                await context.Response.WriteAsync("No image", token);
                 context.Response.End();
                 return;
             }
@@ -33,7 +33,7 @@ namespace WWT.Providers
 
             if (level > 20)
             {
-                context.Response.Write("No image");
+                await context.Response.WriteAsync("No image", token);
                 context.Response.Close();
                 return;
             }

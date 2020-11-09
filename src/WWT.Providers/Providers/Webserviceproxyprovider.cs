@@ -10,7 +10,7 @@ namespace WWT.Providers
     {
         public override string ContentType => ContentTypes.Text;
 
-        public override Task RunAsync(IWwtContext context, CancellationToken token)
+        public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string returnString = "Erorr: No URL Specified";
             string url = "";
@@ -38,11 +38,9 @@ namespace WWT.Providers
                 catch (System.Exception e)
                 {
                     returnString = e.Message;
-                    context.Response.Write(returnString);
+                    await context.Response.WriteAsync(returnString, token);
                 }
             }
-
-            return Task.CompletedTask;
         }
     }
 }
