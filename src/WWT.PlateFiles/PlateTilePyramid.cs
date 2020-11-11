@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using WWT;
 using WWT.PlateFiles;
 
 /* Jonathan Fay wrote this, except for the bits polluted by Dinoj, which are between <dinoj>...</dinoj> tags
@@ -25,20 +26,10 @@ namespace WWTWebservices
 {
     public class PlateTilePyramid : IDisposable
     {
-        string filename;
-        private FileStream _readStream;
         private bool _disposed = false;
 
-        public string FileName
-        {
-            get { return filename; }
-        }
-        int levels;
+        public int Levels { get; }
 
-        public int Levels
-        {
-            get { return levels; }
-        }
         uint currentOffset = 0;
         LevelInfo[] levelMap;
 
@@ -48,84 +39,50 @@ namespace WWTWebservices
         /// magic number is ceil(0.9876 * 2^31) = 0111 1110 0110 1001 1010 1101 0100 0011 in binary
         /// this identifies that this plate file has useful header information
 
-        public PlateTilePyramid(string filename)
+        public PlateTilePyramid(Stream stream)
         {
-            int L = -1;
-            if (GetLevelCount(filename, out L))
+            if (GetLevelCount(stream, out var L))
             {
-                this.filename = filename;
-                this.levels = L;
+                fileStream = stream;
+                Levels = L;
             }
             else
             {
-                this.filename = "";      // UNCLEAR WHAT TO SET THIS TO
-                this.levels = -1;        // UNCLEAR WHAT TO SET THIS TO
+                throw new InvalidOperationException();
             }
         }
-        // </dinoj>
 
-        public PlateTilePyramid(string filename, int levels)
+        Stream fileStream = null;
+
+        public PlateTilePyramid(Stream stream, int L)
         {
-            this.filename = filename;
-            this.levels = levels;
-        }
+            fileStream = stream;
+            Levels = L;
 
-        FileStream fileStream = null;
+            levelMap = new LevelInfo[Levels];
 
-        public void Create()
-        {
-            levelMap = new LevelInfo[levels];
-
-            for (int i = 0; i < levels; i++)
+            for (int i = 0; i < Levels; i++)
             {
                 levelMap[i] = new LevelInfo(i);
             }
-            fileStream = File.Open(filename, FileMode.Create, FileAccess.ReadWrite, FileShare.None);
+
             WriteHeaders();
             currentOffset = HeaderSize;
             fileStream.Seek(currentOffset, SeekOrigin.Begin);
-
         }
 
-        // would be nice to have a version of AddFile that has as its first argument a Bitmap or Stream
-        public void AddFile(string inputFilename, int level, int x, int y)
+        public int Count { get; private set; }
+
+        public async Task AddStreamAsync(Stream inputStream, int level, int x, int y, CancellationToken token)
         {
+            Count++;
+
             long start = fileStream.Seek(0, SeekOrigin.End);
-            byte[] buf = null;
 
-            using (FileStream fs = File.Open(inputFilename, FileMode.Open, FileAccess.Read, FileShare.Read))
-            {
-                int len = (int)fs.Length;
-                buf = new byte[fs.Length];
-
-                levelMap[level].fileMap[x, y].start = (uint)start;
-                levelMap[level].fileMap[x, y].size = (uint)len;
-
-                fs.Read(buf, 0, len);
-                fileStream.Write(buf, 0, len);
-                fs.Close();
-            }
-        }
-
-
-        public void AddStream(Stream inputStream, int level, int x, int y)
-        {
-            // closes inputStream once read
-            // added by Dinoj, debugged by Jonathan
-            // TODO: add a while loop so that it can handle very long streams
-            // (for our 256 x 256 bitmaps it's fine)
-            long start = fileStream.Seek(0, SeekOrigin.End);
-            byte[] buf = null;
-
-            int len = (int)inputStream.Length;
-            buf = new byte[inputStream.Length];
+            await inputStream.CopyToAsync(fileStream, token).ConfigureAwait(false);
 
             levelMap[level].fileMap[x, y].start = (uint)start;
-            levelMap[level].fileMap[x, y].size = (uint)len;
-            inputStream.Seek(0, SeekOrigin.Begin);
-            int lenRead = inputStream.Read(buf, 0, len);
-            fileStream.Write(buf, 0, len);
-            inputStream.Close();
+            levelMap[level].fileMap[x, y].size = (uint)inputStream.Length;
         }
 
         public void UpdateHeaderAndClose()
@@ -137,46 +94,47 @@ namespace WWTWebservices
                 fileStream = null;
             }
         }
-        // <dinoj>
-        static bool HasUsefulHeaders(string plateFileName)
-        {
-            // returns true if plateFileName has the magic number identifying this as a .plate file
-            int L = -1;
-            return GetLevelCount(plateFileName, out L);
-        }
+
+        public static int GetImageCountOneAxis(int level) => (int)Math.Pow(2, level);
 
         public static bool GetLevelCount(string plateFileName, out int L)
         {
-            // Returns true if plateFileName has the magic number identifying this as a .plate file
-            // Also returns the number of levels in the .plate file. 
-            //   This is 10 by default i.e. if no headers are found.
-            L = 10; // 
-            bool hasHeadersWithInfo = false;
             if (File.Exists(plateFileName))
             {
-                using (FileStream fs = new FileStream(plateFileName, FileMode.Open, FileAccess.Read))
+                using (var fs = new FileStream(plateFileName, FileMode.Open, FileAccess.Read))
                 {
-                    if (fs != null)
-                    {
-                        uint FirstFourBytes, SecondFourBytes;
-                        FirstFourBytes = GetNodeInfo(fs, 0, out SecondFourBytes);
-                        if (FirstFourBytes == dotPlateFileTypeNumber)
-                        {
-                            L = (int)SecondFourBytes;
-                            hasHeadersWithInfo = true;
-                        }
-                    }
-                    fs.Close();
+                    return GetLevelCount(fs, out L);
                 }
             }
-            return hasHeadersWithInfo;
+
+            L = 10;
+            return false;
         }
-        //  </dinoj>
+
+        public static bool GetLevelCount(Stream stream, out int L)
+        {
+            // Returns true if plateFileName has the magic number identifying this as a .plate file
+            // Also returns the number of levels in the .plate file. 
+
+            if (stream != null)
+            {
+                uint FirstFourBytes = GetNodeInfo(stream, 0, out var SecondFourBytes);
+                if (FirstFourBytes == dotPlateFileTypeNumber)
+                {
+                    L = (int)SecondFourBytes;
+                    return true;
+                }
+            }
+
+            // This is 10 by default i.e. if no headers are found.
+            L = 10;
+            return false;
+        }
 
         private void WriteHeaders()
         {
             //  <dinoj>
-            uint L = (uint)levels;
+            uint L = (uint)Levels;
             byte[] buffer = new byte[8];
             buffer[0] = (byte)(dotPlateFileTypeNumber % 256);
             buffer[1] = (byte)((dotPlateFileTypeNumber >> 8) % 256);
@@ -209,7 +167,7 @@ namespace WWTWebservices
         {
             get
             {
-                return GetFileIndexOffset(levels, 0, 0);
+                return GetFileIndexOffset(Levels, 0, 0);
             }
         }
 
@@ -229,14 +187,6 @@ namespace WWTWebservices
 
         }
 
-        public Stream GetFileStream(int level, int x, int y)
-        {
-            if (filename.Length > 0 && File.Exists(filename) && levels > level)
-            {
-                return GetFileStream(filename, level, x, y);
-            }
-            return null;
-        }
 
         public static async Task<Stream> GetImageStreamAsync(Stream f, int level, int x, int y, CancellationToken token)
         {
@@ -248,7 +198,7 @@ namespace WWTWebservices
             return new StreamSlice(f, start, length);
         }
 
-        static public Stream GetFileStream(string filename, int level, int x, int y)
+        public static Stream GetFileStream(string filename, int level, int x, int y)
         {
             uint offset = GetFileIndexOffset(level, x, y);
             uint start;
@@ -268,7 +218,7 @@ namespace WWTWebservices
             return ms;
         }
 
-        public static async ValueTask<(uint start, uint length)> GetNodeInfoAsync(Stream fs, uint offset, CancellationToken token)
+        private static async ValueTask<(uint start, uint length)> GetNodeInfoAsync(Stream fs, uint offset, CancellationToken token)
         {
             Byte[] buf = new Byte[8];
             fs.Seek(offset, SeekOrigin.Begin);
@@ -280,7 +230,7 @@ namespace WWTWebservices
             return (start, length);
         }
 
-        public static uint GetNodeInfo(Stream fs, uint offset, out uint length)
+        private static uint GetNodeInfo(Stream fs, uint offset, out uint length)
         {
             Byte[] buf = new Byte[8];
             fs.Seek(offset, SeekOrigin.Begin);
@@ -291,7 +241,7 @@ namespace WWTWebservices
             return (uint)((buf[0] + (buf[1] << 8) + (buf[2] << 16) + (buf[3] << 24)));
         }
 
-        static public void SetNodeInfo(FileStream fs, uint offset, uint start, uint length)
+        private static void SetNodeInfo(Stream fs, uint offset, uint start, uint length)
         {
             Byte[] buf = new Byte[8];
             buf[0] = (byte)start;
@@ -311,6 +261,7 @@ namespace WWTWebservices
             GC.SuppressFinalize(this);
             Dispose(true);
         }
+
         public void Dispose(bool disposing)
         {
             if (!this._disposed)
@@ -318,15 +269,11 @@ namespace WWTWebservices
                 // If disposing equals true, dispose all managed and unmanaged resources.
                 if (disposing)
                 {
-                    if (_readStream != null)
-                        _readStream.Dispose();
-                    _readStream = null;
                 }
                 this._disposed = true;
             }
         }
     }
-
 
     public class LevelInfo
     {

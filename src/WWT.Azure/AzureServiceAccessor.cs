@@ -9,7 +9,7 @@ namespace WWT.Azure
         public AzureServiceAccessor(AzureOptions options, TokenCredential credential)
         {
             WwtFiles = CreateServiceClient(options.StorageAccount, credential);
-            Mars = CreateServiceClient(options.MarsStorageAccount, credential);
+            Mars = CreateServiceClient(options.MarsStorageAccount, credential) ?? WwtFiles;
         }
 
         public BlobServiceClient WwtFiles { get; set; }
@@ -22,6 +22,11 @@ namespace WWT.Azure
         /// </summary>
         private static BlobServiceClient CreateServiceClient(string storageAccount, TokenCredential credential)
         {
+            if (storageAccount is null)
+            {
+                return null;
+            }
+
             if (Uri.TryCreate(storageAccount, UriKind.Absolute, out var storageUri))
             {
                 return new BlobServiceClient(storageUri, credential);

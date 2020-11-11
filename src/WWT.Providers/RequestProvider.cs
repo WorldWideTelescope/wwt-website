@@ -28,6 +28,8 @@ namespace WWT.Providers
             public const string XWtt = "application/x-wtt";
 
             public const string XWtml = "application/x-wtml";
+
+            public const string Zip = "application/zip";
         }
     }
 }

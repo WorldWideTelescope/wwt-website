@@ -21,51 +21,9 @@ As we move the service to a more modern architecture, some endpoints are being d
 | `/wwtweb/wmsmoon.aspx` | Data is from `onmoon.jpl.nasa.gov` which no longer available. | [#181](https://github.com/WorldWideTelescope/wwt-website/pull/181) |
 | `/wwtweb/wmstoast.aspx` | Data is from `ms.mars.asu.edu` which no longer available. | [#181](https://github.com/WorldWideTelescope/wwt-website/pull/181) |
 
-## Installation Instructions
+## Developer Instructions
 
-**To be revised**. Some *old* notes are in [INSTALL.md](./INSTALL.md).
-
-### Azure Storage Emulator
-
-This project is configured to use [Azurite](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azurite), a cross-platform emulator for Azure storage. There are multiple ways to acquire the tool, so please refer to the link given to set up an install.
-
-Access to the storage is done via the `DefaultAzureTokenCredential` that requires `https` protocol for connection. In order to do that, the following steps must be done to enable development:
-
-These are steps taken from [here](https://blog.jongallant.com/2020/04/local-azure-storage-development-with-azurite-azuresdks-storage-explorer/):
-
-1. Install [`mkcert`](https://github.com/FiloSottile/mkcert#installation)
-1. Trust the mkcert RootCA.pem and create a certificate
-
-	```
-	mkcert -install
-	mkcert 127.0.0.1
-	```
-1. Chose a directory from which to run Azurite. The local emulator data will be stored here
-1. Run Azurite with oauth and SSL support:
-
-	```
-	azurite --oauth basic --cert 127.0.0.1.pem --key 127.0.0.1-key.pem
-	```
-1. The app will now run with default settings.
-
-In order to configure the [Azure Storage Explorer](https://azure.microsoft.com/en-us/features/storage-explorer/) to run, you'll need to do the following:
-
-1. Get the RootCA.pem
-
-	```
-	mkcert -CAROOT
-	```
-1. Open Azure Storage Explorer
-1. Go to `Edit->SSL Certificates->Import Certificates` and select the file from the first step.
-1. Restart the storage explorer (you will be prompted to do this)
-
-### Configuration
-Configuration in this project uses ConfigurationManager.AppSettings. In order to make
-it easier to configure outside of web.config, ConfigurationBuilders are supported.
-Currently, there are three builders enabled: KeyVault, Environment, and User Secrets.
-For more details, see the [project](https://github.com/aspnet/MicrosoftConfigurationBuilders#config-builders-in-this-project)
-where they are maintained.
-
+This project is undergoing rapid changes and some of these will be playing with moving pieces. Please submit issues (or PRs!) if you find anything out of date. See [docs/dev-environment.md](instructions) for details on how to build and run locally.
 
 ## Getting involved
 
