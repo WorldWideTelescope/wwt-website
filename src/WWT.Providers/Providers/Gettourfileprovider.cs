@@ -55,7 +55,7 @@ namespace WWT.Providers
                     if (result != null)
                     {
                         context.Response.ContentType = contentType;
-                        context.Response.OutputStream.Write(result, 0, result.Length);
+                        await context.Response.OutputStream.WriteAsync(result, 0, result.Length, token);
                     }
                 }
             }

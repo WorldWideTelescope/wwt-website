@@ -72,8 +72,6 @@ namespace WWTMVC5
         {
             var services = new ServiceCollection();
 
-            services.AddSingleton<IFileNameHasher, Net4x32BitFileNameHasher>();
-
             services.AddRequestProviders(options =>
             {
                 options.DataDir = ConfigurationManager.AppSettings["DataDir"];

@@ -41,7 +41,7 @@ namespace WWT.Providers
 
                 using (Stream s = await _plateTiles.GetStreamAsync(_options.WwtTilesDir, "BmngMerBase.plate", level, tileX, tileY, token))
                 {
-                    s.CopyTo(context.Response.OutputStream);
+                    await s.CopyToAsync(context.Response.OutputStream, token);
                     context.Response.Flush();
                     context.Response.End();
                 }
@@ -63,7 +63,7 @@ namespace WWT.Providers
 
                 using (Stream s = await _plateTiles.GetStreamAsync(_options.WwtTilesDir, $"BmngMerL2X{X32}Y{Y32}.plate", L5, X5, Y5, token))
                 {
-                    s.CopyTo(context.Response.OutputStream);
+                    await s.CopyToAsync(context.Response.OutputStream, token);
                     context.Response.Flush();
                     context.Response.End();
                 }

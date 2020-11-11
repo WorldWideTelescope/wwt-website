@@ -74,7 +74,7 @@ namespace WWT.Providers
                         return;
                     }
 
-                    s.CopyTo(context.Response.OutputStream);
+                    await s.CopyToAsync(context.Response.OutputStream, token);
                     context.Response.Flush();
                     context.Response.End();
                     return;
@@ -85,7 +85,7 @@ namespace WWT.Providers
 
             using (var stream = await _octTileMap.GetOctTileAsync(level, tileX, tileY, token: token))
             {
-                await stream.CopyToAsync(context.Response.OutputStream);
+                await stream.CopyToAsync(context.Response.OutputStream, token);
             }
         }
     }

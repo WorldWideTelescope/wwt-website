@@ -17,7 +17,7 @@ namespace WWT.Providers
 
         public override string ContentType => ContentTypes.OctetStream;
 
-        public override Task RunAsync(IWwtContext context, CancellationToken token)
+        public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string query = context.Request.Params["Q"];
             string[] values = query.Split(',');
@@ -35,13 +35,10 @@ namespace WWT.Providers
                 fs.Seek((long)(demSize * tileX), SeekOrigin.Begin);
                 fs.Read(data, 0, demSize);
                 fs.Close();
-                context.Response.OutputStream.Write(data, 0, demSize);
-                context.Response.OutputStream.Flush();
+                await context.Response.OutputStream.WriteAsync(data, 0, demSize, token);
             }
 
             context.Response.End();
-
-            return Task.CompletedTask;
         }
     }
 }

@@ -99,10 +99,8 @@ namespace WWT.Providers
                     }
                 }
 
-                output.Save(context.Response.OutputStream, ImageFormat.Png);
+                await output.SaveAsync(context.Response, ImageFormat.Png, token);
             }
-
-            return; ;
         }
 
         private Task<Stream> LoadHiRiseAsync(int level, int tileX, int tileY, int id, CancellationToken token)
