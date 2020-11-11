@@ -14,12 +14,22 @@ variables:
 
 steps:
 
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '3.x'
+
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    useGlobalJson: true
+
 - task: DotNetCoreCLI@2
   displayName: 'Install GitVersion'
   inputs:
     command: 'custom'
     custom: 'tool'
-    arguments: 'install --global GitVersion.Tool --version 5.1.2'
+    arguments: 'install --global GitVersion.Tool --version 5.5.0'
 
 - task: DotNetCoreCLI@2
   displayName: 'Update Version'
@@ -35,6 +45,13 @@ steps:
     restoreSolution: '$(solution)'
     feedsToUse: config
     nugetConfigPath: NuGet.config
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: 'src/WWT.Web/WWT.Web.csproj'
+    arguments: '--runtime win-x64 --self-contained --configuration $(buildConfiguration)'
 
 - task: Npm@1
   displayName: npm install
