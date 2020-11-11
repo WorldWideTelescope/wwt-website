@@ -31,7 +31,7 @@ namespace WWT.Providers
 
                             context.Response.ContentType = wc.ResponseHeaders["Content-type"].ToString();
                             int length = data.Length;
-                            context.Response.OutputStream.Write(data, 0, length);
+                            await context.Response.OutputStream.WriteAsync(data, 0, length, token);
                         }
                     }
                 }

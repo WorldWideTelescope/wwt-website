@@ -11,7 +11,7 @@ namespace WWT.Providers
     {
         public override string ContentType => ContentTypes.Jpeg;
 
-        public override Task RunAsync(IWwtContext context, CancellationToken token)
+        public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string query = context.Request.Params["Q"];
             string[] values = query.Split(',');
@@ -25,10 +25,7 @@ namespace WWT.Providers
             double Sx = ((double)tileX * tileWidth) - 4;
             double Fx = Sx + tileWidth;
 
-
             context.Response.Clear();
-
-
 
             Bitmap b = new Bitmap(256, 256);
             double x, y, x1, y1, xx, xmin, xmax, ymin, ymax = 0.0;
@@ -63,11 +60,9 @@ namespace WWT.Providers
                 x += intigralX;
             }
 
-            b.Save(context.Response.OutputStream, ImageFormat.Jpeg);
+            await b.SaveAsync(context.Response, ImageFormat.Jpeg, token);
             b.Dispose();
             context.Response.End();
-
-            return Task.CompletedTask;
         }
     }
 }

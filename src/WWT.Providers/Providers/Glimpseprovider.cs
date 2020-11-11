@@ -45,7 +45,7 @@ namespace WWT.Providers
 
                     using (Stream s = await _plateTiles.GetStreamAsync(_options.WwtTilesDir, "glimpse_L0to10_x0_y0.plate", level, tileX, tileY, token))
                     {
-                        s.CopyTo(context.Response.OutputStream);
+                        await s.CopyToAsync(context.Response.OutputStream, token);
                         context.Response.Flush();
                         context.Response.End();
                         return;
@@ -80,7 +80,7 @@ namespace WWT.Providers
 
                     using (Stream s = await _plateTiles.GetStreamAsync(_options.WwtTilesDir, $"glimpse_L1to11_x{X8}_y{Y8}.plate", L3, X3, Y3, token))
                     {
-                        s.CopyTo(context.Response.OutputStream);
+                        await s.CopyToAsync(context.Response.OutputStream, token);
                         context.Response.Flush();
                         context.Response.End();
                         return;

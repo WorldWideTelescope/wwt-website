@@ -93,10 +93,8 @@ namespace WWT.Providers
                     }
                 }
 
-                output.Save(context.Response.OutputStream, ImageFormat.Png);
+                await output.SaveAsync(context.Response, ImageFormat.Png, token);
             }
-
-            return; ;
         }
 
         private Task<Stream> LoadMocAsync(int level, int tileX, int tileY, CancellationToken token)

@@ -34,7 +34,6 @@ namespace WWT.Providers
             }
 
             bw = null;
-            context.Response.OutputStream.Flush();
 
             context.Response.End();
 

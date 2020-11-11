@@ -50,7 +50,7 @@ namespace WWT.Providers
                     int length = (int)s.Length;
                     byte[] data = new byte[length];
                     s.Read(data, 0, length);
-                    context.Response.OutputStream.Write(data, 0, length);
+                    await context.Response.OutputStream.WriteAsync(data, 0, length, token);
                     context.Response.Flush();
                     context.Response.End();
                     return;
@@ -76,7 +76,7 @@ namespace WWT.Providers
                     int length = (int)s.Length;
                     byte[] data = new byte[length];
                     s.Read(data, 0, length);
-                    context.Response.OutputStream.Write(data, 0, length);
+                    await context.Response.OutputStream.WriteAsync(data, 0, length, token);
                     context.Response.Flush();
                     context.Response.End();
                     return;

@@ -6,28 +6,28 @@
 
         public bool LoginTracking { get; set; }
 
-        public string LoggingConn { get; set; }
+        public string LoggingConn { get; set; } = string.Empty;
 
-        public string Webkey { get; set; }
+        public string Webkey { get; set; } = string.Empty;
 
-        public string DataDir { get; set; }
+        public string DataDir { get; set; } = string.Empty;
 
-        public string DssTerapixelDir { get; set; }
+        public string DssTerapixelDir { get; set; } = string.Empty;
 
-        public string DSSTileCache { get; set; }
+        public string DSSTileCache { get; set; } = string.Empty;
 
-        public string DssToastPng { get; set; }
+        public string DssToastPng { get; set; } = string.Empty;
 
-        public string WWTDEMDir { get; set; }
+        public string WWTDEMDir { get; set; } = string.Empty;
 
-        public string WwtTilesDir { get; set; }
+        public string WwtTilesDir { get; set; } = string.Empty;
 
-        public string WwtTourCache { get; set; }
+        public string WwtTourCache { get; set; } = string.Empty;
 
-        public string WwtToursTourFileUNC { get; set; }
+        public string WwtToursTourFileUNC { get; set; } = string.Empty;
 
-        public string WwtGalexDir { get; set; }
+        public string WwtGalexDir { get; set; } = string.Empty;
 
-        public string WwtToursDBConnectionString { get; set; }
+        public string WwtToursDBConnectionString { get; set; } = string.Empty;
     }
 }

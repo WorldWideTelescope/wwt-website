@@ -76,7 +76,7 @@ namespace WWT.Providers
                         return;
                     }
 
-                    s.CopyTo(context.Response.OutputStream);
+                    await s.CopyToAsync(context.Response.OutputStream, token);
                     context.Response.Flush();
                     context.Response.End();
                     return;

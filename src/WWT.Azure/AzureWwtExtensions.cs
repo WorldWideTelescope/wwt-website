@@ -1,7 +1,7 @@
 ﻿using Azure.Core;
 using Azure.Identity;
-using Azure.Storage.Blobs;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 using WWT.Azure.Catalog;
 using WWT.Catalog;
@@ -18,7 +18,8 @@ namespace WWT.Azure
             var options = new AzureOptions();
             configure(options);
 
-            services.AddSingleton<TokenCredential, DefaultAzureCredential>();
+            // This may be set earlier on in the host, so we don't want to override it
+            services.TryAddSingleton<TokenCredential, DefaultAzureCredential>();
             services.AddSingleton(options);
             services.AddSingleton<AzureServiceAccessor>();
             services.AddSingleton(ctx => ctx.GetRequiredService<AzureServiceAccessor>().WwtFiles);
