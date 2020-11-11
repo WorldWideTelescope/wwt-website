@@ -13,6 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		CONTRIBUTING.md = CONTRIBUTING.md
 		Directory.Build.props = Directory.Build.props
 		Directory.Build.targets = Directory.Build.targets
+		global.json = global.json
 		init.ps1 = init.ps1
 		INSTALL.md = INSTALL.md
 		LICENSE = LICENSE
@@ -56,7 +57,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WWT.Caching.Tests", "tests\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WWT.Tours", "src\WWT.Tours\WWT.Tours.csproj", "{0A5B7416-B9CB-438F-8DC9-C9D3B096896B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WWT.Catalog", "src\WWT.Catalog\WWT.Catalog.csproj", "{C5F256EE-8ECC-46F8-BD80-5D19CF55E7AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WWT.Catalog", "src\WWT.Catalog\WWT.Catalog.csproj", "{C5F256EE-8ECC-46F8-BD80-5D19CF55E7AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
