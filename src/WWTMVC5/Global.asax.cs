@@ -1,4 +1,5 @@
 ﻿using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.ApplicationInsights;
@@ -134,6 +135,7 @@ namespace WWTMVC5
                 .CacheType<IThumbnailAccessor>(plates => plates
                     .Add(nameof(IThumbnailAccessor.GetThumbnailStreamAsync))
                     .Add(nameof(IThumbnailAccessor.GetDefaultThumbnailStreamAsync)))
+                .CacheType<IDevDataAccessor>(dev => dev.Add(nameof(IDevDataAccessor.GetDevDataAsync)))
                 .CacheType<ITourAccessor>(plates => plates
                     .Add(nameof(ITourAccessor.GetAuthorThumbnailAsync))
                     .Add(nameof(ITourAccessor.GetTourAsync))

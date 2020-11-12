@@ -1,18 +1,14 @@
-﻿using Azure.Identity;
-using Microsoft.Extensions.Azure;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PlateManager.List;
 using Serilog;
 using Serilog.Events;
-using System;
 using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.IO;
 using System.Threading.Tasks;
 using WWT.Azure;
-using WWTWebservices;
 
 namespace PlateManager
 {
@@ -23,6 +19,7 @@ namespace PlateManager
             var root = new RootCommand
             {
                 CreateUploadCommand(),
+                CreateDownloadCommand(),
                 CreateListCommand(),
             };
 
@@ -64,6 +61,22 @@ namespace PlateManager
             return command;
         }
 
+        static Command CreateDownloadCommand()
+        {
+            var command = new Command("download")
+            {
+                new Option<string>("--plate") { IsRequired = true },
+                new Option<DirectoryInfo>(new[] { "--output", "-o" }) { IsRequired = true },
+                new Option<int>("--levels", () => 2),
+            };
+
+            AddDefaultOptions(command);
+
+            command.Handler = CommandHandler.Create<Download.DownloadCommandOptions>(Run);
+
+            return command;
+        }
+
         private static void AddDefaultOptions(Command command)
         {
             command.Add(new Option<string>("--storage", () => "https://127.0.0.1:10000/devstoreaccount1/"));
@@ -96,35 +109,19 @@ namespace PlateManager
             options.AddServices(services);
 
             services.AddSingleton(options);
-            services.AddSingleton<AzurePlateTilePyramid>();
-            services.AddSingleton<IPlateTilePyramid>(ctx => ctx.GetRequiredService<AzurePlateTilePyramid>());
 
-            services.AddSingleton(new AzurePlateTilePyramidOptions
-            {
-                CreateContainer = true,
-                SkipIfExists = options.SkipExisting,
-                OverwriteExisting = !options.SkipExisting,
-                Container = options.AzureContainer
-            });
-
-            services.AddAzureClients(builder =>
-            {
-                if (Uri.TryCreate(options.Storage, UriKind.Absolute, out var storageUri))
+            services
+                .AddAzureServices(opt =>
                 {
-                    // Use the storage URI and register the credential provider 
-                    builder.AddBlobServiceClient(storageUri);
-
-                    if (options.Interactive)
-                        builder.UseCredential(new InteractiveBrowserCredential());
-                    else
-                        builder.UseCredential(new DefaultAzureCredential());
-                }
-                else
+                    opt.StorageAccount = options.Storage;
+                })
+                .AddPlateFiles(opt =>
                 {
-                    // this is actually a storage connection string with included credentials
-                    builder.AddBlobServiceClient(options.Storage);
-                }
-            });
+                    opt.CreateContainer = true;
+                    opt.SkipIfExists = options.SkipExisting;
+                    opt.OverwriteExisting = !options.SkipExisting;
+                    opt.Container = options.AzureContainer;
+                });
 
             await using var container = services.BuildServiceProvider();
 
