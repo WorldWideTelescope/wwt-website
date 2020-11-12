@@ -16,7 +16,7 @@ The solution file is `wwt-website.sln` and the start up project should be set to
 ## Set up development datasets
 
 ### Download datasets
-A subset of data can be accessed by calling `GET http://worldwidetelescope.org/wwtweb/data/dev`. This is a zip file that will contain various datapoints and will be expanded as more deve data comes online. Each of the folders align with the expected Azure container it will be put in. Once the dataset is downloaded, the data should be copied over to either Azure or an Azure emulator such as Azurite.
+A subset of data can be accessed by calling `GET http://worldwidetelescope.org/v2/data/dev_export`. This is a zip file that will contain various datapoints and will be expanded as more deve data comes online. Each of the folders align with the expected Azure container it will be put in. Once the dataset is downloaded, the data should be copied over to either Azure or an Azure emulator such as Azurite.
 
 ### Azure Storage Emulator
 This project is configured to use [Azurite](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azurite), a cross-platform emulator for Azure storage. There are multiple ways to acquire the tool, so please refer to the link given to set up an install.
