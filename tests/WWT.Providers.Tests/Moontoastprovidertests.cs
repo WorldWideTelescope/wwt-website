@@ -38,7 +38,7 @@ namespace WWT.Providers.Tests
                 int X5 = x % powLev5Diff;
                 int Y5 = y % powLev5Diff;
 
-                return plateTiles.GetStreamAsync(prefix, $"LROWAC_L3x{X32}y{Y32}.plate", L5, X5, Y5, default);
+                return plateTiles.GetStreamAsync(prefix, $"LROWAC_L3X{X32}Y{Y32}.plate", L5, X5, Y5, default);
             }
         }
     }

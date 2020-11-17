@@ -60,7 +60,7 @@ namespace WWT.Providers
 
                 context.Response.ContentType = "application/octet-stream";
 
-                using (Stream s = await _plateTiles.GetStreamAsync(wwtDemDir, $"moontoast_L3x{X32}y{Y32}.plate", L5, X5, Y5, token))
+                using (Stream s = await _plateTiles.GetStreamAsync(wwtDemDir, $"moontoast_L3X{X32}Y{Y32}.plate", L5, X5, Y5, token))
                 {
                     await s.CopyToAsync(context.Response.OutputStream, token);
                     context.Response.Flush();
