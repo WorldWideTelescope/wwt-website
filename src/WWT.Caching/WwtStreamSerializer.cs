@@ -66,6 +66,12 @@ namespace WWT
 
         async ValueTask<Stream> IResultTransformer<Stream>.TransformAsync(Stream input, CancellationToken token)
         {
+            if (input is null)
+            {
+                _logger.LogInformation("Input to serialize was null.");
+                return null;
+            }
+
             if (input is MemoryStream)
             {
                 return input;
@@ -76,7 +82,7 @@ namespace WWT
             using (input)
             {
                 var ms = new MemoryStream();
-                await input.CopyToAsync(ms, 81920, token);
+                await input.CopyToAsync(ms, token).ConfigureAwait(false);
                 return ms;
             }
         }
