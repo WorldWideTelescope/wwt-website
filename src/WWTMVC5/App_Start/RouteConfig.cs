@@ -15,7 +15,6 @@ namespace WWTMVC5
 
             // Ignore wwtweb/ as this is handled by WwtWebHttpHandler
             routes.IgnoreRoute("{*wwtaspx}", new { wwtaspx = @"wwtweb/.*" });
-            routes.IgnoreRoute("{*tour}", new { tour = @"GetTourFile2?\.aspx" });
 
             routes.MapRoute(
                 "ExperienceIt",
