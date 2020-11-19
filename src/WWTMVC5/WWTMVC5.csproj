@@ -442,8 +442,6 @@
     <Compile Include="ViewModels\TopCategoryViewModel.cs" />
     <Compile Include="ViewModels\UploadAssetViewModel.cs" />
     <Compile Include="ViewModels\VideoDataViewModel.cs" />
-    <Compile Include="Views\Test.cs" />
-    <Compile Include="Views\UseWWT.cs" />
     <Compile Include="WebServices\IResourceService.cs" />
     <Compile Include="WebServices\LiveIdAuth.svc.cs">
       <DependentUpon>LiveIdAuth.svc</DependentUpon>
@@ -678,50 +676,13 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="WebServices\LiveIdAuth.svc" />
     <Content Include="WebServices\ResourceService.svc" />
-    <Content Include="Views\Interact\Index.cshtml" />
-    <Content Include="Views\OpenWWT\Contributing.cshtml" />
     <Content Include="Views\Community\Index.cshtml" />
     <Content Include="Views\Community\Profile.cshtml" />
     <Content Include="Views\Shared\_CommunityLayout.cshtml" />
     <Content Include="WWTMVC5.csproj.DotSettings" />
-    <Content Include="Views\Upgrade\Index.cshtml" />
-    <Content Include="Views\Planetariums\QuickStart.cshtml" />
-    <Content Include="Views\Learn\WebDevelopment.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Views\News\planet9.cshtml" />
-    <Content Include="Views\News\LeftNav.cshtml" />
-    <Content Include="Views\News\index.cshtml" />
-    <Content Include="Views\About\Data.cshtml" />
-    <Content Include="Views\Developers\Embed.cshtml" />
-    <Content Include="Views\Developers\WebDevelopment.cshtml" />
-    <Content Include="Views\News\Eclipse2017.cshtml" />
-    <Content Include="Views\News\2016wwtprize.cshtml" />
-    <Content Include="Views\News\onlinetraining.cshtml" />
-    <Content Include="Views\GetInvolved\Develop.cshtml" />
-    <Content Include="Views\GetInvolved\HelpOthers.cshtml" />
-    <Content Include="Views\About\WhoWeAre.cshtml" />
-    <Content Include="Views\Learn\UserGuide.cshtml" />
-    <Content Include="Views\GetInvolved\LeftNav.cshtml" />
-    <Content Include="Views\GetInvolved\Index.cshtml" />
-    <Content Include="Views\Download\Embed.cshtml" />
-    <Content Include="Views\Use\Beta.cshtml" />
-    <Content Include="Views\Use\Embed.cshtml" />
-    <Content Include="Views\Use\Index.cshtml" />
-    <Content Include="Views\Use\LeftNav.cshtml" />
-    <Content Include="Views\Use\Tools.cshtml" />
-    <Content Include="Views\Use\TourAssets.cshtml" />
-    <Content Include="Views\Use\Educators.cshtml" />
-    <Content Include="Views\Use\Researchers.cshtml" />
-    <Content Include="Views\Use\Planetariums.cshtml" />
-    <Content Include="Views\Use\WWTPlanetarium.cshtml" />
-    <Content Include="Views\Use\DomeProject.cshtml" />
-    <Content Include="Views\Use\Impacts.cshtml" />
-    <Content Include="Views\GetInvolved\Spectrum.cshtml" />
-    <Content Include="Views\GetInvolved\PlanetExplorer.cshtml" />
-    <Content Include="Views\GetInvolved\GreatObservatories.cshtml" />
-    <Content Include="Views\GetInvolved\ImportImage.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
@@ -729,12 +690,6 @@
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Content\OpenWWT\" />
-    <Folder Include="Views\Home\" />
-    <Folder Include="Views\Resources\" />
-    <Folder Include="Views\WCF\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CSS\bootswatch.less" />
@@ -760,80 +715,8 @@
       <LastGenOutput>EarthOnline1.cs</LastGenOutput>
     </Content>
     <Content Include="Views\Shared\_ContentPage.cshtml" />
-    <Content Include="Views\About\Index.cshtml" />
-    <Content Include="Views\About\Acknowledgments.cshtml" />
-    <Content Include="Views\About\FAQ.cshtml" />
-    <Content Include="Views\About\FurtherDetails.cshtml" />
-    <Content Include="Views\About\WebClient.cshtml" />
-    <Content Include="Views\Contact\Index.cshtml" />
-    <Content Include="Views\Developers\DataFilesReference.cshtml" />
-    <Content Include="Views\Developers\DataToolsGuide.cshtml" />
-    <Content Include="Views\Developers\Index.cshtml" />
-    <Content Include="Views\Developers\HTML5SDK.cshtml" />
-    <Content Include="Views\Developers\ImportImage.cshtml" />
-    <Content Include="Views\Developers\LayerControlAPI.cshtml" />
-    <Content Include="Views\Developers\ProjectionReference.cshtml" />
-    <Content Include="Views\Developers\WWTSDK.cshtml" />
-    <Content Include="Views\Download\Index.cshtml" />
-    <Content Include="Views\Download\Features.cshtml" />
-    <Content Include="Views\Download\Legacy.cshtml" />
-    <Content Include="Views\Download\Tools.cshtml" />
-    <Content Include="Views\Download\TourAssets.cshtml" />
-    <Content Include="Views\Educators\Index.cshtml" />
-    <Content Include="Views\Educators\WWTA.cshtml" />
-    <Content Include="Views\Explorers\Index.cshtml" />
-    <Content Include="Views\Explorers\WWTA.cshtml" />
-    <Content Include="Views\Eyewire\Index.cshtml" />
-    <Content Include="Views\Interact\Debug.cshtml" />
-    <Content Include="Views\Interact\GreatObservatories.cshtml" />
-    <Content Include="Views\Interact\MilkyWay.cshtml" />
-    <Content Include="Views\Interact\MoreNessies.cshtml" />
-    <Content Include="Views\Interact\PlanetExplorer.cshtml" />
-    <Content Include="Views\Interact\Spectrum.cshtml" />
-    <Content Include="Views\Layerscape\Index.cshtml" />
-    <Content Include="Views\Learn\Authoring.cshtml" />
-    <Content Include="Views\Learn\Exploring.cshtml" />
-    <Content Include="Views\Learn\Index.cshtml" />
-    <Content Include="Views\Learn\SettingUp.cshtml" />
-    <Content Include="Views\Learn\WhatsNew.cshtml" />
-    <Content Include="Views\Museums\Index.cshtml" />
-    <Content Include="Views\Planetariums\DomeProject.cshtml" />
-    <Content Include="Views\Planetariums\Index.cshtml" />
-    <Content Include="Views\Planetariums\Impacts.cshtml" />
-    <Content Include="Views\Planetariums\Resources.cshtml" />
-    <Content Include="Views\Researchers\Index.cshtml" />
-    <Content Include="Views\Researchers\Resources.cshtml" />
-    <Content Include="Views\About\LeftNav.cshtml" />
-    <Content Include="Views\Learn\LeftNav.cshtml" />
-    <Content Include="Views\Developers\LeftNav.cshtml" />
-    <Content Include="Views\Download\LeftNav.cshtml" />
-    <Content Include="Views\Educators\LeftNav.cshtml" />
-    <Content Include="Views\Explorers\LeftNav.cshtml" />
-    <Content Include="Views\Interact\LeftNav.cshtml" />
-    <Content Include="Views\Planetariums\LeftNav.cshtml" />
-    <Content Include="Views\Researchers\LeftNav.cshtml" />
-    <Content Include="Views\Support\IssuesAndBugs.cshtml" />
-    <Content Include="Views\Support\Index.cshtml" />
-    <Content Include="Views\Support\LeftNav.cshtml" />
-    <!-- <Content Include="Views\Shared\webclient\IndexNYI.cshtml" /> -->
     <Content Include="Views\Search\Index.cshtml" />
-    <Content Include="Views\Download\Beta.cshtml" />
     <Content Include="Views\Index.cshtml" />
-    <Content Include="Views\Support\Localization.cshtml" />
-    <Content Include="Views\Learn\MobileTest.cshtml" />
-    <!-- <Content Include="Views\Shared\webclient\debughead.cshtml" /> -->
-    <Content Include="Views\Support\Error500.cshtml" />
-    <Content Include="Views\WWTinAction\Index.cshtml" />
-    <Content Include="Views\WWTinAction\LeftNav.cshtml" />
-    <Content Include="Views\WWTinAction\WWTinEducation.cshtml" />
-    <Content Include="Views\WWTinAction\WWTinResearch.cshtml" />
-    <Content Include="Views\Interact\Embed.cshtml" />
-    <Content Include="Views\Interact\WCSService.cshtml" />
-    <Content Include="Views\OpenWWT\Index.cshtml" />
-    <Content Include="Views\OpenWWT\LeftNav.cshtml" />
-    <Content Include="Views\OpenWWT\WWTStories.cshtml" />
-    <Content Include="Views\OpenWWT\WWTatAAS.cshtml" />
-    <Content Include="Views\Interact\Planck.cshtml" />
     <Content Include="Views\Profile\Index.cshtml" />
     <Content Include="Views\Profile\LeftNav.cshtml" />
     <Content Include="Views\Profile\Communities.cshtml" />
