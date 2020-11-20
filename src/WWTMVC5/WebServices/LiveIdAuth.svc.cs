@@ -67,6 +67,8 @@ namespace WWTMVC5.WebServices
 
         public async Task<string> GetTokens(string authCode)
         {
+            _logger.LogInformation("trying to GetTokens with code {code}", authCode);
+
             // This call is purely internal, so use the "desktop" redirect_uri. Our WWT ones
             // are currently (2020 Nov) disabled, possibly because they are HTTP not HTTPS.
             var redir = "https://login.live.com/oauth20_desktop.srf";
@@ -76,6 +78,7 @@ namespace WWTMVC5.WebServices
             var httpClient = new HttpClient();
             var response = await httpClient.GetAsync(tokenUri);
             var responseString = await response.Content.ReadAsStringAsync();
+            _logger.LogInformation("GetTokens got response string: {resp}", responseString);
 
             var tokens = new { access_token = "", refresh_token = "" };
             var json = JsonConvert.DeserializeAnonymousType(responseString, tokens);
@@ -98,14 +101,17 @@ namespace WWTMVC5.WebServices
 
         public async Task<string> RefreshTokens()
         {
+            _logger.LogInformation("Trying to RefreshTokens");
             var token = HttpContext.Current.Request.Cookies["refresh_token"] != null ?HttpContext.Current.Request.Cookies["refresh_token"].Value : null;
             if (token == null)
             {
+                _logger.LogInformation("RefreshTokens early exit");
                 return string.Empty;
             }
             // This call is purely internal, so use the "desktop" redirect_uri. Our WWT ones
             // are currently (2020 Nov) disabled, possibly because they are HTTP not HTTPS.
             var redir = "https://login.live.com/oauth20_desktop.srf";
+            _logger.LogInformation("RefreshTokens proceeding with token {tok}", token);
 
             var tokenUri = string.Format("https://login.live.com/oauth20_token.srf?client_id={0}&redirect_uri={1}&client_secret={2}&refresh_token={3}&grant_type=refresh_token",
                 _clientId, HttpUtility.UrlEncode(redir), _clientSecret, token);
@@ -113,7 +119,7 @@ namespace WWTMVC5.WebServices
             var httpClient = new HttpClient();
             var response = await httpClient.GetAsync(tokenUri);
             var responseString = await response.Content.ReadAsStringAsync();
-
+            _logger.LogInformation("RefreshTokens got response string: {resp}", responseString);
 
             var tokens = new { access_token = "", refresh_token = "" };
             var json = JsonConvert.DeserializeAnonymousType(responseString, tokens);
@@ -128,11 +134,13 @@ namespace WWTMVC5.WebServices
         [OperationContract]
         public async Task<string> GetUserId(string accessToken)
         {
+            _logger.LogInformation("trying to GetUserId with token {tok}", accessToken);
             var meUri = new Uri(string.Format("https://apis.live.net/v5.0/me/?access_token={0}", accessToken));
 
             var httpClient = new HttpClient();
             var response = await httpClient.GetAsync(meUri);
             var responseString = await response.Content.ReadAsStringAsync();
+            _logger.LogInformation("GetUserId got response string: {resp}", responseString);
             var meObj = new { Id = "" };
 
             meObj = JsonConvert.DeserializeAnonymousType(responseString, meObj);
