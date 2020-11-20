@@ -62,7 +62,9 @@ namespace WWTMVC5.WebServices
 
         public async Task<string> GetTokens(string authCode)
         {
-            var redir = GetRedirectUrl();
+            // This call is purely internal, so use the "desktop" redirect_uri. Our WWT ones
+            // are currently (2020 Nov) disabled, possibly because they are HTTP not HTTPS.
+            var redir = "https://login.live.com/oauth20_desktop.srf";
             var tokenUri = new Uri(string.Format("https://login.live.com/oauth20_token.srf?client_id={0}&redirect_uri={1}&client_secret={2}&code={3}&grant_type=authorization_code",
                 _clientId, HttpUtility.UrlEncode(redir), _clientSecret, authCode));
 
@@ -98,7 +100,9 @@ namespace WWTMVC5.WebServices
             {
                 return string.Empty;
             }
-            var redir = GetRedirectUrl();
+            // This call is purely internal, so use the "desktop" redirect_uri. Our WWT ones
+            // are currently (2020 Nov) disabled, possibly because they are HTTP not HTTPS.
+            var redir = "https://login.live.com/oauth20_desktop.srf";
             
             var tokenUri = string.Format("https://login.live.com/oauth20_token.srf?client_id={0}&redirect_uri={1}&client_secret={2}&refresh_token={3}&grant_type=refresh_token",
                 _clientId, HttpUtility.UrlEncode(redir), _clientSecret, token);
