@@ -55,7 +55,7 @@ namespace WWT.Providers
 
                 context.Response.ContentType = "image/png";
 
-                var filename = $"DSSpngL5to12_x{X32}_y{Y32}.plate";
+                var filename = $"DSSPngL5to12_x{X32}_y{Y32}.plate";
 
                 using (var s = await _plateTile.GetStreamAsync(_options.DssToastPng, filename, L5, X5, Y5, token))
                 {
