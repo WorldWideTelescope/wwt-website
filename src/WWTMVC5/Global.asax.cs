@@ -1,5 +1,4 @@
 ﻿using Microsoft.ApplicationInsights.Extensibility;
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.ApplicationInsights;
@@ -38,8 +37,7 @@ namespace WWTMVC5
 
         protected void Application_End()
         {
-            var container = UnityConfig.GetConfiguredContainer();
-            container.Dispose();
+            UnityConfig.Container.Dispose();
         }
 
         protected void Application_Error(object sender, EventArgs e)
@@ -60,13 +58,14 @@ namespace WWTMVC5
         /// </summary>
         private static void RegisterUnityContainer()
         {
-            var container = UnityConfig.GetConfiguredContainer();
+            var provider = BuildServiceProvider();
+            var container = UnityConfig.ConfigureContainer(provider);
 
             FilterProviders.Providers.Remove(FilterProviders.Providers.OfType<FilterAttributeFilterProvider>().First());
             FilterProviders.Providers.Add(new UnityFilterAttributeFilterProvider(container));
 
             DependencyResolver.SetResolver(new UnityDependencyResolver(container));
-            WwtWebHttpHandler.Initialize(BuildServiceProvider());
+            WwtWebHttpHandler.Initialize(provider);
         }
 
         private static IServiceProvider BuildServiceProvider()
