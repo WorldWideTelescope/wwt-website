@@ -2,7 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Live;
+using Unity;
 using WWTMVC5.Extensions;
 using WWTMVC5.Models;
 using WWTMVC5.Properties;
@@ -20,11 +22,14 @@ namespace WWTMVC5.Controllers
         /// Instance of Queue Service
         /// </summary>
         private INotificationService _notificationService;
+        private readonly ILogger<DefaultController> _logger;
+
         public DefaultController(IProfileService profileService, ICommunityService communityService, INotificationService queueService)
             : base(profileService)
         {
             _communityService = communityService;
             _notificationService = queueService;
+            _logger = UnityConfig.Container.Resolve<ILogger<DefaultController>>();
         }
         private readonly BaseModel _baseModel = new BaseModel();
 
