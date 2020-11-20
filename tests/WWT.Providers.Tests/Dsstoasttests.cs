@@ -32,7 +32,7 @@ namespace WWT.Providers.Tests
                 var X5 = x % powLev5Diff;
                 var Y5 = y % powLev5Diff;
 
-                var filename = $"DSSpngL5to12_x{x / powLev5Diff}_y{y / powLev5Diff}.plate";
+                var filename = $"DSSPngL5to12_x{x / powLev5Diff}_y{y / powLev5Diff}.plate";
 
                 return plateTiles.GetStreamAsync(Options.DssToastPng, filename, L5, X5, Y5, default);
             }

@@ -34,7 +34,7 @@ namespace WWT.Providers.Tests
                 var X5 = x % powLev5Diff;
                 var Y5 = y % powLev5Diff;
 
-                return plateTiles.GetStreamAsync(Options.DssTerapixelDir, $"DSSpngL5to12_x{X32}_y{Y32}.plate", L5, X5, Y5, default);
+                return plateTiles.GetStreamAsync(Options.DssTerapixelDir, $"DSSPngL5to12_x{X32}_y{Y32}.plate", L5, X5, Y5, default);
             }
         }
 
