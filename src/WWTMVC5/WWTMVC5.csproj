@@ -473,7 +473,6 @@
     <Content Include="Content\images\defaultwtmlwwtthumbnail.png" />
     <Content Include="Content\images\defaultWwtlThumbnail.png" />
     <Content Include="Content\images\defaultwwtlwwtthumbnail.png" />
-    <Content Include="Content\images\gbox.png" />
     <Content Include="Content\images\helpwwtthumbnail.png" />
     <Content Include="Content\images\searchwwtthumbnail.png" />
     <Content Include="WWT2\ClientVersion.txt" />
@@ -488,13 +487,9 @@
     <Content Include="WWT2\version.txt" />
     <Content Include="WWT2\warnver.txt" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="Content\images\addview.png" />
-    <Content Include="Content\images\layoutpage.png" />
-    <Content Include="Content\images\solutionexplorer.png" />
     <Content Include="Content\Views\EditCommunity.html" />
     <Content Include="Content\Views\CommunityDetail.html" />
     <Content Include="Content\Views\ContentPreview.html" />
-    <Content Include="Content\Views\generatedtours.xml" />
     <Content Include="Content\Views\modals\EditFolder.html" />
     <Content Include="Content\Views\modals\EditTour.html" />
     <Content Include="Content\Views\TestResources.html" />
@@ -505,13 +500,11 @@
     <Content Include="Scripts\controllers\modals\editfolder.js" />
     <Content Include="Scripts\controllers\modals\edittour.js" />
     <Content Include="Scripts\controllers\touradmin.js" />
-    <Content Include="Scripts\ext\hljsrazor.js" />
     <Content Include="Scripts\ext\ui-bootstrap-tpls-0.12.1.modified.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CSS\angular-motion.css" />
     <Content Include="Content\CSS\bootstrapValidator.css" />
-    <Content Include="Content\CSS\SDK_style.css" />
     <Content Include="Content\CSS\wwt.css" />
     <Content Include="Content\CSS\wwt.min.css" />
     <Content Include="Content\Views\EditContent.html" />
@@ -520,9 +513,6 @@
     <Content Include="Content\Views\MyProfile.html" />
     <Content Include="Gruntfile.js" />
     <Content Include="Global.asax" />
-    <Content Include="Models\images.xml" />
-    <Content Include="Models\wwtmusic.xml" />
-    <Content Include="robots.txt" />
     <Content Include="Scripts\controllers\communitydetail.js" />
     <Content Include="Scripts\controllers\contentdetail.js" />
     <Content Include="Scripts\controllers\communitycontent.js" />
@@ -530,24 +520,14 @@
     <Content Include="Scripts\controllers\editcontent.js" />
     <Content Include="Scripts\controllers\myprofile.js" />
     <Content Include="Scripts\controllers\testresources.js" />
-    <Content Include="Scripts\controls\move.js" />
-    <Content Include="Scripts\controls\pinch.js" />
-    <Content Include="Scripts\controls\sdk.js" />
-    <Content Include="Scripts\controls\TourPlayer.js" />
-    <Content Include="Scripts\controls\tweener.js" />
     <Content Include="Scripts\controls\user.js" />
     <Content Include="Scripts\controls\util.js" />
-    <Content Include="Scripts\controls\WCSService.js" />
-    <Content Include="Scripts\controls\WebControl.js" />
     <Content Include="Scripts\factory\dataproxy.js" />
     <Content Include="Content\CSS\sprites.less" />
     <Content Include="Content\CSS\multiselect.less" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Properties\PublishProfiles\wwt.thewebkid.com.pubxml" />
-    <None Include="Properties\PublishProfiles\wwtstaging - FTP.pubxml" />
-    <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy.pubxml" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
@@ -623,48 +603,14 @@
     <Content Include="Content\bootstrap\bootstrap.less" />
     <Content Include="Content\bootstrap\badges.less" />
     <Content Include="Content\bootstrap\alerts.less" />
-    <None Include="Properties\PublishProfiles\wwt.thewebkid.com.pubxml" />
-    <None Include="Properties\PublishProfiles\WWTMVC5rosenfield - Web Deploy.pubxml" />
-    <None Include="Properties\PublishProfiles\wwtstaging - FTP.pubxml" />
-    <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy.pubxml" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
-    <None Include="Properties\PublishProfiles\wwt.thewebkid.com.pubxml" />
-    <None Include="Properties\PublishProfiles\wwtstaging - FTP %282%29.pubxml" />
-    <None Include="Properties\PublishProfiles\wwtstaging - FTP.pubxml" />
-    <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy %283%29.pubxml" />
-    <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy.pubxml" />
-    <None Include="Properties\PublishProfiles\wwt.thewebkid.com.pubxml" />
-    <None Include="Properties\PublishProfiles\wwtstaging - FTP.pubxml" />
-    <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy %282%29.pubxml" />
-    <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy.pubxml" />
-    <Content Include="Content\Views\alltours.wtml" />
-    <None Include="Properties\PublishProfiles\wwt.thewebkid.com.pubxml" />
-    <None Include="Properties\PublishProfiles\wwtstaging - FTP.pubxml" />
-    <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy.pubxml" />
-    <Content Include="Content\Views\webclienttours.wtml">
-      <SubType>Designer</SubType>
-    </Content>
-    <None Include="Properties\PublishProfiles\wwt.thewebkid.com.pubxml" />
-    <None Include="Properties\PublishProfiles\wwtstaging - FTP.pubxml" />
-    <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy.pubxml" />
-    <None Include="Properties\PublishProfiles\wwt.thewebkid.com.pubxml" />
-    <None Include="Properties\PublishProfiles\wwtstaging - FTP.pubxml" />
-    <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy.pubxml" />
-    <Content Include="favicon.ico" />
-    <None Include="Properties\PublishProfiles\wwt.thewebkid.com.pubxml" />
-    <None Include="Properties\PublishProfiles\wwtstaging - FTP.pubxml" />
-    <None Include="Properties\PublishProfiles\wwtstaging - Web Deploy.pubxml" />
     <Content Include="Scripts\ext\multiselect.js" />
     <Content Include="Scripts\factory\uihelper.js" />
     <Content Include="Scripts\main.js" />
     <Content Include="Scripts\pages\home.js" />
-    <Content Include="Scripts\pages\ImportImage.js" />
-    <Content Include="Scripts\pages\Observatories.js" />
-    <Content Include="Scripts\pages\PlanetExplorer.js" />
-    <Content Include="Scripts\pages\Spectroscopy.js" />
     <Content Include="Views\Shared\Footer.cshtml" />
     <Content Include="Views\Shared\TopNav.cshtml" />
     <Content Include="Views\Web.config">
@@ -682,13 +628,6 @@
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <None Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CSS\bootswatch.less" />
