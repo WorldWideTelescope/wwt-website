@@ -129,5 +129,5 @@ steps:
     deployToSlotOrASE: true
     ResourceGroupName: 'wwtcoreapp-resources'
     SlotName: 'production'
-    packageForLinux: '$(Build.artifactStagingDirectory)/website/*.zip'
+    packageForLinux: '$(Build.artifactStagingDirectory)/website/WWTMVC5.zip'
   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
