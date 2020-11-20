@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using System;
 using Unity;
 using Unity.AspNet.Mvc;
@@ -16,31 +17,35 @@ namespace WWTMVC5
     /// </summary>
     public class UnityConfig
     {
-        private static readonly Lazy<IUnityContainer> _container = new Lazy<IUnityContainer>(() =>
-        {
-            var container = new UnityContainer();
-            RegisterTypes(container);
-            return container;
-        });
+        public static IUnityContainer Container { get; private set; }
 
         /// <summary>
         /// Gets the configured Unity container.
         /// </summary>
-        public static IUnityContainer GetConfiguredContainer()
+        public static IUnityContainer ConfigureContainer(IServiceProvider provider)
         {
-            return _container.Value;
+            var container = new UnityContainer();
+            RegisterTypes(container, provider);
+            Container = container;
+
+            return Container;
         }
 
         /// <summary>Registers the type mappings with the Unity container.</summary>
         /// <param name="container">The unity container to configure.</param>
         /// <remarks>There is no need to register concrete types such as controllers or API controllers (unless you want to 
         /// change the defaults), as Unity allows resolving a concrete type even if it was not previously registered.</remarks>
-        private static void RegisterTypes(IUnityContainer container)
+        private static void RegisterTypes(IUnityContainer container, IServiceProvider provider)
         {
             RegisterEarthOnlineEntities(container);
             RegisterRepositories(container);
             RegisterServices(container);
+            MapServicesFromProvider(container, provider);
+        }
 
+        private static void MapServicesFromProvider(IUnityContainer container, IServiceProvider provider)
+        {
+            container.RegisterFactory(typeof(ILogger<>), null, (_, type, __) => provider.GetService(type));
         }
 
         private static void RegisterEarthOnlineEntities(IUnityContainer container)

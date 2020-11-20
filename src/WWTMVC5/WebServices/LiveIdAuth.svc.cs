@@ -1,4 +1,5 @@
 ﻿using System;
+using Unity;
 using System.Configuration;
 using System.IO;
 using System.Net;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 using System.Web;
 using Microsoft.Live;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Logging;
 
 namespace WWTMVC5.WebServices
 {
@@ -20,6 +22,8 @@ namespace WWTMVC5.WebServices
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     public class LiveIdAuth
     {
+        private readonly ILogger<LiveIdAuth> _logger;
+
         private string _clientId;
         private string _clientSecret;
         private LiveAuthClient _liveAuthClient;
@@ -30,6 +34,7 @@ namespace WWTMVC5.WebServices
             _clientId = ConfigReader<string>.GetSetting("LiveClientId");
             _clientSecret = ConfigReader<string>.GetSetting("LiveClientSecret");
             _liveAuthClient = new LiveAuthClient(ConfigReader<string>.GetSetting("LiveClientId"), ConfigReader<string>.GetSetting("LiveClientSecret"), null);
+            _logger = UnityConfig.Container.Resolve<ILogger<LiveIdAuth>>();
         }
 
         [WebGet]
