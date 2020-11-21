@@ -127,14 +127,13 @@ if (top === self) {
 			}
 
 			wwt.user.set('authCodeRedirect', true);
-			var dir = '/home';//location.href.toLowerCase().indexOf('/community') !== -1 ? '/Community' : '';
-			var redir = 'http://' + location.host + dir;
 			var wlUrl = 'https://login.live.com/oauth20_authorize.srf?client_id=' +
-						_liveClientId + '&scope=wl.offline_access%20wl.emails&response_type=code&redirect_uri=' +
-						encodeURIComponent(redir) + '&display=popup';
+						encodeURIComponent(_liveClientId) +
+						'&scope=wl.offline_access%20wl.emails&response_type=code&redirect_uri=' +
+						encodeURIComponent(_liveClientRedirectUrl) +
+						'&display=popup';
 			location.href = wlUrl;
 		}
-
 
 		var cleanCookies = function() {
 			var hosts = [
