@@ -13,6 +13,7 @@
         // ignored
     }
     var liveId = ConfigReader<string>.GetSetting("LiveClientId");
+    var liveRedirectUrl = ConfigReader<string>.GetSetting("LiveClientRedirectUrl");
 }
 <!DOCTYPE html>
 <html>
@@ -27,6 +28,7 @@
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 	    <script>
             var _liveClientId = '@(liveId)';
+            var _liveClientRedirectUrl = '@(liveRedirectUrl)';
     	</script>
 	    <script src="//js.live.net/v5.0/wl.js"></script>
 	    
