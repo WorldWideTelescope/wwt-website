@@ -519,7 +519,6 @@
     <Content Include="Content\Views\ContentDetail.html" />
     <Content Include="Content\Views\MyProfile.html" />
     <Content Include="Gruntfile.js" />
-    <Content Include="Error404.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Models\images.xml" />
     <Content Include="Models\wwtmusic.xml" />
