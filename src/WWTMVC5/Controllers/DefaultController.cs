@@ -24,12 +24,13 @@ namespace WWTMVC5.Controllers
         private INotificationService _notificationService;
         private readonly ILogger<DefaultController> _logger;
 
-        public DefaultController(IProfileService profileService, ICommunityService communityService, INotificationService queueService)
+        public DefaultController(IProfileService profileService, ICommunityService communityService, 
+                                 INotificationService queueService, ILogger<DefaultController> logger)
             : base(profileService)
         {
             _communityService = communityService;
             _notificationService = queueService;
-            _logger = UnityConfig.Container.Resolve<ILogger<DefaultController>>();
+            _logger = logger;
         }
         private readonly BaseModel _baseModel = new BaseModel();
 
