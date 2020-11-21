@@ -55,23 +55,21 @@ namespace WWTMVC5.WebServices
 
         private string GetRedirectUrl()
         {
-            var redir = HttpContext.Current.Request.UrlReferrer != null ?
-                HttpContext.Current.Request.UrlReferrer.AbsoluteUri.Split('?')[0] :
-                "http://" + HttpContext.Current.Request.Headers.Get("host");
-            if (redir.EndsWith("/"))
-            {
-                redir = redir.TrimEnd(new char[] { '/' });
-            }
-            return redir;
+            // There used to be more complex logic here, but for the production
+            // OAuth app, only two redirection URLs are (known to be) allowed:
+            // http://worldwidetelescope.org/webclient, and
+            // http://www.worldwidetelescope.org/webclient , and you need to use
+            // the same URL consistently through the auth process to keep Live
+            // happy. (Unfortunately, we can't update these URLs and https:
+            // variants aren't allowed.)
+            return ConfigReader<string>.GetSetting("LiveClientRedirectUrl");
         }
 
         public async Task<string> GetTokens(string authCode)
         {
             _logger.LogInformation("trying to GetTokens with code {code}", authCode);
 
-            // This call is purely internal, so use the "desktop" redirect_uri. Our WWT ones
-            // are currently (2020 Nov) disabled, possibly because they are HTTP not HTTPS.
-            var redir = "https://login.live.com/oauth20_desktop.srf";
+            var redir = GetRedirectUrl();
             var tokenUri = new Uri(string.Format("https://login.live.com/oauth20_token.srf?client_id={0}&redirect_uri={1}&client_secret={2}&code={3}&grant_type=authorization_code",
                 _clientId, HttpUtility.UrlEncode(redir), _clientSecret, authCode));
 
@@ -108,9 +106,8 @@ namespace WWTMVC5.WebServices
                 _logger.LogInformation("RefreshTokens early exit");
                 return string.Empty;
             }
-            // This call is purely internal, so use the "desktop" redirect_uri. Our WWT ones
-            // are currently (2020 Nov) disabled, possibly because they are HTTP not HTTPS.
-            var redir = "https://login.live.com/oauth20_desktop.srf";
+
+            var redir = GetRedirectUrl();
             _logger.LogInformation("RefreshTokens proceeding with token {tok}", token);
 
             var tokenUri = string.Format("https://login.live.com/oauth20_token.srf?client_id={0}&redirect_uri={1}&client_secret={2}&refresh_token={3}&grant_type=refresh_token",
