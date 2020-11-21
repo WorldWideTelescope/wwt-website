@@ -50,6 +50,7 @@ namespace WWTMVC5.Controllers
     
         public async Task<ActionResult> Index()
         {
+            _logger.LogInformation("DefaultController Index handler");
             return await GetViewOrRedirect(string.Empty,"index", _baseModel);
         }
 
@@ -88,8 +89,11 @@ namespace WWTMVC5.Controllers
         [Route("LiveId/AuthenticateFromCode/{code}")]
         public async Task<ActionResult> AuthenticateFromCode(string code)
         {
+            _logger.LogInformation("Handler AuthFromCode: code = {code}", code);
+
             if (Request.Headers.Get("host").Contains("localhost"))
             {
+                _logger.LogInformation("... localhost branch");
                 SessionWrapper.Clear();
                 var refreshTokenCookie = Response.Cookies["refresh_token"];
                 var accessTokenCookie = Response.Cookies["access_token"];
@@ -106,9 +110,12 @@ namespace WWTMVC5.Controllers
 
                 return Redirect("/home");
             }
+            _logger.LogInformation("AuthFromCode: trying to get user");
             var user = await TryAuthenticateFromAuthCode(code);
+            _logger.LogInformation("AuthFromCode: got user with email {email}", user.Email);
             _baseModel.User = user;
             string url = Uri.UnescapeDataString(Request.QueryString["returnUrl"]).ToLower();
+            _logger.LogInformation("AuthFromCode: redirecting with URL {url}", url);
             if (url.IndexOf("/community") != -1)
             {
                 return Redirect("/Community");
@@ -147,10 +154,13 @@ namespace WWTMVC5.Controllers
         [Route("{group}/{page=Index}")]
         public async Task<ActionResult> ViewResult(string group, string page)
         {
+            _logger.LogInformation("Handler ViewResult: group = {g}, page = {p}", group, page);
+
             try
             {
                 if (!ViewGroups.Contains(group.ToLower()))
                 {
+                    _logger.LogInformation("ViewResult: early error");
                     return View("~/Views/Support/Error.cshtml", _baseModel);
                 }
                 if (group.ToLower() == "wwtstories")
@@ -159,10 +169,12 @@ namespace WWTMVC5.Controllers
                 }
                 if (page.Contains(".msi") || (page.ToLower() == "error" && Request.RawUrl.Contains(".msi")))
                 {
+                    _logger.LogInformation("ViewResult: MSI");
                     return await GetViewOrRedirect("download","index", _baseModel);
                 }
                 if (group.ToLower() == "community" && page.ToLower() == "profile" && _baseModel.User == null)
                 {
+                    _logger.LogInformation("ViewResult: community branch");
                     await TryAuthenticateFromHttpContext();
                     if (CurrentUserId != 0)
                     {
@@ -172,14 +184,16 @@ namespace WWTMVC5.Controllers
                     
                     return Redirect("/Community");
                 }
+                _logger.LogInformation("ViewResult: default branch");
                 ViewBag.page = page = GetQsPage(page);
                 ViewBag.group = group;
                 ViewBag.CurrentUserId = CurrentUserId;
 
                 return await GetViewOrRedirect(group, page, _baseModel);
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                _logger.LogError(e, "ViewResult: error in dispatch");
                 return View("~/Views/Support/Error.cshtml", _baseModel);
             }
         }
@@ -193,9 +207,8 @@ namespace WWTMVC5.Controllers
         /// <returns></returns>
         private async Task<ActionResult> GetViewOrRedirect(string group, string page, BaseModel model)
         {
+            _logger.LogInformation("GetViewOrRedirect: group = {g}, page = {p}", group, page);
             model.IsOpenWwtKiosk = Request.Headers.Get("host").ToLower().Contains("openwwt.org");
-
-            
 
             if (model.IsOpenWwtKiosk && group.ToLower() != "openwwt")
             {
@@ -204,8 +217,10 @@ namespace WWTMVC5.Controllers
             }
             if (model.User == null)
             {
+                _logger.LogInformation("GetViewOrRedirect: null user");
                 if (Request.QueryString["code"] != null)
                 {
+                    _logger.LogInformation("GetViewOrRedirect: trying code auth with code = {c}", Request.QueryString["code"]);
                     model.User = await TryAuthenticateFromAuthCode(Request.QueryString["code"]);
                     if (page == "index")
                     {
@@ -216,18 +231,22 @@ namespace WWTMVC5.Controllers
                         strippedUrl = "/home";
                     }
                     //redirect strips gnarly looking code from qs
+                    _logger.LogInformation("GetViewOrRedirect: auth OK; redirect: {u}", strippedUrl);
                     return Redirect(strippedUrl);
                 }
                 if (Request.Cookies["refresh_token"] != null)
                 {
+                    _logger.LogInformation("GetViewOrRedirect: refresh_token present; trying blank code");
                     model.User = await TryAuthenticateFromAuthCode("");
                 }
             }
             if (group == string.Empty) {
+                _logger.LogInformation("GetViewOrRedirect: empty group redirect");
                 var homeCookie = Request.Cookies["homepage"];
                 var rootDir = homeCookie == null || string.IsNullOrEmpty(homeCookie.Value) ? "webclient" : homeCookie.Value;
                 return Redirect(rootDir);
             }
+            _logger.LogInformation("GetViewOrRedirect: default redirect");
             return group.ToLower() == "home" ? View("~/Views/index.cshtml", model) : View("~/Views/" + group + "/" + page + ".cshtml", model);
         }
 
