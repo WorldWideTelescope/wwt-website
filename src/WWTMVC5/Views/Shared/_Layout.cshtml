@@ -51,6 +51,7 @@
 				background-image: url(@Model.ImgDir/bg/navbar-logo-glow.png);
 			}
 		</style>
+
         <!-- Global Site Tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-107473046-1"></script>
         <script>
@@ -62,7 +63,8 @@
 		
 		@RenderSection("head", required: false)
 	</head>
-<body class="wwt" resLoc="@Model.ResLoc">
+
+<body class="wwt">
 	<div class="bg-gradient"></div>
 	@Html.Partial("TopNav")
 

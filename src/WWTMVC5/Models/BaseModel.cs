@@ -10,8 +10,6 @@ namespace WWTMVC5.Models
         private readonly string _imgDir;
         private readonly string _jsDir;
         private readonly string _cssDir;
-        private readonly string _resLoc;
-        private readonly bool _staging;
         private readonly string _toursDir;
         private readonly string _resVer;
         private readonly string _downloadUrl;
@@ -21,22 +19,15 @@ namespace WWTMVC5.Models
 
         public BaseModel()
         {
-            _resLoc = ConfigReader<string>.GetSetting("ResourcesLocation");//CDN
-            _staging = ConfigReader<bool>.GetSetting("Staging");
-            _cssDir = ResLoc + "/Content/CSS";
-            _jsDir = ResLoc + "/Scripts";
-            _contentDir= "//wwtweb.blob.core.windows.net";//azure blob storage
+            _cssDir = "/Content/CSS";
+            _jsDir = "/Scripts";
+            _contentDir = "//wwtweb.blob.core.windows.net";
             _imgDir = ContentDir + "/images";
             _toursDir = ContentDir + "/WebControlTours";
             _resVer = ConfigReader<string>.GetSetting("ResourcesVersion");
             _downloadUrl = ConfigReader<string>.GetSetting("WWTDownloadUrl");
             _legacyUrl = ConfigReader<string>.GetSetting("WWTLegacyDownloadUrl");
             _isOpenWwtKiosk = false;
-        }
-
-        public string ResLoc
-        {
-            get { return _resLoc; }
         }
 
         public string CssDir
@@ -57,11 +48,6 @@ namespace WWTMVC5.Models
         public string ImgDir
         {
             get { return _imgDir; }
-        }
-
-        public bool Staging
-        {
-            get { return _staging; }
         }
 
         public string ToursDir

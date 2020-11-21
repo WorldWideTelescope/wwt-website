@@ -42,7 +42,6 @@ if (top === self) {
 			} catch (ex) {
 			}
 
-			wwt.resLoc = $('body').attr('resLoc');
 			bindEvents();
 			var rememberSetting = wwt.user && wwt.user.get('rememberMe');
 			wwt.autoSignin = rememberSetting && rememberSetting===true;
