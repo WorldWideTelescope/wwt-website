@@ -493,8 +493,6 @@
     <Content Include="Content\Views\modals\EditFolder.html" />
     <Content Include="Content\Views\modals\EditTour.html" />
     <Content Include="Content\Views\TourAdmin.html" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\controllers\modals\editfolder.js" />
     <Content Include="Scripts\controllers\modals\edittour.js" />
     <Content Include="Scripts\controllers\touradmin.js" />
