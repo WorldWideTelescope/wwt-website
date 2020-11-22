@@ -607,7 +607,6 @@
     <Content Include="Scripts\ext\multiselect.js" />
     <Content Include="Scripts\factory\uihelper.js" />
     <Content Include="Scripts\main.js" />
-    <Content Include="Scripts\pages\home.js" />
     <Content Include="Views\Shared\Footer.cshtml" />
     <Content Include="Views\Shared\TopNav.cshtml" />
     <Content Include="Views\Web.config">
