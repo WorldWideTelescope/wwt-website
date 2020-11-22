@@ -1,7 +1,6 @@
 ﻿@{
-    ViewBag.Title = "WorldWide Telescope Community Content";
+    ViewBag.Title = "AAS WorldWide Telescope Community Content";
 	Layout = "~/Views/Shared/_Layout.cshtml";
-    
 }
 @section head
 {
@@ -15,7 +14,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular-strap/2.1.6/angular-strap.tpl.min.js"></script>
     <script src="/Scripts/ext/multiselect.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular-file-upload/1.1.5/angular-file-upload.min.js"></script>
-    
+
     <script>
     var wwtng = angular.module('wwt', [
         'ui.bootstrap',
@@ -70,7 +69,7 @@
                 });
         }
     ]);
-</script>
+    </script>
     <script src="@Model.JsDir/controllers/myprofile.js?v=@Model.ResVer"></script>
     <script src="@Model.JsDir/controllers/communitycontent.js?v=@Model.ResVer"></script>
     <script src="@Model.JsDir/controllers/contentdetail.js?v=@Model.ResVer"></script>
@@ -83,8 +82,7 @@
     <script src="@Model.JsDir/factory/uihelper.js?v=@Model.ResVer"></script>
     <script src="@Model.JsDir/factory/dataproxy.js?v=@Model.ResVer"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
-    
-    }
+}
 <div class="row" data-ng-app="wwt">
     <div class="col-md-3">
         <div class="bs-sidebar" id="cellLeftNav">
@@ -104,11 +102,11 @@
             </ul>
         </div>
     </div>
+
     <div class="col-md-9">
         <section class="content community-content" content-location="@Model.ContentDir">
             <div data-ng-view></div>
             @RenderBody()
         </section>
-
     </div>
 </div>
