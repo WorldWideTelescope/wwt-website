@@ -492,9 +492,7 @@
     <Content Include="Content\Views\ContentPreview.html" />
     <Content Include="Content\Views\modals\EditFolder.html" />
     <Content Include="Content\Views\modals\EditTour.html" />
-    <Content Include="Content\Views\TestResources.html" />
     <Content Include="Content\Views\TourAdmin.html" />
-    <Content Include="Content\Views\tours.xml" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\controllers\modals\editfolder.js" />
@@ -519,7 +517,6 @@
     <Content Include="Scripts\controllers\editcommunity.js" />
     <Content Include="Scripts\controllers\editcontent.js" />
     <Content Include="Scripts\controllers\myprofile.js" />
-    <Content Include="Scripts\controllers\testresources.js" />
     <Content Include="Scripts\controls\user.js" />
     <Content Include="Scripts\controls\util.js" />
     <Content Include="Scripts\factory\dataproxy.js" />
