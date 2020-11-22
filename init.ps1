@@ -11,6 +11,6 @@ Push-Location src/WWTMVC5
 bower install
 if (-not $?) { throw "bower install failed with error code $LastExitCode" }
 
-grunt copy
-if (-not $?) { throw "grunt copy failed with error code $LastExitCode" }
+grunt vendor dist-css
+if (-not $?) { throw "grunt failed with error code $LastExitCode" }
 Pop-Location

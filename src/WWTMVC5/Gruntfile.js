@@ -23,12 +23,12 @@ module.exports = function(grunt) {
                 options: {
                     sourceMap: true,
                     outputSourceFiles: true,
-                    sourceMapURL: 'Content/css/wwt.css.map',
-                    sourceMapFilename: 'Content/css/wwt.css.map'
+                    sourceMapURL: 'Content/CSS/wwt.css.map',
+                    sourceMapFilename: 'Content/CSS/wwt.css.map'
                 },
 
-                src: 'Content/css/wwt.less',
-                dest: 'Content/css/wwt.css'
+                src: 'Content/CSS/wwt.less',
+                dest: 'Content/CSS/wwt.css'
             }
         },
 
@@ -49,7 +49,7 @@ module.exports = function(grunt) {
                 options: {
                     map: true
                 },
-                src: 'Content/css/wwt.css'
+                src: 'Content/CSS/wwt.css'
             }
         },
 
@@ -60,8 +60,8 @@ module.exports = function(grunt) {
                 noAdvanced: true
             },
             minifyCore: {
-                src: 'Content/css/wwt.css',
-                dest: 'Content/css/wwt.min.css'
+                src: 'Content/CSS/wwt.css',
+                dest: 'Content/CSS/wwt.min.css'
             }
         },
 
@@ -109,7 +109,7 @@ module.exports = function(grunt) {
             },
 
             less: {
-                files: 'Content/css/*.less',
+                files: 'Content/CSS/*.less',
                 tasks: ['dist-css']
             }
         }
