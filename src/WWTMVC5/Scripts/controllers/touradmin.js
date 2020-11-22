@@ -40,7 +40,6 @@
             dataproxy.getCommunityContents(communityId).then(function (response) {
                 $scope.community.contents = response.entities;
                 $scope.community.communities = response.childCommunities;
-                repairTourType();
                 wwt.triggerResize();
                 console.log('update details took ' + (new Date().valueOf() - d1.valueOf()));
             });
@@ -206,77 +205,5 @@
             $timeout(function() { $scope.tourXml = s; });
         }
 
-        
-
-        var repairTourType = function () {
-            //$scope.buildXml();
-            //$q.all([
-            //    $http({ method: 'GET', url: '/content/views/tours.xml' }),
-            //    $http({ method: 'GET', url: '/community/fetch/tours' })
-            //]).then(function(results) {
-            //    origXml = $(results[0].data);
-            //    newXml = $(results[1].data);
-            //    var origFolders = origXml.find('Folder[Name]');
-            //    var newFolders = newXml.find('Folder[Name]');
-            //    origFolders.each(function(i, folder) {
-            //        var fld = $(folder);
-            //        var name = fld.attr('Name');
-            //        var nFld = newFolders.filter('[Name="' + name + '"]');
-            //        var origTours = fld.find('Tour');
-            //        var newTours = nFld.find('Tour');
-            //        console.log({ folder: name, origCount: origTours.length, newCount: newTours.length });
-            //        var origTourNames = [], newTourNames = [];
-            //        origTours.each(function (i, t) {
-            //            origTourNames.push($(t).attr('RelatedTours').split(';').length);
-            //        }); newTours.each(function (i, t) {
-            //            newTourNames.push($(t).attr('RelatedTours').split(';').length);
-            //        });
-            //        console.log(origTourNames.sort());
-            //        console.log(newTourNames.sort());
-            //    });
-                
-
-            //});
-            return;
-            $.each($scope.community.contents, function(i, tour) {
-                var tourId = tour.Id;
-                if (tour.ContentType === 7) {
-                    dataproxy.getEditContent(tourId).then(function(tour) {
-                        if (tour.ContentFileDetail.indexOf('~') === 0 || tour.ContentFileDetail.indexOf('~~') !== -1) {
-                            tour.ContentFileDetail = ".wtt~0~" + tour.ContentDataID + "~application/x-wtt~" + tour.ID;
-                            tour.ContentTypeID = 1;
-                            tour.ContentTypeName = 'Tours';
-                            tour.ContentType = 1;
-                            tour.TypeID = 1;
-                            if (tour.FileName.indexOf('.wtt') === -1) {
-                                tour.FileName += '.wtt';
-                            }
-                            if (tour.extData) {
-                                tour.Citation = "json://" + JSON.stringify(tour.extData);
-                            }
-                            dataproxy.saveEditedContent(tour).then(function(response) {
-                                console.log('fixed tour', response);
-                            });
-                        }
-
-                        $scope.tour = tour;
-                        $scope.extData = tour.extData;
-                        $scope.tourLoaded = true;
-
-                        try {
-                            $scope.AuthorThumbnailId = $scope.tour.PostedFileDetail[0].split('~')[2]; //".jpg~5226~bfa1553c-e7d3-4857-8a1e-56607bcc7543~image/jpeg~-1"
-                        } catch (er) {
-                            dataproxy.deleteContent(id).then($scope.$hide);
-                            $scope.refreshCommunityDetail();
-                        }
-
-                    });
-                }
-            });
-          
-        }
-
         init();
-
-        
     }]);

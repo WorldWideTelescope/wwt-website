@@ -8,8 +8,6 @@
 
         public string LoggingConn { get; set; } = string.Empty;
 
-        public string Webkey { get; set; } = string.Empty;
-
         public string DataDir { get; set; } = string.Empty;
 
         public string DssTerapixelDir { get; set; } = string.Empty;

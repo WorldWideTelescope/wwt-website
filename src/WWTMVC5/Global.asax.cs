@@ -87,7 +87,6 @@ namespace WWTMVC5
                 options.TourVersionCheckIntervalMinutes = int.TryParse(ConfigurationManager.AppSettings["TourVersionCheckIntervalMinutes"], out var min) ? min : 5;
                 options.LoginTracking = Convert.ToBoolean(ConfigurationManager.AppSettings["LoginTracking"]);
                 options.LoggingConn = ConfigurationManager.AppSettings["LoggingConn"];
-                options.Webkey = ConfigurationManager.AppSettings["webkey"];
             });
 
             services
