@@ -18,13 +18,10 @@ namespace WWTMVC5.Controllers
     public class DefaultController : ControllerBase
     {
         private ICommunityService _communityService;
-        /// <summary>
-        /// Instance of Queue Service
-        /// </summary>
         private INotificationService _notificationService;
         private readonly ILogger<DefaultController> _logger;
 
-        public DefaultController(IProfileService profileService, ICommunityService communityService, 
+        public DefaultController(IProfileService profileService, ICommunityService communityService,
                                  INotificationService queueService, ILogger<DefaultController> logger)
             : base(profileService)
         {
@@ -32,26 +29,12 @@ namespace WWTMVC5.Controllers
             _notificationService = queueService;
             _logger = logger;
         }
+
         private readonly BaseModel _baseModel = new BaseModel();
 
-        private static readonly string[] ViewGroups = new string[]
-        {
-            "about",
-            "community",
-            "download",
-            "getinvolved",
-            "home",
-            "learn",
-            "profile",
-            "support",
-            "terms",
-            "upgrade",
-            "use"
-        };
-    
         public async Task<ActionResult> Index()
         {
-            return await GetViewOrRedirect(string.Empty,"index", _baseModel);
+            return await GetViewOrRedirect(string.Empty, "index", _baseModel);
         }
 
         [AllowAnonymous]
@@ -67,7 +50,7 @@ namespace WWTMVC5.Controllers
                     Status = "Connected",
                     Session = new
                     {
-                        
+
                         User = SessionWrapper.Get<string>("CurrentUserProfileName")
                     },
 
@@ -85,20 +68,22 @@ namespace WWTMVC5.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
-        
         [Route("LiveId/AuthenticateFromCode/{code}")]
         public async Task<ActionResult> AuthenticateFromCode(string code)
         {
             if (Request.Headers.Get("host").Contains("localhost"))
             {
                 SessionWrapper.Clear();
+
                 var refreshTokenCookie = Response.Cookies["refresh_token"];
                 var accessTokenCookie = Response.Cookies["access_token"];
+
                 if (refreshTokenCookie != null && !string.IsNullOrEmpty(refreshTokenCookie.Value))
                 {
                     refreshTokenCookie.Expires = DateTime.Now.AddDays(-1);
                     Response.Cookies.Add(refreshTokenCookie);
                 }
+
                 if (accessTokenCookie != null && !string.IsNullOrEmpty(accessTokenCookie.Value))
                 {
                     accessTokenCookie.Expires = DateTime.Now.AddDays(-1);
@@ -128,23 +113,26 @@ namespace WWTMVC5.Controllers
         public ActionResult Logout()
         {
             var svc = new LiveIdAuth();
-            var url =  svc.GetLogoutUrl("http://" + Request.Headers.Get("host")); 
-            
+            var url =  svc.GetLogoutUrl("http://" + Request.Headers.Get("host"));
+
             SessionWrapper.Clear();
+
             var refreshTokenCookie = Response.Cookies["refresh_token"];
             var accessTokenCookie = Response.Cookies["access_token"];
+
             if (refreshTokenCookie != null && !string.IsNullOrEmpty(refreshTokenCookie.Value))
             {
                 refreshTokenCookie.Expires = DateTime.Now.AddDays(-1);
                 Response.Cookies.Add(refreshTokenCookie);
             }
+
             if (accessTokenCookie != null && !string.IsNullOrEmpty(accessTokenCookie.Value))
             {
                 accessTokenCookie.Expires = DateTime.Now.AddDays(-1);
                 Response.Cookies.Add(accessTokenCookie);
             }
-            
-            return Redirect(url); 
+
+            return Redirect(url);
         }
 
         [Route("{group}/{page=Index}")]
@@ -152,33 +140,22 @@ namespace WWTMVC5.Controllers
         {
             try
             {
-                if (!ViewGroups.Contains(group.ToLower()))
-                {
-                    return View("~/Views/Support/Error.cshtml", _baseModel);
-                }
-                if (group.ToLower() == "wwtstories")
-                {
-                    return Redirect("http://wwtstories.org");
-                }
-                if (page.Contains(".msi") || (page.ToLower() == "error" && Request.RawUrl.Contains(".msi")))
-                {
-                    return await GetViewOrRedirect("download","index", _baseModel);
-                }
                 if (group.ToLower() == "community" && page.ToLower() == "profile" && _baseModel.User == null)
                 {
                     await TryAuthenticateFromHttpContext();
+
                     if (CurrentUserId != 0)
                     {
                         _baseModel.User = SessionWrapper.Get<ProfileDetails>("ProfileDetails");
                         return await GetViewOrRedirect(group, page, _baseModel);
                     }
-                    
+
                     return Redirect("/Community");
                 }
-                ViewBag.page = page = GetQsPage(page);
+
+                ViewBag.page = page;
                 ViewBag.group = group;
                 ViewBag.CurrentUserId = CurrentUserId;
-
                 return await GetViewOrRedirect(group, page, _baseModel);
             }
             catch (Exception e)
@@ -187,7 +164,7 @@ namespace WWTMVC5.Controllers
                 return View("~/Views/Support/Error.cshtml", _baseModel);
             }
         }
-        
+
         private async Task<ActionResult> GetViewOrRedirect(string group, string page, BaseModel model)
         {
             if (model.User == null)
@@ -195,39 +172,43 @@ namespace WWTMVC5.Controllers
                 if (Request.QueryString["code"] != null)
                 {
                     model.User = await TryAuthenticateFromAuthCode(Request.QueryString["code"]);
+
                     if (page == "index")
                     {
                         page = "";
                     }
+
                     var strippedUrl = group + "/" + page;
+
                     if (strippedUrl == "/") {
                         strippedUrl = "/home";
                     }
-                    //redirect strips gnarly looking code from qs
+
                     return Redirect(strippedUrl);
                 }
+
                 if (Request.Cookies["refresh_token"] != null)
                 {
                     model.User = await TryAuthenticateFromAuthCode("");
                 }
             }
+
             if (group == string.Empty) {
                 var homeCookie = Request.Cookies["homepage"];
-                var rootDir = homeCookie == null || string.IsNullOrEmpty(homeCookie.Value) ? "webclient" : homeCookie.Value;
+                var rootDir = "webclient";
+
+                if (homeCookie != null && !string.IsNullOrEmpty(homeCookie.Value)) {
+                    rootDir = homeCookie.Value;
+                }
+
                 return Redirect(rootDir);
             }
-            return group.ToLower() == "home" ? View("~/Views/index.cshtml", model) : View("~/Views/" + group + "/" + page + ".cshtml", model);
-        }
 
-        //Ensure old webform routes still return the proper view
-        private string GetQsPage(string page)
-        {
-            if (page == "Index" && Request.QueryString.Count == 1 && Request.QueryString["code"] == null)
-            {
-                page = Request.QueryString.Get(0);
+            if (group.ToLower() == "home") {
+                return View("~/Views/index.cshtml", model);
             }
-            return page;
-        }
 
+            return View("~/Views/" + group + "/" + page + ".cshtml", model);
+        }
     }
 }
