@@ -26,7 +26,3 @@ x64/
 # Database file
 Database.jfm
 /tools/PlateManager/Properties/launchSettings.json
-
-# npm content
-/src/WWTMVC5/Content/bootstrap
-/src/WWTMVC5/Content/fonts

@@ -1,6 +1,6 @@
 ﻿@using System.Configuration
 @{
-    var title = "WorldWide Telescope";
+    var title = "AAS WorldWide Telescope";
     try
     {
         if (ViewBag.Title != null && ViewBag.Title != "")
@@ -18,74 +18,60 @@
 <!DOCTYPE html>
 <html>
 	<head>
-	    <title>@title</title>
+		<title>@title</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<meta name="description" content="@(ViewBag.MetaDescription ?? "Worldwide Telescope enables your computer to function as a virtual telescope, bringing together imagery from the best telescopes in the world.")" />
 		<meta name="ROBOTS" content="INDEX, FOLLOW">
-        <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
-        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-	    <script>
-            var _liveClientId = '@(liveId)';
-            var _liveClientRedirectUrl = '@(liveRedirectUrl)';
-    	</script>
-	    <script src="//js.live.net/v5.0/wl.js"></script>
-	    
+
+		<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+		<script>
+					var _liveClientId = '@(liveId)';
+					var _liveClientRedirectUrl = '@(liveRedirectUrl)';
+		</script>
+		<script src="//js.live.net/v5.0/wl.js"></script>
+
 		<link href="@Model.CssDir/wwt.min.css?v=@Model.ResVer" rel="stylesheet" />
 		<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-		
+
 		<script src="@Model.JsDir/main.js?v=@Model.ResVer"></script>
-	    <script src="@Model.JsDir/controls/user.js?v=@Model.ResVer"></script>
+		<script src="@Model.JsDir/controls/user.js?v=@Model.ResVer"></script>
 
 		<style>
 			body.wwt {
-				background: #011e34 url('@Model.ImgDir/bg/starfield2.png') center 0;
+				background: #011e34 url('@Model.ContentDir/images/bg/starfield2.png') center 0;
 				background-repeat: no-repeat;
 			}
 			.navbar-inverse {
-				background: rgba(1,30,52,.7) url(@Model.ImgDir/bg/starfield2.png) center 0;
+				background: rgba(1,30,52,.7) url(@Model.ContentDir/images/bg/starfield2.png) center 0;
 				background-repeat: no-repeat;
 			}
 			.navbar-fixed-top .container {
-				background-image: url(@Model.ImgDir/bg/navbar-logo-glow.png);
+				background-image: url(@Model.ContentDir/images/bg/navbar-logo-glow.png);
 			}
 		</style>
 
-        <!-- Global Site Tag (gtag.js) - Google Analytics -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-107473046-1"></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag() { dataLayer.push(arguments) };
-            gtag('js', new Date());
-            gtag('config', 'UA-107473046-1');
-        </script>
-		
+		<!-- Global Site Tag (gtag.js) - Google Analytics -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-107473046-1"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag() { dataLayer.push(arguments) };
+			gtag('js', new Date());
+			gtag('config', 'UA-107473046-1');
+		</script>
+
 		@RenderSection("head", required: false)
 	</head>
 
-<body class="wwt">
-	<div class="bg-gradient"></div>
-	@Html.Partial("TopNav")
+	<body class="wwt">
+		<div class="bg-gradient"></div>
+		@Html.Partial("TopNav")
 
-	<div class="container" id="divMain">
-		@RenderBody()
-	</div>
+		<div class="container" id="divMain">
+			@RenderBody()
+		</div>
 
-    @Html.Partial("Footer");
-    
-    <div class="modal fade" id="mailChimp">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <div class="close-button">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    </div>
-                    
-                    <iframe class="embed-responsive-item" frameborder="0" src="http://worldwidetelescope.us11.list-manage.com/subscribe?u=92369f48c120de5898e8ea9f5&id=d52401e7c0"></iframe>
-                    
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-</body>
+		@Html.Partial("Footer");
+	</body>
 </html>

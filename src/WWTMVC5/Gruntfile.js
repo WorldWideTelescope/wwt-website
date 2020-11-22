@@ -1,9 +1,7 @@
 /// <binding ProjectOpened='watch' />
+
 /**!
-Gruntfile to perform wwt  less compilation and
-script  component updates (using bower install)
-
-
+Gruntfile to perform wwt less compilation and script component updates
 **/
 
 module.exports = function(grunt) {
@@ -18,22 +16,22 @@ module.exports = function(grunt) {
 
     // Project configuration.
     grunt.initConfig({
-        
         pkg: grunt.file.readJSON('package.json'),
-        
+
         less: {
             compileCore: {
                 options: {
-                   
                     sourceMap: true,
                     outputSourceFiles: true,
-                    sourceMapURL: 'Content/css/wwt.css.map',
-                    sourceMapFilename: 'Content/css/wwt.css.map'
+                    sourceMapURL: 'Content/CSS/wwt.css.map',
+                    sourceMapFilename: 'Content/CSS/wwt.css.map'
                 },
-                src: 'Content/css/wwt.less',
-                dest: 'Content/css/wwt.css'
+
+                src: 'Content/CSS/wwt.less',
+                dest: 'Content/CSS/wwt.css'
             }
         },
+
         autoprefixer: {
             options: {
                 browsers: [
@@ -51,9 +49,10 @@ module.exports = function(grunt) {
                 options: {
                     map: true
                 },
-                src: 'Content/css/wwt.css'
+                src: 'Content/CSS/wwt.css'
             }
         },
+
         cssmin: {
             options: {
                 compatibility: 'ie10',
@@ -61,28 +60,29 @@ module.exports = function(grunt) {
                 noAdvanced: true
             },
             minifyCore: {
-                src: 'Content/css/wwt.css',
-                dest: 'Content/css/wwt.min.css'
+                src: 'Content/CSS/wwt.css',
+                dest: 'Content/CSS/wwt.min.css'
             }
         },
-        
+
         copy: {
             vendor: {
-                files: [ {
-                        expand: true,
-                        flatten: true,
+                files: [
+                    {
                         src: 'bower_components/jquery/dist/jquery.js',
-                        dest: 'Scripts/ext/'
-                    }, {
                         dest: 'Scripts/ext/',
                         expand: true,
-                        flatten: true,
-                        src: 'bower_components/bootstrap/dist/js/bootstrap.js'
+                        flatten: true
                     }, {
+                        src: 'bower_components/bootstrap/dist/js/bootstrap.js',
                         dest: 'Scripts/ext/',
                         expand: true,
-                        flatten: true,
-                        src: 'bower_components/angular/angular.js'
+                        flatten: true
+                    }, {
+                        src: 'bower_components/angular/angular.js',
+                        dest: 'Scripts/ext/',
+                        expand: true,
+                        flatten: true
                     }, {
                         cwd: 'bower_components/bootstrap/less/',
                         src: '**/*',
@@ -97,6 +97,7 @@ module.exports = function(grunt) {
                 ]
             }
         },
+
         watch: {
             vendor: { // will be triggered by 'bower install' when it finds updates
                 files: [
@@ -107,9 +108,8 @@ module.exports = function(grunt) {
                 tasks: ['vendor']
             },
 
-            
             less: {
-                files: 'Content/css/*.less',
+                files: 'Content/CSS/*.less',
                 tasks: ['dist-css']
             }
         }
@@ -117,9 +117,7 @@ module.exports = function(grunt) {
 
     // Dependencies
     require('load-grunt-tasks')(grunt, { scope: 'devDependencies' });
-    
 
     grunt.registerTask('dist-css', ['less:compileCore', 'autoprefixer:core', 'cssmin:minifyCore']);
     grunt.registerTask('vendor', ['copy:vendor']);
-
 };

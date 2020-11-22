@@ -7,10 +7,8 @@ namespace WWTMVC5.Models
     public class BaseModel
     {
         private readonly string _contentDir;
-        private readonly string _imgDir;
         private readonly string _jsDir;
         private readonly string _cssDir;
-        private readonly string _toursDir;
         private readonly string _resVer;
         private ProfileDetails _profile;
 
@@ -19,8 +17,6 @@ namespace WWTMVC5.Models
             _cssDir = "/Content/CSS";
             _jsDir = "/Scripts";
             _contentDir = "//wwtweb.blob.core.windows.net";
-            _imgDir = ContentDir + "/images";
-            _toursDir = ContentDir + "/WebControlTours";
             _resVer = ConfigReader<string>.GetSetting("ResourcesVersion");
         }
 
@@ -37,16 +33,6 @@ namespace WWTMVC5.Models
         public string ContentDir
         {
             get { return _contentDir; }
-        }
-
-        public string ImgDir
-        {
-            get { return _imgDir; }
-        }
-
-        public string ToursDir
-        {
-            get { return _toursDir; }
         }
 
         public string ResVer

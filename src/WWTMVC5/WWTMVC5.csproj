@@ -307,7 +307,7 @@
     <Compile Include="Models\OffensiveStatus.cs">
       <DependentUpon>EarthOnline.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\OpeartionStatus.cs" />
+    <Compile Include="Models\OperationStatus.cs" />
     <Compile Include="Models\PageDetails.cs" />
     <Compile Include="Models\PayloadDetails.cs" />
     <Compile Include="Models\PermissionDetails.cs" />
@@ -493,8 +493,6 @@
     <Content Include="Content\Views\modals\EditFolder.html" />
     <Content Include="Content\Views\modals\EditTour.html" />
     <Content Include="Content\Views\TourAdmin.html" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\controllers\modals\editfolder.js" />
     <Content Include="Scripts\controllers\modals\edittour.js" />
     <Content Include="Scripts\controllers\touradmin.js" />
@@ -607,7 +605,6 @@
     <Content Include="Scripts\ext\multiselect.js" />
     <Content Include="Scripts\factory\uihelper.js" />
     <Content Include="Scripts\main.js" />
-    <Content Include="Scripts\pages\home.js" />
     <Content Include="Views\Shared\Footer.cshtml" />
     <Content Include="Views\Shared\TopNav.cshtml" />
     <Content Include="Views\Web.config">
