@@ -320,7 +320,7 @@ namespace WWTMVC5
         {
             get
             {
-                return ConfigReader<string>.GetSetting("ThumbnailContainer");
+                return ConfigReader<string>.GetSetting("CommunitiesThumbnailContainer");
             }
         }
 
