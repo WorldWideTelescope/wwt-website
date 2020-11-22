@@ -2,43 +2,40 @@
 <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
-            @if (!Model.IsOpenWwtKiosk)
-            {
-                <button data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggle" type="button">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-            }
-            <a class="navbar-brand" href="@(Model.IsOpenWwtKiosk ? "http://worldwidetelescope.org" : "/")">
+            <button data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggle" type="button">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="/">
                 <span class="aas">American Astronomical Society</span>
                 World<span class=text-info>Wide Telescope</span>
             </a>
         </div>
-        @if (!Model.IsOpenWwtKiosk)
-        {
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav social">
-                    <li class="social">
-                        @if (Model.User != null)
-                        {
-                            <div id="signinContainer" loggedIn="true">
-                                <a class="social" href="/Community/#/MyProfile" id="username" data-toggle="tooltip" data-placement="bottom"
-                                   data-title="@("Welcome, " +Model.User.FirstName + " " + Model.User.LastName). Click to view your WWT community profile">
-                                    <i class="fa fa-user" style="color:#009cff"></i>
-                                </a>
-                            </div>
-                        }
-                        else
-                        {
-                            <div id="signinContainer">
-                                <a class="social" href="javascript:void(0)" id="signin" data-toggle="tooltip" data-placement="bottom"
-                                   data-title="Sign in to WWT">
-                                    <i class="fa fa-sign-in"></i>
-                                </a>
-                            </div>
-                        }
-                    </li>
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav social">
+                <li class="social">
+                    @if (Model.User != null)
+                    {
+                        <div id="signinContainer" loggedIn="true">
+                            <a class="social" href="/Community/#/MyProfile" id="username" data-toggle="tooltip" data-placement="bottom"
+                                data-title="@("Welcome, " +Model.User.FirstName + " " + Model.User.LastName). Click to view your WWT community profile">
+                                <i class="fa fa-user" style="color:#009cff"></i>
+                            </a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div id="signinContainer">
+                            <a class="social" href="javascript:void(0)" id="signin" data-toggle="tooltip" data-placement="bottom"
+                                data-title="Sign in to WWT">
+                                <i class="fa fa-sign-in"></i>
+                            </a>
+                        </div>
+                    }
+                </li>
             </ul>
             <ul class="nav navbar-nav">
                 <li class="dropdown" runat="server" id="topNav_Develop">
@@ -52,7 +49,5 @@
                 </li>
             </ul>
         </div>
-
-        }
     </div>
 </div>

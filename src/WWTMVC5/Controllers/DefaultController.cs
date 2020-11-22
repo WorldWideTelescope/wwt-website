@@ -188,22 +188,8 @@ namespace WWTMVC5.Controllers
             }
         }
         
-        /// <summary>
-        /// All web page views go through this function - it ensures we are not in openwwt land - which should only display a kiosk
-        /// </summary>
-        /// <param name="group"></param>
-        /// <param name="page"></param>
-        /// <param name="model"></param>
-        /// <returns></returns>
         private async Task<ActionResult> GetViewOrRedirect(string group, string page, BaseModel model)
         {
-            model.IsOpenWwtKiosk = Request.Headers.Get("host").ToLower().Contains("openwwt.org");
-
-            if (model.IsOpenWwtKiosk && group.ToLower() != "openwwt")
-            {
-                group = "openwwt";
-                page = "index";
-            }
             if (model.User == null)
             {
                 if (Request.QueryString["code"] != null)

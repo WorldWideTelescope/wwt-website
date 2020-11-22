@@ -72,10 +72,7 @@
 		@RenderBody()
 	</div>
 
-    @if (Model.IsOpenWwtKiosk != true)
-    {
-       @Html.Partial("Footer");
-    } 
+    @Html.Partial("Footer");
     
     <div class="modal fade" id="mailChimp">
         <div class="modal-dialog">

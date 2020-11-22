@@ -14,7 +14,6 @@ namespace WWTMVC5.Models
         private readonly string _resVer;
         private readonly string _downloadUrl;
         private readonly string _legacyUrl;
-        private bool _isOpenWwtKiosk = false;
         private ProfileDetails _profile;
 
         public BaseModel()
@@ -27,7 +26,6 @@ namespace WWTMVC5.Models
             _resVer = ConfigReader<string>.GetSetting("ResourcesVersion");
             _downloadUrl = ConfigReader<string>.GetSetting("WWTDownloadUrl");
             _legacyUrl = ConfigReader<string>.GetSetting("WWTLegacyDownloadUrl");
-            _isOpenWwtKiosk = false;
         }
 
         public string CssDir
@@ -68,12 +66,6 @@ namespace WWTMVC5.Models
         public string LegacyUrl
         {
             get { return _legacyUrl; }
-        }
-
-        public bool IsOpenWwtKiosk
-        {
-            get { return _isOpenWwtKiosk; }
-            set { _isOpenWwtKiosk = value; }
         }
 
         public ProfileDetails User
