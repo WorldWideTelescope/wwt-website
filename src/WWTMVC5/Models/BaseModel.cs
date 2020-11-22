@@ -13,7 +13,6 @@ namespace WWTMVC5.Models
         private readonly string _toursDir;
         private readonly string _resVer;
         private readonly string _downloadUrl;
-        private readonly string _legacyUrl;
         private ProfileDetails _profile;
 
         public BaseModel()
@@ -25,7 +24,6 @@ namespace WWTMVC5.Models
             _toursDir = ContentDir + "/WebControlTours";
             _resVer = ConfigReader<string>.GetSetting("ResourcesVersion");
             _downloadUrl = ConfigReader<string>.GetSetting("WWTDownloadUrl");
-            _legacyUrl = ConfigReader<string>.GetSetting("WWTLegacyDownloadUrl");
         }
 
         public string CssDir
@@ -61,11 +59,6 @@ namespace WWTMVC5.Models
         public string DownloadUrl
         {
             get { return _downloadUrl; }
-        }
-
-        public string LegacyUrl
-        {
-            get { return _legacyUrl; }
         }
 
         public ProfileDetails User
