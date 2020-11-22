@@ -307,7 +307,7 @@
     <Compile Include="Models\OffensiveStatus.cs">
       <DependentUpon>EarthOnline.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\OpeartionStatus.cs" />
+    <Compile Include="Models\OperationStatus.cs" />
     <Compile Include="Models\PageDetails.cs" />
     <Compile Include="Models\PayloadDetails.cs" />
     <Compile Include="Models\PermissionDetails.cs" />
