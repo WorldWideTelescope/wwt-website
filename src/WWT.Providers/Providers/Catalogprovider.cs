@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using Microsoft.Extensions.Logging;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using WWT.Catalog;
@@ -8,13 +9,13 @@ namespace WWT.Providers
     [RequestEndpoint("/wwtweb/Catalog.aspx")]
     public class CatalogProvider : RequestProvider
     {
-        private readonly ICatalogAccessor _catalog;        
-        private readonly bool _useXmlContentType;
+        private readonly ICatalogAccessor _catalog;
+        private readonly ILogger<CatalogProvider> _logger;
 
-        public CatalogProvider(ICatalogAccessor catalogAccessor, bool useXmlContentType = false)
+        public CatalogProvider(ICatalogAccessor catalogAccessor, ILogger<CatalogProvider> logger)
         {
             _catalog = catalogAccessor;
-            _useXmlContentType = useXmlContentType;
+            _logger = logger;
         }
 
         public override string ContentType => ContentTypes.Text;
@@ -37,13 +38,6 @@ namespace WWT.Providers
             }
             else if (context.Request.Params["X"] != null)
             {
-                // One of 2 changes that make up Catalog2Provider
-                if (_useXmlContentType)
-                {
-                    context.Response.Clear();
-                    context.Response.ContentType = "application/xml";
-                }
-
                 string query = context.Request.Params["X"];
 
                 query = query.Replace("..", "");
@@ -53,13 +47,6 @@ namespace WWT.Providers
             }
             else if (context.Request.Params["W"] != null)
             {
-                // Two of 2 changes that make up Catalog2Provider
-                if (_useXmlContentType)
-                {
-                    context.Response.Clear();
-                    context.Response.ContentType = "application/xml";
-                }
-
                 string query = context.Request.Params["W"];
 
                 query = query.Replace("..", "");
@@ -68,27 +55,46 @@ namespace WWT.Providers
                 filename = $"{query}.wtml";
             }
 
-            if (!string.IsNullOrEmpty(filename))
+            if (!await GetEntry(context, etag, filename, token))
             {
-                var catalogEntry = await _catalog.GetCatalogEntryAsync(filename, token);
-                string newEtag = catalogEntry.LastModified.ToUniversalTime().ToString();
+                context.Response.StatusCode = 404;
+            }
+        }
 
-                if (newEtag != etag)
-                {
-                    context.Response.AddHeader("etag", newEtag);
+        private async Task<bool> GetEntry(IWwtContext context, string etag, string filename, CancellationToken token)
+        {
+            if (string.IsNullOrEmpty(filename))
+            {
+                return false;
+            }
 
-                    using (var c = catalogEntry.Contents)
-                    {
-                        await c.CopyToAsync(context.Response.OutputStream, token);
-                        context.Response.Flush();
-                        context.Response.End();
-                    }
-                }
-                else
+            var catalogEntry = await _catalog.GetCatalogEntryAsync(filename, token);
+
+            if (catalogEntry is null)
+            {
+                _logger.LogWarning("Requested catalog {Name} does not exist.", filename);
+                return false;
+            }
+
+            string newEtag = catalogEntry.LastModified.ToUniversalTime().ToString();
+
+            if (newEtag != etag)
+            {
+                context.Response.AddHeader("etag", newEtag);
+
+                using (var c = catalogEntry.Contents)
                 {
-                    context.Response.Status = "304 Not Modified";
+                    await c.CopyToAsync(context.Response.OutputStream, token);
+                    context.Response.Flush();
+                    context.Response.End();
                 }
             }
+            else
+            {
+                context.Response.Status = "304 Not Modified";
+            }
+
+            return true;
         }
     }
 }
