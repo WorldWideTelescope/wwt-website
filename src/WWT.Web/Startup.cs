@@ -103,8 +103,7 @@ namespace WWT.Web
                 builder.AddDebug();
             });
 
-            services.AddSnapshotCollector((snapshotConfiguration) => 
-                _configuration.Bind(nameof(SnapshotCollectorConfiguration), snapshotConfiguration));
+            services.AddSnapshotCollector();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
