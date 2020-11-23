@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.ApplicationInsights;
+using Microsoft.ApplicationInsights.SnapshotCollector;
 using Microsoft.Extensions.Options;
 using System;
 using System.Configuration;
