@@ -1,3 +1,4 @@
+using Microsoft.ApplicationInsights.SnapshotCollector;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -101,6 +102,9 @@ namespace WWT.Web
                 builder.AddFilter("Swick.Cache", LogLevel.Trace);
                 builder.AddDebug();
             });
+
+            services.AddSnapshotCollector((snapshotConfiguration) => 
+                _configuration.Bind(nameof(SnapshotCollectorConfiguration), snapshotConfiguration));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
