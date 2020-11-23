@@ -159,7 +159,6 @@ namespace WWTMVC5
                 }
             });
 
-
             return services.BuildServiceProvider();
         }
 
