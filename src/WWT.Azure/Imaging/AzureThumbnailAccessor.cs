@@ -20,17 +20,17 @@ namespace WWT.Azure
         }
 
         public Task<Stream> GetDefaultThumbnailStreamAsync(CancellationToken token)
-            => GetThumbnailStreamFromFileAsync(_options.Default, "fromAssembly", token);
+            => GetThumbnailStreamFromFileAsync(_options.Default, "fromAssembly", token).AsTask();
 
         public async Task<Stream> GetThumbnailStreamAsync(string name, string type, CancellationToken token)
-            => await GetThumbnailStreamAsync(name.ToLowerInvariant(), token)
-            ?? await GetThumbnailStreamAsync(type.ToLowerInvariant(), token);
+            => await GetThumbnailStreamAsync(name?.ToLowerInvariant(), token)
+            ?? await GetThumbnailStreamAsync(type?.ToLowerInvariant(), token);
 
-        private async Task<Stream> GetThumbnailStreamAsync(string fileName, CancellationToken token)
+        private async ValueTask<Stream> GetThumbnailStreamAsync(string fileName, CancellationToken token)
             => await GetThumbnailStreamFromFileAsync(fileName, "fromAssembly", token) 
             ?? await GetThumbnailStreamFromFileAsync(fileName, "fromBackup", token);
 
-        private async Task<Stream> GetThumbnailStreamFromFileAsync(string fileName, string sub, CancellationToken token)
+        private async ValueTask<Stream> GetThumbnailStreamFromFileAsync(string fileName, string sub, CancellationToken token)
         {
             if (fileName is null)
             {
