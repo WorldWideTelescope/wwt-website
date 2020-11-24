@@ -1,4 +1,6 @@
-﻿namespace WWT.Providers
+#nullable disable
+
+namespace WWT.Providers
 {
     public enum VirtualEarthTile
     {

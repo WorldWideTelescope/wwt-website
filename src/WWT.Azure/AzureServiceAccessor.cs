@@ -1,4 +1,6 @@
-﻿using Azure.Core;
+#nullable disable
+
+using Azure.Core;
 using Azure.Storage.Blobs;
 using System;
 

@@ -1,3 +1,5 @@
+#nullable disable
+
 using Azure.Core;
 using Azure.Identity;
 using Microsoft.AspNetCore.Hosting;

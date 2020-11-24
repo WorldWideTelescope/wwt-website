@@ -1,4 +1,6 @@
-﻿using OctSetTest;
+#nullable disable
+
+using OctSetTest;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;

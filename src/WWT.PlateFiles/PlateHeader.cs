@@ -1,3 +1,5 @@
+#nullable disable
+
 namespace WWTWebservices
 {
     public struct PlateHeader

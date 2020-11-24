@@ -1,4 +1,6 @@
-﻿namespace WWT.PlateFiles
+#nullable disable
+
+namespace WWT.PlateFiles
 {
     public interface IKnownPlateFiles
     {

@@ -1,3 +1,5 @@
+#nullable disable
+
 namespace WWT.Providers
 {
     public abstract partial class isstle : RequestProvider

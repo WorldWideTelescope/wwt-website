@@ -1,4 +1,6 @@
-﻿using Microsoft.ApplicationInsights;
+#nullable disable
+
+using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.Caching.Distributed;

@@ -1,3 +1,5 @@
+#nullable disable
+
 using System;
 using System.Data.SqlClient;
 using System.Threading;

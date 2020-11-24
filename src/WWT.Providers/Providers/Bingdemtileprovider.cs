@@ -1,4 +1,6 @@
-﻿using Microsoft.Maps.ElevationAdjustmentService.HDPhoto;
+#nullable disable
+
+using Microsoft.Maps.ElevationAdjustmentService.HDPhoto;
 using System;
 using System.IO;
 using System.Threading;

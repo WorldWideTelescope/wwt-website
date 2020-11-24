@@ -1,4 +1,6 @@
-﻿// OctSetTest.SdssImage
+#nullable disable
+
+// OctSetTest.SdssImage
 using OctSetTest;
 using System;
 using System.Drawing;

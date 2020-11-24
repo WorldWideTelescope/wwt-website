@@ -1,4 +1,6 @@
-﻿namespace WWT.Azure
+#nullable disable
+
+namespace WWT.Azure
 {
     public class ThumbnailOptions
     {

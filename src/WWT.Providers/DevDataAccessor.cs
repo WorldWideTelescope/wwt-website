@@ -1,4 +1,6 @@
-﻿using System.IO;
+#nullable disable
+
+using System.IO;
 using System.IO.Compression;
 using System.Threading;
 using System.Threading.Tasks;
