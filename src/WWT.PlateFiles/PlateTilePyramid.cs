@@ -189,7 +189,6 @@ namespace WWTWebservices
 
         }
 
-
         public static async Task<Stream> GetImageStreamAsync(Stream f, int level, int x, int y, CancellationToken token)
         {
             var offset = GetFileIndexOffset(level, x, y);
@@ -197,7 +196,7 @@ namespace WWTWebservices
 
             var (start, length) = await GetNodeInfoAsync(f, offset, token).ConfigureAwait(false);
 
-            return new StreamSlice(f, start, length);
+            return StreamSlice.Create(f, start, length);
         }
 
         public static Stream GetFileStream(string filename, int level, int x, int y)

@@ -11,6 +11,7 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using WWT.PlateFiles;
 using WWTWebservices;
 
 namespace WWT.Azure
@@ -46,19 +47,15 @@ namespace WWT.Azure
 
                 return await PlateTilePyramid.GetImageStreamAsync(download, level, x, y, token).ConfigureAwait(false);
             }
+            catch (PlateTileException e)
+            {
+                _logger.LogError(e, "Unexpected error accessing image in plate file");
+                return null;
+            }
             catch (RequestFailedException e)
             {
                 _logger.LogError(e, "Unexpected error downloading {PlateName}", plateName);
                 return null;
-            }
-        }
-
-        public async IAsyncEnumerable<string> GetPlateNames([EnumeratorCancellation] CancellationToken token)
-        {
-            await foreach (var item in _container.GetBlobsByHierarchyAsync(delimiter: "/", cancellationToken: token))
-            {
-                var prefix = item.Prefix.TrimEnd('/');
-                yield return $"{prefix}.plate";
             }
         }
 
@@ -72,10 +69,24 @@ namespace WWT.Azure
 
                 return PlateFile2.GetImageStream(stream, tag, level, x, y);
             }
+            catch (PlateTileException e)
+            {
+                _logger.LogError(e, "Unexpected error accessing image in plate file");
+                return null;
+            }
             catch (RequestFailedException e)
             {
                 _logger.LogError(e, "Unexpected error downloading {PlateName}", plateName);
                 return null;
+            }
+        }
+
+        public async IAsyncEnumerable<string> GetPlateNames([EnumeratorCancellation] CancellationToken token)
+        {
+            await foreach (var item in _container.GetBlobsByHierarchyAsync(delimiter: "/", cancellationToken: token))
+            {
+                var prefix = item.Prefix.TrimEnd('/');
+                yield return $"{prefix}.plate";
             }
         }
 

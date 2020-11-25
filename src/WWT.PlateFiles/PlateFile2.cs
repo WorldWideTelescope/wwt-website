@@ -367,7 +367,7 @@ namespace WWTWebservices
 
                 if ((de.x == x) && (de.y == y) && ((de.tag == tag) || (tag == -1)) && (de.level == level))
                 {
-                    return new StreamSlice(dataStream, de.location, de.size);
+                    return StreamSlice.Create(dataStream, de.location, de.size);
                 }
                 else
                 {

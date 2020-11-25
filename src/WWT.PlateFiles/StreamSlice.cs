@@ -18,6 +18,22 @@ namespace WWT.PlateFiles
 
         private readonly long _length;
 
+        /// <summary>
+        /// Attempts to create a <see cref="StreamSlice"/>. Any exception is wrapped in
+        /// a <see cref=" PlateTileException"/>.
+        /// </summary>
+        public static Stream Create(Stream baseStream, long offset, long length)
+        {
+            try
+            {
+                return new StreamSlice(baseStream, offset, length);
+            }
+            catch (Exception e)
+            {
+                throw new PlateTileException(e.Message, e);
+            }
+        }
+
         public StreamSlice(Stream baseStream, long offset, long length)
         {
             _baseStream = baseStream ?? throw new ArgumentNullException(nameof(baseStream));
