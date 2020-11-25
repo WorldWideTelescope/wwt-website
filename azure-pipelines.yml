@@ -118,7 +118,7 @@ steps:
     publishVstsFeed: '5b8413f0-309f-4655-933b-c3b9516cd60f/cec2a436-ea5b-41d3-a4d4-8f2380a4c6a9'
   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
 
-# One day we should have a dev/prod deployment scheme, but for now it's YOLO.
+# For time being: deploy to "stage" slot, **manually** swap to production.
 - task: AzureRmWebAppDeployment@4
   displayName: Deploy to App Service
   inputs:
@@ -128,6 +128,6 @@ steps:
     WebAppName: 'wwtcoreapp-app-service'
     deployToSlotOrASE: true
     ResourceGroupName: 'wwtcoreapp-resources'
-    SlotName: 'production'
+    SlotName: 'stage'
     packageForLinux: '$(Build.artifactStagingDirectory)/website/WWTMVC5.zip'
   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
