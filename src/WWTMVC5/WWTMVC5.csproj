@@ -475,6 +475,7 @@
     <Content Include="Content\images\defaultwwtlwwtthumbnail.png" />
     <Content Include="Content\images\helpwwtthumbnail.png" />
     <Content Include="Content\images\searchwwtthumbnail.png" />
+    <Content Include="WebServices\WWTWebService.asmx" />
     <Content Include="WWT2\ClientVersion.txt" />
     <Content Include="WWT2\dataversion.txt" />
     <Content Include="WWT2\EqClientVersion.txt" />
