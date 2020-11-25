@@ -1,3 +1,5 @@
+#nullable disable
+
 using WWTWebservices;
 
 namespace WWT.Providers

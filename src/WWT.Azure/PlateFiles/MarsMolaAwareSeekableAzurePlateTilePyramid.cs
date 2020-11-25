@@ -1,4 +1,6 @@
-﻿using Azure;
+#nullable disable
+
+using Azure;
 using Azure.Storage.Blobs;
 using Microsoft.Extensions.Logging;
 using System;

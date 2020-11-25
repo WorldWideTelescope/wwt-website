@@ -1,4 +1,6 @@
-﻿// OctSetTest.OctTileMap
+#nullable disable
+
+// OctSetTest.OctTileMap
 using OctSetTest;
 using System;
 using System.Collections.Generic;

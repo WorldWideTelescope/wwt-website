@@ -1,4 +1,6 @@
-﻿namespace WWTWebservices
+#nullable disable
+
+namespace WWTWebservices
 {
     public interface IFileNameHasher
     {

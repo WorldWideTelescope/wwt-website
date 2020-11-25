@@ -1,4 +1,6 @@
-﻿using Azure.Core;
+#nullable disable
+
+using Azure.Core;
 using Azure.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;

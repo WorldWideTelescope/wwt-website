@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+#nullable disable
+
+using Microsoft.Extensions.Logging;
 using Swick.Cache;
 using System;
 using System.IO;

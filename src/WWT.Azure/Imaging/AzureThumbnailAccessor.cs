@@ -1,4 +1,6 @@
-﻿using Azure.Storage.Blobs;
+#nullable disable
+
+using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using System.IO;
 using System.Threading;

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+#nullable disable
+
+using Microsoft.AspNetCore.Http;
 using System;
 using System.IO;
 using System.Threading;

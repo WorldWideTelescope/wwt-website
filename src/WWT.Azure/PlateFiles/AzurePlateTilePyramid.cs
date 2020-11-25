@@ -1,3 +1,5 @@
+#nullable disable
+
 using Azure.Storage.Blobs;
 using System;
 using System.Collections.Concurrent;

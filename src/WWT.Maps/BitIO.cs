@@ -1,3 +1,5 @@
+#nullable disable
+
 //------------------------------------------------------------------------------
 // <copyright file="BitIO.cs" company="Microsoft">
 //     Copyright (c) Microsoft Corporation.  All rights reserved.
