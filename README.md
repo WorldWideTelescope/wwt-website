@@ -6,8 +6,6 @@ This repository contains the code for the web services backing the
 [AAS](https://aas.org/) [WorldWide
 Telescope](https://worldwidetelescope.org/home) (WWT) software system.
 
-**Note** The contents of this repository are in flux as we modernize this
-codebase.
 
 ## Deprecated APIs
 
@@ -37,9 +35,13 @@ As we move the service to a more modern architecture, some endpoints are being d
 | `/wwtweb/wmstoast.aspx` | Data is from `ms.mars.asu.edu` which no longer available. | [#181](https://github.com/WorldWideTelescope/wwt-website/pull/181) |
 | `/wwtweb/xml2wtt.aspx` | No evidence of current usage | [#205](https://github.com/WorldWideTelescope/wwt-website/pull/205) |
 
+
 ## Developer Instructions
 
-This project is undergoing rapid changes and some of these will be playing with moving pieces. Please submit issues (or PRs!) if you find anything out of date. See [docs/dev-environment.md](instructions) for details on how to build and run locally.
+See [docs/dev-environment.md](instructions) for details on how to build and run
+locally. Please submit issues (or PRs!) if you run into any problems or
+inaccuracies.
+
 
 ## Getting involved
 
