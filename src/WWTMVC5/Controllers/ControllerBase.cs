@@ -13,8 +13,11 @@ using System.ServiceModel.Web;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Live;
 using Newtonsoft.Json;
+using Unity;
+
 using WWTMVC5.Extensions;
 using WWTMVC5.Models;
 using WWTMVC5.Properties;
@@ -28,6 +31,8 @@ namespace WWTMVC5.Controllers
     /// </summary>
     public class ControllerBase : Controller
     {
+        private readonly ILogger<ControllerBase> _logger;
+
         #region Constructor
 
         /// <summary>
@@ -37,8 +42,9 @@ namespace WWTMVC5.Controllers
         public ControllerBase(IProfileService profileService)
         {
             ProfileService = profileService;
+            _logger = UnityConfig.Container.Resolve<ILogger<ControllerBase>>();
         }
-        
+
         #endregion
 
         #region Properties
@@ -81,7 +87,7 @@ namespace WWTMVC5.Controllers
             }
         }
 
-        
+
 
         /// <summary>
         /// Gets or sets Instance of profile Service
@@ -118,6 +124,12 @@ namespace WWTMVC5.Controllers
             }
             var tokens = new { access_token = "", refresh_token = "" };
             var json = JsonConvert.DeserializeAnonymousType(tokenResult, tokens);
+
+            if (string.IsNullOrEmpty(json.access_token) || string.IsNullOrEmpty(json.refresh_token)) {
+                _logger.LogWarning("UserFromToken failed: {reply}", tokenResult);
+                return null;
+            }
+
             var userId = await svc.GetUserId(json.access_token);
             if (string.IsNullOrEmpty(userId))
             {
@@ -160,7 +172,7 @@ namespace WWTMVC5.Controllers
                 };
                 // While creating the user, IsSubscribed to be true always.
 
-                // When creating the user, by default the user type will be of regular. 
+                // When creating the user, by default the user type will be of regular.
                 profileDetails.ID = ProfileService.CreateProfile(profileDetails);
 
                 // This will used as the default community when user is uploading a new content.
@@ -190,7 +202,7 @@ namespace WWTMVC5.Controllers
             SessionWrapper.Set("CurrentUserProfileName",
                 profileDetails.FirstName + " " + profileDetails.LastName);
             SessionWrapper.Set("ProfileDetails", profileDetails);
-            
+
             return profileDetails;
         }
 
@@ -213,7 +225,7 @@ namespace WWTMVC5.Controllers
                 return profile;
             }
             var result = await svc.Authenticate();
-            
+
             string userId = null;
             if (result.Status != LiveConnectSessionStatus.Connected)
             {
@@ -232,7 +244,7 @@ namespace WWTMVC5.Controllers
                 }
             }
             //userId = jsonResult["id"].ToString();
-            
+
             return await InitUserProfile(userId, result.Session.AccessToken);
         }
 
@@ -297,7 +309,7 @@ namespace WWTMVC5.Controllers
                 {
                     token = authCookie.Value;
                 }
-                
+
             }
             var cachedProfile = ProfileCacheManager.GetProfileDetails(token);
             if (cachedProfile!=null)
@@ -321,7 +333,7 @@ namespace WWTMVC5.Controllers
             {
                 ProfileCacheManager.CacheProfile(token,profileDetails);
             }
-                
+
             return profileDetails;
         }
 
