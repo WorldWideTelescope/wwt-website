@@ -1,5 +1,5 @@
 ﻿using System;
-using Unity;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Net;
@@ -12,9 +12,11 @@ using System.ServiceModel.Web;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+
+using Microsoft.Extensions.Logging;
 using Microsoft.Live;
 using Newtonsoft.Json;
-using Microsoft.Extensions.Logging;
+using Unity;
 
 namespace WWTMVC5.WebServices
 {
@@ -69,16 +71,25 @@ namespace WWTMVC5.WebServices
         {
             _logger.LogInformation("OAuth: GetTokens()");
 
-            var redir = GetRedirectUrl();
-            var tokenUri = new Uri(string.Format("https://login.live.com/oauth20_token.srf?client_id={0}&redirect_uri={1}&client_secret={2}&code={3}&grant_type=authorization_code",
-                _clientId, HttpUtility.UrlEncode(redir), _clientSecret, authCode));
+            var formData = new List<KeyValuePair<string, string>>();
+            formData.Add(new KeyValuePair<string, string>("client_id", _clientId));
+            formData.Add(new KeyValuePair<string, string>("client_secret", _clientSecret));
+            formData.Add(new KeyValuePair<string, string>("redirect_uri", GetRedirectUrl()));
+            formData.Add(new KeyValuePair<string, string>("grant_type", "authorization_code"));
+            formData.Add(new KeyValuePair<string, string>("code", authCode));
 
             var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync(tokenUri);
+            var response = await httpClient.PostAsync("https://login.live.com/oauth20_token.srf", new FormUrlEncodedContent(formData));
             var responseString = await response.Content.ReadAsStringAsync();
 
             var tokens = new { access_token = "", refresh_token = "" };
             var json = JsonConvert.DeserializeAnonymousType(responseString, tokens);
+
+            if (string.IsNullOrEmpty(json.access_token) || string.IsNullOrEmpty(json.refresh_token)) {
+                _logger.LogWarning("GetTokens failed: {reply}", responseString);
+                return string.Empty;
+            }
+
             HttpCookie authCookie = new HttpCookie("refresh_token", json.refresh_token) { Expires = DateTime.MaxValue };
             HttpContext.Current.Response.Cookies.Add(authCookie);
             HttpCookie accessCookie = new HttpCookie("access_token", json.access_token) { Expires = DateTime.MaxValue };
@@ -98,23 +109,35 @@ namespace WWTMVC5.WebServices
 
         public async Task<string> RefreshTokens()
         {
-            var token = HttpContext.Current.Request.Cookies["refresh_token"] != null ?HttpContext.Current.Request.Cookies["refresh_token"].Value : null;
+            string token = null;
+
+            if (HttpContext.Current.Request.Cookies["refresh_token"] != null)
+                token = HttpContext.Current.Request.Cookies["refresh_token"].Value;
+
             if (token == null)
             {
                 return string.Empty;
             }
 
-            var redir = GetRedirectUrl();
-
-            var tokenUri = string.Format("https://login.live.com/oauth20_token.srf?client_id={0}&redirect_uri={1}&client_secret={2}&refresh_token={3}&grant_type=refresh_token",
-                _clientId, HttpUtility.UrlEncode(redir), _clientSecret, token);
+            var formData = new List<KeyValuePair<string, string>>();
+            formData.Add(new KeyValuePair<string, string>("client_id", _clientId));
+            formData.Add(new KeyValuePair<string, string>("client_secret", _clientSecret));
+            formData.Add(new KeyValuePair<string, string>("redirect_uri", GetRedirectUrl()));
+            formData.Add(new KeyValuePair<string, string>("grant_type", "refresh_token"));
+            formData.Add(new KeyValuePair<string, string>("refresh_token", token));
 
             var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync(tokenUri);
+            var response = await httpClient.PostAsync("https://login.live.com/oauth20_token.srf", new FormUrlEncodedContent(formData));
             var responseString = await response.Content.ReadAsStringAsync();
 
             var tokens = new { access_token = "", refresh_token = "" };
             var json = JsonConvert.DeserializeAnonymousType(responseString, tokens);
+
+            if (string.IsNullOrEmpty(json.access_token) || string.IsNullOrEmpty(json.refresh_token)) {
+                _logger.LogWarning("RefreshTokens failed: {reply}", responseString);
+                return string.Empty;
+            }
+
             HttpCookie authCookie = new HttpCookie("refresh_token", json.refresh_token) { Expires = DateTime.MaxValue };
             HttpContext.Current.Response.Cookies.Add(authCookie);
             HttpCookie accessCookie = new HttpCookie("access_token", json.access_token) { Expires = DateTime.MaxValue };
