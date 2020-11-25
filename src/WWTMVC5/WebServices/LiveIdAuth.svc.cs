@@ -174,9 +174,9 @@ namespace WWTMVC5.WebServices
             return (dynamic)JsonConvert.DeserializeObject(responseString);
         }
 
-        public string GetLogoutUrl(string returnUrl)
+        public string GetLogoutUrl()
         {
-            return _liveAuthClient.GetLogoutUrl(returnUrl);
+            return _liveAuthClient.GetLogoutUrl(GetRedirectUrl());
         }
     }
 }

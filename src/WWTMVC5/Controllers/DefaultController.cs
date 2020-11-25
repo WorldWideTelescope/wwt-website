@@ -58,7 +58,7 @@ namespace WWTMVC5.Controllers
             }
 
             var svc = new LiveIdAuth();
-            var url = svc.GetLogoutUrl("http://" + Request.Headers.Get("host"));
+            var url = svc.GetLogoutUrl();
 
             SessionWrapper.Clear();
             return Json(new
@@ -113,7 +113,7 @@ namespace WWTMVC5.Controllers
         public ActionResult Logout()
         {
             var svc = new LiveIdAuth();
-            var url =  svc.GetLogoutUrl("http://" + Request.Headers.Get("host"));
+            var url =  svc.GetLogoutUrl();
 
             SessionWrapper.Clear();
 
