@@ -1,6 +1,13 @@
 <Project ToolsVersion="14.0"
   xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
+  <PropertyGroup>
+    <TargetFrameworks Condition=" '$(OS)' == 'Windows'">net5;net48</TargetFrameworks>
+    <TargetFrameworks Condition=" '$(OS)' != 'Windows'">net5</TargetFrameworks>
+    <LangVersion>8.0</LangVersion>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)/Common/**/*.cs" />
   </ItemGroup>
@@ -21,6 +28,4 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
-
-  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.targets', '$(MSBuildThisFileDirectory)../'))" />
 </Project>
