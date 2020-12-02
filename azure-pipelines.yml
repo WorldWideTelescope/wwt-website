@@ -136,15 +136,11 @@ stages:
           platform: '$(buildPlatform)'
           configuration: '$(buildConfiguration)'
 
-      - task: VSTest@2
+      - task: DotNetCoreCLI@2
         inputs:
-          testSelector: 'testAssemblies'
-          testAssemblyVer2: |
-            **\WWT.*.Tests.dll
-            !**\*TestAdapter.dll
-            !**\obj\**
-          searchFolder: '$(System.DefaultWorkingDirectory)'
-          codeCoverageEnabled: true
+          command: 'test'
+          projects: 'wwt-website-net5.slnf'
+          arguments: '--configuration $(buildConfiguration)'
 
       - publish: $(build.artifactStagingDirectory)/website
         artifact: mvc5
