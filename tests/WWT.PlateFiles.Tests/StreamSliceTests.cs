@@ -1,6 +1,5 @@
 using AutofacContrib.NSubstitute;
 using AutoFixture;
-using Castle.Components.DictionaryAdapter.Xml;
 using System.IO;
 using System.Linq;
 using Xunit;

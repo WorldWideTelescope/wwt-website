@@ -4,130 +4,182 @@ trigger:
 pr:
 - master
 
-pool:
-  vmImage: 'windows-latest'
-
 variables:
-  solution: 'wwt-website.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
-steps:
+stages:
+- stage: Build
+  jobs:
+    - job: BuildNet5
+      displayName: '.NET 5 WebApp'
+      pool:
+        vmImage: 'Ubuntu-latest'
+      steps:
+      - task: UseDotNet@2
+        inputs:
+          packageType: 'sdk'
+          version: '3.x'
 
-- task: UseDotNet@2
-  inputs:
-    packageType: 'sdk'
-    version: '3.x'
+      - task: UseDotNet@2
+        inputs:
+          packageType: 'sdk'
+          useGlobalJson: true
 
-- task: UseDotNet@2
-  inputs:
-    packageType: 'sdk'
-    useGlobalJson: true
+      - task: DotNetCoreCLI@2
+        displayName: 'Install GitVersion'
+        inputs:
+          command: 'custom'
+          custom: 'tool'
+          arguments: 'install --global GitVersion.Tool --version 5.5.0'
 
-- task: DotNetCoreCLI@2
-  displayName: 'Install GitVersion'
-  inputs:
-    command: 'custom'
-    custom: 'tool'
-    arguments: 'install --global GitVersion.Tool --version 5.5.0'
+      - task: DotNetCoreCLI@2
+        displayName: 'Update Version'
+        inputs:
+          command: 'custom'
+          custom: 'gitversion'
+          arguments: '/output buildserver /nofetch'
 
-- task: DotNetCoreCLI@2
-  displayName: 'Update Version'
-  inputs:
-    command: 'custom'
-    custom: 'gitversion'
-    arguments: '/output buildserver /nofetch'
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'build'
+          projects: 'wwt-website-net5.slnf'
+          arguments: '--configuration $(buildConfiguration)'
+        
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'test'
+          projects: 'wwt-website-net5.slnf'
+          arguments: '--configuration $(buildConfiguration)'
 
-- task: NuGetToolInstaller@1
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'publish'
+          publishWebProjects: false
+          zipAfterPublish: true
+          modifyOutputPath: true
+          projects: 'src/WWT.Web/WWT.Web.csproj'
+          arguments: '--configuration $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)/website'
+      
+      - task: DotNetCoreCLI@2
+        displayName: Create tool package
+        inputs:
+          command: 'pack'
+          packagesToPack: 'tools/PlateManager/PlateManager.csproj'
+          packDirectory: '$(Build.ArtifactStagingDirectory)/tools'
+          versioningScheme: 'off'          
+          
+      - publish: $(build.artifactStagingDirectory)/tools
+        artifact: tools
 
-- task: NuGetCommand@2
-  inputs:
-    restoreSolution: '$(solution)'
-    feedsToUse: config
-    nugetConfigPath: NuGet.config
+      - publish: $(build.artifactStagingDirectory)/website
+        artifact: net5-web
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'publish'
-    publishWebProjects: false
-    projects: 'src/WWT.Web/WWT.Web.csproj'
-    arguments: '--runtime win-x64 --self-contained --configuration $(buildConfiguration)'
+    - job: BuildMVC5
+      displayName: 'ASP.NET MVC5 WebApp'
+      pool:
+        vmImage: 'windows-latest'
+      steps:
+      - task: UseDotNet@2
+        inputs:
+          packageType: 'sdk'
+          version: '3.x'
 
-- task: Npm@1
-  displayName: npm install
-  inputs:
-    command: 'install'
-    workingDir: 'src/WWTMVC5'
+      - task: UseDotNet@2
+        inputs:
+          packageType: 'sdk'
+          useGlobalJson: true
 
-- task: Npm@1
-  displayName: npm install -g bower
-  inputs:
-    command: 'custom'
-    customCommand: 'install -g bower'
+      - task: DotNetCoreCLI@2
+        displayName: 'Install GitVersion'
+        inputs:
+          command: 'custom'
+          custom: 'tool'
+          arguments: 'install --global GitVersion.Tool --version 5.5.0'
 
-- task: PowerShell@2
-  displayName: Run init.ps1
-  inputs:
-    filePath: 'init.ps1'
+      - task: DotNetCoreCLI@2
+        displayName: 'Update Version'
+        inputs:
+          command: 'custom'
+          custom: 'gitversion'
+          arguments: '/output buildserver /nofetch'
 
-- task: VSBuild@1
-  inputs:
-    solution: '$(solution)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:PrecompileBeforePublish=true /p:EnableUpdateable=false /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)/website"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+      - task: NuGetToolInstaller@1
 
-- task: DotNetCoreCLI@2
-  displayName: Create tool package
-  inputs:
-    command: 'pack'
-    packagesToPack: 'tools/PlateManager/PlateManager.csproj'
-    packDirectory: '$(Build.ArtifactStagingDirectory)/tools'
-    versioningScheme: 'off'
+      - task: NuGetCommand@2
+        inputs:
+          restoreSolution: 'wwt-website.sln'
+          feedsToUse: config
+          nugetConfigPath: NuGet.config
 
-- task: VSTest@2
-  inputs:
-    testSelector: 'testAssemblies'
-    testAssemblyVer2: |
-      **\WWT.*.Tests.dll
-      !**\*TestAdapter.dll
-      !**\obj\**
-    searchFolder: '$(System.DefaultWorkingDirectory)'
-    codeCoverageEnabled: true
+      - task: Npm@1
+        displayName: npm install
+        inputs:
+          command: 'install'
+          workingDir: 'src/WWTMVC5'
 
-- task: PublishPipelineArtifact@1
-  displayName: Publish website bundle artifacts
-  inputs:
-    targetPath: '$(build.artifactStagingDirectory)/website'
-    artifact: 'website'
-    publishLocation: 'pipeline'
+      - task: Npm@1
+        displayName: npm install -g bower
+        inputs:
+          command: 'custom'
+          customCommand: 'install -g bower'
 
-- task: PublishPipelineArtifact@1
-  displayName: Publish tool package artifacts
-  inputs:
-    targetPath: '$(build.artifactStagingDirectory)/tools'
-    artifact: 'tools'
-    publishLocation: 'pipeline'
+      - task: PowerShell@2
+        displayName: Run init.ps1
+        inputs:
+          filePath: 'init.ps1'
 
-- task: DotNetCoreCLI@2
-  displayName: Push tools to feed
-  inputs:
-    command: 'push'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/tools/*.nupkg'
-    nuGetFeedType: 'internal'
-    publishVstsFeed: '5b8413f0-309f-4655-933b-c3b9516cd60f/cec2a436-ea5b-41d3-a4d4-8f2380a4c6a9'
+      - task: VSBuild@1
+        inputs:
+          solution: 'wwt-website.sln'
+          msbuildArgs: '/p:DeployOnBuild=true /p:PrecompileBeforePublish=true /p:EnableUpdateable=false /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)/website"'
+          platform: '$(buildPlatform)'
+          configuration: '$(buildConfiguration)'
+
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'test'
+          projects: 'wwt-website-net5.slnf'
+          arguments: '--configuration $(buildConfiguration)'
+
+      - publish: $(build.artifactStagingDirectory)/website
+        artifact: mvc5
+
+- stage: Deploy
+  dependsOn: Build
   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+  jobs:
+    - job: Tools
+      pool:
+        vmImage: 'ubuntu-latest'
+      steps:
+      - checkout: none
+      - download: current
+        artifact: tools
+      - task: DotNetCoreCLI@2
+        displayName: Push tools to feed
+        inputs:
+          command: 'push'
+          packagesToPush: '$(Pipeline.Workspace)/{tools}/*.nupkg'
+          nuGetFeedType: 'internal'
+          publishVstsFeed: '5b8413f0-309f-4655-933b-c3b9516cd60f/cec2a436-ea5b-41d3-a4d4-8f2380a4c6a9'
 
-# For time being: deploy to "stage" slot, **manually** swap to production.
-- task: AzureRmWebAppDeployment@4
-  displayName: Deploy to App Service
-  inputs:
-    ConnectionType: 'AzureRM'
-    azureSubscription: 'aas@wwtadmindotnetfoundation'
-    appType: 'webApp'
-    WebAppName: 'wwtcoreapp-app-service'
-    deployToSlotOrASE: true
-    ResourceGroupName: 'wwtcoreapp-resources'
-    SlotName: 'stage'
-    packageForLinux: '$(Build.artifactStagingDirectory)/website/WWTMVC5.zip'
-  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+    - job: AzureAppService
+      pool:
+        vmImage: 'ubuntu-latest'
+      steps:
+      - checkout: none
+      - download: current
+        artifact: mvc5
+      # For time being: deploy to "stage" slot, **manually** swap to production.
+      - task: AzureRmWebAppDeployment@4
+        displayName: Deploy to App Service
+        inputs:
+          ConnectionType: 'AzureRM'
+          azureSubscription: 'aas@wwtadmindotnetfoundation'
+          appType: 'webApp'
+          WebAppName: 'wwtcoreapp-app-service'
+          deployToSlotOrASE: true
+          ResourceGroupName: 'wwtcoreapp-resources'
+          SlotName: 'stage'
+          packageForLinux: '$(Pipeline.Workspace)/{mvc5}/WWTMVC5.zip'
