@@ -104,13 +104,11 @@ stages:
           custom: 'gitversion'
           arguments: '/output buildserver /nofetch'
 
-      - task: NuGetToolInstaller@1
-
-      - task: NuGetCommand@2
+      - task: DotNetCoreCLI@2
         inputs:
-          restoreSolution: 'wwt-website.sln'
-          feedsToUse: config
-          nugetConfigPath: NuGet.config
+          command: 'build'
+          projects: 'wwt-website.slnf'
+          arguments: '--configuration $(buildConfiguration)'
 
       - task: Npm@1
         displayName: npm install
