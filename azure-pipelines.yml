@@ -107,7 +107,7 @@ stages:
       - task: DotNetCoreCLI@2
         inputs:
           command: 'build'
-          projects: 'wwt-website.slnf'
+          projects: 'wwt-website.sln'
           arguments: '--configuration $(buildConfiguration)'
 
       - task: Npm@1
