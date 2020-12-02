@@ -12,6 +12,7 @@ stages:
 - stage: Build
   jobs:
     - job: BuildNet5
+      displayName: 'Build .NET 5 WebApp'
       pool:
         vmImage: 'Ubuntu-latest'
       steps:
@@ -75,6 +76,7 @@ stages:
         artifact: net5-web
 
     - job: BuildMVC5
+      displayName: 'Build ASP.NET MVC5 WebApp'
       pool:
         vmImage: 'windows-latest'
       steps:
