@@ -151,6 +151,32 @@ stages:
       - publish: $(build.artifactStagingDirectory)/website
         artifact: mvc5
 
+    - job: BuildDocker
+      displayName: 'Docker Image'
+      pool:
+        vmImage: 'Ubuntu-latest'
+
+      steps:
+      - task: Docker@2
+        displayName: Build image
+        inputs:
+          repository: 'aasworldwidetelescope/core-data'
+          command: 'build'
+          Dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+          buildContext: '$(Build.SourcesDirectory)'
+          tags: |
+            latest
+
+      - bash: |
+          set -xeuo pipefail
+          mkdir $(build.artifactStagingDirectory)/dockerImage
+          docker save -o $(build.artifactStagingDirectory)/dockerImage/core-data.tar.gz \
+            aasworldwidetelescope/core-data:latest
+        displayName: Save image as artifact
+
+      - publish: $(build.artifactStagingDirectory)/dockerImage
+        artifact: dockerImage
+
 - stage: Deploy
   dependsOn: Build
   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
@@ -189,3 +215,22 @@ stages:
           ResourceGroupName: 'wwtcoreapp-resources'
           SlotName: 'stage'
           packageForLinux: '$(Pipeline.Workspace)/mvc5/WWTMVC5.zip'
+
+    - job: DockerImage
+      pool:
+        vmImage: 'ubuntu-latest'
+      steps:
+      - checkout: none
+      - download: current
+        artifact: dockerImage
+      - bash: |
+          docker load -i $(Pipeline.Workspace)/dockerImage/core-data.tar.gz
+        displayName: Load image from artifacts
+      - task: Docker@2
+        displayName: Push image
+        inputs:
+          containerRegistry: 'worldwidetelescope@DockerHub'
+          repository: 'aasworldwidetelescope/core-data'
+          command: 'push'
+          tags: |
+            latest
