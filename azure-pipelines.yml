@@ -15,6 +15,7 @@ stages:
       displayName: '.NET 5 WebApp'
       pool:
         vmImage: 'Ubuntu-latest'
+
       steps:
       - task: UseDotNet@2
         inputs:
@@ -41,18 +42,21 @@ stages:
           arguments: '/output buildserver /nofetch'
 
       - task: DotNetCoreCLI@2
+        displayName: dotnet build
         inputs:
           command: 'build'
           projects: 'wwt-website-net5.slnf'
           arguments: '--configuration $(buildConfiguration)'
-        
+
       - task: DotNetCoreCLI@2
+        displayName: dotnet test
         inputs:
           command: 'test'
           projects: 'wwt-website-net5.slnf'
           arguments: '--configuration $(buildConfiguration)'
 
       - task: DotNetCoreCLI@2
+        displayName: dotnet publish
         inputs:
           command: 'publish'
           publishWebProjects: false
@@ -60,19 +64,21 @@ stages:
           modifyOutputPath: true
           projects: 'src/WWT.Web/WWT.Web.csproj'
           arguments: '--configuration $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)/website'
-      
+
       - task: DotNetCoreCLI@2
         displayName: Create tool package
         inputs:
           command: 'pack'
           packagesToPack: 'tools/PlateManager/PlateManager.csproj'
           packDirectory: '$(Build.ArtifactStagingDirectory)/tools'
-          versioningScheme: 'off'          
-          
+          versioningScheme: 'off'
+
       - publish: $(build.artifactStagingDirectory)/tools
+        displayName: Publish tools
         artifact: tools
 
       - publish: $(build.artifactStagingDirectory)/website
+        displayName: Publish net5-web
         artifact: net5-web
 
     - job: BuildMVC5
@@ -160,7 +166,7 @@ stages:
         displayName: Push tools to feed
         inputs:
           command: 'push'
-          packagesToPush: '$(Pipeline.Workspace)/{tools}/*.nupkg'
+          packagesToPush: '$(Pipeline.Workspace)/tools/*.nupkg'
           nuGetFeedType: 'internal'
           publishVstsFeed: '5b8413f0-309f-4655-933b-c3b9516cd60f/cec2a436-ea5b-41d3-a4d4-8f2380a4c6a9'
 
@@ -182,4 +188,4 @@ stages:
           deployToSlotOrASE: true
           ResourceGroupName: 'wwtcoreapp-resources'
           SlotName: 'stage'
-          packageForLinux: '$(Pipeline.Workspace)/{mvc5}/WWTMVC5.zip'
+          packageForLinux: '$(Pipeline.Workspace)/mvc5/WWTMVC5.zip'
