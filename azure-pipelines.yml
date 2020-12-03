@@ -166,7 +166,7 @@ stages:
         displayName: Push tools to feed
         inputs:
           command: 'push'
-          packagesToPush: '$(Pipeline.Workspace)/{tools}/*.nupkg'
+          packagesToPush: '$(Pipeline.Workspace)/tools/*.nupkg'
           nuGetFeedType: 'internal'
           publishVstsFeed: '5b8413f0-309f-4655-933b-c3b9516cd60f/cec2a436-ea5b-41d3-a4d4-8f2380a4c6a9'
 
@@ -188,4 +188,4 @@ stages:
           deployToSlotOrASE: true
           ResourceGroupName: 'wwtcoreapp-resources'
           SlotName: 'stage'
-          packageForLinux: '$(Pipeline.Workspace)/{mvc5}/WWTMVC5.zip'
+          packageForLinux: '$(Pipeline.Workspace)/mvc5/WWTMVC5.zip'
