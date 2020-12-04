@@ -7,5 +7,9 @@ RUN dotnet publish -c Release -o out wwt-website-net5.slnf
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:5.0
 WORKDIR /app
+RUN apt-get update \
+  && DEBIAN_FRONTEND=noninteractive apt-get install -y libgdiplus \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
 COPY --from=build-env /app/out .
 ENTRYPOINT ["dotnet", "WWT.Web.dll"]
