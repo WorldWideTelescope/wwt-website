@@ -12,4 +12,8 @@ RUN apt-get update \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 COPY --from=build-env /app/out .
+
+# To avoid "Could not find a suitable shadow copy folder." in App Insights Snapshot Debugger:
+ENV TEMP /tmp
+
 ENTRYPOINT ["dotnet", "WWT.Web.dll"]
