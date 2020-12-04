@@ -476,17 +476,6 @@
     <Content Include="Content\images\helpwwtthumbnail.png" />
     <Content Include="Content\images\searchwwtthumbnail.png" />
     <Content Include="WebServices\WWTWebService.asmx" />
-    <Content Include="WWT2\ClientVersion.txt" />
-    <Content Include="WWT2\dataversion.txt" />
-    <Content Include="WWT2\EqClientVersion.txt" />
-    <Content Include="WWT2\Eqdataversion.txt" />
-    <Content Include="WWT2\ExcelAddinUpdateUrl.txt" />
-    <Content Include="WWT2\ExcelAddinVersion.txt" />
-    <Content Include="WWT2\Message.txt" />
-    <Content Include="WWT2\minver.txt" />
-    <Content Include="WWT2\updateurl.txt" />
-    <Content Include="WWT2\version.txt" />
-    <Content Include="WWT2\warnver.txt" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\Views\EditCommunity.html" />
     <Content Include="Content\Views\CommunityDetail.html" />
