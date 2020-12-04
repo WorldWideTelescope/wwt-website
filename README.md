@@ -42,6 +42,23 @@ See [docs/dev-environment.md](instructions) for details on how to build and run
 locally. Please submit issues (or PRs!) if you run into any problems or
 inaccuracies.
 
+On Linux, if you have .NET5 installed, the basic build command is:
+
+```
+dotnet build -c Release wwt-website-net5.slnf
+```
+
+You can build and run the server in a Docker container with:
+
+```
+docker build -t aasworldwidetelescope/core-data:latest .
+docker run --rm -p 8080:80 aasworldwidetelescope/core-data:latest
+# browse to http://localhost:8080/wwtweb/isstle.aspx
+```
+
+However, most API endpoints won't work since they need to be wired up to the
+backing data storage.
+
 
 ## Getting involved
 
