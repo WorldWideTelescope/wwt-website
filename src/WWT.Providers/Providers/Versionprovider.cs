@@ -1,7 +1,6 @@
 #nullable disable
 
 using Microsoft.Extensions.Logging;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using WWT.Catalog;
@@ -30,7 +29,7 @@ namespace WWT.Providers
 
             if (catalogEntry is null)
             {
-                _logger.LogError("version file mising from backing storage");
+                _logger.LogError("wwt2::version file mising from backing storage");
                 context.Response.StatusCode = 500;
                 return;
             }
