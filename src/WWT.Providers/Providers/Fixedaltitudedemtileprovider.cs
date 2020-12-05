@@ -11,7 +11,7 @@ namespace WWT.Providers
     {
         public override string ContentType => ContentTypes.OctetStream;
 
-        public override Task RunAsync(IWwtContext context, CancellationToken token)
+        public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             string query = context.Request.Params["Q"];
             string[] values = query.Split(',');
@@ -28,18 +28,18 @@ namespace WWT.Providers
                 demSize = 17 * 17;
             }
 
-            BinaryWriter bw = new BinaryWriter(context.Response.OutputStream);
+            var data = new byte[demSize * 4];
+            using var ms = new MemoryStream(data);
+            var bw = new BinaryWriter(ms);
 
             for (int i = 0; i < demSize; i++)
             {
                 bw.Write(altitude);
             }
 
-            bw = null;
-
+            bw.Flush();
+            await context.Response.OutputStream.WriteAsync(data, 0, data.Length, token);
             context.Response.End();
-
-            return Task.CompletedTask;
         }
     }
 }
