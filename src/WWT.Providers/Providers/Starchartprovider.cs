@@ -13,7 +13,7 @@ namespace WWT.Providers
     {
         public override string ContentType => ContentTypes.Png;
 
-        public override Task RunAsync(IWwtContext context, CancellationToken token)
+        public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             double lat = double.Parse(context.Request.Params["lat"]);
             double lng = double.Parse(context.Request.Params["lng"]);
@@ -41,10 +41,8 @@ namespace WWT.Providers
 
 
             Bitmap chart = GetChart(lat, lng, time, ra, dec, width, height);
-            chart.Save(context.Response.OutputStream, ImageFormat.Png);
+            await chart.SaveAsync(context.Response, ImageFormat.Png, token);
             chart.Dispose();
-
-            return Task.CompletedTask;
         }
     }
 }
