@@ -34,7 +34,7 @@ namespace WWT
           => CreateOperationInternal(key, () => new ValueTask<byte[]>(_other.Get(key))).GetAwaiter().GetResult();
 
         public Task<byte[]> GetAsync(string key, CancellationToken token = default)
-          => CreateOperationInternal(key, async () => await _other.GetAsync(key, default)).AsTask();
+          => CreateOperationInternal(key, async () => await _other.GetAsync(key, token)).AsTask();
 
         public void Refresh(string key) => throw new System.NotImplementedException();
 

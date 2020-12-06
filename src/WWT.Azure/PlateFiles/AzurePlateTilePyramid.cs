@@ -39,7 +39,7 @@ namespace WWT.Azure
 
         public async Task<bool> SaveStreamAsync(Stream stream, string plateName, string fileName, CancellationToken token)
         {
-            var container = await GetBlobContainerClientAsync(plateName).ConfigureAwait(false);
+            var container = await GetBlobContainerClientAsync(plateName, token).ConfigureAwait(false);
             var client = container.GetBlobClient(fileName);
 
             return await SaveStreamAsync(client, stream, token).ConfigureAwait(false);
@@ -47,7 +47,7 @@ namespace WWT.Azure
 
         public async Task<bool> SaveStreamAsync(Stream stream, string plateName, int level, int x, int y, CancellationToken token)
         {
-            var client = await GetBlobClientAsync(plateName, level, x, y).ConfigureAwait(false);
+            var client = await GetBlobClientAsync(plateName, level, x, y, token).ConfigureAwait(false);
 
             return await SaveStreamAsync(client, stream, token).ConfigureAwait(false);
         }
@@ -69,13 +69,13 @@ namespace WWT.Azure
 
         public async Task<Stream> GetStreamAsync(string plateName, int level, int x, int y, CancellationToken token)
         {
-            var client = await GetBlobClientAsync(plateName, level, x, y).ConfigureAwait(false);
+            var client = await GetBlobClientAsync(plateName, level, x, y, token).ConfigureAwait(false);
             var download = client.Download();
 
             return download.Value.Content;
         }
 
-        private Task<BlobContainerClient> GetBlobContainerClientAsync(string plateName)
+        private Task<BlobContainerClient> GetBlobContainerClientAsync(string plateName, CancellationToken token)
             => _containers.GetOrAdd(plateName, async p =>
             {
                 var name = GetBlobContainerName(p);
@@ -83,15 +83,15 @@ namespace WWT.Azure
 
                 if (_options.CreateContainer)
                 {
-                    await client.CreateIfNotExistsAsync();
+                    await client.CreateIfNotExistsAsync(cancellationToken: token);
                 }
 
                 return client;
             });
 
-        private async Task<BlobClient> GetBlobClientAsync(string plateName, int level, int x, int y)
+        private async Task<BlobClient> GetBlobClientAsync(string plateName, int level, int x, int y, CancellationToken token)
         {
-            var container = await GetBlobContainerClientAsync(plateName).ConfigureAwait(false);
+            var container = await GetBlobContainerClientAsync(plateName, token).ConfigureAwait(false);
             var blobName = GetBlobName(plateName, level, x, y);
             return container.GetBlobClient(blobName);
         }
@@ -139,9 +139,9 @@ namespace WWT.Azure
 
         public async Task<Stream> GetStreamAsync(string pathPrefix, string plateName, int tag, int level, int x, int y, CancellationToken token)
         {
-            var container = await GetBlobContainerClientAsync(plateName).ConfigureAwait(false);
+            var container = await GetBlobContainerClientAsync(plateName, token).ConfigureAwait(false);
             var client = container.GetBlobClient(plateName);
-            var stream = await client.OpenReadAsync();
+            var stream = await client.OpenReadAsync(cancellationToken: token);
 
             return PlateFile2.GetImageStream(stream, tag, level, x, y);
         }

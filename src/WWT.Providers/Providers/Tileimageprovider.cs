@@ -327,6 +327,7 @@ namespace WWT.Providers
                 return path;
             }
 
+            // should be able to give this the cancellationtoken somehow?
             using var stream = await _httpClient.GetStreamAsync(url).ConfigureAwait(false);
 
             using (var fs = File.OpenWrite(path))

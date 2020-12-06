@@ -36,7 +36,7 @@ namespace WWT.Providers
             }
             else
             {
-                await stream.CopyToAsync(context.Response.OutputStream);
+                await stream.CopyToAsync(context.Response.OutputStream, token);
             }
         }
     }
