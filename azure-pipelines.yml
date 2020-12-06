@@ -196,6 +196,11 @@ stages:
           nuGetFeedType: 'internal'
           publishVstsFeed: '5b8413f0-309f-4655-933b-c3b9516cd60f/cec2a436-ea5b-41d3-a4d4-8f2380a4c6a9'
 
+    # This job deploys the updated Windows app to the "stage" deployment slot of
+    # the Windows app service. To bring those changes into production, the stage
+    # and main slots should be "swapped" in the Azure UI, after warming up the
+    # new app and doing any final testing.
+
     - job: AzureAppService
       pool:
         vmImage: 'ubuntu-latest'
@@ -215,6 +220,18 @@ stages:
           ResourceGroupName: 'wwtcoreapp-resources'
           SlotName: 'stage'
           packageForLinux: '$(Pipeline.Workspace)/mvc5/WWTMVC5.zip'
+
+    # This job deploys the new Docker image to Docker Hub under the `latest`
+    # tag, which will then trigger an update of the "stage" deployment slot of
+    # the Linux core data app service. To bring the new image into production,
+    # first update the `production` tag on Docker:
+    #
+    #   $ docker pull aasworldwidetelescope/core-data:latest
+    #   $ docker tag aasworldwidetelescope/core-data:latest aasworldwidetelescope/core-data:production
+    #   $ docker push aasworldwidetelescope/core-data:production
+    #
+    # Then "swap" the stage and main slots in the Azure UI after warming up the
+    # new app and doing any final testing.
 
     - job: DockerImage
       pool:

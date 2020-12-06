@@ -59,6 +59,9 @@ docker run --rm -p 8080:80 --name wwtcoredata aasworldwidetelescope/core-data:la
 However, most API endpoints won't work since they need to be wired up to the
 backing data storage.
 
+See comments in the `azure-pipelines.yml` file for descriptions of how deployment
+works.
+
 
 ## Getting involved
 
