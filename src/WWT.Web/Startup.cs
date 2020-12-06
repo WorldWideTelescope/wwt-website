@@ -106,6 +106,8 @@ namespace WWT.Web
             });
 
             services.AddSnapshotCollector();
+
+            services.AddSingleton(typeof(HelloWorldProvider));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -133,6 +135,20 @@ namespace WWT.Web
 
             var @public = new CacheControlHeaderValue { Public = true };
             var nocache = new CacheControlHeaderValue { NoCache = true };
+
+            // Some special infrastructure endpoints that don't need to be
+            // library-ified:
+            //
+            // Many web infra health checks assume that your server will return
+            // a 200 result for the root path, so let's make sure that actually
+            // happens.
+            endpointManager.Add("/", typeof(HelloWorldProvider));
+
+            // this URL is requested by the Azure App Service Docker framework
+            // to check if the container is running. Azure doesn't care if it
+            // 404's, but those 404's do get logged as failures in Application
+            // Insights, which we'd like to avoid.
+            endpointManager.Add("/robots933456.txt", typeof(HelloWorldProvider));
 
             foreach (var (endpoint, providerType) in endpointManager)
             {
