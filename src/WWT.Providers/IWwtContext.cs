@@ -11,7 +11,5 @@ namespace WWT.Providers
         IResponse Response { get; }
 
         string MachineName { get; }
-
-        string MapPath(params string[] path);
     }
 }

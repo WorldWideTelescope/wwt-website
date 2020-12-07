@@ -64,8 +64,6 @@ namespace WWT.Web
 
         Stream IRequest.InputStream => _ctx.Request.Body;
 
-        public string MapPath(params string[] path) => throw new NotImplementedException();
-
         void IResponse.AddHeader(string name, string value) => _ctx.Response.Headers.Add(name, value);
 
         void IResponse.Clear()
