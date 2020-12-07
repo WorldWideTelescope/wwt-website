@@ -48,7 +48,7 @@ namespace WWT.Providers
                             }
                             else
                             {
-                                await s.CopyToAsync(context.Response.OutputStream);
+                                await s.CopyToAsync(context.Response.OutputStream, token);
                                 context.Response.Flush();
                                 context.Response.End();
                             }
@@ -68,7 +68,7 @@ namespace WWT.Providers
                             }
                             else
                             {
-                                await s.CopyToAsync(context.Response.OutputStream);
+                                await s.CopyToAsync(context.Response.OutputStream, token);
                                 context.Response.Flush();
                                 context.Response.End();
                             }

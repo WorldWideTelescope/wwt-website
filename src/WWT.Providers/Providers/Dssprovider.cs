@@ -61,7 +61,7 @@ namespace WWT.Providers
 
                 using (var s = await _plateTile.GetStreamAsync(_options.DssTerapixelDir, filename, L5, X5, Y5, token))
                 {
-                    await s.CopyToAsync(context.Response.OutputStream);
+                    await s.CopyToAsync(context.Response.OutputStream, token);
                     context.Response.Flush();
                     context.Response.End();
                 }

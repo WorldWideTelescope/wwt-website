@@ -46,7 +46,7 @@ namespace WWT.Azure
                 return null;
             }
 
-            return await blob.OpenReadAsync(_blobOpenReadOptions).ConfigureAwait(false);
+            return await blob.OpenReadAsync(_blobOpenReadOptions, token).ConfigureAwait(false);
         }
     }
 }

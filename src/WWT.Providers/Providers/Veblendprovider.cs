@@ -83,7 +83,7 @@ namespace WWT.Providers
             else
             {
                 using var veTile = await _veDownloader.DownloadVeTileAsync(VirtualEarthTile.Ortho, level, tileX, tileY, token);
-                await veTile.CopyToAsync(context.Response.OutputStream);
+                await veTile.CopyToAsync(context.Response.OutputStream, token);
             }
         }
     }
