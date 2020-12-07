@@ -46,12 +46,6 @@ namespace WWT.Web
 
         Stream IResponse.OutputStream => _ctx.Response.Body;
 
-        int IResponse.Expires
-        {
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
-        }
-
         string IResponse.CacheControl
         {
             get => throw new NotImplementedException();

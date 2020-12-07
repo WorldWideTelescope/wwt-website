@@ -74,12 +74,6 @@ namespace WWTMVC5
 
         Stream IResponse.OutputStream => _context.Response.OutputStream;
 
-        int IResponse.Expires
-        {
-            get => _context.Response.Expires;
-            set => _context.Response.Expires = value;
-        }
-
         string IResponse.CacheControl
         {
             get => _context.Response.CacheControl;

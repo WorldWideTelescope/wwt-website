@@ -32,8 +32,6 @@ namespace WWT.Providers
 
         void Redirect(string redirectUri);
 
-        int Expires { get; set; }
-
         string CacheControl { get; set; }
     }
 }

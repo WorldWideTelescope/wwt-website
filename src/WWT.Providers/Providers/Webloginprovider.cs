@@ -14,7 +14,7 @@ namespace WWT.Providers
 
         public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
-            context.Response.Expires = -1;
+            context.Response.AddHeader("Expires", "0");
             await context.Response.WriteAsync("Key:Authorized", token);
         }
     }
