@@ -20,6 +20,8 @@ namespace WWT.Providers
             _options = options;
         }
 
+        // This content-type isn't correct since this is a DEM provider, but it's
+        // what the server has historically reported.
         public override string ContentType => ContentTypes.Png;
 
         public override async Task RunAsync(IWwtContext context, CancellationToken token)
