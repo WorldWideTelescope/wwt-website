@@ -70,11 +70,6 @@ namespace WWTMVC5
 
         Stream IResponse.OutputStream => _context.Response.OutputStream;
 
-        string IResponse.CacheControl
-        {
-            get => _context.Response.CacheControl;
-            set => _context.Response.CacheControl = value;
-        }
         void IResponse.AddHeader(string name, string value) => _context.Response.AddHeader(name, value);
         void IResponse.Clear() => _context.Response.Clear();
         void IResponse.ClearHeaders() => _context.Response.ClearHeaders();

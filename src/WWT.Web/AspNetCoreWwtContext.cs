@@ -46,12 +46,6 @@ namespace WWT.Web
 
         Stream IResponse.OutputStream => _ctx.Response.Body;
 
-        string IResponse.CacheControl
-        {
-            get => throw new NotImplementedException();
-            set => _ctx.Response.Headers.Add("Cache-Control", value);
-        }
-
         IParameters IRequest.Params => this;
 
         string IRequest.GetParams(string name) => _ctx.Request.Query[name];

@@ -29,7 +29,5 @@ namespace WWT.Providers
         void ClearHeaders();
 
         void Redirect(string redirectUri);
-
-        string CacheControl { get; set; }
     }
 }
