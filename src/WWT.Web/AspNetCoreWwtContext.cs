@@ -91,7 +91,5 @@ namespace WWT.Web
         Task IResponse.WriteAsync(string message, CancellationToken token) => _ctx.Response.WriteAsync(message, token);
 
         void IResponse.Redirect(string redirectUri) => _ctx.Response.Redirect(redirectUri);
-
-        void IResponse.WriteFile(string path) => throw new NotImplementedException();
     }
 }

@@ -20,7 +20,7 @@ namespace WWT.Providers
             _options = options;
         }
 
-        public override string ContentType => ContentTypes.Text;
+        public override string ContentType => ContentTypes.Png;
 
         public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
@@ -30,30 +30,20 @@ namespace WWT.Providers
             int tileX = Convert.ToInt32(values[1]);
             int tileY = Convert.ToInt32(values[2]);
 
-            string filename = $@"\\wwt-mars\marsroot\dem\Merged4\{level}\{tileX}\DL{level}X{tileX}Y{tileY}.dem";
-
-            if (!File.Exists(filename))
+            using (Stream s = await _plateTiles.GetStreamAsync(_options.WwtTilesDir, $"marsToastDem.plate", -1, level, tileX, tileY, token))
             {
-                context.Response.ContentType = "image/png";
-                using (Stream s = await _plateTiles.GetStreamAsync(_options.WwtTilesDir, $"marsToastDem.plate", -1, level, tileX, tileY, token))
+                if (s.Length == 0)
                 {
-                    if (s.Length == 0)
-                    {
-                        context.Response.Clear();
-                        context.Response.ContentType = "text/plain";
-                        await context.Response.WriteAsync("No image", token);
-                        context.Response.End();
-                        return;
-                    }
-
+                    context.Response.Clear();
+                    context.Response.ContentType = "text/plain";
+                    await context.Response.WriteAsync("No image", token);
+                } else {
                     await s.CopyToAsync(context.Response.OutputStream, token);
                     context.Response.Flush();
-                    context.Response.End();
-                    return;
                 }
             }
 
-            context.Response.WriteFile(filename);
+            context.Response.End();
         }
     }
 }

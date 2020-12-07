@@ -16,8 +16,6 @@ namespace WWT.Providers
 
         void AddHeader(string name, string value);
 
-        void WriteFile(string path);
-
         int StatusCode { get; set; }
 
         Task WriteAsync(string message, CancellationToken token);

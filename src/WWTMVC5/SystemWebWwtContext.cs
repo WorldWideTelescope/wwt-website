@@ -88,7 +88,5 @@ namespace WWTMVC5
             _context.Response.Write(message);
             return Task.CompletedTask;
         }
-
-        void IResponse.WriteFile(string path) => _context.Response.WriteFile(path);
     }
 }
