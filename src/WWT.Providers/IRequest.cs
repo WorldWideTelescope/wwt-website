@@ -19,8 +19,6 @@ namespace WWT.Providers
 
         string UserAgent { get; }
 
-        string PhysicalPath { get; }
-
         Stream InputStream { get; }
     }
 }

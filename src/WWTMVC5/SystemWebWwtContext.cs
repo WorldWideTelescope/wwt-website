@@ -19,8 +19,6 @@ namespace WWTMVC5
 
         public string MachineName => _context.Server.MachineName;
 
-        public string MapPath(params string[] path) => _context.Server.MapPath(Path.Combine(path));
-
         public IRequest Request => this;
 
         public IResponse Response => this;
@@ -56,20 +54,12 @@ namespace WWTMVC5
 
         string IRequest.UserAgent => _context.Request.UserAgent;
 
-        string IRequest.PhysicalPath => _context.Request.PhysicalPath;
-
         Stream IRequest.InputStream => _context.Request.InputStream;
 
         string IResponse.ContentType
         {
             get => _context.Response.ContentType;
             set => _context.Response.ContentType = value;
-        }
-
-        string IResponse.Status
-        {
-            get => _context.Response.Status;
-            set => _context.Response.Status = value;
         }
 
         int IResponse.StatusCode
@@ -80,17 +70,6 @@ namespace WWTMVC5
 
         Stream IResponse.OutputStream => _context.Response.OutputStream;
 
-        int IResponse.Expires
-        {
-            get => _context.Response.Expires;
-            set => _context.Response.Expires = value;
-        }
-
-        string IResponse.CacheControl
-        {
-            get => _context.Response.CacheControl;
-            set => _context.Response.CacheControl = value;
-        }
         void IResponse.AddHeader(string name, string value) => _context.Response.AddHeader(name, value);
         void IResponse.Clear() => _context.Response.Clear();
         void IResponse.ClearHeaders() => _context.Response.ClearHeaders();
@@ -104,7 +83,5 @@ namespace WWTMVC5
             _context.Response.Write(message);
             return Task.CompletedTask;
         }
-
-        void IResponse.WriteFile(string path) => _context.Response.WriteFile(path);
     }
 }

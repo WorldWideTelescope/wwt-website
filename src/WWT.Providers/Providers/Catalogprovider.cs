@@ -93,7 +93,7 @@ namespace WWT.Providers
             }
             else
             {
-                context.Response.Status = "304 Not Modified";
+                await Report304Async(context, token);
             }
 
             return true;

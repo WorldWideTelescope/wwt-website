@@ -35,8 +35,7 @@ namespace WWT.Providers
                 catalog_file = "wwt2_login_pre_equinox.txt";
             }
 
-            //context.Response.Expires = -1;
-            //context.Response.AddHeader("etag", "1-2-3-4-5");
+            context.Response.AddHeader("Expires", "0");
 
             var catalogEntry = await _catalog.GetCatalogEntryAsync(catalog_file, token);
 

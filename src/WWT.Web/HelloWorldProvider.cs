@@ -12,7 +12,8 @@ namespace WWT.Providers
 
         public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
-            string assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            var attr = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+            string assemblyVersion = attr?.InformationalVersion ?? "0.0.0-unspecified";
             string reply = $"WWT.Web app version {assemblyVersion}\n";
             await context.Response.WriteAsync(reply, token);
         }

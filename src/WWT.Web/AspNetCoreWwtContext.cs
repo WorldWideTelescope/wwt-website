@@ -38,12 +38,6 @@ namespace WWT.Web
             set => _ctx.Response.ContentType = value;
         }
 
-        string IResponse.Status
-        {
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
-        }
-
         int IResponse.StatusCode
         {
             get => _ctx.Response.StatusCode;
@@ -51,18 +45,6 @@ namespace WWT.Web
         }
 
         Stream IResponse.OutputStream => _ctx.Response.Body;
-
-        int IResponse.Expires
-        {
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
-        }
-
-        string IResponse.CacheControl
-        {
-            get => throw new NotImplementedException();
-            set => _ctx.Response.Headers.Add("Cache-Control", value);
-        }
 
         IParameters IRequest.Params => this;
 
@@ -74,11 +56,7 @@ namespace WWT.Web
 
         string IRequest.UserAgent => _ctx.Request.Headers["User-Agent"];
 
-        string IRequest.PhysicalPath => throw new NotImplementedException();
-
         Stream IRequest.InputStream => _ctx.Request.Body;
-
-        public string MapPath(params string[] path) => throw new NotImplementedException();
 
         void IResponse.AddHeader(string name, string value) => _ctx.Response.Headers.Add(name, value);
 
@@ -107,7 +85,5 @@ namespace WWT.Web
         Task IResponse.WriteAsync(string message, CancellationToken token) => _ctx.Response.WriteAsync(message, token);
 
         void IResponse.Redirect(string redirectUri) => _ctx.Response.Redirect(redirectUri);
-
-        void IResponse.WriteFile(string path) => throw new NotImplementedException();
     }
 }

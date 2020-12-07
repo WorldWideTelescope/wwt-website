@@ -33,10 +33,6 @@ namespace WWT.Providers
             int tileX = Convert.ToInt32(values[1]);
             int tileY = Convert.ToInt32(values[2]);
 
-            context.Response.AddHeader("Expires", "Thu, 31 Dec 2009 16:00:00 GMT");
-            context.Response.AddHeader("ETag", "155");
-            context.Response.AddHeader("Last-Modified", "Tue, 20 May 2008 22:32:37 GMT");
-
             if (_knownPlateFiles.TryNormalizePlateName(values[3], out var file) && level < 10)
             {
                 context.Response.ContentType = "image/png";

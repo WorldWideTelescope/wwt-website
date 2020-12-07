@@ -16,10 +16,6 @@ namespace WWT.Providers
 
         void AddHeader(string name, string value);
 
-        void WriteFile(string path);
-
-        string Status { get; set; }
-
         int StatusCode { get; set; }
 
         Task WriteAsync(string message, CancellationToken token);
@@ -33,9 +29,5 @@ namespace WWT.Providers
         void ClearHeaders();
 
         void Redirect(string redirectUri);
-
-        int Expires { get; set; }
-
-        string CacheControl { get; set; }
     }
 }

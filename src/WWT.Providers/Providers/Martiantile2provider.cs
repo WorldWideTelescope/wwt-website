@@ -30,7 +30,6 @@ namespace WWT.Providers
             int tileX = Convert.ToInt32(values[1]);
             int tileY = Convert.ToInt32(values[2]);
             string dataset = values[3];
-            string id = "nothing";
 
             switch (dataset)
             {
@@ -55,9 +54,7 @@ namespace WWT.Providers
                         }
                     }
                     break;
-                case "mars_terrain_color":
-                    id = "220581050";
-                    break;
+
                 case "mars_hirise":
                     if (level < 19)
                     {
@@ -83,6 +80,7 @@ namespace WWT.Providers
                     }
 
                     break;
+
                 case "mars_moc":
                     if (level < 18)
                     {
@@ -108,36 +106,19 @@ namespace WWT.Providers
                         }
                     }
                     break;
-                case "mars_historic_green":
-                    id = "1194136815";
-                    break;
-                case "mars_historic_schiaparelli":
-                    id = "1113282550";
-                    break;
-                case "mars_historic_lowell":
-                    id = "675790761";
-                    break;
-                case "mars_historic_antoniadi":
-                    id = "1648157275";
-                    break;
-                case "mars_historic_mec1":
-                    id = "2141096698";
-                    break;
 
+                // old cases:
+                // "mars_terrain_color" => id = "220581050";
+                // "mars_historic_green" => id = "1194136815";
+                // "mars_historic_schiaparelli" => id = "1113282550";
+                // "mars_historic_lowell" => id = "675790761";
+                // "mars_historic_antoniadi" => id = "1648157275";
+                // "mars_historic_mec1" => id = "2141096698";
             }
 
-            string filename = $@"{_options.DssToastPng}\wwtcache\mars\{id}\{level}\{tileY}\{tileX}_{tileY}.png";
-
-            if (!File.Exists(filename))
-            {
-                // This used to download from $"http://wwt.nasa.gov/wwt/p/{dataset}/{level}/{tileX}/{tileY}.png"
-                // That URL is no longer available.
-                context.Response.StatusCode = 404;
-            }
-            else
-            {
-                context.Response.WriteFile(filename);
-            }
+            // This used to download from $"http://wwt.nasa.gov/wwt/p/{dataset}/{level}/{tileX}/{tileY}.png"
+            // That URL is no longer available.
+            await Report404Async(context, $"Mars dataset {dataset} unavailable", token);
         }
     }
 }

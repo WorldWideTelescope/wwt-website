@@ -224,14 +224,8 @@ stages:
     # This job deploys the new Docker image to Docker Hub under the `latest`
     # tag, which will then trigger an update of the "stage" deployment slot of
     # the Linux core data app service. To bring the new image into production,
-    # first update the `production` tag on Docker:
-    #
-    #   $ docker pull aasworldwidetelescope/core-data:latest
-    #   $ docker tag aasworldwidetelescope/core-data:latest aasworldwidetelescope/core-data:production
-    #   $ docker push aasworldwidetelescope/core-data:production
-    #
-    # Then "swap" the stage and main slots in the Azure UI after warming up the
-    # new app and doing any final testing.
+    # the stage and main slots should be "swapped" in the Azure UI, after
+    # warming up the new app and doing any final testing.
 
     - job: DockerImage
       pool:
