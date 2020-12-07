@@ -38,12 +38,6 @@ namespace WWT.Web
             set => _ctx.Response.ContentType = value;
         }
 
-        string IResponse.Status
-        {
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
-        }
-
         int IResponse.StatusCode
         {
             get => _ctx.Response.StatusCode;

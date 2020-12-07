@@ -66,12 +66,6 @@ namespace WWTMVC5
             set => _context.Response.ContentType = value;
         }
 
-        string IResponse.Status
-        {
-            get => _context.Response.Status;
-            set => _context.Response.Status = value;
-        }
-
         int IResponse.StatusCode
         {
             get => _context.Response.StatusCode;

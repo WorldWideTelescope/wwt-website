@@ -18,8 +18,6 @@ namespace WWT.Providers
 
         void WriteFile(string path);
 
-        string Status { get; set; }
-
         int StatusCode { get; set; }
 
         Task WriteAsync(string message, CancellationToken token);

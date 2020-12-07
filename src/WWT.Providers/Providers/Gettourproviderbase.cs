@@ -23,7 +23,7 @@ namespace WWT.Providers
             {
                 if (stream is null)
                 {
-                    context.Response.Status = "404 Not Found";
+                    await Report404Async(context, $"no record for tour GUID {guid}", token);
                 }
                 else
                 {
