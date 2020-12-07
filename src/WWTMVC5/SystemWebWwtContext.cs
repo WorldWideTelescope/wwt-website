@@ -56,8 +56,6 @@ namespace WWTMVC5
 
         string IRequest.UserAgent => _context.Request.UserAgent;
 
-        string IRequest.PhysicalPath => _context.Request.PhysicalPath;
-
         Stream IRequest.InputStream => _context.Request.InputStream;
 
         string IResponse.ContentType

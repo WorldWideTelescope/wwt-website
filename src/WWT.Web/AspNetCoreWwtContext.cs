@@ -62,8 +62,6 @@ namespace WWT.Web
 
         string IRequest.UserAgent => _ctx.Request.Headers["User-Agent"];
 
-        string IRequest.PhysicalPath => throw new NotImplementedException();
-
         Stream IRequest.InputStream => _ctx.Request.Body;
 
         public string MapPath(params string[] path) => throw new NotImplementedException();
