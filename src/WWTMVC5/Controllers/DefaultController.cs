@@ -156,6 +156,13 @@ namespace WWTMVC5.Controllers
                 ViewBag.page = page;
                 ViewBag.group = group;
                 ViewBag.CurrentUserId = CurrentUserId;
+
+                // It is dumb to create a new LiveIdAuth for each page load, but that's
+                // the most straightforward way to expose the proper redirect URL, and
+                // this whole app sees little usage.
+                var svc = new LiveIdAuth();
+                ViewBag.LiveRedirectUrl = svc.GetRedirectUrl();
+
                 return await GetViewOrRedirect(group, page, _baseModel);
             }
             catch (Exception e)
