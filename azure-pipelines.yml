@@ -203,12 +203,11 @@ stages:
 
     - job: AzureAppService
       pool:
-        vmImage: 'ubuntu-latest'
+        vmImage: 'windows-latest'
       steps:
       - checkout: none
       - download: current
         artifact: mvc5
-      # For time being: deploy to "stage" slot, **manually** swap to production.
       - task: AzureRmWebAppDeployment@4
         displayName: Deploy to App Service
         inputs:
