@@ -28,6 +28,7 @@ namespace WWTMVC5.WebServices
 
         private string _clientId;
         private string _clientSecret;
+        private Dictionary<string, string> _redirectUris;
         private LiveAuthClient _liveAuthClient;
         private LiveConnectSession _session = null;
 
@@ -35,7 +36,28 @@ namespace WWTMVC5.WebServices
         {
             _clientId = ConfigReader<string>.GetSetting("LiveClientId");
             _clientSecret = ConfigReader<string>.GetSetting("LiveClientSecret");
-            _liveAuthClient = new LiveAuthClient(ConfigReader<string>.GetSetting("LiveClientId"), ConfigReader<string>.GetSetting("LiveClientSecret"), null);
+            _liveAuthClient = new LiveAuthClient(_clientId, _clientSecret, null);
+
+            // This file used to have some code to construct redirection URLs on
+            // the fly, but that doesn't work well because the URLs have to
+            // match values that are exactly specified in the OAuth app, and
+            // this server may be running behind a gateway such that its
+            // hostname is unrelated to what we want to expose. On the other hand,
+            // the way that Azure deployment slots work, our staging and production
+            // apps have to share identical settings if we want to use its "swap"
+            // functionality -- so we can't just hardcode a single redirection URL.
+            // So we have a variable that maps from HTTP host to redirection URL,
+            // in the form "host1=http://url1/,host2=http://url1".
+            var redirText = ConfigReader<string>.GetSetting("LiveClientRedirectUrlMap");
+            _redirectUris = new Dictionary<string, string>();
+
+            foreach (var item in redirText.Split(',')) {
+                var pieces = item.Split(new char[] { '=' }, 2);
+                var host = pieces[0].ToLower();
+                var redirectUri = pieces[1];
+                _redirectUris[host] = redirectUri;
+            }
+
             _logger = UnityConfig.Container.Resolve<ILogger<LiveIdAuth>>();
         }
 
@@ -57,14 +79,13 @@ namespace WWTMVC5.WebServices
 
         private string GetRedirectUrl()
         {
-            // There used to be more complex logic here, but for the production
-            // OAuth app, only two redirection URLs are (known to be) allowed:
-            // http://worldwidetelescope.org/webclient, and
-            // http://www.worldwidetelescope.org/webclient , and you need to use
-            // the same URL consistently through the auth process to keep Live
-            // happy. (Unfortunately, we can't update these URLs and https:
-            // variants aren't allowed.)
-            return ConfigReader<string>.GetSetting("LiveClientRedirectUrl");
+            var host = HttpContext.Current.Request.Headers.Get("Host").ToLower();
+
+            if (_redirectUris.ContainsKey(host)) {
+                return _redirectUris[host];
+            }
+
+            return "https://" + host + "/";
         }
 
         public async Task<string> GetTokens(string authCode)

@@ -34,11 +34,6 @@ namespace WWT.Providers
             public const string Zip = "application/zip";
         }
 
-        protected Task Report304Async(IWwtContext context, CancellationToken token) {
-            context.Response.StatusCode = 304;
-            return context.Response.WriteAsync("HTTP/304 Not Modified", token);
-        }
-
         protected Task Report404Async(IWwtContext context, string detail, CancellationToken token) {
             context.Response.StatusCode = 404;
             return context.Response.WriteAsync($"HTTP/404 Not Found\n\n{detail}", token);
