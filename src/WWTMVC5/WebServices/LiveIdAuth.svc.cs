@@ -77,7 +77,7 @@ namespace WWTMVC5.WebServices
             return result;
         }
 
-        private string GetRedirectUrl()
+        public string GetRedirectUrl()
         {
             var host = HttpContext.Current.Request.Headers.Get("Host").ToLower();
 

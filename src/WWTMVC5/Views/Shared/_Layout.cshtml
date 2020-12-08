@@ -13,7 +13,7 @@
         // ignored
     }
     var liveId = ConfigReader<string>.GetSetting("LiveClientId");
-    var liveRedirectUrl = ConfigReader<string>.GetSetting("LiveClientRedirectUrl");
+    var liveRedirectUrl = ViewBag.LiveRedirectUrl;
 }
 <!DOCTYPE html>
 <html>
