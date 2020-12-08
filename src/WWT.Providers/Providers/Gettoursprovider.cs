@@ -39,7 +39,7 @@ namespace WWT.Providers
                 }
                 else
                 {
-                    await Report304Async(context, token);
+                    context.Response.StatusCode = 304;
                 }
             }
             context.Response.End();
