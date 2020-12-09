@@ -13,6 +13,7 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/*
 COPY --from=build-env /app/out .
 
+ENV ASPNETCORE_ENVIRONMENT Production
 # To avoid "Could not find a suitable shadow copy folder." in App Insights Snapshot Debugger:
 ENV TEMP /tmp
 
