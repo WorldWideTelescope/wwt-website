@@ -219,6 +219,8 @@ stages:
           ResourceGroupName: 'wwtcoreapp-resources'
           SlotName: 'stage'
           packageForLinux: '$(Pipeline.Workspace)/mvc5/WWTMVC5.zip'
+          DeploymentType: 'webDeploy'
+          RemoveAdditionalFilesFlag: true
 
     # This job deploys the new Docker image to Docker Hub under the `latest`
     # tag, which will then trigger an update of the "stage" deployment slot of
