@@ -79,7 +79,7 @@ namespace WWT
                 return input;
             }
 
-            _logger.LogInformation("Copying input stream to a buffer to ensure it is done asynchronously");
+            _logger.LogTrace("Copying input stream to a buffer to ensure it is done asynchronously");
 
             using (input)
             {
