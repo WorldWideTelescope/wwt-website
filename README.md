@@ -7,39 +7,10 @@ This repository contains the code for the web services backing the
 Telescope](https://worldwidetelescope.org/home) (WWT) software system.
 
 
-## Deprecated APIs
-
-As we move the service to a more modern architecture, some endpoints are being deprecated. These include the following:
-
-| Endpoint | Reason | PR |
-| -------- | -------| -- |
-| `/gettourfile.aspx` | No evidence of current usage | [#205](https://github.com/WorldWideTelescope/wwt-website/pull/205) |
-| `/webserviceproxy.aspx` | Offloaded to separate service | [#205](https://github.com/WorldWideTelescope/wwt-website/pull/205) |
-| `/wwtweb/catalog2.aspx` | No evidence of current usage | [#205](https://github.com/WorldWideTelescope/wwt-website/pull/205) |
-| `/wwtweb/demmarsempty.aspx` | Data is from `wwt.nasa.gov` which is no longer available. | [#173](https://github.com/WorldWideTelescope/wwt-website/pull/173) |
-| `/wwtweb/gethostname.aspx` | Debugging-only API | [#205](https://github.com/WorldWideTelescope/wwt-website/pull/205) |
-| `/wwtweb/gettourfile.aspx` | No evidence of current usage | [#205](https://github.com/WorldWideTelescope/wwt-website/pull/205) |
-| `/wwtweb/goto2.aspx` | No evidence of current usage | [#205](https://github.com/WorldWideTelescope/wwt-website/pull/205) |
-| `/wwtweb/isstle2.aspx` | No evidence of current usage | [#205](https://github.com/WorldWideTelescope/wwt-website/pull/205) |
-| `/wwtweb/martiantileempty.aspx` | Data is from `wwt.nasa.gov` which is no longer available. | [#182](https://github.com/WorldWideTelescope/wwt-website/pull/182) |
-| `/wwtweb/postmars.aspx` | No evidence of current usage | [#205](https://github.com/WorldWideTelescope/wwt-website/pull/205) |
-| `/wwtweb/postmarsdem.aspx` | No evidence of current usage | [#205](https://github.com/WorldWideTelescope/wwt-website/pull/205) |
-| `/wwtweb/postmarsdem2.aspx` | No evidence of current usage | [#205](https://github.com/WorldWideTelescope/wwt-website/pull/205) |
-| `/wwtweb/sdsstoast.offline.aspx` | Debugging-only API | [#205](https://github.com/WorldWideTelescope/wwt-website/pull/205) |
-| `/wwtweb/showimage2.aspx` | No evidence of current usage | [#205](https://github.com/WorldWideTelescope/wwt-website/pull/205) |
-| `/wwtweb/test.aspx` | Debugging-only API | [#205](https://github.com/WorldWideTelescope/wwt-website/pull/205) |
-| `/wwtweb/testfailover.aspx` | Debugging-only API | [#205](https://github.com/WorldWideTelescope/wwt-website/pull/205) |
-| `/wwtweb/webserviceproxy.aspx` | Offloaded to separate service | [#205](https://github.com/WorldWideTelescope/wwt-website/pull/205) |
-| `/wwtweb/wmsearthtoday.aspx` | Data is from `wms.jpl.nasa.gov` which is no longer available. | [#181](https://github.com/WorldWideTelescope/wwt-website/pull/181) |
-| `/wwtweb/wmsmoon.aspx` | Data is from `onmoon.jpl.nasa.gov` which no longer available. | [#181](https://github.com/WorldWideTelescope/wwt-website/pull/181) |
-| `/wwtweb/wmstoast.aspx` | Data is from `ms.mars.asu.edu` which no longer available. | [#181](https://github.com/WorldWideTelescope/wwt-website/pull/181) |
-| `/wwtweb/xml2wtt.aspx` | No evidence of current usage | [#205](https://github.com/WorldWideTelescope/wwt-website/pull/205) |
-
-
 ## Developer Instructions
 
-See [docs/dev-environment.md](instructions) for details on how to build and run
-locally. Please submit issues (or PRs!) if you run into any problems or
+See [these instructions](docs/dev-environment.md) for details on how to build
+and run locally. Please submit issues (or PRs!) if you run into any problems or
 inaccuracies.
 
 If you have .NET5 installed, the basic CLI build command is:
@@ -61,6 +32,10 @@ backing data storage.
 
 See comments in the `azure-pipelines.yml` file for descriptions of how deployment
 works.
+
+[This file](docs/deprecations.md) logs old APIs that have been deprecated or
+removed. The implementations of many of these can be found in the Git history if
+you’re willing to dig.
 
 
 ## Getting involved
