@@ -27,13 +27,11 @@ namespace WWT.Providers
 
         public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
-            string query = context.Request.Params["Q"];
-            string[] values = query.Split(',');
-            int level = Convert.ToInt32(values[0]);
-            int tileX = Convert.ToInt32(values[1]);
-            int tileY = Convert.ToInt32(values[2]);
+            (var errored, var level, var tileX, var tileY, var dataset) = await HandleLXYExtraQParameter(context, token);
+            if (errored)
+                return;
 
-            if (_knownPlateFiles.TryNormalizePlateName(values[3], out var file) && level < 8)
+            if (_knownPlateFiles.TryNormalizePlateName(dataset, out var file) && level < 8)
             {
                 context.Response.ContentType = "image/png";
 

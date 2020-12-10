@@ -21,12 +21,10 @@ namespace WWT.Providers
 
         public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
-            string query = context.Request.Params["Q"];
-            string[] values = query.Split(',');
-            int level = Convert.ToInt32(values[0]);
-            int tileX = Convert.ToInt32(values[1]);
-            int tileY = Convert.ToInt32(values[2]);
-            string type = values[3];
+            (var errored, var level, var tileX, var tileY, var type) = await HandleLXYExtraQParameter(context, token);
+            if (errored)
+                return;
+
             int demSize = 513 * 2;
             string wwtDemDir = _options.WWTDEMDir;
             string filename = String.Format(wwtDemDir + @"\toast\moon\Chunks\{0}\{1}.chunk", level, tileY);
