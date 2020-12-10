@@ -446,9 +446,6 @@
     <Compile Include="WebServices\LiveIdAuth.svc.cs">
       <DependentUpon>LiveIdAuth.svc</DependentUpon>
     </Compile>
-    <Compile Include="WebServices\ResourceService.svc.cs">
-      <DependentUpon>ResourceService.svc</DependentUpon>
-    </Compile>
     <Compile Include="WebServices\ServiceBase.cs" />
     <Compile Include="WwtWebHttpHandler.cs" />
   </ItemGroup>

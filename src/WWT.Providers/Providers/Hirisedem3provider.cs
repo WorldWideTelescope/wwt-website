@@ -26,11 +26,9 @@ namespace WWT.Providers
 
         public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
-            string query = context.Request.Params["Q"];
-            string[] values = query.Split(',');
-            int level = Convert.ToInt32(values[0]);
-            int tileX = Convert.ToInt32(values[1]);
-            int tileY = Convert.ToInt32(values[2]);
+            (var errored, var level, var tileX, var tileY) = await HandleLXYQParameter(context, token);
+            if (errored)
+                return;
 
             using (Stream s = await _plateTiles.GetStreamAsync(_options.WwtTilesDir, "marsToastDem.plate", -1, level, tileX, tileY, token))
             {

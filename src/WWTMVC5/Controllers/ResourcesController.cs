@@ -24,19 +24,12 @@ namespace WWTMVC5.Controllers
     {
         #region Private Variables
 
-        /// <summary>
-        /// Instance of Content Service
-        /// </summary>
         private IContentService _contentService;
         private ICommunityService _communityService;
-
-        /// <summary>
-        /// Instance of Queue Service
-        /// </summary>
         private INotificationService _notificationService;
-
         private IProfileService _profileService;
-        
+        private Dictionary<string, string> _baseHosts;
+
         #endregion Private Variables
 
         #region Constructor
@@ -55,11 +48,30 @@ namespace WWTMVC5.Controllers
             _notificationService = queueService;
             _profileService = profileService;
             _communityService = communityService;
+
+            // Constructing our service base-URLs. Needed since this server may
+            // be running behind a gateway such that its hostname is unrelated
+            // to what we want to expose. On the other hand, the way that Azure
+            // deployment slots (seem to) work, our staging and production apps
+            // have to share identical settings if we want to use its "swap"
+            // functionality -- so we can't just hardcode a single URL. So we
+            // have a variable that maps from HTTP host to base-URL, in the form
+            // "host1=http://url1,host2=http://url1".
+
+            var mapText = ConfigReader<string>.GetSetting("ServiceBaseHostMap");
+            _baseHosts = new Dictionary<string, string>();
+
+            foreach (var item in mapText.Split(',')) {
+                var pieces = item.Split(new char[] { '=' }, 2);
+                var authority = pieces[0].ToLower();
+                var baseHost = pieces[1];
+                _baseHosts[authority] = baseHost;
+            }
         }
 
         #endregion Constructor
 
-        
+
         #region Web Methods
 
         #region Mandatory profile check calls - Only logged in users
@@ -89,10 +101,10 @@ namespace WWTMVC5.Controllers
                 // While creating the user, IsSubscribed to be true always.
                 profileDetails.IsSubscribed = true;
 
-                // When creating the user, by default the user type will be of regular. 
+                // When creating the user, by default the user type will be of regular.
                 profileDetails.UserType = UserTypes.Regular;
                 profileDetails.ID = ProfileService.CreateProfile(profileDetails);
-                    
+
                 // This will used as the default community when user is uploading a new content.
                 // This community will need to have the following details:
                 var communityDetails = new CommunityDetails
@@ -115,12 +127,12 @@ namespace WWTMVC5.Controllers
             else
             {
                 throw new WebFaultException<string>("User already registered", HttpStatusCode.BadRequest);
-            } 
+            }
             return true;
         }
 
-           
-        
+
+
         [AllowAnonymous]
         [HttpDelete]
         [Route("Resource/Service/Community/{id}")]
@@ -147,11 +159,11 @@ namespace WWTMVC5.Controllers
         public async Task<bool> DeleteContent(string id)
         {
             var profileDetails = await ValidateAuthentication();
-                
+
             if (profileDetails != null)
             {
                 var contentId = ValidateEntityId(id);
-                    
+
                 var status = _contentService.DeleteContent(contentId, profileDetails.ID);
                 return status != null && status.Succeeded;
             }
@@ -168,12 +180,12 @@ namespace WWTMVC5.Controllers
         {
             Stream resultStream = null;
             var profileDetails = await ValidateAuthentication();
-            
+
             if (profileDetails != null)
             {
                 // Get the payload XML for My Communities.
                 var communityService = DependencyResolver.Current.GetService(typeof(ICommunityService)) as ICommunityService;
-                
+
                 var payloadDetails = await communityService.GetRootCommunities(profileDetails.ID);
 
                 // Rewrite URL with Community and not with Folder
@@ -234,7 +246,7 @@ namespace WWTMVC5.Controllers
             var profileDetails = await ValidateAuthentication();
             if (!string.IsNullOrWhiteSpace(filename) && fileContent != null)
             {
-                
+
                 //// TODO: Check permissions if the user can add content to the parent.
                 if (profileDetails != null)
                 {
@@ -280,12 +292,12 @@ namespace WWTMVC5.Controllers
                 {
                     // Dummy Call
                 }
-                    
+
                 var ratingDetails = new RatingDetails()
                 {
                     Rating = ratingValue >= 5 || ratingValue <= 0 ? 5 : ratingValue,
                     RatedByID = profileDetails.ID,
-                    ParentID = contentId 
+                    ParentID = contentId
                 };
 
                 var ratingService = DependencyResolver.Current.GetService(typeof(IRatingService)) as IRatingService;
@@ -313,7 +325,7 @@ namespace WWTMVC5.Controllers
                     {
                         // Dummy Call
                     }
-                    
+
                     var ratingDetails = new RatingDetails()
                     {
                         Rating = ratingValue >= 5 || ratingValue <= 0 ? 5 : ratingValue,
@@ -431,7 +443,7 @@ namespace WWTMVC5.Controllers
             //// Rewrite URL with Folder in this case
             RewritePayloadUrls(payloadDetails, false);
 
-            // TODO : Need to decide when to add 
+            // TODO : Need to decide when to add
             AddTourFolders(payloadDetails);
             resultStream = GetOutputStream(payloadDetails);
             return new FileStreamResult(resultStream, Response.ContentType);
@@ -465,7 +477,7 @@ namespace WWTMVC5.Controllers
 
             RewritePayloadUrls(payloadDetails, false);
             resultStream = GetOutputStream(payloadDetails);
-            return new FileStreamResult(resultStream, Response.ContentType); 
+            return new FileStreamResult(resultStream, Response.ContentType);
         }
         [AllowAnonymous]
         [HttpGet]
@@ -477,8 +489,8 @@ namespace WWTMVC5.Controllers
             Stream resultStream = null;
             var profileDetails = await ValidateAuthentication();
             var communityService = DependencyResolver.Current.GetService(typeof(ICommunityService)) as ICommunityService;
-            var payloadDetails = profileDetails != null ? 
-                communityService.GetAllTours(communityId, profileDetails.ID) : 
+            var payloadDetails = profileDetails != null ?
+                communityService.GetAllTours(communityId, profileDetails.ID) :
                 communityService.GetAllTours(communityId, null);
 
             RewritePayloadUrls(payloadDetails, false);
@@ -536,7 +548,7 @@ namespace WWTMVC5.Controllers
             //// TODO : Authenticate?
             var blobService = DependencyResolver.Current.GetService(typeof(IBlobService)) as IBlobService;
             var blobDetails = blobService.GetFile(contentId);
-            
+
             if (blobDetails != null && blobDetails.Data != null)
             {
                 var resultStream =  GetFileStream(blobDetails);
@@ -621,7 +633,7 @@ namespace WWTMVC5.Controllers
 
             var resultStream = GetOutputStream(payloadDetails);
             return new FileStreamResult(resultStream, Response.ContentType);
-            
+
         }
 
         [AllowAnonymous]
@@ -706,14 +718,25 @@ namespace WWTMVC5.Controllers
 
         #endregion
 
+        private string GetExposedHostName()
+        {
+            var host = Request.Url.Authority.ToLower();
+
+            if (_baseHosts.ContainsKey(host)) {
+                return _baseHosts[host];
+            }
+
+            return host;
+        }
+
         protected string BaseUri()
         {
-            return string.Format("{0}://{1}", Request.Url.Scheme, Request.Url.Authority);
+            return string.Format("{0}://{1}", Request.Url.Scheme, GetExposedHostName());
         }
 
         protected string ServiceBaseUri()
         {
-            return string.Format("{0}://{1}/Resource/Service", Request.Url.Scheme, Request.Url.Authority);
+            return string.Format("{0}://{1}/Resource/Service", Request.Url.Scheme, GetExposedHostName());
         }
 
         #region Private static methods
@@ -724,7 +747,7 @@ namespace WWTMVC5.Controllers
         /// </summary>
         /// <param name="payloadDetails">PayloadDetails object</param>
         /// <param name="hasChildCommunities"></param>
-        
+
         private void RewritePayloadUrls(PayloadDetails payloadDetails, bool hasChildCommunities)
         {
             var baseUri = BaseUri();
@@ -747,12 +770,12 @@ namespace WWTMVC5.Controllers
                 {
                     fileExt = place.Url.Substring(place.Url.LastIndexOf(".") + 1);
                 }
-                
+
                 place.Url = place.FileType == ContentTypes.Link
                     ? place.ContentLink
                     : string.Format(CultureInfo.InvariantCulture, "{0}/File/Download/{1}/{2}/{3}/{4}", baseUri,
                         place.ContentAzureID, Uri.EscapeDataString(place.Name.Replace("&", "and")), fileExt,
-                        fileExt == "wtml" ? "wwtfull=true":string.Empty); 
+                        fileExt == "wtml" ? "wwtfull=true":string.Empty);
             }
 
             // Update Content Urls
@@ -773,9 +796,9 @@ namespace WWTMVC5.Controllers
                     }
                     else
                     {
-                        childCommunity.Thumbnail = RewriteThumbnailUrl(childCommunity.Thumbnail, 
-                            childCommunity.CommunityType == CommunityTypes.Community ? 
-                            "defaultcommunitywwtthumbnail" : 
+                        childCommunity.Thumbnail = RewriteThumbnailUrl(childCommunity.Thumbnail,
+                            childCommunity.CommunityType == CommunityTypes.Community ?
+                            "defaultcommunitywwtthumbnail" :
                             "defaultfolderwwtthumbnail");
 
                         childCommunity.Url = string.Format(CultureInfo.InvariantCulture, "{0}/Folder/{1}", ServiceBaseUri(), childCommunity.Id);
@@ -808,7 +831,7 @@ namespace WWTMVC5.Controllers
                     {
                         tour.AuthorImageUrl = string.Format(CultureInfo.InvariantCulture, "{0}/File/Thumbnail/{1}", baseUri, pictureId.Value);
                     }
-                    else 
+                    else
                     {
                         // return default profile image
                         tour.AuthorImageUrl = RewriteThumbnailUrl(string.Empty, "wwtprofile");
@@ -818,7 +841,7 @@ namespace WWTMVC5.Controllers
         }
 
         /// <summary>
-        /// Rewrites the thumbnail URL for the payload XML. In case if the thumbnail is provided, proper URL to access the thumbnail 
+        /// Rewrites the thumbnail URL for the payload XML. In case if the thumbnail is provided, proper URL to access the thumbnail
         /// using the File controller and thumbnail action will be formed and returned.
         /// In case the thumbnail is not provided and default image is provided, then default thumbnail URL will be formed and returned.
         /// In other cases (both thumbnail and default image is not provided), same thumbnail will be returned.
@@ -889,7 +912,7 @@ namespace WWTMVC5.Controllers
             return blobDetails.Data;
         }
 
-       
+
 
         private long CreateContent(string filename, Stream fileContent, ProfileDetails profileDetails, CommunityDetails parentCommunity)
         {
