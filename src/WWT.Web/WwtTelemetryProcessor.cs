@@ -27,10 +27,17 @@ namespace WWT.Web
             if (dep == null)
                 return;
 
-            // Don't report missing thumbnails as App Insights errors. That's just
-            // how our system works.
+            // Don't report missing thumbnails as App Insights errors. That's
+            // just how our system works. The docs for `DependencyTelemetry` are
+            // not helpful on their own, but you can go into the Azure Logs
+            // interface for App Insights and do queries on the `dependencies`
+            // table to see what fields correspond to what UI elements.
 
             if (dep.ResultCode == "404" && dep.Data.StartsWith("https://wwtfiles.blob.core.windows.net/thumbnails/"))
+                dep.Success = true;
+
+            if (dep.Target == "BaseBlobClient.Exists")
+                // Unfortunately I don't see a way to make this filter more specific.
                 dep.Success = true;
         }
     }
