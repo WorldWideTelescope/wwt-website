@@ -46,6 +46,7 @@ namespace WWT.Web
                 options.InstrumentationKey = _configuration["APPINSIGHTS_INSTRUMENTATIONKEY"];
             });
             services.AddSingleton<ITelemetryInitializer, ExtraTelemetryInitializer>();
+            services.AddApplicationInsightsTelemetryProcessor<WwtTelemetryProcessor>();
 
             services.AddRequestProviders(options =>
             {
