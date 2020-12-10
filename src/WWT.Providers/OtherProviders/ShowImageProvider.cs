@@ -14,17 +14,24 @@ namespace WWT.Providers
 
         public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
-            if (!context.Request.ContainsCookie("fullclient") && context.Request.Params["wtml"] == null)
+            if (context.Request.Params["wtml"] == null)
             {
-                context.Response.Redirect("http://www.worldwidetelescope.org/webclient/default.aspx?wtml=" + WebUtility.UrlEncode(context.Request.Url.ToString().Replace(",", "-") + "&wtml=true"));
-                return; 
+                // Earlier code that didn't use a proper UriBuilder did `{inputurl}.Replace(",", "-")`. Not sure why.
+                var wb = new UriBuilder(context.Request.Url);
+
+                if (String.IsNullOrEmpty(wb.Query))
+                    wb.Query = "wtml=true";
+                else
+                    wb.Query = wb.Query.Substring(1) + "&wtml=true";
+
+                context.Response.Redirect("//worldwidetelescope.org/webclient/?wtml=" + WebUtility.UrlEncode(wb.ToString()));
+                return;
             }
 
             if (context.Request.Params["debug"] != null)
             {
                 context.Response.ClearHeaders();
                 context.Response.ContentType = "text/plain";
-
             }
 
             string name = context.Request.Params["name"];

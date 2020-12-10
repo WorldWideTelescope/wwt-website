@@ -1,6 +1,7 @@
 #nullable disable
 
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
 using System;
 using System.IO;
 using System.Threading;
@@ -52,7 +53,7 @@ namespace WWT.Web
 
         IHeaders IRequest.Headers => this;
 
-        Uri IRequest.Url => new Uri($"{_ctx.Request.Scheme}://{_ctx.Request.Host}{_ctx.Request.Path}");
+        Uri IRequest.Url => new Uri(_ctx.Request.GetEncodedUrl());
 
         string IRequest.UserAgent => _ctx.Request.Headers["User-Agent"];
 

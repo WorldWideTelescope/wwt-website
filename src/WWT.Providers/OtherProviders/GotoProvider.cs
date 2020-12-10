@@ -14,9 +14,9 @@ namespace WWT.Providers
 
         public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
-            if (!context.Request.ContainsCookie("fullclient") && context.Request.Params["wtml"] == null)
+            if (context.Request.Params["wtml"] == null)
             {
-                context.Response.Redirect("http://www.worldwidetelescope.org/webclient/default.aspx?wtml=" + WebUtility.UrlEncode(context.Request.Url.ToString() + "&wtml=true"));
+                context.Response.Redirect("//worldwidetelescope.org/webclient/?wtml=" + WebUtility.UrlEncode(context.Request.Url.ToString() + "&wtml=true"));
                 return Task.CompletedTask;
             }
 

@@ -101,9 +101,10 @@ namespace WWTMVC5.Controllers
             {
                 return Redirect("/Community");
             }
+
             if (url.IndexOf("/webclient") != -1)
             {
-                return Redirect("/webclient?loggedIn=true");
+                return Redirect("/webclient/?loggedIn=true");
             }
 
             return Redirect("/home");

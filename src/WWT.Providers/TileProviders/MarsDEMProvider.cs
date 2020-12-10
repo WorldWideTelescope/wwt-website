@@ -25,27 +25,12 @@ namespace WWT.Providers
             if (errored)
                 return;
 
+            // These files seem to have been lost. Azure behavior is to return all zeros.
+            //string filename = $@"{_options.WWTDEMDir}\toast\mars\Chunks\{level}\{tileY}.chunk";
+
             int demSize = 513 * 2;
-
-            string filename = $@"{_options.WWTDEMDir}\toast\mars\Chunks\{level}\{tileY}.chunk";
-
-            if (File.Exists(filename))
-            {
-                byte[] data = new byte[demSize];
-                FileStream fs = File.OpenRead(filename);
-                fs.Seek((long)(demSize * tileX), SeekOrigin.Begin);
-
-                fs.Read(data, 0, demSize);
-                fs.Close();
-                await context.Response.OutputStream.WriteAsync(data, 0, demSize, token);
-            }
-            else
-            {
-                byte[] data = new byte[demSize];
-
-                await context.Response.OutputStream.WriteAsync(data, 0, demSize, token);
-            }
-
+            byte[] data = new byte[demSize];
+            await context.Response.OutputStream.WriteAsync(data, 0, demSize, token);
             context.Response.End();
         }
     }

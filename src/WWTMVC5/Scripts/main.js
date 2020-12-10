@@ -77,8 +77,6 @@ if (top === self) {
 			if ('ontouchstart' in document.documentElement) {
 				wwt.isTouch = true;
 			}
-
-			wwt.wcLink = '/webclient';
 		};
 
 		function bindEvents() {
