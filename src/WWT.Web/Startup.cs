@@ -1,5 +1,6 @@
 #nullable disable
 
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.ApplicationInsights.SnapshotCollector;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -44,6 +45,7 @@ namespace WWT.Web
             {
                 options.InstrumentationKey = _configuration["APPINSIGHTS_INSTRUMENTATIONKEY"];
             });
+            services.AddSingleton<ITelemetryInitializer, ExtraTelemetryInitializer>();
 
             services.AddRequestProviders(options =>
             {
