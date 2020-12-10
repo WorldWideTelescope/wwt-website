@@ -10,14 +10,17 @@ using System.Threading.Tasks;
 namespace WWT
 {
     /// <summary>
-    /// This implements a serializer and transformer for the caching library to manager Streams. Streams pose two problems while caching:
-    /// 
-    /// 1. Streams modify state while being read and cannot be reread without resetting the position
-    /// 2. Not all streams support the ability to reset position
-    /// 
-    /// This then hooks into the caching mechanism to transform any stream to a MemoryStream which will then have a byte[] available which is
-    /// used during the serialization process. By using a transformer, it can do this copy using async methods and ensure the resulting
-    /// stream can be reset.
+    /// This implements a serializer and transformer for the caching library to
+    /// manager Streams. Streams pose two problems while caching:
+    ///
+    /// 1. Streams modify state while being read and cannot be reread without
+    ///    resetting the position
+    /// 2. Not all streams support the ability to reset position.
+    ///
+    /// This then hooks into the caching mechanism to transform any stream to a
+    /// MemoryStream which will then have a byte[] available which is used
+    /// during the serialization process. By using a transformer, it can do this
+    /// copy using async methods and ensure the resulting stream can be reset.
     /// </summary>
     internal class WwtStreamSerializer : ICacheSerializer, IResultTransformer<Stream>
     {
@@ -70,7 +73,7 @@ namespace WWT
         {
             if (input is null)
             {
-                _logger.LogInformation("Input to serialize was null.");
+                _logger.LogDebug("Input to serialize was null.");
                 return null;
             }
 

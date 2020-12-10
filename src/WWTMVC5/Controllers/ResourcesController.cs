@@ -390,7 +390,7 @@ namespace WWTMVC5.Controllers
             // TODO: Get Search EO node.
             var searchEoLink = new Place();
             searchEoLink.Name = Resources.SearchWWTLabel;
-            searchEoLink.Url = string.Format(CultureInfo.InvariantCulture, "{0}/Community/index{1}", BaseUri(), "?wwtfull=true");
+            searchEoLink.Url = string.Format(CultureInfo.InvariantCulture, "{0}/Community/index", BaseUri());
             searchEoLink.Permission = Permission.Reader;
             searchEoLink.Thumbnail = RewriteThumbnailUrl(searchEoLink.Thumbnail, "searchwwtthumbnail");
 
@@ -402,7 +402,7 @@ namespace WWTMVC5.Controllers
             // TODO: Get Help node.
             var helpLink = new Place();
             helpLink.Name = Resources.HelpWWTLabel;
-            helpLink.Url = string.Format(CultureInfo.InvariantCulture, "{0}/Support/index{1}", BaseUri(), "?wwtfull=true");
+            helpLink.Url = string.Format(CultureInfo.InvariantCulture, "{0}/connect/", BaseUri());
             helpLink.Permission = Permission.Reader;
             helpLink.Thumbnail = RewriteThumbnailUrl(helpLink.Thumbnail, "helpwwtthumbnail");
 
