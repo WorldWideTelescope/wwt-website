@@ -33,26 +33,9 @@ namespace WWT.Providers
                 return;
             }
 
-            string query = context.Request.Params["Q"];
-            string[] values = query.Split(',');
-            //++
-            // 2014-09-26 security fix.
-            //
-            int level = 0;
-            int tileX = 0;
-            int tileY = 0;
-            try
-            {
-                level = Convert.ToInt32(values[0]);
-                tileX = Convert.ToInt32(values[1]);
-                tileY = Convert.ToInt32(values[2]);
-            }
-            catch
-            {
-                await context.Response.WriteAsync("Invalid query string.", token);
-                context.Response.End();
+            (var errored, var level, var tileX, var tileY) = await HandleLXYQParameter(context, token);
+            if (errored)
                 return;
-            }
 
             string wwtTilesDir = _options.WwtTilesDir;
 

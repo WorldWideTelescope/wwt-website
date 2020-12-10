@@ -22,11 +22,10 @@ namespace WWT.Providers
 
         public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
-            string query = context.Request.Params["Q"];
-            string[] values = query.Split(',');
-            int level = Convert.ToInt32(values[0]);
-            int tileX = Convert.ToInt32(values[1]);
-            int tileY = Convert.ToInt32(values[2]);
+            (var errored, var level, var tileX, var tileY) = await HandleLXYQParameter(context, token);
+            if (errored)
+                return;
+
             int demSize = 33 * 33;
             int parentL = Math.Max(1, level - 3);
             int DemGeneration = level - parentL;

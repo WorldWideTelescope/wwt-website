@@ -26,13 +26,22 @@ namespace WWT.Providers
 
         public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
-            string query = context.Request.Params["Q"];
-            string[] values = query.Split(',');
-            int level = Convert.ToInt32(values[0]);
-            int tileX = Convert.ToInt32(values[1]);
-            int tileY = Convert.ToInt32(values[2]);
+            (var errored, var level, var tileX, var tileY, var idText) = await HandleLXYExtraQParameter(context, token);
+            if (errored)
+                return;
 
-            var id = values.Length > 3 ? Convert.ToInt32(values[3]) : -1;
+            var id = -1;
+
+            if (idText.Length > 0) {
+                try {
+                    id = Convert.ToInt32(idText);
+                } catch {
+                    context.Response.StatusCode = 400;
+                    context.Response.ContentType = ContentTypes.Text;
+                    await context.Response.WriteAsync("HTTP/400 illegal HiRISE \"id\" parameter", token);
+                    return;
+                }
+            }
 
             if (level > 17)
             {

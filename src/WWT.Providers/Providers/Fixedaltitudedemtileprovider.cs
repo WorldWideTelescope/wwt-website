@@ -13,11 +13,9 @@ namespace WWT.Providers
 
         public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
-            string query = context.Request.Params["Q"];
-            string[] values = query.Split(',');
-            //int level = Convert.ToInt32(values[0]);
-            //int tileX = Convert.ToInt32(values[1]);
-            //int tileY = Convert.ToInt32(values[2]);
+            // You can give this endpoint a Q=L,X,Y parameter, but it doesn't actually
+            // do anything with those values.
+
             string alt = context.Request.Params["alt"];
             string proj = context.Request.Params["proj"];
             float altitude = float.Parse(alt);
