@@ -141,7 +141,7 @@ namespace WWTMVC5.Controllers
             return prefix + page;
         }
 
-        [Route("/")]
+        [Route("")]
         [Route("Index")]
         public async Task<ActionResult> RootIndexPage(string page)
         {
