@@ -100,19 +100,19 @@ namespace WWTMVC5.Controllers
 
         protected async Task<ProfileDetails> TryAuthenticateFromAuthCode(string authCode)
         {
-            if (Request.Headers.Get("host").Contains("localhost")) {
-                return null;
-            }
             if (SessionWrapper.Get<ProfileDetails>("ProfileDetails") != null)
             {
                 return SessionWrapper.Get<ProfileDetails>("ProfileDetails");
             }
+
             var svc = new LiveIdAuth();
             var profile = await TryRefreshToken(svc);
+
             if (profile == null && authCode.Length > 1)
             {
                 profile = await UserFromToken(await svc.GetTokens(authCode), svc);
             }
+
             return profile;
         }
 
@@ -208,10 +208,6 @@ namespace WWTMVC5.Controllers
 
         protected async Task<ProfileDetails> TryAuthenticateFromHttpContext()
         {
-            if (Request.Headers.Get("host").Contains("localhost"))
-            {
-                return null;
-            }
             if (SessionWrapper.Get<ProfileDetails>("ProfileDetails") != null)
             {
                 return SessionWrapper.Get<ProfileDetails>("ProfileDetails");
@@ -224,26 +220,24 @@ namespace WWTMVC5.Controllers
             {
                 return profile;
             }
-            var result = await svc.Authenticate();
 
-            string userId = null;
+            var result = await svc.Authenticate();
             if (result.Status != LiveConnectSessionStatus.Connected)
             {
-                return await UserFromToken(await svc.RefreshTokens(),svc);
+                return await UserFromToken(await svc.RefreshTokens(), svc);
             }
 
             var client = new LiveConnectClient(result.Session);
-            dynamic jsonResult = null;
-            var getResult = await client.GetAsync("me");
-            jsonResult = getResult.Result;
-            foreach (KeyValuePair<string,object> item in jsonResult)
+            var getMeResult = await client.GetAsync("me");
+            string userId = null;
+
+            foreach (KeyValuePair<string,object> item in getMeResult.Result)
             {
                 if (item.Key.ToLower() == "id")
                 {
                     userId = item.Value.ToString();
                 }
             }
-            //userId = jsonResult["id"].ToString();
 
             return await InitUserProfile(userId, result.Session.AccessToken);
         }
