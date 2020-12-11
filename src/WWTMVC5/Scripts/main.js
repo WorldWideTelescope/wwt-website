@@ -14,54 +14,7 @@ if (top === self) {
 			signIn: signIn
 		};
 
-		var isLoaded = false;
-		var layoutTimer;
-		var isSmall = false;
-
-		function init() {
-			// OAuth stuff.
-
-			try {
-					initLiveId();
-			} catch (ex) {
-			}
-
-			var rememberSetting = wwt.user && wwt.user.get('rememberMe');
-			wwt.autoSignin = rememberSetting && rememberSetting === true;
-
-			// Old layout/etc stuff -- don't care about this anymore:
-
-			bindEvents();
-			resize();
-
-			if (!isLoaded) {
-				layoutTimer = setInterval(function() {
-					wwt.triggerResize();
-				}, 100);
-			}
-
-			setTimeout(resize, 500);
-
-			$('img.img-border[data-nofs]').css('cursor', 'default');
-			$('a[data-toggle=tooltip]').tooltip({ container: 'body', trigger: 'hover' });
-			$('label[data-toggle=tooltip]').tooltip({ trigger: 'hover' });
-			$('input[data-toggle=tooltip],textarea[data-toggle=tooltip]').tooltip({ trigger: 'focus' });
-
-			hashChange();
-
-			var ua = navigator.userAgent;
-
-			if (ua.indexOf('MSIE 9') !== -1 || ua.indexOf('MSIE 8') !== -1) {
-				$('.navbar').css('filter', '');
-				$('.navbar-inverse .navbar-brand, .navbar-nav>li>a').css({
-					filter: '',
-					padding: '21px 15px 21px 31px'
-				});
-				if (!wwt.user.get('downlevelIgnore')) {
-					bootbox.alert('It looks like you are using an older version of Internet Explorer. WorldWide Telescope has been optimized for the latest browser technologies. Please upgrade your browser.<br/><label><input type=checkbox checked=checked onclick=wwt.user.set("downlevelIgnore",!this.checked) /> Keep reminding me.</label>');
-				}
-			}
-		};
+    // OAuth stuff:
 
 		function initLiveId() {
 			var signedIn = $('#signinContainer').attr('loggedIn') === 'true';
@@ -73,7 +26,7 @@ if (top === self) {
 			}
 
 			var rememberSetting = wwt.user.get('rememberMe');
-			var autoSignin = wwt.autoSignin = rememberSetting && rememberSetting === true;
+			var autoSignin = rememberSetting && rememberSetting === true;
 
 			if (wwt.currentResolution === 'md' || wwt.currentResolution === 'lg') {
 				$('#signinContainer label').slideUp(function() {
@@ -109,12 +62,9 @@ if (top === self) {
 			location.href = wlUrl;
 		}
 
-		var cleanCookies = function() {
+		function cleanCookies() {
 			var hosts = [
-				'.wwtstaging.azurewebsites.net',
-				'wwtstaging.azurewebsites.net',
 				'.worldwidetelescope.org',
-				'worldwidetelescope.org',
 				'worldwidetelescope.org'
 			];
 
@@ -126,7 +76,45 @@ if (top === self) {
 
 		// Old UI stuff:
 
-		function bindEvents() {
+		var isLoaded = false;
+		var layoutTimer;
+		var isSmall = false;
+
+		function init() {
+      initLiveId();
+			bindEvents();
+			resize();
+
+			if (!isLoaded) {
+				layoutTimer = setInterval(function() {
+					wwt.triggerResize();
+				}, 100);
+			}
+
+			setTimeout(resize, 500);
+
+			$('img.img-border[data-nofs]').css('cursor', 'default');
+			$('a[data-toggle=tooltip]').tooltip({ container: 'body', trigger: 'hover' });
+			$('label[data-toggle=tooltip]').tooltip({ trigger: 'hover' });
+			$('input[data-toggle=tooltip],textarea[data-toggle=tooltip]').tooltip({ trigger: 'focus' });
+
+			hashChange();
+
+			var ua = navigator.userAgent;
+
+			if (ua.indexOf('MSIE 9') !== -1 || ua.indexOf('MSIE 8') !== -1) {
+				$('.navbar').css('filter', '');
+				$('.navbar-inverse .navbar-brand, .navbar-nav>li>a').css({
+					filter: '',
+					padding: '21px 15px 21px 31px'
+				});
+				if (!wwt.user.get('downlevelIgnore')) {
+					bootbox.alert('It looks like you are using an older version of Internet Explorer. WorldWide Telescope has been optimized for the latest browser technologies. Please upgrade your browser.<br/><label><input type=checkbox checked=checked onclick=wwt.user.set("downlevelIgnore",!this.checked) /> Keep reminding me.</label>');
+				}
+			}
+		};
+
+    function bindEvents() {
 			$(window).on('resize contentchange', resize);
 			$(window).on('hashchange', hashChange);
 		}
@@ -161,7 +149,7 @@ if (top === self) {
 			clearInterval(layoutTimer);
 		}
 
-		var resize = function() {
+		function resize() {
 			determineFooterLayout();
 
 			if ($('.large-video-player.autoresize').length) {
@@ -190,7 +178,7 @@ if (top === self) {
 			}
 		}
 
-		var determineFooterLayout = function() {
+		function determineFooterLayout() {
 			var mainH = $('#divMain').height(),
 				footerH = $('.footer').height() + 20,
 				navH = $('.navbar').height();
