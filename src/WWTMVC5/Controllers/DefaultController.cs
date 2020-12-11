@@ -1,4 +1,9 @@
-﻿using System;
+﻿// This file used to be the central hub through which most requests for
+// user-facing HTML were routed. Now we've offloaded as much functionality as
+// possible to other web frameworks, so this there are only a few routes that
+// this controller now supports.
+
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -13,8 +18,6 @@ using WWTMVC5.WebServices;
 
 namespace WWTMVC5.Controllers
 {
-    [RoutePrefix("")]
-    [Route("{action=Index}")]
     public class DefaultController : ControllerBase
     {
         private ICommunityService _communityService;
@@ -31,11 +34,6 @@ namespace WWTMVC5.Controllers
         }
 
         private readonly BaseModel _baseModel = new BaseModel();
-
-        public async Task<ActionResult> Index()
-        {
-            return await GetViewOrRedirect(string.Empty, "index", _baseModel);
-        }
 
         [AllowAnonymous]
         [Route("LiveId/Authenticate")]
@@ -136,87 +134,58 @@ namespace WWTMVC5.Controllers
             return Redirect(url);
         }
 
-        [Route("{group}/{page=Index}")]
-        public async Task<ActionResult> ViewResult(string group, string page)
+        private string MakeIndexUrl(string prefix, string page)
         {
-            try
-            {
-                if (group.ToLower() == "community" && page.ToLower() == "profile" && _baseModel.User == null)
-                {
-                    await TryAuthenticateFromHttpContext();
-
-                    if (CurrentUserId != 0)
-                    {
-                        _baseModel.User = SessionWrapper.Get<ProfileDetails>("ProfileDetails");
-                        return await GetViewOrRedirect(group, page, _baseModel);
-                    }
-
-                    return Redirect("/Community");
-                }
-
-                ViewBag.page = page;
-                ViewBag.group = group;
-                ViewBag.CurrentUserId = CurrentUserId;
-
-                // It is dumb to create a new LiveIdAuth for each page load, but that's
-                // the most straightforward way to expose the proper redirect URL, and
-                // this whole app sees little usage.
-                var svc = new LiveIdAuth();
-                ViewBag.LiveRedirectUrl = svc.GetRedirectUrl();
-
-                return await GetViewOrRedirect(group, page, _baseModel);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "ViewResult: error in dispatch");
-                return View("~/Views/Support/Error.cshtml", _baseModel);
-            }
+            if (page.ToLower() == "index")
+                return prefix;
+            return prefix + page;
         }
 
-        private async Task<ActionResult> GetViewOrRedirect(string group, string page, BaseModel model)
+        [Route("/")]
+        [Route("Index")]
+        public async Task<ActionResult> RootIndexPage(string page)
         {
-            if (model.User == null)
+            return await ViewWithLogin("/", "~/Views/Index.cshtml");
+        }
+
+        [Route("Community/{page=Index}")]
+        public async Task<ActionResult> CommunityPage(string page)
+        {
+            var reloadUrl = MakeIndexUrl("/Community/", page);
+            var viewTarget = $"~/Views/Community/{page}.cshtml";
+            ViewBag.page = page;
+            return await ViewWithLogin(reloadUrl, viewTarget);
+        }
+
+        public async Task<ActionResult> ViewWithLogin(string reloadUrl, string viewTarget)
+        {
+            if (_baseModel.User == null)
             {
-                if (Request.QueryString["code"] != null)
-                {
-                    model.User = await TryAuthenticateFromAuthCode(Request.QueryString["code"]);
-
-                    if (page == "index")
-                    {
-                        page = "";
-                    }
-
-                    var strippedUrl = group + "/" + page;
-
-                    if (strippedUrl == "/") {
-                        strippedUrl = "/home";
-                    }
-
-                    return Redirect(strippedUrl);
-                }
-
-                if (Request.Cookies["refresh_token"] != null)
-                {
-                    model.User = await TryAuthenticateFromAuthCode("");
-                }
+                _baseModel.User = await TryAuthenticateFromHttpContext();
             }
 
-            if (group == string.Empty) {
-                var homeCookie = Request.Cookies["homepage"];
-                var rootDir = "webclient";
+            if (_baseModel.User == null)
+            {
+                var code = "";
 
-                if (homeCookie != null && !string.IsNullOrEmpty(homeCookie.Value)) {
-                    rootDir = homeCookie.Value;
-                }
+                if (!string.IsNullOrEmpty(Request.QueryString["code"]))
+                    code = Request.QueryString["code"];
 
-                return Redirect(rootDir);
+                // This call is a bit overloaded -- it will attempt to refresh
+                // the auth using a refresh_token cookie if available, even if
+                // there is no code.
+                _baseModel.User = await TryAuthenticateFromAuthCode(code);
+
+                if (!string.IsNullOrEmpty(code))
+                    return Redirect(reloadUrl);
             }
 
-            if (group.ToLower() == "home") {
-                return View("~/Views/index.cshtml", model);
-            }
-
-            return View("~/Views/" + group + "/" + page + ".cshtml", model);
+            ViewBag.CurrentUserId = CurrentUserId;
+            // Hopefully this is cheap to create? This value is needed to
+            // properly wire up OAuth login in the user-facing HTML.
+            var svc = new LiveIdAuth();
+            ViewBag.LiveRedirectUrl = svc.GetRedirectUrl();
+            return View(viewTarget, _baseModel);
         }
     }
 }
