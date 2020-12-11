@@ -1,6 +1,8 @@
 ﻿var wwt = {
 	triggerResize: function() {
-		setTimeout(function() { $(window).trigger('contentchange'); }, 100);
+		setTimeout(function() {
+			$(window).trigger('contentchange');
+		}, 100);
 	},
 
 	accordianClick: function (e) {
@@ -29,7 +31,7 @@ if (top === self) {
 			init: init,
 			loaded: loaded,
 			fullScreenImage: fullScreenImage,
-            signIn:signIn
+			signIn: signIn
 		};
 
 		var isLoaded = false;
@@ -44,7 +46,7 @@ if (top === self) {
 
 			bindEvents();
 			var rememberSetting = wwt.user && wwt.user.get('rememberMe');
-			wwt.autoSignin = rememberSetting && rememberSetting===true;
+			wwt.autoSignin = rememberSetting && rememberSetting === true;
 			resize();
 
 			if (!isLoaded) {
@@ -63,6 +65,7 @@ if (top === self) {
 			hashChange();
 
 			var ua = navigator.userAgent;
+
 			if (ua.indexOf('MSIE 9') !== -1 || ua.indexOf('MSIE 8') !== -1) {
 				$('.navbar').css('filter', '');
 				$('.navbar-inverse .navbar-brand, .navbar-nav>li>a').css({
