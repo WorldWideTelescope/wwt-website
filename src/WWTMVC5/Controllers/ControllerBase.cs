@@ -122,6 +122,7 @@ namespace WWTMVC5.Controllers
             {
                 return null;
             }
+
             var tokens = new { access_token = "", refresh_token = "" };
             var json = JsonConvert.DeserializeAnonymousType(tokenResult, tokens);
 
@@ -135,6 +136,7 @@ namespace WWTMVC5.Controllers
             {
                 return null;
             }
+
             return await InitUserProfile(userId, json.access_token);
         }
 
@@ -154,25 +156,24 @@ namespace WWTMVC5.Controllers
             {
                 return null;
             }
+
             var profileDetails = ProfileService.GetProfile(liveId);
+
             if (profileDetails == null)
             {
                 if (string.IsNullOrEmpty(accessToken))
                 {
                     return null;
                 }
-                var svc = new LiveIdAuth();
 
-                var getResult = await svc.GetMeInfo(accessToken);
-                var jsonResult = getResult;
+                var svc = new LiveIdAuth();
+                var jsonResult = await svc.GetMeInfo(accessToken);
+
                 profileDetails = new ProfileDetails(jsonResult)
                 {
                     IsSubscribed = true,
                     UserType = UserTypes.Regular
                 };
-                // While creating the user, IsSubscribed to be true always.
-
-                // When creating the user, by default the user type will be of regular.
                 profileDetails.ID = ProfileService.CreateProfile(profileDetails);
 
                 // This will used as the default community when user is uploading a new content.
@@ -185,24 +186,21 @@ namespace WWTMVC5.Controllers
                     Name = Resources.UserCommunityName, // 4. Name should be NONE.
                     AccessTypeID = (int)AccessType.Private, // 5. Access type should be private.
                     CategoryID = (int)CategoryType.GeneralInterest
-                    // 6. Set the category ID of general interest. We need to set the Category ID as it is a foreign key and cannot be null.
                 };
 
                 var communityService = DependencyResolver.Current.GetService(typeof(ICommunityService)) as ICommunityService;
                 var notificationService = DependencyResolver.Current.GetService(typeof(INotificationService)) as INotificationService;
+
                 // 7. Create the community
                 communityService.CreateCommunity(communityDetails);
 
                 // Send New user notification.
-                notificationService.NotifyNewEntityRequest(profileDetails,
-                    HttpContext.Request.Url.GetServerLink());
+                notificationService.NotifyNewEntityRequest(profileDetails, HttpContext.Request.Url.GetServerLink());
             }
 
             SessionWrapper.Set("CurrentUserID", profileDetails.ID);
-            SessionWrapper.Set("CurrentUserProfileName",
-                profileDetails.FirstName + " " + profileDetails.LastName);
+            SessionWrapper.Set("CurrentUserProfileName", profileDetails.FirstName + " " + profileDetails.LastName);
             SessionWrapper.Set("ProfileDetails", profileDetails);
-
             return profileDetails;
         }
 
@@ -295,6 +293,7 @@ namespace WWTMVC5.Controllers
         protected static async Task<ProfileDetails> ValidateAuthentication()
         {
             var svc = new LiveIdAuth();
+
             var token = System.Web.HttpContext.Current.Request.Headers["LiveUserToken"];
             if (token == null)
             {
@@ -303,29 +302,39 @@ namespace WWTMVC5.Controllers
                 {
                     token = authCookie.Value;
                 }
-
             }
+
+            if (string.IsNullOrEmpty(token))
+                return null;
+
             var cachedProfile = ProfileCacheManager.GetProfileDetails(token);
-            if (cachedProfile!=null)
+            if (cachedProfile != null)
             {
                 return cachedProfile;
             }
-            string userId = null;
 
-            userId = await svc.GetUserId(token);
+            string userId = await svc.GetUserId(token);
+
             if (userId == null)
             {
                 var result = await svc.RefreshTokens();
                 var tokens = new { access_token = "", refresh_token = "" };
                 var json = JsonConvert.DeserializeAnonymousType(result, tokens);
+
+                if (string.IsNullOrEmpty(json.access_token))
+                    return null;
+
                 userId = await svc.GetUserId(json.access_token);
             }
-            if (userId == null || userId.Length <= 3) return null;
+
+            if (userId == null || userId.Length <= 3)
+                return null;
+
             var profileService = DependencyResolver.Current.GetService(typeof(IProfileService)) as IProfileService;
             var profileDetails = profileService.GetProfile(userId);
             if (profileDetails != null && token != null)
             {
-                ProfileCacheManager.CacheProfile(token,profileDetails);
+                ProfileCacheManager.CacheProfile(token, profileDetails);
             }
 
             return profileDetails;
