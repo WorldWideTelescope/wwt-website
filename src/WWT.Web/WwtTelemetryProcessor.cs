@@ -36,7 +36,7 @@ namespace WWT.Web
             if (dep.ResultCode == "404" && dep.Data.StartsWith("https://wwtfiles.blob.core.windows.net/thumbnails/"))
                 dep.Success = true;
 
-            if (dep.Target == "BlobBaseClient.Exists")
+            if (dep.Name == "BlobBaseClient.Exists")
                 // Unfortunately I don't see a way to make this filter more specific.
                 dep.Success = true;
         }
