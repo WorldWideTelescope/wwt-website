@@ -14,64 +14,27 @@ if (top === self) {
 			signIn: signIn
 		};
 
-    // OAuth stuff:
+    // OAuth stuff. There used to be more "remember me" functionality, but it
+    // was rickety and this is UI is super rarely used now.
 
 		function initLiveId() {
+      // This attribute will be set by the server if it's happy with our login cookies:
 			var signedIn = $('#signinContainer').attr('loggedIn') === 'true';
-
-			if (!signedIn && getQSValue('code') != null) {
-				var returnUrl = location.href.split('?')[0];
-				console.log(returnUrl);
-				return;
-			}
-
-			var rememberSetting = wwt.user.get('rememberMe');
-			var autoSignin = rememberSetting && rememberSetting === true;
-
-			if (wwt.currentResolution === 'md' || wwt.currentResolution === 'lg') {
-				$('#signinContainer label').slideUp(function() {
-					$('.sign-in').show();
-				});
-			}
-
 			$('#signinContainer #signin').on('click', signIn);
-
-			if (autoSignin && !signedIn) {
-				signIn();
-			}
 		}
 
 		function signIn() {
 			var signedIn = $('#signinContainer').attr('loggedIn') === 'true';
-			if (signedIn || location.host.indexOf('localhost') > -1) {
+			if (signedIn) {
 					return;
 			}
 
-			wwt.signingIn = true;
-			wwt.user.set('rememberMe', true);
-			if (wwt.user.get('authCodeRedirect')) {
-					cleanCookies();
-			}
-
-			wwt.user.set('authCodeRedirect', true);
 			var wlUrl = 'https://login.live.com/oauth20_authorize.srf?client_id=' +
 						encodeURIComponent(_liveClientId) +
 						'&scope=wl.offline_access%20wl.emails&response_type=code&redirect_uri=' +
 						encodeURIComponent(_liveClientRedirectUrl) +
 						'&display=popup';
 			location.href = wlUrl;
-		}
-
-		function cleanCookies() {
-			var hosts = [
-				'.worldwidetelescope.org',
-				'worldwidetelescope.org'
-			];
-
-			document.cookie = 'wl_auth=; expires=Thu, 01-Jan-1970 00:00:01 GMT;';
-			for (var i = 0; i < hosts.length; i++) {
-					document.cookie = 'wl_auth=; expires=Thu, 01-Jan-1970 00:00:01 GMT;domain=' + hosts[i] + ';path=/';
-			}
 		}
 
 		// Old UI stuff:
@@ -84,6 +47,12 @@ if (top === self) {
       initLiveId();
 			bindEvents();
 			resize();
+
+			if (wwt.currentResolution === 'md' || wwt.currentResolution === 'lg') {
+				$('#signinContainer label').slideUp(function() {
+					$('.sign-in').show();
+				});
+			}
 
 			if (!isLoaded) {
 				layoutTimer = setInterval(function() {

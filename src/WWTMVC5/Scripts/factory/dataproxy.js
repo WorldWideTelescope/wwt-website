@@ -335,13 +335,11 @@
                 getAllTypes().then(function() {
                     if (currentUserId && currentUserId > 0) {
                         deferred.resolve(types);
-                    } else if (wwt.signingIn) {
-                        $(window).on('login', refreshTypes); 
                     } else if ($('#signinContainer').attr('loggedIn') === 'true') {
                         refreshTypes();
-                    }else {
+                    } else {
                         wwt.viewMaster.signIn();
-                        $(window).on('login', refreshTypes);
+                        $(window).on('login', refreshTypes); // XXX nothing ever triggers this, I think
                     }
                 });
             }
