@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 
-namespace WWTWebservices
+namespace WWT.Imaging
 {
    public class Triangle
     {

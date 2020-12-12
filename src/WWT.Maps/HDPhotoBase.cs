@@ -13,7 +13,7 @@
 //
 //------------------------------------------------------------------------------
 
-namespace Microsoft.Maps.ElevationAdjustmentService.HDPhoto
+namespace WWT.Maps
 {
 	/// <summary>
 	/// Class used for constants and static methods.

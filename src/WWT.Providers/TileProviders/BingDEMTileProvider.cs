@@ -1,10 +1,11 @@
 #nullable disable
 
-using Microsoft.Maps.ElevationAdjustmentService.HDPhoto;
 using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+
+using WWT.Maps;
 
 namespace WWT.Providers
 {

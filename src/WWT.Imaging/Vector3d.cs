@@ -2,7 +2,7 @@
 
 using System;
 
-namespace WWTWebservices
+namespace WWT.Imaging
 {
     // Summary:
     //     Describes a custom vertex format structure that contains position and one

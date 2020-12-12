@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
-namespace Microsoft.MapPoint.Data.VirtualEarthTileDataStore.ElevationData.Compression
+namespace WWT.Maps
 {
 	/// <summary>
 	/// Writes individual bits to a buffer of bytes.

@@ -14,8 +14,11 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using Unity.AspNet.Mvc;
-using WWT;
+
 using WWT.Azure;
+using WWT.Caching;
+using WWT.Imaging;
+using WWT.PlateFiles;
 using WWT.Providers;
 using WWT.Tours;
 using WWTWebservices;

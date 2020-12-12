@@ -5,7 +5,8 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using WWTWebservices;
+
+using WWT.PlateFiles;
 
 namespace WWT.Azure
 {

@@ -1,14 +1,11 @@
 #nullable disable
 
-// OctSetTest.SdssImage
-using OctSetTest;
 using System;
 using System.Drawing;
 using System.IO;
 using System.Net;
-using WWTWebservices;
 
-namespace OctSetTest
+namespace WWT.Imaging
 {
 	public class SdssImage
 	{

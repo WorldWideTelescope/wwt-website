@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using WWT.PlateFiles;
 
-namespace WWTWebservices
+namespace WWT.PlateFiles
 {
     public class PlateFile2
     {

@@ -9,9 +9,8 @@
 
 using System;
 using System.IO;
-using Microsoft.MapPoint.Data.VirtualEarthTileDataStore.ElevationData.Compression;
 
-namespace Microsoft.Maps.ElevationAdjustmentService.HDPhoto
+namespace WWT.Maps
 {
 	/// <summary>
 	/// Provides serialization and deserialization of digital elevation maps.

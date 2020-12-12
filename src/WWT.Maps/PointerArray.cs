@@ -12,7 +12,7 @@
 //
 //------------------------------------------------------------------------------
 
-namespace Microsoft.Maps.ElevationAdjustmentService.HDPhoto
+namespace WWT.Maps
 {
 	/// <summary>
 	/// The purpose of this class is to implement array that can start in the middle of another one

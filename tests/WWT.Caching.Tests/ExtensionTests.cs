@@ -2,13 +2,11 @@
 using AutofacContrib.NSubstitute.MockHandlers;
 using AutoFixture;
 using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using NSubstitute;
 using StackExchange.Redis;
 using System.Threading.Tasks;
-using WWTWebservices;
 using Xunit;
 
 namespace WWT.Caching.Tests

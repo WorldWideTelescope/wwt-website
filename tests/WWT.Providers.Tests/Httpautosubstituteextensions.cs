@@ -1,12 +1,11 @@
 ﻿using Autofac;
 using AutofacContrib.NSubstitute;
 using NSubstitute;
-using NSubstitute.Core;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+
 using WWT.PlateFiles;
-using WWTWebservices;
 
 namespace WWT.Providers.Tests
 {

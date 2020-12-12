@@ -4,7 +4,9 @@ using Microsoft.Extensions.Logging;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+
 using WWT.Catalog;
+using WWT.PlateFiles;
 
 namespace WWT.Providers
 {

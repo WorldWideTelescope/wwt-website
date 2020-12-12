@@ -4,6 +4,9 @@ using Unity;
 using Unity.AspNet.Mvc;
 using Unity.Injection;
 using Unity.Lifetime;
+
+using WWT.Providers;
+
 using WWTMVC5.Models;
 using WWTMVC5.Repositories;
 using WWTMVC5.Repositories.Interfaces;

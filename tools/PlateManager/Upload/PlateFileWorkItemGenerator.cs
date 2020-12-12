@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using WWTWebservices;
-using WWT.Azure;
 using System.Threading.Tasks;
 using System.Threading;
 using Microsoft.Extensions.Logging;
+
+using WWT.Azure;
+using WWT.PlateFiles;
 
 namespace PlateManager
 {

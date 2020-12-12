@@ -11,7 +11,7 @@ using System.Web.UI.WebControls.WebParts;
 ////using System.Xml.Linq;
 using System.Text.RegularExpressions;
 
-namespace Microsoft.Research.WWT
+namespace WWTWebservices
 {
     public class Global
     {

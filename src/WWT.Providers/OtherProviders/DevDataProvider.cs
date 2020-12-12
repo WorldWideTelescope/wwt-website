@@ -4,6 +4,8 @@ using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
 
+using WWT.PlateFiles;
+
 namespace WWT.Providers
 {
     [RequestEndpoint("/v2/data/dev_export")]

@@ -13,7 +13,7 @@
 //
 //------------------------------------------------------------------------------
 
-namespace Microsoft.Maps.ElevationAdjustmentService.HDPhoto
+namespace WWT.Maps
 {
 	/// <summary>
 	/// Adaptive context model

@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 
-namespace WWT.Providers.Services
+namespace WWT.Providers
 {
     public class Mandelbrot : IMandelbrot
     {

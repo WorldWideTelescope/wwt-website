@@ -5,7 +5,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace WWTWebservices
+namespace WWT.PlateFiles
 {
     public interface IPlateTilePyramid
     {

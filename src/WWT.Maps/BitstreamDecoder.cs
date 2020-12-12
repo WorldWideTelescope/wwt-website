@@ -15,7 +15,7 @@
 
 using System;
 
-namespace Microsoft.Maps.ElevationAdjustmentService.HDPhoto
+namespace WWT.Maps
 {
 	internal class BitstreamDecoder : ContainerDecoder
 	{

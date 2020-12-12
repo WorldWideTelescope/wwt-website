@@ -2,7 +2,7 @@
 
 using System;
 
-namespace WWTWebservices
+namespace WWT.Imaging
 {
     public struct Vector2d
     {

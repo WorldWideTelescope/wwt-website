@@ -16,7 +16,7 @@
 using System;
 using System.Globalization;
 
-namespace Microsoft.Maps.ElevationAdjustmentService.HDPhoto
+namespace WWT.Maps
 {
 	/// <summary>
 	/// adaptive huffman encoding / decoding class

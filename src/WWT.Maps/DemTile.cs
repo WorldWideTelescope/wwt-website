@@ -9,7 +9,7 @@
 
 using System;
 
-namespace Microsoft.Maps.ElevationAdjustmentService.HDPhoto
+namespace WWT.Maps
 {
     /// <summary>
 	/// Represents a Digital Elevation Map tile. 

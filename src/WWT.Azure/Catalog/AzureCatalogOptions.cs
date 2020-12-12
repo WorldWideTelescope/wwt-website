@@ -1,6 +1,6 @@
 #nullable disable
 
-namespace WWT.Azure.Catalog
+namespace WWT.Azure
 {
     public class AzureCatalogOptions
     {

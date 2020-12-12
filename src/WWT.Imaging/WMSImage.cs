@@ -5,7 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Net;
 
-namespace WWTWebservices
+namespace WWT.Imaging
 {
     public enum ImageSource
     {

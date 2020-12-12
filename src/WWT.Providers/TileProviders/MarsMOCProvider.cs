@@ -6,7 +6,8 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using WWTWebservices;
+
+using WWT.PlateFiles;
 
 namespace WWT.Providers
 {

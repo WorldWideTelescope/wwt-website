@@ -4,6 +4,9 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
+using WWT.Imaging;
+using WWT.PlateFiles;
+
 namespace WWT.Providers
 {
     [RequestEndpoint("/wwtweb/thumbnail.aspx")]

@@ -4,7 +4,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace WWT
+namespace WWT.PlateFiles
 {
     public static class StreamExtensions
     {
