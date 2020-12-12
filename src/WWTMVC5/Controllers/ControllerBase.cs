@@ -255,33 +255,6 @@ namespace WWTMVC5.Controllers
             }
         }
 
-        /// <summary>
-        /// It creates the prefix for id of links
-        /// </summary>
-        /// <param name="highlightType">Related / Latest / Top etc.</param>
-        protected void SetSiteAnalyticsPrefix(HighlightType highlightType)
-        {
-            var pageName = string.Empty;
-
-            if (HttpContext.Request.IsAjaxRequest())
-            {
-                pageName = HttpContext.Request.UrlReferrer.AbsolutePath.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault();
-            }
-            else
-            {
-                pageName = HttpContext.Request.Url.AbsolutePath.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault();
-            }
-
-            if (highlightType == HighlightType.None)
-            {
-                ViewData["PrefixId"] = string.Format(CultureInfo.InvariantCulture, "{0}_", pageName);
-            }
-            else
-            {
-                ViewData["PrefixId"] = string.Format(CultureInfo.InvariantCulture, "{0}_{1}_", pageName, highlightType);
-            }
-        }
-
         protected static long ValidateEntityId(string id)
         {
             long result = 0;

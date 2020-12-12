@@ -90,8 +90,6 @@ namespace WWTMVC5.Controllers
 
             var entities = await GetEntities(CurrentUserId, entityType, pageDetails);
 
-            SetSiteAnalyticsPrefix(HighlightType.None);
-
             return new JsonResult
             {
                 Data = new {entities, pageInfo=pageDetails},
