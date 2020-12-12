@@ -121,8 +121,7 @@ namespace WWTMVC5.Controllers
                 _communityService.CreateCommunity(communityDetails);
 
                 // Send New user notification.
-                _notificationService.NotifyNewEntityRequest(profileDetails,
-                    HttpContext.Request.Url.GetServerLink());
+                _notificationService.NotifyNewEntityRequest(profileDetails, GetBaseUrl());
             }
             else
             {

@@ -101,6 +101,14 @@ namespace WWTMVC5.Controllers
 
         #region Protected Methods
 
+        protected string GetBaseUrl()
+        {
+            // We have HttpContextBase, need HttpContext. They're independent!
+            var httpContext = HttpContext.ApplicationInstance.Context;
+            var wwtContext = new SystemWebWwtContext(httpContext);
+            return _urlInfo.GetExternalBaseUrl(wwtContext.Request).ToString();
+        }
+
         protected async Task<ProfileDetails> TryAuthenticateFromAuthCode(string authCode)
         {
             if (SessionWrapper.Get<ProfileDetails>("ProfileDetails") != null)
@@ -198,7 +206,7 @@ namespace WWTMVC5.Controllers
                 communityService.CreateCommunity(communityDetails);
 
                 // Send New user notification.
-                notificationService.NotifyNewEntityRequest(profileDetails, HttpContext.Request.Url.GetServerLink());
+                notificationService.NotifyNewEntityRequest(profileDetails, GetBaseUrl());
             }
 
             SessionWrapper.Set("CurrentUserID", profileDetails.ID);

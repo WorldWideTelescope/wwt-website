@@ -401,7 +401,7 @@ namespace WWTMVC5.Controllers
                 communityJson.ID = communityDetails.ID = _communityService.CreateCommunity(communityDetails);
 
                 // Send Notification Mail
-                _notificationService.NotifyNewEntityRequest(communityDetails, HttpContext.Request.Url.GetServerLink());
+                _notificationService.NotifyNewEntityRequest(communityDetails, GetBaseUrl());
 
                 return new JsonResult { Data = new { ID = communityDetails.ID } };
             }
@@ -746,8 +746,8 @@ namespace WWTMVC5.Controllers
                 request.RequestorID = permission.UserID;
                 request.RequestorName = permission.Name;
                 request.PermissionRequested = permission.Role.ToString();
-                request.RequestorLink = string.Format(CultureInfo.InvariantCulture, "{0}Profile/Index/{1}", HttpContext.Request.Url.GetServerLink(), permission.UserID);
-                request.CommunityLink = string.Format(CultureInfo.InvariantCulture, "{0}Community/Index/{1}", HttpContext.Request.Url.GetServerLink(), permission.CommunityID);
+                request.RequestorLink = string.Format(CultureInfo.InvariantCulture, "{0}Profile/Index/{1}", GetBaseUrl(), permission.UserID);
+                request.CommunityLink = string.Format(CultureInfo.InvariantCulture, "{0}Community/Index/{1}", GetBaseUrl(), permission.CommunityID);
 
                 _notificationService.NotifyJoinCommunity(request);
             }
@@ -774,8 +774,8 @@ namespace WWTMVC5.Controllers
                 moderatorPermissionStatusRequest.RequestorName = permission.Name;
                 moderatorPermissionStatusRequest.ApprovedRole = permission.Role;
                 moderatorPermissionStatusRequest.IsApproved = permission.Approved == true;
-                moderatorPermissionStatusRequest.RequestorLink = string.Format(CultureInfo.InvariantCulture, "{0}Profile/Index/{1}", HttpContext.Request.Url.GetServerLink(), permission.UserID);
-                moderatorPermissionStatusRequest.CommunityLink = string.Format(CultureInfo.InvariantCulture, "{0}Community/Index/{1}", HttpContext.Request.Url.GetServerLink(), permission.CommunityID);
+                moderatorPermissionStatusRequest.RequestorLink = string.Format(CultureInfo.InvariantCulture, "{0}Profile/Index/{1}", GetBaseUrl(), permission.UserID);
+                moderatorPermissionStatusRequest.CommunityLink = string.Format(CultureInfo.InvariantCulture, "{0}Community/Index/{1}", GetBaseUrl(), permission.CommunityID);
 
                 _notificationService.NotifyModeratorPermissionStatus(moderatorPermissionStatusRequest);
 
@@ -786,8 +786,8 @@ namespace WWTMVC5.Controllers
                 request.RequestorID = permission.UserID;
                 request.RequestorName = permission.Name;
                 request.IsApproved = permission.Approved == true;
-                request.RequestorLink = string.Format(CultureInfo.InvariantCulture, "{0}Profile/Index/{1}", HttpContext.Request.Url.GetServerLink(), permission.UserID);
-                request.CommunityLink = string.Format(CultureInfo.InvariantCulture, "{0}Community/Index/{1}", HttpContext.Request.Url.GetServerLink(), permission.CommunityID);
+                request.RequestorLink = string.Format(CultureInfo.InvariantCulture, "{0}Profile/Index/{1}", GetBaseUrl(), permission.UserID);
+                request.CommunityLink = string.Format(CultureInfo.InvariantCulture, "{0}Community/Index/{1}", GetBaseUrl(), permission.CommunityID);
 
                 _notificationService.NotifyUserRequestPermissionStatus(request);
             }
@@ -810,9 +810,9 @@ namespace WWTMVC5.Controllers
                 var request = new RemoveUserRequest();
                 request.CommunityID = permission.CommunityID;
                 request.CommunityName = permission.CommunityName;
-                request.CommunityLink = string.Format(CultureInfo.InvariantCulture, "{0}Community/Index/{1}", HttpContext.Request.Url.GetServerLink(), permission.CommunityID);
+                request.CommunityLink = string.Format(CultureInfo.InvariantCulture, "{0}Community/Index/{1}", GetBaseUrl(), permission.CommunityID);
                 request.UserID = permission.UserID;
-                request.UserLink = string.Format(CultureInfo.InvariantCulture, "{0}Profile/Index/{1}", HttpContext.Request.Url.GetServerLink(), permission.UserID);
+                request.UserLink = string.Format(CultureInfo.InvariantCulture, "{0}Profile/Index/{1}", GetBaseUrl(), permission.UserID);
                 request.UserName = permission.Name;
 
                 _notificationService.NotifyRemoveUser(request);
@@ -836,13 +836,13 @@ namespace WWTMVC5.Controllers
                 var request = new UserPermissionChangedRequest();
                 request.CommunityID = permission.CommunityID;
                 request.CommunityName = permission.CommunityName;
-                request.CommunityLink = string.Format(CultureInfo.InvariantCulture, "{0}Community/Index/{1}", HttpContext.Request.Url.GetServerLink(), permission.CommunityID);
+                request.CommunityLink = string.Format(CultureInfo.InvariantCulture, "{0}Community/Index/{1}", GetBaseUrl(), permission.CommunityID);
                 request.UserID = permission.UserID;
-                request.UserLink = string.Format(CultureInfo.InvariantCulture, "{0}Profile/Index/{1}", HttpContext.Request.Url.GetServerLink(), permission.UserID);
+                request.UserLink = string.Format(CultureInfo.InvariantCulture, "{0}Profile/Index/{1}", GetBaseUrl(), permission.UserID);
                 request.UserName = permission.Name;
                 request.Role = permission.Role;
                 request.ModeratorID = CurrentUserId;
-                request.ModeratorLink = string.Format(CultureInfo.InvariantCulture, "{0}Profile/Index/{1}", HttpContext.Request.Url.GetServerLink(), request.ModeratorID);
+                request.ModeratorLink = string.Format(CultureInfo.InvariantCulture, "{0}Profile/Index/{1}", GetBaseUrl(), request.ModeratorID);
 
                 _notificationService.NotifyUserPermissionChangedStatus(request);
             }
@@ -864,14 +864,14 @@ namespace WWTMVC5.Controllers
                 foreach (var item in invitedPeople)
                 {
                     // Update the body to include the token.
-                    var joinCommunityLink = string.Format(CultureInfo.InvariantCulture, "{0}Community/Join/{1}/{2}", HttpContext.Request.Url.GetServerLink(), item.CommunityID, item.InviteRequestToken);
+                    var joinCommunityLink = string.Format(CultureInfo.InvariantCulture, "{0}Community/Join/{1}/{2}", GetBaseUrl(), item.CommunityID, item.InviteRequestToken);
 
                     var notifyInviteRequest = new NotifyInviteRequest()
                     {
                         EmailId = item.EmailIdList.ElementAt(0),
                         CommunityID = item.CommunityID,
                         CommunityName = communityName,
-                        CommunityLink = string.Format(CultureInfo.InvariantCulture, "{0}Community/Index/{1}", HttpContext.Request.Url.GetServerLink(), item.CommunityID),
+                        CommunityLink = string.Format(CultureInfo.InvariantCulture, "{0}Community/Index/{1}", GetBaseUrl(), item.CommunityID),
                         Subject = item.Subject,
                         Body = item.Body,
                         InviteLink = joinCommunityLink
