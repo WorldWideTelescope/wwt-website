@@ -11,7 +11,7 @@ namespace WWT.Providers
 {
     public static class RequestProvidersExtensions
     {
-        public static void AddRequestProviders(this IServiceCollection services, Action<WwtOptions> config)
+        public static IServiceCollection AddRequestProviders(this IServiceCollection services, Action<WwtOptions> config)
         {
             var manager = new EndpointManager();
             var types = typeof(RequestProvider).Assembly.GetTypes()
@@ -29,6 +29,7 @@ namespace WWT.Providers
 
             services.AddSingleton(manager);
 
+            services.AddSingleton<IExternalUrlInfo, WwtExternalUrlInfo>();
             services.AddSingleton<IFileNameHasher, Net4x32BitFileNameHasher>();
             services.AddSingleton<IOctTileMapBuilder, OctTileMapBuilder>();
             services.AddSingleton<IMandelbrot, Mandelbrot>();
@@ -36,10 +37,10 @@ namespace WWT.Providers
             services.AddSingleton<IDevDataAccessor, DevDataAccessor>();
 
             var options = new WwtOptions();
-
             config(options);
-
             services.AddSingleton(options);
+
+            return services;
         }
     }
 }

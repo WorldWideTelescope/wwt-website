@@ -29,5 +29,7 @@ namespace WWT.Providers
         public string WwtGalexDir { get; set; } = string.Empty;
 
         public string WwtToursDBConnectionString { get; set; } = string.Empty;
+
+        public string ExternalUrlMapText { get; set; } = string.Empty;
     }
 }

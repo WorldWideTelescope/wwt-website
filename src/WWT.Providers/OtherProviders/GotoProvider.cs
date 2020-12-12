@@ -12,11 +12,30 @@ namespace WWT.Providers
     {
         public override string ContentType => ContentTypes.XWtml;
 
+        private readonly IExternalUrlInfo _urlInfo;
+
+        public GotoProvider(IExternalUrlInfo urlInfo)
+        {
+            _urlInfo = urlInfo;
+        }
+
         public override Task RunAsync(IWwtContext context, CancellationToken token)
         {
             if (context.Request.Params["wtml"] == null)
             {
-                context.Response.Redirect("//worldwidetelescope.org/webclient/?wtml=" + WebUtility.UrlEncode(context.Request.Url.ToString() + "&wtml=true"));
+                // If we're called with no "wtml" parameter, we redirect the
+                // caller to the webclient, with a WTML argument pointing to the
+                // current request URL, now with "wtml" set to true. This will
+                // cause us to emit WTML that the webclient will then parse.
+                var gb = new UriBuilder(_urlInfo.GetExternalRequestUrl(context.Request));
+                if (String.IsNullOrEmpty(gb.Query))
+                    gb.Query = "wtml=true";
+                else
+                    gb.Query = gb.Query.Substring(1) + "&wtml=true";
+
+                var wb = _urlInfo.GetWebclientBuilder(context.Request);
+                wb.Query = "wtml=" + WebUtility.UrlEncode(gb.ToString());
+                context.Response.Redirect(wb.ToString());
                 return Task.CompletedTask;
             }
 

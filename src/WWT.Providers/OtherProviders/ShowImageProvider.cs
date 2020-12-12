@@ -12,19 +12,33 @@ namespace WWT.Providers
     {
         public override string ContentType => ContentTypes.XWtml;
 
+        private readonly IExternalUrlInfo _urlInfo;
+
+        public ShowImageProvider(IExternalUrlInfo urlInfo)
+        {
+            _urlInfo = urlInfo;
+        }
+
         public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
             if (context.Request.Params["wtml"] == null)
             {
-                // Earlier code that didn't use a proper UriBuilder did `{inputurl}.Replace(",", "-")`. Not sure why.
-                var wb = new UriBuilder(context.Request.Url);
-
-                if (String.IsNullOrEmpty(wb.Query))
-                    wb.Query = "wtml=true";
+                // If we're called with no "wtml" parameter, we redirect the
+                // caller to the webclient, with a WTML argument pointing to the
+                // current request URL, now with "wtml" set to true. This will
+                // cause us to emit WTML that the webclient will then parse.
+                //
+                // Earlier code that didn't use a proper UriBuilder did
+                // `{inputurl}.Replace(",", "-")`. Not sure why.
+                var sb = new UriBuilder(_urlInfo.GetExternalRequestUrl(context.Request));
+                if (String.IsNullOrEmpty(sb.Query))
+                    sb.Query = "wtml=true";
                 else
-                    wb.Query = wb.Query.Substring(1) + "&wtml=true";
+                    sb.Query = sb.Query.Substring(1) + "&wtml=true";
 
-                context.Response.Redirect("//worldwidetelescope.org/webclient/?wtml=" + WebUtility.UrlEncode(wb.ToString()));
+                var wb = _urlInfo.GetWebclientBuilder(context.Request);
+                wb.Query = "wtml=" + WebUtility.UrlEncode(sb.ToString());
+                context.Response.Redirect(wb.ToString());
                 return;
             }
 
