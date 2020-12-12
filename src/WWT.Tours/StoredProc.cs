@@ -6,7 +6,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 
-namespace WWTWebservices
+namespace WWT.Tours
 {
     public class StoredProc
     {

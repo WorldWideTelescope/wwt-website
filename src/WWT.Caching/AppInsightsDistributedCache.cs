@@ -10,7 +10,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace WWT
+namespace WWT.Caching
 {
     /// <summary>
     /// A decorated <see cref="IDistributedCache"/> that enables AppInsights tracking of values being set/retrieved

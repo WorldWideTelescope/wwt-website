@@ -2,7 +2,7 @@
 
 using System;
 
-namespace WWTWebservices
+namespace WWT.Providers
 {
     public class Net4x32BitFileNameHasher : IFileNameHasher
     {

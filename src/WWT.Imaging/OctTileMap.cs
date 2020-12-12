@@ -1,12 +1,9 @@
 #nullable disable
 
-// OctSetTest.OctTileMap
-using OctSetTest;
 using System;
 using System.Collections.Generic;
-using WWTWebservices;
 
-namespace OctSetTest
+namespace WWT.Imaging
 {
     public class OctTileMap
     {

@@ -5,11 +5,11 @@ using Azure.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
-using WWT.Azure.Catalog;
+
 using WWT.Catalog;
+using WWT.Imaging;
 using WWT.PlateFiles;
 using WWT.Tours;
-using WWTWebservices;
 
 namespace WWT.Azure
 {

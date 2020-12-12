@@ -1,7 +1,8 @@
 #nullable disable
 
 using System;
-namespace WWTWebservices
+
+namespace WWT.Tours
 {
     public class Tour
     {

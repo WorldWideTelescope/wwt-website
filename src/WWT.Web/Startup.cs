@@ -1,7 +1,6 @@
 #nullable disable
 
 using Microsoft.ApplicationInsights.Extensibility;
-using Microsoft.ApplicationInsights.SnapshotCollector;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -12,10 +11,13 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
 using System;
+
 using WWT.Azure;
+using WWT.Caching;
+using WWT.Imaging;
+using WWT.PlateFiles;
 using WWT.Providers;
 using WWT.Tours;
-using WWTWebservices;
 
 namespace WWT.Web
 {

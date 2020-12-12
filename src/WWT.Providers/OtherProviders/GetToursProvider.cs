@@ -5,7 +5,8 @@ using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
-using WWTWebservices;
+
+using WWT.Tours;
 
 namespace WWT.Providers
 {

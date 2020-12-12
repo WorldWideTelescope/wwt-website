@@ -9,7 +9,9 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace WWT
+using WWT.Imaging;
+
+namespace WWT.Azure
 {
     public class AzureTileOptions
     {

@@ -5,7 +5,6 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using WWT;
-using WWT.PlateFiles;
 
 /* Jonathan Fay wrote this, except for the bits polluted by Dinoj, which are between <dinoj>...</dinoj> tags
 *  The header information in the .plate files is being upgraded.
@@ -24,7 +23,7 @@ using WWT.PlateFiles;
  * Yes, we stored them least significant byte first.
 */
 
-namespace WWTWebservices
+namespace WWT.PlateFiles
 {
     public class PlateTilePyramid : IDisposable
     {

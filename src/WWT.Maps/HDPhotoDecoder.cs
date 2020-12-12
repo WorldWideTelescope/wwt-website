@@ -17,7 +17,7 @@ using System;
 using System.Globalization;
 //using Microsoft.Maps.Core;
 
-namespace Microsoft.Maps.ElevationAdjustmentService.HDPhoto
+namespace WWT.Maps
 {
 	internal sealed class HDPhotoDecoder : BitstreamDecoder
 	{

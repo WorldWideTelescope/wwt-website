@@ -4,8 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 using System.Reflection;
-using WWT.Providers.Services;
-using WWTWebservices;
 
 namespace WWT.Providers
 {

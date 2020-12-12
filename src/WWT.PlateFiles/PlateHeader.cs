@@ -1,6 +1,6 @@
 #nullable disable
 
-namespace WWTWebservices
+namespace WWT.PlateFiles
 {
     public struct PlateHeader
     {

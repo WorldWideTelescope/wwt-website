@@ -2,7 +2,9 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace WWT.Providers
+using WWT.Providers;
+
+namespace WWT.Web
 {
     public class HelloWorldProvider : RequestProvider
     {

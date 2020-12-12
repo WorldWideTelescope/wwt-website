@@ -2,6 +2,8 @@
 using System.Data;
 using System.Data.SqlClient;
 
+using WWT.Tours;
+
 /// <summary>
 /// Summary description for WebContentServices
 /// </summary>

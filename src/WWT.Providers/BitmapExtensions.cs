@@ -6,6 +6,8 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
+using WWT.PlateFiles;
+
 namespace WWT.Providers
 {
     internal static class BitmapExtensions

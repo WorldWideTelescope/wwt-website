@@ -7,7 +7,9 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace WWT
+using WWT.PlateFiles;
+
+namespace WWT.Caching
 {
     /// <summary>
     /// This implements a serializer and transformer for the caching library to

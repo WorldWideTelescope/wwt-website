@@ -1,16 +1,13 @@
 using System;
 using System.Web;
-using System.Collections;
-using System.Web.Services;
-using System.Web.Services.Protocols;
 using System.Collections.Generic;
-using System.Text;
 using System.Data.SqlClient;
 using System.Data;
 using System.Configuration;
 using System.Xml;
-using System.Xml.Serialization;
 using System.IO;
+
+using WWT.Tours;
 
 /// <summary>
 /// TourServices : 

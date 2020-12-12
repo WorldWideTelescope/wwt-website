@@ -12,6 +12,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.IO;
 
+using WWT.Tours;
 
 /// <summary>
 /// Summary description for WWTWebService

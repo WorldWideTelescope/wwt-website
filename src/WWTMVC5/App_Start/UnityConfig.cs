@@ -4,6 +4,9 @@ using Unity;
 using Unity.AspNet.Mvc;
 using Unity.Injection;
 using Unity.Lifetime;
+
+using WWT.Providers;
+
 using WWTMVC5.Models;
 using WWTMVC5.Repositories;
 using WWTMVC5.Repositories.Interfaces;
@@ -33,7 +36,7 @@ namespace WWTMVC5
 
         /// <summary>Registers the type mappings with the Unity container.</summary>
         /// <param name="container">The unity container to configure.</param>
-        /// <remarks>There is no need to register concrete types such as controllers or API controllers (unless you want to 
+        /// <remarks>There is no need to register concrete types such as controllers or API controllers (unless you want to
         /// change the defaults), as Unity allows resolving a concrete type even if it was not previously registered.</remarks>
         private static void RegisterTypes(IUnityContainer container, IServiceProvider provider)
         {
@@ -46,6 +49,7 @@ namespace WWTMVC5
         private static void MapServicesFromProvider(IUnityContainer container, IServiceProvider provider)
         {
             container.RegisterFactory(typeof(ILogger<>), null, (_, type, __) => provider.GetService(type));
+            container.RegisterFactory(typeof(IExternalUrlInfo), null, (_, type, __) => provider.GetService(type));
         }
 
         private static void RegisterEarthOnlineEntities(IUnityContainer container)

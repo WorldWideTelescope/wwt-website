@@ -1,4 +1,4 @@
-namespace WWTWebservices
+namespace WWT.Providers
 {
     public interface IFileNameHasher
     {

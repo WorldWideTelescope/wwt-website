@@ -2,7 +2,8 @@ using NSubstitute;
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using WWTWebservices;
+
+using WWT.PlateFiles;
 
 namespace WWT.Providers.Tests
 {

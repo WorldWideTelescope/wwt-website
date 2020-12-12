@@ -16,7 +16,7 @@
 using System;
 //using Microsoft.Maps.Core;
 
-namespace Microsoft.Maps.ElevationAdjustmentService.HDPhoto
+namespace WWT.Maps
 {
 	internal abstract class ContainerDecoder : HDPhotoBase
 	{

@@ -4,7 +4,7 @@ using System;
 using System.Drawing;
 using System.Xml;
 
-namespace WWT.Providers
+namespace WWT.Imaging
 {
     internal class VampWCSImageReader : WcsImage
     {

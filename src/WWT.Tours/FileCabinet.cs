@@ -6,7 +6,7 @@ using System.Text;
 using System.Web;
 using System.Xml;
 
-namespace WWTWebservices
+namespace WWT.Tours
 {
     public class FileEntry
     {

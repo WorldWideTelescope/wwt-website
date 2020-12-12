@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WWT.Catalog;
 
-namespace WWT.Azure.Catalog
+namespace WWT.Azure
 {
     public class AzureCatalogAccessor : ICatalogAccessor
     {

@@ -9,7 +9,7 @@ using Swick.Cache.Handlers;
 using System;
 using System.IO;
 
-namespace WWT
+namespace WWT.Caching
 {
     public static class WwtCachingExtensions
     {

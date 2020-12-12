@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace WWT.Providers
+namespace WWT.Imaging
 {
     public abstract class WcsImage
     {

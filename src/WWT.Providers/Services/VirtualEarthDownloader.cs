@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace WWT.Providers.Services
+namespace WWT.Providers
 {
     public class VirtualEarthDownloader : IVirtualEarthDownloader
     {

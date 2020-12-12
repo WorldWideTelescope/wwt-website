@@ -6,6 +6,8 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
+using WWT.Imaging;
+
 namespace WWT.Azure
 {
     public class AzureThumbnailAccessor : IThumbnailAccessor
