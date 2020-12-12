@@ -79,12 +79,12 @@ namespace WWTMVC5
                 options.DssTerapixelDir = ConfigurationManager.AppSettings["DssTerapixelDir"];
                 options.DSSTileCache = ConfigurationManager.AppSettings["DSSTileCache"];
                 options.DssToastPng = ConfigurationManager.AppSettings["DSSTOASTPNG"];
+                options.ExternalUrlMapText = ConfigurationManager.AppSettings["ExternalUrlMap"];
                 options.WWTDEMDir = ConfigurationManager.AppSettings["WWTDEMDir"];
                 options.WwtTilesDir = ConfigurationManager.AppSettings["WWTTilesDir"];
                 options.WwtGalexDir = ConfigurationManager.AppSettings["WWTGALEXDIR"];
                 options.WwtToursDBConnectionString = ConfigurationManager.AppSettings["WWTToursDBConnectionString"];
                 options.WwtTourCache = ConfigurationManager.AppSettings["WWTTOURCACHE"];
-
                 options.TourVersionCheckIntervalMinutes = int.TryParse(ConfigurationManager.AppSettings["TourVersionCheckIntervalMinutes"], out var min) ? min : 5;
                 options.LoginTracking = Convert.ToBoolean(ConfigurationManager.AppSettings["LoginTracking"]);
                 options.LoggingConn = ConfigurationManager.AppSettings["LoggingConn"];

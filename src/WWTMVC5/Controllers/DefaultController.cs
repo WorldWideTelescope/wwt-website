@@ -69,28 +69,6 @@ namespace WWTMVC5.Controllers
         [Route("LiveId/AuthenticateFromCode/{code}")]
         public async Task<ActionResult> AuthenticateFromCode(string code)
         {
-            if (Request.Headers.Get("host").Contains("localhost"))
-            {
-                SessionWrapper.Clear();
-
-                var refreshTokenCookie = Response.Cookies["refresh_token"];
-                var accessTokenCookie = Response.Cookies["access_token"];
-
-                if (refreshTokenCookie != null && !string.IsNullOrEmpty(refreshTokenCookie.Value))
-                {
-                    refreshTokenCookie.Expires = DateTime.Now.AddDays(-1);
-                    Response.Cookies.Add(refreshTokenCookie);
-                }
-
-                if (accessTokenCookie != null && !string.IsNullOrEmpty(accessTokenCookie.Value))
-                {
-                    accessTokenCookie.Expires = DateTime.Now.AddDays(-1);
-                    Response.Cookies.Add(accessTokenCookie);
-                }
-
-                return Redirect("/home");
-            }
-
             var user = await TryAuthenticateFromAuthCode(code);
             _baseModel.User = user;
             string url = Uri.UnescapeDataString(Request.QueryString["returnUrl"]).ToLower();

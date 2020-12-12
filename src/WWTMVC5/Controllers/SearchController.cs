@@ -81,37 +81,11 @@ namespace WWTMVC5.Controllers
             }
         }
 
-        ///// <summary>
-        ///// This returns the Search Result View depending on the selected search type
-        ///// </summary>
-        ///// <param name="searchText">search Text</param>
-        //[ChildActionOnly]
-        //public void RenderResults(string searchText)
-        //{
-        //    try
-        //    {
-        //        // It creates the prefix for id of links
-        //        SetSiteAnalyticsPrefix(HighlightType.None);
-
-        //        SearchViewModel searchQuery = new SearchViewModel();
-        //        searchQuery.ResultsPerPage = (int)SearchResultsPerPage.Ten;
-
-        //        searchQuery.Results = GetSearchResults(searchText, SelectedSearchType, 1, searchQuery);
-        //        PartialView("SearchResultView", searchQuery).ExecuteResult(this.ControllerContext);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        // Consume the exception and render rest of the views in the page.
-        //        // TODO: Log the exception?
-        //    }
-        //}
-
         /// <summary>
         /// This returns the Search Result View depending on the selected search type for Ajax calls
         /// </summary>
         /// <param name="searchText">search Text</param>
-        /// <param name="currentPage"></param>
-        
+        /// <param name="currentPage"></param>        
         [HttpPost]
         [Route("Search/RenderJson/{searchText}/{categories}/{contentTypes}/{currentPage}/{pageSize}")]
         public async Task<JsonResult> AjaxRenderResults(string searchText, string categories, string contentTypes, int currentPage, int pageSize)
@@ -126,8 +100,6 @@ namespace WWTMVC5.Controllers
                 contentTypes = null;
             }
             var searchQuery = new SearchViewModel {ResultsPerPage = pageSize,CategoryFilter = categories, ContentTypeFilter = contentTypes};
-            // It creates the prefix for id of links
-            SetSiteAnalyticsPrefix(HighlightType.None);
             SessionWrapper.Set<string>("SelectedSearchType", "basic");
             var results = await GetSearchResults(searchText, "basic", currentPage, searchQuery);
             return Json(results);

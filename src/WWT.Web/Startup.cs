@@ -48,13 +48,12 @@ namespace WWT.Web
             services.AddSingleton<ITelemetryInitializer, ExtraTelemetryInitializer>();
             services.AddApplicationInsightsTelemetryProcessor<WwtTelemetryProcessor>();
 
-            services.AddRequestProviders(options =>
-            {
-
-                options.WwtToursDBConnectionString = _configuration["WWTToursDBConnectionString"];
-            });
-
             services
+             .AddRequestProviders(options =>
+             {
+                 options.ExternalUrlMapText = _configuration["ExternalUrlMap"];
+                 options.WwtToursDBConnectionString = _configuration["WWTToursDBConnectionString"];
+             })
              .AddAzureServices(options =>
              {
                  options.StorageAccount = _configuration["AzurePlateFileStorageAccount"];

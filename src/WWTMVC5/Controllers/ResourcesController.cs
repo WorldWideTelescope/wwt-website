@@ -28,7 +28,6 @@ namespace WWTMVC5.Controllers
         private ICommunityService _communityService;
         private INotificationService _notificationService;
         private IProfileService _profileService;
-        private Dictionary<string, string> _baseHosts;
 
         #endregion Private Variables
 
@@ -48,25 +47,6 @@ namespace WWTMVC5.Controllers
             _notificationService = queueService;
             _profileService = profileService;
             _communityService = communityService;
-
-            // Constructing our service base-URLs. Needed since this server may
-            // be running behind a gateway such that its hostname is unrelated
-            // to what we want to expose. On the other hand, the way that Azure
-            // deployment slots (seem to) work, our staging and production apps
-            // have to share identical settings if we want to use its "swap"
-            // functionality -- so we can't just hardcode a single URL. So we
-            // have a variable that maps from HTTP host to base-URL, in the form
-            // "host1=http://url1,host2=http://url1".
-
-            var mapText = ConfigReader<string>.GetSetting("ServiceBaseHostMap");
-            _baseHosts = new Dictionary<string, string>();
-
-            foreach (var item in mapText.Split(',')) {
-                var pieces = item.Split(new char[] { '=' }, 2);
-                var authority = pieces[0].ToLower();
-                var baseHost = pieces[1];
-                _baseHosts[authority] = baseHost;
-            }
         }
 
         #endregion Constructor
@@ -121,8 +101,7 @@ namespace WWTMVC5.Controllers
                 _communityService.CreateCommunity(communityDetails);
 
                 // Send New user notification.
-                _notificationService.NotifyNewEntityRequest(profileDetails,
-                    HttpContext.Request.Url.GetServerLink());
+                _notificationService.NotifyNewEntityRequest(profileDetails, GetBaseUrl());
             }
             else
             {
@@ -352,7 +331,8 @@ namespace WWTMVC5.Controllers
         [Route("Resource/Service/Payload")]
         public FileStreamResult GetProfilePayload()
         {
-            var serviceBaseUri = ServiceBaseUri();
+            var svcUrl = ServiceBaseUrl();
+
             // If we are not doing Re-writes of Url, we need to set the thumbnails explicitly at all places
             var payloadDetails = PayloadDetailsExtensions.InitializePayload();
             payloadDetails.Thumbnail = RewriteThumbnailUrl(payloadDetails.Thumbnail, "defaultfolderwwtthumbnail");
@@ -369,28 +349,28 @@ namespace WWTMVC5.Controllers
             // Get My communities node.
             var myCommunities = PayloadDetailsExtensions.InitializePayload();
             myCommunities.Name = Resources.MyCommunitiesWWTLabel;
-            myCommunities.Url = string.Format(CultureInfo.InvariantCulture, "{0}/Communities", serviceBaseUri);
+            myCommunities.Url = string.Format(CultureInfo.InvariantCulture, "{0}Communities", svcUrl);
             myCommunities.Thumbnail = RewriteThumbnailUrl(myCommunities.Thumbnail, "defaultfolderwwtthumbnail");
             payloadDetails.Children.Add(myCommunities);
 
             // Get My contents node.
             var myContents = PayloadDetailsExtensions.InitializePayload();
             myContents.Name = Resources.MyContentsWWTLabel;
-            myContents.Url = string.Format(CultureInfo.InvariantCulture, "{0}/Contents", serviceBaseUri);
+            myContents.Url = string.Format(CultureInfo.InvariantCulture, "{0}Contents", svcUrl);
             myContents.Thumbnail = RewriteThumbnailUrl(myContents.Thumbnail, "defaultfolderwwtthumbnail");
             payloadDetails.Children.Add(myContents);
 
             // Get Browse EO node.
             var browseDetails = PayloadDetailsExtensions.InitializePayload();
             browseDetails.Name = Resources.BrowseWWTLabel;
-            browseDetails.Url = string.Format(CultureInfo.InvariantCulture, "{0}/Browse", serviceBaseUri);
+            browseDetails.Url = string.Format(CultureInfo.InvariantCulture, "{0}Browse", svcUrl);
             browseDetails.Thumbnail = RewriteThumbnailUrl(browseDetails.Thumbnail, "defaultfolderwwtthumbnail");
             payloadDetails.Children.Add(browseDetails);
 
             // TODO: Get Search EO node.
             var searchEoLink = new Place();
             searchEoLink.Name = Resources.SearchWWTLabel;
-            searchEoLink.Url = string.Format(CultureInfo.InvariantCulture, "{0}/Community/index", BaseUri());
+            searchEoLink.Url = GetBaseUrl() + "Community/index";
             searchEoLink.Permission = Permission.Reader;
             searchEoLink.Thumbnail = RewriteThumbnailUrl(searchEoLink.Thumbnail, "searchwwtthumbnail");
 
@@ -402,7 +382,7 @@ namespace WWTMVC5.Controllers
             // TODO: Get Help node.
             var helpLink = new Place();
             helpLink.Name = Resources.HelpWWTLabel;
-            helpLink.Url = string.Format(CultureInfo.InvariantCulture, "{0}/connect/", BaseUri());
+            helpLink.Url = GetBaseUrl() + "connect/";
             helpLink.Permission = Permission.Reader;
             helpLink.Thumbnail = RewriteThumbnailUrl(helpLink.Thumbnail, "helpwwtthumbnail");
 
@@ -583,8 +563,8 @@ namespace WWTMVC5.Controllers
         [Route("Resource/Service/Browse")]
         public FileStreamResult GetBrowsePayload()
         {
-            var baseUri = BaseUri();
-            var serviceUri = ServiceBaseUri();
+            var svcUrl = ServiceBaseUrl();
+
             var payloadDetails = PayloadDetailsExtensions.InitializePayload();
             payloadDetails.Name = "Browse";
             payloadDetails.Thumbnail = RewriteThumbnailUrl(payloadDetails.Thumbnail, "defaultfolderwwtthumbnail");
@@ -592,42 +572,42 @@ namespace WWTMVC5.Controllers
             // Get Latest Content.
             var latestContent = PayloadDetailsExtensions.InitializePayload();
             latestContent.Name = "Latest Content";
-            latestContent.Url = string.Format(CultureInfo.InvariantCulture, "{0}/Browse/LatestContent", serviceUri);
+            latestContent.Url = string.Format(CultureInfo.InvariantCulture, "{0}Browse/LatestContent", svcUrl);
             latestContent.Thumbnail = RewriteThumbnailUrl(latestContent.Thumbnail, "defaultfolderwwtthumbnail");
             payloadDetails.Children.Add(latestContent);
 
             // Get Top Rated Content.
             var topRatedContent = PayloadDetailsExtensions.InitializePayload();
             topRatedContent.Name = "Top Rated Content";
-            topRatedContent.Url = string.Format(CultureInfo.InvariantCulture, "{0}/Browse/TopRatedContent", serviceUri);
+            topRatedContent.Url = string.Format(CultureInfo.InvariantCulture, "{0}Browse/TopRatedContent", svcUrl);
             topRatedContent.Thumbnail = RewriteThumbnailUrl(topRatedContent.Thumbnail, "defaultfolderwwtthumbnail");
             payloadDetails.Children.Add(topRatedContent);
 
             // Get Top Downloaded Content
             var topDownloadedContent = PayloadDetailsExtensions.InitializePayload();
             topDownloadedContent.Name = "Most Downloaded Content";
-            topDownloadedContent.Url = string.Format(CultureInfo.InvariantCulture, "{0}/Browse/MostDownloadedContent", serviceUri);
+            topDownloadedContent.Url = string.Format(CultureInfo.InvariantCulture, "{0}Browse/MostDownloadedContent", svcUrl);
             topDownloadedContent.Thumbnail = RewriteThumbnailUrl(topDownloadedContent.Thumbnail, "defaultfolderwwtthumbnail");
             payloadDetails.Children.Add(topDownloadedContent);
 
             // Get Latest Community.
             var latestCommunity = PayloadDetailsExtensions.InitializePayload();
             latestCommunity.Name = "Latest Communities";
-            latestCommunity.Url = string.Format(CultureInfo.InvariantCulture, "{0}/Browse/LatestCommunity", serviceUri);
+            latestCommunity.Url = string.Format(CultureInfo.InvariantCulture, "{0}Browse/LatestCommunity", svcUrl);
             latestCommunity.Thumbnail = RewriteThumbnailUrl(latestCommunity.Thumbnail, "defaultfolderwwtthumbnail");
             payloadDetails.Children.Add(latestCommunity);
 
             // Get Top Rated Community.
             var topRatedCommunity = PayloadDetailsExtensions.InitializePayload();
             topRatedCommunity.Name = "Top Rated Communities";
-            topRatedCommunity.Url = string.Format(CultureInfo.InvariantCulture, "{0}/Browse/TopRatedCommunity", serviceUri);
+            topRatedCommunity.Url = string.Format(CultureInfo.InvariantCulture, "{0}Browse/TopRatedCommunity", svcUrl);
             topRatedCommunity.Thumbnail = RewriteThumbnailUrl(topRatedCommunity.Thumbnail, "defaultfolderwwtthumbnail");
             payloadDetails.Children.Add(topRatedCommunity);
 
             // Get Categories.
             var categories = PayloadDetailsExtensions.InitializePayload();
             categories.Name = "Categories";
-            categories.Url = string.Format(CultureInfo.InvariantCulture, "{0}/Browse/Categories", serviceUri);
+            categories.Url = string.Format(CultureInfo.InvariantCulture, "{0}Browse/Categories", svcUrl);
             categories.Thumbnail = RewriteThumbnailUrl(categories.Thumbnail, "defaultfolderwwtthumbnail");
             payloadDetails.Children.Add(categories);
 
@@ -693,11 +673,12 @@ namespace WWTMVC5.Controllers
             payloadDetails.Permission = Permission.Reader;
             payloadDetails.SetValuesFrom(categories);
 
-            var baseUri = BaseUri();
+            var svcUrl = ServiceBaseUrl();
+
             foreach (var childCategory in payloadDetails.Children)
             {
                 childCategory.Thumbnail = RewriteThumbnailUrl(childCategory.Thumbnail, childCategory.Id.ToEnum<string, CategoryType>(CategoryType.GeneralInterest).ToString().ToLowerInvariant() + "wwtthumbnail");
-                childCategory.Url = string.Format(CultureInfo.InvariantCulture, "{0}/Resource/Service/Browse/Category/{1}", baseUri, childCategory.Id);
+                childCategory.Url = svcUrl + "Browse/Category/" + childCategory.Id;
             }
             var resultStream = GetOutputStream(payloadDetails);
             return new FileStreamResult(resultStream, Response.ContentType);
@@ -718,25 +699,9 @@ namespace WWTMVC5.Controllers
 
         #endregion
 
-        private string GetExposedHostName()
+        protected string ServiceBaseUrl()
         {
-            var host = Request.Url.Authority.ToLower();
-
-            if (_baseHosts.ContainsKey(host)) {
-                return _baseHosts[host];
-            }
-
-            return host;
-        }
-
-        protected string BaseUri()
-        {
-            return string.Format("{0}://{1}", Request.Url.Scheme, GetExposedHostName());
-        }
-
-        protected string ServiceBaseUri()
-        {
-            return string.Format("{0}://{1}/Resource/Service", Request.Url.Scheme, GetExposedHostName());
+            return GetBaseUrl() + "Resource/Service/";
         }
 
         #region Private static methods
@@ -750,7 +715,7 @@ namespace WWTMVC5.Controllers
 
         private void RewritePayloadUrls(PayloadDetails payloadDetails, bool hasChildCommunities)
         {
-            var baseUri = BaseUri();
+            var baseUrl = GetBaseUrl();
 
             if (payloadDetails.CommunityType == CommunityTypes.Community)
             {
@@ -773,7 +738,7 @@ namespace WWTMVC5.Controllers
 
                 place.Url = place.FileType == ContentTypes.Link
                     ? place.ContentLink
-                    : string.Format(CultureInfo.InvariantCulture, "{0}/File/Download/{1}/{2}/{3}/{4}", baseUri,
+                    : string.Format(CultureInfo.InvariantCulture, "{0}File/Download/{1}/{2}/{3}/{4}", baseUrl,
                         place.ContentAzureID, Uri.EscapeDataString(place.Name.Replace("&", "and")), fileExt,
                         fileExt == "wtml" ? "wwtfull=true":string.Empty);
             }
@@ -785,14 +750,14 @@ namespace WWTMVC5.Controllers
                 {
                     // Only for collection set the default thumbnail, not for folders.
                     childCommunity.Thumbnail = RewriteThumbnailUrl(childCommunity.Thumbnail, "defaultwtmlwwtthumbnail");
-                    childCommunity.Url = string.Format(CultureInfo.InvariantCulture, "{0}/File/Download/{1}/ChildCommunityData", baseUri, childCommunity.Id);
+                    childCommunity.Url = string.Format(CultureInfo.InvariantCulture, "{0}File/Download/{1}/ChildCommunityData", baseUrl, childCommunity.Id);
                 }
                 else
                 {
                     if (hasChildCommunities)
                     {
                         childCommunity.Thumbnail = RewriteThumbnailUrl(childCommunity.Thumbnail, "defaultcommunitywwtthumbnail");
-                        childCommunity.Url = string.Format(CultureInfo.InvariantCulture, "{0}/Community/{1}", ServiceBaseUri(), childCommunity.Id);
+                        childCommunity.Url = string.Format(CultureInfo.InvariantCulture, "{0}Community/{1}", ServiceBaseUrl(), childCommunity.Id);
                     }
                     else
                     {
@@ -801,7 +766,7 @@ namespace WWTMVC5.Controllers
                             "defaultcommunitywwtthumbnail" :
                             "defaultfolderwwtthumbnail");
 
-                        childCommunity.Url = string.Format(CultureInfo.InvariantCulture, "{0}/Folder/{1}", ServiceBaseUri(), childCommunity.Id);
+                        childCommunity.Url = string.Format(CultureInfo.InvariantCulture, "{0}Folder/{1}", ServiceBaseUrl(), childCommunity.Id);
                     }
                 }
             }
@@ -819,8 +784,8 @@ namespace WWTMVC5.Controllers
             foreach (var tour in payloadDetails.Tours)
             {
                 tour.ThumbnailUrl = RewriteThumbnailUrl(tour.ThumbnailUrl, "defaulttourswwtthumbnail");
-                tour.TourUrl = string.Format(CultureInfo.InvariantCulture, "{0}/File/Download/{1}/{2}/wtt/?wwtfull=true", baseUri, tour.TourUrl, Uri.EscapeDataString(tour.Title.Replace("&", "and")));
-                tour.AuthorURL = string.Format(CultureInfo.InvariantCulture, "{0}/Profile/Index/{1}", baseUri, tour.AuthorURL);
+                tour.TourUrl = string.Format(CultureInfo.InvariantCulture, "{0}File/Download/{1}/{2}/wtt/?wwtfull=true", baseUrl, tour.TourUrl, Uri.EscapeDataString(tour.Title.Replace("&", "and")));
+                tour.AuthorURL = string.Format(CultureInfo.InvariantCulture, "{0}Profile/Index/{1}", baseUrl, tour.AuthorURL);
 
                 // Get profile picture ID using AuthorImageUrl which is CreatedByID value.
                 var firstOrDefault = profileDetails.FirstOrDefault(item => item.ID.ToString(CultureInfo.InvariantCulture) == tour.AuthorImageUrl);
@@ -829,7 +794,7 @@ namespace WWTMVC5.Controllers
                     var pictureId = firstOrDefault.PictureID;
                     if (pictureId.HasValue)
                     {
-                        tour.AuthorImageUrl = string.Format(CultureInfo.InvariantCulture, "{0}/File/Thumbnail/{1}", baseUri, pictureId.Value);
+                        tour.AuthorImageUrl = string.Format(CultureInfo.InvariantCulture, "{0}File/Thumbnail/{1}", baseUrl, pictureId.Value);
                     }
                     else
                     {
@@ -854,11 +819,11 @@ namespace WWTMVC5.Controllers
         {
             if (!string.IsNullOrWhiteSpace(thumbnail))
             {
-                thumbnail = string.Format(CultureInfo.InvariantCulture, "{0}/File/Thumbnail/{1}", BaseUri(), thumbnail);
+                thumbnail = string.Format(CultureInfo.InvariantCulture, "{0}File/Thumbnail/{1}", GetBaseUrl(), thumbnail);
             }
             else if (!string.IsNullOrWhiteSpace(defaultImage))
             {
-                thumbnail = string.Format(CultureInfo.InvariantCulture, "{0}/Content/Images/{1}.png", BaseUri(), defaultImage);
+                thumbnail = string.Format(CultureInfo.InvariantCulture, "{0}Content/Images/{1}.png", GetBaseUrl(), defaultImage);
             }
 
             return thumbnail;
@@ -870,14 +835,14 @@ namespace WWTMVC5.Controllers
         /// <param name="payloadDetails">PayloadDetails object</param>
         private void AddTourFolders(PayloadDetails payloadDetails)
         {
-            var baseUri = ServiceBaseUri();
+            var svcUrl = ServiceBaseUrl();
             var allTours = PayloadDetailsExtensions.InitializePayload();
             allTours.Name = "All Tours";
-            allTours.Url = string.Format(CultureInfo.InvariantCulture, "{0}/Community/{1}/Tours", baseUri, payloadDetails.Id);
+            allTours.Url = string.Format(CultureInfo.InvariantCulture, "{0}Community/{1}/Tours", svcUrl, payloadDetails.Id);
 
             var latestTours = PayloadDetailsExtensions.InitializePayload();
             latestTours.Name = "Latest";
-            latestTours.Url = string.Format(CultureInfo.InvariantCulture, "{0}/Community/{1}/Latest", baseUri, payloadDetails.Id);
+            latestTours.Url = string.Format(CultureInfo.InvariantCulture, "{0}Community/{1}/Latest", svcUrl, payloadDetails.Id);
 
             // Insert tour folders at the start
             payloadDetails.Children.Insert(0, latestTours);
@@ -933,7 +898,7 @@ namespace WWTMVC5.Controllers
             if (contentId > 0)
             {
                 var notificationService = DependencyResolver.Current.GetService(typeof(INotificationService)) as INotificationService;
-                notificationService.NotifyNewEntityRequest(content, BaseUri() + "/");
+                notificationService.NotifyNewEntityRequest(content, GetBaseUrl());
             }
 
             return contentId;
@@ -969,7 +934,7 @@ namespace WWTMVC5.Controllers
             if (contentId > 0)
             {
                 var notificationService = DependencyResolver.Current.GetService(typeof(INotificationService)) as INotificationService;
-                notificationService.NotifyNewEntityRequest(content, BaseUri() + "/");
+                notificationService.NotifyNewEntityRequest(content, GetBaseUrl());
             }
 
             return contentId;
@@ -1002,7 +967,7 @@ namespace WWTMVC5.Controllers
             if (contentId > 0)
             {
                 var notificationService = DependencyResolver.Current.GetService(typeof(INotificationService)) as INotificationService;
-                notificationService.NotifyNewEntityRequest(content, BaseUri() + "/");
+                notificationService.NotifyNewEntityRequest(content, GetBaseUrl());
             }
 
             return contentId;

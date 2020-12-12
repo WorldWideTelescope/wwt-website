@@ -82,10 +82,6 @@ namespace WWTMVC5.Controllers
             var entityHighlightFilter = new EntityHighlightFilter(highlightType, categoryType, entityId, contentType);
             var highlightEntities = await GetHighlightEntities(entityType, entityHighlightFilter, pageDetails);
 
-            
-
-            // It creates the prefix for id of links
-            SetSiteAnalyticsPrefix(highlightType);
             var result = new JsonResult
             {
                 Data = new

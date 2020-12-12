@@ -92,10 +92,6 @@ namespace WWTMVC5.Controllers
             var contentViewModel = new ContentViewModel();
             contentViewModel.SetValuesFrom(contentDetail);
 
-
-            // It creates the prefix for id of links
-            SetSiteAnalyticsPrefix(HighlightType.None);
-
             return new JsonResult { 
                 Data = contentViewModel,
                 JsonRequestBehavior=JsonRequestBehavior.AllowGet

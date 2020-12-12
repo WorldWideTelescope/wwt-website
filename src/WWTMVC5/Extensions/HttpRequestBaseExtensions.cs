@@ -17,21 +17,6 @@ namespace WWTMVC5.Extensions
     public static class HttpRequestBaseExtensions
     {
         /// <summary>
-        /// Get's the root path for the application
-        /// </summary>
-        /// <param name="thisObject">HttpRequestBase object</param>
-        /// <returns>root path for Http request</returns>
-        public static string GetRootPath(this HttpRequestBase thisObject)
-        {
-            if (thisObject != null && thisObject.Url != null)
-            {
-                return thisObject.Url.Scheme + "://" + thisObject.Url.Authority;
-            }
-
-            return string.Empty;
-        }
-
-        /// <summary>
         /// Gets the identity PUID for the user
         /// </summary>
         /// <param name="thisObject">HttpContextBase object</param>
@@ -77,7 +62,7 @@ namespace WWTMVC5.Extensions
         /// <returns>user identity name</returns>
         public static string GetIdentityProfileName(this HttpContextBase thisObject)
         {
-            return SessionWrapper.Get<string>("CurrentUserProfileName")??"";
+            return SessionWrapper.Get<string>("CurrentUserProfileName") ?? "";
         }
     }
 }

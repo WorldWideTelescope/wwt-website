@@ -179,9 +179,6 @@ namespace WWTMVC5.WebServices
 
             meObj = JsonConvert.DeserializeAnonymousType(responseString, meObj);
             return meObj.Id;
-            // This method will not work - returns a 32 character user id
-            // var userId = _liveAuthClient.GetUserId(authToken);//
-            // return userId;
         }
 
         [WebGet]
@@ -192,7 +189,7 @@ namespace WWTMVC5.WebServices
             var httpClient = new HttpClient();
             var response = await httpClient.GetAsync(meUri);
             var responseString = await response.Content.ReadAsStringAsync();
-            return (dynamic)JsonConvert.DeserializeObject(responseString);
+            return (dynamic) JsonConvert.DeserializeObject(responseString);
         }
 
         public string GetLogoutUrl()

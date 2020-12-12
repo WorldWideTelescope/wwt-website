@@ -456,12 +456,12 @@
 
                         item.FileSize = !item.Size ? 'n/a' : uiHelper.getFileSizeString(item.Size);
                         if (item.ContentType === 1) {
-                            item.webclientUrl = 'http://' + location.host + '/webclient?tourUrl=' +
+                            item.webclientUrl = 'http://' + location.host + '/webclient/?tourUrl=' +
                                 encodeURIComponent('http://' + location.host + item.DownloadUrl);
                         } else if (item.ContentType === 0) { //TODO: Find out why type can be "all"
                             item.ContentType = 7;
                         } else if (item.ContentType === 2) {
-                            item.webclientUrl = 'http://' + location.host + '/webclient?wtml=' +
+                            item.webclientUrl = 'http://' + location.host + '/webclient/?wtml=' +
                                 encodeURIComponent('http://' + location.host + item.DownloadUrl);
                         }
                         item.ContentTypeName = types.contentValues.getName(item.ContentType);

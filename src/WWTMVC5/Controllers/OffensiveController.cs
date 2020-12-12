@@ -116,17 +116,17 @@ namespace WWTMVC5.Controllers
                     FlaggedAs = details.ReportEntityType.ToString(),
                     UserID = details.ReportedByID,
                     UserName = details.ReportedBy,
-                    UserLink = string.Format(CultureInfo.InvariantCulture, "{0}Profile/Index/{1}", HttpContext.Request.Url.GetServerLink(), details.ReportedByID),
+                    UserLink = string.Format(CultureInfo.InvariantCulture, "{0}Profile/Index/{1}", GetBaseUrl(), details.ReportedByID),
                 };
 
                 switch (entityType)
                 {
                     case EntityType.Community:
                     case EntityType.Folder:
-                        request.Link = string.Format(CultureInfo.InvariantCulture, "{0}Community/Index/{1}", HttpContext.Request.Url.GetServerLink(), details.ReportEntityID);
+                        request.Link = string.Format(CultureInfo.InvariantCulture, "{0}Community/Index/{1}", GetBaseUrl(), details.ReportEntityID);
                         break;
                     default:
-                        request.Link = string.Format(CultureInfo.InvariantCulture, "{0}{1}/Index/{2}", HttpContext.Request.Url.GetServerLink(), entityType.ToString(), details.ReportEntityID);
+                        request.Link = string.Format(CultureInfo.InvariantCulture, "{0}{1}/Index/{2}", GetBaseUrl(), entityType.ToString(), details.ReportEntityID);
                         break;
                 }
 
