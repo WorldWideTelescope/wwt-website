@@ -17,6 +17,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Live;
 using Newtonsoft.Json;
 using Unity;
+using WWT.Providers;
 
 using WWTMVC5.Extensions;
 using WWTMVC5.Models;
@@ -32,6 +33,7 @@ namespace WWTMVC5.Controllers
     public class ControllerBase : Controller
     {
         private readonly ILogger<ControllerBase> _logger;
+        protected readonly IExternalUrlInfo _urlInfo;
 
         #region Constructor
 
@@ -43,6 +45,7 @@ namespace WWTMVC5.Controllers
         {
             ProfileService = profileService;
             _logger = UnityConfig.Container.Resolve<ILogger<ControllerBase>>();
+            _urlInfo = UnityConfig.Container.Resolve<IExternalUrlInfo>();
         }
 
         #endregion
