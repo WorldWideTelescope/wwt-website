@@ -84,26 +84,26 @@ namespace WWTMVC5.Controllers
             }
             var communityDetails = await _communityService.GetCommunityDetails(id.Value, CurrentUserId, true, true);
             var permissionDetails = GetUserPermissionDetails(id.Value, PermissionsTab.Users, 0);
-            
+
             if (edit == true)
             {
                 var communityInputViewModel = new CommunityInputViewModel();
                 Mapper.Map(communityDetails, communityInputViewModel);
                 var json = new
                 {
-                    community = communityInputViewModel, 
+                    community = communityInputViewModel,
                     permission = permissionDetails
                 };
                 return Json(json, JsonRequestBehavior.AllowGet);
             }
             var communityViewModel = new CommunityViewModel();
             Mapper.Map(communityDetails, communityViewModel);
-            
+
             if (communityViewModel.AccessType != AccessType.Private || communityViewModel.UserPermission >= Permission.Reader)
             {
                 var json = new
                 {
-                    community = communityViewModel, 
+                    community = communityViewModel,
                     permission = permissionDetails
                 };
                 return Json(json,JsonRequestBehavior.AllowGet);
@@ -114,7 +114,7 @@ namespace WWTMVC5.Controllers
                 Data = new { communityViewModel.Name, communityViewModel.Id, error = "insufficient permission" },
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
-            
+
         }
 
         [HttpGet]
@@ -231,24 +231,24 @@ namespace WWTMVC5.Controllers
             toursBlob.DownloadToStream(Response.OutputStream);
             return new EmptyResult();
         }
-    
+
         [HttpGet]
         [AllowAnonymous]
         [Route("Community/Rebuild/Tours/{webclient=false}")]
         public async Task<string> BuildPublicTourXml(bool webclient)
         {
-            
+
             var adminCommunityId = 596915;
             var adminId = 184331;
             var tourDetailList = await _communityService.GetCommunityContents(adminCommunityId, adminId);
             var tourContentList = new List<ContentInputViewModel>();
             foreach (var item in tourDetailList)
             {
-                
+
                 var contentInputViewModel = new ContentInputViewModel();
                 contentInputViewModel.SetValuesFrom(item);
                 tourContentList.Add(contentInputViewModel);
-                
+
             }
             var children = await _communityService.GetChildCommunities(adminCommunityId, adminId);
             var folders = new List<CommunityViewModel>();
@@ -267,7 +267,7 @@ namespace WWTMVC5.Controllers
                     xmlWriter.WriteStartElement("Folder");
                     foreach (var folder in folders)
                     {
-                        
+
                         var tourIds = folder.Description != null ? folder.Description.Split(',') : new string[0];
                         var toursInFolder = false;
                         foreach (var tourId in tourIds)
@@ -353,7 +353,7 @@ namespace WWTMVC5.Controllers
                         if (toursInFolder)
                             xmlWriter.WriteEndElement();
                     }
-                    
+
                     xmlWriter.WriteEndElement();
 
                     xmlWriter.Close();
@@ -363,7 +363,7 @@ namespace WWTMVC5.Controllers
                 var storageAccount =
                     Microsoft.WindowsAzure.Storage.CloudStorageAccount.Parse(
                         ConfigReader<string>.GetSetting("WWTWebBlobs"));
-                
+
                 var blobClient = storageAccount.CreateCloudBlobClient();
                 var cloudBlobContainer = blobClient.GetContainerReference("tours");
                 var toursBlob = cloudBlobContainer.GetBlobReferenceFromServer(webclient? "webclienttours.wtml" : "alltours.wtml");
@@ -374,7 +374,7 @@ namespace WWTMVC5.Controllers
             }
         }
 
-        
+
 
         /// <summary>
         /// Controller action which inserts a new community to the Layerscape database.
@@ -405,18 +405,18 @@ namespace WWTMVC5.Controllers
 
                 return new JsonResult { Data = new { ID = communityDetails.ID } };
             }
-            
+
             // In case of any validation error stay in the same page.
             return new JsonResult { Data = false };
         }
 
-        
+
 
         /// <summary>
         /// Controller action which updates the details in Layerscape database about the community which is being edited.
         /// </summary>
         /// <param name="community">ViewModel holding the details about the community</param>
-        
+
         /// <returns>Returns a redirection view</returns>
         [HttpPost]
         [Route("Community/Edit/Save")]
@@ -446,7 +446,7 @@ namespace WWTMVC5.Controllers
             }
 
             return Json("error: community not saved");
-            
+
         }
 
         /// <summary>
@@ -471,13 +471,13 @@ namespace WWTMVC5.Controllers
 
                     return status.Succeeded;
                     // TODO: Need to add failure functionality.
-                    
+
                 }
             }
 
             return false;
         }
-        
+
         /// <summary>
         /// It returns the permission list view on the basis of user type
         /// </summary>
@@ -534,7 +534,7 @@ namespace WWTMVC5.Controllers
             return Json(operationStatus.Succeeded);
         }
 
-        
+
         /// <summary>
         /// Return success / failure
         /// </summary>
@@ -578,7 +578,7 @@ namespace WWTMVC5.Controllers
         #region Private Methods
 
         /// <summary>
-        /// Rewrites the thumbnail URL for the payload XML. In case if the thumbnail is provided, proper URL to access the thumbnail 
+        /// Rewrites the thumbnail URL for the payload XML. In case if the thumbnail is provided, proper URL to access the thumbnail
         /// using the File controller and thumbnail action will be formed and returned.
         /// In case the thumbnail is not provided and default image is provided, then default thumbnail URL will be formed and returned.
         /// In other cases (both thumbnail and default image is not provided), same thumbnail will be returned.
@@ -590,11 +590,11 @@ namespace WWTMVC5.Controllers
         {
             if (!string.IsNullOrWhiteSpace(thumbnail))
             {
-                thumbnail = Request.GetRootPath() + "/ResourceService/Thumbnail/" + thumbnail; 
+                thumbnail = GetBaseUrl() + "ResourceService/Thumbnail/" + thumbnail;
             }
             else if (!string.IsNullOrWhiteSpace(defaultImage))
             {
-                thumbnail = Request.GetRootPath() + Url.Content(string.Format(CultureInfo.InvariantCulture, "~/Content/Images/{0}.png", defaultImage));
+                thumbnail = GetBaseUrl() + $"Content/Images/{defaulImage}.png";
             }
 
             return thumbnail;
@@ -892,13 +892,13 @@ namespace WWTMVC5.Controllers
 
             //try
             {
-               
+
 
 
                 string data;
                 XmlDocument doc = new XmlDocument();
                 int headerSize = 0;
-                
+
 
                     byte[] buffer = new byte[256];
                     fs.Read(buffer, 0, 255);
@@ -956,7 +956,7 @@ namespace WWTMVC5.Controllers
                     }
 
 
-                   
+
             }
             //catch
             {
