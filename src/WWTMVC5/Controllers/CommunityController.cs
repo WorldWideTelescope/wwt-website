@@ -594,7 +594,7 @@ namespace WWTMVC5.Controllers
             }
             else if (!string.IsNullOrWhiteSpace(defaultImage))
             {
-                thumbnail = GetBaseUrl() + $"Content/Images/{defaulImage}.png";
+                thumbnail = GetBaseUrl() + $"Content/Images/{defaultImage}.png";
             }
 
             return thumbnail;
