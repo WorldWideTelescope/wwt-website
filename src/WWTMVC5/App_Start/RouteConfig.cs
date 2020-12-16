@@ -16,12 +16,6 @@ namespace WWTMVC5
             // Ignore wwtweb/ as this is handled by WwtWebHttpHandler
             routes.IgnoreRoute("{*wwtaspx}", new { wwtaspx = @"wwtweb/.*" });
 
-            routes.MapRoute(
-                "ExperienceIt",
-                "experienceIt/experienceit.aspx",
-                new { controller = "Default", action = "Index" }
-            );
-
             routes.MapMvcAttributeRoutes();
         }
     }
