@@ -47,6 +47,7 @@ namespace WWTMVC5.Controllers
         private INotificationService _notificationService;
 
         private ICommunityService _communityService;
+        private string _oldStaticContentBaseUrl;
 
         #endregion Private Variables
 
@@ -63,6 +64,7 @@ namespace WWTMVC5.Controllers
             _contentService = contentService;
             _notificationService = queueService;
             _communityService = communityService;
+            _oldStaticContentBaseUrl = ConfigReader<string>.GetSetting("OldStaticContentBaseUrl");
         }
 
         #endregion Constructor
@@ -92,7 +94,7 @@ namespace WWTMVC5.Controllers
             var contentViewModel = new ContentViewModel();
             contentViewModel.SetValuesFrom(contentDetail);
 
-            return new JsonResult { 
+            return new JsonResult {
                 Data = contentViewModel,
                 JsonRequestBehavior=JsonRequestBehavior.AllowGet
             };
@@ -190,10 +192,10 @@ namespace WWTMVC5.Controllers
             contentInputViewModel.SetValuesFrom(contentDetails);
 
             // Set Thumbnail URL.
-            contentInputViewModel.ThumbnailLink = contentInputViewModel.ThumbnailID != Guid.Empty ? 
-                Url.Action("Thumbnail", "File", new { id = contentInputViewModel.ThumbnailID }) : 
+            contentInputViewModel.ThumbnailLink = contentInputViewModel.ThumbnailID != Guid.Empty ?
+                Url.Action("Thumbnail", "File", new { id = contentInputViewModel.ThumbnailID }) :
                 Url.Content("~/content/images/default" + Enum.GetName(typeof(ContentTypes), contentDetails.ContentData.ContentType) + "thumbnail.png");
-            
+
             return new JsonResult{Data=contentInputViewModel,JsonRequestBehavior = JsonRequestBehavior.AllowGet};
         }
 
@@ -228,14 +230,14 @@ namespace WWTMVC5.Controllers
                 return Json("error: User not logged in");
             }
             return Json("error: Could not save changes to content");
-            
+
         }
 
         /// <summary>
         /// Deletes the specified content from the  database.
         /// </summary>
         /// <param name="id">Id of the content to be deleted.</param>
-        
+
         /// <returns>Returns status</returns>
         [HttpPost]
         [Route("Content/Delete/{id}")]
@@ -252,7 +254,7 @@ namespace WWTMVC5.Controllers
 
                 // TODO: Need to add failure functionality.
                 //if (!status.Succeeded)
-                
+
             }
             return new JsonResult{Data=status};
         }
@@ -275,7 +277,7 @@ namespace WWTMVC5.Controllers
             if (contentFile != null)
             {
                 // Get File details.
-                
+
                 fileDetail.SetValuesFrom(contentFile);
 
                 contentDataViewModel.ContentDataID = fileDetail.AzureID;
@@ -290,10 +292,10 @@ namespace WWTMVC5.Controllers
 
                 contentDataViewModel.ThumbnailLink = Url.Content("~/content/images/default" + Path.GetExtension(contentDataViewModel.ContentFileName).GetContentTypes().ToString().ToLower() + "thumbnail.png");
 
-                // Upload associated file in the temporary container. Once the user publishes the content 
+                // Upload associated file in the temporary container. Once the user publishes the content
                 // then we will move the file from temporary container to the actual container.
                 // TODO: Need to have clean up task which will delete all unused file from temporary container.
-               
+
 
                 // Only for tour files, properties of the tour like title, description, author and thumbnail should be taken.
                 if (Constants.TourFileExtension.Equals(Path.GetExtension(contentFile.FileName), StringComparison.OrdinalIgnoreCase))
@@ -310,7 +312,7 @@ namespace WWTMVC5.Controllers
                         contentDataViewModel.TourDescription = tourDoc.GetAttributeValue("Tour", "Descirption");
                         contentDataViewModel.TourDistributedBy = tourDoc.GetAttributeValue("Tour", "Author");
                         contentDataViewModel.TourLength = tourDoc.GetAttributeValue("Tour", "RunTime");
-                        
+
                     }
                 }
                 else if (Constants.CollectionFileExtension.Equals(Path.GetExtension(contentFile.FileName), StringComparison.OrdinalIgnoreCase))
@@ -326,7 +328,7 @@ namespace WWTMVC5.Controllers
                     }
                 }
             }
-            
+
 
             _contentService.UploadTemporaryFile(fileDetail);
 
@@ -386,7 +388,7 @@ namespace WWTMVC5.Controllers
                     fileDetail.AzureID,
                     associatedFile.ContentType);
 
-                // Upload associated file in the temporary container. Once the user publishes the content 
+                // Upload associated file in the temporary container. Once the user publishes the content
                 //  then we will move the file from temporary container to the actual container.
                 // TODO: Need to have clean up task which will delete all unused file from temporary container.
                 _contentService.UploadTemporaryFile(fileDetail);
@@ -418,7 +420,19 @@ namespace WWTMVC5.Controllers
             catch (Exception){}
             return false;
         }
-        
+
         #endregion Action Methods
+
+        // Catch-all route to redirect requests for old static-files content
+        // that was intermixed into this URL prefix. We've uploaded such files
+        // to a blob storage area.
+        [HttpGet]
+        [Route("Content/{*otherStuff}", Order = 999)]
+        public ActionResult CommunityNoneOfTheAbove(string otherStuff)
+        {
+            var redir = new UriBuilder(_oldStaticContentBaseUrl);
+            redir.Path += otherStuff;
+            return Redirect(redir.ToString());
+        }
     }
 }
