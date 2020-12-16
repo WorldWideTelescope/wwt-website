@@ -47,7 +47,6 @@ namespace WWTMVC5.Controllers
         private INotificationService _notificationService;
 
         private ICommunityService _communityService;
-        private string _oldStaticContentBaseUrl;
 
         #endregion Private Variables
 
@@ -64,7 +63,6 @@ namespace WWTMVC5.Controllers
             _contentService = contentService;
             _notificationService = queueService;
             _communityService = communityService;
-            _oldStaticContentBaseUrl = ConfigReader<string>.GetSetting("OldStaticContentBaseUrl");
         }
 
         #endregion Constructor
@@ -422,17 +420,5 @@ namespace WWTMVC5.Controllers
         }
 
         #endregion Action Methods
-
-        // Catch-all route to redirect requests for old static-files content
-        // that was intermixed into this URL prefix. We've uploaded such files
-        // to a blob storage area.
-        [HttpGet]
-        [Route("Content/{*otherStuff}", Order = 999)]
-        public ActionResult CommunityNoneOfTheAbove(string otherStuff)
-        {
-            var redir = new UriBuilder(_oldStaticContentBaseUrl);
-            redir.Path += otherStuff;
-            return Redirect(redir.ToString());
-        }
     }
 }
