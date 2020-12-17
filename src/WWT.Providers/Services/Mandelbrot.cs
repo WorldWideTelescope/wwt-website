@@ -76,7 +76,7 @@ namespace WWT.Providers
         {
             var c = new Color[256];
 
-            using (var stream = typeof(MandelProvider).Assembly.GetManifestResourceStream(typeof(Mandelbrot), "colors.map"))
+            using (var stream = typeof(Mandelbrot).Assembly.GetManifestResourceStream(typeof(Mandelbrot), "Services.colors.map"))
             using (var sr = new StreamReader(stream))
             {
                 var lines = new List<string>();
