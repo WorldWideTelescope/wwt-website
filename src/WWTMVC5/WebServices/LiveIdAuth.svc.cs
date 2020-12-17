@@ -66,14 +66,16 @@ namespace WWTMVC5.WebServices
         public async Task<LiveLoginResult> Authenticate()
         {
             LiveLoginResult result = null;
-            try
-            {
-                var redir = GetRedirectUrl();
-                result = await _liveAuthClient.InitializeWebSessionAsync(new HttpContextWrapper(HttpContext.Current), redir, new[] { "wl.emails", "wl.signin" });
 
+            try {
+                result = await _liveAuthClient.InitializeWebSessionAsync(
+                    new HttpContextWrapper(HttpContext.Current),
+                    GetRedirectUrl(),
+                    new[] { "wl.emails", "wl.signin" }
+                );
                 _session = result.Session;
-            }
-            catch (LiveAuthException) { }
+            } catch (LiveAuthException) { }
+
             return result;
         }
 
@@ -116,16 +118,6 @@ namespace WWTMVC5.WebServices
             HttpCookie accessCookie = new HttpCookie("access_token", json.access_token) { Expires = DateTime.MaxValue };
             HttpContext.Current.Response.Cookies.Add(accessCookie);
             return responseString;
-        }
-
-        private static byte[] CreatePostData<T>(T value)
-        {
-            var serializer = new DataContractJsonSerializer(typeof(T));
-            using (var stream = new MemoryStream())
-            {
-                serializer.WriteObject(stream, value);
-                return stream.ToArray();
-            }
         }
 
         public async Task<string> RefreshTokens()
