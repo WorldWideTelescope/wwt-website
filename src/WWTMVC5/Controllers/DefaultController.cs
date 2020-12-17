@@ -121,9 +121,9 @@ namespace WWTMVC5.Controllers
 
         [Route("")]
         [Route("Index")]
-        public async Task<ActionResult> RootIndexPage(string page)
+        public ActionResult RootIndexPage()
         {
-            return await ViewWithLogin("/", "~/Views/Index.cshtml");
+            return View("~/Views/Index.cshtml", _baseModel);
         }
 
         [Route("Community/{page=Index}")]
