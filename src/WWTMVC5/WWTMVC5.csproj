@@ -118,7 +118,6 @@
     <Compile Include="AutoMapperSettings.cs" />
     <Compile Include="ConfigReader.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\CommunityController.cs" />
     <Compile Include="Controllers\ContentController.cs" />
