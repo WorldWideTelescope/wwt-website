@@ -1,4 +1,3 @@
-#nullable disable
 
 using System;
 using System.Drawing;
@@ -13,7 +12,7 @@ namespace WWT.Providers
 {
     public class OctTileMapBuilder : IOctTileMapBuilder
     {
-        public Task<Stream> GetOctTileAsync(int level, int tileX, int tileY, bool enforceBoundary, CancellationToken token)
+        public Task<Stream?> GetOctTileAsync(int level, int tileX, int tileY, bool enforceBoundary, CancellationToken token)
         {
             var map = new OctTileMap(level, tileX, tileY);
 
@@ -24,7 +23,7 @@ namespace WWT.Providers
             {
                 if (map.raMin > 270 | map.decMax < -3 | map.raMax < 105 | map.decMin > 75)
                 {
-                    return null;
+                    return Task.FromResult<Stream?>(null);
                 }
             }
 
@@ -70,7 +69,7 @@ namespace WWT.Providers
 
             var result = bmpOutput.SaveToStream(ImageFormat.Png);
 
-            return Task.FromResult(result);
+            return Task.FromResult<Stream?>(result);
         }
     }
 }
