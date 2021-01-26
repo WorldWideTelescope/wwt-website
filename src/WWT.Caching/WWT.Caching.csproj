@@ -17,6 +17,9 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
     <PackageReference Include="Scrutor" Version="3.3.0" />
+	<!-- This must be referenced separately from the Microsoft.Extensions.Caching.StackExchangeRedis as that will pull in an older version
+	     that can have issues with connection retries. -->
+	<PackageReference Include="StackExchange.Redis" Version="2.2.4" />
     <PackageReference Include="Swick.Cache" Version="0.5.0" />
   </ItemGroup>
 
