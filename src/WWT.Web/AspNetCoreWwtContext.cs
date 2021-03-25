@@ -2,6 +2,11 @@
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.IO;
 using System.Threading;
@@ -13,19 +18,18 @@ namespace WWT.Web
     public class AspNetCoreWwtContext : IWwtContext, IRequest, IResponse, IHeaders, IParameters
     {
         private readonly HttpContext _ctx;
-        private readonly ICache _cache;
 
         public AspNetCoreWwtContext(HttpContext ctx, ICache cache)
         {
             _ctx = ctx;
-            _cache = cache;
+            Cache = cache;
         }
 
         string IParameters.this[string p] => _ctx.Request.Query[p];
 
         string IHeaders.this[string p] => _ctx.Request.Headers[p];
 
-        public ICache Cache => _cache;
+        public ICache Cache { get; }
 
         public IRequest Request => this;
 
@@ -86,5 +90,16 @@ namespace WWT.Web
         Task IResponse.WriteAsync(string message, CancellationToken token) => _ctx.Response.WriteAsync(message, token);
 
         void IResponse.Redirect(string redirectUri) => _ctx.Response.Redirect(redirectUri);
+
+        Task IResponse.WriteStreamAsync(Stream stream, string contentType)
+        {
+            var e = _ctx.RequestServices.GetRequiredService<IActionResultExecutor<FileStreamResult>>();
+            var route = _ctx.GetRouteData();
+            var actionContext = new ActionContext(_ctx, route, new ActionDescriptor());
+
+            var result = new FileStreamResult(stream, contentType) { EnableRangeProcessing = true };
+
+            return e.ExecuteAsync(actionContext, result);
+        }
     }
 }

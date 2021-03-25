@@ -13,10 +13,10 @@ namespace WWT.PlateFiles
     /// </summary>
     public class StreamSlice : Stream
     {
-        private Stream _baseStream;
-        private long _position;
-
+        private readonly long _offset;
         private readonly long _length;
+
+        private Stream _baseStream;
 
         /// <summary>
         /// Attempts to create a <see cref="StreamSlice"/>. Any exception is wrapped in
@@ -38,6 +38,7 @@ namespace WWT.PlateFiles
         {
             _baseStream = baseStream ?? throw new ArgumentNullException(nameof(baseStream));
             _length = length;
+            _offset = offset;
 
             if (!baseStream.CanRead)
             {
@@ -79,7 +80,7 @@ namespace WWT.PlateFiles
         private async ValueTask<int> ReadInternalAsync(byte[] buffer, int offset, int count, bool isAsync, CancellationToken cancellationToken)
         {
             CheckDisposed();
-            var remaining = _length - _position;
+            var remaining = _length - Position;
 
             if (remaining <= 0)
             {
@@ -94,8 +95,6 @@ namespace WWT.PlateFiles
             var read = isAsync
                 ? await _baseStream.ReadAsync(buffer, offset, count, cancellationToken)
                 : _baseStream.Read(buffer, offset, count);
-
-            _position += read;
 
             return read;
         }
@@ -140,7 +139,7 @@ namespace WWT.PlateFiles
             get
             {
                 CheckDisposed();
-                return false;
+                return _baseStream.CanSeek;
             }
         }
 
@@ -149,12 +148,27 @@ namespace WWT.PlateFiles
             get
             {
                 CheckDisposed();
-                return _position;
+                return _baseStream.Position - _offset;
             }
-            set => throw new NotSupportedException();
+            set => Seek(value, SeekOrigin.Begin);
         }
 
-        public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
+        public override long Seek(long offset, SeekOrigin origin)
+        {
+            CheckDisposed();
+
+            var basePosition = origin switch
+            {
+                SeekOrigin.Begin => offset + _offset,
+                SeekOrigin.Current => _baseStream.Position + offset,
+                SeekOrigin.End => _offset + _length - offset,
+                _ => throw new ArgumentOutOfRangeException(nameof(origin)),
+            };
+
+            _baseStream.Seek(basePosition, SeekOrigin.Begin);
+
+            return Position;
+        }
 
         public override void SetLength(long value) => throw new NotSupportedException();
 

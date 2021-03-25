@@ -35,13 +35,9 @@ namespace WWT.Providers
             }
             else if (level < 8)
             {
-                context.Response.ContentType = "image/png";
-
                 using (var s = await _plateTile.GetStreamAsync(_options.WwtTilesDir, "DSSTerraPixel.plate", level, tileX, tileY, token))
                 {
-                    await s.CopyToAsync(context.Response.OutputStream, token);
-                    context.Response.Flush();
-                    context.Response.End();
+                    await context.Response.WriteStreamAsync(s, "image/png");
                 }
             }
             else
@@ -54,15 +50,11 @@ namespace WWT.Providers
                 int X5 = tileX % powLev5Diff;
                 int Y5 = tileY % powLev5Diff;
 
-                context.Response.ContentType = "image/png";
-
                 string filename = $"DSSPngL5to12_x{X32}_y{Y32}.plate";
 
                 using (var s = await _plateTile.GetStreamAsync(_options.DssTerapixelDir, filename, L5, X5, Y5, token))
                 {
-                    await s.CopyToAsync(context.Response.OutputStream, token);
-                    context.Response.Flush();
-                    context.Response.End();
+                    await context.Response.WriteStreamAsync(s, "image/png");
                 }
             }
         }
