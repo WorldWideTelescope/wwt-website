@@ -24,6 +24,8 @@ namespace WWT.Providers
 
         Stream OutputStream { get; }
 
+        Task ServeStreamAsync(Stream stream, string contentType, string etag);
+
         void Close();
 
         void ClearHeaders();

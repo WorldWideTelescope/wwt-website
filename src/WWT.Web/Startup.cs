@@ -11,7 +11,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
 using System;
-
 using WWT.Azure;
 using WWT.Caching;
 using WWT.Imaging;
@@ -42,6 +41,8 @@ namespace WWT.Web
                         .AllowAnyHeader();
                 });
             });
+
+            services.AddMvcCore();
 
             services.AddApplicationInsightsTelemetry(options =>
             {

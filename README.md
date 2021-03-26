@@ -28,7 +28,14 @@ docker run --rm -p 8080:80 --name wwtcoredata aasworldwidetelescope/core-data:la
 ```
 
 However, most API endpoints won't work since they need to be wired up to the
-backing data storage.
+backing data storage. To test locally with WWT production assets, launch the Docker
+container with the following environment variables:
+
+```
+-e UseAzurePlateFiles=true -e AzurePlateFileStorageAccount=[secret]
+```
+
+where the secret can be obtained from the running app's configuration KeyVault.
 
 See comments in the `azure-pipelines.yml` file for descriptions of how deployment
 works.

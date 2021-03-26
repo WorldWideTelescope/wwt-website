@@ -1,5 +1,3 @@
-#nullable disable
-
 using Microsoft.Extensions.Logging;
 using System.IO;
 using System.Threading;
@@ -28,77 +26,49 @@ namespace WWT.Providers
 
         public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
-            string etag = context.Request.Headers["If-None-Match"];
-            string filename = "";
+            string query = "";
+            string extension = "";
 
             if (context.Request.Params["Q"] != null)
             {
-                string query = context.Request.Params["Q"];
-
-                query = query.Replace("..", "");
-                query = query.Replace("\\", "");
-                query = query.Replace("/", "");
-                filename = Path.Combine(query + ".txt");
+                query = context.Request.Params["Q"];
+                extension = "txt";
             }
             else if (context.Request.Params["X"] != null)
             {
-                string query = context.Request.Params["X"];
-
-                query = query.Replace("..", "");
-                query = query.Replace("\\", "");
-                query = query.Replace("/", "");
-                filename = $"{query}.xml";
+                query = context.Request.Params["X"];
+                extension = "xml";
             }
             else if (context.Request.Params["W"] != null)
             {
-                string query = context.Request.Params["W"];
-
-                query = query.Replace("..", "");
-                query = query.Replace("\\", "");
-                query = query.Replace("/", "");
-                filename = $"{query}.wtml";
-            }
-
-            if (!await GetEntry(context, etag, filename, token))
-            {
-                context.Response.StatusCode = 404;
-            }
-        }
-
-        private async Task<bool> GetEntry(IWwtContext context, string etag, string filename, CancellationToken token)
-        {
-            if (string.IsNullOrEmpty(filename))
-            {
-                return false;
-            }
-
-            var catalogEntry = await _catalog.GetCatalogEntryAsync(filename, token);
-
-            if (catalogEntry is null)
-            {
-                _logger.LogWarning("Requested catalog {Name} does not exist.", filename);
-                return false;
-            }
-
-            string newEtag = catalogEntry.LastModified.ToUniversalTime().ToString();
-
-            if (newEtag != etag)
-            {
-                context.Response.AddHeader("etag", newEtag);
-
-                using (var c = catalogEntry.Contents)
-                {
-                    await c.CopyToAsync(context.Response.OutputStream, token);
-                    context.Response.Flush();
-                    context.Response.End();
-                }
+                query = context.Request.Params["W"];
+                extension = "wtml";
             }
             else
             {
-                context.Response.StatusCode = 304;
+                await Report400Async(context, "must pass Q or X or W query parameter", token);
+                return;
             }
 
-            return true;
+            query = query.Replace("..", "").Replace("\\", "").Replace("/", "");
+            string filename = $"{query}.{extension}";
+
+            var catalogEntry = await _catalog.GetCatalogEntryAsync(filename, token);
+            if (catalogEntry is null)
+            {
+                string msg = $"Requested catalog item {filename} does not exist.";
+                _logger.LogWarning(msg);
+                await Report404Async(context, msg, token);
+                return;
+            }
+
+            string mtime = catalogEntry.LastModified.ToUniversalTime().ToString();
+            string etag = $"\"{mtime}\"";
+
+            using (var c = catalogEntry.Contents)
+            {
+                await context.Response.ServeStreamAsync(c, "text/plain", etag);
+            }
         }
     }
 }
