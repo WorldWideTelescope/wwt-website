@@ -48,7 +48,7 @@ namespace WWT.Providers
             }
             else
             {
-                context.Response.StatusCode = 400;
+                await Report400Async(context, "must pass Q or X or W query parameter", token);
                 return;
             }
 

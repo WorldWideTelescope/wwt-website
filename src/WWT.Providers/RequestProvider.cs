@@ -33,10 +33,22 @@ namespace WWT.Providers
             public const string Zip = "application/zip";
         }
 
-        protected Task Report404Async(IWwtContext context, string detail, CancellationToken token) {
+        // Not found.
+        protected async Task Report404Async(IWwtContext context, string detail, CancellationToken token) {
             context.Response.StatusCode = 404;
             context.Response.ContentType = ContentTypes.Text;
-            return context.Response.WriteAsync($"HTTP/404 Not Found\n\n{detail}", token);
+            await context.Response.WriteAsync($"HTTP/404 Not Found\n\n{detail}", token);
+            context.Response.Flush();
+            context.Response.End();
+        }
+
+        // Bad request.
+        protected async Task Report400Async(IWwtContext context, string detail, CancellationToken token) {
+            context.Response.StatusCode = 400;
+            context.Response.ContentType = ContentTypes.Text;
+            await context.Response.WriteAsync($"HTTP/400 Bad Request\n\n{detail}", token);
+            context.Response.Flush();
+            context.Response.End();
         }
 
         // This function is async because it handles the case of reporting an
