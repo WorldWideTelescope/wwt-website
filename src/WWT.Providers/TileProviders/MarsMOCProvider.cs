@@ -1,8 +1,7 @@
-#nullable disable
-
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 using System;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,70 +30,70 @@ namespace WWT.Providers
             if (errored)
                 return;
 
-            using (Bitmap output = new Bitmap(256, 256))
+            using (var output = new Image<Rgba32>(256, 256))
             {
-                using (Graphics g = Graphics.FromImage(output))
+                // TODO: This level was set to 15 before. Should identify a
+                // better way to know if a level is beyond the dataset
+                // without hardcoding.
+                if (level > 14)
                 {
+                    context.Response.StatusCode = 404;
+                    return;
+                }
 
-                    // TODO: This level was set to 15 before. Should identify a better to know if a level is beyond the dataset without hardcoding.
-                    if (level > 14)
+                int ll = level;
+                int xx = tileX;
+                int yy = tileY;
+
+                if (ll > 8)
+                {
+                    int levelDif = ll - 8;
+                    int scale = (int) Math.Pow(2, levelDif);
+                    int tx = xx / scale;
+                    int ty = yy / scale;
+
+                    int offsetX = (xx - (tx * scale)) * (256 / scale);
+                    int offsetY = (yy - (ty * scale)) * (256 / scale);
+                    float width = 256 / scale;
+                    float height = width;
+
+                    if ((width + offsetX) >= 255)
                     {
-                        context.Response.StatusCode = 404;
-                        return; ;
+                        width -= 1;
+                    }
+                    if ((height + offsetY) >= 255)
+                    {
+                        height -= 1;
                     }
 
-                    int ll = level;
-                    int xx = tileX;
-                    int yy = tileY;
-
-                    if (ll > 8)
+                    using (var stream = await _plateTiles.GetStreamAsync(_options.WwtTilesDir, "marsbasemap.plate", -1, 8, tx, ty, token))
+                    using (var bmp1 = Image.Load(stream))
                     {
-                        int levelDif = ll - 8;
-                        int scale = (int)Math.Pow(2, levelDif);
-                        int tx = xx / scale;
-                        int ty = yy / scale;
-
-                        int offsetX = (xx - (tx * scale)) * (256 / scale);
-                        int offsetY = (yy - (ty * scale)) * (256 / scale);
-                        float width = (256 / scale);
-                        float height = width;
-                        if ((width + offsetX) >= 255)
-                        {
-                            width -= 1;
-                        }
-                        if ((height + offsetY) >= 255)
-                        {
-                            height -= 1;
-                        }
-
-                        using (var stream = await _plateTiles.GetStreamAsync(_options.WwtTilesDir, "marsbasemap.plate", -1, 8, tx, ty, token))
-                        using (var bmp1 = new Bitmap(stream))
-                        {
-                            g.DrawImage(bmp1, new RectangleF(0, 0, 256, 256), new RectangleF(offsetX, offsetY, width, height), GraphicsUnit.Pixel);
-                        }
+                        bmp1.Mutate(x => x.Crop(new Rectangle(offsetX, offsetY, (int) width, (int) height)).Resize(256, 256));
+                        output.Mutate(x => x.DrawImage(bmp1, 1.0f));
                     }
-                    else
+                }
+                else
+                {
+                    using (var stream = await _plateTiles.GetStreamAsync(_options.WwtTilesDir, "marsbasemap.plate", -1, ll, xx, yy, token))
+                    using (var bmp1 = Image.Load(stream))
                     {
-                        using (var stream = await _plateTiles.GetStreamAsync(_options.WwtTilesDir, "marsbasemap.plate", -1, ll, xx, yy, token))
-                        using (var bmp1 = new Bitmap(stream))
-                        {
-                            g.DrawImageUnscaled(bmp1, new Point(0, 0));
-                        }
+                        output.Mutate(x => x.DrawImage(bmp1, 1.0f));
                     }
+                }
 
-                    using (var stream = await LoadMocAsync(ll, xx, yy, token))
+                using (var stream = await LoadMocAsync(ll, xx, yy, token))
+                {
+                    if (stream != null)
                     {
-                        if (stream != null)
+                        using (var bmp2 = Image.Load(stream))
                         {
-                            using (var bmp2 = new Bitmap(stream))
-                            {
-                                g.DrawImageUnscaled(bmp2, new Point(0, 0));
-                            }
+                            output.Mutate(x => x.DrawImage(bmp2, 1.0f));
                         }
                     }
                 }
 
-                await output.SaveAsync(context.Response, ImageFormat.Png, token);
+                await output.RespondPngAsync(context.Response, token);
             }
         }
 
