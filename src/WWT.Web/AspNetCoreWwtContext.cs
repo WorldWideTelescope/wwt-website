@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Net.Http.Headers;
 using System;
 using System.IO;
 using System.Threading;
@@ -91,13 +92,16 @@ namespace WWT.Web
 
         void IResponse.Redirect(string redirectUri) => _ctx.Response.Redirect(redirectUri);
 
-        Task IResponse.WriteStreamAsync(Stream stream, string contentType)
+        Task IResponse.ServeStreamAsync(Stream stream, string contentType, string etag)
         {
             var e = _ctx.RequestServices.GetRequiredService<IActionResultExecutor<FileStreamResult>>();
             var route = _ctx.GetRouteData();
             var actionContext = new ActionContext(_ctx, route, new ActionDescriptor());
 
-            var result = new FileStreamResult(stream, contentType) { EnableRangeProcessing = true };
+            var result = new FileStreamResult(stream, contentType) {
+                EnableRangeProcessing = true,
+                EntityTag = EntityTagHeaderValue.Parse(etag),
+            };
 
             return e.ExecuteAsync(actionContext, result);
         }

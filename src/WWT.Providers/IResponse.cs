@@ -24,7 +24,7 @@ namespace WWT.Providers
 
         Stream OutputStream { get; }
 
-        Task WriteStreamAsync(Stream stream, string contentType);
+        Task ServeStreamAsync(Stream stream, string contentType, string etag);
 
         void Close();
 
