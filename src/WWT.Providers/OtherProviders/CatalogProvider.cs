@@ -1,5 +1,3 @@
-#nullable disable
-
 using Microsoft.Extensions.Logging;
 using System.IO;
 using System.Threading;
