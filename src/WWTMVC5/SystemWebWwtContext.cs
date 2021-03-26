@@ -83,5 +83,14 @@ namespace WWTMVC5
             _context.Response.Write(message);
             return Task.CompletedTask;
         }
+
+        Task IResponse.ServeStreamAsync(Stream stream, string contentType, string etag)
+        {
+            // No known reason that we can't implement this; but this API is
+            // mainly intended for the data services, not the WWTMVC5 app, and
+            // right now I'm not in a position to easily build and test an
+            // implementation here.
+            throw new NotImplementedException();
+        }
     }
 }
