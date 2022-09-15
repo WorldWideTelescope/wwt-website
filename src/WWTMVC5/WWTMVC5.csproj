@@ -588,9 +588,9 @@
     <Content Include="Scripts\ext\ui-bootstrap-tpls-0.12.1.modified.js" />
     <Content Include="Scripts\factory\dataproxy.js" />
     <Content Include="Scripts\factory\uihelper.js" />
-    <None Include="Scripts\wwtsdk.aspx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <Content Include="Scripts\wwtsdk.aspx">
+      <PublishState>DataFile</PublishState>
+    </Content>
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Index.cshtml" />
     <Content Include="Views\Community\Index.cshtml" />
