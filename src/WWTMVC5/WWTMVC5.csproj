@@ -588,9 +588,7 @@
     <Content Include="Scripts\ext\ui-bootstrap-tpls-0.12.1.modified.js" />
     <Content Include="Scripts\factory\dataproxy.js" />
     <Content Include="Scripts\factory\uihelper.js" />
-    <Content Include="Scripts\wwtsdk.aspx">
-      <PublishState>DataFile</PublishState>
-    </Content>
+    <Content Include="Scripts\wwtsdk.aspx" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Index.cshtml" />
     <Content Include="Views\Community\Index.cshtml" />
@@ -808,6 +806,17 @@
   <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
     <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
   </Target>
+
+  <PropertyGroup>
+    <OnAfterCopyAllFilesToSingleFolderForAspNetCompileMerge>
+      DeleteConfusingSdkAspxFile;
+    </OnAfterCopyAllFilesToSingleFolderForAspNetCompileMerge>
+  </PropertyGroup>
+
+  <Target Name="DeleteConfusingSdkAspxFile">
+    <Delete DeletedFiles="$(_PreAspnetCompileMergeSingleTargetFolder)\Scripts\wwtsdk.aspx" />
+  </Target>
+
   <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
