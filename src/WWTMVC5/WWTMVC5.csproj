@@ -588,7 +588,6 @@
     <Content Include="Scripts\ext\ui-bootstrap-tpls-0.12.1.modified.js" />
     <Content Include="Scripts\factory\dataproxy.js" />
     <Content Include="Scripts\factory\uihelper.js" />
-    <Content Include="Scripts\wwtsdk.aspx" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Index.cshtml" />
     <Content Include="Views\Community\Index.cshtml" />
