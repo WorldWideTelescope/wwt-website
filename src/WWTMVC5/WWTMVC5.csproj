@@ -814,7 +814,7 @@
   </PropertyGroup>
 
   <Target Name="DeleteConfusingSdkAspxFile">
-    <Delete DeletedFiles="$(_PreAspnetCompileMergeSingleTargetFolder)\Scripts\wwtsdk.aspx" />
+    <Delete Files="$(_PreAspnetCompileMergeSingleTargetFolder)\Scripts\wwtsdk.aspx" />
   </Target>
 
   <ProjectExtensions>
