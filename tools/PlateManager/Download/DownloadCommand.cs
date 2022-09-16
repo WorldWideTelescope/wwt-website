@@ -50,8 +50,7 @@ namespace PlateManager.Download
 
                 if (_options.SkipExisting && outputFile.Exists)
                 {
-                    _logger.LogWarning("Plate {PlateFile} already exists. Skipping.");
-
+                    _logger.LogWarning("Plate {PlateFile} already exists. Skipping.", outputFile.Name);
                     continue;
                 }
 
