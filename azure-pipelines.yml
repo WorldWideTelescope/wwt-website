@@ -11,10 +11,10 @@ variables:
 stages:
 - stage: Build
   jobs:
-    - job: BuildNet5
-      displayName: '.NET 5 WebApp'
+    - job: BuildNet6
+      displayName: '.NET 6 WebApp'
       pool:
-        vmImage: 'Ubuntu-latest'
+        vmImage: 'ubuntu-latest'
 
       steps:
       - task: UseDotNet@2
@@ -45,14 +45,14 @@ stages:
         displayName: dotnet build
         inputs:
           command: 'build'
-          projects: 'wwt-website-net5.slnf'
+          projects: 'wwt-website-net6.slnf'
           arguments: '--configuration $(buildConfiguration)'
 
       - task: DotNetCoreCLI@2
         displayName: dotnet test
         inputs:
           command: 'test'
-          projects: 'wwt-website-net5.slnf'
+          projects: 'wwt-website-net6.slnf'
           arguments: '--configuration $(buildConfiguration)'
 
       - task: DotNetCoreCLI@2
@@ -78,8 +78,8 @@ stages:
         artifact: tools
 
       - publish: $(build.artifactStagingDirectory)/website
-        displayName: Publish net5-web
-        artifact: net5-web
+        displayName: Publish net6-web
+        artifact: net6-web
 
     - job: BuildMVC5
       displayName: 'ASP.NET MVC5 WebApp'
@@ -145,7 +145,7 @@ stages:
       - task: DotNetCoreCLI@2
         inputs:
           command: 'test'
-          projects: 'wwt-website-net5.slnf'
+          projects: 'wwt-website-net6.slnf'
           arguments: '--configuration $(buildConfiguration)'
 
       - publish: $(build.artifactStagingDirectory)/website
