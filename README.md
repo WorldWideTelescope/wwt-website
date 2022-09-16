@@ -13,10 +13,10 @@ See [these instructions](docs/dev-environment.md) for details on how to build
 and run locally. Please submit issues (or PRs!) if you run into any problems or
 inaccuracies.
 
-If you have .NET5 installed, the basic CLI build command is:
+If you have .NET 6 installed, the basic CLI build command is:
 
 ```
-dotnet build -c Release wwt-website-net5.slnf
+dotnet build -c Release wwt-website-net6.slnf
 ```
 
 You can build and run the server in a Docker container with:

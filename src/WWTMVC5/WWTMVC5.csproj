@@ -796,16 +796,36 @@
       <Version>4.3.0</Version>
     </PackageReference>
   </ItemGroup>
+
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
+
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+
   <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
     <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
   </Target>
+
+  <!-- As of Sep. 2022, the ASP.NET build-views stage hits a CSS1647 "expression
+  is too long or complex to compile" error, which seems to be due to it trying
+  to compile `wwtsdk.aspx` even though it's a Content item. I can't find a way
+  to get the compiler to ignore it, but there is a way to just delete it so that
+  the compiler doesn't see it: -->
+
+  <PropertyGroup>
+    <OnAfterCopyAllFilesToSingleFolderForAspNetCompileMerge>
+      DeleteConfusingSdkAspxFile;
+    </OnAfterCopyAllFilesToSingleFolderForAspNetCompileMerge>
+  </PropertyGroup>
+
+  <Target Name="DeleteConfusingSdkAspxFile">
+    <Delete Files="$(_PreAspnetCompileMergeSingleTargetFolder)\Scripts\wwtsdk.aspx" />
+  </Target>
+
   <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">

@@ -1,11 +1,11 @@
 # Build the app
-FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build-env
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
 WORKDIR /app
 COPY . ./
-RUN dotnet publish -c Release -o out wwt-website-net5.slnf
+RUN dotnet publish -c Release -o out wwt-website-net6.slnf
 
 # Build runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:5.0
+FROM mcr.microsoft.com/dotnet/aspnet:6.0
 WORKDIR /app
 RUN apt-get update \
   && DEBIAN_FRONTEND=noninteractive apt-get install -y libgdiplus \
