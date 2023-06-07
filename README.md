@@ -1,16 +1,35 @@
 [![Build Status](https://dev.azure.com/aasworldwidetelescope/WWT/_apis/build/status/WorldWideTelescope.wwt-website?branchName=master)](https://dev.azure.com/aasworldwidetelescope/WWT/_build/latest?definitionId=20&branchName=master)
+[![Powered by NumFOCUS](https://img.shields.io/badge/powered%20by-NumFOCUS-orange.svg?style=flat&colorA=E1523D&colorB=007D8A)](http://numfocus.org)
 
-# AAS WorldWide Telescope website
+# WorldWide Telescope legacy web services
 
-This repository contains the code for the web services backing the
-[AAS](https://aas.org/) [WorldWide
-Telescope](https://worldwidetelescope.org/home) (WWT) software system.
+This repository contains the code for the legacy web services backing the
+[WorldWide Telescope](https://worldwidetelescope.org/home) (WWT) software
+system. Note that while these services are “legacy” in the sense of having an
+old-fashioned design and implementation, they provide essential WWT data and are
+in use 24/7!
 
 You can monitor metrics for the WWT web services on [the public WWT metrics
 dashboard][dashboard], made possible by support from [Datadog].
 
 [dashboard]: https://p.us3.datadoghq.com/sb/cf4ddee0-e5ae-11ec-90f8-da7ad0900003-c64423f0e5e0627e2eb777abe3e591b0
 [Datadog]: https://datadoghq.com/
+
+[//]: # (numfocus-fiscal-sponsor-attribution)
+
+The WorldWide Telescope project uses an [open governance
+model](https://worldwidetelescope.org/about/governance/) and is fiscally
+sponsored by [NumFOCUS](https://numfocus.org/). Consider making a
+[tax-deductible donation](https://numfocus.org/donate-for-worldwide-telescope)
+to help the project pay for developer time, professional services, travel,
+workshops, and a variety of other needs.
+
+<div align="center">
+  <a href="https://numfocus.org/donate-for-worldwide-telescope">
+    <img height="60px"
+         src="https://raw.githubusercontent.com/numfocus/templates/master/images/numfocus-logo.png">
+  </a>
+</div>
 
 
 ## Developer Instructions
@@ -75,14 +94,12 @@ All participation in WWT communities is conditioned on your adherence to the
 
 ## Acknowledgments
 
-The AAS WorldWide Telescope system is a [.NET Foundation] project managed by the
-non-profit [American Astronomical Society] (AAS). Work on WWT has been supported
-by the AAS, the US [National Science Foundation], and other partners. See [the
+Work on the WorldWide Telescope system has been supported by the [American
+Astronomical Society] (AAS), the [.NET Foundation], and other partners. See [the
 WWT user website][acks] for details.
 
-[.NET Foundation]: https://dotnetfoundation.org/
 [American Astronomical Society]: https://aas.org/
-[National Science Foundation]: https://www.nsf.gov/
+[.NET Foundation]: https://dotnetfoundation.org/
 [acks]: https://worldwidetelescope.org/about/acknowledgments/
 
 
