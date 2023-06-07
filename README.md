@@ -1,10 +1,13 @@
 [![Build Status](https://dev.azure.com/aasworldwidetelescope/WWT/_apis/build/status/WorldWideTelescope.wwt-website?branchName=master)](https://dev.azure.com/aasworldwidetelescope/WWT/_build/latest?definitionId=20&branchName=master)
+[![Powered by NumFOCUS](https://img.shields.io/badge/powered%20by-NumFOCUS-orange.svg?style=flat&colorA=E1523D&colorB=007D8A)](http://numfocus.org)
 
 # WorldWide Telescope legacy web services
 
 This repository contains the code for the legacy web services backing the
 [WorldWide Telescope](https://worldwidetelescope.org/home) (WWT) software
-system.
+system. Note that while these services are “legacy” in the sense of having an
+old-fashioned design and implementation, they provide essential WWT data and are
+in use 24/7!
 
 You can monitor metrics for the WWT web services on [the public WWT metrics
 dashboard][dashboard], made possible by support from [Datadog].
