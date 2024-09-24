@@ -14,7 +14,7 @@ namespace WWT.Providers
     public class BingDemTileProvider : RequestProvider
     {
 #if NET
-        private readonly ActivitySource _activitySource = new("WWT");
+        private static readonly ActivitySource _activitySource = new("WWT");
 #endif
 
         private readonly IVirtualEarthDownloader _veDownloader;
