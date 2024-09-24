@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 
 using WWT.Imaging;
 
+#nullable enable
+
 namespace WWT.Providers
 {
     public class OctTileMapBuilder : IOctTileMapBuilder
