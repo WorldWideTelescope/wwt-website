@@ -1,5 +1,6 @@
 #nullable disable
 
+using Azure.Monitor.OpenTelemetry.AspNetCore;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -42,6 +43,13 @@ namespace WWT.Web
                 });
             });
 
+            // Add OpenTelemetry and configure it to use Azure Monitor.
+            services.AddOpenTelemetry()
+                .WithTracing(builder =>
+                {
+                    builder.AddSource("WWT");
+                })
+                .UseAzureMonitor();
             services.AddMvcCore();
 
             services.AddApplicationInsightsTelemetry(options =>

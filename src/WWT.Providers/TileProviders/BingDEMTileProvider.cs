@@ -1,6 +1,7 @@
 #nullable disable
 
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,11 +13,15 @@ namespace WWT.Providers
     [RequestEndpoint("/wwtweb/BingDemTile.aspx")]
     public class BingDemTileProvider : RequestProvider
     {
+#if NET
+        private static readonly ActivitySource _activitySource = new("WWT");
+#endif
+
         private readonly IVirtualEarthDownloader _veDownloader;
 
         public BingDemTileProvider(IVirtualEarthDownloader veDownloader)
         {
-            _veDownloader = veDownloader; 
+            _veDownloader = veDownloader;
         }
 
         public override string ContentType => ContentTypes.OctetStream;
@@ -26,6 +31,9 @@ namespace WWT.Providers
             (var errored, var level, var tileX, var tileY) = await HandleLXYQParameter(context, token);
             if (errored)
                 return;
+#if NET
+            using var activity = _activitySource.CreateActivity("BingDemTileProvider", ActivityKind.Internal);
+#endif
 
             int demSize = 33 * 33;
             int parentL = Math.Max(1, level - 3);
@@ -42,8 +50,7 @@ namespace WWT.Providers
 
             using var stream = await _veDownloader.DownloadVeTileAsync(VirtualEarthTile.Ecn, parentL, parentX, parentY, token);
 
-
-            DemTile tile = DemCodec.Decompress(stream);
+            DemTile tile = await DemCodec.DecompressAsync(stream, token);
 
             if (tile != null)
             {
@@ -65,6 +72,7 @@ namespace WWT.Providers
 
                 var data = new byte[DemData.Length * 4];
                 using var ms = new MemoryStream(data);
+
                 var bw = new BinaryWriter(ms);
 
                 foreach (float sample in DemData)
