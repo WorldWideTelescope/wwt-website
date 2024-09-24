@@ -2,7 +2,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
 WORKDIR /app
 COPY . ./
-RUN dotnet publish -c Release -o out wwt-website-net6.slnf
+RUN dotnet publish -c Release -o out ./src/WWT.Web/WWT.Web.csproj
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
