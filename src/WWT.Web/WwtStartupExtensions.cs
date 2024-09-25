@@ -20,7 +20,7 @@ public static class WwtStartupExtensions
 {
     private static void MergeConfig(IConfiguration configuration, string oldKey, string newKey)
     {
-        if (configuration[oldKey] is { } existing)
+        if (configuration[oldKey] is { } existing && !string.IsNullOrEmpty(existing))
         {
             configuration[newKey] = existing;
         }
