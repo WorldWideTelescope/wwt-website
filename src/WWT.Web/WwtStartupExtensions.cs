@@ -18,9 +18,21 @@ namespace WWT.Web;
 
 public static class WwtStartupExtensions
 {
+    private static void MergeConfig(IConfiguration configuration, string oldKey, string newKey)
+    {
+        if (configuration[oldKey] is { } existing)
+        {
+            configuration[newKey] = existing;
+        }
+    }
+
     public static void AddWwt(this IHostApplicationBuilder builder)
     {
         var configuration = builder.Configuration;
+
+        // TODO: change the existing configuration to the new expected pattern
+        MergeConfig(configuration, "AzurePlateFileStorageAccount", "Aspire:Azure:Storage:Blobs:WwtFiles");
+        MergeConfig(configuration, "MarsStorageAccount", "Aspire:Azure:Storage:Blobs:Mars");
 
         builder.AddKeyedAzureBlobClient("WwtFiles");
         builder.AddKeyedAzureBlobClient("Mars");
