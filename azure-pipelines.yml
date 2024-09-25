@@ -124,7 +124,7 @@ stages:
 
       - task: NuGetCommand@2
         inputs:
-          restoreSolution: 'wwt-website.sln'
+          restoreSolution: 'wwt-communities.slnf'
           feedsToUse: config
           nugetConfigPath: NuGet.config
 
@@ -147,7 +147,7 @@ stages:
 
       - task: VSBuild@1
         inputs:
-          solution: 'wwt-website.sln'
+          solution: 'wwt-communities.slnf'
           msbuildArgs: '/p:DeployOnBuild=true /p:PrecompileBeforePublish=true /p:EnableUpdateable=false /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)/website"'
           platform: '$(buildPlatform)'
           configuration: '$(buildConfiguration)'
