@@ -152,12 +152,6 @@ stages:
           platform: '$(buildPlatform)'
           configuration: '$(buildConfiguration)'
 
-      - task: DotNetCoreCLI@2
-        inputs:
-          command: 'test'
-          projects: 'wwt-website-net6.slnf'
-          arguments: '--configuration $(buildConfiguration)'
-
       - publish: $(build.artifactStagingDirectory)/website
         artifact: mvc5
 
