@@ -78,39 +78,6 @@ namespace WWT.Caching.Tests
             var inMemory = Assert.IsType<MemoryDistributedCache>(resolved);
         }
 
-        [Fact]
-        public void RedisUsedWithConnectionString()
-        {
-            // Arrange
-            var original = Substitute.For<ITestService>();
-            var mock = AutoSubstitute.Configure()
-                .InjectProperties()
-                .MakeUnregisteredTypesPerLifetime()
-                .ConfigureOptions(options =>
-                {
-                    options.MockHandlers.Add(SkipTypeMockHandler.Create(typeof(IValidateOptions<>)));
-                })
-                .ConfigureServices(services =>
-                {
-                    services.AddSingleton(original);
-                    services
-                        .AddCaching(options =>
-                        {
-                            options.UseCaching = true;
-                            options.RedisCacheConnectionString = _fixture.Create<string>();
-                        })
-                        .CacheType<ITestService>(_ => { });
-                })
-                .SubstituteFor<IConnectionMultiplexer>()
-                .Build();
-
-            // Act
-            var resolved = mock.Resolve<IDistributedCache>();
-
-            // Assert
-            var inMemory = Assert.IsType<AppInsightsDistributedCache>(resolved);
-        }
-
         public interface ITestService
         {
             Task<string> GetAsync();

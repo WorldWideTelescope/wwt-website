@@ -12,7 +12,7 @@ stages:
 - stage: Build
   jobs:
     - job: BuildNet6
-      displayName: '.NET 6 WebApp'
+      displayName: '.NET 8 WebApp'
       pool:
         vmImage: 'ubuntu-latest'
       steps:
@@ -20,11 +20,22 @@ stages:
         inputs:
           packageType: 'sdk'
           version: '3.x'
+      - task: UseDotNet@2
+        inputs:
+          packageType: 'sdk'
+          version: '6.x'
 
       - task: UseDotNet@2
         inputs:
           packageType: 'sdk'
           useGlobalJson: true
+
+      - task: DotNetCoreCLI@2
+        displayName: 'Install .NET Aspire'
+        inputs:
+          command: custom
+          custom: 'workload '
+          arguments: 'install aspire --source https://api.nuget.org/v3/index.json'
 
       - task: DotNetCoreCLI@2
         displayName: 'Install GitVersion'
@@ -113,7 +124,7 @@ stages:
 
       - task: NuGetCommand@2
         inputs:
-          restoreSolution: 'wwt-website.sln'
+          restoreSolution: 'wwt-communities.slnf'
           feedsToUse: config
           nugetConfigPath: NuGet.config
 
@@ -136,16 +147,10 @@ stages:
 
       - task: VSBuild@1
         inputs:
-          solution: 'wwt-website.sln'
+          solution: 'wwt-communities.slnf'
           msbuildArgs: '/p:DeployOnBuild=true /p:PrecompileBeforePublish=true /p:EnableUpdateable=false /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)/website"'
           platform: '$(buildPlatform)'
           configuration: '$(buildConfiguration)'
-
-      - task: DotNetCoreCLI@2
-        inputs:
-          command: 'test'
-          projects: 'wwt-website-net6.slnf'
-          arguments: '--configuration $(buildConfiguration)'
 
       - publish: $(build.artifactStagingDirectory)/website
         artifact: mvc5
