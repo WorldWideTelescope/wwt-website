@@ -12,7 +12,7 @@ stages:
 - stage: Build
   jobs:
     - job: BuildNet6
-      displayName: '.NET 6 WebApp'
+      displayName: '.NET 8 WebApp'
       pool:
         vmImage: 'ubuntu-latest'
       steps:
@@ -25,6 +25,13 @@ stages:
         inputs:
           packageType: 'sdk'
           useGlobalJson: true
+
+      - task: DotNetCoreCLI@2
+        displayName: 'Install .NET Aspire'
+        inputs:
+          command: custom
+          custom: 'workload '
+          arguments: 'install maui --source https://api.nuget.org/v3/index.json'
 
       - task: DotNetCoreCLI@2
         displayName: 'Install GitVersion'
