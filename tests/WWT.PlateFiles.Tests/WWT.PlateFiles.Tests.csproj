@@ -5,4 +5,8 @@
     <ProjectReference Include="..\..\src\WWT.PlateFiles\WWT.PlateFiles.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Update="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+  </ItemGroup>
+
 </Project>

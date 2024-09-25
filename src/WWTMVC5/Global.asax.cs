@@ -14,13 +14,6 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using Unity.AspNet.Mvc;
-
-using WWT.Azure;
-using WWT.Caching;
-using WWT.Imaging;
-using WWT.PlateFiles;
-using WWT.Providers;
-using WWT.Tours;
 using WWTWebservices;
 
 namespace WWTMVC5
@@ -69,73 +62,11 @@ namespace WWTMVC5
             FilterProviders.Providers.Add(new UnityFilterAttributeFilterProvider(container));
 
             DependencyResolver.SetResolver(new UnityDependencyResolver(container));
-            WwtWebHttpHandler.Initialize(provider);
         }
 
         private static IServiceProvider BuildServiceProvider()
         {
             var services = new ServiceCollection();
-
-            services.AddRequestProviders(options =>
-            {
-                options.DssTerapixelDir = ConfigurationManager.AppSettings["DssTerapixelDir"];
-                options.ExternalUrlMapText = ConfigurationManager.AppSettings["ExternalUrlMap"];
-                options.WWTDEMDir = ConfigurationManager.AppSettings["WWTDEMDir"];
-                options.WwtTilesDir = ConfigurationManager.AppSettings["WWTTilesDir"];
-                options.WwtGalexDir = ConfigurationManager.AppSettings["WWTGALEXDIR"];
-                options.WwtToursDBConnectionString = ConfigurationManager.AppSettings["WWTToursDBConnectionString"];
-                options.TourVersionCheckIntervalMinutes = int.TryParse(ConfigurationManager.AppSettings["TourVersionCheckIntervalMinutes"], out var min) ? min : 5;
-            });
-
-            services
-                .AddAzureServices(options =>
-                {
-                    options.StorageAccount = ConfigurationManager.AppSettings["AzurePlateFileStorageAccount"];
-                    options.MarsStorageAccount = ConfigurationManager.AppSettings["MarsStorageAccount"];
-                })
-                .AddPlateFiles(options =>
-                {
-                    options.UseAzurePlateFiles = ConfigReader<bool>.GetSetting("UseAzurePlateFiles");
-                    options.Container = ConfigurationManager.AppSettings["PlateFileContainer"];
-                    options.KnownPlateFile = ConfigurationManager.AppSettings["KnownPlateFile"];
-                })
-                .AddThumbnails(options =>
-                {
-                    options.ContainerName = ConfigurationManager.AppSettings["ThumbnailContainer"];
-                    options.Default = ConfigurationManager.AppSettings["DefaultThumbnail"];
-                })
-                .AddCatalog(options =>
-                {
-                    options.ContainerName = ConfigurationManager.AppSettings["CatalogContainer"];
-                })
-                .AddTours(options =>
-                {
-                    options.ContainerName = ConfigurationManager.AppSettings["TourContainer"];
-                })
-                .AddTiles(options =>
-                {
-                    options.ContainerName = ConfigurationManager.AppSettings["ImagesTilerContainer"];
-                });
-
-            services
-                .AddCaching(options =>
-                {
-                    options.RedisCacheConnectionString = ConfigurationManager.AppSettings["RedisConnectionString"];
-                    options.UseCaching = ConfigReader<bool>.GetSetting("UseCaching");
-                    options.SlidingExpiration = TimeSpan.Parse(ConfigurationManager.AppSettings["SlidingExpiration"]);
-                })
-                .CacheType<IMandelbrot>(m => m.Add(nameof(IMandelbrot.CreateMandelbrot)))
-                .CacheType<IVirtualEarthDownloader>(plates => plates.Add(nameof(IVirtualEarthDownloader.DownloadVeTileAsync)))
-                .CacheType<IOctTileMapBuilder>(plates => plates.Add(nameof(IOctTileMapBuilder.GetOctTileAsync)))
-                .CacheType<IPlateTilePyramid>(plates => plates.Add(nameof(IPlateTilePyramid.GetStreamAsync)))
-                .CacheType<IThumbnailAccessor>(plates => plates
-                    .Add(nameof(IThumbnailAccessor.GetThumbnailStreamAsync))
-                    .Add(nameof(IThumbnailAccessor.GetDefaultThumbnailStreamAsync)))
-                .CacheType<IDevDataAccessor>(dev => dev.Add(nameof(IDevDataAccessor.GetDevDataAsync)))
-                .CacheType<ITourAccessor>(plates => plates
-                    .Add(nameof(ITourAccessor.GetAuthorThumbnailAsync))
-                    .Add(nameof(ITourAccessor.GetTourAsync))
-                    .Add(nameof(ITourAccessor.GetTourThumbnailAsync)));
 
             // Override built-in configuration for ILoggerProvider so everyone uses the same instance
             services.AddSingleton<IOptionsFactory<TelemetryConfiguration>>(new TelemetryConfigurationInstance());
