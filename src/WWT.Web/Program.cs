@@ -18,7 +18,8 @@ var tenant = builder.Configuration["DefaultCredentialTenantId"];
 var credential = new DefaultAzureCredential(new DefaultAzureCredentialOptions
 {
     VisualStudioCodeTenantId = tenant,
-    VisualStudioTenantId = tenant
+    VisualStudioTenantId = tenant,
+    TenantId = tenant,
 });
 
 if (builder.Configuration["KeyVaultName"] is { } keyVaultName && !string.IsNullOrEmpty(keyVaultName))
