@@ -64,7 +64,7 @@ namespace WWT.Web
 
         Stream IRequest.InputStream => _ctx.Request.Body;
 
-        void IResponse.AddHeader(string name, string value) => _ctx.Response.Headers.Add(name, value);
+        void IResponse.AddHeader(string name, string value) => _ctx.Response.Headers.Append(name, value);
 
         void IResponse.Clear()
         {
