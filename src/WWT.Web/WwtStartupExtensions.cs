@@ -6,7 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
-using System;
 using WWT.Azure;
 using WWT.Caching;
 using WWT.Imaging;
@@ -33,9 +32,11 @@ public static class WwtStartupExtensions
         // TODO: change the existing configuration to the new expected pattern
         MergeConfig(configuration, "AzurePlateFileStorageAccount", "WwtFiles");
         MergeConfig(configuration, "MarsStorageAccount", "Mars");
+        MergeConfig(configuration, "RedisConnectionString", "cache");
 
         builder.AddKeyedAzureBlobClient("WwtFiles");
         builder.AddKeyedAzureBlobClient("Mars");
+        builder.AddRedisDistributedCache("cache");
 
         builder.Services
          .AddRequestProviders(options =>
@@ -75,8 +76,6 @@ public static class WwtStartupExtensions
             .AddCaching(options =>
             {
                 configuration.Bind(options);
-                options.RedisCacheConnectionString = configuration["RedisConnectionString"];
-                options.SlidingExpiration = TimeSpan.Parse(configuration["SlidingExpiration"]);
             })
             .CacheType<IMandelbrot>(m => m.Add(nameof(IMandelbrot.CreateMandelbrot)))
             .CacheType<IVirtualEarthDownloader>(plates => plates.Add(nameof(IVirtualEarthDownloader.DownloadVeTileAsync)))

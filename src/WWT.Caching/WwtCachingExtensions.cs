@@ -1,8 +1,6 @@
 #nullable disable
 
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Swick.Cache;
 using Swick.Cache.Handlers;
 using System;
@@ -37,18 +35,6 @@ namespace WWT.Caching
                         entry.SlidingExpiration = options.SlidingExpiration;
                     }));
                 });
-
-            if (!string.IsNullOrEmpty(options.RedisCacheConnectionString))
-            {
-                services.AddStackExchangeRedisCache(redisOptions =>
-                {
-                    redisOptions.Configuration = options.RedisCacheConnectionString;
-                });
-            }
-            else
-            {
-                services.AddDistributedMemoryCache();
-            }
 
             return new WwtCacheBuilder(cacheBuilder);
         }
