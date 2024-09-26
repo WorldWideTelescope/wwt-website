@@ -16,6 +16,8 @@
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\WWT.Maps\WWT.Maps.csproj" />
+    <ProjectReference Include="..\WWT.PlateFiles\WWT.PlateFiles.csproj" />
     <ProjectReference Include="..\WWT.Tours\WWT.Tours.csproj" />
   </ItemGroup>
 </Project>

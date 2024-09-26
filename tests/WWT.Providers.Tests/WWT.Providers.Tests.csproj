@@ -5,8 +5,4 @@
     <ProjectReference Include="..\..\src\WWT.Providers\WWT.Providers.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Update="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
-  </ItemGroup>
-
 </Project>

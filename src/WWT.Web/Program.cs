@@ -1,65 +1,63 @@
+#nullable disable
+
+using Azure.Core;
 using Azure.Identity;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using System;
-using WWT.Web;
 
-var builder = WebApplication.CreateBuilder(args);
-
-// This configuration is used to to identify the tenant of the KeyVault. If the user
-// is not in the same tenant, then the token will be incorrect. The error message
-// you'll see will be similar to: AKV10032: Invalid issuer
-var tenant = builder.Configuration["DefaultCredentialTenantId"];
-
-var credential = new DefaultAzureCredential(new DefaultAzureCredentialOptions
+namespace WWT.Web
 {
-    VisualStudioCodeTenantId = tenant,
-    VisualStudioTenantId = tenant,
-    TenantId = tenant,
-});
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            CreateHostBuilder(args).Build().Run();
+        }
 
-if (builder.Configuration["KeyVaultName"] is { } keyVaultName && !string.IsNullOrEmpty(keyVaultName))
-{
-    var uri = new Uri($"https://{keyVaultName}.vault.azure.net/");
-    builder.Configuration.AddAzureKeyVault(uri, credential);
+        private static TokenCredential _credential;
+
+        private static TokenCredential BuildTokenCredential(IConfiguration config)
+        {
+            if (_credential is null)
+            {
+                // This configuration is used to to identify the tenant of the KeyVault. If the user
+                // is not in the same tenant, then the token will be incorrect. The error message
+                // you'll see will be similar to: AKV10032: Invalid issuer
+                var tenant = config["DefaultCredentialTenantId"];
+
+                _credential = new DefaultAzureCredential(new DefaultAzureCredentialOptions
+                {
+                    VisualStudioCodeTenantId = tenant,
+                    VisualStudioTenantId = tenant
+                });
+            }
+
+            return _credential;
+        }
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureServices((context, services) =>
+                {
+                    services.AddSingleton(BuildTokenCredential(context.Configuration));
+                })
+                .ConfigureAppConfiguration((context, config) =>
+                {
+                    var builtConfig = config.Build();
+                    var keyVaultName = builtConfig["KeyVaultName"];
+
+                    if (!string.IsNullOrEmpty(keyVaultName))
+                    {
+                        var uri = new Uri($"https://{keyVaultName}.vault.azure.net/");
+                        config.AddAzureKeyVault(uri, BuildTokenCredential(builtConfig));
+                    }
+                })
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
+    }
 }
-
-builder.AddServiceDefaults();
-builder.AddWwt();
-
-builder.Services.AddSingleton(credential);
-
-builder.Services.AddCors(options => options
-    .AddDefaultPolicy(builder => builder
-        .AllowAnyOrigin()
-        .AllowAnyMethod()
-        .AllowAnyHeader()));
-
-builder.Services.AddMvcCore();
-
-builder.Services.AddLogging(builder =>
-{
-    builder.AddFilter("Swick.Cache", LogLevel.Trace);
-    builder.AddDebug();
-});
-
-builder.Services.AddSingleton(typeof(HelloWorldProvider));
-
-var app = builder.Build();
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-}
-
-app.UseCors();
-
-app.UseRouting();
-
-app.MapWwt();
-
-app.Run();

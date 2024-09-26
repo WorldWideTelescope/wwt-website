@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.12.35309.182
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30309.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WWT.Providers", "src\WWT.Providers\WWT.Providers.csproj", "{EE4A3106-572B-4EF4-9AB5-A22643309A57}"
 EndProject
@@ -60,10 +60,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WWT.Catalog", "src\WWT.Catalog\WWT.Catalog.csproj", "{C5F256EE-8ECC-46F8-BD80-5D19CF55E7AA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WWT.Web", "src\WWT.Web\WWT.Web.csproj", "{1C293ECE-171A-4F1C-B9EE-79C3EAA6D518}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WWT.AppHost", "src\WWT\WWT.AppHost\WWT.AppHost.csproj", "{DFCC91AC-036D-4DE4-A588-057649AFD307}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WWT.ServiceDefaults", "src\WWT\WWT.ServiceDefaults\WWT.ServiceDefaults.csproj", "{EF3595C9-F770-4300-BAEE-BF4929E66442}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -135,14 +131,6 @@ Global
 		{1C293ECE-171A-4F1C-B9EE-79C3EAA6D518}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C293ECE-171A-4F1C-B9EE-79C3EAA6D518}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C293ECE-171A-4F1C-B9EE-79C3EAA6D518}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DFCC91AC-036D-4DE4-A588-057649AFD307}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DFCC91AC-036D-4DE4-A588-057649AFD307}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DFCC91AC-036D-4DE4-A588-057649AFD307}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DFCC91AC-036D-4DE4-A588-057649AFD307}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EF3595C9-F770-4300-BAEE-BF4929E66442}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EF3595C9-F770-4300-BAEE-BF4929E66442}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EF3595C9-F770-4300-BAEE-BF4929E66442}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EF3595C9-F770-4300-BAEE-BF4929E66442}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -164,8 +152,6 @@ Global
 		{0A5B7416-B9CB-438F-8DC9-C9D3B096896B} = {F12286DB-AF41-4661-A1C6-EB3259CB9B41}
 		{C5F256EE-8ECC-46F8-BD80-5D19CF55E7AA} = {F12286DB-AF41-4661-A1C6-EB3259CB9B41}
 		{1C293ECE-171A-4F1C-B9EE-79C3EAA6D518} = {F12286DB-AF41-4661-A1C6-EB3259CB9B41}
-		{DFCC91AC-036D-4DE4-A588-057649AFD307} = {F12286DB-AF41-4661-A1C6-EB3259CB9B41}
-		{EF3595C9-F770-4300-BAEE-BF4929E66442} = {F12286DB-AF41-4661-A1C6-EB3259CB9B41}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {80DABDD3-0D48-43AD-893B-B09A38FCFC72}
