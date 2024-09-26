@@ -15,9 +15,9 @@ namespace WWT.Providers
 
         private readonly HttpClient _httpClient;
 
-        public VirtualEarthDownloader()
+        public VirtualEarthDownloader(IHttpClientFactory factory)
         {
-            _httpClient = new HttpClient();
+            _httpClient = factory.CreateClient();
         }
 
         public int GetServerID(int x, int y)
@@ -111,7 +111,7 @@ namespace WWT.Providers
                 _ => throw new NotImplementedException()
             };
 
-            return _httpClient.GetStreamAsync(url);
+            return _httpClient.GetStreamAsync(url, token);
         }
     }
 }
