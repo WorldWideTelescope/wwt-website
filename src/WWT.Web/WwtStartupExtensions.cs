@@ -22,7 +22,7 @@ public static class WwtStartupExtensions
     {
         if (configuration[oldKey] is { } existing && !string.IsNullOrEmpty(existing))
         {
-            configuration[$"ConnectionStrings:{newKey}"] = existing;
+            configuration[newKey] = existing;
         }
     }
 
@@ -31,8 +31,8 @@ public static class WwtStartupExtensions
         var configuration = builder.Configuration;
 
         // TODO: change the existing configuration to the new expected pattern
-        MergeConfig(configuration, "AzurePlateFileStorageAccount", "WwtFiles");
-        MergeConfig(configuration, "MarsStorageAccount", "Mars");
+        MergeConfig(configuration, "AzurePlateFileStorageAccount", "Aspire:Azure:Storage:Blobs:WwtFiles");
+        MergeConfig(configuration, "MarsStorageAccount", "Aspire:Azure:Storage:Blobs:Mars");
 
         builder.AddKeyedAzureBlobClient("WwtFiles");
         builder.AddKeyedAzureBlobClient("Mars");
