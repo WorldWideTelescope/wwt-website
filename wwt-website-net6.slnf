@@ -3,7 +3,6 @@
     "path": "wwt-website.sln",
     "projects": [
       "src\\WWT.Azure\\WWT.Azure.csproj",
-      "src\\WWT.Caching\\WWT.Caching.csproj",
       "src\\WWT.Catalog\\WWT.Catalog.csproj",
       "src\\WWT.Imaging\\WWT.Imaging.csproj",
       "src\\WWT.Maps\\WWT.Maps.csproj",
@@ -14,7 +13,6 @@
       "src\\WWT\\WWT.AppHost\\WWT.AppHost.csproj",
       "src\\WWT\\WWT.ServiceDefaults\\WWT.ServiceDefaults.csproj",
       "tests\\WWT.Azure.Tests\\WWT.Azure.Tests.csproj",
-      "tests\\WWT.Caching.Tests\\WWT.Caching.Tests.csproj",
       "tests\\WWT.PlateFiles.Tests\\WWT.PlateFiles.Tests.csproj",
       "tests\\WWT.Providers.Tests\\WWT.Providers.Tests.csproj",
       "tools\\PlateManager\\PlateManager.csproj"

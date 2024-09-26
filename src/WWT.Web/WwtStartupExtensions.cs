@@ -4,15 +4,10 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
-using System;
+using System.Diagnostics;
 using WWT.Azure;
-using WWT.Caching;
-using WWT.Imaging;
-using WWT.PlateFiles;
 using WWT.Providers;
-using WWT.Tours;
 
 namespace WWT.Web;
 
@@ -31,11 +26,15 @@ public static class WwtStartupExtensions
         var configuration = builder.Configuration;
 
         // TODO: change the existing configuration to the new expected pattern
-        MergeConfig(configuration, "AzurePlateFileStorageAccount", "Aspire:Azure:Storage:Blobs:WwtFiles");
-        MergeConfig(configuration, "MarsStorageAccount", "Aspire:Azure:Storage:Blobs:Mars");
+        MergeConfig(configuration, "AzurePlateFileStorageAccount", "WwtFiles");
+        MergeConfig(configuration, "MarsStorageAccount", "Mars");
+        MergeConfig(configuration, "RedisConnectionString", "cache");
 
         builder.AddKeyedAzureBlobClient("WwtFiles");
         builder.AddKeyedAzureBlobClient("Mars");
+        builder.AddRedisDistributedCache("cache");
+
+        builder.Services.AddKeyedSingleton("WWT", new ActivitySource("WWT"));
 
         builder.Services
          .AddRequestProviders(options =>
@@ -71,30 +70,7 @@ public static class WwtStartupExtensions
              options.ContainerName = configuration["ImagesTilerContainer"];
          });
 
-        builder.Services
-            .AddCaching(options =>
-            {
-                configuration.Bind(options);
-                options.RedisCacheConnectionString = configuration["RedisConnectionString"];
-                options.SlidingExpiration = TimeSpan.Parse(configuration["SlidingExpiration"]);
-            })
-            .CacheType<IMandelbrot>(m => m.Add(nameof(IMandelbrot.CreateMandelbrot)))
-            .CacheType<IVirtualEarthDownloader>(plates => plates.Add(nameof(IVirtualEarthDownloader.DownloadVeTileAsync)))
-            .CacheType<IOctTileMapBuilder>(plates => plates.Add(nameof(IOctTileMapBuilder.GetOctTileAsync)))
-            .CacheType<IPlateTilePyramid>(plates => plates.Add(nameof(IPlateTilePyramid.GetStreamAsync)))
-            .CacheType<IThumbnailAccessor>(plates => plates
-                .Add(nameof(IThumbnailAccessor.GetThumbnailStreamAsync))
-                .Add(nameof(IThumbnailAccessor.GetDefaultThumbnailStreamAsync)))
-            .CacheType<ITourAccessor>(plates => plates
-                .Add(nameof(ITourAccessor.GetAuthorThumbnailAsync))
-                .Add(nameof(ITourAccessor.GetTourAsync))
-                .Add(nameof(ITourAccessor.GetTourThumbnailAsync)));
-
-        builder.Services.AddLogging(builder =>
-        {
-            builder.AddFilter("Swick.Cache", LogLevel.Trace);
-            builder.AddDebug();
-        });
+        builder.CacheWwtServices();
 
         builder.Services.AddSingleton(typeof(HelloWorldProvider));
     }
