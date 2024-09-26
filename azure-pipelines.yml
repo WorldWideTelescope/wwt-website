@@ -173,13 +173,14 @@ stages:
           Dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
           buildContext: '$(Build.SourcesDirectory)'
           tags: |
-            ${{ dockerTag }}
+            '$(dockerTag)'
 
       - bash: |
           set -xeuo pipefail
           mkdir $(build.artifactStagingDirectory)/dockerImage
+          echo 'tag = $(dockerTag)'
           docker save -o $(build.artifactStagingDirectory)/dockerImage/core-data.tar.gz \
-            aasworldwidetelescope/core-data:${{dockerTag}}
+            aasworldwidetelescope/core-data:$(dockerTag)
         displayName: Save image as artifact
 
       - publish: $(build.artifactStagingDirectory)/dockerImage
@@ -254,4 +255,4 @@ stages:
           repository: 'aasworldwidetelescope/core-data'
           command: 'push'
           tags: |
-            ${{ dockerTag }}
+            '$(dockerTag)'
