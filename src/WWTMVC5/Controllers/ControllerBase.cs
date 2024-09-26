@@ -17,6 +17,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Live;
 using Newtonsoft.Json;
 using Unity;
+using WWT.Providers;
 
 using WWTMVC5.Extensions;
 using WWTMVC5.Models;
@@ -32,6 +33,7 @@ namespace WWTMVC5.Controllers
     public class ControllerBase : Controller
     {
         private readonly ILogger<ControllerBase> _logger;
+        protected readonly IExternalUrlInfo _urlInfo;
 
         #region Constructor
 
@@ -43,6 +45,7 @@ namespace WWTMVC5.Controllers
         {
             ProfileService = profileService;
             _logger = UnityConfig.Container.Resolve<ILogger<ControllerBase>>();
+            _urlInfo = UnityConfig.Container.Resolve<IExternalUrlInfo>();
         }
 
         #endregion
@@ -102,9 +105,8 @@ namespace WWTMVC5.Controllers
         {
             // We have HttpContextBase, need HttpContext. They're independent!
             var httpContext = HttpContext.ApplicationInstance.Context;
-
-            // TODO: Figure out what we should return here
-            throw new InvalidOperationException("Need to get the base url");
+            var wwtContext = new SystemWebWwtContext(httpContext);
+            return _urlInfo.GetExternalBaseUrl(wwtContext.Request).ToString();
         }
 
         protected async Task<ProfileDetails> TryAuthenticateFromAuthCode(string authCode)
@@ -135,8 +137,7 @@ namespace WWTMVC5.Controllers
             var tokens = new { access_token = "", refresh_token = "" };
             var json = JsonConvert.DeserializeAnonymousType(tokenResult, tokens);
 
-            if (string.IsNullOrEmpty(json.access_token) || string.IsNullOrEmpty(json.refresh_token))
-            {
+            if (string.IsNullOrEmpty(json.access_token) || string.IsNullOrEmpty(json.refresh_token)) {
                 _logger.LogWarning("UserFromToken failed: {reply}", tokenResult);
                 return null;
             }
@@ -239,7 +240,7 @@ namespace WWTMVC5.Controllers
             var getMeResult = await client.GetAsync("me");
             string userId = null;
 
-            foreach (KeyValuePair<string, object> item in getMeResult.Result)
+            foreach (KeyValuePair<string,object> item in getMeResult.Result)
             {
                 if (item.Key.ToLower() == "id")
                 {

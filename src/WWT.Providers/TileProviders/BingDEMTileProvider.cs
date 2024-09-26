@@ -31,6 +31,9 @@ namespace WWT.Providers
             (var errored, var level, var tileX, var tileY) = await HandleLXYQParameter(context, token);
             if (errored)
                 return;
+#if NET
+            using var activity = _activitySource.CreateActivity("BingDemTileProvider", ActivityKind.Internal);
+#endif
 
             int demSize = 33 * 33;
             int parentL = Math.Max(1, level - 3);
@@ -47,9 +50,6 @@ namespace WWT.Providers
 
             using var stream = await _veDownloader.DownloadVeTileAsync(VirtualEarthTile.Ecn, parentL, parentX, parentY, token);
 
-#if NET
-            using var activity = _activitySource.CreateActivity("BingDemTileProvider", ActivityKind.Internal)?.Start();
-#endif
             DemTile tile = await DemCodec.DecompressAsync(stream, token);
 
             if (tile != null)

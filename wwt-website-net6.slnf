@@ -11,8 +11,6 @@
       "src\\WWT.Providers\\WWT.Providers.csproj",
       "src\\WWT.Tours\\WWT.Tours.csproj",
       "src\\WWT.Web\\WWT.Web.csproj",
-      "src\\WWT\\WWT.AppHost\\WWT.AppHost.csproj",
-      "src\\WWT\\WWT.ServiceDefaults\\WWT.ServiceDefaults.csproj",
       "tests\\WWT.Azure.Tests\\WWT.Azure.Tests.csproj",
       "tests\\WWT.Caching.Tests\\WWT.Caching.Tests.csproj",
       "tests\\WWT.PlateFiles.Tests\\WWT.PlateFiles.Tests.csproj",
