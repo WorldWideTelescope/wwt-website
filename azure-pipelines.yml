@@ -1,12 +1,21 @@
 trigger:
 - master
+- staging
 
 pr:
 - master
+- staging
 
 variables:
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
+  - name: buildPlatform
+    value: 'Any CPU'
+  - name: buildConfiguration
+    value: 'Release'
+  - name: dockerTag
+    ${{ if eq( variables['Build.SourceBranchName'], 'master' ) }}:
+      value: 'latest'
+    ${{ if ne( variables['Build.SourceBranchName'], 'master' ) }}:
+      value: ${{ variables['Build.SourceBranchName'] }}
 
 stages:
 - stage: Build
@@ -164,13 +173,13 @@ stages:
           Dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
           buildContext: '$(Build.SourcesDirectory)'
           tags: |
-            latest
+            ${{ dockerTag }}
 
       - bash: |
           set -xeuo pipefail
           mkdir $(build.artifactStagingDirectory)/dockerImage
           docker save -o $(build.artifactStagingDirectory)/dockerImage/core-data.tar.gz \
-            aasworldwidetelescope/core-data:latest
+            aasworldwidetelescope/core-data:${{dockerTag}}
         displayName: Save image as artifact
 
       - publish: $(build.artifactStagingDirectory)/dockerImage
@@ -201,6 +210,7 @@ stages:
     # new app and doing any final testing.
 
     - job: AzureAppService
+      condition: eq(variables['Build.SourceBranchName'], 'master')
       pool:
         vmImage: 'windows-latest'
       steps:
@@ -244,4 +254,4 @@ stages:
           repository: 'aasworldwidetelescope/core-data'
           command: 'push'
           tags: |
-            latest
+            ${{ dockerTag }}
