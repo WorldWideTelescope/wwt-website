@@ -22,7 +22,7 @@ public static class WwtStartupExtensions
     {
         if (configuration[oldKey] is { } existing && !string.IsNullOrEmpty(existing))
         {
-            configuration[newKey] = existing;
+            configuration[$"ConnectionStrings:{newKey}"] = existing;
         }
     }
 
