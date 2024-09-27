@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
+    <ContainerRepository>aasworldwidetelescope/core-data</ContainerRepository>
     <UserSecretsId>a8e75023-0c2f-49d9-ad36-1d5f83df30d7</UserSecretsId>
   </PropertyGroup>
 
@@ -9,7 +10,6 @@
     <PackageReference Include="Aspire.StackExchange.Redis.DistributedCaching" Version="8.2.0" />
     <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.3.2" />
     <PackageReference Include="Aspire.Azure.Storage.Blobs" Version="8.2.0" />
-    <PackageReference Include="Scrutor" Version="3.3.0" />
   </ItemGroup>
 
   <ItemGroup>
