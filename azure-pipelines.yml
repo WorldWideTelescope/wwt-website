@@ -74,15 +74,13 @@ stages:
           projects: 'wwt-website-net6.slnf'
           arguments: '--configuration $(buildConfiguration)'
 
-      - task: DotNetCoreCLI@2
-        displayName: dotnet publish
-        inputs:
-          command: 'publish'
-          publishWebProjects: false
-          zipAfterPublish: true
-          modifyOutputPath: true
-          projects: 'src/WWT.Web/WWT.Web.csproj'
-          arguments: '--configuration $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)/website'
+      - bash: |
+          dotnet publish ./src/WWT.Web/WWT.Web.csproj --configuration $(buildConfiguration) --no-build /t:PublishContainer -p "ContainerImageTags=${{ variables.dockerTag }}" -p ContainerArchiveOutputPath=$(build.artifactStagingDirectory)/dockerImage/core-data.tar.gz
+        displayName: Build docker image
+
+      - publish: $(build.artifactStagingDirectory)/dockerImage
+        artifact: dockerImage
+        displayName: Publish docker image
 
       - task: DotNetCoreCLI@2
         displayName: Create tool package
@@ -95,10 +93,6 @@ stages:
       - publish: $(build.artifactStagingDirectory)/tools
         displayName: Publish tools
         artifact: tools
-
-      - publish: $(build.artifactStagingDirectory)/website
-        displayName: Publish net6-web
-        artifact: net6-web
 
     - job: BuildMVC5
       displayName: 'ASP.NET MVC5 WebApp'
@@ -153,7 +147,6 @@ stages:
         displayName: Run init.ps1
         inputs:
           filePath: 'init.ps1'
-
       - task: VSBuild@1
         inputs:
           solution: 'wwt-communities.slnf'
@@ -163,33 +156,6 @@ stages:
 
       - publish: $(build.artifactStagingDirectory)/website
         artifact: mvc5
-
-    - job: BuildDocker
-      displayName: 'Docker Image'
-      pool:
-        vmImage: 'Ubuntu-latest'
-
-      steps:
-      - task: Docker@2
-        displayName: Build image
-        inputs:
-          repository: 'aasworldwidetelescope/core-data'
-          command: 'build'
-          Dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-          buildContext: '$(Build.SourcesDirectory)'
-          tags: |
-            ${{ variables.dockerTag }}
-
-      - bash: |
-          set -xeuo pipefail
-          mkdir $(build.artifactStagingDirectory)/dockerImage
-          echo 'tag = ${{ variables.dockerTag }}'
-          docker save -o $(build.artifactStagingDirectory)/dockerImage/core-data.tar.gz \
-            aasworldwidetelescope/core-data:${{ variables.dockerTag }}
-        displayName: Save image as artifact
-
-      - publish: $(build.artifactStagingDirectory)/dockerImage
-        artifact: dockerImage
 
 - stage: Deploy
   dependsOn: Build
