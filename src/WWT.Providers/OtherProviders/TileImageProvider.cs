@@ -7,9 +7,7 @@ using System.IO;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-
 using WWT.Imaging;
-using WWT.PlateFiles;
 
 namespace WWT.Providers
 {
@@ -21,10 +19,10 @@ namespace WWT.Providers
         private readonly ITileAccessor _tileAccessor;
         private readonly string _tempDir;
 
-        public TileImageProvider(IFileNameHasher hasher, ITileAccessor tileAccessor)
+        public TileImageProvider(IFileNameHasher hasher, ITileAccessor tileAccessor, IHttpClientFactory factory)
         {
             _hasher = hasher;
-            _httpClient = new HttpClient();
+            _httpClient = factory.CreateClient();
             _tileAccessor = tileAccessor;
             _tempDir = Path.Combine(Path.GetTempPath(), "wwt_temp");
 
@@ -43,7 +41,6 @@ namespace WWT.Providers
                 {
                     context.Response.ClearHeaders();
                     context.Response.ContentType = "text/plain";
-
                 }
 
                 string url = "";
@@ -329,8 +326,7 @@ namespace WWT.Providers
                 return path;
             }
 
-            // should be able to give this the cancellationtoken somehow?
-            using var stream = await _httpClient.GetStreamAsync(url).ConfigureAwait(false);
+            using var stream = await _httpClient.GetStreamAsync(url, token).ConfigureAwait(false);
 
             using (var fs = File.OpenWrite(path))
             {
