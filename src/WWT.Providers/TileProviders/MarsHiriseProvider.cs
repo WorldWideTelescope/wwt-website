@@ -1,13 +1,15 @@
 #nullable disable
 
 using System;
-using System.Drawing;
-using System.Drawing.Imaging;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Drawing;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
 using WWT.PlateFiles;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 
 namespace WWT.Providers
 {
@@ -27,16 +29,23 @@ namespace WWT.Providers
 
         public override async Task RunAsync(IWwtContext context, CancellationToken token)
         {
+            const int Width = 256;
+            const int Height = 256;
+
             (var errored, var level, var tileX, var tileY, var idText) = await HandleLXYExtraQParameter(context, token);
             if (errored)
                 return;
 
             var id = -1;
 
-            if (idText.Length > 0) {
-                try {
+            if (idText.Length > 0)
+            {
+                try
+                {
                     id = Convert.ToInt32(idText);
-                } catch {
+                }
+                catch
+                {
                     context.Response.StatusCode = 400;
                     context.Response.ContentType = ContentTypes.Text;
                     await context.Response.WriteAsync("HTTP/400 illegal HiRISE \"id\" parameter", token);
@@ -50,68 +59,74 @@ namespace WWT.Providers
                 return;
             }
 
-            using (Bitmap output = new Bitmap(256, 256))
+            int ll = level;
+            int xx = tileX;
+            int yy = tileY;
+
+            if (ll > 8)
             {
-                using (Graphics g = Graphics.FromImage(output))
+                int levelDif = ll - 8;
+                int scale = (int)Math.Pow(2, levelDif);
+                int tx = xx / scale;
+                int ty = yy / scale;
+
+                int offsetX = (xx - (tx * scale)) * (Width / scale);
+                int offsetY = (yy - (ty * scale)) * (Width / scale);
+                float width = Math.Max(2, (Width / scale));
+                float height = width;
+                if ((width + offsetX) >= (Width - 1))
                 {
-                    int ll = level;
-                    int xx = tileX;
-                    int yy = tileY;
-
-                    if (ll > 8)
-                    {
-                        int levelDif = ll - 8;
-                        int scale = (int)Math.Pow(2, levelDif);
-                        int tx = xx / scale;
-                        int ty = yy / scale;
-
-                        int offsetX = (xx - (tx * scale)) * (256 / scale);
-                        int offsetY = (yy - (ty * scale)) * (256 / scale);
-                        float width = Math.Max(2, (256 / scale));
-                        float height = width;
-                        if ((width + offsetX) >= 255)
-                        {
-                            width -= 1;
-                        }
-                        if ((height + offsetY) >= 255)
-                        {
-                            height -= 1;
-                        }
-
-                        using (var stream = await _plateTiles.GetStreamAsync(_options.WwtTilesDir, "marsbasemap.plate", -1, 8, tx, ty, token))
-                        using (var bmp1 = new Bitmap(stream))
-                        {
-                            g.DrawImage(bmp1, new RectangleF(0, 0, 256, 256), new RectangleF(offsetX, offsetY, width, height), GraphicsUnit.Pixel);
-                        }
-                    }
-                    else
-                    {
-                        using (var stream = await _plateTiles.GetStreamAsync(_options.WwtTilesDir, "marsbasemap.plate", -1, ll, xx, yy, token))
-                        using (var bmp1 = new Bitmap(stream))
-                        {
-                            g.DrawImageUnscaled(bmp1, new Point(0, 0));
-                        }
-                    }
-
-                    try
-                    {
-                        using (var stream = await LoadHiRiseAsync(ll, xx, yy, id, token))
-                        {
-                            if (stream != null)
-                            {
-                                using (var bmp2 = new Bitmap(stream))
-                                {
-                                    g.DrawImageUnscaled(bmp2, new Point(0, 0));
-                                }
-                            }
-                        }
-                    }
-                    catch
-                    {
-                    }
+                    width -= 1;
+                }
+                if ((height + offsetY) >= (Height - 1))
+                {
+                    height -= 1;
                 }
 
-                await output.SaveAsync(context.Response, ImageFormat.Png, token);
+                using var stream = await _plateTiles.GetStreamAsync(_options.WwtTilesDir, "marsbasemap.plate", -1, 8, tx, ty, token);
+                using var bmpl = Image.Load(stream);
+
+                bmpl.Mutate(c =>
+                {
+                    c.Crop(new Rectangle(offsetX, offsetY, (int)width, (int)height));
+                    c.Resize(Width, Height);
+                });
+
+                await bmpl.RespondPngAsync(context.Response, token);
+            }
+            else
+            {
+                using var stream = await _plateTiles.GetStreamAsync(_options.WwtTilesDir, "marsbasemap.plate", -1, ll, xx, yy, token);
+                using var bmp1 = Image.Load(stream);
+
+                bmp1.Mutate(c =>
+                {
+                    c.Crop(Width, Height);
+                });
+
+                await bmp1.RespondPngAsync(context.Response, token);
+            }
+
+            try
+            {
+                using (var stream = await LoadHiRiseAsync(ll, xx, yy, id, token))
+                {
+                    if (stream != null)
+                    {
+                        using var bmp2 = await Image.LoadAsync(stream, token);
+
+                        bmp2.Mutate(c =>
+                        {
+                            c.Crop(Width, Height);
+                        });
+                        await bmp2.RespondPngAsync(context.Response, token);
+                    }
+                }
+            }
+            catch
+            {
+                using var bmp2 = new Image<Rgba32>(Width, Height);
+                await bmp2.RespondPngAsync(context.Response, token);
             }
         }
 

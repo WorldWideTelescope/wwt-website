@@ -2,7 +2,6 @@
   "solution": {
     "path": "wwt-website.sln",
     "projects": [
-      "src\\WWT.Imaging\\WWT.Imaging.csproj",
       "src\\WWT.Tours\\WWT.Tours.csproj",
       "src\\WWTMVC5\\WWTMVC5.csproj",
       "src\\WWTWebservices\\WWTWebservices.csproj"
