@@ -1,7 +1,7 @@
 
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 using System;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,45 +31,32 @@ namespace WWT.Providers
 
             Int32 sqSide = 256;
 
-            using Bitmap bmpOutput = new Bitmap(sqSide, sqSide);
-            FastBitmap bmpOutputFast = new FastBitmap(bmpOutput);
-            SdssImage sdim = new SdssImage(map.raMin, map.decMax, map.raMax, map.decMin, true);
+            using var bmpOutput = new Image<Rgb24>(sqSide, sqSide);
+            var sdim = new SdssImage<Rgb24>(map.raMin, map.decMax, map.raMax, map.decMin, true);
             sdim.LoadImage();
 
             if (sdim.image != null)
             {
-
-                sdim.Lock();
-
-                bmpOutputFast.LockBitmap();
                 // Fill up bmp from sdim
-
                 Vector2d vxy, vradec;
                 unsafe
                 {
-                    PixelData* pPixel;
                     for (int y = 0; y < sqSide; y++)
                     {
-                        pPixel = bmpOutputFast[0, y];
                         vxy.Y = (y / 255.0);
                         for (int x = 0; x < sqSide; x++)
                         {
                             vxy.X = (x / 255.0);
                             vradec = map.PointToRaDec(vxy);
-                            *pPixel = sdim.GetPixelDataAtRaDec(vradec);
-
-                            pPixel++;
+                            bmpOutput[x, y] = sdim.GetPixelDataAtRaDec(vradec);
                         }
                     }
                 }
 
-                sdim.Unlock();
                 sdim.image.Dispose();
-
-                bmpOutputFast.UnlockBitmap();
             }
 
-            var result = bmpOutput.SaveToStream(ImageFormat.Png);
+            var result = bmpOutput.ToPngStream();
 
             return Task.FromResult<Stream?>(result);
         }

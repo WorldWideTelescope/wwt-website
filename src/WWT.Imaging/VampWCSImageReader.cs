@@ -1,8 +1,8 @@
 #nullable disable
 
 using System;
-using System.Drawing;
 using System.Xml;
+using SixLabors.ImageSharp;
 
 namespace WWT.Imaging
 {
@@ -82,9 +82,9 @@ namespace WWT.Imaging
 
 
 
-        public override Bitmap GetBitmap()
+        public override Image GetBitmap()
         {
-            return new Bitmap(imageFilename);
+            return Image.Load(imageFilename);
         }
 
         private int Rating;

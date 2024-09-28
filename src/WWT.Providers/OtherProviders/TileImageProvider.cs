@@ -1,13 +1,19 @@
 #nullable disable
 
+using SixLabors;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Drawing;
+using SixLabors.ImageSharp.Drawing.Processing;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 using System;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using WWT.Imaging;
+
+using Path = System.IO.Path;
 
 namespace WWT.Providers
 {
@@ -159,7 +165,7 @@ namespace WWT.Providers
             }
         }
 
-        public async Task TileBitmap(Bitmap bmp, ITileCreator creator, CancellationToken token)
+        public async Task TileBitmap(Image bmp, ITileCreator creator, CancellationToken token)
         {
             int width = bmp.Width;
             int height = bmp.Height;
@@ -213,15 +219,16 @@ namespace WWT.Providers
                         if ((((x + 1) * gridX) > xOffset) && (((y + 1) * gridX) > yOffset) &&
                             (((x) * gridX) < (xOffset + width)) && (((y) * gridX) < (yOffset + height)))
                         {
-                            using Bitmap bmpTile = new Bitmap(256, 256);
-                            using (Graphics gfx = Graphics.FromImage(bmpTile))
+                            using var bmpTile = bmp.Clone(c =>
                             {
-                                gfx.DrawImage(bmp, new Rectangle(0, 0, 256, 256),
-                                    new Rectangle((x * gridX) - xOffset, (y * gridX) - yOffset, gridX, gridX),
-                                    GraphicsUnit.Pixel);
-                            }
+                                c.Crop(new((x * gridX) - xOffset, (y * gridX) - yOffset, gridX, gridX));
+                                c.Resize(256, 256);
+                            });
 
-                            using var stream = bmpTile.SaveToStream(ImageFormat.Png);
+                            using var stream = new MemoryStream();
+                            await bmpTile.SaveAsPngAsync(stream, token);
+                            stream.Position = 0;
+
                             await creator.AddTileAsync(stream, currentLevel, x, y, token);
                         }
                     }
@@ -232,59 +239,61 @@ namespace WWT.Providers
             }
         }
 
-        public async Task MakeThumbnailAsync(Bitmap imgOrig, ITileCreator creator, CancellationToken token)
+        public async Task MakeThumbnailAsync(Image imgOrig, ITileCreator creator, CancellationToken token)
         {
             using var stream = CreateThumbnailStream(imgOrig);
 
             await creator.AddThumbnailAsync(stream, token);
         }
 
-        private Stream CreateThumbnailStream(Bitmap imgOrig)
+        private Stream CreateThumbnailStream(Image imgOrig)
         {
             try
             {
-                using Bitmap bmpThumb = new Bitmap(96, 45);
+                const int Width = 96;
+                const int Height = 45;
 
-                using (Graphics g = Graphics.FromImage(bmpThumb))
+                double imageAspect = ((double)imgOrig.Width) / (imgOrig.Height);
+
+                double clientAspect = ((double)Width) / Height;
+
+                int cw = Width;
+                int ch = Height;
+
+                if (imageAspect < clientAspect)
                 {
-                    g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-
-                    double imageAspect = ((double)imgOrig.Width) / (imgOrig.Height);
-
-                    double clientAspect = ((double)bmpThumb.Width) / bmpThumb.Height;
-
-                    int cw = bmpThumb.Width;
-                    int ch = bmpThumb.Height;
-
-                    if (imageAspect < clientAspect)
-                    {
-                        ch = (int)((double)cw / imageAspect);
-                    }
-                    else
-                    {
-                        cw = (int)((double)ch * imageAspect);
-                    }
-
-                    int cx = (bmpThumb.Width - cw) / 2;
-                    int cy = ((bmpThumb.Height - ch) / 2); // - 1;
-                    Rectangle destRect = new Rectangle(cx, cy, cw, ch); //+ 1);
-
-                    Rectangle srcRect = new Rectangle(0, 0, imgOrig.Width, imgOrig.Height);
-                    g.DrawImage(imgOrig, destRect, srcRect, System.Drawing.GraphicsUnit.Pixel);
+                    ch = (int)((double)cw / imageAspect);
                 }
-                return bmpThumb.SaveToStream(ImageFormat.Jpeg);
+                else
+                {
+                    cw = (int)((double)ch * imageAspect);
+                }
+
+                int cx = (Width - cw) / 2;
+                int cy = ((Height - ch) / 2); // - 1;
+
+                using var thumb = imgOrig.Clone(c =>
+                {
+                    c.Crop(new Rectangle(cx, cy, cw, ch));
+                    c.Resize(Width, Height, KnownResamplers.Bicubic, new Rectangle(cx, cy, cw, ch), compand: false);
+                });
+
+                return thumb.ToJpegStream();
             }
             catch
             {
-                using Bitmap bmp = new Bitmap(96, 45);
-                using (Graphics g = Graphics.FromImage(bmp))
-                {
-                    g.Clear(Color.Blue);
-                }
-
-                return bmp.SaveToStream(ImageFormat.Jpeg);
+                return new MemoryStream(_empty.Value);
             }
         }
+
+        private readonly Lazy<byte[]> _empty = new(() =>
+        {
+            var img = new Image<L8>(96, 45);
+            img.Mutate(c => c.Fill(Color.Blue));
+            var ms = new MemoryStream();
+            img.SaveAsJpeg(ms);
+            return ms.ToArray();
+        });
 
         public int CalcMaxLevels(int SizeX, int SizeY)
         {

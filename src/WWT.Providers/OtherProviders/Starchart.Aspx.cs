@@ -1,7 +1,11 @@
 #nullable disable
 
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Drawing;
+using SixLabors.ImageSharp.Drawing.Processing;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 using System;
-using System.Drawing;
 
 namespace WWT.Providers
 {
@@ -2348,105 +2352,92 @@ namespace WWT.Providers
         }
 
 
-        public Bitmap GetChart(double lat, double lng, double time, double ra, double dec, int width, int height)
+        public Image GetChart(double lat, double lng, double time, double ra, double dec, int width, int height)
         {
             double radius = width / 2;
             Vector2DD location = new Vector2DD(lng, lat);
 
-            Bitmap bmp = new Bitmap(width, height);
+            var bmp = new Image<Rgb24>(width, height);
 
-            Graphics g = Graphics.FromImage(bmp);
-            g.Clear(Color.White);
-
-            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-
-            //g.DrawEllipse(Pens.Black, );
-
-            SolidBrush black = new SolidBrush(Color.Black);
-            SolidBrush white = new SolidBrush(Color.White);
-
-            g.FillEllipse(black, new RectangleF(0, 0, (float)(radius * 2), (float)(radius * 2)));
-            // draw stars
-
-            for (int i = 0; i < stars.Length; i += 3)
+            bmp.Mutate(c =>
             {
-                Vector2DD pnt = new Vector2DD(stars[i] / 15, stars[i + 1]);
-                Vector2DD pntOut = Calc.EquitorialToHorizon(pnt, location, time);
-                pntOut.X -= 90;
-                double mag = stars[i + 2];
+                c.Clear(Color.White);
+                c.Fill(Color.Black, new EllipsePolygon(0, 0, (float)(radius * 2), (float)(radius * 2)));
 
-                double x = radius - Math.Cos(pntOut.X * Calc.RC) * ((1 - pntOut.Y / 90) * radius);
-                double y = radius + Math.Sin(pntOut.X * Calc.RC) * ((1 - pntOut.Y / 90) * radius);
-                double size = (6 - mag) * 4 / 5;
-                //size = 5;
-                g.FillEllipse(white, new RectangleF((float)(x - (size / 2)), (float)(y - (size / 2)), (float)size, (float)size));
-            }
-
-            // draw constellation lines
-            double lastX = 0;
-            double lastY = 0;
-            bool first = true;
-            for (int i = 0; i < figures.Length; i += 3)
-            {
-                Vector2DD pnt = new Vector2DD(figures[i], figures[i + 1]);
-                Vector2DD pntOut = Calc.EquitorialToHorizon(pnt, location, time);
-                pntOut.X -= 90;
-
-                double x = radius - Math.Cos(pntOut.X * Calc.RC) * ((1 - pntOut.Y / 90) * radius);
-                double y = radius + Math.Sin(pntOut.X * Calc.RC) * ((1 - pntOut.Y / 90) * radius);
-
-                if (figures[i + 2] == 0 || first)
+                for (int i = 0; i < stars.Length; i += 3)
                 {
-                    first = false;
+                    Vector2DD pnt = new Vector2DD(stars[i] / 15, stars[i + 1]);
+                    Vector2DD pntOut = Calc.EquitorialToHorizon(pnt, location, time);
+                    pntOut.X -= 90;
+                    double mag = stars[i + 2];
+
+                    double x = radius - Math.Cos(pntOut.X * Calc.RC) * ((1 - pntOut.Y / 90) * radius);
+                    double y = radius + Math.Sin(pntOut.X * Calc.RC) * ((1 - pntOut.Y / 90) * radius);
+                    double size = (6 - mag) * 4 / 5;
+
+                    c.Fill(Color.White, new EllipsePolygon((float)(x - (size / 2)), (float)(y - (size / 2)), (float)size, (float)size));
                 }
-                else
+
+                // draw constellation lines
+                double lastX = 0;
+                double lastY = 0;
+                bool first = true;
+
+                var whitePen = Pens.Solid(Color.White);
+                var greenPen = Pens.Solid(Color.Green);
+
+                for (int i = 0; i < figures.Length; i += 3)
                 {
-                    if (pntOut.Y > -20)
+                    Vector2DD pnt = new Vector2DD(figures[i], figures[i + 1]);
+                    Vector2DD pntOut = Calc.EquitorialToHorizon(pnt, location, time);
+                    pntOut.X -= 90;
+
+                    double x = radius - Math.Cos(pntOut.X * Calc.RC) * ((1 - pntOut.Y / 90) * radius);
+                    double y = radius + Math.Sin(pntOut.X * Calc.RC) * ((1 - pntOut.Y / 90) * radius);
+
+                    if (figures[i + 2] == 0 || first)
                     {
-                        g.DrawLine(Pens.White, new PointF((float)x, (float)y), new PointF((float)lastX, (float)lastY));
+                        first = false;
                     }
+                    else
+                    {
+                        if (pntOut.Y > -20)
+                        {
+                            c.DrawLine(Pens.Solid(Color.White), new PointF((float)x, (float)y), new PointF((float)lastX, (float)lastY));
+                        }
+                    }
+
+                    lastX = x;
+                    lastY = y;
                 }
 
-                lastX = x;
-                lastY = y;
-            }
+                // draw ecliptic
 
-            // draw ecliptic
+                // draw planets / moon
 
-            // draw planets / moon
+                // draw labels
 
-            // draw labels
+                // draw target
 
-            // draw target
+                // draw target
+                if (ra != 0 && dec != 0)
+                {
+                    Vector2DD pnt = new Vector2DD(ra / 15, dec);
+                    Vector2DD pntOut = Calc.EquitorialToHorizon(pnt, location, time);
+                    pntOut.X -= 90;
 
-            // draw target
-            if (ra != 0 && dec != 0)
-            {
-                Vector2DD pnt = new Vector2DD(ra / 15, dec);
-                Vector2DD pntOut = Calc.EquitorialToHorizon(pnt, location, time);
-                pntOut.X -= 90;
+                    double x = radius - Math.Cos(pntOut.X * Calc.RC) * ((1 - pntOut.Y / 90) * radius);
+                    double y = radius + Math.Sin(pntOut.X * Calc.RC) * ((1 - pntOut.Y / 90) * radius);
 
-                double x = radius - Math.Cos(pntOut.X * Calc.RC) * ((1 - pntOut.Y / 90) * radius);
-                double y = radius + Math.Sin(pntOut.X * Calc.RC) * ((1 - pntOut.Y / 90) * radius);
-
-                int tSize = width / 50;
-                g.DrawEllipse(Pens.Green, new RectangleF((float)(x - tSize), (float)(y - tSize), tSize * 2, tSize * 2));
-                g.DrawLine(Pens.Green, new PointF((float)(x - tSize), (float)y), new PointF((float)(x + tSize), (float)y));
-                g.DrawLine(Pens.Green, new PointF((float)x, (float)(y - tSize)), new PointF((float)x, (float)(y + tSize)));
-            }
-
-            //Clean up
-
-            black.Dispose();
-            white.Dispose();
-            g.Flush();
-            g.Dispose();
+                    int tSize = width / 50;
+                    c.Draw(greenPen, new EllipsePolygon((float)(x - tSize), (float)(y - tSize), tSize * 2, tSize * 2));
+                    c.DrawLine(greenPen, new PointF((float)(x - tSize), (float)y), new PointF((float)(x + tSize), (float)y));
+                    c.DrawLine(greenPen, new PointF((float)x, (float)(y - tSize)), new PointF((float)x, (float)(y + tSize)));
+                }
+            });
 
             return bmp;
-
         }
-
-
     }
 
     public class Calc
@@ -2473,8 +2464,6 @@ namespace WWT.Providers
 
             double cosAzimith = (Math.Sin(dec) - Math.Sin(altitude) * Math.Sin(lat)) / (Math.Cos(altitude) * Math.Cos(lat));
             double azimuth = Math.Acos(cosAzimith);
-
-
 
             Vector2DD altAz = new Vector2DD(azimuth / RC, altitude / RC);
             if (Math.Sin(ha) > 0)

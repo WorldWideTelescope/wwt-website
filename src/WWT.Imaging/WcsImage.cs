@@ -1,5 +1,6 @@
 #nullable disable
 
+using SixLabors.ImageSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -240,6 +241,6 @@ namespace WWT.Imaging
         }
 
 
-        public abstract System.Drawing.Bitmap GetBitmap();
+        public abstract Image GetBitmap();
     }
 }
