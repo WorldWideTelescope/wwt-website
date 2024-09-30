@@ -1,7 +1,9 @@
 
+using Microsoft.Extensions.DependencyInjection;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,7 +14,7 @@ using WWT.Imaging;
 
 namespace WWT.Providers
 {
-    public class OctTileMapBuilder : IOctTileMapBuilder
+    public class OctTileMapBuilder([FromKeyedServices("WTT")] ActivitySource activitySource) : IOctTileMapBuilder
     {
         public Task<Stream?> GetOctTileAsync(int level, int tileX, int tileY, bool enforceBoundary, CancellationToken token)
         {
@@ -25,11 +27,14 @@ namespace WWT.Providers
             {
                 if (map.raMin > 270 | map.decMax < -3 | map.raMax < 105 | map.decMin > 75)
                 {
+                    Activity.Current?.SetBaggage("Boundary Enforced", "true");
                     return Task.FromResult<Stream?>(null);
                 }
             }
 
             Int32 sqSide = 256;
+
+            using var activity = activitySource.StartImageProcessing();
 
             using var bmpOutput = new Image<Rgb24>(sqSide, sqSide);
             var sdim = new SdssImage<Rgb24>(map.raMin, map.decMax, map.raMax, map.decMin, true);

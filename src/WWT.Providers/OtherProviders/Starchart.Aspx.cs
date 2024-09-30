@@ -1,22 +1,26 @@
 #nullable disable
 
+using Microsoft.Extensions.DependencyInjection;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Drawing;
 using SixLabors.ImageSharp.Drawing.Processing;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using System;
+using System.Diagnostics;
 
 namespace WWT.Providers
 {
-    public abstract partial class StarChart : RequestProvider
+    public sealed class StarChart
     {
+        private readonly ActivitySource _activitySource;
+        private readonly double[] stars;
+        private readonly double[] figures;
 
-        double[] stars;
-        double[] figures;
-
-        public StarChart()
+        public StarChart([FromKeyedServices("WTT")]ActivitySource activitySource)
         {
+            _activitySource = activitySource;
+
             #region 
             stars = new double[] {
                 101.2833333,-16.71611111,-1.46,
@@ -2354,6 +2358,8 @@ namespace WWT.Providers
 
         public Image GetChart(double lat, double lng, double time, double ra, double dec, int width, int height)
         {
+            using var activity = _activitySource.StartImageProcessing();
+
             double radius = width / 2;
             Vector2DD location = new Vector2DD(lng, lat);
 

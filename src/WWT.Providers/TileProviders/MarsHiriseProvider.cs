@@ -1,26 +1,28 @@
 #nullable disable
 
-using System;
+using Microsoft.Extensions.DependencyInjection;
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Drawing;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
+using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-
 using WWT.PlateFiles;
-using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing;
 
 namespace WWT.Providers
 {
     [RequestEndpoint("/wwtweb/MarsHirise.aspx")]
     public class MarsHiriseProvider : RequestProvider
     {
+        private readonly ActivitySource _activitySource;
         private readonly IPlateTilePyramid _plateTiles;
         private readonly WwtOptions _options;
 
-        public MarsHiriseProvider(IPlateTilePyramid plateTiles, WwtOptions options)
+        public MarsHiriseProvider(IPlateTilePyramid plateTiles, WwtOptions options, [FromKeyedServices("WTT")]ActivitySource activitySource)
         {
+            _activitySource = activitySource;
             _plateTiles = plateTiles;
             _options = options;
         }
@@ -58,6 +60,8 @@ namespace WWT.Providers
                 context.Response.StatusCode = 404;
                 return;
             }
+
+            using var activity = _activitySource.StartImageProcessing();
 
             int ll = level;
             int xx = tileX;

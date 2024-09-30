@@ -1,12 +1,12 @@
 #nullable disable
 
-using SixLabors;
+using Microsoft.Extensions.DependencyInjection;
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Drawing;
 using SixLabors.ImageSharp.Drawing.Processing;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Threading;
@@ -20,13 +20,15 @@ namespace WWT.Providers
     [RequestEndpoint("/wwtweb/TileImage.aspx")]
     public class TileImageProvider : RequestProvider
     {
+        private readonly ActivitySource _activitySource;
         private readonly IFileNameHasher _hasher;
         private readonly HttpClient _httpClient;
         private readonly ITileAccessor _tileAccessor;
         private readonly string _tempDir;
 
-        public TileImageProvider(IFileNameHasher hasher, ITileAccessor tileAccessor, IHttpClientFactory factory)
+        public TileImageProvider(IFileNameHasher hasher, ITileAccessor tileAccessor, IHttpClientFactory factory, [FromKeyedServices("WTT")] ActivitySource activitySource)
         {
+            _activitySource = activitySource;
             _hasher = hasher;
             _httpClient = factory.CreateClient();
             _tileAccessor = tileAccessor;
@@ -248,6 +250,8 @@ namespace WWT.Providers
 
         private Stream CreateThumbnailStream(Image imgOrig)
         {
+            using var activity = _activitySource.StartImageProcessing();
+
             try
             {
                 const int Width = 96;

@@ -40,14 +40,6 @@ builder.Services.AddCors(options => options
 
 builder.Services.AddMvcCore();
 
-builder.Services.AddLogging(builder =>
-{
-    builder.AddFilter("Swick.Cache", LogLevel.Trace);
-    builder.AddDebug();
-});
-
-builder.Services.AddSingleton(typeof(HelloWorldProvider));
-
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

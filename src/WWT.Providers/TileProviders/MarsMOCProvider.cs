@@ -1,7 +1,9 @@
+using Microsoft.Extensions.DependencyInjection;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,11 +15,13 @@ namespace WWT.Providers
     [RequestEndpoint("/wwtweb/MarsMoc.aspx")]
     public class MarsMocProvider : RequestProvider
     {
+        private readonly ActivitySource _activitySource;
         private readonly IPlateTilePyramid _plateTiles;
         private readonly WwtOptions _options;
 
-        public MarsMocProvider(IPlateTilePyramid plateTiles, WwtOptions options)
+        public MarsMocProvider(IPlateTilePyramid plateTiles, WwtOptions options, [FromKeyedServices("WTT")]ActivitySource activitySource)
         {
+            _activitySource = activitySource;
             _plateTiles = plateTiles;
             _options = options;
         }
@@ -29,6 +33,8 @@ namespace WWT.Providers
             (var errored, var level, var tileX, var tileY) = await HandleLXYQParameter(context, token);
             if (errored)
                 return;
+
+            using var activity = _activitySource.StartImageProcessing();
 
             using (var output = new Image<Rgba32>(256, 256))
             {
