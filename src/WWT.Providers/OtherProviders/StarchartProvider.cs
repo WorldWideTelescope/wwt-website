@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace WWT.Providers
 {
     [RequestEndpoint("/wwtweb/StarChart.aspx")]
-    public class StarChartProvider : StarChart
+    public class StarChartProvider(StarChart stars) : RequestProvider
     {
         public override string ContentType => ContentTypes.Png;
 
@@ -37,7 +37,7 @@ namespace WWT.Providers
                 }
             }
 
-            using var chart = GetChart(lat, lng, time, ra, dec, width, height);
+            using var chart = stars.GetChart(lat, lng, time, ra, dec, width, height);
             await chart.SavePngResponseAsync(context.Response, token);
         }
     }

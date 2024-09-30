@@ -1,5 +1,6 @@
 #nullable disable
 
+using Microsoft.Extensions.DependencyInjection;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
@@ -12,10 +13,12 @@ namespace WWT.Providers
 {
     public class Mandelbrot : IMandelbrot
     {
+        private readonly ActivitySource _activitySource;
         private readonly Color[] _colorMap;
 
-        public Mandelbrot()
+        public Mandelbrot([FromKeyedServices("WTT")]ActivitySource activitySource)
         {
+            _activitySource = activitySource;
             _colorMap = CreateColorMap();
         }
 
@@ -29,6 +32,8 @@ namespace WWT.Providers
 
         private Image CreateMandelbrotBitmap(int level, int tileX, int tileY)
         {
+            using var activity = _activitySource.StartImageProcessing();
+
             double tileWidth = (4 / (Math.Pow(2, level)));
             double Sy = ((double)tileY * tileWidth) - 2;
             double Fy = Sy + tileWidth;

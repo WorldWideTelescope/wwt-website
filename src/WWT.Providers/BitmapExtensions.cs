@@ -1,5 +1,7 @@
 using SixLabors.ImageSharp;
+using System.Diagnostics;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -21,6 +23,17 @@ namespace WWT.Providers
             bitmap.SaveAsJpeg(ms);
             ms.Position = 0;
             return ms;
+        }
+
+        public static Activity StartImageProcessing(this ActivitySource source, [CallerMemberName] string name = null)
+        {
+            if (source.StartActivity(name) is { } activity)
+            {
+                activity.AddBaggage("ImageProcessing", "true");
+                return activity;
+            }
+
+            return null;
         }
 
         public static async Task SavePngResponseAsync(this Image bitmap, IResponse response, CancellationToken token)

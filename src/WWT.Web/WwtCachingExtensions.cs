@@ -24,7 +24,7 @@ internal static class WwtCachingExtensions
 {
     private const string Original = "Original";
 
-    public static void CacheWwtServices(this IHostApplicationBuilder builder)
+    public static void AddWwtCaching(this IHostApplicationBuilder builder)
     {
         builder.Services.AddSingleton(sp => sp.GetRequiredService<ObjectPoolProvider>().CreateStringBuilderPool());
         builder.Services.AddOptions<CachingOptions>()
