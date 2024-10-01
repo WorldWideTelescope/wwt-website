@@ -15,6 +15,6 @@
   <ItemGroup>
     <ProjectReference Include="..\WWT.Azure\WWT.Azure.csproj" />
     <ProjectReference Include="..\WWT.Providers\WWT.Providers.csproj" />
-    <ProjectReference Include="..\WWT\WWT.ServiceDefaults\WWT.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\WWT.ServiceDefaults\WWT.ServiceDefaults.csproj" />
   </ItemGroup>
 </Project>

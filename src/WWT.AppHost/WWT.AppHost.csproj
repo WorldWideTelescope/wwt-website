@@ -13,10 +13,17 @@
     <PackageReference Include="Aspire.Hosting.AppHost" Version="8.2.0" />
     <PackageReference Include="Aspire.Hosting.Azure.Storage" Version="8.2.0" />
     <PackageReference Include="Aspire.Hosting.Redis" Version="8.2.0" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.22.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\WWT.Web\WWT.Web.csproj" />
+    <ProjectReference Include="..\WWT.Web\WWT.Web.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="webclient\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
