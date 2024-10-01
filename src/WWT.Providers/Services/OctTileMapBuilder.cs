@@ -14,7 +14,7 @@ using WWT.Imaging;
 
 namespace WWT.Providers
 {
-    public class OctTileMapBuilder([FromKeyedServices("WTT")] ActivitySource activitySource) : IOctTileMapBuilder
+    public class OctTileMapBuilder([FromKeyedServices(Constants.ActivitySourceName)] ActivitySource activitySource) : IOctTileMapBuilder
     {
         public Task<Stream?> GetOctTileAsync(int level, int tileX, int tileY, bool enforceBoundary, CancellationToken token)
         {

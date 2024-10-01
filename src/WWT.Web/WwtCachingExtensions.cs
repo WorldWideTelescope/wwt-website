@@ -57,7 +57,7 @@ internal static class WwtCachingExtensions
         ObjectPool<StringBuilder> sbPool,
         IOptions<CachingOptions> options,
         IDistributedCache cache,
-        [FromKeyedServices("WWT")] ActivitySource activitySource,
+        [FromKeyedServices(Constants.ActivitySourceName)] ActivitySource activitySource,
         [FromKeyedServices(Original)] ITourAccessor tourAccessor,
         [FromKeyedServices(Original)] IThumbnailAccessor thumbnailAccessor,
         [FromKeyedServices(Original)] IPlateTilePyramid plateTilePyramid,

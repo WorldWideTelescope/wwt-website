@@ -19,7 +19,7 @@ namespace WWT.Providers
         private readonly IPlateTilePyramid _plateTiles;
         private readonly WwtOptions _options;
 
-        public MarsMocProvider(IPlateTilePyramid plateTiles, WwtOptions options, [FromKeyedServices("WTT")]ActivitySource activitySource)
+        public MarsMocProvider(IPlateTilePyramid plateTiles, WwtOptions options, [FromKeyedServices(Constants.ActivitySourceName)] ActivitySource activitySource)
         {
             _activitySource = activitySource;
             _plateTiles = plateTiles;
@@ -54,7 +54,7 @@ namespace WWT.Providers
                 if (ll > 8)
                 {
                     int levelDif = ll - 8;
-                    int scale = (int) Math.Pow(2, levelDif);
+                    int scale = (int)Math.Pow(2, levelDif);
                     int tx = xx / scale;
                     int ty = yy / scale;
 
@@ -75,7 +75,7 @@ namespace WWT.Providers
                     using (var stream = await _plateTiles.GetStreamAsync(_options.WwtTilesDir, "marsbasemap.plate", -1, 8, tx, ty, token))
                     using (var bmp1 = Image.Load(stream))
                     {
-                        bmp1.Mutate(x => x.Crop(new Rectangle(offsetX, offsetY, (int) width, (int) height)).Resize(256, 256));
+                        bmp1.Mutate(x => x.Crop(new Rectangle(offsetX, offsetY, (int)width, (int)height)).Resize(256, 256));
                         output.Mutate(x => x.DrawImage(bmp1, 1.0f));
                     }
                 }

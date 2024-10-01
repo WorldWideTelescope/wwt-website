@@ -3,7 +3,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,7 +15,7 @@ namespace WWT.Providers
         private readonly ActivitySource _activitySource;
         private readonly Color[] _colorMap;
 
-        public Mandelbrot([FromKeyedServices("WTT")]ActivitySource activitySource)
+        public Mandelbrot([FromKeyedServices(Constants.ActivitySourceName)]ActivitySource activitySource)
         {
             _activitySource = activitySource;
             _colorMap = CreateColorMap();

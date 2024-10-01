@@ -17,7 +17,7 @@ namespace WWT.Providers
         private readonly IVirtualEarthDownloader _veDownloader;
         private readonly ActivitySource _activitySource;
 
-        public BingDemTileProvider(IVirtualEarthDownloader veDownloader, [FromKeyedServices("WWT")] ActivitySource activitySource)
+        public BingDemTileProvider(IVirtualEarthDownloader veDownloader, [FromKeyedServices(Constants.ActivitySourceName)] ActivitySource activitySource)
         {
             _veDownloader = veDownloader;
             _activitySource = activitySource;
