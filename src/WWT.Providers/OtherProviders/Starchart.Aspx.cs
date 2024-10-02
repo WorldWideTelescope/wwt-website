@@ -17,7 +17,7 @@ namespace WWT.Providers
         private readonly double[] stars;
         private readonly double[] figures;
 
-        public StarChart([FromKeyedServices("WTT")]ActivitySource activitySource)
+        public StarChart([FromKeyedServices(Constants.ActivitySourceName)]ActivitySource activitySource)
         {
             _activitySource = activitySource;
 

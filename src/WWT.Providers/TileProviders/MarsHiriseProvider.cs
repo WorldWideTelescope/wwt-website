@@ -20,7 +20,7 @@ namespace WWT.Providers
         private readonly IPlateTilePyramid _plateTiles;
         private readonly WwtOptions _options;
 
-        public MarsHiriseProvider(IPlateTilePyramid plateTiles, WwtOptions options, [FromKeyedServices("WTT")]ActivitySource activitySource)
+        public MarsHiriseProvider(IPlateTilePyramid plateTiles, WwtOptions options, [FromKeyedServices(Constants.ActivitySourceName)]ActivitySource activitySource)
         {
             _activitySource = activitySource;
             _plateTiles = plateTiles;

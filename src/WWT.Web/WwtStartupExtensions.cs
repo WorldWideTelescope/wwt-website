@@ -30,7 +30,7 @@ public static class WwtStartupExtensions
         builder.AddKeyedAzureBlobClient("Mars");
         builder.AddRedisDistributedCache("cache");
 
-        builder.Services.AddKeyedSingleton("WWT", new ActivitySource("WWT"));
+        builder.Services.AddKeyedSingleton(Constants.ActivitySourceName, new ActivitySource(Constants.ActivitySourceName));
         builder.Services.AddSingleton<DSSProvider>();
 
         builder.Services
