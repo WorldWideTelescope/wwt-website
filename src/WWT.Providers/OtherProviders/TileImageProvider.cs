@@ -26,7 +26,7 @@ namespace WWT.Providers
         private readonly ITileAccessor _tileAccessor;
         private readonly string _tempDir;
 
-        public TileImageProvider(IFileNameHasher hasher, ITileAccessor tileAccessor, IHttpClientFactory factory, [FromKeyedServices("WTT")] ActivitySource activitySource)
+        public TileImageProvider(IFileNameHasher hasher, ITileAccessor tileAccessor, IHttpClientFactory factory, [FromKeyedServices(Constants.ActivitySourceName)] ActivitySource activitySource)
         {
             _activitySource = activitySource;
             _hasher = hasher;

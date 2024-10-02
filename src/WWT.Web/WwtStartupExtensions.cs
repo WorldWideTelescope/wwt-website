@@ -35,7 +35,7 @@ public static class WwtStartupExtensions
         builder.AddKeyedAzureBlobClient("Mars");
         builder.AddRedisDistributedCache("cache");
 
-        builder.Services.AddKeyedSingleton("WWT", new ActivitySource("WWT"));
+        builder.Services.AddKeyedSingleton(Constants.ActivitySourceName, new ActivitySource(Constants.ActivitySourceName));
 
         builder.Services
          .AddRequestProviders(options =>
@@ -108,7 +108,7 @@ public static class WwtStartupExtensions
         {
             // All the providers are registered as singletons, so we can cache them initially
             var provider = (RequestProvider)ActivatorUtilities.CreateInstance(endpoints.ServiceProvider, providerType);
-            endpoints.MapGet(endpoint, (HttpContext ctx, [FromKeyedServices("WWT")] ActivitySource activitySource) =>
+            endpoints.MapGet(endpoint, (HttpContext ctx, [FromKeyedServices(Constants.ActivitySourceName)] ActivitySource activitySource) =>
             {
                 using var activity = activitySource.StartActivity("RequestProvider", ActivityKind.Server);
                 activity?.AddBaggage("ProviderName", providerType.FullName);

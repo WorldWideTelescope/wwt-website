@@ -9,6 +9,7 @@ using OpenTelemetry;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using System.Diagnostics;
+using WWT.Providers;
 
 namespace Microsoft.Extensions.Hosting;
 
@@ -53,7 +54,7 @@ public static class Extensions
                 .AddRuntimeInstrumentation())
             .WithTracing(tracing => tracing
                 .AddAspNetCoreInstrumentation()
-                .AddSource("WWT")
+                .AddSource(Constants.ActivitySourceName)
                 .AddProcessor(new IgnoreFailedBlobProcessor())
                 .AddHttpClientInstrumentation());
 
