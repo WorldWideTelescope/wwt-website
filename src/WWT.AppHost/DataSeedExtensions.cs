@@ -109,6 +109,8 @@ internal static class DataSeedExtensions
         {
             var blobClient = new BlobServiceClient(resource.ConnectionStringExpression.ValueExpression, new() { Transport = new HttpClientTransport(httpClient) });
 
+            logger.LogInformation("Connecting to blob at {ConnectionString}", resource.ConnectionStringExpression.ValueExpression);
+
             using var fs = File.OpenRead(path);
             using var archive = new ZipArchive(fs, ZipArchiveMode.Read);
 
