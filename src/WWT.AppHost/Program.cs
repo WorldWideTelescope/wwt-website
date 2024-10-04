@@ -1,5 +1,6 @@
 using Projects;
 using WWT.AppHost;
+using System.Runtime.InteropServices;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
@@ -17,13 +18,18 @@ var webclient = builder.AddDockerfile("webclient", "webclient/")
     .WithHttpEndpoint(targetPort: 8080)
     .ExcludeFromManifest();
 
-builder.AddContainer("storage-explorer", "sebagomez/azurestorageexplorer")
-    .WithHttpEndpoint(targetPort: 8080)
-    .WithEnvironment(e =>
-    {
-        e.EnvironmentVariables["AZURE_STORAGE_CONNECTIONSTRING"] = new ConnectionStringReference(wwtFiles.Resource, optional: false);
-    })
-    .ExcludeFromManifest();
+// This container only supports x86_64
+var architecture = RuntimeInformation.OSArchitecture;
+if (architecture is Architecture.X64)
+{
+    builder.AddContainer("storage-explorer", "sebagomez/azurestorageexplorer")
+        .WithHttpEndpoint(targetPort: 8080)
+        .WithEnvironment(e =>
+        {
+            e.EnvironmentVariables["AZURE_STORAGE_CONNECTIONSTRING"] = new ConnectionStringReference(wwtFiles.Resource, optional: false);
+        })
+        .ExcludeFromManifest();
+}
 
 builder.AddProject<WWT_Web>("web")
     .WithReference(wwtFiles)
