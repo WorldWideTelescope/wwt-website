@@ -122,10 +122,11 @@ public static class WwtEndpointExtensions
 
         foreach (var (endpoint, providerType) in endpointManager)
         {
-            var provider = (RequestProvider)ActivatorUtilities.CreateInstance(endpoints.ServiceProvider, providerType);
+            var providerLazy = new Lazy<RequestProvider>(() => (RequestProvider)ActivatorUtilities.CreateInstance(endpoints.ServiceProvider, providerType), isThreadSafe: true);
 
             endpoints.MapGet(endpoint, (HttpContext ctx, [FromKeyedServices("WWT")] ActivitySource activitySource) =>
             {
+                var provider = providerLazy.Value;
                 using var activity = activitySource.StartActivity("RequestProvider", ActivityKind.Server);
                 activity?.AddBaggage("ProviderName", providerType.FullName);
 
