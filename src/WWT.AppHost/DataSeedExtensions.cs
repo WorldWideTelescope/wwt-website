@@ -128,6 +128,7 @@ internal static class DataSeedExtensions
 
                 using var archiveStream = entry.Open();
                 await blob.UploadAsync(archiveStream, token);
+                logger.LogInformation("Uploaded {Name} to {Container}", blobName, containerName);
             }
         }
     }
