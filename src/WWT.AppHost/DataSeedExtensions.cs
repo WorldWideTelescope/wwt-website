@@ -1,6 +1,7 @@
 ﻿using Aspire.Hosting.Azure;
 using Aspire.Hosting.Eventing;
 using Aspire.Hosting.Lifecycle;
+using Azure.Core.Pipeline;
 using Azure.Storage.Blobs;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -32,16 +33,18 @@ internal static class DataSeedExtensions
 
             await rns.PublishUpdateAsync(seedData.Resource, s => s with { State = "Preparing data" });
 
+            using var client = e.Services.GetRequiredService<IHttpClientFactory>().CreateClient(e.Resource.Name);
+
             try
             {
-                var downloadTask = DataManager.Create(e, logger, token);
+                var downloadTask = DataManager.Create(e, logger, client, token);
                 var resource = rns.WaitForResourceAsync(blob.Resource.Name, KnownResourceStates.Running, token);
 
                 await Task.WhenAll(downloadTask, resource);
 
                 var download = await downloadTask;
 
-                await download.UploadAsync(blob.Resource, token);
+                await download.UploadAsync(blob.Resource, client, token);
 
                 await rns.PublishUpdateAsync(seedData.Resource, s => s with { State = KnownResourceStates.Finished });
             }
@@ -73,7 +76,7 @@ internal static class DataSeedExtensions
 
     private sealed class DataManager(ILogger logger, string path)
     {
-        public static async Task<DataManager> Create(BeforeResourceStartedEvent b, ILogger logger, CancellationToken token)
+        public static async Task<DataManager> Create(BeforeResourceStartedEvent b, ILogger logger, HttpClient client, CancellationToken token)
         {
             var path = Path.Combine(Path.GetTempPath(), "wwt-website", "dev-data.zip");
 
@@ -91,8 +94,6 @@ internal static class DataSeedExtensions
 
             async Task DownloadAsync()
             {
-                using var client = b.Services.GetRequiredService<IHttpClientFactory>().CreateClient(b.Resource.Name);
-
                 const string url = "https://wwtcoreapp-data-app.azurewebsites.net/v2/data/dev_export";
 
                 logger.LogInformation("Downloading dev data from {Url}", url);
@@ -104,9 +105,9 @@ internal static class DataSeedExtensions
             }
         }
 
-        public async Task UploadAsync(AzureBlobStorageResource resource, CancellationToken token)
+        public async Task UploadAsync(AzureBlobStorageResource resource, HttpClient httpClient, CancellationToken token)
         {
-            var client = new BlobServiceClient(resource.ConnectionStringExpression.ValueExpression);
+            var blobClient = new BlobServiceClient(resource.ConnectionStringExpression.ValueExpression, new() { Transport = new HttpClientTransport(httpClient) });
 
             using var fs = File.OpenRead(path);
             using var archive = new ZipArchive(fs, ZipArchiveMode.Read);
@@ -120,7 +121,7 @@ internal static class DataSeedExtensions
 
                 logger.LogInformation("Uploading {Name} to {Container}", blobName, containerName);
 
-                var container = client.GetBlobContainerClient(containerName);
+                var container = blobClient.GetBlobContainerClient(containerName);
 
                 await container.CreateIfNotExistsAsync(cancellationToken: token);
 
