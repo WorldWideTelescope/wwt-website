@@ -19,8 +19,7 @@ var webclient = builder.AddDockerfile("webclient", "webclient/")
     .ExcludeFromManifest();
 
 // This container only supports x86_64
-var architecture = RuntimeInformation.OSArchitecture;
-if (architecture is Architecture.X64)
+if (RuntimeInformation.OSArchitecture is Architecture.X64)
 {
     builder.AddContainer("storage-explorer", "sebagomez/azurestorageexplorer")
         .WithHttpEndpoint(targetPort: 8080)
