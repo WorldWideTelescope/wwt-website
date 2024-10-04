@@ -32,16 +32,24 @@ internal static class DataSeedExtensions
 
             await rns.PublishUpdateAsync(seedData.Resource, s => s with { State = "Preparing data" });
 
-            var downloadTask = DataManager.Create(e, logger, token);
-            var resource = rns.WaitForResourceAsync(blob.Resource.Name, KnownResourceStates.Running, token);
+            try
+            {
+                var downloadTask = DataManager.Create(e, logger, token);
+                var resource = rns.WaitForResourceAsync(blob.Resource.Name, KnownResourceStates.Running, token);
 
-            await Task.WhenAll(downloadTask, resource);
+                await Task.WhenAll(downloadTask, resource);
 
-            var download = await downloadTask;
+                var download = await downloadTask;
 
-            await download.UploadAsync(blob.Resource, token);
+                await download.UploadAsync(blob.Resource, token);
 
-            await rns.PublishUpdateAsync(seedData.Resource, s => s with { State = KnownResourceStates.Finished });
+                await rns.PublishUpdateAsync(seedData.Resource, s => s with { State = KnownResourceStates.Finished });
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Failed to seed data resource");
+                await rns.PublishUpdateAsync(seedData.Resource, s => s with { State = KnownResourceStates.FailedToStart });
+            }
         });
 
         return blob;
