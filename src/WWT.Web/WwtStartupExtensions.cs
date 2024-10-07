@@ -31,6 +31,7 @@ public static class WwtStartupExtensions
         builder.AddRedisDistributedCache("cache");
 
         builder.Services.AddKeyedSingleton(Constants.ActivitySourceName, new ActivitySource(Constants.ActivitySourceName));
+        builder.Services.AddSingleton<SDSSToastProvider>();
         builder.Services.AddSingleton<DSSProvider>();
 
         builder.Services
