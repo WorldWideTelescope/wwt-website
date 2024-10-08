@@ -47,11 +47,11 @@ public static class WwtEndpointExtensions
             return TypedResults.Stream(mandelbrot.CreateMandelbrot(q.Level, q.X, q.Y), "image/jpeg");
         }).WithCacheControl();
 
-        group.MapGet("dss.aspx", static async Task<Results<FileStreamHttpResult, NotFound>> ([FromQuery] LXY q, DSSProvider dss, CancellationToken token) =>
+        group.MapGet("marshirise.aspx", static async Task<Results<ImageResult, NotFound>> ([FromQuery] LXYId q, MarsHiriseProvider marsHirise) =>
         {
-            if (await dss.GetStreamAsync(q.Level, q.X, q.Y, token) is { } stream)
+            if (await marsHirise.GetImageAsync(q.Level, q.X, q.Y, q.Id, CancellationToken.None) is { } image)
             {
-                return TypedResults.Stream(stream, "image/png");
+                return TypedResults.Extensions.Png(image);
             }
 
             return TypedResults.NotFound();
@@ -66,6 +66,16 @@ public static class WwtEndpointExtensions
 
             return TypedResults.NotFound();
         }).DisallowWget().WithCacheControl();
+
+        group.MapGet("dss.aspx", static async Task<Results<FileStreamHttpResult, NotFound>> ([FromQuery] LXY q, DSSProvider dss, CancellationToken token) =>
+            {
+                if (await dss.GetStreamAsync(q.Level, q.X, q.Y, token) is { } stream)
+                {
+                    return TypedResults.Stream(stream, "image/png");
+                }
+
+                return TypedResults.NotFound();
+            }).WithCacheControl();
 
         return group;
     }
@@ -172,7 +182,47 @@ public static class WwtEndpointExtensions
                     int.TryParse(sX, NumberStyles.Integer, provider, out var x) &&
                     int.TryParse(sY, NumberStyles.Integer, provider, out var y))
                 {
-                    result = new LXY(level, x, y);
+                    result = new(level, x, y);
+                    return true;
+                }
+            }
+
+            result = default;
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Provides a strongly typed representation of the LXY query parameter often used as the 'Q' parameter. This will be used
+    /// to attempt to parse the parameter, and if it fails, the request will be rejected with an explanation of the failure.
+    /// </summary>
+    private record struct LXYId(int Level, int X, int Y, int Id) : IParsable<LXYId>
+    {
+        public static LXYId Parse(string s, IFormatProvider provider)
+        {
+            if (TryParse(s, provider, out var result))
+            {
+                return result;
+            }
+
+            throw new FormatException("Could not parse input for LXYId");
+        }
+
+        public static bool TryParse([NotNullWhen(true)] string s, IFormatProvider provider, [MaybeNullWhen(false)] out LXYId result)
+        {
+            if (LXY.TryParse(s, provider, out var lxy))
+            {
+                result = new LXYId(lxy.Level, lxy.X, lxy.Y, -1);
+                return true;
+            }
+            else if (s.Split([','], count: 4, StringSplitOptions.TrimEntries) is [{ } sLevel, { } sX, { } sY, { } sId])
+            {
+                if (int.TryParse(sLevel, NumberStyles.Integer, provider, out var level) &&
+                    int.TryParse(sX, NumberStyles.Integer, provider, out var x) &&
+                    int.TryParse(sY, NumberStyles.Integer, provider, out var y) &&
+                    int.TryParse(sId, NumberStyles.Integer, provider, out var id))
+                {
+                    result = new(level, x, y, id);
                     return true;
                 }
             }

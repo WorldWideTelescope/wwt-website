@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IO;
 using System.Diagnostics;
 using WWT.Azure;
 using WWT.Providers;
@@ -30,9 +31,11 @@ public static class WwtStartupExtensions
         builder.AddKeyedAzureBlobClient("Mars");
         builder.AddRedisDistributedCache("cache");
 
+        builder.Services.AddSingleton<RecyclableMemoryStreamManager>();
         builder.Services.AddKeyedSingleton(Constants.ActivitySourceName, new ActivitySource(Constants.ActivitySourceName));
         builder.Services.AddSingleton<SDSSToastProvider>();
         builder.Services.AddSingleton<DSSProvider>();
+        builder.Services.AddSingleton<MarsHiriseProvider>();
 
         builder.Services
          .AddRequestProviders(options =>
