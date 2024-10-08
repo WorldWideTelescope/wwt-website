@@ -57,6 +57,16 @@ public static class WwtEndpointExtensions
             return TypedResults.NotFound();
         }).WithCacheControl();
 
+        group.MapGet("sdsstoast.aspx", static async Task<Results<FileStreamHttpResult, NotFound>> ([FromQuery] LXY q, SDSSToastProvider sdss, CancellationToken token) =>
+        {
+            if (await sdss.GetStreamAsync(q.Level, q.X, q.Y, token) is { } stream)
+            {
+                return TypedResults.Stream(stream, "image/png");
+            }
+
+            return TypedResults.NotFound();
+        }).DisallowWget().WithCacheControl();
+
         group.MapGet("dss.aspx", static async Task<Results<FileStreamHttpResult, NotFound>> ([FromQuery] LXY q, DSSProvider dss, CancellationToken token) =>
             {
                 if (await dss.GetStreamAsync(q.Level, q.X, q.Y, token) is { } stream)

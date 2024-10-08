@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using System;
 using WWT.Web;
 
@@ -50,6 +49,7 @@ if (app.Environment.IsDevelopment())
 app.UseCors();
 
 app.UseRouting();
+app.UseUserAgentFiltering();
 
 app.MapWwt();
 
