@@ -60,11 +60,15 @@ public class OctTileMapBuilder([FromKeyedServices(Constants.ActivitySourceName)]
 
     private async Task<SdssImage?> LoadImage(double raLeft, double decTop, double raRight, double decBottom, bool dr12, CancellationToken token)
     {
-        var innerPath = dr12 ? "DR12" : "dr6";
+        var innerPath = dr12 ? "dr12" : "dr6";
         var raCenter = (raLeft + raRight) / 2.0;
         var decCenter = (decBottom + decTop) / 2.0;
         var scale = Math.Abs(decBottom - decTop) / 500.0;
-        var address = $"https://skyservice.pha.jhu.edu/{innerPath}/imgcutout/getjpeg.aspx?ra={raCenter}&dec={decCenter}&scale={scale * 3600.0}&width={512.0}&height={512.0}&opt=&query=";
+        var updatedScale = scale * 3600.0;
+        var address = dr12 ?
+        $"https://skyserver.sdss.org/{innerPath}/SkyServerWS/ImgCutout/getjpeg?TaskName=SkyServer.Chart.List&ra={raCenter}&dec={decCenter}&scale={updatedScale}&width={512.0}&height={512.0}&opt="
+        :
+        $"https://skyservice.pha.jhu.edu/{innerPath}/imgcutout/getjpeg.aspx?ra={raCenter}&dec={decCenter}&scale={updatedScale}&width={512.0}&height={512.0}&opt=&query=";
 
         using var client = httpClientFactory.CreateClient();
         using var response = await client.GetAsync(address, token);
