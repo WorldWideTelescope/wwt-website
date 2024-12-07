@@ -1,22 +1,25 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
+    <ContainerRepository>aasworldwidetelescope/core-data</ContainerRepository>
     <UserSecretsId>a8e75023-0c2f-49d9-ad36-1d5f83df30d7</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.0.2" />
-    <PackageReference Include="Azure.Identity" Version="1.10.2" />
-    <PackageReference Include="Azure.Monitor.OpenTelemetry.AspNetCore" Version="1.2.0" />
-    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.16.0" />
-    <PackageReference Include="Microsoft.ApplicationInsights.SnapshotCollector" Version="1.3.7.3" />
+    <Compile Include="..\WWT.Providers\Constants.cs" Link="Constants.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.StackExchange.Redis.DistributedCaching" Version="8.2.0" />
+    <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.3.2" />
+    <PackageReference Include="Aspire.Azure.Storage.Blobs" Version="8.2.0" />
+    <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="3.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\WWT.Azure\WWT.Azure.csproj" />
-    <ProjectReference Include="..\WWT.Caching\WWT.Caching.csproj" />
     <ProjectReference Include="..\WWT.Providers\WWT.Providers.csproj" />
+    <ProjectReference Include="..\WWT.ServiceDefaults\WWT.ServiceDefaults.csproj" />
   </ItemGroup>
-
 </Project>

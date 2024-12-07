@@ -1,7 +1,9 @@
+using Microsoft.Extensions.DependencyInjection;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,11 +15,13 @@ namespace WWT.Providers
     [RequestEndpoint("/wwtweb/MarsMoc.aspx")]
     public class MarsMocProvider : RequestProvider
     {
+        private readonly ActivitySource _activitySource;
         private readonly IPlateTilePyramid _plateTiles;
         private readonly WwtOptions _options;
 
-        public MarsMocProvider(IPlateTilePyramid plateTiles, WwtOptions options)
+        public MarsMocProvider(IPlateTilePyramid plateTiles, WwtOptions options, [FromKeyedServices(Constants.ActivitySourceName)] ActivitySource activitySource)
         {
+            _activitySource = activitySource;
             _plateTiles = plateTiles;
             _options = options;
         }
@@ -29,6 +33,8 @@ namespace WWT.Providers
             (var errored, var level, var tileX, var tileY) = await HandleLXYQParameter(context, token);
             if (errored)
                 return;
+
+            using var activity = _activitySource.StartImageProcessing();
 
             using (var output = new Image<Rgba32>(256, 256))
             {
@@ -48,7 +54,7 @@ namespace WWT.Providers
                 if (ll > 8)
                 {
                     int levelDif = ll - 8;
-                    int scale = (int) Math.Pow(2, levelDif);
+                    int scale = (int)Math.Pow(2, levelDif);
                     int tx = xx / scale;
                     int ty = yy / scale;
 
@@ -69,7 +75,7 @@ namespace WWT.Providers
                     using (var stream = await _plateTiles.GetStreamAsync(_options.WwtTilesDir, "marsbasemap.plate", -1, 8, tx, ty, token))
                     using (var bmp1 = Image.Load(stream))
                     {
-                        bmp1.Mutate(x => x.Crop(new Rectangle(offsetX, offsetY, (int) width, (int) height)).Resize(256, 256));
+                        bmp1.Mutate(x => x.Crop(new Rectangle(offsetX, offsetY, (int)width, (int)height)).Resize(256, 256));
                         output.Mutate(x => x.DrawImage(bmp1, 1.0f));
                     }
                 }

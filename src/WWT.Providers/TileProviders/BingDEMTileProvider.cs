@@ -1,5 +1,6 @@
 #nullable disable
 
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -13,15 +14,13 @@ namespace WWT.Providers
     [RequestEndpoint("/wwtweb/BingDemTile.aspx")]
     public class BingDemTileProvider : RequestProvider
     {
-#if NET
-        private static readonly ActivitySource _activitySource = new("WWT");
-#endif
-
         private readonly IVirtualEarthDownloader _veDownloader;
+        private readonly ActivitySource _activitySource;
 
-        public BingDemTileProvider(IVirtualEarthDownloader veDownloader)
+        public BingDemTileProvider(IVirtualEarthDownloader veDownloader, [FromKeyedServices(Constants.ActivitySourceName)] ActivitySource activitySource)
         {
             _veDownloader = veDownloader;
+            _activitySource = activitySource;
         }
 
         public override string ContentType => ContentTypes.OctetStream;
@@ -31,9 +30,6 @@ namespace WWT.Providers
             (var errored, var level, var tileX, var tileY) = await HandleLXYQParameter(context, token);
             if (errored)
                 return;
-#if NET
-            using var activity = _activitySource.CreateActivity("BingDemTileProvider", ActivityKind.Internal);
-#endif
 
             int demSize = 33 * 33;
             int parentL = Math.Max(1, level - 3);
@@ -50,7 +46,9 @@ namespace WWT.Providers
 
             using var stream = await _veDownloader.DownloadVeTileAsync(VirtualEarthTile.Ecn, parentL, parentX, parentY, token);
 
-            DemTile tile = await DemCodec.DecompressAsync(stream, token);
+            using var activity = _activitySource.CreateActivity("BingDemTileProvider", ActivityKind.Internal)?.Start();
+
+            var tile = await DemCodec.DecompressAsync(stream, token);
 
             if (tile != null)
             {

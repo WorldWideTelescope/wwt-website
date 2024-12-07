@@ -1,15 +1,13 @@
 #nullable disable
 
 using System;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
     [RequestEndpoint("/wwtweb/StarChart.aspx")]
-    public class StarChartProvider : StarChart
+    public class StarChartProvider(StarChart stars) : RequestProvider
     {
         public override string ContentType => ContentTypes.Png;
 
@@ -39,10 +37,8 @@ namespace WWT.Providers
                 }
             }
 
-
-            Bitmap chart = GetChart(lat, lng, time, ra, dec, width, height);
-            await chart.SaveAsync(context.Response, ImageFormat.Png, token);
-            chart.Dispose();
+            using var chart = stars.GetChart(lat, lng, time, ra, dec, width, height);
+            await chart.SavePngResponseAsync(context.Response, token);
         }
     }
 }

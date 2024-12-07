@@ -1,8 +1,0 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\WWT.Tests.props" />
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\WWT.Caching\WWT.Caching.csproj" />
-  </ItemGroup>
-
-</Project>

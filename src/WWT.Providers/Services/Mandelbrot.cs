@@ -1,19 +1,23 @@
 #nullable disable
 
+using Microsoft.Extensions.DependencyInjection;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
+using System.Diagnostics;
 using System.IO;
 
 namespace WWT.Providers
 {
     public class Mandelbrot : IMandelbrot
     {
+        private readonly ActivitySource _activitySource;
         private readonly Color[] _colorMap;
 
-        public Mandelbrot()
+        public Mandelbrot([FromKeyedServices(Constants.ActivitySourceName)]ActivitySource activitySource)
         {
+            _activitySource = activitySource;
             _colorMap = CreateColorMap();
         }
 
@@ -21,12 +25,14 @@ namespace WWT.Providers
         {
             using (var image = CreateMandelbrotBitmap(level, tileX, tileY))
             {
-                return image.SaveToStream(ImageFormat.Png);
+                return image.ToPngStream();
             }
         }
 
-        private Bitmap CreateMandelbrotBitmap(int level, int tileX, int tileY)
+        private Image CreateMandelbrotBitmap(int level, int tileX, int tileY)
         {
+            using var activity = _activitySource.StartImageProcessing();
+
             double tileWidth = (4 / (Math.Pow(2, level)));
             double Sy = ((double)tileY * tileWidth) - 2;
             double Fy = Sy + tileWidth;
@@ -35,7 +41,7 @@ namespace WWT.Providers
 
             int MAXITER = 100 + level * 100;
 
-            var b = new Bitmap(256, 256);
+            var b = new Image<Rgb24>(256, 256);
             double x, y, x1, y1, xx, xmin, xmax, ymin, ymax = 0.0;
             int looper, s, z = 0;
             double intigralX, intigralY = 0.0;
@@ -63,7 +69,7 @@ namespace WWT.Providers
                     }
                     double perc = looper / (256.0);
                     int val = looper % 254;
-                    b.SetPixel(s, z, looper == MAXITER ? Color.Black : _colorMap[val]);
+                    b[s, z] = looper == MAXITER ? Color.Black : _colorMap[val];
                     y += intigralY;
                 }
                 x += intigralX;
@@ -92,7 +98,7 @@ namespace WWT.Providers
                 for (i = 0; i < Math.Min(256, lines.Count); i++)
                 {
                     var curC = lines[i];
-                    var temp = Color.FromArgb(int.Parse(curC.Split(' ')[0]), int.Parse(curC.Split(' ')[1]), int.Parse(curC.Split(' ')[2]));
+                    var temp = new Color(new Rgb24(byte.Parse(curC.Split(' ')[0]), byte.Parse(curC.Split(' ')[1]), byte.Parse(curC.Split(' ')[2])));
                     c[i] = temp;
                 }
 
