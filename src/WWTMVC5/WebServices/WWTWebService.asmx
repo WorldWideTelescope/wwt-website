@@ -1,1 +1,0 @@
-﻿<%@ WebService Class="WWTWebservices.WWTWebService" %>
