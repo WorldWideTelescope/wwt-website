@@ -55,14 +55,14 @@ stages:
         displayName: dotnet build
         inputs:
           command: 'build'
-          projects: 'wwt-core-data.slnf'
+          projects: 'wwt-core-data.sln'
           arguments: '--configuration $(buildConfiguration)'
 
       - task: DotNetCoreCLI@2
         displayName: dotnet test
         inputs:
           command: 'test'
-          projects: 'wwt-core-data.slnf'
+          projects: 'wwt-core-data.sln'
           arguments: '--configuration $(buildConfiguration)'
 
       - bash: |
