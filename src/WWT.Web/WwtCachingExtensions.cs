@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.ObjectPool;
 using Microsoft.Extensions.Options;
+using Microsoft.IO;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -56,7 +57,8 @@ internal static class WwtCachingExtensions
     class CachedServices(
         ObjectPool<StringBuilder> sbPool,
         IOptions<CachingOptions> options,
-        IDistributedCache cache,
+        RecyclableMemoryStreamManager manager,
+        IBufferDistributedCache cache,
         [FromKeyedServices(Constants.ActivitySourceName)] ActivitySource activitySource,
         [FromKeyedServices(Original)] ITourAccessor tourAccessor,
         [FromKeyedServices(Original)] IThumbnailAccessor thumbnailAccessor,
@@ -124,15 +126,23 @@ internal static class WwtCachingExtensions
 
         private async Task<Stream> GetOrUpdateCache<T>(Func<Task<Stream>> run, object[] names, CancellationToken token, [CallerMemberName] string caller = null!)
         {
+            const long DefaultSize = 50_000; // 50 kb
+
             var key = GetKey<T>(caller, names);
+
+            var buffer = manager.GetStream("cache", DefaultSize);
 
             using var checkCache = activitySource.StartActivity("check cache");
 
-            if (await cache.GetAsync(key, token) is { } known)
+            if (await cache.TryGetAsync(key, buffer, token))
             {
                 checkCache?.AddTag("IsCached", true);
-                return new MemoryStream(known);
+                buffer.Position = 0;
+                return buffer;
             }
+
+            // Ensure the cache didn't write anything
+            buffer.SetLength(0);
 
             checkCache?.AddTag("IsCached", false);
             checkCache?.Stop();
@@ -142,21 +152,21 @@ internal static class WwtCachingExtensions
 
             if (created is null)
             {
+                await buffer.DisposeAsync();
                 runActivity?.SetTag("Size", 0);
                 return null;
             }
 
-            var ms = new MemoryStream();
-            await created.CopyToAsync(ms, token);
+            await created.CopyToAsync(buffer, token);
 
-            ms.Position = 0;
-            runActivity?.SetTag("Size", ms.Length);
+            buffer.Position = 0;
+            runActivity?.SetTag("Size", buffer.Length);
             runActivity?.Stop();
 
             using var setCache = activitySource.StartActivity("set cache");
-            await cache.SetAsync(key, ms.ToArray(), new DistributedCacheEntryOptions { SlidingExpiration = options.Value.SlidingExpiration }, token);
+            await cache.SetAsync(key, buffer.GetReadOnlySequence(), new DistributedCacheEntryOptions { SlidingExpiration = options.Value.SlidingExpiration }, token);
 
-            return ms;
+            return buffer;
         }
 
         private string GetKey<T>(string caller, object[] names)
