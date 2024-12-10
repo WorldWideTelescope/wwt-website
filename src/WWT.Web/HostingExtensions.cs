@@ -9,15 +9,18 @@ using Microsoft.Extensions.Logging;
 using OpenTelemetry;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
+using System;
 using System.Diagnostics;
+using System.Linq;
 using WWT.Providers;
+using WWT.Web.Caching;
 
 namespace Microsoft.Extensions.Hosting;
 
 // Adds common .NET Aspire services: service discovery, resilience, health checks, and OpenTelemetry.
 // This project should be referenced by each service project in your solution.
 // To learn more about using this project, see https://aka.ms/dotnet/aspire/service-defaults
-public static class Extensions
+public static class HostingExtensions
 {
     public static IHostApplicationBuilder AddServiceDefaults(this IHostApplicationBuilder builder)
     {
@@ -29,6 +32,8 @@ public static class Extensions
 
         builder.Services.ConfigureHttpClientDefaults(http =>
         {
+            http.AddRequestCaching(builder.Configuration.GetSection("Caching:Hosts").GetChildren().Select(c => c.Key));
+
             // Turn on resilience by default
             http.AddStandardResilienceHandler()
                 .SelectPipelineByAuthority();

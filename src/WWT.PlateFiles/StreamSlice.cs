@@ -11,7 +11,7 @@ namespace WWT.PlateFiles
     /// An implementation of <see cref="Stream"/> that allows for slicing of another stream given
     /// an initial offset and length.
     /// </summary>
-    public class StreamSlice : Stream
+    public sealed class StreamSlice : Stream
     {
         private readonly long _offset;
         private readonly long _length;
@@ -34,12 +34,8 @@ namespace WWT.PlateFiles
             }
         }
 
-        public StreamSlice(Stream baseStream, long offset, long length)
+        public StreamSlice(Stream baseStream, long offset, long? length = null)
         {
-            _baseStream = baseStream ?? throw new ArgumentNullException(nameof(baseStream));
-            _length = length;
-            _offset = offset;
-
             if (!baseStream.CanRead)
             {
                 throw new ArgumentException("Stream must support read.");
@@ -50,17 +46,21 @@ namespace WWT.PlateFiles
                 throw new ArgumentException("Stream must support seek.");
             }
 
+            _baseStream = baseStream ?? throw new ArgumentNullException(nameof(baseStream));
+            _length = length ?? baseStream.Length - offset;
+            _offset = offset;
+
             if (offset < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(offset));
             }
 
-            if (length < 0)
+            if (_length < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(length));
             }
 
-            if (offset + length > baseStream.Length)
+            if (offset + _length > baseStream.Length)
             {
                 throw new ArgumentOutOfRangeException(nameof(length));
             }
@@ -193,6 +193,7 @@ namespace WWT.PlateFiles
                 {
                     try { _baseStream.Dispose(); }
                     catch { }
+
                     _baseStream = null;
                 }
             }

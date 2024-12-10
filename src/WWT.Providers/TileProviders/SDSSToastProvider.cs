@@ -25,6 +25,7 @@ public class SDSSToastProvider(IPlateTilePyramid plateTiles, WwtOptions options,
 
             if (s.Length == 0)
             {
+                await s.DisposeAsync();
                 return null;
             }
 
