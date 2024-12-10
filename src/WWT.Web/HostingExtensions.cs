@@ -2,6 +2,7 @@ using Azure.Monitor.OpenTelemetry.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Http.Resilience;
@@ -32,7 +33,10 @@ public static class HostingExtensions
 
         builder.Services.ConfigureHttpClientDefaults(http =>
         {
-            http.AddRequestCaching(builder.Configuration.GetSection("Caching:Hosts").GetChildren().Select(c => c.Key));
+            http.AddRequestCaching(options =>
+            {
+                builder.Configuration.GetSection("Caching").Bind(options);
+            });
 
             // Turn on resilience by default
             http.AddStandardResilienceHandler()

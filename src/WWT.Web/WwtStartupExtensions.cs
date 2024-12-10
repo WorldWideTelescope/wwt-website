@@ -76,6 +76,5 @@ public static class WwtStartupExtensions
          });
 
         builder.Services.AddSingleton<StarChart>();
-        builder.AddWwtCaching();
     }
 }

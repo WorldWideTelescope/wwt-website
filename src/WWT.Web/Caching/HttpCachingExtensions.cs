@@ -14,27 +14,37 @@ namespace WWT.Web.Caching;
 
 internal static class HttpCachingExtensions
 {
-    public static IHttpClientBuilder AddRequestCaching(this IHttpClientBuilder builder, IEnumerable<string> hosts)
+    public static IHttpClientBuilder AddRequestCaching(this IHttpClientBuilder builder, Action<CachingOptions> configure)
     {
         builder.Services.AddSingleton<CachingHandler>();
         builder.AddHttpMessageHandler<CachingHandler>();
 
         builder.Services.AddOptions<CachingOptions>()
-            .Configure(options => options.Hosts.UnionWith(hosts));
+            .Configure(configure);
 
         return builder;
     }
 
-    private sealed class CachingOptions
+    public sealed class CachingOptions
     {
-        public HashSet<string> Hosts { get; } = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        public bool IsEnabled { get; set; }
+
+        public TimeSpan DefaultExpiration { get; set; } = TimeSpan.FromMinutes(5);
+
+        public IDictionary<string, CachedHostOptions> Hosts { get; } = new Dictionary<string, CachedHostOptions>(StringComparer.OrdinalIgnoreCase);
+    }
+
+    public sealed class CachedHostOptions
+    {
     }
 
     private sealed partial class CachingHandler(IOptions<CachingOptions> options, IBufferDistributedCache cache, RecyclableMemoryStreamManager manager) : DelegatingHandler
     {
+        private readonly CachingOptions _options = options.Value;
+
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            if (request.Method == HttpMethod.Get && options.Value.Hosts.Contains(request.RequestUri?.Host!))
+            if (_options.IsEnabled && request.Method == HttpMethod.Get && _options.Hosts.ContainsKey(request.RequestUri?.Host!))
             {
                 return SendCachedAsync(request, cancellationToken);
             }
