@@ -1,4 +1,4 @@
-﻿using Aspire.Hosting.Azure;
+using Aspire.Hosting.Azure;
 using Aspire.Hosting.Eventing;
 using Aspire.Hosting.Lifecycle;
 using Azure.Core.Pipeline;
