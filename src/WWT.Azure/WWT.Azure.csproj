@@ -1,9 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Azure.Identity" Version="1.12.0" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.22.0" />
@@ -11,13 +9,10 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
     <PackageReference Include="System.Linq.Async" Version="6.0.1" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\WWT.Catalog\WWT.Catalog.csproj" />
     <ProjectReference Include="..\WWT.Imaging\WWT.Imaging.csproj" />
     <ProjectReference Include="..\WWT.PlateFiles\WWT.PlateFiles.csproj" />
     <ProjectReference Include="..\WWT.Tours\WWT.Tours.csproj" />
   </ItemGroup>
-
-
 </Project>
