@@ -55,14 +55,14 @@ stages:
         displayName: dotnet build
         inputs:
           command: 'build'
-          projects: 'wwt-core-data.slnf'
+          projects: 'wwt-core-data.sln'
           arguments: '--configuration $(buildConfiguration)'
 
       - task: DotNetCoreCLI@2
         displayName: dotnet test
         inputs:
           command: 'test'
-          projects: 'wwt-core-data.slnf'
+          projects: 'wwt-core-data.sln'
           arguments: '--configuration $(buildConfiguration)'
 
       - bash: |
@@ -73,94 +73,10 @@ stages:
         artifact: dockerImage
         displayName: Publish docker image
 
-    - job: BuildMVC5
-      displayName: 'ASP.NET MVC5 WebApp'
-      pool:
-        vmImage: 'windows-latest'
-      steps:
-
-      - task: UseDotNet@2
-        inputs:
-          packageType: 'sdk'
-          useGlobalJson: true
-
-      - task: DotNetCoreCLI@2
-        displayName: 'Install GitVersion'
-        inputs:
-          command: 'custom'
-          custom: 'tool'
-          arguments: 'install --global GitVersion.Tool --version 6.0.2'
-
-      - task: DotNetCoreCLI@2
-        displayName: 'Update Version'
-        inputs:
-          command: 'custom'
-          custom: 'gitversion'
-          arguments: '/output buildserver /nofetch'
-
-      - task: NuGetToolInstaller@1
-
-      - task: NuGetCommand@2
-        inputs:
-          restoreSolution: 'wwt-communities.slnf'
-          feedsToUse: config
-          nugetConfigPath: NuGet.config
-
-      - task: Npm@1
-        displayName: npm install
-        inputs:
-          command: 'install'
-          workingDir: 'src/WWTMVC5'
-
-      - task: Npm@1
-        displayName: npm install -g bower
-        inputs:
-          command: 'custom'
-          customCommand: 'install -g bower'
-
-      - task: PowerShell@2
-        displayName: Run init.ps1
-        inputs:
-          filePath: 'init.ps1'
-      - task: VSBuild@1
-        inputs:
-          solution: 'wwt-communities.slnf'
-          msbuildArgs: '/p:DeployOnBuild=true /p:PrecompileBeforePublish=true /p:EnableUpdateable=false /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)/website"'
-          platform: '$(buildPlatform)'
-          configuration: '$(buildConfiguration)'
-
-      - publish: $(build.artifactStagingDirectory)/website
-        artifact: mvc5
-
 - stage: Deploy
   dependsOn: Build
   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
   jobs:
-    # This job deploys the updated Windows app to the "stage" deployment slot of
-    # the Windows app service. To bring those changes into production, the stage
-    # and main slots should be "swapped" in the Azure UI, after warming up the
-    # new app and doing any final testing.
-    - job: AzureAppService
-      condition: eq(variables['Build.SourceBranchName'], 'master')
-      pool:
-        vmImage: 'windows-latest'
-      steps:
-      - checkout: none
-      - download: current
-        artifact: mvc5
-      - task: AzureRmWebAppDeployment@4
-        displayName: Deploy to App Service
-        inputs:
-          ConnectionType: 'AzureRM'
-          azureSubscription: 'aas@wwtadmindotnetfoundation'
-          appType: 'webApp'
-          WebAppName: 'wwtcoreapp-app-service'
-          deployToSlotOrASE: true
-          ResourceGroupName: 'wwtcoreapp-resources'
-          SlotName: 'stage'
-          packageForLinux: '$(Pipeline.Workspace)/mvc5/WWTMVC5.zip'
-          DeploymentType: 'webDeploy'
-          RemoveAdditionalFilesFlag: true
 
     # This job deploys the new Docker image to Docker Hub under the `latest`
     # tag, which will then trigger an update of the "stage" deployment slot of
