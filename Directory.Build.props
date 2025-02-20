@@ -11,11 +11,4 @@
     <Version>$(GitVersion_NuGetVersionV2)</Version>
   </PropertyGroup>
 
-  <!-- Handle warnings from .NET 9 upgrade -->
-  <PropertyGroup>
-    <NoWarn>
-      $(NoWarn);
-      CA2022;
-    </NoWarn>
-  </PropertyGroup>
 </Project>
