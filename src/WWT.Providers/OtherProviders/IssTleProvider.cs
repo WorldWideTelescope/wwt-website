@@ -1,12 +1,12 @@
 using System;
-using System.Net;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace WWT.Providers
 {
     [RequestEndpoint("/wwtweb/isstle.aspx")]
-    public class IsstleProvider : RequestProvider
+    public class IsstleProvider(IHttpClientFactory factory) : RequestProvider
     {
         public override string ContentType => ContentTypes.Text;
 
@@ -30,10 +30,10 @@ namespace WWT.Providers
 
                 if (String.IsNullOrEmpty(reply) || ts.TotalDays > .5 || context.Request.Params["refresh"] != null)
                 {
-                    using (WebClient wc = new WebClient())
+                    using (var client = factory.CreateClient())
                     {
-                        string data = wc.DownloadString(theUrl);
-                        string[] lines = data.Split(new char[] { '\n', '\r' });
+                        string data = await client.GetStringAsync(theUrl, token);
+                        string[] lines = data.Split(['\n', '\r']);
 
                         string line1 = "";
                         string line2 = "";
