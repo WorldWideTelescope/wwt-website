@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -30,6 +31,9 @@ public static class WwtStartupExtensions
         builder.AddKeyedAzureBlobClient("WwtFiles");
         builder.AddKeyedAzureBlobClient("Mars");
         builder.AddRedisDistributedCache("cache");
+
+        // Redis doesn't register this but it does implement it, so we'll force its registration here
+        builder.Services.AddSingleton(sp => (IBufferDistributedCache)sp.GetRequiredService<IDistributedCache>());
 
         builder.Services.AddSingleton<RecyclableMemoryStreamManager>();
         builder.Services.AddKeyedSingleton(Constants.ActivitySourceName, new ActivitySource(Constants.ActivitySourceName));
@@ -72,6 +76,5 @@ public static class WwtStartupExtensions
          });
 
         builder.Services.AddSingleton<StarChart>();
-        builder.AddWwtCaching();
     }
 }
