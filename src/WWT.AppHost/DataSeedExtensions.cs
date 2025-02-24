@@ -25,8 +25,7 @@ internal static class DataSeedExtensions
                 ResourceType = "Test data",
                 State = KnownResourceStates.Starting,
                 Properties = []
-            })
-            ;
+            });
        
         blob.ApplicationBuilder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<IDistributedApplicationLifecycleHook, DataSeedLifecycleHood>());
         blob.ApplicationBuilder.Services.AddHttpClient(seedData.Resource.Name);
