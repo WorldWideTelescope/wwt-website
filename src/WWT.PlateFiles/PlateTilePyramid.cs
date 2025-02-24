@@ -136,17 +136,18 @@ namespace WWT.PlateFiles
         {
             //  <dinoj>
             uint L = (uint)Levels;
-            byte[] buffer = new byte[8];
-            buffer[0] = (byte)(dotPlateFileTypeNumber % 256);
-            buffer[1] = (byte)((dotPlateFileTypeNumber >> 8) % 256);
-            buffer[2] = (byte)((dotPlateFileTypeNumber >> 16) % 256);
-            buffer[3] = (byte)((dotPlateFileTypeNumber >> 24) % 256);
-            buffer[4] = (byte)L;
-            buffer[5] = (byte)(L >> 8);
-            buffer[6] = (byte)(L >> 16);
-            buffer[7] = (byte)(L >> 24);
-
-            fileStream.Write(buffer, 0, 8);
+            ReadOnlySpan<byte> buffer =
+            [
+                (byte)(dotPlateFileTypeNumber % 256),
+                (byte)((dotPlateFileTypeNumber >> 8) % 256),
+                (byte)((dotPlateFileTypeNumber >> 16) % 256),
+                (byte)((dotPlateFileTypeNumber >> 24) % 256),
+                (byte)L,
+                (byte)(L >> 8),
+                (byte)(L >> 16),
+                (byte)(L >> 24),
+            ];
+            fileStream.Write(buffer);
             //  </dinoj>
 
             uint currentSeek = 8;
@@ -171,8 +172,6 @@ namespace WWT.PlateFiles
                 return GetFileIndexOffset(Levels, 0, 0);
             }
         }
-
-
 
         static public uint GetFileIndexOffset(int level, int x, int y)
         {
@@ -203,19 +202,12 @@ namespace WWT.PlateFiles
             uint offset = GetFileIndexOffset(level, x, y);
             uint start;
 
-            MemoryStream ms = null;
-            using (FileStream f = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-            {
-                f.Seek(offset, SeekOrigin.Begin);
-                start = GetNodeInfo(f, offset, out var length);
+            var fs = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
 
-                byte[] buffer = new byte[length];
-                f.Seek(start, SeekOrigin.Begin);
-                f.Read(buffer, 0, (int)length);
-                ms = new MemoryStream(buffer);
-                f.Close();
-            }
-            return ms;
+            fs.Seek(offset, SeekOrigin.Begin);
+            start = GetNodeInfo(fs, offset, out var length);
+
+            return StreamSlice.Create(fs, start, length);
         }
 
         private static async ValueTask<(uint start, uint length)> GetNodeInfoAsync(Stream fs, uint offset, CancellationToken token)
@@ -232,9 +224,9 @@ namespace WWT.PlateFiles
 
         private static uint GetNodeInfo(Stream fs, uint offset, out uint length)
         {
-            Byte[] buf = new Byte[8];
+            Span<Byte> buf = stackalloc byte[8];
             fs.Seek(offset, SeekOrigin.Begin);
-            fs.Read(buf, 0, 8);
+            fs.ReadExactly(buf);
 
             length = (uint)(buf[4] + (buf[5] << 8) + (buf[6] << 16) + (buf[7] << 24));
 
@@ -243,18 +235,19 @@ namespace WWT.PlateFiles
 
         private static void SetNodeInfo(Stream fs, uint offset, uint start, uint length)
         {
-            Byte[] buf = new Byte[8];
-            buf[0] = (byte)start;
-            buf[1] = (byte)(start >> 8);
-            buf[2] = (byte)(start >> 16);
-            buf[3] = (byte)(start >> 24);
-            buf[4] = (byte)length;
-            buf[5] = (byte)(length >> 8);
-            buf[6] = (byte)(length >> 16);
-            buf[7] = (byte)(length >> 24);
-
+            ReadOnlySpan<byte> buf =
+            [
+                (byte)start,
+                (byte)(start >> 8),
+                (byte)(start >> 16),
+                (byte)(start >> 24),
+                (byte)length,
+                (byte)(length >> 8),
+                (byte)(length >> 16),
+                (byte)(length >> 24),
+            ];
             fs.Seek(offset, SeekOrigin.Begin);
-            fs.Write(buf, 0, 8);
+            fs.Write(buf);
         }
         public void Dispose()
         {
