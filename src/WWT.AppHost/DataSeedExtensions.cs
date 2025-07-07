@@ -19,8 +19,14 @@ internal static class DataSeedExtensions
     /// </summary>
     public static IResourceBuilder<AzureBlobStorageResource> WithDevData(this IResourceBuilder<AzureBlobStorageResource> blob)
     {
-        var seedData = blob.ApplicationBuilder.AddResource(new SeedDataResource($"{blob.Resource.Name}-data"));
-
+        var seedData = blob.ApplicationBuilder.AddResource(new SeedDataResource($"{blob.Resource.Name}-data"))
+            .WithInitialState(new()
+            {
+                ResourceType = "Test data",
+                State = KnownResourceStates.Starting,
+                Properties = []
+            });
+       
         blob.ApplicationBuilder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<IDistributedApplicationLifecycleHook, DataSeedLifecycleHood>());
         blob.ApplicationBuilder.Services.AddHttpClient(seedData.Resource.Name);
 
@@ -31,7 +37,7 @@ internal static class DataSeedExtensions
 
             var logger = rls.GetLogger(seedData.Resource);
 
-            await rns.PublishUpdateAsync(seedData.Resource, s => s with { State = "Preparing data" });
+            await rns.PublishUpdateAsync(seedData.Resource, s => s with { State = KnownResourceStates.Waiting });
 
             using var client = e.Services.GetRequiredService<IHttpClientFactory>().CreateClient(e.Resource.Name);
 
@@ -107,9 +113,16 @@ internal static class DataSeedExtensions
 
         public async Task UploadAsync(AzureBlobStorageResource resource, HttpClient httpClient, CancellationToken token)
         {
-            var blobClient = new BlobServiceClient(resource.ConnectionStringExpression.ValueExpression, new() { Transport = new HttpClientTransport(httpClient) });
+            var connectionString = await resource.ConnectionStringExpression.GetValueAsync(token);
 
-            logger.LogInformation("Connecting to blob at {ConnectionString}", resource.ConnectionStringExpression.ValueExpression);
+            if (connectionString is null)
+            {
+                throw new InvalidCastException("No connection string");
+            }
+
+            var blobClient = new BlobServiceClient(connectionString, new() { Transport = new HttpClientTransport(httpClient) });
+
+            logger.LogInformation("Connecting to blob at {ConnectionString}", connectionString);
 
             using var fs = File.OpenRead(path);
             using var archive = new ZipArchive(fs, ZipArchiveMode.Read);
