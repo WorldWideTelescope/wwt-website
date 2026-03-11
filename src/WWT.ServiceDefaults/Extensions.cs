@@ -77,7 +77,14 @@ public static class Extensions
         if (!string.IsNullOrEmpty(builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]))
         {
             builder.Services.AddOpenTelemetry()
-               .UseAzureMonitor();
+               .UseAzureMonitor(options =>
+                {
+                    options.EnableLogs = false;
+
+                    options.EnableHttpClientInstrumentation = false;
+                    options.EnableSqlClientInstrumentation = false;
+                    options.EnableAzureSdkInstrumentation = false;
+                });
         }
 
         return builder;
