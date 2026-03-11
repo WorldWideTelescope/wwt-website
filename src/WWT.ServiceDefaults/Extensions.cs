@@ -42,6 +42,13 @@ public static class Extensions
 
     public static IHostApplicationBuilder ConfigureOpenTelemetry(this IHostApplicationBuilder builder)
     {
+
+        builder.Logging.ClearProviders();
+        builder.Logging.AddConsole();
+        builder.Logging.SetMinimumLevel(LogLevel.Information);
+
+        Environment.SetEnvironmentVariable("OTEL_LOGS_EXPORTER", "none");
+
         builder.Services.AddTransient<IStartupFilter, AddRefererStartupFilter>();
         // builder.Logging.AddOpenTelemetry(logging =>
         // {
