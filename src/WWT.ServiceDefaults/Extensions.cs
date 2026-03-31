@@ -45,9 +45,7 @@ public static class Extensions
 
         builder.Logging.ClearProviders();
         builder.Logging.AddConsole();
-        builder.Logging.SetMinimumLevel(LogLevel.Information);
-
-        Environment.SetEnvironmentVariable("OTEL_LOGS_EXPORTER", "none");
+        builder.Logging.SetMinimumLevel(LogLevel.Warning);
 
         builder.Services.AddTransient<IStartupFilter, AddRefererStartupFilter>();
         // builder.Logging.AddOpenTelemetry(logging =>
