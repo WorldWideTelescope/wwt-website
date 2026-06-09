@@ -29,6 +29,7 @@ deprecated. We log them here.
 | `/wwtweb/jupiter.aspx` | Unused, broken | [#258](https://github.com/WorldWideTelescope/wwt-website/pull/258) |
 | `/wwtweb/mandel1.aspx` | Unused, broken | [#258](https://github.com/WorldWideTelescope/wwt-website/pull/258) |
 | `/wwtweb/mars.aspx` | Unused, broken | [#258](https://github.com/WorldWideTelescope/wwt-website/pull/258) |
+| `/wwtweb/marshirise.aspx` | Low usage, removed to reduce costs | [#258](https://github.com/WorldWideTelescope/wwt-website/pull/258) |
 | `/wwtweb/martiantileempty.aspx` | Data is from `wwt.nasa.gov` which is no longer available. | [#182](https://github.com/WorldWideTelescope/wwt-website/pull/182) |
 | `/wwtweb/martiantile2.aspx` | Unused, broken | [#258](https://github.com/WorldWideTelescope/wwt-website/pull/258) |
 | `/wwtweb/moondem.aspx` | Unused, broken | [#258](https://github.com/WorldWideTelescope/wwt-website/pull/258) |
