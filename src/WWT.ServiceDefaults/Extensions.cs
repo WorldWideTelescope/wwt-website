@@ -42,12 +42,17 @@ public static class Extensions
 
     public static IHostApplicationBuilder ConfigureOpenTelemetry(this IHostApplicationBuilder builder)
     {
+
+        builder.Logging.ClearProviders();
+        builder.Logging.AddConsole();
+        builder.Logging.SetMinimumLevel(LogLevel.Warning);
+
         builder.Services.AddTransient<IStartupFilter, AddRefererStartupFilter>();
-        builder.Logging.AddOpenTelemetry(logging =>
-        {
-            logging.IncludeFormattedMessage = true;
-            logging.IncludeScopes = true;
-        });
+        // builder.Logging.AddOpenTelemetry(logging =>
+        // {
+        //     logging.IncludeFormattedMessage = true;
+        //     logging.IncludeScopes = true;
+        // });
 
         builder.Services.AddOpenTelemetry()
             .WithMetrics(metrics => metrics
@@ -57,8 +62,8 @@ public static class Extensions
             .WithTracing(tracing => tracing
                 .AddAspNetCoreInstrumentation()
                 .AddSource(Constants.ActivitySourceName)
-                .AddProcessor(new IgnoreFailedBlobProcessor())
-                .AddHttpClientInstrumentation());
+                .AddProcessor(new IgnoreFailedBlobProcessor()));
+                // .AddHttpClientInstrumentation());
 
         builder.AddOpenTelemetryExporters();
 
