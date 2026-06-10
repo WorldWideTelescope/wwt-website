@@ -8,7 +8,7 @@ var redis = builder.AddRedis("cache")
     .WithRedisCommander();
 
 var storage = builder.AddAzureStorage("wwtstorage")
-    .RunAsEmulator(builder => builder.WithImageTag("3.32.0"));
+    .RunAsEmulator();
 
 var wwtFiles = storage.AddBlobs("WwtFiles")
     .WithDevData();

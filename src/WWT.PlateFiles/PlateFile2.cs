@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
-using WWT.PlateFiles;
 
 namespace WWT.PlateFiles
 {
@@ -111,17 +110,12 @@ namespace WWT.PlateFiles
                 entry = new DirectoryEntry(tag, level, x, y, position, (UInt32)fi.Length);
 
                 UInt32 index = entry.ComputeHash() % (UInt32)header.HashBuckets;
-                byte[] buf = null;
-
+            
                 // Copy the input file stream to the end of the file
-                using (FileStream ifs = File.Open(inputFilename, FileMode.Open, FileAccess.Read, FileShare.Read))
+                using (var ifs = File.Open(inputFilename, FileMode.Open, FileAccess.Read, FileShare.Read))
+                using (var slice = StreamSlice.Create(ifs, 0, fi.Length))
                 {
-                    int len = (int)fi.Length;
-                    buf = new byte[fi.Length];
-
-                    ifs.Read(buf, 0, len);
-                    dataStream.Write(buf, 0, len);
-                    ifs.Close();
+                    slice.CopyTo(dataStream);
                 }
 
                 long hep = GetHashEntryPosition(index);
@@ -141,16 +135,12 @@ namespace WWT.PlateFiles
                 header.NextFreeDirectoryEntry += Marshal.SizeOf(entry);
                 header.FreeEntries--;
 
-
-
                 // Write it back to file
                 Byte[] headerData = GetHeaderBytes();
                 dataStream.Seek(0, SeekOrigin.Begin);
                 dataStream.Write(headerData, 0, headerData.Length);
 
                 //todo check for file count and extend file when we get to end.
-
-
             }
         }
 
@@ -168,11 +158,13 @@ namespace WWT.PlateFiles
             // preload the directory & hashtable here to make sure reads are serial and in system cache
 
             List<List<DirectoryEntry>> list = new List<List<DirectoryEntry>>();
+
             byte[] buf = new byte[header.HashBuckets * 8];
-            dataStream.Read(buf, 0, (int)buf.Length);
+            dataStream.ReadExactly(buf, 0, (int)buf.Length);
+
             de = GetDirectoryEntry(header.FirstDirectoryEntry);
             buf = new byte[de.size];
-            dataStream.Read(buf, 0, (int)de.size);
+            dataStream.ReadExactly(buf, 0, (int)de.size);
 
             for (UInt32 i = 0; i < header.HashBuckets; i++)
             {
@@ -378,53 +370,6 @@ namespace WWT.PlateFiles
             return null;
         }
 
-        public Stream GetFileStreamFullSearch(int tag, int level, int x, int y)
-        {
-            entry = new DirectoryEntry(tag, level, x, y, 0, 0);
-
-            UInt32 index = entry.ComputeHash() % (UInt32)(header.HashBuckets);
-
-            long hep = GetHashEntryPosition(index);
-
-            DirectoryEntry de;
-            DirectoryEntry den = new DirectoryEntry();
-
-            while (hep != 0)
-            {
-                de = GetDirectoryEntry(hep);
-
-                if ((de.x == x) && (de.y == y) && ((de.tag == tag) || (tag == -1)) && (de.level == level))
-                {
-                    if (den.tag < de.tag)
-                    {
-                        den = de;
-                        if (tag != -1)
-                        {
-                            break;
-                        }
-                    }
-                }
-
-                hep = de.NextEntryInChain;
-
-            }
-
-            if (den.location != 0)
-            {
-                MemoryStream ms = null;
-
-                byte[] buffer = new byte[den.size];
-                dataStream.Seek(den.location, SeekOrigin.Begin);
-                dataStream.Read(buffer, 0, (int)den.size);
-                ms = new MemoryStream(buffer);
-                return ms;
-            }
-
-
-            return null;
-        }
-
-
         public long GetHashEntryPosition(UInt32 hashindex)
         {
             if (hashindex >= header.HashBuckets)
@@ -483,29 +428,21 @@ namespace WWT.PlateFiles
 
         private void ReadHeader()
         {
-            byte[] buffer = new byte[Marshal.SizeOf(header)];
+            Span<byte> data = stackalloc byte[Marshal.SizeOf(header)];
             dataStream.Seek(0, SeekOrigin.Begin);
-            dataStream.Read(buffer, 0, buffer.Length);
-            SetHeaderBytes(buffer);
-        }
+            dataStream.ReadExactly(data);
 
-        private void SetHeaderBytes(byte[] data)
-        {
-            GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            header = (PlateHeader)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(PlateHeader));
-            handle.Free();
+            header = MemoryMarshal.Read<PlateHeader>(data);
         }
 
         private DirectoryEntry GetDirectoryEntry(long pos)
         {
             dataStream.Seek(pos, SeekOrigin.Begin);
-            byte[] data = new byte[Marshal.SizeOf(entry)];
-            dataStream.Read(data, 0, data.Length);
 
-            GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            DirectoryEntry de = (DirectoryEntry)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(DirectoryEntry));
-            handle.Free();
-            return de;
+            Span<byte> data = stackalloc byte[Marshal.SizeOf(entry)];
+            dataStream.ReadExactly(data);
+
+            return MemoryMarshal.Read<DirectoryEntry>(data);
         }
 
         private byte[] GetEntryBytes()
@@ -515,13 +452,6 @@ namespace WWT.PlateFiles
             Marshal.StructureToPtr(entry, hStruct.AddrOfPinnedObject(), false);
             hStruct.Free();
             return buffer;
-        }
-
-        private void SetEntryBytes(byte[] data)
-        {
-            GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            entry = (DirectoryEntry)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(DirectoryEntry));
-            handle.Free();
         }
 
         private int NextPowerOfTwo(int val)

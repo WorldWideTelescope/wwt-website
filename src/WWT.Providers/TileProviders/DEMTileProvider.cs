@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using WWT.PlateFiles;
 
 namespace WWT.Providers
 {
@@ -31,12 +32,10 @@ namespace WWT.Providers
 
             if (File.Exists(filename))
             {
-                byte[] data = new byte[demSize];
-                FileStream fs = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                fs.Seek((long)(demSize * tileX), SeekOrigin.Begin);
-                fs.Read(data, 0, demSize);
-                fs.Close();
-                await context.Response.OutputStream.WriteAsync(data, 0, demSize, token);
+                using var fs = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                using var slice = StreamSlice.Create(fs, demSize * tileX, demSize);
+
+                await slice.CopyToAsync(context.Response.OutputStream, token);
             }
 
             context.Response.End();

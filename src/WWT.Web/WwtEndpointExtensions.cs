@@ -47,16 +47,6 @@ public static class WwtEndpointExtensions
             return TypedResults.Stream(mandelbrot.CreateMandelbrot(q.Level, q.X, q.Y), "image/jpeg");
         }).WithCacheControl();
 
-        group.MapGet("marshirise.aspx", static async Task<Results<ImageResult, NotFound>> ([FromQuery] LXYId q, MarsHiriseProvider marsHirise) =>
-        {
-            if (await marsHirise.GetImageAsync(q.Level, q.X, q.Y, q.Id, CancellationToken.None) is { } image)
-            {
-                return TypedResults.Extensions.Png(image);
-            }
-
-            return TypedResults.NotFound();
-        }).WithCacheControl();
-
         group.MapGet("sdsstoast.aspx", static async Task<Results<FileStreamHttpResult, NotFound>> ([FromQuery] LXY q, SDSSToastProvider sdss, CancellationToken token) =>
         {
             if (await sdss.GetStreamAsync(q.Level, q.X, q.Y, token) is { } stream)
@@ -100,6 +90,7 @@ public static class WwtEndpointExtensions
         deprecated.MapGet("/jupiter.aspx", DeprecatedMessaging);
         deprecated.MapGet("/mandel1.aspx", DeprecatedMessaging);
         deprecated.MapGet("/mars.aspx", DeprecatedMessaging);
+        deprecated.MapGet("/marshirise.aspx", DeprecatedMessaging);
         deprecated.MapGet("/MartianTile2.aspx", DeprecatedMessaging);
         deprecated.MapGet("/moondem.aspx", DeprecatedMessaging);
         deprecated.MapGet("/moonOct.aspx", DeprecatedMessaging);

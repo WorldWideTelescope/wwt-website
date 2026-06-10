@@ -69,15 +69,18 @@ namespace WWT.PlateFiles
         }
 
         public override Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
-            => ReadInternalAsync(buffer, offset, count, true, cancellationToken).AsTask();
+            => ReadAsync(buffer.AsMemory(offset, count), cancellationToken).AsTask();
 
         public override int Read(byte[] buffer, int offset, int count)
-            => ReadInternalAsync(buffer, offset, count, isAsync: false, default).Result;
+            => Read(buffer.AsSpan(offset, count));
 
-        /// <summary>
-        /// A read implementation that can be either async or synchronous to reduce duplication of code. The synchronous pathway will always be completed.
-        /// </summary>
-        private async ValueTask<int> ReadInternalAsync(byte[] buffer, int offset, int count, bool isAsync, CancellationToken cancellationToken)
+        public override int ReadByte()
+        {
+            Span<byte> buffer = stackalloc byte[1];
+            return Read(buffer) == 0 ? -1 : buffer[0];
+        }
+
+        public override async ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = default)
         {
             CheckDisposed();
             var remaining = _length - Position;
@@ -87,16 +90,30 @@ namespace WWT.PlateFiles
                 return 0;
             }
 
-            if (remaining < count)
+            if (remaining < buffer.Length)
             {
-                count = (int)remaining;
+                buffer = buffer[..(int)remaining];
             }
 
-            var read = isAsync
-                ? await _baseStream.ReadAsync(buffer, offset, count, cancellationToken)
-                : _baseStream.Read(buffer, offset, count);
+            return await _baseStream.ReadAsync(buffer, cancellationToken);
+        }
 
-            return read;
+        public override int Read(Span<byte> buffer)
+        {
+            CheckDisposed();
+            var remaining = _length - Position;
+
+            if (remaining <= 0)
+            {
+                return 0;
+            }
+
+            if (remaining < buffer.Length)
+            {
+                buffer = buffer[..(int)remaining];
+            }
+
+            return _baseStream.Read(buffer);
         }
 
         private void CheckDisposed()

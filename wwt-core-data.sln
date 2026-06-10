@@ -30,11 +30,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WWT.Azure", "src\WWT.Azure\WWT.Azure.csproj", "{E371698C-F67E-4DA7-8545-1A7C984279C8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{EFF21404-6CEA-49EB-9402-C6643AC2564F}"
-	ProjectSection(SolutionItems) = preProject
-		tests\Directory.Build.props = tests\Directory.Build.props
-		tests\Directory.Build.Targets = tests\Directory.Build.Targets
-		tests\WWT.Tests.props = tests\WWT.Tests.props
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WWT.Azure.Tests", "tests\WWT.Azure.Tests\WWT.Azure.Tests.csproj", "{6AC5F326-90D9-4829-A823-407B50525E57}"
 EndProject
