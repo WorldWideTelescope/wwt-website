@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Services\colors.map" />
+    <EmbeddedResource Include="Fonts\micross.ttf" />
   </ItemGroup>
 
   <ItemGroup>

@@ -33,6 +33,7 @@ namespace WWT.Providers
             services.AddSingleton<IMandelbrot, Mandelbrot>();
             services.AddSingleton<IVirtualEarthDownloader, VirtualEarthDownloader>();
             services.AddSingleton<IDevDataAccessor, DevDataAccessor>();
+            services.AddSingleton<IWwtFonts, WwtFonts>();
 
             var options = new WwtOptions();
             config(options);
