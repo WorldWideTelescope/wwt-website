@@ -18,14 +18,14 @@ namespace WWT.Providers
     [RequestEndpoint("/wwtweb/Example.aspx")]
     public class ExampleTileProvider : RequestProvider
     {
-        private readonly ActivitySource _activitySource;
+        private readonly IWwtFonts _fonts;
 
-        public ExampleTileProvider([FromKeyedServices(Constants.ActivitySourceName)] ActivitySource activitySource)
+        public ExampleTileProvider(IWwtFonts fonts)
         {
-            _activitySource = activitySource;
+            _fonts = fonts;
         }
 
-        public override string ContentType => ContentTypes.OctetStream;
+        public override string ContentType => ContentTypes.Png;
 
 
         public override async Task RunAsync(IWwtContext context, CancellationToken token)
@@ -46,7 +46,7 @@ namespace WWT.Providers
             {
                 ctx.Fill(Color.FromPixel(new Rgba32(r, g, b, 255)));
 
-                // Draw a grid every 16 rows and columns
+                // Draw a grid every 32 rows and columns
                 for (int i = 0; i < 256; i += 32)
                 {
                     ctx.DrawLine(lineColor, thickness: 1f, new PointF(i, 0), new PointF(i, 256));
@@ -54,35 +54,19 @@ namespace WWT.Providers
                 }
 
                 var label = $"L={level} X={tileX} Y={tileY}";
-                var fontFamily = SystemFonts.Families.First();
-                var font = fontFamily.CreateFont(12, FontStyle.Regular);
+                var font = _fonts.Family.CreateFont(25, FontStyle.Regular);
 
                 RichTextOptions options = new (font)
                 {
-                    Origin = new PointF(size / 2f, 50),
+                    Origin = new PointF(size / 2f, size / 2f),
                     HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center,
                     WrappingLength = size - 100,
                 };
                 ctx.DrawText(options, label, Color.White);
             });
 
-            using var ms = new MemoryStream();
-            await image.SaveAsPngAsync(ms, token);
-
-            context.Response.ContentType = "image/png";
-
-            if (ms.Length == 0)
-            {
-                context.Response.Clear();
-                context.Response.ContentType = "text/plain";
-                await context.Response.WriteAsync("No image", token);
-                context.Response.End();
-                return;
-            }
-
-            await ms.CopyToAsync(context.Response.OutputStream, token);
-            context.Response.Flush();
-            context.Response.End();
+            await image.RespondPngAsync(context.Response, token); 
         }
     }
 }
