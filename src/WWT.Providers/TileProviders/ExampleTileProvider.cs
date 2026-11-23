@@ -61,7 +61,6 @@ namespace WWT.Providers
                     Origin = new PointF(size / 2f, size / 2f),
                     HorizontalAlignment = HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Center,
-                    WrappingLength = size - 100,
                 };
                 ctx.DrawText(options, label, Color.White);
             });
