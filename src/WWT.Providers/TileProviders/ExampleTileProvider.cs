@@ -54,7 +54,7 @@ namespace WWT.Providers
                 }
 
                 var label = $"L={level} X={tileX} Y={tileY}";
-                var font = _fonts.Family.CreateFont(25, FontStyle.Regular);
+                var font = _fonts.Family.CreateFont(32, FontStyle.Regular);
 
                 RichTextOptions options = new (font)
                 {
