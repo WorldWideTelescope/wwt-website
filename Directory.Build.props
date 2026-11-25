@@ -11,6 +11,10 @@
     <Version>$(GitVersion_NuGetVersionV2)</Version>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <SixLaborsLicenseFile>$(MSBuildThisFileDirectory)sixlabors.lic</SixLaborsLicenseFile>
+  </PropertyGroup>
+
   <!-- Handle warnings from .NET 9 upgrade -->
   <PropertyGroup>
     <NoWarn>
